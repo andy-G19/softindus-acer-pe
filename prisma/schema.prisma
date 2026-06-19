@@ -11,3 +11,43 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum UserRole {
+  ADMIN
+  SELLER
+  WORKSHOP_MASTER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String     @map("password_hash")
+  role         UserRole   @default(SELLER)
+  status       UserStatus @default(ACTIVE)
+
+  lastLoginAt  DateTime?  @map("last_login_at")
+
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  createdById  String?    @map("created_by_id")
+  updatedById  String?    @map("updated_by_id")
+
+  createdBy    User?      @relation("UserCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers User[]     @relation("UserCreatedBy")
+
+  updatedBy    User?      @relation("UserUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+  updatedUsers User[]     @relation("UserUpdatedBy")
+
+  @@index([role])
+  @@index([status])
+  @@index([createdById])
+  @@index([updatedById])
+  @@map("users")
+}
