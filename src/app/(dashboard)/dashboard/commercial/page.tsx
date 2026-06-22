@@ -40,6 +40,16 @@ export default function CommercialPage() {
             Registrar pedidos de clientes y su detalle comercial.
           </p>
         </Link>
+
+        <Link
+          href="/dashboard/commercial/quotes"
+          className="rounded-lg border p-5 transition hover:bg-muted"
+        >
+          <h2 className="font-semibold">Proformas</h2>
+          <p className="text-sm text-muted-foreground">
+            Generar y consultar proformas digitales desde pedidos.
+          </p>
+        </Link>
       </div>
     </main>
   );
