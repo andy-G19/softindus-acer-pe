@@ -1,53 +1,1191 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
   provider = "postgresql"
+  
 }
 
-enum UserRole {
-  ADMIN
-  SELLER
-  WORKSHOP_MASTER
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model alerta_stock {
+  id_alerta           String    @id @db.Char(11)
+  id_material         String    @db.Char(11)
+  fecha_alerta        DateTime  @default(now()) @db.Timestamptz(6)
+  stock_detectado     Decimal   @db.Decimal(10, 2)
+  stock_minimo        Decimal   @db.Decimal(10, 2)
+  estado_alerta       String    @default("activa") @db.VarChar(30)
+  mensaje             String?   @db.VarChar(255)
+  fecha_atencion      DateTime? @db.Timestamptz(6)
+  id_usuario_atencion String?   @db.Char(11)
+  material            material  @relation(fields: [id_material], references: [id_material], map: "fk_alerta_material")
+  usuario             usuario?  @relation(fields: [id_usuario_atencion], references: [id_usuario], onDelete: Restrict, map: "fk_alerta_usuario_atencion")
+
+  @@index([estado_alerta], map: "idx_alerta_estado")
+  @@index([id_material], map: "idx_alerta_material")
 }
 
-enum UserStatus {
-  ACTIVE
-  INACTIVE
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model asignacion_herramienta_epp {
+  id_asignacion               String          @id @db.Char(11)
+  id_herramienta_epp          String          @db.Char(11)
+  id_operario                 String          @db.Char(11)
+  fecha_entrega               DateTime        @default(now()) @db.Timestamptz(6)
+  fecha_devolucion_programada DateTime?       @db.Timestamptz(6)
+  fecha_devolucion_real       DateTime?       @db.Timestamptz(6)
+  estado_devolucion           String          @default("pendiente") @db.VarChar(30)
+  observaciones               String?
+  id_usuario_registro         String          @db.Char(11)
+  herramienta_epp             herramienta_epp @relation(fields: [id_herramienta_epp], references: [id_herramienta_epp], map: "fk_asignacion_herramienta")
+  operario                    operario        @relation(fields: [id_operario], references: [id_operario], map: "fk_asignacion_operario")
+  usuario                     usuario         @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_asignacion_usuario")
+
+  @@index([estado_devolucion], map: "idx_asignacion_estado")
+  @@index([id_herramienta_epp], map: "idx_asignacion_herramienta")
+  @@index([id_operario], map: "idx_asignacion_operario")
 }
 
-model User {
-  id           String     @id @default(uuid())
-  name         String
-  email        String     @unique
-  passwordHash String     @map("password_hash")
-  role         UserRole   @default(SELLER)
-  status       UserStatus @default(ACTIVE)
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model asistencia {
+  id_asistencia       String    @id @db.Char(11)
+  id_operario         String    @db.Char(11)
+  id_usuario_registro String    @db.Char(11)
+  fecha               DateTime  @db.Date
+  hora_ingreso        DateTime? @db.Time(6)
+  hora_salida         DateTime? @db.Time(6)
+  tardanza            Boolean   @default(false)
+  falta               Boolean   @default(false)
+  horas_trabajadas    Decimal?  @db.Decimal(5, 2)
+  observaciones       String?
+  operario            operario  @relation(fields: [id_operario], references: [id_operario], map: "fk_asistencia_operario")
+  usuario             usuario   @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_asistencia_usuario")
 
-  lastLoginAt  DateTime?  @map("last_login_at")
+  @@unique([id_operario, fecha], map: "uq_asistencia_operario_fecha")
+  @@index([fecha(sort: Desc)], map: "idx_asistencia_fecha")
+  @@index([id_operario], map: "idx_asistencia_operario")
+}
 
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @updatedAt @map("updated_at")
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model avance_orden {
+  id_avance            String               @id @db.Char(11)
+  id_orden_trabajo     String               @db.Char(11)
+  id_etapa_ruta        String               @db.Char(11)
+  id_operario          String?              @db.Char(11)
+  estado_etapa         String               @default("pendiente") @db.VarChar(30)
+  porcentaje_avance    Decimal              @default(0) @db.Decimal(5, 2)
+  fecha_inicio_etapa   DateTime?            @db.Timestamptz(6)
+  fecha_fin_etapa      DateTime?            @db.Timestamptz(6)
+  observaciones        String?
+  id_usuario_actualiza String               @db.Char(11)
+  etapa_ruta           etapa_ruta           @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], map: "fk_avance_etapa")
+  operario             operario?            @relation(fields: [id_operario], references: [id_operario], onDelete: Restrict, map: "fk_avance_operario")
+  orden_trabajo        orden_trabajo        @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], map: "fk_avance_orden")
+  usuario              usuario              @relation(fields: [id_usuario_actualiza], references: [id_usuario], map: "fk_avance_usuario_actualiza")
+  reasignacion_tarea   reasignacion_tarea[]
 
-  createdById  String?    @map("created_by_id")
-  updatedById  String?    @map("updated_by_id")
+  @@unique([id_orden_trabajo, id_etapa_ruta], map: "uq_avance_orden_etapa")
+  @@index([estado_etapa], map: "idx_avance_estado")
+  @@index([id_etapa_ruta], map: "idx_avance_etapa")
+  @@index([id_operario], map: "idx_avance_operario")
+  @@index([id_orden_trabajo], map: "idx_avance_orden")
+}
 
-  createdBy    User?      @relation("UserCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  createdUsers User[]     @relation("UserCreatedBy")
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model bitacora_operacion {
+  id_bitacora          String   @id @db.Char(11)
+  id_usuario           String   @db.Char(11)
+  entidad_afectada     String   @db.VarChar(80)
+  id_registro_afectado String?  @db.Char(11)
+  accion               String   @db.VarChar(30)
+  fecha_hora           DateTime @default(now()) @db.Timestamptz(6)
+  detalle              String?
+  ip_origen            String?  @db.VarChar(45)
+  usuario              usuario  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_bitacora_usuario")
 
-  updatedBy    User?      @relation("UserUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
-  updatedUsers User[]     @relation("UserUpdatedBy")
+  @@index([accion], map: "idx_bitacora_accion")
+  @@index([entidad_afectada, id_registro_afectado], map: "idx_bitacora_entidad")
+  @@index([id_usuario, fecha_hora(sort: Desc)], map: "idx_bitacora_usuario_fecha")
+}
 
-  @@index([role])
-  @@index([status])
-  @@index([createdById])
-  @@index([updatedById])
-  @@map("users")
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model caja_chica {
+  id_caja_chica   String            @id @db.Char(11)
+  nombre_caja     String            @db.VarChar(100)
+  saldo_inicial   Decimal           @db.Decimal(12, 2)
+  saldo_actual    Decimal           @db.Decimal(12, 2)
+  fecha_apertura  DateTime          @default(dbgenerated("CURRENT_DATE")) @db.Date
+  estado          String            @default("abierta") @db.VarChar(30)
+  responsable     String?           @db.VarChar(100)
+  observaciones   String?
+  movimiento_caja movimiento_caja[]
+
+  @@index([estado], map: "idx_caja_estado")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model campania_detalle {
+  id_campania_detalle String              @id @db.Char(11)
+  id_campania         String              @db.Char(11)
+  id_producto         String              @db.Char(11)
+  cantidad_objetivo   Decimal             @db.Decimal(10, 2)
+  cantidad_producida  Decimal             @default(0) @db.Decimal(10, 2)
+  observaciones       String?
+  campania_produccion campania_produccion @relation(fields: [id_campania], references: [id_campania], map: "fk_campania_detalle_campania")
+  producto            producto            @relation(fields: [id_producto], references: [id_producto], map: "fk_campania_detalle_producto")
+
+  @@unique([id_campania, id_producto], map: "uq_campania_producto")
+  @@index([id_campania], map: "idx_campania_detalle_campania")
+  @@index([id_producto], map: "idx_campania_detalle_producto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model campania_produccion {
+  id_campania         String             @id @db.Char(11)
+  nombre_campania     String             @db.VarChar(100)
+  fecha_inicio        DateTime           @db.Date
+  fecha_fin           DateTime?          @db.Date
+  objetivo_general    String?
+  estado              String             @default("planificada") @db.VarChar(30)
+  id_usuario_registro String             @db.Char(11)
+  campania_detalle    campania_detalle[]
+  usuario             usuario            @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_campania_usuario")
+  orden_trabajo       orden_trabajo[]
+
+  @@index([estado], map: "idx_campania_estado")
+  @@index([fecha_inicio, fecha_fin], map: "idx_campania_fechas")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model categoria_gasto {
+  id_categoria_gasto String            @id @db.Char(11)
+  nombre_categoria   String            @unique @db.VarChar(80)
+  descripcion        String?
+  estado             Boolean           @default(true)
+  movimiento_caja    movimiento_caja[]
+
+  @@index([estado], map: "idx_categoria_gasto_estado")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model chatarra {
+  id_chatarra    String           @id @db.Char(11)
+  id_material    String?          @db.Char(11)
+  tipo_material  String           @db.VarChar(50)
+  peso_kg        Decimal?         @db.Decimal(10, 2)
+  cantidad       Decimal?         @db.Decimal(10, 2)
+  estado         String           @default("acumulada") @db.VarChar(30)
+  fecha_registro DateTime         @default(now()) @db.Timestamptz(6)
+  observaciones  String?
+  material       material?        @relation(fields: [id_material], references: [id_material], onDelete: Restrict, map: "fk_chatarra_material")
+  venta_chatarra venta_chatarra[]
+
+  @@index([estado], map: "idx_chatarra_estado")
+  @@index([id_material], map: "idx_chatarra_material")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cliente {
+  id_cliente          String          @id @db.Char(11)
+  tipo_cliente        String          @db.VarChar(50)
+  nombre_razon_social String          @db.VarChar(150)
+  tipo_documento      String?         @db.VarChar(20)
+  numero_documento    String?         @unique @db.VarChar(20)
+  telefono            String?         @db.VarChar(20)
+  correo              String?         @db.VarChar(100)
+  direccion           String?         @db.VarChar(150)
+  lugar_origen        String?         @db.VarChar(100)
+  fecha_registro      DateTime        @default(now()) @db.Timestamptz(6)
+  estado              Boolean         @default(true)
+  observaciones       String?
+  orden_trabajo       orden_trabajo[]
+  pedido              pedido[]
+
+  @@index([estado], map: "idx_cliente_estado")
+  @@index([nombre_razon_social], map: "idx_cliente_nombre")
+  @@index([tipo_cliente], map: "idx_cliente_tipo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model compra {
+  id_compra                  String                       @id @db.Char(11)
+  id_proveedor               String                       @db.Char(11)
+  id_usuario_registro        String                       @db.Char(11)
+  fecha_compra               DateTime                     @default(dbgenerated("CURRENT_DATE")) @db.Date
+  tipo_comprobante           String?                      @db.VarChar(30)
+  numero_comprobante         String?                      @db.VarChar(30)
+  subtotal                   Decimal                      @db.Decimal(12, 2)
+  igv                        Decimal?                     @db.Decimal(12, 2)
+  monto_total                Decimal                      @db.Decimal(12, 2)
+  estado_pago                String                       @default("pendiente") @db.VarChar(30)
+  estado_compra              String                       @default("registrada") @db.VarChar(30)
+  observaciones              String?
+  fecha_registro             DateTime                     @default(now()) @db.Timestamptz(6)
+  proveedor                  proveedor                    @relation(fields: [id_proveedor], references: [id_proveedor], map: "fk_compra_proveedor")
+  usuario                    usuario                      @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_compra_usuario")
+  detalle_compra             detalle_compra[]
+  historial_precio_proveedor historial_precio_proveedor[]
+  movimiento_inventario      movimiento_inventario[]
+  pago_proveedor             pago_proveedor[]
+
+  @@unique([tipo_comprobante, numero_comprobante], map: "uq_compra_comprobante")
+  @@unique([id_compra, id_proveedor], map: "uq_compra_proveedor_ref")
+  @@index([estado_compra], map: "idx_compra_estado")
+  @@index([estado_pago], map: "idx_compra_estado_pago")
+  @@index([fecha_compra(sort: Desc)], map: "idx_compra_fecha")
+  @@index([id_proveedor], map: "idx_compra_proveedor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model comprobante_venta {
+  id_comprobante     String    @id @db.Char(11)
+  id_pedido          String    @db.Char(11)
+  id_proforma        String?   @db.Char(11)
+  tipo_comprobante   String    @db.VarChar(30)
+  numero_comprobante String    @unique @db.VarChar(30)
+  fecha_emision      DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  monto_total        Decimal   @db.Decimal(12, 2)
+  estado             String    @default("emitido") @db.VarChar(30)
+  observaciones      String?
+  pedido             pedido    @relation(fields: [id_pedido], references: [id_pedido], map: "fk_comprobante_pedido")
+  proforma           proforma? @relation(fields: [id_proforma, id_pedido], references: [id_proforma, id_pedido], map: "fk_comprobante_proforma_pedido")
+
+  @@index([fecha_emision(sort: Desc)], map: "idx_comprobante_fecha")
+  @@index([id_pedido], map: "idx_comprobante_pedido")
+  @@index([id_proforma], map: "idx_comprobante_proforma")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model costeo {
+  id_costeo             String            @id @db.Char(11)
+  id_pedido             String?           @db.Char(11)
+  id_orden_trabajo      String?           @db.Char(11)
+  id_usuario_registro   String            @db.Char(11)
+  fecha_costeo          DateTime          @default(dbgenerated("CURRENT_DATE")) @db.Date
+  costo_materiales      Decimal           @default(0) @db.Decimal(12, 2)
+  costo_consumibles     Decimal           @default(0) @db.Decimal(12, 2)
+  costo_mano_obra       Decimal           @default(0) @db.Decimal(12, 2)
+  costo_indirecto_total Decimal           @default(0) @db.Decimal(12, 2)
+  costo_total           Decimal           @default(0) @db.Decimal(12, 2)
+  costo_unitario        Decimal?          @db.Decimal(12, 2)
+  cantidad_base         Decimal?          @db.Decimal(10, 2)
+  observaciones         String?
+  orden_trabajo         orden_trabajo?    @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], onDelete: Restrict, map: "fk_costeo_orden")
+  pedido                pedido?           @relation(fields: [id_pedido], references: [id_pedido], onDelete: Restrict, map: "fk_costeo_pedido")
+  usuario               usuario           @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_costeo_usuario")
+  costo_indirecto       costo_indirecto[]
+  margen_ganancia       margen_ganancia[]
+  rentabilidad          rentabilidad[]
+
+  @@index([fecha_costeo(sort: Desc)], map: "idx_costeo_fecha")
+  @@index([id_orden_trabajo], map: "idx_costeo_orden")
+  @@index([id_pedido], map: "idx_costeo_pedido")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model costo_indirecto {
+  id_costo_indirecto String   @id @db.Char(11)
+  id_costeo          String?  @db.Char(11)
+  concepto           String   @db.VarChar(100)
+  categoria          String   @db.VarChar(50)
+  monto              Decimal  @db.Decimal(12, 2)
+  criterio_prorrateo String?  @db.VarChar(100)
+  periodo            String?  @db.VarChar(30)
+  fecha_registro     DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  observaciones      String?
+  costeo             costeo?  @relation(fields: [id_costeo], references: [id_costeo], onDelete: Restrict, map: "fk_costo_indirecto_costeo")
+
+  @@index([id_costeo], map: "idx_costo_indirecto_costeo")
+  @@index([periodo], map: "idx_costo_indirecto_periodo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model dashboard_indicador {
+  id_indicador        String   @id @db.Char(11)
+  nombre_indicador    String   @db.VarChar(100)
+  categoria           String   @db.VarChar(50)
+  valor_numerico      Decimal? @db.Decimal(12, 2)
+  valor_texto         String?  @db.VarChar(100)
+  unidad              String?  @db.VarChar(20)
+  fecha_actualizacion DateTime @default(now()) @db.Timestamptz(6)
+  descripcion         String?
+
+  @@unique([nombre_indicador, categoria], map: "uq_dashboard_indicador")
+  @@index([categoria], map: "idx_dashboard_categoria")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detalle_compra {
+  id_detalle_compra String   @id @db.Char(11)
+  id_compra         String   @db.Char(11)
+  id_material       String   @db.Char(11)
+  cantidad          Decimal  @db.Decimal(10, 2)
+  unidad_medida     String   @db.VarChar(20)
+  costo_unitario    Decimal  @db.Decimal(12, 2)
+  subtotal          Decimal  @db.Decimal(12, 2)
+  observaciones     String?
+  compra            compra   @relation(fields: [id_compra], references: [id_compra], map: "fk_detalle_compra_compra")
+  material          material @relation(fields: [id_material], references: [id_material], map: "fk_detalle_compra_material")
+
+  @@index([id_compra], map: "idx_detalle_compra_compra")
+  @@index([id_material], map: "idx_detalle_compra_material")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detalle_pedido {
+  id_detalle_pedido String          @id @db.Char(11)
+  id_pedido         String          @db.Char(11)
+  id_producto       String          @db.Char(11)
+  cantidad          Decimal         @db.Decimal(10, 2)
+  precio_unitario   Decimal         @db.Decimal(12, 2)
+  subtotal          Decimal         @db.Decimal(12, 2)
+  observaciones     String?
+  pedido            pedido          @relation(fields: [id_pedido], references: [id_pedido], map: "fk_detalle_pedido_pedido")
+  producto          producto        @relation(fields: [id_producto], references: [id_producto], map: "fk_detalle_pedido_producto")
+  orden_trabajo     orden_trabajo[]
+
+  @@unique([id_pedido, id_producto], map: "uq_detalle_pedido_producto")
+  @@index([id_pedido], map: "idx_detalle_pedido_pedido")
+  @@index([id_producto], map: "idx_detalle_pedido_producto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detalle_receta {
+  id_detalle_receta         String         @id @db.Char(11)
+  id_version_receta         String         @db.Char(11)
+  id_material               String         @db.Char(11)
+  cantidad_requerida        Decimal        @db.Decimal(10, 2)
+  unidad_medida             String         @db.VarChar(20)
+  tipo_consumo              String         @db.VarChar(30)
+  merma_estimada_porcentaje Decimal?       @db.Decimal(5, 2)
+  observaciones             String?
+  material                  material       @relation(fields: [id_material], references: [id_material], map: "fk_detalle_receta_material")
+  version_receta            version_receta @relation(fields: [id_version_receta], references: [id_version_receta], map: "fk_detalle_receta_version")
+
+  @@unique([id_version_receta, id_material], map: "uq_detalle_receta_material")
+  @@index([id_material], map: "idx_detalle_receta_material")
+  @@index([id_version_receta], map: "idx_detalle_receta_version")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model detalle_repuesto_reparacion {
+  id_detalle_repuesto String     @id @db.Char(11)
+  id_reparacion       String     @db.Char(11)
+  id_repuesto         String     @db.Char(11)
+  cantidad            Decimal    @db.Decimal(10, 2)
+  costo_unitario      Decimal    @db.Decimal(12, 2)
+  subtotal            Decimal    @db.Decimal(12, 2)
+  reparacion          reparacion @relation(fields: [id_reparacion], references: [id_reparacion], map: "fk_det_repuesto_reparacion")
+  repuesto            repuesto   @relation(fields: [id_repuesto], references: [id_repuesto], map: "fk_det_repuesto_repuesto")
+
+  @@unique([id_reparacion, id_repuesto], map: "uq_det_repuesto_reparacion")
+  @@index([id_reparacion], map: "idx_det_repuesto_reparacion")
+  @@index([id_repuesto], map: "idx_det_repuesto_repuesto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model etapa_ruta {
+  id_etapa_ruta         String               @id @db.Char(11)
+  id_ruta               String               @db.Char(11)
+  nombre_etapa          String               @db.VarChar(100)
+  orden_secuencia       Int
+  descripcion           String?
+  tiempo_estimado_horas Decimal?             @db.Decimal(10, 2)
+  requiere_maquina      Boolean              @default(false)
+  estado                Boolean              @default(true)
+  avance_orden          avance_orden[]
+  ruta_fabricacion      ruta_fabricacion     @relation(fields: [id_ruta], references: [id_ruta], map: "fk_etapa_ruta")
+  etapa_ruta_maquina    etapa_ruta_maquina[]
+  tarea_operario        tarea_operario[]
+
+  @@unique([id_ruta, nombre_etapa], map: "uq_etapa_ruta_nombre")
+  @@unique([id_ruta, orden_secuencia], map: "uq_etapa_ruta_orden")
+  @@index([id_ruta], map: "idx_etapa_ruta")
+  @@index([id_ruta, orden_secuencia], map: "idx_etapa_ruta_orden")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model etapa_ruta_maquina {
+  id_etapa_ruta_maquina String     @id @db.Char(11)
+  id_etapa_ruta         String     @db.Char(11)
+  id_maquina            String     @db.Char(11)
+  observaciones         String?
+  etapa_ruta            etapa_ruta @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], map: "fk_etapa_ruta_maquina_etapa")
+  maquina               maquina    @relation(fields: [id_maquina], references: [id_maquina], map: "fk_etapa_ruta_maquina_maquina")
+
+  @@unique([id_etapa_ruta, id_maquina], map: "uq_etapa_ruta_maquina")
+  @@index([id_etapa_ruta], map: "idx_etapa_ruta_maquina_etapa")
+  @@index([id_maquina], map: "idx_etapa_ruta_maquina_maquina")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model exportacion_datos {
+  id_exportacion    String   @id @db.Char(11)
+  id_usuario        String   @db.Char(11)
+  modulo_origen     String   @db.VarChar(80)
+  formato           String   @db.VarChar(20)
+  fecha_exportacion DateTime @default(now()) @db.Timestamptz(6)
+  parametros        String?
+  estado            String   @default("generada") @db.VarChar(30)
+  ruta_archivo      String?  @db.VarChar(255)
+  usuario           usuario  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_exportacion_usuario")
+
+  @@index([fecha_exportacion(sort: Desc)], map: "idx_exportacion_fecha")
+  @@index([modulo_origen], map: "idx_exportacion_modulo")
+  @@index([id_usuario], map: "idx_exportacion_usuario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model falla_maquina {
+  id_falla             String       @id @db.Char(11)
+  id_maquina           String       @db.Char(11)
+  id_usuario_registro  String       @db.Char(11)
+  fecha_falla          DateTime     @default(now()) @db.Timestamptz(6)
+  descripcion          String
+  responsable_registro String?      @db.VarChar(100)
+  estado_atencion      String       @default("pendiente") @db.VarChar(30)
+  tiempo_perdido_horas Decimal?     @db.Decimal(10, 2)
+  impacto_produccion   String?
+  maquina              maquina      @relation(fields: [id_maquina], references: [id_maquina], map: "fk_falla_maquina")
+  usuario              usuario      @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_falla_usuario")
+  reparacion           reparacion[]
+
+  @@index([estado_atencion], map: "idx_falla_estado")
+  @@index([fecha_falla(sort: Desc)], map: "idx_falla_fecha")
+  @@index([id_maquina], map: "idx_falla_maquina")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model herramienta_epp {
+  id_herramienta_epp         String                       @id @db.Char(11)
+  nombre                     String                       @db.VarChar(100)
+  tipo                       String                       @db.VarChar(50)
+  codigo_interno             String?                      @unique @db.VarChar(30)
+  estado                     String                       @default("operativo") @db.VarChar(30)
+  ubicacion                  String?                      @db.VarChar(100)
+  fecha_registro             DateTime                     @default(now()) @db.Timestamptz(6)
+  observaciones              String?
+  asignacion_herramienta_epp asignacion_herramienta_epp[]
+
+  @@index([estado], map: "idx_herramienta_estado")
+  @@index([tipo], map: "idx_herramienta_tipo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model historial_pago_operario {
+  id_historial_pago   String        @id @db.Char(11)
+  id_planilla         String        @db.Char(11)
+  id_operario         String        @db.Char(11)
+  id_usuario_registro String        @db.Char(11)
+  fecha_pago          DateTime      @default(dbgenerated("CURRENT_DATE")) @db.Date
+  monto_pagado        Decimal       @db.Decimal(12, 2)
+  metodo_pago         String?       @db.VarChar(30)
+  periodo             String        @db.VarChar(30)
+  observaciones       String?
+  planilla_pago       planilla_pago @relation(fields: [id_planilla, id_operario], references: [id_planilla, id_operario], map: "fk_hist_pago_planilla_operario")
+  usuario             usuario       @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_hist_pago_usuario")
+
+  @@index([fecha_pago(sort: Desc)], map: "idx_hist_pago_fecha")
+  @@index([id_operario], map: "idx_hist_pago_operario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model historial_precio_proveedor {
+  id_historial_precio String    @id @db.Char(11)
+  id_proveedor        String    @db.Char(11)
+  id_material         String    @db.Char(11)
+  id_compra           String?   @db.Char(11)
+  precio_unitario     Decimal   @db.Decimal(12, 2)
+  fecha_registro      DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  origen_registro     String    @db.VarChar(50)
+  observaciones       String?
+  compra              compra?   @relation(fields: [id_compra, id_proveedor], references: [id_compra, id_proveedor], map: "fk_hist_precio_compra_proveedor")
+  material            material  @relation(fields: [id_material], references: [id_material], map: "fk_hist_precio_material")
+  proveedor           proveedor @relation(fields: [id_proveedor], references: [id_proveedor], map: "fk_hist_precio_proveedor")
+
+  @@index([fecha_registro(sort: Desc)], map: "idx_hist_precio_fecha")
+  @@index([id_material], map: "idx_hist_precio_material")
+  @@index([id_proveedor], map: "idx_hist_precio_proveedor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mantenimiento_preventivo {
+  id_mantenimiento    String    @id @db.Char(11)
+  id_maquina          String    @db.Char(11)
+  id_usuario_programa String    @db.Char(11)
+  fecha_programada    DateTime  @db.Date
+  fecha_realizada     DateTime? @db.Date
+  responsable         String?   @db.VarChar(100)
+  actividad           String    @db.VarChar(255)
+  estado              String    @default("pendiente") @db.VarChar(30)
+  observaciones       String?
+  maquina             maquina   @relation(fields: [id_maquina], references: [id_maquina], map: "fk_mantenimiento_maquina")
+  usuario             usuario   @relation(fields: [id_usuario_programa], references: [id_usuario], map: "fk_mantenimiento_usuario")
+
+  @@index([estado], map: "idx_mantenimiento_estado")
+  @@index([fecha_programada(sort: Desc)], map: "idx_mantenimiento_fecha")
+  @@index([id_maquina], map: "idx_mantenimiento_maquina")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model maquina {
+  id_maquina               String                     @id @db.Char(11)
+  nombre                   String                     @db.VarChar(100)
+  tipo                     String                     @db.VarChar(80)
+  codigo_interno           String?                    @unique @db.VarChar(30)
+  ubicacion                String?                    @db.VarChar(100)
+  estado                   String                     @default("operativa") @db.VarChar(30)
+  fecha_registro           DateTime                   @default(now()) @db.Timestamptz(6)
+  observaciones            String?
+  etapa_ruta_maquina       etapa_ruta_maquina[]
+  falla_maquina            falla_maquina[]
+  mantenimiento_preventivo mantenimiento_preventivo[]
+
+  @@index([estado], map: "idx_maquina_estado")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model margen_ganancia {
+  id_margen         String   @id @db.Char(11)
+  id_costeo         String   @db.Char(11)
+  id_usuario_aplica String   @db.Char(11)
+  porcentaje_margen Decimal  @db.Decimal(5, 2)
+  precio_sugerido   Decimal  @db.Decimal(12, 2)
+  precio_final      Decimal? @db.Decimal(12, 2)
+  fecha_aplicacion  DateTime @default(now()) @db.Timestamptz(6)
+  motivo_ajuste     String?
+  costeo            costeo   @relation(fields: [id_costeo], references: [id_costeo], map: "fk_margen_costeo")
+  usuario           usuario  @relation(fields: [id_usuario_aplica], references: [id_usuario], map: "fk_margen_usuario")
+
+  @@index([id_costeo], map: "idx_margen_costeo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model material {
+  id_material                String                       @id @db.Char(11)
+  nombre_material            String                       @unique(map: "uq_material_nombre") @db.VarChar(100)
+  categoria                  String                       @db.VarChar(50)
+  unidad_medida              String                       @db.VarChar(20)
+  stock_actual               Decimal                      @default(0) @db.Decimal(10, 2)
+  stock_reservado            Decimal                      @default(0) @db.Decimal(10, 2)
+  stock_minimo               Decimal                      @default(0) @db.Decimal(10, 2)
+  costo_unitario_actual      Decimal                      @default(0) @db.Decimal(12, 2)
+  estado                     Boolean                      @default(true)
+  fecha_registro             DateTime                     @default(now()) @db.Timestamptz(6)
+  alerta_stock               alerta_stock[]
+  chatarra                   chatarra[]
+  detalle_compra             detalle_compra[]
+  detalle_receta             detalle_receta[]
+  historial_precio_proveedor historial_precio_proveedor[]
+  movimiento_inventario      movimiento_inventario[]
+  proveedor_material         proveedor_material[]
+  retazo_reutilizable        retazo_reutilizable[]
+
+  @@index([categoria], map: "idx_material_categoria")
+  @@index([estado], map: "idx_material_estado")
+  @@index([stock_actual, stock_minimo], map: "idx_material_stock")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model movimiento_caja {
+  id_movimiento_caja  String           @id @db.Char(11)
+  id_caja_chica       String           @db.Char(11)
+  id_categoria_gasto  String?          @db.Char(11)
+  id_usuario_registro String           @db.Char(11)
+  tipo_movimiento     String           @db.VarChar(20)
+  concepto            String           @db.VarChar(150)
+  monto               Decimal          @db.Decimal(12, 2)
+  fecha_movimiento    DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  comprobante         String?          @db.VarChar(50)
+  responsable         String?          @db.VarChar(100)
+  observaciones       String?
+  caja_chica          caja_chica       @relation(fields: [id_caja_chica], references: [id_caja_chica], map: "fk_mov_caja_caja")
+  categoria_gasto     categoria_gasto? @relation(fields: [id_categoria_gasto], references: [id_categoria_gasto], onDelete: Restrict, map: "fk_mov_caja_categoria")
+  usuario             usuario          @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_mov_caja_usuario")
+  venta_chatarra      venta_chatarra[]
+
+  @@index([id_caja_chica], map: "idx_mov_caja_caja")
+  @@index([id_categoria_gasto], map: "idx_mov_caja_categoria")
+  @@index([fecha_movimiento(sort: Desc)], map: "idx_mov_caja_fecha")
+  @@index([tipo_movimiento], map: "idx_mov_caja_tipo")
+  @@index([id_usuario_registro], map: "idx_mov_caja_usuario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model movimiento_inventario {
+  id_movimiento          String         @id @db.Char(11)
+  id_material            String         @db.Char(11)
+  id_orden_trabajo       String?        @db.Char(11)
+  id_compra              String?        @db.Char(11)
+  tipo_movimiento        String         @db.VarChar(30)
+  cantidad               Decimal        @db.Decimal(10, 2)
+  stock_anterior         Decimal        @db.Decimal(10, 2)
+  stock_resultante       Decimal        @db.Decimal(10, 2)
+  fecha_movimiento       DateTime       @default(now()) @db.Timestamptz(6)
+  motivo                 String?        @db.VarChar(255)
+  id_usuario_responsable String         @db.Char(11)
+  compra                 compra?        @relation(fields: [id_compra], references: [id_compra], onDelete: Restrict, map: "fk_mov_inv_compra")
+  material               material       @relation(fields: [id_material], references: [id_material], map: "fk_mov_inv_material")
+  orden_trabajo          orden_trabajo? @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], onDelete: Restrict, map: "fk_mov_inv_orden")
+  usuario                usuario        @relation(fields: [id_usuario_responsable], references: [id_usuario], map: "fk_mov_inv_usuario")
+
+  @@index([id_compra], map: "idx_mov_inv_compra")
+  @@index([fecha_movimiento(sort: Desc)], map: "idx_mov_inv_fecha")
+  @@index([id_material], map: "idx_mov_inv_material")
+  @@index([id_orden_trabajo], map: "idx_mov_inv_orden")
+  @@index([tipo_movimiento], map: "idx_mov_inv_tipo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model operario {
+  id_operario                                                          String                       @id @db.Char(11)
+  nombres                                                              String                       @db.VarChar(100)
+  apellidos                                                            String                       @db.VarChar(100)
+  cargo                                                                String?                      @db.VarChar(50)
+  especialidad                                                         String?                      @db.VarChar(80)
+  telefono                                                             String?                      @db.VarChar(20)
+  direccion                                                            String?                      @db.VarChar(150)
+  modalidad_pago                                                       String                       @db.VarChar(30)
+  tarifa                                                               Decimal?                     @db.Decimal(12, 2)
+  fecha_ingreso                                                        DateTime?                    @db.Date
+  estado                                                               String                       @default("activo") @db.VarChar(20)
+  observaciones                                                        String?
+  asignacion_herramienta_epp                                           asignacion_herramienta_epp[]
+  asistencia                                                           asistencia[]
+  avance_orden                                                         avance_orden[]
+  planilla_pago                                                        planilla_pago[]
+  reasignacion_tarea_reasignacion_tarea_id_operario_anteriorTooperario reasignacion_tarea[]         @relation("reasignacion_tarea_id_operario_anteriorTooperario")
+  reasignacion_tarea_reasignacion_tarea_id_operario_nuevoTooperario    reasignacion_tarea[]         @relation("reasignacion_tarea_id_operario_nuevoTooperario")
+  tarea_operario                                                       tarea_operario[]
+
+  @@index([estado], map: "idx_operario_estado")
+  @@index([modalidad_pago], map: "idx_operario_modalidad")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model orden_trabajo {
+  id_orden_trabajo       String                  @id @db.Char(11)
+  id_cliente             String?                 @db.Char(11)
+  id_producto            String                  @db.Char(11)
+  id_campania            String?                 @db.Char(11)
+  id_detalle_pedido      String?                 @db.Char(11)
+  id_ruta                String?                 @db.Char(11)
+  id_version_receta      String?                 @db.Char(11)
+  tipo_produccion        String                  @db.VarChar(30)
+  cantidad               Decimal                 @db.Decimal(10, 2)
+  fecha_inicio           DateTime                @db.Date
+  fecha_entrega_estimada DateTime?               @db.Date
+  fecha_entrega_real     DateTime?               @db.Date
+  prioridad              String                  @default("media") @db.VarChar(20)
+  estado                 String                  @default("pendiente") @db.VarChar(30)
+  observaciones          String?
+  id_usuario_registro    String                  @db.Char(11)
+  fecha_registro         DateTime                @default(now()) @db.Timestamptz(6)
+  avance_orden           avance_orden[]
+  costeo                 costeo[]
+  movimiento_inventario  movimiento_inventario[]
+  campania_produccion    campania_produccion?    @relation(fields: [id_campania], references: [id_campania], onDelete: Restrict, map: "fk_orden_campania")
+  cliente                cliente?                @relation(fields: [id_cliente], references: [id_cliente], onDelete: Restrict, map: "fk_orden_cliente")
+  detalle_pedido         detalle_pedido?         @relation(fields: [id_detalle_pedido], references: [id_detalle_pedido], onDelete: Restrict, map: "fk_orden_detalle_pedido")
+  producto               producto                @relation(fields: [id_producto], references: [id_producto], map: "fk_orden_producto")
+  ruta_fabricacion       ruta_fabricacion?       @relation(fields: [id_ruta], references: [id_ruta], onDelete: Restrict, map: "fk_orden_ruta")
+  usuario                usuario                 @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_orden_usuario_registro")
+  version_receta         version_receta?         @relation(fields: [id_version_receta], references: [id_version_receta], onDelete: Restrict, map: "fk_orden_version_receta")
+  retazo_reutilizable    retazo_reutilizable[]
+  tarea_operario         tarea_operario[]
+
+  @@index([id_campania], map: "idx_orden_campania")
+  @@index([id_cliente], map: "idx_orden_cliente")
+  @@index([id_detalle_pedido], map: "idx_orden_detalle_pedido")
+  @@index([estado], map: "idx_orden_estado")
+  @@index([fecha_inicio, fecha_entrega_estimada], map: "idx_orden_fechas")
+  @@index([prioridad], map: "idx_orden_prioridad")
+  @@index([id_producto], map: "idx_orden_producto")
+  @@index([id_ruta], map: "idx_orden_ruta")
+  @@index([id_version_receta], map: "idx_orden_version_receta")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pago_cliente {
+  id_pago_cliente     String   @id @db.Char(11)
+  id_proforma         String   @db.Char(11)
+  id_pedido           String   @db.Char(11)
+  id_usuario_registro String   @db.Char(11)
+  fecha_pago          DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  monto_pagado        Decimal  @db.Decimal(12, 2)
+  metodo_pago         String   @db.VarChar(30)
+  tipo_pago           String   @db.VarChar(30)
+  saldo_actual        Decimal  @db.Decimal(12, 2)
+  observaciones       String?
+  proforma            proforma @relation(fields: [id_proforma, id_pedido], references: [id_proforma, id_pedido], map: "fk_pago_cliente_proforma_pedido")
+  usuario             usuario  @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_pago_cliente_usuario")
+
+  @@index([fecha_pago(sort: Desc)], map: "idx_pago_cliente_fecha")
+  @@index([id_pedido], map: "idx_pago_cliente_pedido")
+  @@index([id_proforma], map: "idx_pago_cliente_proforma")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pago_proveedor {
+  id_pago_proveedor   String   @id @db.Char(11)
+  id_compra           String   @db.Char(11)
+  id_proveedor        String   @db.Char(11)
+  id_usuario_registro String   @db.Char(11)
+  fecha_pago          DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  monto_pagado        Decimal  @db.Decimal(12, 2)
+  metodo_pago         String   @db.VarChar(30)
+  saldo_pendiente     Decimal  @db.Decimal(12, 2)
+  estado_pago         String   @db.VarChar(30)
+  observaciones       String?
+  compra              compra   @relation(fields: [id_compra, id_proveedor], references: [id_compra, id_proveedor], map: "fk_pago_proveedor_compra_proveedor")
+  usuario             usuario  @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_pago_proveedor_usuario")
+
+  @@index([id_compra], map: "idx_pago_proveedor_compra")
+  @@index([fecha_pago(sort: Desc)], map: "idx_pago_proveedor_fecha")
+  @@index([id_proveedor], map: "idx_pago_proveedor_proveedor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pedido {
+  id_pedido              String              @id @db.Char(11)
+  id_cliente             String              @db.Char(11)
+  id_usuario_registro    String              @db.Char(11)
+  fecha_pedido           DateTime            @default(dbgenerated("CURRENT_DATE")) @db.Date
+  fecha_entrega_estimada DateTime?           @db.Date
+  estado                 String              @default("registrado") @db.VarChar(30)
+  monto_estimado         Decimal?            @db.Decimal(12, 2)
+  observaciones          String?
+  comprobante_venta      comprobante_venta[]
+  costeo                 costeo[]
+  detalle_pedido         detalle_pedido[]
+  cliente                cliente             @relation(fields: [id_cliente], references: [id_cliente], map: "fk_pedido_cliente")
+  usuario                usuario             @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_pedido_usuario_registro")
+  proforma               proforma[]
+  rentabilidad           rentabilidad[]
+
+  @@index([id_cliente], map: "idx_pedido_cliente")
+  @@index([estado], map: "idx_pedido_estado")
+  @@index([fecha_pedido(sort: Desc)], map: "idx_pedido_fecha")
+  @@index([id_usuario_registro], map: "idx_pedido_usuario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model planilla_pago {
+  id_planilla             String                    @id @db.Char(11)
+  id_operario             String                    @db.Char(11)
+  id_usuario_genera       String                    @db.Char(11)
+  periodo_inicio          DateTime                  @db.Date
+  periodo_fin             DateTime                  @db.Date
+  modalidad_pago          String                    @db.VarChar(30)
+  monto_bruto             Decimal                   @db.Decimal(12, 2)
+  descuentos              Decimal                   @default(0) @db.Decimal(12, 2)
+  monto_neto              Decimal                   @db.Decimal(12, 2)
+  estado_pago             String                    @default("pendiente") @db.VarChar(30)
+  fecha_generacion        DateTime                  @default(now()) @db.Timestamptz(6)
+  historial_pago_operario historial_pago_operario[]
+  operario                operario                  @relation(fields: [id_operario], references: [id_operario], map: "fk_planilla_operario")
+  usuario                 usuario                   @relation(fields: [id_usuario_genera], references: [id_usuario], map: "fk_planilla_usuario")
+
+  @@unique([id_operario, periodo_inicio, periodo_fin], map: "uq_planilla_operario_periodo")
+  @@unique([id_planilla, id_operario], map: "uq_planilla_operario_ref")
+  @@index([estado_pago], map: "idx_planilla_estado")
+  @@index([id_operario], map: "idx_planilla_operario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model producto {
+  id_producto        String             @id @db.Char(11)
+  nombre_producto    String             @unique(map: "uq_producto_nombre") @db.VarChar(100)
+  categoria          String             @db.VarChar(50)
+  descripcion        String?
+  unidad_medida      String             @db.VarChar(20)
+  precio_referencial Decimal?           @db.Decimal(12, 2)
+  estado             Boolean            @default(true)
+  fecha_registro     DateTime           @default(now()) @db.Timestamptz(6)
+  campania_detalle   campania_detalle[]
+  detalle_pedido     detalle_pedido[]
+  orden_trabajo      orden_trabajo[]
+  receta_tecnica     receta_tecnica[]
+  ruta_fabricacion   ruta_fabricacion[]
+
+  @@index([categoria], map: "idx_producto_categoria")
+  @@index([estado], map: "idx_producto_estado")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model proforma {
+  id_proforma       String              @id @db.Char(11)
+  id_pedido         String              @db.Char(11)
+  numero_proforma   String              @unique @db.VarChar(30)
+  fecha_emision     DateTime            @default(dbgenerated("CURRENT_DATE")) @db.Date
+  monto_total       Decimal             @db.Decimal(12, 2)
+  adelanto_inicial  Decimal?            @db.Decimal(12, 2)
+  saldo             Decimal             @db.Decimal(12, 2)
+  estado            String              @default("vigente") @db.VarChar(30)
+  validez_dias      Int?
+  observaciones     String?
+  comprobante_venta comprobante_venta[]
+  pago_cliente      pago_cliente[]
+  pedido            pedido              @relation(fields: [id_pedido], references: [id_pedido], map: "fk_proforma_pedido")
+
+  @@unique([id_proforma, id_pedido], map: "uq_proforma_pedido_ref")
+  @@index([estado], map: "idx_proforma_estado")
+  @@index([fecha_emision(sort: Desc)], map: "idx_proforma_fecha")
+  @@index([id_pedido], map: "idx_proforma_pedido")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model proveedor {
+  id_proveedor               String                       @id @db.Char(11)
+  razon_social               String                       @db.VarChar(150)
+  tipo_documento             String?                      @db.VarChar(20)
+  numero_documento           String?                      @unique @db.VarChar(20)
+  telefono                   String?                      @db.VarChar(20)
+  correo                     String?                      @db.VarChar(100)
+  direccion                  String?                      @db.VarChar(150)
+  contacto_principal         String?                      @db.VarChar(100)
+  tipo_proveedor             String                       @db.VarChar(50)
+  condicion_pago             String?                      @db.VarChar(50)
+  estado                     Boolean                      @default(true)
+  observaciones              String?
+  compra                     compra[]
+  historial_precio_proveedor historial_precio_proveedor[]
+  proveedor_material         proveedor_material[]
+  repuesto                   repuesto[]
+
+  @@index([estado], map: "idx_proveedor_estado")
+  @@index([razon_social], map: "idx_proveedor_razon_social")
+  @@index([tipo_proveedor], map: "idx_proveedor_tipo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model proveedor_material {
+  id_proveedor_material String    @id @db.Char(11)
+  id_proveedor          String    @db.Char(11)
+  id_material           String    @db.Char(11)
+  precio_referencial    Decimal?  @db.Decimal(12, 2)
+  unidad_medida         String    @db.VarChar(20)
+  tiempo_entrega_dias   Int?
+  disponibilidad        String?   @db.VarChar(30)
+  estado                Boolean   @default(true)
+  fecha_actualizacion   DateTime? @db.Timestamptz(6)
+  material              material  @relation(fields: [id_material], references: [id_material], map: "fk_proveedor_material_material")
+  proveedor             proveedor @relation(fields: [id_proveedor], references: [id_proveedor], map: "fk_proveedor_material_proveedor")
+
+  @@unique([id_proveedor, id_material], map: "uq_proveedor_material")
+  @@index([id_material], map: "idx_proveedor_material_material")
+  @@index([id_proveedor], map: "idx_proveedor_material_proveedor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model reasignacion_tarea {
+  id_reasignacion                                            String       @id @db.Char(11)
+  id_avance                                                  String       @db.Char(11)
+  id_operario_anterior                                       String?      @db.Char(11)
+  id_operario_nuevo                                          String       @db.Char(11)
+  motivo                                                     String       @db.VarChar(255)
+  fecha_reasignacion                                         DateTime     @default(now()) @db.Timestamptz(6)
+  id_usuario_responsable                                     String       @db.Char(11)
+  avance_orden                                               avance_orden @relation(fields: [id_avance], references: [id_avance], map: "fk_reasignacion_avance")
+  operario_reasignacion_tarea_id_operario_anteriorTooperario operario?    @relation("reasignacion_tarea_id_operario_anteriorTooperario", fields: [id_operario_anterior], references: [id_operario], onDelete: Restrict, map: "fk_reasignacion_operario_anterior")
+  operario_reasignacion_tarea_id_operario_nuevoTooperario    operario     @relation("reasignacion_tarea_id_operario_nuevoTooperario", fields: [id_operario_nuevo], references: [id_operario], map: "fk_reasignacion_operario_nuevo")
+  usuario                                                    usuario      @relation(fields: [id_usuario_responsable], references: [id_usuario], map: "fk_reasignacion_usuario")
+
+  @@index([id_avance], map: "idx_reasignacion_avance")
+  @@index([id_operario_nuevo], map: "idx_reasignacion_operario_nuevo")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model receta_tecnica {
+  id_receta           String          @id @db.Char(11)
+  id_producto         String          @db.Char(11)
+  nombre_receta       String          @db.VarChar(100)
+  descripcion         String?
+  estado              String          @default("activa") @db.VarChar(20)
+  fecha_creacion      DateTime        @default(dbgenerated("CURRENT_DATE")) @db.Date
+  id_usuario_creacion String          @db.Char(11)
+  producto            producto        @relation(fields: [id_producto], references: [id_producto], map: "fk_receta_producto")
+  usuario             usuario         @relation(fields: [id_usuario_creacion], references: [id_usuario], map: "fk_receta_usuario_creacion")
+  version_receta      version_receta?
+
+  @@unique([id_producto, nombre_receta], map: "uq_receta_producto_nombre")
+  @@index([estado], map: "idx_receta_estado")
+  @@index([id_producto], map: "idx_receta_producto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rentabilidad {
+  id_rentabilidad    String   @id @db.Char(11)
+  id_pedido          String?  @db.Char(11)
+  id_costeo          String   @db.Char(11)
+  ingreso_estimado   Decimal  @db.Decimal(12, 2)
+  costo_total        Decimal  @db.Decimal(12, 2)
+  utilidad_estimada  Decimal  @db.Decimal(12, 2)
+  margen_real        Decimal  @db.Decimal(5, 2)
+  alerta_bajo_margen Boolean  @default(false)
+  fecha_calculo      DateTime @default(now()) @db.Timestamptz(6)
+  observaciones      String?
+  costeo             costeo   @relation(fields: [id_costeo], references: [id_costeo], map: "fk_rentabilidad_costeo")
+  pedido             pedido?  @relation(fields: [id_pedido], references: [id_pedido], onDelete: Restrict, map: "fk_rentabilidad_pedido")
+
+  @@index([id_costeo], map: "idx_rentabilidad_costeo")
+  @@index([fecha_calculo(sort: Desc)], map: "idx_rentabilidad_fecha")
+  @@index([id_pedido], map: "idx_rentabilidad_pedido")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model reparacion {
+  id_reparacion               String                        @id @db.Char(11)
+  id_falla                    String                        @db.Char(11)
+  fecha_reparacion            DateTime                      @default(dbgenerated("CURRENT_DATE")) @db.Date
+  tecnico_proveedor           String?                       @db.VarChar(100)
+  mano_obra                   Decimal?                      @db.Decimal(12, 2)
+  costo_total                 Decimal                       @db.Decimal(12, 2)
+  estado_reparacion           String                        @default("programada") @db.VarChar(30)
+  observaciones               String?
+  detalle_repuesto_reparacion detalle_repuesto_reparacion[]
+  falla_maquina               falla_maquina                 @relation(fields: [id_falla], references: [id_falla], map: "fk_reparacion_falla")
+
+  @@index([id_falla], map: "idx_reparacion_falla")
+  @@index([fecha_reparacion(sort: Desc)], map: "idx_reparacion_fecha")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model reporte {
+  id_reporte       String   @id @db.Char(11)
+  id_usuario       String   @db.Char(11)
+  tipo_reporte     String   @db.VarChar(80)
+  fecha_generacion DateTime @default(now()) @db.Timestamptz(6)
+  formato          String   @db.VarChar(20)
+  parametros       String?
+  ruta_archivo     String?  @db.VarChar(255)
+  estado           String   @default("generado") @db.VarChar(30)
+  usuario          usuario  @relation(fields: [id_usuario], references: [id_usuario], map: "fk_reporte_usuario")
+
+  @@index([fecha_generacion(sort: Desc)], map: "idx_reporte_fecha")
+  @@index([tipo_reporte], map: "idx_reporte_tipo")
+  @@index([id_usuario], map: "idx_reporte_usuario")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model repuesto {
+  id_repuesto                 String                        @id @db.Char(11)
+  id_proveedor                String?                       @db.Char(11)
+  nombre_repuesto             String                        @unique(map: "uq_repuesto_nombre") @db.VarChar(100)
+  descripcion                 String?
+  costo_unitario              Decimal                       @db.Decimal(12, 2)
+  estado                      Boolean                       @default(true)
+  detalle_repuesto_reparacion detalle_repuesto_reparacion[]
+  proveedor                   proveedor?                    @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: Restrict, map: "fk_repuesto_proveedor")
+
+  @@index([id_proveedor], map: "idx_repuesto_proveedor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model retazo_reutilizable {
+  id_retazo           String         @id @db.Char(11)
+  id_material         String         @db.Char(11)
+  id_orden_trabajo    String?        @db.Char(11)
+  tipo_material       String         @db.VarChar(50)
+  medida_aproximada   String?        @db.VarChar(80)
+  cantidad            Decimal        @db.Decimal(10, 2)
+  unidad_medida       String         @db.VarChar(20)
+  ubicacion           String?        @db.VarChar(100)
+  estado              String         @default("disponible") @db.VarChar(30)
+  fecha_registro      DateTime       @default(now()) @db.Timestamptz(6)
+  id_usuario_registro String         @db.Char(11)
+  material            material       @relation(fields: [id_material], references: [id_material], map: "fk_retazo_material")
+  orden_trabajo       orden_trabajo? @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], onDelete: Restrict, map: "fk_retazo_orden")
+  usuario             usuario        @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_retazo_usuario")
+
+  @@index([estado], map: "idx_retazo_estado")
+  @@index([id_material], map: "idx_retazo_material")
+  @@index([id_orden_trabajo], map: "idx_retazo_orden")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rol {
+  id_rol      String    @id @db.Char(11)
+  nombre_rol  String    @unique @db.VarChar(50)
+  descripcion String?
+  estado      Boolean   @default(true)
+  usuario     usuario[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ruta_fabricacion {
+  id_ruta       String          @id @db.Char(11)
+  id_producto   String          @db.Char(11)
+  nombre_ruta   String          @db.VarChar(100)
+  descripcion   String?
+  estado        Boolean         @default(true)
+  etapa_ruta    etapa_ruta[]
+  orden_trabajo orden_trabajo[]
+  producto      producto        @relation(fields: [id_producto], references: [id_producto], map: "fk_ruta_producto")
+
+  @@unique([id_producto, nombre_ruta], map: "uq_ruta_producto_nombre")
+  @@index([id_producto], map: "idx_ruta_producto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tarea_operario {
+  id_tarea_operario   String        @id @db.Char(11)
+  id_operario         String        @db.Char(11)
+  id_orden_trabajo    String        @db.Char(11)
+  id_etapa_ruta       String?       @db.Char(11)
+  id_usuario_registro String        @db.Char(11)
+  fecha_tarea         DateTime      @default(dbgenerated("CURRENT_DATE")) @db.Date
+  descripcion         String        @db.VarChar(255)
+  horas_dedicadas     Decimal?      @db.Decimal(5, 2)
+  estado              String        @default("registrada") @db.VarChar(30)
+  observaciones       String?
+  etapa_ruta          etapa_ruta?   @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], onDelete: Restrict, map: "fk_tarea_etapa")
+  operario            operario      @relation(fields: [id_operario], references: [id_operario], map: "fk_tarea_operario")
+  orden_trabajo       orden_trabajo @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], map: "fk_tarea_orden")
+  usuario             usuario       @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_tarea_usuario")
+
+  @@index([fecha_tarea(sort: Desc)], map: "idx_tarea_fecha")
+  @@index([id_operario], map: "idx_tarea_operario")
+  @@index([id_orden_trabajo], map: "idx_tarea_orden")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model usuario {
+  id_usuario                 String                       @id @db.Char(11)
+  id_rol                     String                       @db.Char(11)
+  nombres                    String                       @db.VarChar(100)
+  apellidos                  String                       @db.VarChar(100)
+  usuario                    String                       @unique @db.VarChar(50)
+  correo                     String?                      @unique @db.VarChar(100)
+  clave_hash                 String                       @db.VarChar(255)
+  estado                     String                       @default("activo") @db.VarChar(20)
+  fecha_registro             DateTime                     @default(now()) @db.Timestamptz(6)
+  ultimo_acceso              DateTime?                    @db.Timestamptz(6)
+  alerta_stock               alerta_stock[]
+  asignacion_herramienta_epp asignacion_herramienta_epp[]
+  asistencia                 asistencia[]
+  avance_orden               avance_orden[]
+  bitacora_operacion         bitacora_operacion[]
+  campania_produccion        campania_produccion[]
+  compra                     compra[]
+  costeo                     costeo[]
+  exportacion_datos          exportacion_datos[]
+  falla_maquina              falla_maquina[]
+  historial_pago_operario    historial_pago_operario[]
+  mantenimiento_preventivo   mantenimiento_preventivo[]
+  margen_ganancia            margen_ganancia[]
+  movimiento_caja            movimiento_caja[]
+  movimiento_inventario      movimiento_inventario[]
+  orden_trabajo              orden_trabajo[]
+  pago_cliente               pago_cliente[]
+  pago_proveedor             pago_proveedor[]
+  pedido                     pedido[]
+  planilla_pago              planilla_pago[]
+  reasignacion_tarea         reasignacion_tarea[]
+  receta_tecnica             receta_tecnica[]
+  reporte                    reporte[]
+  retazo_reutilizable        retazo_reutilizable[]
+  tarea_operario             tarea_operario[]
+  rol                        rol                          @relation(fields: [id_rol], references: [id_rol], map: "fk_usuario_rol")
+  venta_chatarra             venta_chatarra[]
+  version_receta             version_receta[]
+
+  @@index([estado], map: "idx_usuario_estado")
+  @@index([id_rol], map: "idx_usuario_id_rol")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model venta_chatarra {
+  id_venta_chatarra   String           @id @db.Char(11)
+  id_chatarra         String           @db.Char(11)
+  id_movimiento_caja  String?          @db.Char(11)
+  fecha_venta         DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  cantidad_vendida    Decimal?         @db.Decimal(10, 2)
+  peso_vendido_kg     Decimal?         @db.Decimal(10, 2)
+  monto_recibido      Decimal          @db.Decimal(12, 2)
+  destino_dinero      String?          @db.VarChar(150)
+  id_usuario_registro String           @db.Char(11)
+  observaciones       String?
+  chatarra            chatarra         @relation(fields: [id_chatarra], references: [id_chatarra], map: "fk_venta_chatarra_chatarra")
+  movimiento_caja     movimiento_caja? @relation(fields: [id_movimiento_caja], references: [id_movimiento_caja], onDelete: Restrict, map: "fk_venta_chatarra_mov_caja")
+  usuario             usuario          @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_venta_chatarra_usuario")
+
+  @@index([fecha_venta(sort: Desc)], map: "idx_venta_chatarra_fecha")
+  @@index([id_movimiento_caja], map: "idx_venta_chatarra_mov_caja")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model version_receta {
+  id_version_receta  String           @id @db.Char(11)
+  id_receta          String           @unique(map: "uq_version_receta_vigente", where: raw("((estado)::text = 'vigente'::text)")) @db.Char(11)
+  numero_version     String           @db.VarChar(20)
+  fecha_version      DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  motivo_cambio      String?
+  estado             String           @default("vigente") @db.VarChar(20)
+  id_usuario_aprueba String?          @db.Char(11)
+  detalle_receta     detalle_receta[]
+  orden_trabajo      orden_trabajo[]
+  receta_tecnica     receta_tecnica   @relation(fields: [id_receta], references: [id_receta], map: "fk_version_receta")
+  usuario            usuario?         @relation(fields: [id_usuario_aprueba], references: [id_usuario], onDelete: Restrict, map: "fk_version_usuario_aprueba")
+
+  @@unique([id_receta, numero_version], map: "uq_version_receta_numero")
+  @@index([estado], map: "idx_version_receta_estado")
+  @@index([id_receta], map: "idx_version_receta_id_receta")
 }
