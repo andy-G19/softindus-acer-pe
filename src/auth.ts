@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/db";
 import { loginSchema } from "@/modules/auth/auth.schema";
-import { UserStatus } from "@/generated/prisma/client";
 
 declare module "next-auth" {
   interface User {
@@ -55,9 +54,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const { email, password } = parsedCredentials.data;
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.usuario.findUnique({
           where: {
-            email,
+            correo: email,
+          },
+          include: {
+            rol: true,
           },
         });
 
@@ -65,34 +67,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        if (user.status !== UserStatus.ACTIVE) {
+        if (user.estado !== "activo") {
           return null;
         }
 
         const passwordIsValid = await bcrypt.compare(
           password,
-          user.passwordHash,
+          user.clave_hash,
         );
 
         if (!passwordIsValid) {
           return null;
         }
 
-        await prisma.user.update({
+        await prisma.usuario.update({
           where: {
-            id: user.id,
+            id_usuario: user.id_usuario,
           },
           data: {
-            lastLoginAt: new Date(),
+            ultimo_acceso: new Date(),
           },
         });
 
         return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          status: user.status,
+          id: user.id_usuario,
+          name: `${user.nombres} ${user.apellidos}`,
+          email: user.correo,
+          role: user.rol.nombre_rol,
+          status: user.estado,
         };
       },
     }),

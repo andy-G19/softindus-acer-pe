@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
-import type { UserRole } from "@/generated/prisma/client";
+import type { AppRole } from "@/lib/permissions";
 
 export async function requireAuth() {
   const session = await auth();
@@ -13,10 +13,10 @@ export async function requireAuth() {
   return session;
 }
 
-export async function requireRole(allowedRoles: UserRole[]) {
+export async function requireRole(allowedRoles: AppRole[]) {
   const session = await requireAuth();
 
-  if (!allowedRoles.includes(session.user.role as UserRole)) {
+  if (!allowedRoles.includes(session.user.role as AppRole)) {
     redirect("/dashboard/access-denied");
   }
 

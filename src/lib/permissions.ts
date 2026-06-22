@@ -1,37 +1,46 @@
-import { UserRole, UserStatus } from "@/generated/prisma/client";
+export const APP_ROLES = {
+  ADMIN: "ADMIN",
+  SELLER: "SELLER",
+  WORKSHOP_MASTER: "WORKSHOP_MASTER",
+} as const;
 
-export const roleLabels: Record<UserRole, string> = {
+export type AppRole = (typeof APP_ROLES)[keyof typeof APP_ROLES];
+
+export type AppUserStatus = "activo" | "inactivo" | "bloqueado";
+
+export const roleLabels: Record<AppRole, string> = {
   ADMIN: "Administrador",
   SELLER: "Vendedor",
   WORKSHOP_MASTER: "Maestro de taller",
 };
 
-export const userStatusLabels: Record<UserStatus, string> = {
-  ACTIVE: "Activo",
-  INACTIVE: "Inactivo",
+export const userStatusLabels: Record<AppUserStatus, string> = {
+  activo: "Activo",
+  inactivo: "Inactivo",
+  bloqueado: "Bloqueado",
 };
 
 type DashboardRoute = {
   title: string;
   href: string;
-  roles: UserRole[];
+  roles: AppRole[];
 };
 
 export const dashboardRoutes: DashboardRoute[] = [
   {
     title: "Dashboard",
     href: "/dashboard",
-    roles: [UserRole.ADMIN, UserRole.SELLER, UserRole.WORKSHOP_MASTER],
+    roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER, APP_ROLES.WORKSHOP_MASTER],
   },
   {
     title: "Usuarios",
     href: "/dashboard/users",
-    roles: [UserRole.ADMIN],
+    roles: [APP_ROLES.ADMIN],
   },
   {
     title: "Acceso denegado",
     href: "/dashboard/access-denied",
-    roles: [UserRole.ADMIN, UserRole.SELLER, UserRole.WORKSHOP_MASTER],
+    roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER, APP_ROLES.WORKSHOP_MASTER],
   },
 ];
 
@@ -43,7 +52,27 @@ function normalizePath(pathname: string) {
   return pathname;
 }
 
-export function getMenuForRole(role: UserRole) {
+export function isAppRole(role: string): role is AppRole {
+  return Object.values(APP_ROLES).includes(role as AppRole);
+}
+
+export function getRoleLabel(role: string) {
+  if (!isAppRole(role)) {
+    return role;
+  }
+
+  return roleLabels[role];
+}
+
+export function getUserStatusLabel(status: string) {
+  return userStatusLabels[status as AppUserStatus] ?? status;
+}
+
+export function getMenuForRole(role: string) {
+  if (!isAppRole(role)) {
+    return [];
+  }
+
   return dashboardRoutes.filter((route) => {
     if (route.href === "/dashboard/access-denied") {
       return false;
@@ -53,7 +82,11 @@ export function getMenuForRole(role: UserRole) {
   });
 }
 
-export function canAccessDashboardRoute(role: UserRole, pathname: string) {
+export function canAccessDashboardRoute(role: string, pathname: string) {
+  if (!isAppRole(role)) {
+    return false;
+  }
+
   const normalizedPathname = normalizePath(pathname);
 
   const matchedRoute = dashboardRoutes

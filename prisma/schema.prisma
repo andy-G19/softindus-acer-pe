@@ -6,7 +6,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
+  schemas  = ["aceros"]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -26,6 +26,7 @@ model alerta_stock {
 
   @@index([estado_alerta], map: "idx_alerta_estado")
   @@index([id_material], map: "idx_alerta_material")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -47,6 +48,7 @@ model asignacion_herramienta_epp {
   @@index([estado_devolucion], map: "idx_asignacion_estado")
   @@index([id_herramienta_epp], map: "idx_asignacion_herramienta")
   @@index([id_operario], map: "idx_asignacion_operario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -68,6 +70,7 @@ model asistencia {
   @@unique([id_operario, fecha], map: "uq_asistencia_operario_fecha")
   @@index([fecha(sort: Desc)], map: "idx_asistencia_fecha")
   @@index([id_operario], map: "idx_asistencia_operario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -94,6 +97,7 @@ model avance_orden {
   @@index([id_etapa_ruta], map: "idx_avance_etapa")
   @@index([id_operario], map: "idx_avance_operario")
   @@index([id_orden_trabajo], map: "idx_avance_orden")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -112,6 +116,7 @@ model bitacora_operacion {
   @@index([accion], map: "idx_bitacora_accion")
   @@index([entidad_afectada, id_registro_afectado], map: "idx_bitacora_entidad")
   @@index([id_usuario, fecha_hora(sort: Desc)], map: "idx_bitacora_usuario_fecha")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -128,6 +133,7 @@ model caja_chica {
   movimiento_caja movimiento_caja[]
 
   @@index([estado], map: "idx_caja_estado")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -145,6 +151,7 @@ model campania_detalle {
   @@unique([id_campania, id_producto], map: "uq_campania_producto")
   @@index([id_campania], map: "idx_campania_detalle_campania")
   @@index([id_producto], map: "idx_campania_detalle_producto")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -163,6 +170,7 @@ model campania_produccion {
 
   @@index([estado], map: "idx_campania_estado")
   @@index([fecha_inicio, fecha_fin], map: "idx_campania_fechas")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -175,6 +183,7 @@ model categoria_gasto {
   movimiento_caja    movimiento_caja[]
 
   @@index([estado], map: "idx_categoria_gasto_estado")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -193,6 +202,7 @@ model chatarra {
 
   @@index([estado], map: "idx_chatarra_estado")
   @@index([id_material], map: "idx_chatarra_material")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -216,6 +226,7 @@ model cliente {
   @@index([estado], map: "idx_cliente_estado")
   @@index([nombre_razon_social], map: "idx_cliente_nombre")
   @@index([tipo_cliente], map: "idx_cliente_tipo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -247,6 +258,7 @@ model compra {
   @@index([estado_pago], map: "idx_compra_estado_pago")
   @@index([fecha_compra(sort: Desc)], map: "idx_compra_fecha")
   @@index([id_proveedor], map: "idx_compra_proveedor")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -267,6 +279,7 @@ model comprobante_venta {
   @@index([fecha_emision(sort: Desc)], map: "idx_comprobante_fecha")
   @@index([id_pedido], map: "idx_comprobante_pedido")
   @@index([id_proforma], map: "idx_comprobante_proforma")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -295,6 +308,7 @@ model costeo {
   @@index([fecha_costeo(sort: Desc)], map: "idx_costeo_fecha")
   @@index([id_orden_trabajo], map: "idx_costeo_orden")
   @@index([id_pedido], map: "idx_costeo_pedido")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -313,6 +327,7 @@ model costo_indirecto {
 
   @@index([id_costeo], map: "idx_costo_indirecto_costeo")
   @@index([periodo], map: "idx_costo_indirecto_periodo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -329,6 +344,7 @@ model dashboard_indicador {
 
   @@unique([nombre_indicador, categoria], map: "uq_dashboard_indicador")
   @@index([categoria], map: "idx_dashboard_categoria")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -347,6 +363,7 @@ model detalle_compra {
 
   @@index([id_compra], map: "idx_detalle_compra_compra")
   @@index([id_material], map: "idx_detalle_compra_material")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -366,6 +383,7 @@ model detalle_pedido {
   @@unique([id_pedido, id_producto], map: "uq_detalle_pedido_producto")
   @@index([id_pedido], map: "idx_detalle_pedido_pedido")
   @@index([id_producto], map: "idx_detalle_pedido_producto")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -385,6 +403,7 @@ model detalle_receta {
   @@unique([id_version_receta, id_material], map: "uq_detalle_receta_material")
   @@index([id_material], map: "idx_detalle_receta_material")
   @@index([id_version_receta], map: "idx_detalle_receta_version")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -402,6 +421,7 @@ model detalle_repuesto_reparacion {
   @@unique([id_reparacion, id_repuesto], map: "uq_det_repuesto_reparacion")
   @@index([id_reparacion], map: "idx_det_repuesto_reparacion")
   @@index([id_repuesto], map: "idx_det_repuesto_repuesto")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -424,6 +444,7 @@ model etapa_ruta {
   @@unique([id_ruta, orden_secuencia], map: "uq_etapa_ruta_orden")
   @@index([id_ruta], map: "idx_etapa_ruta")
   @@index([id_ruta, orden_secuencia], map: "idx_etapa_ruta_orden")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -439,6 +460,7 @@ model etapa_ruta_maquina {
   @@unique([id_etapa_ruta, id_maquina], map: "uq_etapa_ruta_maquina")
   @@index([id_etapa_ruta], map: "idx_etapa_ruta_maquina_etapa")
   @@index([id_maquina], map: "idx_etapa_ruta_maquina_maquina")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -457,6 +479,7 @@ model exportacion_datos {
   @@index([fecha_exportacion(sort: Desc)], map: "idx_exportacion_fecha")
   @@index([modulo_origen], map: "idx_exportacion_modulo")
   @@index([id_usuario], map: "idx_exportacion_usuario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -478,6 +501,7 @@ model falla_maquina {
   @@index([estado_atencion], map: "idx_falla_estado")
   @@index([fecha_falla(sort: Desc)], map: "idx_falla_fecha")
   @@index([id_maquina], map: "idx_falla_maquina")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -495,6 +519,7 @@ model herramienta_epp {
 
   @@index([estado], map: "idx_herramienta_estado")
   @@index([tipo], map: "idx_herramienta_tipo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -514,6 +539,7 @@ model historial_pago_operario {
 
   @@index([fecha_pago(sort: Desc)], map: "idx_hist_pago_fecha")
   @@index([id_operario], map: "idx_hist_pago_operario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -534,6 +560,7 @@ model historial_precio_proveedor {
   @@index([fecha_registro(sort: Desc)], map: "idx_hist_precio_fecha")
   @@index([id_material], map: "idx_hist_precio_material")
   @@index([id_proveedor], map: "idx_hist_precio_proveedor")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -554,6 +581,7 @@ model mantenimiento_preventivo {
   @@index([estado], map: "idx_mantenimiento_estado")
   @@index([fecha_programada(sort: Desc)], map: "idx_mantenimiento_fecha")
   @@index([id_maquina], map: "idx_mantenimiento_maquina")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -572,6 +600,7 @@ model maquina {
   mantenimiento_preventivo mantenimiento_preventivo[]
 
   @@index([estado], map: "idx_maquina_estado")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -589,6 +618,7 @@ model margen_ganancia {
   usuario           usuario  @relation(fields: [id_usuario_aplica], references: [id_usuario], map: "fk_margen_usuario")
 
   @@index([id_costeo], map: "idx_margen_costeo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -616,6 +646,7 @@ model material {
   @@index([categoria], map: "idx_material_categoria")
   @@index([estado], map: "idx_material_estado")
   @@index([stock_actual, stock_minimo], map: "idx_material_stock")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -642,6 +673,7 @@ model movimiento_caja {
   @@index([fecha_movimiento(sort: Desc)], map: "idx_mov_caja_fecha")
   @@index([tipo_movimiento], map: "idx_mov_caja_tipo")
   @@index([id_usuario_registro], map: "idx_mov_caja_usuario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -668,6 +700,7 @@ model movimiento_inventario {
   @@index([id_material], map: "idx_mov_inv_material")
   @@index([id_orden_trabajo], map: "idx_mov_inv_orden")
   @@index([tipo_movimiento], map: "idx_mov_inv_tipo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -695,6 +728,7 @@ model operario {
 
   @@index([estado], map: "idx_operario_estado")
   @@index([modalidad_pago], map: "idx_operario_modalidad")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -739,6 +773,7 @@ model orden_trabajo {
   @@index([id_producto], map: "idx_orden_producto")
   @@index([id_ruta], map: "idx_orden_ruta")
   @@index([id_version_receta], map: "idx_orden_version_receta")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -760,6 +795,7 @@ model pago_cliente {
   @@index([fecha_pago(sort: Desc)], map: "idx_pago_cliente_fecha")
   @@index([id_pedido], map: "idx_pago_cliente_pedido")
   @@index([id_proforma], map: "idx_pago_cliente_proforma")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -781,6 +817,7 @@ model pago_proveedor {
   @@index([id_compra], map: "idx_pago_proveedor_compra")
   @@index([fecha_pago(sort: Desc)], map: "idx_pago_proveedor_fecha")
   @@index([id_proveedor], map: "idx_pago_proveedor_proveedor")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -806,6 +843,7 @@ model pedido {
   @@index([estado], map: "idx_pedido_estado")
   @@index([fecha_pedido(sort: Desc)], map: "idx_pedido_fecha")
   @@index([id_usuario_registro], map: "idx_pedido_usuario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -830,6 +868,7 @@ model planilla_pago {
   @@unique([id_planilla, id_operario], map: "uq_planilla_operario_ref")
   @@index([estado_pago], map: "idx_planilla_estado")
   @@index([id_operario], map: "idx_planilla_operario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -851,6 +890,7 @@ model producto {
 
   @@index([categoria], map: "idx_producto_categoria")
   @@index([estado], map: "idx_producto_estado")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -874,6 +914,7 @@ model proforma {
   @@index([estado], map: "idx_proforma_estado")
   @@index([fecha_emision(sort: Desc)], map: "idx_proforma_fecha")
   @@index([id_pedido], map: "idx_proforma_pedido")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -899,6 +940,7 @@ model proveedor {
   @@index([estado], map: "idx_proveedor_estado")
   @@index([razon_social], map: "idx_proveedor_razon_social")
   @@index([tipo_proveedor], map: "idx_proveedor_tipo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -919,6 +961,7 @@ model proveedor_material {
   @@unique([id_proveedor, id_material], map: "uq_proveedor_material")
   @@index([id_material], map: "idx_proveedor_material_material")
   @@index([id_proveedor], map: "idx_proveedor_material_proveedor")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -938,6 +981,7 @@ model reasignacion_tarea {
 
   @@index([id_avance], map: "idx_reasignacion_avance")
   @@index([id_operario_nuevo], map: "idx_reasignacion_operario_nuevo")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -957,6 +1001,7 @@ model receta_tecnica {
   @@unique([id_producto, nombre_receta], map: "uq_receta_producto_nombre")
   @@index([estado], map: "idx_receta_estado")
   @@index([id_producto], map: "idx_receta_producto")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -978,6 +1023,7 @@ model rentabilidad {
   @@index([id_costeo], map: "idx_rentabilidad_costeo")
   @@index([fecha_calculo(sort: Desc)], map: "idx_rentabilidad_fecha")
   @@index([id_pedido], map: "idx_rentabilidad_pedido")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -996,6 +1042,7 @@ model reparacion {
 
   @@index([id_falla], map: "idx_reparacion_falla")
   @@index([fecha_reparacion(sort: Desc)], map: "idx_reparacion_fecha")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1014,6 +1061,7 @@ model reporte {
   @@index([fecha_generacion(sort: Desc)], map: "idx_reporte_fecha")
   @@index([tipo_reporte], map: "idx_reporte_tipo")
   @@index([id_usuario], map: "idx_reporte_usuario")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1029,6 +1077,7 @@ model repuesto {
   proveedor                   proveedor?                    @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: Restrict, map: "fk_repuesto_proveedor")
 
   @@index([id_proveedor], map: "idx_repuesto_proveedor")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1052,6 +1101,7 @@ model retazo_reutilizable {
   @@index([estado], map: "idx_retazo_estado")
   @@index([id_material], map: "idx_retazo_material")
   @@index([id_orden_trabajo], map: "idx_retazo_orden")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1062,6 +1112,8 @@ model rol {
   descripcion String?
   estado      Boolean   @default(true)
   usuario     usuario[]
+
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1078,6 +1130,7 @@ model ruta_fabricacion {
 
   @@unique([id_producto, nombre_ruta], map: "uq_ruta_producto_nombre")
   @@index([id_producto], map: "idx_ruta_producto")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1101,6 +1154,7 @@ model tarea_operario {
   @@index([fecha_tarea(sort: Desc)], map: "idx_tarea_fecha")
   @@index([id_operario], map: "idx_tarea_operario")
   @@index([id_orden_trabajo], map: "idx_tarea_orden")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1147,6 +1201,7 @@ model usuario {
 
   @@index([estado], map: "idx_usuario_estado")
   @@index([id_rol], map: "idx_usuario_id_rol")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1168,6 +1223,7 @@ model venta_chatarra {
 
   @@index([fecha_venta(sort: Desc)], map: "idx_venta_chatarra_fecha")
   @@index([id_movimiento_caja], map: "idx_venta_chatarra_mov_caja")
+  @@schema("aceros")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1188,4 +1244,5 @@ model version_receta {
   @@unique([id_receta, numero_version], map: "uq_version_receta_numero")
   @@index([estado], map: "idx_version_receta_estado")
   @@index([id_receta], map: "idx_version_receta_id_receta")
+  @@schema("aceros")
 }

@@ -1,7 +1,10 @@
-import { UserRole } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/authz";
-import { roleLabels, userStatusLabels } from "@/lib/permissions";
+import {
+  APP_ROLES,
+  getRoleLabel,
+  getUserStatusLabel,
+} from "@/lib/permissions";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -30,20 +33,25 @@ function formatDate(value: Date | null) {
 }
 
 export default async function UsersPage() {
-  await requireRole([UserRole.ADMIN]);
+  await requireRole([APP_ROLES.ADMIN]);
 
-  const users = await prisma.user.findMany({
+  const users = await prisma.usuario.findMany({
     orderBy: {
-      createdAt: "desc",
+      fecha_registro: "desc",
     },
     select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      status: true,
-      lastLoginAt: true,
-      createdAt: true,
+      id_usuario: true,
+      nombres: true,
+      apellidos: true,
+      correo: true,
+      estado: true,
+      ultimo_acceso: true,
+      fecha_registro: true,
+      rol: {
+        select: {
+          nombre_rol: true,
+        },
+      },
     },
   });
 
@@ -52,7 +60,7 @@ export default async function UsersPage() {
       <div>
         <h2 className="text-2xl font-bold">Usuarios</h2>
         <p className="text-sm text-muted-foreground">
-          Gestión inicial de usuarios del sistema.
+          Gestión inicial de usuarios del sistema conectada al DDL oficial.
         </p>
       </div>
 
@@ -76,19 +84,21 @@ export default async function UsersPage() {
 
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
+                <TableRow key={user.id_usuario}>
+                  <TableCell className="font-medium">
+                    {user.nombres} {user.apellidos}
+                  </TableCell>
+                  <TableCell>{user.correo}</TableCell>
                   <TableCell>
-                    <Badge>{roleLabels[user.role]}</Badge>
+                    <Badge>{getRoleLabel(user.rol.nombre_rol)}</Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary">
-                      {userStatusLabels[user.status]}
+                      {getUserStatusLabel(user.estado)}
                     </Badge>
                   </TableCell>
-                  <TableCell>{formatDate(user.lastLoginAt)}</TableCell>
-                  <TableCell>{formatDate(user.createdAt)}</TableCell>
+                  <TableCell>{formatDate(user.ultimo_acceso)}</TableCell>
+                  <TableCell>{formatDate(user.fecha_registro)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

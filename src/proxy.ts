@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 import { canAccessDashboardRoute } from "@/lib/permissions";
-import type { UserRole } from "@/generated/prisma/client";
 
 const protectedRoutePrefix = "/dashboard";
 const authRoutes = ["/login"];
@@ -27,11 +26,9 @@ export const proxy = auth((request) => {
   }
 
   if (isLoggedIn && isProtectedRoute) {
-    const role = request.auth?.user?.role as UserRole | undefined;
+    const role = request.auth?.user?.role;
 
-    const hasAccess = role
-      ? canAccessDashboardRoute(role, pathname)
-      : false;
+    const hasAccess = role ? canAccessDashboardRoute(role, pathname) : false;
 
     if (!hasAccess && pathname !== "/dashboard/access-denied") {
       const accessDeniedUrl = new URL(

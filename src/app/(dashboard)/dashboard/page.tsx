@@ -6,8 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { requireAuth } from "@/lib/authz";
-import { roleLabels, userStatusLabels } from "@/lib/permissions";
-import type { UserRole, UserStatus } from "@/generated/prisma/client";
+import { getRoleLabel, getUserStatusLabel } from "@/lib/permissions";
 
 export default async function DashboardPage() {
   const session = await requireAuth();
@@ -40,13 +39,13 @@ export default async function DashboardPage() {
 
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Rol:</span>
-              <Badge>{roleLabels[session.user.role as UserRole]}</Badge>
+              <Badge>{getRoleLabel(session.user.role)}</Badge>
             </div>
 
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Estado:</span>
               <Badge variant="secondary">
-                {userStatusLabels[session.user.status as UserStatus]}
+                {getUserStatusLabel(session.user.status)}
               </Badge>
             </div>
           </CardContent>
@@ -70,7 +69,9 @@ export default async function DashboardPage() {
           </CardHeader>
 
           <CardContent>
-            <Badge variant="secondary">Fase 1 — Seguridad y Usuarios</Badge>
+            <Badge variant="secondary">
+              Fase 1 corregida — Seguridad conectada al DDL oficial
+            </Badge>
           </CardContent>
         </Card>
       </section>

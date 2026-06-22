@@ -3,8 +3,7 @@ import type { Session } from "next-auth";
 
 import { Badge } from "@/components/ui/badge";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
-import { getMenuForRole, roleLabels } from "@/lib/permissions";
-import type { UserRole } from "@/generated/prisma/client";
+import { getMenuForRole, getRoleLabel } from "@/lib/permissions";
 
 type DashboardShellProps = {
   session: Session;
@@ -12,7 +11,7 @@ type DashboardShellProps = {
 };
 
 export function DashboardShell({ session, children }: DashboardShellProps) {
-  const menuItems = getMenuForRole(session.user.role as any);
+  const menuItems = getMenuForRole(session.user.role);
 
   return (
     <div className="min-h-screen bg-muted">
@@ -30,7 +29,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
               <p className="text-sm font-medium">{session.user.name}</p>
               <div className="mt-1 flex justify-end">
                 <Badge variant="secondary">
-                  {roleLabels[session.user.role as UserRole]}
+                  {getRoleLabel(session.user.role)}
                 </Badge>
               </div>
             </div>
