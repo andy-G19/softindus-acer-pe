@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { StatusBadge } from "@/components/commercial/status-badge";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 
@@ -126,7 +127,9 @@ export default async function QuotesPage() {
                     {formatMoney(quote.adelanto_inicial)}
                   </td>
                   <td className="px-4 py-3">{formatMoney(quote.saldo)}</td>
-                  <td className="px-4 py-3">{quote.estado}</td>
+                  <td className="px-4 py-3">{
+                    <StatusBadge status={quote.estado} />
+                  }</td>
                   <td className="px-4 py-3">
                     {quote.comprobante_venta[0] ? (
                       <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
@@ -134,9 +137,7 @@ export default async function QuotesPage() {
                         {quote.comprobante_venta[0].numero_comprobante}
                       </span>
                     ) : (
-                      <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
-                        Sin comprobante
-                      </span>
+                      <StatusBadge status="sin-comprobante" />
                     )}
                   </td>
                   <td className="px-4 py-3">

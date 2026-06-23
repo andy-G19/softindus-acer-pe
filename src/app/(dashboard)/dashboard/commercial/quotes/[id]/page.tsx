@@ -6,6 +6,7 @@ import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
 import { prisma } from "@/lib/db";
+import { StatusBadge } from "@/components/commercial/status-badge";
 
 type QuoteDetailPageProps = {
   params: Promise<{
@@ -222,11 +223,11 @@ export default async function QuoteDetailPage({
                 </p>
                 <p>
                   <span className="font-medium">Estado del pedido:</span>{" "}
-                  {quote.pedido.estado}
+                  <StatusBadge status={quote.pedido.estado} />
                 </p>
                 <p>
                   <span className="font-medium">Estado de proforma:</span>{" "}
-                  {quote.estado}
+                  <StatusBadge status={quote.estado} />
                 </p>
               </div>
             </div>
@@ -393,7 +394,9 @@ export default async function QuoteDetailPage({
                           <td className="px-4 py-3 text-right">
                             {formatMoney(receipt.monto_total)}
                           </td>
-                          <td className="px-4 py-3">{receipt.estado}</td>
+                          <td className="px-4 py-3">
+                            <StatusBadge status={receipt.estado} />
+                          </td>
                         </tr>
                       ))}
 

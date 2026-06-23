@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 
+import { StatusBadge } from "@/components/commercial/status-badge";
+
 function formatMoney(value: unknown) {
   if (value === null || value === undefined) {
     return "-";
@@ -127,7 +129,9 @@ export default async function OrdersPage() {
                     {formatMoney(order.monto_estimado)}
                   </td>
 
-                  <td className="px-4 py-3">{order.estado}</td>
+                  <td className="px-4 py-3">
+                    <StatusBadge status={order.estado} />
+                  </td>
 
                   <td className="px-4 py-3">
                     {activeQuote ? (
@@ -135,9 +139,7 @@ export default async function OrdersPage() {
                         {activeQuote.numero_proforma}
                       </span>
                     ) : (
-                      <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
-                        Sin proforma
-                      </span>
+                      <StatusBadge status="sin-proforma" />
                     )}
                   </td>
 
