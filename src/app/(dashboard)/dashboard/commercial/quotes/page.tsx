@@ -116,12 +116,23 @@ export default async function QuotesPage() {
                   <td className="px-4 py-3">{formatMoney(quote.saldo)}</td>
                   <td className="px-4 py-3">{quote.estado}</td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
-                      className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
-                    >
-                      Ver detalle
-                    </Link>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
+                      >
+                        Ver detalle
+                      </Link>
+
+                      {quote.estado !== "pagada" && quote.estado !== "anulada" && (
+                        <Link
+                          href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
+                        >
+                          Registrar pago
+                        </Link>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

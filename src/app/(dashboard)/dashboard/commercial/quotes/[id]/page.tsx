@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
 import { prisma } from "@/lib/db";
@@ -61,6 +62,14 @@ export default async function QuoteDetailPage({
       id_proforma: id,
     },
     include: {
+      pago_cliente: {
+        orderBy: {
+          fecha_pago: "desc",
+        },
+        include: {
+          usuario: true,
+        },
+      },
       pedido: {
         include: {
           cliente: true,
@@ -279,6 +288,62 @@ export default async function QuoteDetailPage({
               </div>
             </div>
           </section>
+
+          <section className="grid gap-4 print:hidden lg:grid-cols-[1fr_1.2fr]">
+              <PaymentForm
+                quoteId={quote.id_proforma}
+                currentBalance={quote.saldo.toString()}
+                isPaid={quote.estado === "pagada" || Number(quote.saldo.toString()) <= 0}
+              />
+
+              <div className="rounded-lg border p-4">
+                <h3 className="font-semibold">Historial de pagos</h3>
+                <p className="text-sm text-muted-foreground">
+                  Pagos registrados para esta proforma.
+                </p>
+
+                <div className="mt-4 overflow-hidden rounded-lg border">
+                  <table className="w-full text-sm">
+                    <thead className="bg-muted">
+                      <tr>
+                        <th className="px-4 py-3 text-left">Fecha</th>
+                        <th className="px-4 py-3 text-left">Tipo</th>
+                        <th className="px-4 py-3 text-left">Método</th>
+                        <th className="px-4 py-3 text-right">Monto</th>
+                        <th className="px-4 py-3 text-right">Saldo</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {quote.pago_cliente.map((payment) => (
+                        <tr key={payment.id_pago_cliente} className="border-t">
+                          <td className="px-4 py-3">{formatDate(payment.fecha_pago)}</td>
+                          <td className="px-4 py-3">{payment.tipo_pago}</td>
+                          <td className="px-4 py-3">{payment.metodo_pago}</td>
+                          <td className="px-4 py-3 text-right">
+                            {formatMoney(payment.monto_pagado)}
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            {formatMoney(payment.saldo_actual)}
+                          </td>
+                        </tr>
+                      ))}
+
+                      {quote.pago_cliente.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan={5}
+                            className="px-4 py-6 text-center text-muted-foreground"
+                          >
+                            Todavía no hay pagos registrados para esta proforma.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
 
           {quote.observaciones && (
             <section className="rounded-lg border p-4">
