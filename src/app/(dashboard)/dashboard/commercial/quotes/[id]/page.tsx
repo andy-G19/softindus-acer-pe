@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { ReceiptForm } from "@/components/commercial/receipt-form";
 import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
@@ -62,6 +63,11 @@ export default async function QuoteDetailPage({
       id_proforma: id,
     },
     include: {
+      comprobante_venta: {
+        orderBy: {
+          fecha_emision: "desc",
+        },
+      },
       pago_cliente: {
         orderBy: {
           fecha_pago: "desc",
@@ -90,6 +96,10 @@ export default async function QuoteDetailPage({
   const expirationDate = calculateExpirationDate(
     quote.fecha_emision,
     quote.validez_dias
+  );
+
+  const activeReceipt = quote.comprobante_venta.find(
+    (receipt) => receipt.estado === "emitido"
   );
 
   return (
@@ -336,6 +346,64 @@ export default async function QuoteDetailPage({
                             className="px-4 py-6 text-center text-muted-foreground"
                           >
                             Todavía no hay pagos registrados para esta proforma.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <section className="grid gap-4 print:hidden lg:grid-cols-[1fr_1.2fr]">
+              <ReceiptForm
+                quoteId={quote.id_proforma}
+                suggestedAmount={quote.monto_total.toString()}
+                hasReceipt={Boolean(activeReceipt)}
+              />
+
+              <div className="rounded-lg border p-4">
+                <h3 className="font-semibold">Comprobantes emitidos</h3>
+                <p className="text-sm text-muted-foreground">
+                  Historial de comprobantes registrados para esta proforma.
+                </p>
+
+                <div className="mt-4 overflow-hidden rounded-lg border">
+                  <table className="w-full text-sm">
+                    <thead className="bg-muted">
+                      <tr>
+                        <th className="px-4 py-3 text-left">Fecha</th>
+                        <th className="px-4 py-3 text-left">Tipo</th>
+                        <th className="px-4 py-3 text-left">Número</th>
+                        <th className="px-4 py-3 text-right">Monto</th>
+                        <th className="px-4 py-3 text-left">Estado</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {quote.comprobante_venta.map((receipt) => (
+                        <tr key={receipt.id_comprobante} className="border-t">
+                          <td className="px-4 py-3">
+                            {formatDate(receipt.fecha_emision)}
+                          </td>
+                          <td className="px-4 py-3">{receipt.tipo_comprobante}</td>
+                          <td className="px-4 py-3 font-medium">
+                            {receipt.numero_comprobante}
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            {formatMoney(receipt.monto_total)}
+                          </td>
+                          <td className="px-4 py-3">{receipt.estado}</td>
+                        </tr>
+                      ))}
+
+                      {quote.comprobante_venta.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan={5}
+                            className="px-4 py-6 text-center text-muted-foreground"
+                          >
+                            Todavía no hay comprobantes registrados para esta proforma.
                           </td>
                         </tr>
                       )}

@@ -32,10 +32,21 @@ export default async function QuotesPage() {
   }
 
   const quotes = await prisma.proforma.findMany({
+    
     orderBy: {
       fecha_emision: "desc",
     },
     include: {
+      comprobante_venta: {
+        where: {
+          estado: "emitido",
+        },
+        select: {
+          id_comprobante: true,
+          numero_comprobante: true,
+          tipo_comprobante: true,
+        },
+      },
       pedido: {
         include: {
           cliente: true,
@@ -80,6 +91,7 @@ export default async function QuotesPage() {
               <th className="px-4 py-3 text-left">Adelanto</th>
               <th className="px-4 py-3 text-left">Saldo</th>
               <th className="px-4 py-3 text-left">Estado</th>
+              <th className="px-4 py-3 text-left">Comprobante</th>
               <th className="px-4 py-3 text-left">Acciones</th>
             </tr>
           </thead>
@@ -116,6 +128,18 @@ export default async function QuotesPage() {
                   <td className="px-4 py-3">{formatMoney(quote.saldo)}</td>
                   <td className="px-4 py-3">{quote.estado}</td>
                   <td className="px-4 py-3">
+                    {quote.comprobante_venta[0] ? (
+                      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                        {quote.comprobante_venta[0].tipo_comprobante}{" "}
+                        {quote.comprobante_venta[0].numero_comprobante}
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
+                        Sin comprobante
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       <Link
                         href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
@@ -141,7 +165,7 @@ export default async function QuotesPage() {
             {quotes.length === 0 && (
               <tr>
                 <td
-                  colSpan={10}
+                  colSpan={11}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
                   Todavía no hay proformas registradas.
