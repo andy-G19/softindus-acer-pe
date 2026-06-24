@@ -16,6 +16,7 @@ export default async function DashboardPage() {
 
   const canAccessCommercial = ["ADMIN", "SELLER"].includes(role);
   const canAccessInventory = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
+  const canAccessProduction = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
 
   return (
     <div className="space-y-6">
@@ -123,6 +124,25 @@ export default async function DashboardPage() {
                   <p className="text-sm text-muted-foreground">
                     Control de materiales, stock, proveedores, compras y
                     abastecimiento.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessProduction ? (
+            <Link href="/dashboard/production" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Producción y recetas técnicas
+                  </CardTitle>
+                </CardHeader>
+                    
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Órdenes de trabajo, rutas de fabricación, etapas, avances y
+                    recetas técnicas.
                   </p>
                 </CardContent>
               </Card>
