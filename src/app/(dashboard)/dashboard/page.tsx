@@ -17,6 +17,7 @@ export default async function DashboardPage() {
   const canAccessCommercial = ["ADMIN", "SELLER"].includes(role);
   const canAccessInventory = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessProduction = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
+  const canAccessCosts = role === "ADMIN";
 
   return (
     <div className="space-y-6">
@@ -77,7 +78,7 @@ export default async function DashboardPage() {
 
           <CardContent>
             <Badge variant="secondary">
-              Fase 3 — Inventario y proveedores
+              Fase 5 — Costos y rentabilidad
             </Badge>
           </CardContent>
         </Card>
@@ -91,7 +92,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {canAccessCommercial ? (
             <Link href="/dashboard/commercial" className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
@@ -138,11 +139,30 @@ export default async function DashboardPage() {
                     Producción y recetas técnicas
                   </CardTitle>
                 </CardHeader>
-                    
+
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
                     Órdenes de trabajo, rutas de fabricación, etapas, avances y
                     recetas técnicas.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessCosts ? (
+            <Link href="/dashboard/costs" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Costos y rentabilidad
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Costeo de producción, costos indirectos, márgenes, precios
+                    sugeridos y utilidad estimada.
                   </p>
                 </CardContent>
               </Card>

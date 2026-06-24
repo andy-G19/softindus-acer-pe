@@ -38,6 +38,26 @@ export const dashboardRoutes: DashboardRoute[] = [
     roles: [APP_ROLES.ADMIN],
   },
   {
+    title: "Comercial",
+    href: "/dashboard/commercial",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER],
+  },
+  {
+    title: "Inventario",
+    href: "/dashboard/inventory",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  },
+  {
+    title: "Producción",
+    href: "/dashboard/production",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  },
+  {
+    title: "Costos",
+    href: "/dashboard/costs",
+    roles: [APP_ROLES.ADMIN],
+  },
+  {
     title: "Acceso denegado",
     href: "/dashboard/access-denied",
     roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER, APP_ROLES.WORKSHOP_MASTER],
