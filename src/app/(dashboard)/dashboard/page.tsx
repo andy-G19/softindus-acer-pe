@@ -17,6 +17,7 @@ export default async function DashboardPage() {
   const canAccessCommercial = ["ADMIN", "SELLER"].includes(role);
   const canAccessInventory = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessProduction = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
+  const canAccessWasteScrap = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessCosts = role === "ADMIN";
 
   return (
@@ -78,7 +79,7 @@ export default async function DashboardPage() {
 
           <CardContent>
             <Badge variant="secondary">
-              Fase 5 — Costos y rentabilidad
+              Fase 6 — Mermas, retazos y chatarra
             </Badge>
           </CardContent>
         </Card>
@@ -92,7 +93,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {canAccessCommercial ? (
             <Link href="/dashboard/commercial" className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
@@ -144,6 +145,25 @@ export default async function DashboardPage() {
                   <p className="text-sm text-muted-foreground">
                     Órdenes de trabajo, rutas de fabricación, etapas, avances y
                     recetas técnicas.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessWasteScrap ? (
+            <Link href="/dashboard/waste-scrap" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Mermas y chatarra
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Registro de retazos reutilizables, chatarra generada,
+                    ventas de chatarra y destino del dinero.
                   </p>
                 </CardContent>
               </Card>

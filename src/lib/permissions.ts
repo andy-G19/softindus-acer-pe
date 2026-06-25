@@ -53,6 +53,11 @@ export const dashboardRoutes: DashboardRoute[] = [
     roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
   },
   {
+    title: "Mermas y chatarra",
+    href: "/dashboard/waste-scrap",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  },
+  {
     title: "Costos",
     href: "/dashboard/costs",
     roles: [APP_ROLES.ADMIN],
