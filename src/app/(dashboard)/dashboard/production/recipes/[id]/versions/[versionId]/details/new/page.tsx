@@ -222,7 +222,7 @@ export default async function NewRecipeDetailPage({
             className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           >
             <option value="">Seleccione el tipo</option>
-            <option value="materia prima">Materia prima</option>
+            <option value="materia_prima">Materia prima</option>
             <option value="consumible">Consumible</option>
             <option value="auxiliar">Auxiliar</option>
           </select>

@@ -16,11 +16,9 @@ export const recipeDetailSchema = z.object({
     .positive("La cantidad requerida debe ser mayor a 0.")
     .max(999999.99, "La cantidad requerida es demasiado alta."),
 
-  tipo_consumo: z
-    .string()
-    .trim()
-    .min(1, "Seleccione el tipo de consumo.")
-    .max(30, "El tipo de consumo no debe superar 30 caracteres."),
+  tipo_consumo: z.enum(["materia_prima", "consumible", "auxiliar"], {
+    message: "Seleccione un tipo de consumo válido.",
+  }),
 
   merma_estimada_porcentaje: z
     .string()
