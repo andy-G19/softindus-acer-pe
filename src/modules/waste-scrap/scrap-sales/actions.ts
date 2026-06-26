@@ -225,6 +225,10 @@ export async function createScrapSaleAction(formData: FormData) {
   revalidatePath("/dashboard/waste-scrap");
   revalidatePath("/dashboard/waste-scrap/scraps");
   revalidatePath("/dashboard/waste-scrap/scrap-sales/new");
+  revalidatePath("/dashboard/petty-cash");
+  revalidatePath("/dashboard/petty-cash/movements");
+  revalidatePath("/dashboard/petty-cash/monthly-summary");
+  revalidatePath("/dashboard/petty-cash/monthly-summary");
 
   redirect("/dashboard/waste-scrap/scraps");
 }

@@ -19,6 +19,7 @@ export default async function DashboardPage() {
   const canAccessProduction = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessWasteScrap = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessCosts = role === "ADMIN";
+  const canAccessPettyCash = role === "ADMIN";
 
   return (
     <div className="space-y-6">
@@ -79,7 +80,7 @@ export default async function DashboardPage() {
 
           <CardContent>
             <Badge variant="secondary">
-              Fase 6 — Mermas, retazos y chatarra
+              Fase 7 — Caja chica y finanzas
             </Badge>
           </CardContent>
         </Card>
@@ -93,7 +94,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           {canAccessCommercial ? (
             <Link href="/dashboard/commercial" className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
@@ -183,6 +184,25 @@ export default async function DashboardPage() {
                   <p className="text-sm text-muted-foreground">
                     Costeo de producción, costos indirectos, márgenes, precios
                     sugeridos y utilidad estimada.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessPettyCash ? (
+            <Link href="/dashboard/petty-cash" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Caja chica y finanzas
+                  </CardTitle>
+                </CardHeader>
+                    
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Control de caja chica, ingresos menores, egresos, categorías de
+                    gasto y resumen financiero mensual.
                   </p>
                 </CardContent>
               </Card>
