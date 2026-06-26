@@ -20,6 +20,9 @@ export default async function DashboardPage() {
   const canAccessWasteScrap = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessCosts = role === "ADMIN";
   const canAccessPettyCash = role === "ADMIN";
+  const canAccessStaff = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
+  const canAccessMaintenance = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
+  const canAccessReports = role === "ADMIN";
 
   return (
     <div className="space-y-6">
@@ -80,7 +83,7 @@ export default async function DashboardPage() {
 
           <CardContent>
             <Badge variant="secondary">
-              Fase 7 — Caja chica y finanzas
+              Fase 10 — Reportes y dashboard general
             </Badge>
           </CardContent>
         </Card>
@@ -94,7 +97,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {canAccessCommercial ? (
             <Link href="/dashboard/commercial" className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
@@ -208,6 +211,64 @@ export default async function DashboardPage() {
               </Card>
             </Link>
           ) : null}
+
+          {canAccessStaff ? (
+            <Link href="/dashboard/staff" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Personal, asistencia y pagos
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Operarios, asistencia diaria, tareas, planillas e historial
+                    de pagos.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessMaintenance ? (
+            <Link href="/dashboard/maintenance" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Mantenimiento de maquinaria
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Máquinas, fallas, repuestos, reparaciones, preventivos y
+                    reincidencias.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+
+          {canAccessReports ? (
+            <Link href="/dashboard/reports" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Reportes y dashboard general
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Indicadores generales, reportes administrativos y
+                    exportación de datos.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ) : null}
+          
         </div>
       </section>
     </div>
