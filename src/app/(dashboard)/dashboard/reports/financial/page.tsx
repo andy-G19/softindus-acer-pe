@@ -8,6 +8,7 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import { buildReportExportHref } from "@/lib/report-export-link";
 
 const CASH_MOVEMENT_TYPE_OPTIONS = [
   { value: "ingreso", label: "Ingreso" },
@@ -137,6 +138,28 @@ export default async function FinancialReportPage({
   const movementType = getSearchParam(params, "movementType");
   const categoryId = getSearchParam(params, "categoryId");
   const searchText = getSearchParam(params, "searchText").trim();
+
+  const csvExportHref = buildReportExportHref("financial", {
+    dateFrom,
+    dateTo,
+    cashBoxId,
+    movementType,
+    categoryId,
+    searchText,
+  });
+
+  const pdfExportHref = buildReportExportHref(
+  "financial",
+  {
+    dateFrom,
+    dateTo,
+    cashBoxId,
+    movementType,
+    categoryId,
+    searchText,
+  },
+  "pdf",
+  );
 
   const fromDate = parseDateInput(dateFrom);
   const toDate = parseDateInputAsNextDay(dateTo);
@@ -404,12 +427,28 @@ export default async function FinancialReportPage({
           </p>
         </div>
 
-        <Link
-          href="/dashboard/reports"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-        >
-          Volver al dashboard
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={csvExportHref}
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Exportar CSV/Excel
+          </a>
+
+          <a
+            href={pdfExportHref}
+            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+          >
+            Exportar PDF
+          </a>
+
+          <Link
+            href="/dashboard/reports"
+            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
+          >
+            Volver al dashboard
+          </Link>
+        </div>
       </section>
 
       <Card>

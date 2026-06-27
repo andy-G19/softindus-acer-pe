@@ -875,6 +875,24 @@ export default async function ReportsDashboardPage() {
             </Link>
 
 
+            <Link href="/dashboard/reports/export-history" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Historial de exportaciones
+                  </CardTitle>
+                </CardHeader>
+                
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Auditoría de reportes exportados por usuario, módulo, formato,
+                    filtros y fecha.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+
           </div>
         </section>
 

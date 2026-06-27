@@ -8,6 +8,7 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import { buildReportExportHref } from "@/lib/report-export-link";
 
 const INVENTORY_MOVEMENT_OPTIONS = [
   { value: "entrada", label: "Entrada" },
@@ -142,6 +143,28 @@ export default async function InventoryReportPage({
   const userId = getSearchParam(params, "userId");
   const workOrderId = getSearchParam(params, "workOrderId").trim();
 
+  const csvExportHref = buildReportExportHref("inventory", {
+    dateFrom,
+    dateTo,
+    materialId,
+    movementType,
+    userId,
+    workOrderId,
+  });
+
+  const pdfExportHref = buildReportExportHref(
+  "inventory",
+  {
+    dateFrom,
+    dateTo,
+    materialId,
+    movementType,
+    userId,
+    workOrderId,
+  },
+  "pdf",
+);
+
   const fromDate = parseDateInput(dateFrom);
   const toDate = parseDateInputAsNextDay(dateTo);
 
@@ -271,12 +294,28 @@ export default async function InventoryReportPage({
           </p>
         </div>
 
-        <Link
-          href="/dashboard/reports"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-        >
-          Volver al dashboard
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={csvExportHref}
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Exportar CSV/Excel
+          </a>
+          <a
+            href={pdfExportHref}
+            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+          >
+            Exportar PDF
+          </a>
+
+          <Link
+            href="/dashboard/reports"
+            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
+          >
+            Volver al dashboard
+          </Link>
+        </div>
+
       </section>
 
       <Card>
