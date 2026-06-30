@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 
@@ -37,7 +38,7 @@ function toNullable(value: string | undefined) {
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -277,6 +278,15 @@ export async function createPurchaseAction(formData: FormData) {
         },
       });
     }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "compra",
+      id_registro_afectado: idCompra,
+      accion: "crear",
+      detalle: `Compra creada con ${data.items.length} material(es).`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/inventory");

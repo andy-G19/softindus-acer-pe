@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { supplierPaymentSchema } from "@/schemas/inventory/supplier-payment.schema";
 
@@ -23,7 +24,7 @@ function toNullable(value: string | undefined) {
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -139,6 +140,15 @@ export async function createSupplierPaymentAction(formData: FormData) {
       data: {
         estado_pago: newPaymentStatus,
       },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "pago_proveedor",
+      id_registro_afectado: idPagoProveedor,
+      accion: "crear",
+      detalle: `Pago a proveedor registrado para la compra ${data.id_compra}.`,
+      tx,
     });
   });
 

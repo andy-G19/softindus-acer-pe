@@ -12,7 +12,7 @@ export default async function NewSupplierMaterialPage() {
   }
 
   if (session.user.role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 
   const [suppliers, materials] = await Promise.all([

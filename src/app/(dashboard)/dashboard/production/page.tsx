@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -66,6 +66,8 @@ export default async function ProductionDashboardPage() {
     activeRecipes,
     validVersions,
     recipeDetails,
+    totalCampaigns,
+    activeCampaigns,
   ] = await Promise.all([
     prisma.orden_trabajo.count(),
 
@@ -144,6 +146,16 @@ export default async function ProductionDashboardPage() {
           receta_tecnica: {
             estado: "activa",
           },
+        },
+      },
+    }),
+
+    prisma.campania_produccion.count(),
+
+    prisma.campania_produccion.count({
+      where: {
+        estado: {
+          in: ["planificada", "activa"],
         },
       },
     }),
@@ -250,7 +262,7 @@ export default async function ProductionDashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-4">
         <Link
           href="/dashboard/production/routes"
           className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
@@ -293,6 +305,36 @@ export default async function ProductionDashboardPage() {
 
           <p className="mt-4 text-sm font-medium text-slate-900">
             Ver órdenes →
+          </p>
+        </Link>
+
+        <Link
+          href="/dashboard/production/campaigns"
+          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
+        >
+          <h2 className="text-xl font-semibold">Campanias</h2>
+
+          <p className="mt-2 text-sm text-slate-600">
+            Planifica lotes de produccion y vinculalos con ordenes de trabajo.
+          </p>
+
+          <p className="mt-4 text-sm font-medium text-slate-900">
+            Ver campanias -&gt;
+          </p>
+        </Link>
+
+        <Link
+          href="/dashboard/production/bottlenecks"
+          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
+        >
+          <h2 className="text-xl font-semibold">Cuellos de botella</h2>
+
+          <p className="mt-2 text-sm text-slate-600">
+            Detecta etapas en proceso atrasadas, en riesgo o saturadas.
+          </p>
+
+          <p className="mt-4 text-sm font-medium text-slate-900">
+            Ver indicador -&gt;
           </p>
         </Link>
       </section>
@@ -375,6 +417,14 @@ export default async function ProductionDashboardPage() {
 
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
             Finalizadas: {finishedOrders}
+          </span>
+
+          <span className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-700">
+            Campanias activas/planificadas: {activeCampaigns}
+          </span>
+
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+            Campanias registradas: {totalCampaigns}
           </span>
         </div>
       </section>

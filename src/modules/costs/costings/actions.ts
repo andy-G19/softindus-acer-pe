@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 
 function buildSequentialId(lastId: string | null | undefined, prefix: string) {
@@ -176,6 +177,14 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
       observaciones:
         "Costeo generado automáticamente desde orden de trabajo usando la receta técnica vigente y el costo unitario actual de los materiales.",
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "costeo",
+    id_registro_afectado: idCosteo,
+    accion: "crear",
+    detalle: `Costeo creado desde la orden de trabajo ${workOrder.id_orden_trabajo}.`,
   });
 
   revalidatePath("/dashboard");

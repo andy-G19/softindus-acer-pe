@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { pettyCashExpenseSchema } from "@/schemas/petty-cash/petty-cash-expense.schema";
 
@@ -156,6 +157,15 @@ export async function createPettyCashExpenseAction(formData: FormData) {
           decrement: data.monto,
         },
       },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "movimiento_caja",
+      id_registro_afectado: idMovimientoCaja,
+      accion: "crear",
+      detalle: `Egreso de caja registrado: ${data.concepto}.`,
+      tx,
     });
   });
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { scrapSchema } from "@/schemas/waste-scrap/scrap.schema";
 
@@ -96,6 +97,14 @@ export async function createScrapAction(formData: FormData) {
       estado: "acumulada",
       observaciones: data.observaciones,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "chatarra",
+    id_registro_afectado: idChatarra,
+    accion: "crear",
+    detalle: `Chatarra registrada: ${data.tipo_material}`,
   });
 
   revalidatePath("/dashboard");

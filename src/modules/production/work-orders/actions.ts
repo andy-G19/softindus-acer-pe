@@ -3,7 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildNextIds } from "@/lib/ids";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
 
 function buildSequentialId(lastId: string | null | undefined, prefix: string) {
@@ -24,7 +26,7 @@ function buildSequentialId(lastId: string | null | undefined, prefix: string) {
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -38,6 +40,20 @@ function parseNullableDate(value: string | null | undefined) {
   }
 
   return new Date(`${value}T00:00:00`);
+}
+
+function toNumber(value: unknown) {
+  if (value === null || value === undefined || value === "") {
+    return 0;
+  }
+
+  const numericValue = Number(value.toString());
+
+  return Number.isNaN(numericValue) ? 0 : numericValue;
+}
+
+function roundQuantity(value: number) {
+  return Number(value.toFixed(2));
 }
 
 export async function createWorkOrderAction(formData: FormData) {
@@ -240,11 +256,318 @@ export async function createWorkOrderAction(formData: FormData) {
         });
       }
     }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: idOrdenTrabajo,
+      accion: "crear",
+      detalle: `Orden de trabajo creada para el producto ${data.id_producto}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
+
+  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+}
+
+export async function consumeWorkOrderMaterialsAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const idOrdenTrabajo = String(
+    formData.get("id_orden_trabajo") ?? "",
+  ).trim();
+
+  if (!idOrdenTrabajo) {
+    throw new Error("No se recibio la orden de trabajo.");
+  }
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: {
+      id_orden_trabajo: idOrdenTrabajo,
+    },
+    include: {
+      version_receta: {
+        include: {
+          detalle_receta: {
+            include: {
+              material: true,
+            },
+            orderBy: {
+              id_detalle_receta: "asc",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
+    throw new Error(
+      "No se puede consumir materiales de una orden anulada o finalizada.",
+    );
+  }
+
+  if (!workOrder.id_version_receta || !workOrder.version_receta) {
+    throw new Error("La orden de trabajo no tiene una receta tecnica asociada.");
+  }
+
+  if (workOrder.version_receta.detalle_receta.length === 0) {
+    throw new Error("La receta tecnica asociada no tiene materiales.");
+  }
+
+  const existingConsumption = await prisma.movimiento_inventario.count({
+    where: {
+      id_orden_trabajo: idOrdenTrabajo,
+      tipo_movimiento: "salida",
+    },
+  });
+
+  if (existingConsumption > 0) {
+    throw new Error(
+      "Los materiales de esta orden ya fueron consumidos. No se permite consumirlos nuevamente.",
+    );
+  }
+
+  const orderQuantity = toNumber(workOrder.cantidad);
+
+  if (orderQuantity <= 0) {
+    throw new Error("La cantidad de la orden debe ser mayor que cero.");
+  }
+
+  const consumptions = workOrder.version_receta.detalle_receta.map((detail) => {
+    const requiredBase = toNumber(detail.cantidad_requerida) * orderQuantity;
+    const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
+    const requiredWithWaste = roundQuantity(
+      requiredBase * (1 + wastePercentage / 100),
+    );
+    const stockActual = toNumber(detail.material.stock_actual);
+    const stockMinimo = toNumber(detail.material.stock_minimo);
+    const stockResultante = roundQuantity(stockActual - requiredWithWaste);
+
+    return {
+      idMaterial: detail.id_material,
+      materialName: detail.material.nombre_material,
+      materialIsActive: detail.material.estado,
+      requiredWithWaste,
+      stockActual,
+      stockMinimo,
+      stockResultante,
+    };
+  });
+
+  const inactiveMaterials = consumptions.filter(
+    (consumption) => !consumption.materialIsActive,
+  );
+
+  if (inactiveMaterials.length > 0) {
+    throw new Error(
+      `No se puede consumir materiales inactivos: ${inactiveMaterials
+        .map((material) => material.materialName)
+        .join(", ")}.`,
+    );
+  }
+
+  const insufficientMaterials = consumptions.filter((consumption) => {
+    return consumption.stockActual < consumption.requiredWithWaste;
+  });
+
+  if (insufficientMaterials.length > 0) {
+    const detail = insufficientMaterials
+      .map((material) => {
+        return `${material.materialName} requiere ${material.requiredWithWaste.toFixed(
+          2,
+        )} y tiene ${material.stockActual.toFixed(2)}`;
+      })
+      .join("; ");
+
+    throw new Error(`Stock insuficiente para consumir la orden: ${detail}.`);
+  }
+
+  const criticalConsumptions = consumptions.filter((consumption) => {
+    return consumption.stockResultante <= consumption.stockMinimo;
+  });
+
+  const [lastMovement, lastAlert, activeAlerts] = await Promise.all([
+    prisma.movimiento_inventario.findFirst({
+      orderBy: {
+        id_movimiento: "desc",
+      },
+      select: {
+        id_movimiento: true,
+      },
+    }),
+    prisma.alerta_stock.findFirst({
+      orderBy: {
+        id_alerta: "desc",
+      },
+      select: {
+        id_alerta: true,
+      },
+    }),
+    criticalConsumptions.length > 0
+      ? prisma.alerta_stock.findMany({
+          where: {
+            id_material: {
+              in: criticalConsumptions.map(
+                (consumption) => consumption.idMaterial,
+              ),
+            },
+            estado_alerta: "activa",
+          },
+          select: {
+            id_alerta: true,
+            id_material: true,
+          },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const movementIds = buildNextIds(
+    "MVI",
+    lastMovement?.id_movimiento,
+    consumptions.length,
+  );
+
+  const activeAlertByMaterial = new Map(
+    activeAlerts.map((alert) => [alert.id_material, alert.id_alerta]),
+  );
+
+  const criticalConsumptionsWithoutAlert = criticalConsumptions.filter(
+    (consumption) => !activeAlertByMaterial.has(consumption.idMaterial),
+  );
+
+  const alertIds = buildNextIds(
+    "ALE",
+    lastAlert?.id_alerta,
+    criticalConsumptionsWithoutAlert.length,
+  );
+
+  const alertIdByMaterial = new Map(
+    criticalConsumptionsWithoutAlert.map((consumption, index) => [
+      consumption.idMaterial,
+      alertIds[index],
+    ]),
+  );
+
+  await prisma.$transaction(async (tx) => {
+    const consumptionInsideTransaction = await tx.movimiento_inventario.count({
+      where: {
+        id_orden_trabajo: idOrdenTrabajo,
+        tipo_movimiento: "salida",
+      },
+    });
+
+    if (consumptionInsideTransaction > 0) {
+      throw new Error(
+        "Los materiales de esta orden ya fueron consumidos. No se permite consumirlos nuevamente.",
+      );
+    }
+
+    for (const [index, consumption] of consumptions.entries()) {
+      const materialUpdate = await tx.material.updateMany({
+        where: {
+          id_material: consumption.idMaterial,
+          stock_actual: {
+            gte: consumption.requiredWithWaste,
+          },
+        },
+        data: {
+          stock_actual: {
+            decrement: consumption.requiredWithWaste,
+          },
+        },
+      });
+
+      if (materialUpdate.count !== 1) {
+        throw new Error(
+          `Stock insuficiente para ${consumption.materialName}. La operacion fue cancelada.`,
+        );
+      }
+
+      await tx.movimiento_inventario.create({
+        data: {
+          id_movimiento: movementIds[index],
+          id_material: consumption.idMaterial,
+          id_orden_trabajo: idOrdenTrabajo,
+          tipo_movimiento: "salida",
+          cantidad: consumption.requiredWithWaste,
+          stock_anterior: consumption.stockActual,
+          stock_resultante: consumption.stockResultante,
+          motivo: `Salida por consumo de orden de trabajo ${idOrdenTrabajo}`,
+          id_usuario_responsable: session.user.id,
+        },
+      });
+
+      if (consumption.stockResultante <= consumption.stockMinimo) {
+        const activeAlertId = activeAlertByMaterial.get(
+          consumption.idMaterial,
+        );
+
+        if (activeAlertId) {
+          await tx.alerta_stock.update({
+            where: {
+              id_alerta: activeAlertId,
+            },
+            data: {
+              stock_detectado: consumption.stockResultante,
+              stock_minimo: consumption.stockMinimo,
+              mensaje: `El material ${consumption.materialName} quedo en stock critico tras consumir la orden ${idOrdenTrabajo}.`,
+            },
+          });
+        } else {
+          const newAlertId = alertIdByMaterial.get(consumption.idMaterial);
+
+          if (!newAlertId) {
+            throw new Error(
+              `No se pudo generar la alerta de stock para ${consumption.materialName}.`,
+            );
+          }
+
+          await tx.alerta_stock.create({
+            data: {
+              id_alerta: newAlertId,
+              id_material: consumption.idMaterial,
+              stock_detectado: consumption.stockResultante,
+              stock_minimo: consumption.stockMinimo,
+              estado_alerta: "activa",
+              mensaje: `El material ${consumption.materialName} quedo en stock critico tras consumir la orden ${idOrdenTrabajo}.`,
+            },
+          });
+        }
+      }
+    }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: idOrdenTrabajo,
+      accion: "consumir_materiales",
+      detalle: `Consumo de materiales registrado para ${consumptions.length} material(es).`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/inventory");
+  revalidatePath("/dashboard/inventory/alerts");
+  revalidatePath("/dashboard/inventory/materials");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
   redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 }

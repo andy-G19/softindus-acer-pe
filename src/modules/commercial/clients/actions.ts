@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { clientSchema } from "@/schemas/commercial/client.schema";
@@ -66,6 +67,14 @@ export async function createClientAction(formData: FormData) {
       observaciones: emptyToNull(formData.get("observaciones")),
       estado: true,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "cliente",
+    id_registro_afectado: id_cliente,
+    accion: "crear",
+    detalle: `Cliente creado: ${parsed.data.nombre_razon_social}`,
   });
 
   revalidatePath("/dashboard/commercial/clients");

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { pettyCashIncomeAdjustmentSchema } from "@/schemas/petty-cash/petty-cash-income-adjustment.schema";
 
@@ -180,8 +181,17 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
             }
           : {
               increment: data.monto,
-            },
+        },
       },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "movimiento_caja",
+      id_registro_afectado: idMovimientoCaja,
+      accion: "crear",
+      detalle: `Movimiento de caja registrado: ${movementConcept}.`,
+      tx,
     });
   });
 

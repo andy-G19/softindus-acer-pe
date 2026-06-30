@@ -19,7 +19,7 @@ export default async function SupplierMaterialsPage() {
   }
 
   if (session.user.role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 
   const relations = await prisma.proveedor_material.findMany({

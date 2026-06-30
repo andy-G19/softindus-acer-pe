@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
-import { buildCsv, csvResponse } from "@/lib/csv-export";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import { buildNextId } from "@/lib/ids";
@@ -158,6 +159,16 @@ async function registerExportLog(data: {
       ruta_archivo: data.filename,
     },
   });
+
+  await registerAuditLog({
+    userId: data.userId,
+    entidad_afectada: "exportacion_datos",
+    id_registro_afectado: id_exportacion,
+    accion: "crear",
+    detalle: `Reporte exportado: ${
+      REPORT_MODULE_LABELS[data.report] ?? data.report
+    } (${data.fileFormat}).`,
+  });
 }
 
 function getPaymentTotalByType(
@@ -216,7 +227,7 @@ async function buildProductionCsv(searchParams: URLSearchParams): Promise<Export
   });
 
   return {
-    filename: `reporte_produccion_${getDateStamp()}.csv`,
+    filename: `reporte_produccion_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_produccion_${getDateStamp()}.pdf`,
     title: "Reporte de Producción",
     headers: [
@@ -307,7 +318,7 @@ async function buildInventoryCsv(searchParams: URLSearchParams): Promise<ExportR
   });
 
   return {
-    filename: `reporte_inventario_${getDateStamp()}.csv`,
+    filename: `reporte_inventario_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_inventario_${getDateStamp()}.pdf`,
     title: "Reporte de Inventario",
     headers: [
@@ -464,7 +475,7 @@ async function buildSalesCollectionsCsv(
     });
 
   return {
-    filename: `reporte_ventas_cobranzas_${getDateStamp()}.csv`,
+    filename: `reporte_ventas_cobranzas_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_ventas_cobranzas_${getDateStamp()}.pdf`,
     title: "Reporte de Ventas y Cobranzas",
     headers: [
@@ -579,7 +590,7 @@ async function buildSuppliersPurchasesCsv(
   });
 
   return {
-    filename: `reporte_proveedores_compras_${getDateStamp()}.csv`,
+    filename: `reporte_proveedores_compras_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_proveedores_compras_${getDateStamp()}.pdf`,
     title: "Reporte de Proveedores y Compras",
     headers: [
@@ -830,7 +841,7 @@ async function buildFinancialCsv(searchParams: URLSearchParams): Promise<ExportR
   ]);
 
   return {
-    filename: `reporte_financiero_${getDateStamp()}.csv`,
+    filename: `reporte_financiero_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_financiero_${getDateStamp()}.pdf`,
     title: "Reporte Financiero",
     headers: [
@@ -984,7 +995,7 @@ async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<Expor
   ]);
 
   return {
-    filename: `reporte_mantenimiento_${getDateStamp()}.csv`,
+    filename: `reporte_mantenimiento_${getDateStamp()}.xlsx`,
     pdfFilename: `reporte_mantenimiento_${getDateStamp()}.pdf`,
     title: "Reporte de Mantenimiento",
     headers: [
@@ -1047,44 +1058,49 @@ export async function GET(request: Request, context: RouteContext) {
   const { report } = await context.params;
   const url = new URL(request.url);
 
-  const csvReport = await buildReport(report, url.searchParams);
+  const exportReport = await buildReport(report, url.searchParams);
 
-  if (!csvReport) {
+  if (!exportReport) {
     return new Response("Reporte no encontrado.", {
       status: 404,
     });
   }
 
-  const fileFormat = url.searchParams.get("fileFormat") === "pdf" ? "pdf" : "csv";
+  const fileFormat =
+    url.searchParams.get("fileFormat") === "pdf" ? "pdf" : "excel";
 
-if (fileFormat === "pdf") {
+  if (fileFormat === "pdf") {
+    await registerExportLog({
+      userId: session.user.id,
+      report,
+      filename: exportReport.pdfFilename,
+      fileFormat: "pdf",
+      searchParams: url.searchParams,
+    });
+
+    const pdfBuffer = await buildPdfBuffer({
+      title: exportReport.title,
+      subtitle: "Sistema de Gestion Integral - Industrias Aceros Peru",
+      headers: exportReport.headers,
+      rows: exportReport.rows.slice(0, 80),
+    });
+
+    return pdfResponse(pdfBuffer, exportReport.pdfFilename);
+  }
+
   await registerExportLog({
     userId: session.user.id,
     report,
-    filename: csvReport.pdfFilename,
-    fileFormat: "pdf",
+    filename: exportReport.filename,
+    fileFormat: "excel",
     searchParams: url.searchParams,
   });
 
-  const pdfBuffer = await buildPdfBuffer({
-    title: csvReport.title,
-    subtitle: "Sistema de Gestión Integral — Industrias Aceros Perú",
-    headers: csvReport.headers,
-    rows: csvReport.rows.slice(0, 80),
+  const excelBuffer = await buildExcelBuffer({
+    title: exportReport.title,
+    headers: exportReport.headers,
+    rows: exportReport.rows,
   });
 
-  return pdfResponse(pdfBuffer, csvReport.pdfFilename);
-}
-
-await registerExportLog({
-  userId: session.user.id,
-  report,
-  filename: csvReport.filename,
-  fileFormat: "excel",
-  searchParams: url.searchParams,
-});
-
-const content = buildCsv(csvReport.headers, csvReport.rows);
-
-return csvResponse(content, csvReport.filename);
+  return excelResponse(excelBuffer, exportReport.filename);
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { consumeWorkOrderMaterialsAction } from "@/modules/production/work-orders/actions";
 
 type WorkOrderDetailPageProps = {
   params: Promise<{
@@ -11,7 +12,7 @@ type WorkOrderDetailPageProps = {
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -189,6 +190,15 @@ export default async function WorkOrderDetailPage({
     (row) => !row.hasEnoughStock,
   );
 
+  const materialsConsumed = workOrder.movimiento_inventario.some((movement) => {
+    return movement.tipo_movimiento === "salida";
+  });
+
+  const canConsumeMaterials =
+    ["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "") &&
+    !["anulada", "finalizada"].includes(workOrder.estado) &&
+    !materialsConsumed;
+
   const origin =
     workOrder.tipo_produccion === "pedido"
       ? workOrder.detalle_pedido?.pedido.cliente.nombre_razon_social ??
@@ -225,6 +235,29 @@ export default async function WorkOrderDetailPage({
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row">
+          {materialsConsumed ? (
+            <span className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
+              Materiales consumidos
+            </span>
+          ) : null}
+
+          {canConsumeMaterials ? (
+            <form action={consumeWorkOrderMaterialsAction}>
+              <input
+                type="hidden"
+                name="id_orden_trabajo"
+                value={workOrder.id_orden_trabajo}
+              />
+
+              <button
+                type="submit"
+                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+              >
+                Consumir materiales
+              </button>
+            </form>
+          ) : null}
+
           <Link
             href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress`}
             className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"

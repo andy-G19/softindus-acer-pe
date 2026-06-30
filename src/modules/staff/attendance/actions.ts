@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { attendanceSchema } from "@/schemas/staff/attendance.schema";
 
@@ -146,6 +147,14 @@ export async function createAttendanceAction(formData: FormData) {
         workedHours === null ? null : workedHours.toFixed(2),
       observaciones: data.observaciones || null,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "asistencia",
+    id_registro_afectado: idAsistencia,
+    accion: "crear",
+    detalle: `Asistencia registrada para el operario ${data.id_operario}.`,
   });
 
   revalidatePath("/dashboard/staff");

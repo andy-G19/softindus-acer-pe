@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { marginSchema } from "@/schemas/costs/margin.schema";
 
@@ -114,6 +115,14 @@ export async function createMarginAction(formData: FormData) {
       precio_final: finalPrice,
       motivo_ajuste: data.motivo_ajuste,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "margen_ganancia",
+    id_registro_afectado: idMargen,
+    accion: "crear",
+    detalle: `Margen aplicado al costeo ${data.id_costeo}.`,
   });
 
   revalidatePath("/dashboard/costs");

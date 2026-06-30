@@ -3,12 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
-import { updateWorkOrderProgressSchema } from "@/schemas/production/work-order-progress.schema";
+import { buildNextId } from "@/lib/ids";
+import {
+  reassignWorkOrderProgressSchema,
+  updateWorkOrderProgressSchema,
+} from "@/schemas/production/work-order-progress.schema";
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -253,7 +258,6 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
 
   const parsed = updateWorkOrderProgressSchema.safeParse({
     id_avance: formData.get("id_avance"),
-    id_operario: formData.get("id_operario") ?? "",
     estado_etapa: formData.get("estado_etapa"),
     porcentaje_avance: formData.get("porcentaje_avance"),
     observaciones: formData.get("observaciones") ?? "",
@@ -287,22 +291,6 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
     );
   }
 
-  if (data.id_operario) {
-    const operator = await prisma.operario.findFirst({
-      where: {
-        id_operario: data.id_operario,
-        estado: "activo",
-      },
-      select: {
-        id_operario: true,
-      },
-    });
-
-    if (!operator) {
-      throw new Error("El operario seleccionado no existe o está inactivo.");
-    }
-  }
-
   const now = new Date();
   const normalizedPercentage = normalizeProgressPercentage(
     data.estado_etapa,
@@ -326,7 +314,7 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
       id_avance: data.id_avance,
     },
     data: {
-      id_operario: data.id_operario,
+      id_operario: advance.id_operario,
       estado_etapa: data.estado_etapa,
       porcentaje_avance: normalizedPercentage,
       fecha_inicio_etapa: nextStartDate,
@@ -338,6 +326,14 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
 
   await syncWorkOrderStatus(advance.id_orden_trabajo);
 
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "avance_orden",
+    id_registro_afectado: data.id_avance,
+    accion: "actualizar",
+    detalle: `Avance actualizado a ${data.estado_etapa} (${normalizedPercentage}%).`,
+  });
+
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
@@ -348,3 +344,133 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
 
   redirect(`/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`);
 }
+
+export async function reassignWorkOrderProgressAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const parsed = reassignWorkOrderProgressSchema.safeParse({
+    id_avance: formData.get("id_avance"),
+    id_operario_nuevo: formData.get("id_operario_nuevo"),
+    motivo: formData.get("motivo"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const [advance, newOperator, lastReassignment] = await Promise.all([
+    prisma.avance_orden.findUnique({
+      where: {
+        id_avance: data.id_avance,
+      },
+      include: {
+        etapa_ruta: true,
+        operario: true,
+        orden_trabajo: true,
+      },
+    }),
+
+    prisma.operario.findFirst({
+      where: {
+        id_operario: data.id_operario_nuevo,
+        estado: "activo",
+      },
+      select: {
+        id_operario: true,
+        nombres: true,
+        apellidos: true,
+      },
+    }),
+
+    prisma.reasignacion_tarea.findFirst({
+      orderBy: {
+        id_reasignacion: "desc",
+      },
+      select: {
+        id_reasignacion: true,
+      },
+    }),
+  ]);
+
+  if (!advance) {
+    throw new Error("El avance seleccionado no existe.");
+  }
+
+  if (
+    advance.orden_trabajo.estado === "anulada" ||
+    advance.orden_trabajo.estado === "finalizada"
+  ) {
+    throw new Error(
+      "No se puede reasignar el avance de una orden anulada o finalizada.",
+    );
+  }
+
+  if (!newOperator) {
+    throw new Error("El nuevo operario no existe o esta inactivo.");
+  }
+
+  if (advance.id_operario === newOperator.id_operario) {
+    throw new Error("El nuevo operario debe ser distinto al operario actual.");
+  }
+
+  const idReasignacion = buildNextId(
+    "REA",
+    lastReassignment?.id_reasignacion,
+  );
+  const reassignmentDate = new Date();
+
+  await prisma.$transaction(async (tx) => {
+    await tx.reasignacion_tarea.create({
+      data: {
+        id_reasignacion: idReasignacion,
+        id_avance: advance.id_avance,
+        id_operario_anterior: advance.id_operario,
+        id_operario_nuevo: newOperator.id_operario,
+        motivo: data.motivo,
+        fecha_reasignacion: reassignmentDate,
+        id_usuario_responsable: session.user.id,
+      },
+    });
+
+    await tx.avance_orden.update({
+      where: {
+        id_avance: advance.id_avance,
+      },
+      data: {
+        id_operario: newOperator.id_operario,
+        id_usuario_actualiza: session.user.id,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "reasignacion_tarea",
+      id_registro_afectado: idReasignacion,
+      accion: "crear",
+      detalle: `Avance ${advance.id_avance} reasignado a ${newOperator.apellidos}, ${newOperator.nombres}.`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${advance.id_orden_trabajo}`);
+  revalidatePath(
+    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`,
+  );
+  revalidatePath(
+    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress/${advance.id_avance}/reassign`,
+  );
+
+  redirect(`/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`);
+}
+

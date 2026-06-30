@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { reusableScrapSchema } from "@/schemas/waste-scrap/reusable-scrap.schema";
 
@@ -121,6 +122,14 @@ export async function createReusableScrapAction(formData: FormData) {
       estado: "disponible",
       id_usuario_registro: session.user.id,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "retazo_reutilizable",
+    id_registro_afectado: idRetazo,
+    accion: "crear",
+    detalle: `Retazo reutilizable creado para el material ${data.id_material}.`,
   });
 
   revalidatePath("/dashboard");

@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-const optionalIdSchema = z
-  .string()
-  .trim()
-  .optional()
-  .transform((value) => (value && value.length > 0 ? value : null));
-
 const optionalTextSchema = z
   .string()
   .trim()
@@ -19,8 +13,6 @@ export const updateWorkOrderProgressSchema = z.object({
     .trim()
     .min(1, "El avance de producción es obligatorio."),
 
-  id_operario: optionalIdSchema,
-
   estado_etapa: z.enum(["pendiente", "en_proceso", "pausada", "terminada"]),
 
   porcentaje_avance: z.coerce
@@ -29,4 +21,22 @@ export const updateWorkOrderProgressSchema = z.object({
     .max(100, "El porcentaje no puede ser mayor a 100."),
 
   observaciones: optionalTextSchema,
+});
+
+export const reassignWorkOrderProgressSchema = z.object({
+  id_avance: z
+    .string()
+    .trim()
+    .min(1, "El avance de produccion es obligatorio."),
+
+  id_operario_nuevo: z
+    .string()
+    .trim()
+    .min(1, "El nuevo operario es obligatorio."),
+
+  motivo: z
+    .string()
+    .trim()
+    .min(1, "El motivo de reasignacion es obligatorio.")
+    .max(255, "El motivo no debe superar 255 caracteres."),
 });

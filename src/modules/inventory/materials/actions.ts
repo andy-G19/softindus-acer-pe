@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { materialSchema } from "@/schemas/inventory/material.schema";
 
@@ -19,7 +20,7 @@ function buildSequentialId(lastId: string | null | undefined, prefix: string) {
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -138,6 +139,15 @@ export async function createMaterialAction(formData: FormData) {
         },
       });
     }
+
+    await registerAuditLog({
+      userId,
+      entidad_afectada: "material",
+      id_registro_afectado: idMaterial,
+      accion: "crear",
+      detalle: `Material creado: ${data.nombre_material}`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/inventory");

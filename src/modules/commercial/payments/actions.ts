@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { paymentSchema } from "@/schemas/commercial/payment.schema";
@@ -113,6 +114,15 @@ export async function createPaymentAction(formData: FormData) {
         saldo: nuevoSaldo,
         estado: nuevoEstado,
       },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "pago_cliente",
+      id_registro_afectado: id_pago_cliente,
+      accion: "crear",
+      detalle: `Pago de cliente registrado para la proforma ${quote.id_proforma}.`,
+      tx,
     });
   });
 

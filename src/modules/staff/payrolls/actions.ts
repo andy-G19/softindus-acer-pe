@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
 
@@ -176,6 +177,14 @@ export async function generatePayrollAction(formData: FormData) {
       monto_neto: netAmount.toFixed(2),
       estado_pago: "pendiente",
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "planilla_pago",
+    id_registro_afectado: idPlanilla,
+    accion: "crear",
+    detalle: `Planilla generada para el operario ${data.id_operario}.`,
   });
 
   console.log("Planilla generada", {

@@ -13,7 +13,7 @@ type NewRecipeDetailPageProps = {
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 

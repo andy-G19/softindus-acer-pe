@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
 
@@ -196,6 +197,17 @@ export async function createScrapSaleAction(formData: FormData) {
       });
     }
 
+    if (idMovimientoCaja) {
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "movimiento_caja",
+        id_registro_afectado: idMovimientoCaja,
+        accion: "crear",
+        detalle: `Movimiento de caja creado por venta de chatarra ${data.id_chatarra}.`,
+        tx,
+      });
+    }
+
     await tx.venta_chatarra.create({
       data: {
         id_venta_chatarra: idVentaChatarra,
@@ -218,6 +230,15 @@ export async function createScrapSaleAction(formData: FormData) {
       data: {
         estado: "vendida",
       },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "venta_chatarra",
+      id_registro_afectado: idVentaChatarra,
+      accion: "crear",
+      detalle: `Venta de chatarra registrada para ${data.id_chatarra}.`,
+      tx,
     });
   });
 

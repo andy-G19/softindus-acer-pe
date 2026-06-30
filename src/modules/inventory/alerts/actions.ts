@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db";
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 

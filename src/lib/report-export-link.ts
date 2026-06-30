@@ -1,7 +1,7 @@
 export function buildReportExportHref(
   report: string,
   params: Record<string, string>,
-  fileFormat: "csv" | "pdf" = "csv",
+  fileFormat: "excel" | "pdf" = "excel",
 ) {
   const searchParams = new URLSearchParams();
 

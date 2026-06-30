@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -98,6 +99,14 @@ export async function createFailureAction(formData: FormData) {
       tiempo_perdido_horas: data.tiempo_perdido_horas,
       impacto_produccion: data.impacto_produccion || null,
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "falla_maquina",
+    id_registro_afectado: idFalla,
+    accion: "crear",
+    detalle: `Falla registrada para la maquina ${data.id_maquina}.`,
   });
 
   revalidatePath("/dashboard/maintenance");

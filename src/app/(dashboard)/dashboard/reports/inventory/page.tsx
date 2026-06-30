@@ -75,18 +75,6 @@ function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
 }
 
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
-
 function formatDateTime(value: Date | null | undefined) {
   if (!value) {
     return "-";
@@ -299,7 +287,7 @@ export default async function InventoryReportPage({
             href={csvExportHref}
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
           >
-            Exportar CSV/Excel
+            Exportar Excel
           </a>
           <a
             href={pdfExportHref}

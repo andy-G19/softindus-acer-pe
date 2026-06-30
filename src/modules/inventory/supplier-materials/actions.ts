@@ -19,7 +19,7 @@ function buildSequentialId(lastId: string | null | undefined, prefix: string) {
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 

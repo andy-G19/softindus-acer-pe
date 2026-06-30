@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { quoteSchema } from "@/schemas/commercial/quote.schema";
@@ -118,6 +119,14 @@ export async function createQuoteAction(formData: FormData) {
       validez_dias: parsed.data.validez_dias ?? null,
       observaciones: emptyToNull(formData.get("observaciones")),
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "proforma",
+    id_registro_afectado: id_proforma,
+    accion: "crear",
+    detalle: `Proforma creada para el pedido ${parsed.data.id_pedido}.`,
   });
 
   revalidatePath("/dashboard/commercial/quotes");

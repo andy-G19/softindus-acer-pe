@@ -11,7 +11,7 @@ export default async function SuppliersPage() {
   }
 
   if (session.user.role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 
   const suppliers = await prisma.proveedor.findMany({

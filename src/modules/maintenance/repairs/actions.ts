@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -256,6 +257,15 @@ export async function createRepairAction(formData: FormData) {
         },
       });
     }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "reparacion",
+      id_registro_afectado: idReparacion,
+      accion: "crear",
+      detalle: `Reparacion registrada para la falla ${data.id_falla}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");

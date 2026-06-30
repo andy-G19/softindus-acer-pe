@@ -27,7 +27,7 @@ export default async function PurchasesPage() {
   }
 
   if (session.user.role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 
   const purchases = await prisma.compra.findMany({

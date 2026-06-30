@@ -15,7 +15,7 @@ type WorkOrderProgressPageProps = {
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
@@ -113,49 +113,43 @@ export default async function WorkOrderProgressPage({
 
   const { id } = await params;
 
-  const [workOrder, operators] = await Promise.all([
-    prisma.orden_trabajo.findUnique({
-      where: {
-        id_orden_trabajo: id,
-      },
-      include: {
-        producto: true,
-        ruta_fabricacion: {
-          include: {
-            etapa_ruta: {
-              where: {
-                estado: true,
-              },
-              orderBy: {
-                orden_secuencia: "asc",
-              },
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: {
+      id_orden_trabajo: id,
+    },
+    include: {
+      producto: true,
+      ruta_fabricacion: {
+        include: {
+          etapa_ruta: {
+            where: {
+              estado: true,
+            },
+            orderBy: {
+              orden_secuencia: "asc",
             },
           },
         },
-        avance_orden: {
-          include: {
-            etapa_ruta: true,
-            operario: true,
-            usuario: true,
+      },
+      avance_orden: {
+        include: {
+          etapa_ruta: true,
+          operario: true,
+          usuario: true,
+          reasignacion_tarea: {
+            include: {
+              operario_reasignacion_tarea_id_operario_anteriorTooperario: true,
+              operario_reasignacion_tarea_id_operario_nuevoTooperario: true,
+              usuario: true,
+            },
+            orderBy: {
+              fecha_reasignacion: "desc",
+            },
           },
         },
       },
-    }),
-
-    prisma.operario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
-  ]);
+    },
+  });
 
   if (!workOrder) {
     notFound();
@@ -397,24 +391,28 @@ export default async function WorkOrderProgressPage({
                   <div className="space-y-2 md:col-span-2">
                     <label className="text-sm font-medium">Operario</label>
 
-                    <select
-                      name="id_operario"
-                      defaultValue={advance.id_operario ?? ""}
-                      disabled={!canEditProgress}
-                      className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-                    >
-                      <option value="">Sin asignar</option>
+                    <div className="flex flex-col gap-3 rounded-lg border bg-slate-50 p-3 text-sm md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="font-medium text-slate-900">
+                          {advance.operario
+                            ? `${advance.operario.apellidos}, ${advance.operario.nombres}`
+                            : "Sin operario asignado"}
+                        </p>
 
-                      {operators.map((operator) => (
-                        <option
-                          key={operator.id_operario}
-                          value={operator.id_operario}
+                        <p className="mt-1 text-xs text-slate-500">
+                          {advance.operario?.cargo ?? "Operario de produccion"}
+                        </p>
+                      </div>
+
+                      {canEditProgress ? (
+                        <Link
+                          href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress/${advance.id_avance}/reassign`}
+                          className="text-sm font-medium text-slate-700 hover:text-slate-950"
                         >
-                          {operator.apellidos}, {operator.nombres} ·{" "}
-                          {operator.cargo ?? "Operario"}
-                        </option>
-                      ))}
-                    </select>
+                          Reasignar
+                        </Link>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
 
@@ -466,6 +464,57 @@ export default async function WorkOrderProgressPage({
                     Actualizar etapa
                   </button>
                 </div>
+
+                {advance.reasignacion_tarea.length > 0 ? (
+                  <div className="mt-5 rounded-lg border bg-slate-50 p-4 text-sm">
+                    <p className="font-medium text-slate-900">
+                      Historial de reasignaciones
+                    </p>
+
+                    <div className="mt-3 space-y-3">
+                      {advance.reasignacion_tarea.map((reassignment) => {
+                        const previousOperator =
+                          reassignment
+                            .operario_reasignacion_tarea_id_operario_anteriorTooperario;
+                        const nextOperator =
+                          reassignment
+                            .operario_reasignacion_tarea_id_operario_nuevoTooperario;
+
+                        return (
+                          <div
+                            key={reassignment.id_reasignacion}
+                            className="rounded-md border bg-white p-3"
+                          >
+                            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                              <p className="font-medium text-slate-800">
+                                {previousOperator
+                                  ? `${previousOperator.apellidos}, ${previousOperator.nombres}`
+                                  : "Sin operario anterior"}{" "}
+                                -&gt; {nextOperator.apellidos},{" "}
+                                {nextOperator.nombres}
+                              </p>
+
+                              <span className="text-xs text-slate-500">
+                                {formatDateTime(
+                                  reassignment.fecha_reasignacion,
+                                )}
+                              </span>
+                            </div>
+
+                            <p className="mt-2 text-slate-600">
+                              {reassignment.motivo}
+                            </p>
+
+                            <p className="mt-1 text-xs text-slate-500">
+                              Responsable: {reassignment.usuario.nombres}{" "}
+                              {reassignment.usuario.apellidos}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
               </form>
             );
           })}
@@ -502,3 +551,4 @@ export default async function WorkOrderProgressPage({
     </main>
   );
 }
+

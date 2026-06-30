@@ -19,7 +19,7 @@ const REPORT_MODULE_OPTIONS = [
 ];
 
 const FORMAT_OPTIONS = [
-  { value: "excel", label: "Excel / CSV" },
+  { value: "excel", label: "Excel" },
   { value: "pdf", label: "PDF" },
 ];
 
@@ -425,7 +425,7 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
         />
 
         <SummaryCard
-          title="Excel / CSV"
+          title="Excel"
           value={excelExports}
           description="Exportaciones registradas como Excel."
         />

@@ -36,7 +36,7 @@ export default async function PurchaseDetailPage({
   }
 
   if (session.user.role !== "ADMIN") {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 
   const { id } = await params;

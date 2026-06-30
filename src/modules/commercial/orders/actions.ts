@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId, buildNextIds } from "@/lib/ids";
 import { orderSchema } from "@/schemas/commercial/order.schema";
@@ -134,6 +135,15 @@ export async function createOrderAction(formData: FormData) {
         subtotal: item.cantidad * item.precio_unitario,
         observaciones: item.observaciones?.trim() || null,
       })),
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "pedido",
+      id_registro_afectado: id_pedido,
+      accion: "crear",
+      detalle: `Pedido creado con ${parsed.data.items.length} producto(s).`,
+      tx,
     });
   });
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { productSchema } from "@/schemas/commercial/product.schema";
@@ -60,6 +61,14 @@ export async function createProductAction(formData: FormData) {
       estado: true,
       fecha_registro: new Date(),
     },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "producto",
+    id_registro_afectado: id_producto,
+    accion: "crear",
+    detalle: `Producto creado: ${parsed.data.nombre_producto}`,
   });
 
   revalidatePath("/dashboard/commercial/products");

@@ -24,7 +24,7 @@ function buildSequentialId(lastId: string | null | undefined, prefix: string) {
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/access-denied");
+    redirect("/dashboard/access-denied");
   }
 }
 
