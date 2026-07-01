@@ -85,9 +85,44 @@ export async function createWorkOrderAction(formData: FormData) {
 
   const data = parsed.data;
 
+  let effectiveProductId = data.id_producto ?? "";
+
+  if (data.tipo_produccion === "pedido") {
+    if (!data.id_detalle_pedido) {
+      throw new Error("Para una orden por pedido debe seleccionar un detalle de pedido.");
+    }
+
+    const orderDetail = await prisma.detalle_pedido.findUnique({
+      where: {
+        id_detalle_pedido: data.id_detalle_pedido,
+      },
+      select: {
+        id_producto: true,
+      },
+    });
+
+    if (!orderDetail) {
+      throw new Error("El detalle de pedido seleccionado no existe.");
+    }
+
+    if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
+      throw new Error("El detalle de pedido pertenece a otro producto.");
+    }
+
+    effectiveProductId = orderDetail.id_producto;
+  }
+
+  if (
+    (data.tipo_produccion === "campania" ||
+      data.tipo_produccion === "reposicion_stock") &&
+    !data.id_producto
+  ) {
+    throw new Error("Seleccione un producto.");
+  }
+
   const product = await prisma.producto.findFirst({
     where: {
-      id_producto: data.id_producto,
+      id_producto: effectiveProductId,
       estado: true,
     },
     select: {
@@ -103,7 +138,6 @@ export async function createWorkOrderAction(formData: FormData) {
   const route = await prisma.ruta_fabricacion.findFirst({
     where: {
       id_ruta: data.id_ruta,
-      id_producto: data.id_producto,
       estado: true,
     },
     include: {
@@ -121,6 +155,10 @@ export async function createWorkOrderAction(formData: FormData) {
     );
   }
 
+  if (route.id_producto !== effectiveProductId) {
+    throw new Error("La ruta seleccionada pertenece a otro producto.");
+  }
+
   if (route.etapa_ruta.length === 0) {
     throw new Error(
       "La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden.",
@@ -130,11 +168,6 @@ export async function createWorkOrderAction(formData: FormData) {
   const version = await prisma.version_receta.findFirst({
     where: {
       id_version_receta: data.id_version_receta,
-      estado: "vigente",
-      receta_tecnica: {
-        id_producto: data.id_producto,
-        estado: "activa",
-      },
     },
     include: {
       receta_tecnica: true,
@@ -146,6 +179,17 @@ export async function createWorkOrderAction(formData: FormData) {
     throw new Error(
       "La versión de receta seleccionada no existe, no está vigente o no pertenece al producto.",
     );
+  }
+
+  if (
+    version.estado !== "vigente" ||
+    version.receta_tecnica.estado !== "activa"
+  ) {
+    throw new Error("La receta seleccionada no esta vigente o activa.");
+  }
+
+  if (version.receta_tecnica.id_producto !== effectiveProductId) {
+    throw new Error("La receta seleccionada pertenece a otro producto.");
   }
 
   if (version.detalle_receta.length === 0) {
@@ -171,10 +215,8 @@ export async function createWorkOrderAction(formData: FormData) {
       throw new Error("El detalle de pedido seleccionado no existe.");
     }
 
-    if (orderDetail.id_producto !== data.id_producto) {
-      throw new Error(
-        "El producto de la orden no coincide con el producto del detalle de pedido.",
-      );
+    if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
+      throw new Error("El detalle de pedido pertenece a otro producto.");
     }
 
     idCliente = orderDetail.pedido.id_cliente;
@@ -184,11 +226,22 @@ export async function createWorkOrderAction(formData: FormData) {
   let idCampania: string | null = null;
 
   if (data.tipo_produccion === "campania") {
+    if (!data.id_campania) {
+      throw new Error("Para una orden por campania debe seleccionar una campania.");
+    }
+
     const campaign = await prisma.campania_produccion.findFirst({
       where: {
-        id_campania: data.id_campania ?? "",
+        id_campania: data.id_campania,
         estado: {
           in: ["planificada", "activa"],
+        },
+      },
+      include: {
+        campania_detalle: {
+          select: {
+            id_producto: true,
+          },
         },
       },
     });
@@ -198,6 +251,15 @@ export async function createWorkOrderAction(formData: FormData) {
     }
 
     idCampania = campaign.id_campania;
+
+    if (
+      campaign.campania_detalle.length > 0 &&
+      !campaign.campania_detalle.some((detail) => {
+        return detail.id_producto === effectiveProductId;
+      })
+    ) {
+      throw new Error("El producto seleccionado no pertenece a la campania.");
+    }
   }
 
   const lastWorkOrder = await prisma.orden_trabajo.findFirst({
@@ -219,7 +281,7 @@ export async function createWorkOrderAction(formData: FormData) {
       data: {
         id_orden_trabajo: idOrdenTrabajo,
         id_cliente: idCliente,
-        id_producto: data.id_producto,
+        id_producto: effectiveProductId,
         id_campania: idCampania,
         id_detalle_pedido: idDetallePedido,
         id_ruta: data.id_ruta,
@@ -251,7 +313,7 @@ export async function createWorkOrderAction(formData: FormData) {
             id_pedido: orderDetail.id_pedido,
           },
           data: {
-            estado: "en producción",
+            estado: "en_produccion",
           },
         });
       }
@@ -262,7 +324,7 @@ export async function createWorkOrderAction(formData: FormData) {
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: idOrdenTrabajo,
       accion: "crear",
-      detalle: `Orden de trabajo creada para el producto ${data.id_producto}.`,
+      detalle: `Orden de trabajo creada para el producto ${effectiveProductId}.`,
       tx,
     });
   });

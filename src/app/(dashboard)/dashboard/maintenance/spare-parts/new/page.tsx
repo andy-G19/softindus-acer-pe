@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -24,12 +25,17 @@ export default async function NewSparePartPage() {
     },
   });
 
+  const providerItems = providers.map((provider) => ({
+    id: provider.id_proveedor,
+    label: provider.razon_social,
+  }));
+
   return (
     <main className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Nuevo repuesto
+            Dashboard - Mantenimiento de maquinaria - Nuevo repuesto
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
@@ -37,8 +43,8 @@ export default async function NewSparePartPage() {
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Registra repuestos que podrán usarse luego en reparaciones de
-            maquinaria, incluyendo proveedor, descripción y costo unitario.
+            Registra repuestos que podran usarse luego en reparaciones de
+            maquinaria, incluyendo proveedor, descripcion y costo unitario.
           </p>
         </div>
 
@@ -68,34 +74,20 @@ export default async function NewSparePartPage() {
                   name="nombre_repuesto"
                   type="text"
                   required
-                  placeholder="Ejemplo: Manguera hidráulica"
+                  placeholder="Ejemplo: Manguera hidraulica"
                   className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label htmlFor="id_proveedor" className="text-sm font-medium">
-                    Proveedor
-                  </label>
-
-                  <select
-                    id="id_proveedor"
+                  <SearchableSelect
                     name="id_proveedor"
-                    defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="">Sin proveedor asignado</option>
-
-                    {providers.map((provider) => (
-                      <option
-                        key={provider.id_proveedor}
-                        value={provider.id_proveedor}
-                      >
-                        {provider.razon_social}
-                      </option>
-                    ))}
-                  </select>
+                    label="Proveedor"
+                    placeholder="Buscar proveedor..."
+                    items={providerItems}
+                    emptyMessage="No hay proveedores activos."
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -135,14 +127,14 @@ export default async function NewSparePartPage() {
 
               <div className="space-y-2">
                 <label htmlFor="descripcion" className="text-sm font-medium">
-                  Descripción
+                  Descripcion
                 </label>
 
                 <textarea
                   id="descripcion"
                   name="descripcion"
                   rows={4}
-                  placeholder="Ejemplo: Repuesto usado para mantenimiento del sistema hidráulico."
+                  placeholder="Ejemplo: Repuesto usado para mantenimiento del sistema hidraulico."
                   className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
@@ -166,7 +158,7 @@ export default async function NewSparePartPage() {
                   href="/dashboard/maintenance"
                   className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
                 >
-                  Volver al módulo
+                  Volver al modulo
                 </Link>
               </div>
             </form>
@@ -175,23 +167,23 @@ export default async function NewSparePartPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Recomendación</CardTitle>
+            <CardTitle className="text-base">Recomendacion</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              Registra repuestos críticos como mangueras, fajas, rodamientos,
+              Registra repuestos criticos como mangueras, fajas, rodamientos,
               electrodos, cables, interruptores, discos o piezas de desgaste.
             </p>
 
             <p>
               El proveedor es opcional porque algunos repuestos pueden ser
-              comprados de forma eventual o aún no tener proveedor definido.
+              comprados de forma eventual o aun no tener proveedor definido.
             </p>
 
             <p>
               En la siguiente subfase usaremos estos repuestos para calcular el
-              costo real de cada reparación.
+              costo real de cada reparacion.
             </p>
           </CardContent>
         </Card>

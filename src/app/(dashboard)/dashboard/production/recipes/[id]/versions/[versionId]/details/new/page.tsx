@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { prisma } from "@/lib/db";
 import { createRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 
@@ -95,11 +96,21 @@ export default async function NewRecipeDetailPage({
     version.receta_tecnica.estado === "activa" &&
     materials.length > 0;
 
+  const materialItems = materials.map((material) => ({
+    id: material.id_material,
+    label: material.nombre_material,
+    description: `${material.categoria} - Stock: ${formatDecimal(
+      material.stock_actual,
+    )} ${material.unidad_medida} - ${formatMoney(
+      material.costo_unitario_actual,
+    )}`,
+  }));
+
   return (
     <main className="mx-auto max-w-3xl space-y-6">
       <section>
         <p className="text-sm font-medium text-slate-500">
-          Producción · Recetas técnicas · Materiales requeridos
+          Produccion - Recetas tecnicas - Materiales requeridos
         </p>
 
         <h1 className="text-3xl font-bold tracking-tight">
@@ -111,8 +122,8 @@ export default async function NewRecipeDetailPage({
           <span className="font-medium">
             {version.receta_tecnica.nombre_receta}
           </span>{" "}
-          · Versión:{" "}
-          <span className="font-medium">{version.numero_version}</span> ·
+          - Version:{" "}
+          <span className="font-medium">{version.numero_version}</span> -
           Producto:{" "}
           <span className="font-medium">
             {version.receta_tecnica.producto.nombre_producto}
@@ -122,21 +133,21 @@ export default async function NewRecipeDetailPage({
 
       {version.estado !== "vigente" ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta versión no está vigente. Solo se pueden agregar materiales a una
-          versión vigente.
+          Esta version no esta vigente. Solo se pueden agregar materiales a una
+          version vigente.
         </section>
       ) : null}
 
       {version.receta_tecnica.estado !== "activa" ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no está activa. Actívala antes de agregar materiales.
+          Esta receta no esta activa. Activala antes de agregar materiales.
         </section>
       ) : null}
 
       {materials.length === 0 ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
           No hay materiales activos disponibles o todos los materiales activos ya
-          fueron agregados a esta versión de receta.
+          fueron agregados a esta version de receta.
         </section>
       ) : null}
 
@@ -151,27 +162,18 @@ export default async function NewRecipeDetailPage({
         />
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Material o insumo *</label>
-
-          <select
+          <SearchableSelect
             name="id_material"
+            label="Material o insumo"
+            placeholder="Buscar material..."
+            items={materialItems}
             required
             disabled={!canAddDetail}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-          >
-            <option value="">Seleccione un material</option>
-
-            {materials.map((material) => (
-              <option key={material.id_material} value={material.id_material}>
-                {material.nombre_material} · {material.categoria} · Stock:{" "}
-                {formatDecimal(material.stock_actual)} {material.unidad_medida} ·{" "}
-                {formatMoney(material.costo_unitario_actual)}
-              </option>
-            ))}
-          </select>
+            emptyMessage="No hay materiales disponibles para esta receta."
+          />
 
           <p className="text-xs text-slate-500">
-            La unidad de medida se tomará automáticamente desde el material
+            La unidad de medida se tomara automaticamente desde el material
             registrado en inventario.
           </p>
         </div>
@@ -195,9 +197,7 @@ export default async function NewRecipeDetailPage({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              Merma estimada (%)
-            </label>
+            <label className="text-sm font-medium">Merma estimada (%)</label>
 
             <input
               name="merma_estimada_porcentaje"
@@ -247,7 +247,7 @@ export default async function NewRecipeDetailPage({
           <p className="mt-1">
             La cantidad registrada representa el consumo estimado para fabricar
             una unidad del producto. En la siguiente fase usaremos estos datos
-            para calcular materiales requeridos según la cantidad a producir.
+            para calcular materiales requeridos segun la cantidad a producir.
           </p>
         </div>
 

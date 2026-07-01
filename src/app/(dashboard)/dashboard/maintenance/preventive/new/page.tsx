@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -45,13 +46,18 @@ export default async function NewPreventiveMaintenancePage() {
   });
 
   const today = getTodayValue();
+  const machineItems = machines.map((machine) => ({
+    id: machine.id_maquina,
+    label: machine.nombre,
+    description: `${machine.tipo} - ${getMachineStatusLabel(machine.estado)}`,
+  }));
 
   return (
     <main className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Nuevo preventivo
+            Dashboard - Mantenimiento de maquinaria - Nuevo preventivo
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
@@ -59,7 +65,7 @@ export default async function NewPreventiveMaintenancePage() {
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Programa actividades preventivas por máquina para anticipar fallas,
+            Programa actividades preventivas por maquina para anticipar fallas,
             reducir paradas imprevistas y mantener la continuidad del taller.
           </p>
         </div>
@@ -82,11 +88,11 @@ export default async function NewPreventiveMaintenancePage() {
             {machines.length === 0 ? (
               <div className="rounded-lg border border-dashed p-6 text-center">
                 <p className="text-sm font-medium">
-                  No hay máquinas registradas.
+                  No hay maquinas registradas.
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra una máquina para poder programar
+                  Primero registra una maquina para poder programar
                   mantenimientos preventivos.
                 </p>
 
@@ -94,7 +100,7 @@ export default async function NewPreventiveMaintenancePage() {
                   href="/dashboard/maintenance/machines/new"
                   className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
                 >
-                  Registrar máquina
+                  Registrar maquina
                 </Link>
               </div>
             ) : (
@@ -103,28 +109,14 @@ export default async function NewPreventiveMaintenancePage() {
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <label htmlFor="id_maquina" className="text-sm font-medium">
-                    Máquina
-                  </label>
-
-                  <select
-                    id="id_maquina"
+                  <SearchableSelect
                     name="id_maquina"
+                    label="Maquina"
+                    placeholder="Buscar maquina..."
+                    items={machineItems}
                     required
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="">Seleccione una máquina</option>
-
-                    {machines.map((machine) => (
-                      <option
-                        key={machine.id_maquina}
-                        value={machine.id_maquina}
-                      >
-                        {machine.nombre} · {machine.tipo} ·{" "}
-                        {getMachineStatusLabel(machine.estado)}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay maquinas registradas."
+                  />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
@@ -190,7 +182,7 @@ export default async function NewPreventiveMaintenancePage() {
                     name="actividad"
                     type="text"
                     required
-                    placeholder="Ejemplo: Lubricación general y revisión de presión hidráulica"
+                    placeholder="Ejemplo: Lubricacion general y revision de presion hidraulica"
                     className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
@@ -228,7 +220,7 @@ export default async function NewPreventiveMaintenancePage() {
                     href="/dashboard/maintenance"
                     className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
                   >
-                    Volver al módulo
+                    Volver al modulo
                   </Link>
                 </div>
               </form>
@@ -238,25 +230,25 @@ export default async function NewPreventiveMaintenancePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Recomendación</CardTitle>
+            <CardTitle className="text-base">Recomendacion</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              Programa mantenimientos preventivos para máquinas críticas como
+              Programa mantenimientos preventivos para maquinas criticas como
               prensas, cortadoras, soldadoras, compresoras o dobladoras.
             </p>
 
             <p>
-              Mantén el estado como <strong>Pendiente</strong> hasta que se
+              Manten el estado como <strong>Pendiente</strong> hasta que se
               realice la actividad. Al marcarlo como{" "}
-              <strong>Realizado</strong>, el sistema registrará la fecha real de
-              ejecución.
+              <strong>Realizado</strong>, el sistema registrara la fecha real de
+              ejecucion.
             </p>
 
             <p>
               Los preventivos ayudan a reducir fallas inesperadas y costos por
-              paradas de producción.
+              paradas de produccion.
             </p>
           </CardContent>
         </Card>

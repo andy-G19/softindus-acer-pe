@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { prisma } from "@/lib/db";
 import { reassignWorkOrderProgressAction } from "@/modules/production/work-order-progress/actions";
 
@@ -96,6 +97,11 @@ export default async function ReassignWorkOrderProgressPage({
   });
 
   const canReassign = !isClosedOrder && operators.length > 0;
+  const operatorItems = operators.map((operator) => ({
+    id: operator.id_operario,
+    label: `${operator.apellidos}, ${operator.nombres}`,
+    description: operator.cargo ?? "Operario",
+  }));
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
@@ -158,23 +164,15 @@ export default async function ReassignWorkOrderProgressPage({
         <input type="hidden" name="id_avance" value={advance.id_avance} />
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nuevo operario *</label>
-
-          <select
+          <SearchableSelect
             name="id_operario_nuevo"
+            label="Nuevo operario"
+            placeholder="Buscar operario activo..."
+            items={operatorItems}
             required
             disabled={!canReassign}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-          >
-            <option value="">Seleccione un operario activo</option>
-
-            {operators.map((operator) => (
-              <option key={operator.id_operario} value={operator.id_operario}>
-                {operator.apellidos}, {operator.nombres} -{" "}
-                {operator.cargo ?? "Operario"}
-              </option>
-            ))}
-          </select>
+            emptyMessage="No hay operarios activos disponibles."
+          />
         </div>
 
         <div className="space-y-2">

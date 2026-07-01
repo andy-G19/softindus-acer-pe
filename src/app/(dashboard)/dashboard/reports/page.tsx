@@ -14,7 +14,6 @@ const PENDING_ORDER_STATES = [
   "registrado",
   "aprobado",
   "en_produccion",
-  "en producción",
 ];
 const OPEN_FAILURE_STATES = ["pendiente", "en_atencion"];
 const ACTIVE_PROFORMA_STATES = ["vigente", "aceptada"];

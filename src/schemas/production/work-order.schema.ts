@@ -20,7 +20,7 @@ export const workOrderSchema = z
     id_detalle_pedido: optionalIdSchema,
     id_campania: optionalIdSchema,
 
-    id_producto: z.string().trim().min(1, "Seleccione un producto."),
+    id_producto: optionalIdSchema,
 
     id_ruta: z
       .string()
@@ -77,6 +77,18 @@ export const workOrderSchema = z
         code: "custom",
         path: ["id_campania"],
         message: "Para una orden por campaña debe seleccionar una campaña.",
+      });
+    }
+
+    if (
+      (data.tipo_produccion === "campania" ||
+        data.tipo_produccion === "reposicion_stock") &&
+      !data.id_producto
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["id_producto"],
+        message: "Seleccione un producto.",
       });
     }
 

@@ -407,7 +407,7 @@ export default async function WorkOrderProgressPage({
                       {canEditProgress ? (
                         <Link
                           href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress/${advance.id_avance}/reassign`}
-                          className="text-sm font-medium text-slate-700 hover:text-slate-950"
+                          className="rounded-lg border bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                         >
                           Reasignar
                         </Link>

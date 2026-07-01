@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -45,13 +46,18 @@ export default async function NewFailurePage() {
   });
 
   const currentDateTime = getCurrentDateTimeValue();
+  const machineItems = machines.map((machine) => ({
+    id: machine.id_maquina,
+    label: machine.nombre,
+    description: `${machine.tipo} - ${getMachineStatusLabel(machine.estado)}`,
+  }));
 
   return (
     <main className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Nueva falla
+            Dashboard - Mantenimiento de maquinaria - Nueva falla
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
@@ -59,9 +65,9 @@ export default async function NewFailurePage() {
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Documenta una falla técnica de una máquina o equipo crítico,
-            registrando fecha, descripción, responsable, tiempo perdido e
-            impacto en producción.
+            Documenta una falla tecnica de una maquina o equipo critico,
+            registrando fecha, descripcion, responsable, tiempo perdido e
+            impacto en produccion.
           </p>
         </div>
 
@@ -74,53 +80,38 @@ export default async function NewFailurePage() {
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">
-              Datos de la falla
-            </CardTitle>
+            <CardTitle className="text-base">Datos de la falla</CardTitle>
           </CardHeader>
 
           <CardContent>
             {machines.length === 0 ? (
               <div className="rounded-lg border border-dashed p-6 text-center">
                 <p className="text-sm font-medium">
-                  No hay máquinas registradas.
+                  No hay maquinas registradas.
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra una máquina para poder documentar sus fallas.
+                  Primero registra una maquina para poder documentar sus fallas.
                 </p>
 
                 <Link
                   href="/dashboard/maintenance/machines/new"
                   className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
                 >
-                  Registrar máquina
+                  Registrar maquina
                 </Link>
               </div>
             ) : (
               <form action={createFailureAction} className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="id_maquina" className="text-sm font-medium">
-                    Máquina
-                  </label>
-
-                  <select
-                    id="id_maquina"
+                  <SearchableSelect
                     name="id_maquina"
+                    label="Maquina"
+                    placeholder="Buscar maquina..."
+                    items={machineItems}
                     required
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="">Seleccione una máquina</option>
-                    {machines.map((machine) => (
-                      <option
-                        key={machine.id_maquina}
-                        value={machine.id_maquina}
-                      >
-                        {machine.nombre} · {machine.tipo} ·{" "}
-                        {getMachineStatusLabel(machine.estado)}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay maquinas registradas."
+                  />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
@@ -144,7 +135,7 @@ export default async function NewFailurePage() {
                       htmlFor="estado_atencion"
                       className="text-sm font-medium"
                     >
-                      Estado de atención
+                      Estado de atencion
                     </label>
 
                     <select
@@ -155,7 +146,7 @@ export default async function NewFailurePage() {
                       className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <option value="pendiente">Pendiente</option>
-                      <option value="en_atencion">En atención</option>
+                      <option value="en_atencion">En atencion</option>
                       <option value="reparada">Reparada</option>
                       <option value="anulada">Anulada</option>
                     </select>
@@ -164,7 +155,7 @@ export default async function NewFailurePage() {
 
                 <div className="space-y-2">
                   <label htmlFor="descripcion" className="text-sm font-medium">
-                    Descripción de la falla
+                    Descripcion de la falla
                   </label>
 
                   <textarea
@@ -172,7 +163,7 @@ export default async function NewFailurePage() {
                     name="descripcion"
                     rows={4}
                     required
-                    placeholder="Ejemplo: La prensa hidráulica perdió presión durante el proceso de doblado."
+                    placeholder="Ejemplo: La prensa hidraulica perdio presion durante el proceso de doblado."
                     className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
@@ -220,7 +211,7 @@ export default async function NewFailurePage() {
                     htmlFor="impacto_produccion"
                     className="text-sm font-medium"
                   >
-                    Impacto en producción
+                    Impacto en produccion
                   </label>
 
                   <textarea
@@ -251,7 +242,7 @@ export default async function NewFailurePage() {
                     href="/dashboard/maintenance"
                     className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
                   >
-                    Volver al módulo
+                    Volver al modulo
                   </Link>
                 </div>
               </form>
@@ -261,23 +252,23 @@ export default async function NewFailurePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Recomendación</CardTitle>
+            <CardTitle className="text-base">Recomendacion</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
               Registra la falla apenas ocurra para no perder trazabilidad del
-              tiempo detenido y del impacto en producción.
+              tiempo detenido y del impacto en produccion.
             </p>
 
             <p>
-              Si la falla todavía no fue revisada, usa el estado{" "}
-              <strong>Pendiente</strong>. Si ya está siendo atendida, usa{" "}
-              <strong>En atención</strong>.
+              Si la falla todavia no fue revisada, usa el estado{" "}
+              <strong>Pendiente</strong>. Si ya esta siendo atendida, usa{" "}
+              <strong>En atencion</strong>.
             </p>
 
             <p>
-              La reparación y el costo económico se registrarán en la siguiente
+              La reparacion y el costo economico se registraran en la siguiente
               subfase, cuando implementemos reparaciones y repuestos.
             </p>
           </CardContent>

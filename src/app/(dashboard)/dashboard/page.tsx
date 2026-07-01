@@ -12,7 +12,7 @@ import { formatDate } from "@/lib/formatters";
 import { getRoleLabel, getUserStatusLabel } from "@/lib/permissions";
 
 const ACTIVE_WORK_ORDER_STATUSES = ["pendiente", "en_proceso", "pausada"];
-const PENDING_ORDER_STATUSES = ["registrado", "aprobado", "en producción"];
+const PENDING_ORDER_STATUSES = ["registrado", "aprobado", "en_produccion"];
 const RECEIVABLE_QUOTE_STATUSES = ["vigente", "aceptada"];
 const PENDING_PURCHASE_PAYMENT_STATUSES = ["pendiente", "parcial"];
 const CLOSED_FAILURE_STATUSES = ["cerrada", "reparada"];

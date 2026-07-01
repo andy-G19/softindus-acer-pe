@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -36,7 +37,7 @@ function getTodayValue() {
 function getFailureStatusLabel(status: string) {
   const labels: Record<string, string> = {
     pendiente: "Pendiente",
-    en_atencion: "En atención",
+    en_atencion: "En atencion",
     reparada: "Reparada",
     anulada: "Anulada",
   };
@@ -71,21 +72,33 @@ export default async function NewRepairPage() {
   });
 
   const today = getTodayValue();
+  const failureItems = failures.map((failure) => ({
+    id: failure.id_falla,
+    label: failure.maquina.nombre,
+    description: `${formatDateTime(failure.fecha_falla)} - ${getFailureStatusLabel(
+      failure.estado_atencion,
+    )}`,
+  }));
+  const sparePartItems = spareParts.map((sparePart) => ({
+    id: sparePart.id_repuesto,
+    label: sparePart.nombre_repuesto,
+    description: `S/ ${sparePart.costo_unitario.toString()}`,
+  }));
 
   return (
     <main className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Nueva reparación
+            Dashboard - Mantenimiento de maquinaria - Nueva reparacion
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
-            Registrar reparación
+            Registrar reparacion
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Registra la atención realizada a una falla, incluyendo técnico,
+            Registra la atencion realizada a una falla, incluyendo tecnico,
             mano de obra, repuestos utilizados y costo total calculado.
           </p>
         </div>
@@ -99,20 +112,18 @@ export default async function NewRepairPage() {
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">
-              Datos de la reparación
-            </CardTitle>
+            <CardTitle className="text-base">Datos de la reparacion</CardTitle>
           </CardHeader>
 
           <CardContent>
             {failures.length === 0 ? (
               <div className="rounded-lg border border-dashed p-6 text-center">
                 <p className="text-sm font-medium">
-                  No hay fallas pendientes o en atención.
+                  No hay fallas pendientes o en atencion.
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra una falla para poder asociarle una reparación.
+                  Primero registra una falla para poder asociarle una reparacion.
                 </p>
 
                 <Link
@@ -125,26 +136,14 @@ export default async function NewRepairPage() {
             ) : (
               <form action={createRepairAction} className="space-y-5">
                 <div className="space-y-2">
-                  <label htmlFor="id_falla" className="text-sm font-medium">
-                    Falla a reparar
-                  </label>
-
-                  <select
-                    id="id_falla"
+                  <SearchableSelect
                     name="id_falla"
+                    label="Falla a reparar"
+                    placeholder="Buscar falla por maquina..."
+                    items={failureItems}
                     required
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="">Seleccione una falla</option>
-
-                    {failures.map((failure) => (
-                      <option key={failure.id_falla} value={failure.id_falla}>
-                        {failure.maquina.nombre} ·{" "}
-                        {formatDateTime(failure.fecha_falla)} ·{" "}
-                        {getFailureStatusLabel(failure.estado_atencion)}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay fallas pendientes o en atencion."
+                  />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
@@ -153,7 +152,7 @@ export default async function NewRepairPage() {
                       htmlFor="fecha_reparacion"
                       className="text-sm font-medium"
                     >
-                      Fecha de reparación
+                      Fecha de reparacion
                     </label>
 
                     <input
@@ -210,14 +209,14 @@ export default async function NewRepairPage() {
                     htmlFor="tecnico_proveedor"
                     className="text-sm font-medium"
                   >
-                    Técnico o proveedor
+                    Tecnico o proveedor
                   </label>
 
                   <input
                     id="tecnico_proveedor"
                     name="tecnico_proveedor"
                     type="text"
-                    placeholder="Ejemplo: Técnico interno / proveedor externo"
+                    placeholder="Ejemplo: Tecnico interno / proveedor externo"
                     className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
@@ -228,8 +227,8 @@ export default async function NewRepairPage() {
                       Repuestos usados
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Puedes registrar hasta 3 repuestos en esta versión. El
-                      costo unitario se tomará automáticamente del catálogo de
+                      Puedes registrar hasta 3 repuestos en esta version. El
+                      costo unitario se tomara automaticamente del catalogo de
                       repuestos.
                     </p>
                   </div>
@@ -241,31 +240,13 @@ export default async function NewRepairPage() {
                         className="grid gap-4 md:grid-cols-[1fr_160px]"
                       >
                         <div className="space-y-2">
-                          <label
-                            htmlFor={`id_repuesto_${index}`}
-                            className="text-sm font-medium"
-                          >
-                            Repuesto {index}
-                          </label>
-
-                          <select
-                            id={`id_repuesto_${index}`}
+                          <SearchableSelect
                             name={`id_repuesto_${index}`}
-                            defaultValue=""
-                            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                          >
-                            <option value="">Sin repuesto</option>
-
-                            {spareParts.map((sparePart) => (
-                              <option
-                                key={sparePart.id_repuesto}
-                                value={sparePart.id_repuesto}
-                              >
-                                {sparePart.nombre_repuesto} · S/{" "}
-                                {sparePart.costo_unitario.toString()}
-                              </option>
-                            ))}
-                          </select>
+                            label={`Repuesto ${index}`}
+                            placeholder="Buscar repuesto..."
+                            items={sparePartItems}
+                            emptyMessage="No hay repuestos activos."
+                          />
                         </div>
 
                         <div className="space-y-2">
@@ -300,7 +281,7 @@ export default async function NewRepairPage() {
                     id="observaciones"
                     name="observaciones"
                     rows={4}
-                    placeholder="Ejemplo: Se cambió la manguera hidráulica y se realizó prueba de presión."
+                    placeholder="Ejemplo: Se cambio la manguera hidraulica y se realizo prueba de presion."
                     className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
@@ -310,7 +291,7 @@ export default async function NewRepairPage() {
                     type="submit"
                     className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
                   >
-                    Registrar reparación
+                    Registrar reparacion
                   </button>
 
                   <Link
@@ -324,7 +305,7 @@ export default async function NewRepairPage() {
                     href="/dashboard/maintenance"
                     className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
                   >
-                    Volver al módulo
+                    Volver al modulo
                   </Link>
                 </div>
               </form>
@@ -334,24 +315,24 @@ export default async function NewRepairPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Cálculo automático</CardTitle>
+            <CardTitle className="text-base">Calculo automatico</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              El costo total se calcula automáticamente sumando la mano de obra
-              más los subtotales de los repuestos usados.
+              El costo total se calcula automaticamente sumando la mano de obra
+              mas los subtotales de los repuestos usados.
             </p>
 
             <p>
-              Si registras una reparación como <strong>Ejecutada</strong>, la
-              falla pasará a <strong>Reparada</strong> y la máquina volverá a
+              Si registras una reparacion como <strong>Ejecutada</strong>, la
+              falla pasara a <strong>Reparada</strong> y la maquina volvera a
               estado <strong>Operativa</strong>.
             </p>
 
             <p>
-              Si la reparación queda programada u observada, la falla pasará a
-              <strong> En atención</strong> y la máquina quedará en{" "}
+              Si la reparacion queda programada u observada, la falla pasara a
+              <strong> En atencion</strong> y la maquina quedara en{" "}
               <strong>En mantenimiento</strong>.
             </p>
           </CardContent>

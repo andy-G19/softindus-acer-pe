@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { createOrderAction } from "@/modules/commercial/orders/actions";
 
 type ClientOption = {
@@ -55,6 +56,24 @@ export function OrderForm({ clients, products }: OrderFormProps) {
 
   const canCreateOrder = clients.length > 0 && products.length > 0;
 
+  const clientItems = useMemo(() => {
+    return clients.map((client) => ({
+      id: client.id_cliente,
+      label: client.nombre_razon_social,
+      description: client.tipo_cliente,
+    }));
+  }, [clients]);
+
+  const productItems = useMemo(() => {
+    return products.map((product) => ({
+      id: product.id_producto,
+      label: product.nombre_producto,
+      description: `${product.categoria} - ${product.unidad_medida} - ${formatMoney(
+        product.precio_referencial,
+      )}`,
+    }));
+  }, [products]);
+
   const total = useMemo(() => {
     return items.reduce((sum, item) => {
       const cantidad = Number(item.cantidad || 0);
@@ -93,13 +112,13 @@ export function OrderForm({ clients, products }: OrderFormProps) {
           ...item,
           [field]: value,
         };
-      })
+      }),
     );
   }
 
   function handleProductChange(key: string, productId: string) {
     const selectedProduct = products.find(
-      (product) => product.id_producto === productId
+      (product) => product.id_producto === productId,
     );
 
     setItems((currentItems) =>
@@ -113,7 +132,7 @@ export function OrderForm({ clients, products }: OrderFormProps) {
           id_producto: productId,
           precio_unitario: selectedProduct?.precio_referencial ?? "",
         };
-      })
+      }),
     );
   }
 
@@ -127,20 +146,15 @@ export function OrderForm({ clients, products }: OrderFormProps) {
       )}
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Cliente</label>
-        <select
+        <SearchableSelect
           name="id_cliente"
-          className="w-full rounded-md border px-3 py-2"
+          label="Cliente"
+          placeholder="Buscar cliente..."
+          items={clientItems}
           required
           disabled={!canCreateOrder}
-        >
-          <option value="">Selecciona un cliente</option>
-          {clients.map((client) => (
-            <option key={client.id_cliente} value={client.id_cliente}>
-              {client.nombre_razon_social} — {client.tipo_cliente}
-            </option>
-          ))}
-        </select>
+          emptyMessage="No hay clientes activos."
+        />
       </div>
 
       <div className="space-y-4 rounded-lg border p-4">
@@ -185,28 +199,19 @@ export function OrderForm({ clients, products }: OrderFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Producto</label>
-                  <select
+                  <SearchableSelect
                     name="id_producto"
+                    label="Producto"
+                    placeholder="Buscar producto..."
+                    items={productItems}
                     value={item.id_producto}
-                    onChange={(event) =>
-                      handleProductChange(item.key, event.target.value)
-                    }
-                    className="w-full rounded-md border px-3 py-2"
                     required
                     disabled={!canCreateOrder}
-                  >
-                    <option value="">Selecciona un producto</option>
-                    {products.map((product) => (
-                      <option
-                        key={product.id_producto}
-                        value={product.id_producto}
-                      >
-                        {product.nombre_producto} — {product.categoria} —{" "}
-                        {formatMoney(product.precio_referencial)}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay productos activos."
+                    onValueChange={(value) =>
+                      handleProductChange(item.key, value)
+                    }
+                  />
                 </div>
 
                 <div className="mt-4 grid gap-4 md:grid-cols-3">
@@ -241,7 +246,7 @@ export function OrderForm({ clients, products }: OrderFormProps) {
                         updateItem(
                           item.key,
                           "precio_unitario",
-                          event.target.value
+                          event.target.value,
                         )
                       }
                       className="w-full rounded-md border px-3 py-2"
@@ -260,7 +265,7 @@ export function OrderForm({ clients, products }: OrderFormProps) {
 
                 <div className="mt-4 space-y-2">
                   <label className="text-sm font-medium">
-                    Observación del producto
+                    Observacion del producto
                   </label>
                   <input
                     name="observacion_detalle"
@@ -269,7 +274,7 @@ export function OrderForm({ clients, products }: OrderFormProps) {
                       updateItem(
                         item.key,
                         "observacion_detalle",
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     placeholder="Ejemplo: entregar pintado de color negro"
