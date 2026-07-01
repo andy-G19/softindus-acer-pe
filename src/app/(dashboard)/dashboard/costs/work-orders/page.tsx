@@ -65,6 +65,11 @@ export default async function CostingWorkOrdersPage() {
         id_version_receta: {
           not: null,
         },
+        version_receta: {
+          estado: {
+            not: "anulada",
+          },
+        },
         costeo: {
           none: {},
         },
@@ -160,7 +165,7 @@ export default async function CostingWorkOrdersPage() {
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Selecciona una orden de trabajo con receta técnica vigente para
+            Selecciona una orden de trabajo con versión de receta registrada para
             calcular automáticamente el costo estimado de materiales y
             consumibles.
           </p>

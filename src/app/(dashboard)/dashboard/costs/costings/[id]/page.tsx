@@ -3,7 +3,14 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
-import { createIndirectCostAction } from "@/modules/costs/indirect-costs/actions";
+import {
+  createIndirectCostAction,
+  deleteIndirectCostAction,
+} from "@/modules/costs/indirect-costs/actions";
+import {
+  recalculateCostingAction,
+  updateLaborCostAction,
+} from "@/modules/costs/costings/actions";
 import { createMarginAction } from "@/modules/costs/margins/actions";
 import { createProfitabilityAction } from "@/modules/costs/profitability/actions";
 
@@ -108,7 +115,7 @@ function getProfitabilityReference(
   const cost = toNumber(totalCost);
   const expected = toNumber(expectedMargin);
 
-  if (income <= 0) {
+  if (income <= 0 || cost <= 0) {
     return {
       income: 0,
       profit: 0,
@@ -118,7 +125,7 @@ function getProfitabilityReference(
   }
 
   const profit = income - cost;
-  const realMargin = (profit / income) * 100;
+  const realMargin = (profit / cost) * 100;
   const lowMarginAlert = realMargin < expected;
 
   return {
@@ -280,7 +287,7 @@ export default async function CostingDetailPage({
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-5">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">Costo materiales</p>
           <p className="mt-2 text-2xl font-bold">
@@ -292,6 +299,13 @@ export default async function CostingDetailPage({
           <p className="text-sm text-slate-500">Costo consumibles</p>
           <p className="mt-2 text-2xl font-bold">
             {formatMoney(costing.costo_consumibles)}
+          </p>
+        </div>
+
+        <div className="rounded-xl border bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Mano de obra</p>
+          <p className="mt-2 text-2xl font-bold">
+            {formatMoney(costing.costo_mano_obra)}
           </p>
         </div>
 
@@ -343,6 +357,67 @@ export default async function CostingDetailPage({
               <dd className="font-medium">{clientName ?? "-"}</dd>
             </div>
           </dl>
+
+          <div className="mt-5 rounded-lg border bg-slate-50 p-4">
+            <h3 className="text-sm font-semibold">Mano de obra y recálculo</h3>
+            <p className="mt-1 text-xs text-slate-500">
+              La mano de obra inicial se estima desde tareas de operario con
+              horas y tarifa registradas. Puedes ajustarla manualmente si faltan
+              datos operativos.
+            </p>
+
+            <form
+              action={updateLaborCostAction}
+              className="mt-4 grid gap-3 md:grid-cols-[1fr_auto]"
+            >
+              <input
+                type="hidden"
+                name="id_costeo"
+                value={costing.id_costeo}
+              />
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="costo_mano_obra"
+                  className="text-xs font-medium text-slate-600"
+                >
+                  Costo de mano de obra
+                </label>
+
+                <input
+                  id="costo_mano_obra"
+                  name="costo_mano_obra"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  defaultValue={formatDecimal(costing.costo_mano_obra)}
+                  className="w-full rounded-lg border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="self-end rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+              >
+                Actualizar
+              </button>
+            </form>
+
+            <form action={recalculateCostingAction} className="mt-3">
+              <input
+                type="hidden"
+                name="id_costeo"
+                value={costing.id_costeo}
+              />
+
+              <button
+                type="submit"
+                className="rounded-lg border bg-white px-4 py-2 text-sm font-medium hover:bg-slate-100"
+              >
+                Recalcular costeo
+              </button>
+            </form>
+          </div>
         </div>
 
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -415,6 +490,17 @@ export default async function CostingDetailPage({
           </dl>
         </div>
       </section>
+
+      {latestProfitability?.alerta_bajo_margen ? (
+        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+          <p className="font-semibold">Alerta de bajo margen</p>
+          <p className="mt-1">
+            La última rentabilidad calculada está por debajo del margen
+            esperado. Revisa costos, precio final o margen aplicado antes de
+            cerrar la evaluación comercial.
+          </p>
+        </section>
+      ) : null}
 
       <section className="rounded-xl border bg-white shadow-sm">
         <div className="border-b p-5">
@@ -556,7 +642,7 @@ export default async function CostingDetailPage({
                   name="monto"
                   type="number"
                   required
-                  min="0.01"
+                  min="0"
                   step="0.01"
                   placeholder="0.00"
                   className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
@@ -647,6 +733,9 @@ export default async function CostingDetailPage({
                     <th className="px-5 py-3 font-medium">Categoría</th>
                     <th className="px-5 py-3 font-medium">Periodo</th>
                     <th className="px-5 py-3 text-right font-medium">Monto</th>
+                    <th className="px-5 py-3 text-right font-medium">
+                      Accion
+                    </th>
                   </tr>
                 </thead>
 
@@ -678,6 +767,23 @@ export default async function CostingDetailPage({
 
                       <td className="px-5 py-3 text-right font-medium">
                         {formatMoney(item.monto)}
+                      </td>
+
+                      <td className="px-5 py-3 text-right">
+                        <form action={deleteIndirectCostAction}>
+                          <input
+                            type="hidden"
+                            name="id_costo_indirecto"
+                            value={item.id_costo_indirecto}
+                          />
+
+                          <button
+                            type="submit"
+                            className="text-xs font-medium text-red-600 hover:text-red-800"
+                          >
+                            Eliminar
+                          </button>
+                        </form>
                       </td>
                     </tr>
                   ))}

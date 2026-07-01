@@ -5,23 +5,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildNextId } from "@/lib/ids";
 import { marginSchema } from "@/schemas/costs/margin.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -103,7 +88,7 @@ export async function createMarginAction(formData: FormData) {
     },
   });
 
-  const idMargen = buildSequentialId(lastMargin?.id_margen, "MGN");
+  const idMargen = buildNextId("MGN", lastMargin?.id_margen);
 
   await prisma.margen_ganancia.create({
     data: {
@@ -125,7 +110,9 @@ export async function createMarginAction(formData: FormData) {
     detalle: `Margen aplicado al costeo ${data.id_costeo}.`,
   });
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/costs");
+  revalidatePath("/dashboard/costs/costings");
   revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
 
   redirect(`/dashboard/costs/costings/${data.id_costeo}`);

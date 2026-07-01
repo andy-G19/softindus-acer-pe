@@ -996,7 +996,7 @@ model receta_tecnica {
   id_usuario_creacion String          @db.Char(11)
   producto            producto        @relation(fields: [id_producto], references: [id_producto], map: "fk_receta_producto")
   usuario             usuario         @relation(fields: [id_usuario_creacion], references: [id_usuario], map: "fk_receta_usuario_creacion")
-  version_receta      version_receta?
+  version_receta      version_receta[]
 
   @@unique([id_producto, nombre_receta], map: "uq_receta_producto_nombre")
   @@index([estado], map: "idx_receta_estado")
@@ -1230,7 +1230,7 @@ model venta_chatarra {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model version_receta {
   id_version_receta  String           @id @db.Char(11)
-  id_receta          String           @unique(map: "uq_version_receta_vigente", where: raw("((estado)::text = 'vigente'::text)")) @db.Char(11)
+  id_receta          String           @db.Char(11)
   numero_version     String           @db.VarChar(20)
   fecha_version      DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
   motivo_cambio      String?

@@ -3,24 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildNextId } from "@/lib/ids";
 import { technicalRecipeSchema } from "@/schemas/production/recipe.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -84,17 +70,28 @@ export async function createTechnicalRecipeAction(formData: FormData) {
     },
   });
 
-  const idReceta = buildSequentialId(lastRecipe?.id_receta, "REC");
+  const idReceta = buildNextId("REC", lastRecipe?.id_receta);
 
-  await prisma.receta_tecnica.create({
-    data: {
-      id_receta: idReceta,
-      id_producto: data.id_producto,
-      nombre_receta: data.nombre_receta,
-      descripcion: data.descripcion,
-      estado: "activa",
-      id_usuario_creacion: session.user.id,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.receta_tecnica.create({
+      data: {
+        id_receta: idReceta,
+        id_producto: data.id_producto,
+        nombre_receta: data.nombre_receta,
+        descripcion: data.descripcion,
+        estado: "activa",
+        id_usuario_creacion: session.user.id,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "receta_tecnica",
+      id_registro_afectado: idReceta,
+      accion: "CREAR_RECETA",
+      detalle: `Receta técnica creada para el producto ${product.nombre_producto}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/production");
@@ -134,15 +131,27 @@ export async function toggleTechnicalRecipeStatusAction(formData: FormData) {
 
   const nextStatus = recipe.estado === "activa" ? "inactiva" : "activa";
 
-  await prisma.receta_tecnica.update({
-    where: {
-      id_receta: idReceta,
-    },
-    data: {
-      estado: nextStatus,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.receta_tecnica.update({
+      where: {
+        id_receta: idReceta,
+      },
+      data: {
+        estado: nextStatus,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "receta_tecnica",
+      id_registro_afectado: idReceta,
+      accion: "ACTUALIZAR_RECETA",
+      detalle: `Estado de receta técnica cambiado a ${nextStatus}.`,
+      tx,
+    });
   });
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/recipes");
 

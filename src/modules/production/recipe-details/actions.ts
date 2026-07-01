@@ -3,24 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildNextId } from "@/lib/ids";
 import { recipeDetailSchema } from "@/schemas/production/recipe-detail.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -60,6 +46,11 @@ export async function createRecipeDetailAction(formData: FormData) {
     },
     include: {
       receta_tecnica: true,
+      orden_trabajo: {
+        select: {
+          id_orden_trabajo: true,
+        },
+      },
     },
   });
 
@@ -69,6 +60,12 @@ export async function createRecipeDetailAction(formData: FormData) {
 
   if (version.receta_tecnica.estado !== "activa") {
     throw new Error("La receta técnica no está activa.");
+  }
+
+  if (version.orden_trabajo.length > 0) {
+    throw new Error(
+      "No se puede modificar una versión de receta usada por órdenes de trabajo. Crea una nueva versión para conservar la trazabilidad.",
+    );
   }
 
   const material = await prisma.material.findFirst({
@@ -107,24 +104,33 @@ export async function createRecipeDetailAction(formData: FormData) {
     },
   });
 
-  const idDetalleReceta = buildSequentialId(
-    lastDetail?.id_detalle_receta,
-    "DRE",
-  );
+  const idDetalleReceta = buildNextId("DRE", lastDetail?.id_detalle_receta);
 
-  await prisma.detalle_receta.create({
-    data: {
-      id_detalle_receta: idDetalleReceta,
-      id_version_receta: data.id_version_receta,
-      id_material: data.id_material,
-      cantidad_requerida: data.cantidad_requerida,
-      unidad_medida: material.unidad_medida,
-      tipo_consumo: data.tipo_consumo,
-      merma_estimada_porcentaje: data.merma_estimada_porcentaje,
-      observaciones: data.observaciones,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.detalle_receta.create({
+      data: {
+        id_detalle_receta: idDetalleReceta,
+        id_version_receta: data.id_version_receta,
+        id_material: data.id_material,
+        cantidad_requerida: data.cantidad_requerida,
+        unidad_medida: material.unidad_medida,
+        tipo_consumo: data.tipo_consumo,
+        merma_estimada_porcentaje: data.merma_estimada_porcentaje,
+        observaciones: data.observaciones,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "detalle_receta",
+      id_registro_afectado: idDetalleReceta,
+      accion: "MODIFICAR_DETALLE_RECETA",
+      detalle: `Material ${material.nombre_material} agregado a la versión ${data.id_version_receta}.`,
+      tx,
+    });
   });
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/recipes");
   revalidatePath(

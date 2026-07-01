@@ -3,24 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
+import { buildNextId } from "@/lib/ids";
 import { profitabilitySchema } from "@/schemas/costs/profitability.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -117,28 +103,42 @@ export async function createProfitabilityAction(formData: FormData) {
     },
   });
 
-  const idRentabilidad = buildSequentialId(
-    lastProfitability?.id_rentabilidad,
+  const idRentabilidad = buildNextId(
     "REN",
+    lastProfitability?.id_rentabilidad,
   );
 
-  await prisma.rentabilidad.create({
-    data: {
-      id_rentabilidad: idRentabilidad,
-      id_pedido: costing.id_pedido,
-      id_costeo: costing.id_costeo,
-      ingreso_estimado: estimatedIncome,
-      costo_total: totalCost,
-      utilidad_estimada: estimatedProfit,
-      margen_real: realMargin,
-      alerta_bajo_margen: lowMarginAlert,
-      observaciones:
-        data.observaciones ??
-        "Rentabilidad calculada automáticamente usando el último margen aplicado.",
-    },
+  await prisma.$transaction(async (tx) => {
+    // Se crea histórico: el modelo permite múltiples cálculos por costeo.
+    await tx.rentabilidad.create({
+      data: {
+        id_rentabilidad: idRentabilidad,
+        id_pedido: costing.id_pedido,
+        id_costeo: costing.id_costeo,
+        ingreso_estimado: estimatedIncome,
+        costo_total: totalCost,
+        utilidad_estimada: estimatedProfit,
+        margen_real: realMargin,
+        alerta_bajo_margen: lowMarginAlert,
+        observaciones:
+          data.observaciones ??
+          "Rentabilidad calculada automáticamente usando el último margen aplicado.",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "rentabilidad",
+      id_registro_afectado: idRentabilidad,
+      accion: "crear",
+      detalle: `Rentabilidad calculada para el costeo ${costing.id_costeo}. Utilidad estimada: S/ ${estimatedProfit.toFixed(2)}.`,
+      tx,
+    });
   });
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/costs");
+  revalidatePath("/dashboard/costs/costings");
   revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
 
   redirect(`/dashboard/costs/costings/${data.id_costeo}`);

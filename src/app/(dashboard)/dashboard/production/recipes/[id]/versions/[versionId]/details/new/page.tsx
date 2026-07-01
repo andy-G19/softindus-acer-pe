@@ -63,6 +63,11 @@ export default async function NewRecipeDetailPage({
           id_material: true,
         },
       },
+      _count: {
+        select: {
+          orden_trabajo: true,
+        },
+      },
     },
   });
 
@@ -94,6 +99,7 @@ export default async function NewRecipeDetailPage({
   const canAddDetail =
     version.estado === "vigente" &&
     version.receta_tecnica.estado === "activa" &&
+    version._count.orden_trabajo === 0 &&
     materials.length > 0;
 
   const materialItems = materials.map((material) => ({
@@ -148,6 +154,13 @@ export default async function NewRecipeDetailPage({
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
           No hay materiales activos disponibles o todos los materiales activos ya
           fueron agregados a esta version de receta.
+        </section>
+      ) : null}
+
+      {version._count.orden_trabajo > 0 ? (
+        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+          Esta version ya fue usada por ordenes de trabajo. Crea una nueva
+          version para cambiar materiales sin afectar ordenes historicas.
         </section>
       ) : null}
 

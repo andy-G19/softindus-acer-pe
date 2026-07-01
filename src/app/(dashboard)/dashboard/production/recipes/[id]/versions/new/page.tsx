@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
-import { createRecipeVersionAction } from "@/modules/production/recipe-versions/actions";
+import { RecipeVersionForm } from "@/modules/production/recipes/components/recipe-version-form";
 
 type NewRecipeVersionPageProps = {
   params: Promise<{
@@ -29,36 +28,82 @@ export default async function NewRecipeVersionPage({
 
   const { id } = await params;
 
-  const recipe = await prisma.receta_tecnica.findUnique({
-    where: {
-      id_receta: id,
-    },
-    include: {
-      producto: true,
-      version_receta: true,
-    },
-  });
+  const [recipe, materials] = await Promise.all([
+    prisma.receta_tecnica.findUnique({
+      where: {
+        id_receta: id,
+      },
+      include: {
+        producto: true,
+        version_receta: {
+          include: {
+            detalle_receta: {
+              include: {
+                material: true,
+              },
+              orderBy: {
+                id_detalle_receta: "asc",
+              },
+            },
+          },
+          orderBy: {
+            fecha_version: "desc",
+          },
+          take: 1,
+        },
+      },
+    }),
+    prisma.material.findMany({
+      where: {
+        estado: true,
+      },
+      orderBy: {
+        nombre_material: "asc",
+      },
+      select: {
+        id_material: true,
+        nombre_material: true,
+        categoria: true,
+        unidad_medida: true,
+        costo_unitario_actual: true,
+      },
+    }),
+  ]);
 
   if (!recipe) {
     notFound();
   }
 
-  const hasVersion = Boolean(recipe.version_receta);
-  const canCreateVersion = recipe.estado === "activa" && !hasVersion;
+  const latestVersion = recipe.version_receta[0];
+  const canCreateVersion = recipe.estado === "activa" && materials.length > 0;
+  const backHref = `/dashboard/production/recipes/${recipe.id_receta}/versions`;
+  const materialOptions = materials.map((material) => ({
+    ...material,
+    costo_unitario_actual: material.costo_unitario_actual.toString(),
+  }));
+  const initialDetails = latestVersion?.detalle_receta.map((detail) => ({
+    key: detail.id_detalle_receta,
+    id_material: detail.id_material,
+    cantidad_requerida: detail.cantidad_requerida.toString(),
+    tipo_consumo: detail.tipo_consumo,
+    merma_estimada_porcentaje:
+      detail.merma_estimada_porcentaje?.toString() ?? "0",
+    observaciones: detail.observaciones ?? "",
+  }));
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <main className="mx-auto max-w-5xl space-y-6">
       <section>
         <p className="text-sm font-medium text-slate-500">
-          Producción · Recetas técnicas · Versiones
+          Produccion - Recetas tecnicas - Versiones
         </p>
 
         <h1 className="text-3xl font-bold tracking-tight">
-          Nueva versión de receta
+          Nueva version de receta
         </h1>
 
         <p className="mt-2 text-slate-600">
-          Receta: <span className="font-medium">{recipe.nombre_receta}</span> ·
+          Receta: <span className="font-medium">{recipe.nombre_receta}</span> -
           Producto:{" "}
           <span className="font-medium">{recipe.producto.nombre_producto}</span>
         </p>
@@ -66,83 +111,31 @@ export default async function NewRecipeVersionPage({
 
       {recipe.estado !== "activa" ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no está activa. Actívala antes de crear una versión.
+          Esta receta no esta activa. Activala antes de crear una nueva version.
         </section>
       ) : null}
 
-      {hasVersion ? (
+      {materials.length === 0 ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta ya tiene una versión registrada. En esta fase trabajaremos
-          con una versión vigente inicial. Más adelante podemos ampliar el
-          histórico completo de versiones.
+          No hay materiales activos para registrar el detalle de la version.
         </section>
       ) : null}
 
-      <form
-        action={createRecipeVersionAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
-      >
-        <input type="hidden" name="id_receta" value={recipe.id_receta} />
+      {latestVersion ? (
+        <section className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
+          Se cargaron como base los materiales de la version{" "}
+          <span className="font-medium">{latestVersion.numero_version}</span>.
+          Puedes ajustarlos antes de guardar la nueva version vigente.
+        </section>
+      ) : null}
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Número de versión *</label>
-
-          <input
-            name="numero_version"
-            required
-            maxLength={20}
-            defaultValue="V1"
-            placeholder="Ej. V1"
-            disabled={!canCreateVersion}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-          />
-
-          <p className="text-xs text-slate-500">
-            Usa códigos simples como V1, V1.0 o 2026-01.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Motivo o descripción</label>
-
-          <textarea
-            name="motivo_cambio"
-            rows={5}
-            maxLength={700}
-            defaultValue="Versión inicial de la receta técnica."
-            placeholder="Ej. Versión inicial aprobada para producción."
-            disabled={!canCreateVersion}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-          />
-        </div>
-
-        <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-          <p className="font-medium text-slate-800">Importante</p>
-
-          <p className="mt-1">
-            Esta versión será marcada como vigente. En la siguiente fase
-            agregaremos los materiales y cantidades requeridas para fabricar una
-            unidad del producto.
-          </p>
-        </div>
-
-        <div className="flex items-center justify-between pt-4">
-          <Link
-            href={`/dashboard/production/recipes/${recipe.id_receta}/versions`}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Cancelar
-          </Link>
-
-          <button
-            type="submit"
-            disabled={!canCreateVersion}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
-            Guardar versión
-          </button>
-        </div>
-      </form>
+      <RecipeVersionForm
+        idReceta={recipe.id_receta}
+        backHref={backHref}
+        materials={materialOptions}
+        initialDetails={initialDetails}
+        canCreateVersion={canCreateVersion}
+      />
     </main>
   );
 }

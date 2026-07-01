@@ -285,7 +285,7 @@ export async function createWorkOrderAction(formData: FormData) {
         id_campania: idCampania,
         id_detalle_pedido: idDetallePedido,
         id_ruta: data.id_ruta,
-        id_version_receta: data.id_version_receta,
+        id_version_receta: version.id_version_receta,
         tipo_produccion: data.tipo_produccion,
         cantidad: data.cantidad,
         fecha_inicio: parseDate(data.fecha_inicio),

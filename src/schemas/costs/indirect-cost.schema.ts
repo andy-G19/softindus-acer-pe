@@ -31,7 +31,7 @@ export const indirectCostSchema = z.object({
     .number({
       message: "El monto debe ser numérico.",
     })
-    .positive("El monto debe ser mayor que cero."),
+    .min(0, "El monto no puede ser negativo."),
 
   criterio_prorrateo: z
     .string()

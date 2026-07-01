@@ -3,24 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
+import { recalculateCostingTotals } from "@/lib/costing";
 import { prisma } from "@/lib/db";
+import { buildNextId } from "@/lib/ids";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -28,12 +15,22 @@ function requireAdmin(role: string | undefined) {
   }
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
+function normalizeText(value: FormDataEntryValue | null) {
+  if (!value) {
+    return "";
   }
 
-  return Number(value.toString());
+  return String(value).trim();
+}
+
+function revalidateCostingPaths(idCosteo?: string) {
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/costs");
+  revalidatePath("/dashboard/costs/costings");
+
+  if (idCosteo) {
+    revalidatePath(`/dashboard/costs/costings/${idCosteo}`);
+  }
 }
 
 export async function createIndirectCostAction(formData: FormData) {
@@ -65,19 +62,6 @@ export async function createIndirectCostAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const costing = await prisma.costeo.findUnique({
-    where: {
-      id_costeo: data.id_costeo,
-    },
-    include: {
-      costo_indirecto: true,
-    },
-  });
-
-  if (!costing) {
-    throw new Error("El costeo seleccionado no existe.");
-  }
-
   const lastIndirectCost = await prisma.costo_indirecto.findFirst({
     orderBy: {
       id_costo_indirecto: "desc",
@@ -87,12 +71,25 @@ export async function createIndirectCostAction(formData: FormData) {
     },
   });
 
-  const idCostoIndirecto = buildSequentialId(
-    lastIndirectCost?.id_costo_indirecto,
+  const idCostoIndirecto = buildNextId(
     "CIN",
+    lastIndirectCost?.id_costo_indirecto,
   );
 
   await prisma.$transaction(async (tx) => {
+    const costing = await tx.costeo.findUnique({
+      where: {
+        id_costeo: data.id_costeo,
+      },
+      select: {
+        id_costeo: true,
+      },
+    });
+
+    if (!costing) {
+      throw new Error("El costeo seleccionado no existe.");
+    }
+
     await tx.costo_indirecto.create({
       data: {
         id_costo_indirecto: idCostoIndirecto,
@@ -106,42 +103,81 @@ export async function createIndirectCostAction(formData: FormData) {
       },
     });
 
-    const indirectCosts = await tx.costo_indirecto.findMany({
-      where: {
-        id_costeo: data.id_costeo,
-      },
-      select: {
-        monto: true,
-      },
-    });
+    await recalculateCostingTotals(tx, data.id_costeo);
 
-    const indirectCostTotal = indirectCosts.reduce((total, item) => {
-      return total + toNumber(item.monto);
-    }, 0);
-
-    const totalCost =
-      toNumber(costing.costo_materiales) +
-      toNumber(costing.costo_consumibles) +
-      toNumber(costing.costo_mano_obra) +
-      indirectCostTotal;
-
-    const baseQuantity = toNumber(costing.cantidad_base);
-    const unitCost = baseQuantity > 0 ? totalCost / baseQuantity : null;
-
-    await tx.costeo.update({
-      where: {
-        id_costeo: data.id_costeo,
-      },
-      data: {
-        costo_indirecto_total: indirectCostTotal,
-        costo_total: totalCost,
-        costo_unitario: unitCost,
-      },
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "costo_indirecto",
+      id_registro_afectado: idCostoIndirecto,
+      accion: "crear",
+      detalle: `Costo indirecto agregado al costeo ${data.id_costeo}: ${data.concepto}.`,
+      tx,
     });
   });
 
-  revalidatePath("/dashboard/costs");
-  revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
+  revalidateCostingPaths(data.id_costeo);
 
   redirect(`/dashboard/costs/costings/${data.id_costeo}`);
+}
+
+export async function deleteIndirectCostAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireAdmin(session.user.role);
+
+  const idCostoIndirecto = normalizeText(formData.get("id_costo_indirecto"));
+
+  if (!idCostoIndirecto) {
+    throw new Error("Debe seleccionar un costo indirecto válido.");
+  }
+
+  let idCosteo = "";
+
+  await prisma.$transaction(async (tx) => {
+    const indirectCost = await tx.costo_indirecto.findUnique({
+      where: {
+        id_costo_indirecto: idCostoIndirecto,
+      },
+      select: {
+        id_costo_indirecto: true,
+        id_costeo: true,
+        concepto: true,
+      },
+    });
+
+    if (!indirectCost) {
+      throw new Error("El costo indirecto seleccionado no existe.");
+    }
+
+    if (!indirectCost.id_costeo) {
+      throw new Error("El costo indirecto no está asociado a un costeo.");
+    }
+
+    idCosteo = indirectCost.id_costeo;
+
+    await tx.costo_indirecto.delete({
+      where: {
+        id_costo_indirecto: idCostoIndirecto,
+      },
+    });
+
+    await recalculateCostingTotals(tx, idCosteo);
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "costo_indirecto",
+      id_registro_afectado: idCostoIndirecto,
+      accion: "eliminar",
+      detalle: `Costo indirecto eliminado del costeo ${idCosteo}: ${indirectCost.concepto}.`,
+      tx,
+    });
+  });
+
+  revalidateCostingPaths(idCosteo);
+
+  redirect(`/dashboard/costs/costings/${idCosteo}`);
 }

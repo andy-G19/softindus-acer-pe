@@ -71,6 +71,11 @@ export default async function RecipeDetailsPage({
           id_detalle_receta: "asc",
         },
       },
+      _count: {
+        select: {
+          orden_trabajo: true,
+        },
+      },
     },
   });
 
@@ -123,12 +128,15 @@ export default async function RecipeDetailsPage({
             Calcular materiales
           </Link>
 
-          <Link
-            href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/new`}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Agregar material
-          </Link>
+          {version.estado === "vigente" &&
+          version._count.orden_trabajo === 0 ? (
+            <Link
+              href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/new`}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Agregar material
+            </Link>
+          ) : null}
         </div>
 
       </section>
@@ -146,7 +154,7 @@ export default async function RecipeDetailsPage({
           <p className="mt-2 text-3xl font-bold">
             {
               version.detalle_receta.filter(
-                (detail) => detail.tipo_consumo === "materia prima",
+                (detail) => detail.tipo_consumo === "materia_prima",
               ).length
             }
           </p>
@@ -285,6 +293,14 @@ export default async function RecipeDetailsPage({
           y validaremos stock suficiente.
         </p>
       </div>
+
+      {version._count.orden_trabajo > 0 ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+          Esta versión ya fue usada por órdenes de trabajo. Sus materiales se
+          conservan como historial y no deben modificarse; crea una nueva
+          versión para futuros cambios.
+        </div>
+      ) : null}
 
       <div className="flex items-center justify-between">
         <Link
