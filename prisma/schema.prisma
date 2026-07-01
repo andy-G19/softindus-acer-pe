@@ -186,6 +186,18 @@ model categoria_gasto {
   @@schema("aceros")
 }
 
+model categoria_producto {
+  id_categoria_producto String   @id @db.Char(11)
+  nombre                String   @unique @db.VarChar(80)
+  slug                  String   @unique @db.VarChar(80)
+  descripcion           String?
+  estado                Boolean  @default(true)
+  fecha_registro        DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([estado], map: "idx_categoria_producto_estado")
+  @@schema("aceros")
+}
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model chatarra {

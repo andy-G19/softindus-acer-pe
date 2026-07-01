@@ -1,7 +1,21 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
 
 export default async function ClientsPage() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
+    redirect("/dashboard/access-denied");
+  }
+
   const clients = await prisma.cliente.findMany({
     orderBy: {
       fecha_registro: "desc",
@@ -36,6 +50,7 @@ export default async function ClientsPage() {
               <th className="px-4 py-3 text-left">Teléfono</th>
               <th className="px-4 py-3 text-left">Origen</th>
               <th className="px-4 py-3 text-left">Estado</th>
+              <th className="px-4 py-3 text-left">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -49,13 +64,37 @@ export default async function ClientsPage() {
                 <td className="px-4 py-3">
                   {client.estado ? "Activo" : "Inactivo"}
                 </td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={`/dashboard/commercial/clients/${client.id_cliente}/edit`}
+                      className="rounded-md border px-3 py-1.5 text-xs font-medium"
+                    >
+                      Editar
+                    </Link>
+
+                    <form action={toggleClientStatusAction}>
+                      <input
+                        type="hidden"
+                        name="id_cliente"
+                        value={client.id_cliente}
+                      />
+                      <button
+                        type="submit"
+                        className="rounded-md border px-3 py-1.5 text-xs font-medium"
+                      >
+                        {client.estado ? "Inactivar" : "Activar"}
+                      </button>
+                    </form>
+                  </div>
+                </td>
               </tr>
             ))}
 
             {clients.length === 0 && (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
                   Todavía no hay clientes registrados.

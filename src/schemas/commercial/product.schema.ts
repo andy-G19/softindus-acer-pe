@@ -7,9 +7,11 @@ export const productSchema = z.object({
     .min(2, "El nombre del producto es obligatorio.")
     .max(100, "El nombre no debe superar 100 caracteres."),
 
-  categoria: z.enum(["lampa", "rastrillo", "tripode", "otro"], {
-    message: "Selecciona una categoría válida.",
-  }),
+  categoria: z
+    .string()
+    .trim()
+    .min(1, "La categoría es obligatoria.")
+    .max(80, "La categoría no debe superar 80 caracteres."),
 
   descripcion: z.string().trim().max(500).optional(),
 

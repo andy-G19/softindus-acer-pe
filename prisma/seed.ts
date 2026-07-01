@@ -67,6 +67,37 @@ const users = [
   },
 ];
 
+const productCategories = [
+  {
+    id_categoria_producto: "CPR00000001",
+    nombre: "Lampa",
+    slug: "lampa",
+    descripcion: "Categoria base para productos tipo lampa.",
+    estado: true,
+  },
+  {
+    id_categoria_producto: "CPR00000002",
+    nombre: "Rastrillo",
+    slug: "rastrillo",
+    descripcion: "Categoria base para productos tipo rastrillo.",
+    estado: true,
+  },
+  {
+    id_categoria_producto: "CPR00000003",
+    nombre: "Tripode",
+    slug: "tripode",
+    descripcion: "Categoria base para productos tipo tripode.",
+    estado: true,
+  },
+  {
+    id_categoria_producto: "CPR00000004",
+    nombre: "Otro",
+    slug: "otro",
+    descripcion: "Categoria base para productos generales.",
+    estado: true,
+  },
+];
+
 async function main() {
   console.log("Iniciando seed oficial de Aceros Perú...");
 
@@ -119,6 +150,24 @@ async function main() {
     });
 
     console.log(`Usuario creado/actualizado: ${user.correo}`);
+  }
+
+  console.log("Creando categorias base de productos...");
+
+  for (const category of productCategories) {
+    await prisma.categoria_producto.upsert({
+      where: {
+        slug: category.slug,
+      },
+      update: {
+        nombre: category.nombre,
+        descripcion: category.descripcion,
+        estado: category.estado,
+      },
+      create: category,
+    });
+
+    console.log(`Categoria de producto creada/actualizada: ${category.nombre}`);
   }
 
   console.log("Seed oficial completado correctamente.");
