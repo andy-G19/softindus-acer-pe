@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
@@ -30,6 +31,12 @@ export default async function NewAttendancePage() {
       },
     ],
   });
+
+  const operatorItems = operators.map((operator) => ({
+    id: operator.id_operario,
+    label: `${operator.apellidos}, ${operator.nombres}`,
+    description: operator.cargo ?? "Sin cargo",
+  }));
 
   return (
     <main className="space-y-6">
@@ -85,31 +92,14 @@ export default async function NewAttendancePage() {
             ) : (
               <form action={createAttendanceAction} className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="id_operario" className="text-sm font-medium">
-                    Operario
-                  </label>
-
-                  <select
-                    id="id_operario"
+                  <SearchableSelect
                     name="id_operario"
+                    label="Operario"
+                    placeholder="Buscar operario..."
+                    items={operatorItems}
                     required
-                    defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="" disabled>
-                      Seleccione un operario
-                    </option>
-
-                    {operators.map((operator) => (
-                      <option
-                        key={operator.id_operario}
-                        value={operator.id_operario}
-                      >
-                        {operator.apellidos}, {operator.nombres} ·{" "}
-                        {operator.cargo ?? "Sin cargo"}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay operarios activos disponibles."
+                  />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">

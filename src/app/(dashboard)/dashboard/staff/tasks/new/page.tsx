@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
@@ -91,6 +92,21 @@ export default async function NewOperatorTaskPage() {
   ]);
 
   const hasRequiredData = operators.length > 0 && workOrders.length > 0;
+  const operatorItems = operators.map((operator) => ({
+    id: operator.id_operario,
+    label: `${operator.apellidos}, ${operator.nombres}`,
+    description: operator.cargo ?? "Sin cargo",
+  }));
+  const workOrderItems = workOrders.map((order) => ({
+    id: order.id_orden_trabajo,
+    label: `${order.id_orden_trabajo} - ${order.producto.nombre_producto}`,
+    description: `Cantidad: ${order.cantidad.toString()} - Estado: ${order.estado} - Inicio: ${formatDate(order.fecha_inicio)}`,
+  }));
+  const stageItems = stages.map((stage) => ({
+    id: stage.id_etapa_ruta,
+    label: `${stage.ruta_fabricacion.producto.nombre_producto} - ${stage.nombre_etapa}`,
+    description: `${stage.ruta_fabricacion.nombre_ruta} - Secuencia ${stage.orden_secuencia}`,
+  }));
 
   return (
     <main className="space-y-6">
@@ -153,92 +169,35 @@ export default async function NewOperatorTaskPage() {
             ) : (
               <form action={createOperatorTaskAction} className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="id_operario" className="text-sm font-medium">
-                    Operario
-                  </label>
-
-                  <select
-                    id="id_operario"
+                  <SearchableSelect
                     name="id_operario"
+                    label="Operario"
+                    placeholder="Buscar operario..."
+                    items={operatorItems}
                     required
-                    defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="" disabled>
-                      Seleccione un operario
-                    </option>
-
-                    {operators.map((operator) => (
-                      <option
-                        key={operator.id_operario}
-                        value={operator.id_operario}
-                      >
-                        {operator.apellidos}, {operator.nombres} ·{" "}
-                        {operator.cargo ?? "Sin cargo"}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay operarios activos disponibles."
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="id_orden_trabajo"
-                    className="text-sm font-medium"
-                  >
-                    Orden de trabajo
-                  </label>
-
-                  <select
-                    id="id_orden_trabajo"
+                  <SearchableSelect
                     name="id_orden_trabajo"
+                    label="Orden de trabajo"
+                    placeholder="Buscar orden..."
+                    items={workOrderItems}
                     required
-                    defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="" disabled>
-                      Seleccione una orden de trabajo
-                    </option>
-
-                    {workOrders.map((order) => (
-                      <option
-                        key={order.id_orden_trabajo}
-                        value={order.id_orden_trabajo}
-                      >
-                        {order.id_orden_trabajo} ·{" "}
-                        {order.producto.nombre_producto} · Cantidad:{" "}
-                        {order.cantidad.toString()} · Estado: {order.estado} ·
-                        Inicio: {formatDate(order.fecha_inicio)}
-                      </option>
-                    ))}
-                  </select>
+                    emptyMessage="No hay órdenes de trabajo disponibles."
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="id_etapa_ruta" className="text-sm font-medium">
-                    Etapa de producción
-                  </label>
-
-                  <select
-                    id="id_etapa_ruta"
+                  <SearchableSelect
                     name="id_etapa_ruta"
-                    defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
-                    <option value="">
-                      Sin etapa específica
-                    </option>
-
-                    {stages.map((stage) => (
-                      <option
-                        key={stage.id_etapa_ruta}
-                        value={stage.id_etapa_ruta}
-                      >
-                        {stage.ruta_fabricacion.producto.nombre_producto} ·{" "}
-                        {stage.ruta_fabricacion.nombre_ruta} ·{" "}
-                        {stage.orden_secuencia}. {stage.nombre_etapa}
-                      </option>
-                    ))}
-                  </select>
+                    label="Etapa de producción"
+                    placeholder="Buscar etapa..."
+                    items={stageItems}
+                    emptyMessage="No hay etapas activas disponibles."
+                  />
 
                   <p className="text-xs text-muted-foreground">
                     Importante: si seleccionas una etapa, debe pertenecer a la

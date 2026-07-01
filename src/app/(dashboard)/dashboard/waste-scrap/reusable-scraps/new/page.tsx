@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
@@ -46,6 +47,20 @@ export default async function NewReusableScrapPage() {
       },
     }),
   ]);
+
+  const materialItems = materials.map((material) => ({
+    id: material.id_material,
+    label: material.nombre_material,
+    description: `${material.categoria} - Stock: ${material.stock_actual.toString()} ${material.unidad_medida}`,
+  }));
+
+  const workOrderItems = workOrders.map((order) => ({
+    id: order.id_orden_trabajo,
+    label: `${order.id_orden_trabajo} - ${order.producto.nombre_producto}`,
+    description: order.cliente
+      ? `${order.estado} - ${order.cliente.nombre_razon_social}`
+      : order.estado,
+  }));
 
   return (
     <main className="space-y-6">
@@ -92,35 +107,15 @@ export default async function NewReusableScrapPage() {
           <form action={createReusableScrapAction} className="space-y-5">
             <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2">
-                <label
-                  htmlFor="id_material"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Material de origen *
-                </label>
-
-                <select
-                  id="id_material"
+                <SearchableSelect
                   name="id_material"
+                  label="Material de origen"
+                  placeholder="Buscar material..."
+                  items={materialItems}
                   required
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Selecciona un material
-                  </option>
-
-                  {materials.map((material) => (
-                    <option
-                      key={material.id_material}
-                      value={material.id_material}
-                    >
-                      {material.nombre_material} · {material.categoria} · Stock:{" "}
-                      {material.stock_actual.toString()}{" "}
-                      {material.unidad_medida}
-                    </option>
-                  ))}
-                </select>
+                  disabled={materials.length === 0}
+                  emptyMessage="No hay materiales activos disponibles."
+                />
 
                 <p className="text-xs text-slate-500">
                   El tipo de material del retazo se tomará automáticamente desde
@@ -129,31 +124,13 @@ export default async function NewReusableScrapPage() {
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="id_orden_trabajo"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Orden de trabajo relacionada
-                </label>
-
-                <select
-                  id="id_orden_trabajo"
+                <SearchableSelect
                   name="id_orden_trabajo"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  defaultValue=""
-                >
-                  <option value="">Sin orden específica</option>
-
-                  {workOrders.map((order) => (
-                    <option
-                      key={order.id_orden_trabajo}
-                      value={order.id_orden_trabajo}
-                    >
-                      {order.id_orden_trabajo} ·{" "}
-                      {order.producto.nombre_producto} · {order.estado}
-                    </option>
-                  ))}
-                </select>
+                  label="Orden de trabajo relacionada"
+                  placeholder="Buscar orden..."
+                  items={workOrderItems}
+                  emptyMessage="No hay órdenes de trabajo disponibles."
+                />
 
                 <p className="text-xs text-slate-500">
                   Usa este campo cuando el retazo provenga de una orden

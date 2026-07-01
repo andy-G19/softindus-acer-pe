@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
@@ -28,6 +29,12 @@ export default async function NewScrapPage() {
       stock_actual: true,
     },
   });
+
+  const materialItems = materials.map((material) => ({
+    id: material.id_material,
+    label: material.nombre_material,
+    description: `${material.categoria} - Stock: ${material.stock_actual.toString()} ${material.unidad_medida}`,
+  }));
 
   return (
     <main className="space-y-6">
@@ -65,32 +72,13 @@ export default async function NewScrapPage() {
           <form action={createScrapAction} className="space-y-5">
             <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2">
-                <label
-                  htmlFor="id_material"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Material de origen
-                </label>
-
-                <select
-                  id="id_material"
+                <SearchableSelect
                   name="id_material"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  defaultValue=""
-                >
-                  <option value="">No identificado</option>
-
-                  {materials.map((material) => (
-                    <option
-                      key={material.id_material}
-                      value={material.id_material}
-                    >
-                      {material.nombre_material} · {material.categoria} · Stock:{" "}
-                      {material.stock_actual.toString()}{" "}
-                      {material.unidad_medida}
-                    </option>
-                  ))}
-                </select>
+                  label="Material de origen"
+                  placeholder="Buscar material..."
+                  items={materialItems}
+                  emptyMessage="No hay materiales activos disponibles."
+                />
 
                 <p className="text-xs text-slate-500">
                   Selecciona el material si se conoce el origen. Si la chatarra
