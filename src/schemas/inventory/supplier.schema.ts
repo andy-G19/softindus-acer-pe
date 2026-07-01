@@ -54,14 +54,15 @@ export const supplierSchema = z.object({
 
   contacto_principal: optionalText(100),
 
-  tipo_proveedor: z.enum(
-    ["materia_prima", "consumibles", "repuestos", "servicios", "otros"],
-    {
-      message: "Seleccione un tipo de proveedor válido.",
-    },
-  ),
+  tipo_proveedor: z
+    .string()
+    .trim()
+    .min(1, "El tipo de proveedor es obligatorio.")
+    .max(80, "El tipo de proveedor no debe superar 80 caracteres."),
 
   condicion_pago: optionalEnum(["contado", "credito", "parcial", "otro"]),
 
   observaciones: optionalText(500),
 });
+
+export type SupplierInput = z.infer<typeof supplierSchema>;

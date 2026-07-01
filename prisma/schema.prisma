@@ -198,6 +198,18 @@ model categoria_producto {
   @@schema("aceros")
 }
 
+model categoria_material {
+  id_categoria_material String   @id @db.Char(11)
+  nombre                String   @unique @db.VarChar(80)
+  slug                  String   @unique @db.VarChar(80)
+  descripcion           String?
+  estado                Boolean  @default(true)
+  fecha_registro        DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([estado], map: "idx_categoria_material_estado")
+  @@schema("aceros")
+}
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model chatarra {
@@ -902,6 +914,18 @@ model producto {
 
   @@index([categoria], map: "idx_producto_categoria")
   @@index([estado], map: "idx_producto_estado")
+  @@schema("aceros")
+}
+
+model tipo_proveedor_catalogo {
+  id_tipo_proveedor String   @id @db.Char(11)
+  nombre            String   @unique @db.VarChar(80)
+  slug              String   @unique @db.VarChar(80)
+  descripcion       String?
+  estado            Boolean  @default(true)
+  fecha_registro    DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([estado], map: "idx_tipo_proveedor_catalogo_estado")
   @@schema("aceros")
 }
 

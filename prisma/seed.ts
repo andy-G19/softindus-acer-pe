@@ -98,6 +98,82 @@ const productCategories = [
   },
 ];
 
+const materialCategories = [
+  {
+    id_categoria_material: "CMA00000001",
+    nombre: "Materia prima",
+    slug: "materia_prima",
+    descripcion: "Categoria base para materias primas.",
+    estado: true,
+  },
+  {
+    id_categoria_material: "CMA00000002",
+    nombre: "Consumible",
+    slug: "consumible",
+    descripcion: "Categoria base para consumibles.",
+    estado: true,
+  },
+  {
+    id_categoria_material: "CMA00000003",
+    nombre: "Repuesto",
+    slug: "repuesto",
+    descripcion: "Categoria base para repuestos.",
+    estado: true,
+  },
+  {
+    id_categoria_material: "CMA00000004",
+    nombre: "Herramienta",
+    slug: "herramienta",
+    descripcion: "Categoria base para herramientas.",
+    estado: true,
+  },
+  {
+    id_categoria_material: "CMA00000005",
+    nombre: "Otro",
+    slug: "otro",
+    descripcion: "Categoria base para otros materiales.",
+    estado: true,
+  },
+];
+
+const supplierTypes = [
+  {
+    id_tipo_proveedor: "TPR00000001",
+    nombre: "Materia prima",
+    slug: "materia_prima",
+    descripcion: "Tipo base para proveedores de materia prima.",
+    estado: true,
+  },
+  {
+    id_tipo_proveedor: "TPR00000002",
+    nombre: "Consumibles",
+    slug: "consumibles",
+    descripcion: "Tipo base para proveedores de consumibles.",
+    estado: true,
+  },
+  {
+    id_tipo_proveedor: "TPR00000003",
+    nombre: "Repuestos",
+    slug: "repuestos",
+    descripcion: "Tipo base para proveedores de repuestos.",
+    estado: true,
+  },
+  {
+    id_tipo_proveedor: "TPR00000004",
+    nombre: "Servicios",
+    slug: "servicios",
+    descripcion: "Tipo base para proveedores de servicios.",
+    estado: true,
+  },
+  {
+    id_tipo_proveedor: "TPR00000005",
+    nombre: "Otros",
+    slug: "otros",
+    descripcion: "Tipo base para otros proveedores.",
+    estado: true,
+  },
+];
+
 async function main() {
   console.log("Iniciando seed oficial de Aceros Perú...");
 
@@ -168,6 +244,42 @@ async function main() {
     });
 
     console.log(`Categoria de producto creada/actualizada: ${category.nombre}`);
+  }
+
+  console.log("Creando categorias base de materiales...");
+
+  for (const category of materialCategories) {
+    await prisma.categoria_material.upsert({
+      where: {
+        slug: category.slug,
+      },
+      update: {
+        nombre: category.nombre,
+        descripcion: category.descripcion,
+        estado: category.estado,
+      },
+      create: category,
+    });
+
+    console.log(`Categoria de material creada/actualizada: ${category.nombre}`);
+  }
+
+  console.log("Creando tipos base de proveedor...");
+
+  for (const supplierType of supplierTypes) {
+    await prisma.tipo_proveedor_catalogo.upsert({
+      where: {
+        slug: supplierType.slug,
+      },
+      update: {
+        nombre: supplierType.nombre,
+        descripcion: supplierType.descripcion,
+        estado: supplierType.estado,
+      },
+      create: supplierType,
+    });
+
+    console.log(`Tipo de proveedor creado/actualizado: ${supplierType.nombre}`);
   }
 
   console.log("Seed oficial completado correctamente.");
