@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,16 +11,46 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
-import { createSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
+import { updateSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
 
-export default async function NewSupplierMaterialPage() {
+type EditSupplierMaterialPageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function EditSupplierMaterialPage({
+  params,
+}: EditSupplierMaterialPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  const { id } = await params;
+  const relation = await prisma.proveedor_material.findUnique({
+    where: {
+      id_proveedor_material: id,
+    },
+    include: {
+      proveedor: true,
+      material: true,
+    },
+  });
+
+  if (!relation) {
+    notFound();
+  }
 
   const [suppliers, materials] = await Promise.all([
     prisma.proveedor.findMany({
       where: {
-        estado: true,
+        OR: [
+          {
+            estado: true,
+          },
+          {
+            id_proveedor: relation.id_proveedor,
+          },
+        ],
       },
       orderBy: {
         razon_social: "asc",
@@ -31,7 +62,14 @@ export default async function NewSupplierMaterialPage() {
     }),
     prisma.material.findMany({
       where: {
-        estado: true,
+        OR: [
+          {
+            estado: true,
+          },
+          {
+            id_material: relation.id_material,
+          },
+        ],
       },
       orderBy: {
         nombre_material: "asc",
@@ -49,14 +87,14 @@ export default async function NewSupplierMaterialPage() {
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Inventario - Proveedor-material - Nueva asociacion
+            Inventario - Proveedor-material - Editar asociacion
           </p>
           <h1 className="text-3xl font-bold tracking-tight">
-            Nueva asociacion proveedor-material
+            Editar asociacion proveedor-material
           </h1>
           <p className="mt-2 max-w-3xl text-slate-600">
-            Relaciona proveedores activos con materiales activos para mantener
-            precios referenciales, disponibilidad y tiempos de entrega.
+            Actualiza el proveedor, material, precio referencial, disponibilidad
+            y tiempo de entrega.
           </p>
         </div>
 
@@ -77,7 +115,7 @@ export default async function NewSupplierMaterialPage() {
         </CardHeader>
         <CardContent>
           <SupplierMaterialForm
-            action={createSupplierMaterialAction}
+            action={updateSupplierMaterialAction}
             suppliers={suppliers.map((supplier) => ({
               id: supplier.id_proveedor,
               label: supplier.razon_social,
@@ -86,7 +124,18 @@ export default async function NewSupplierMaterialPage() {
               id: material.id_material,
               label: `${material.nombre_material} (${material.unidad_medida})`,
             }))}
-            submitLabel="Guardar asociacion"
+            defaultValues={{
+              id_proveedor_material: relation.id_proveedor_material,
+              id_proveedor: relation.id_proveedor,
+              id_material: relation.id_material,
+              unidad_medida: relation.unidad_medida,
+              precio_referencial:
+                relation.precio_referencial?.toString() ?? "",
+              tiempo_entrega_dias:
+                relation.tiempo_entrega_dias?.toString() ?? "",
+              disponibilidad: relation.disponibilidad ?? "",
+            }}
+            submitLabel="Guardar cambios"
           />
         </CardContent>
       </Card>

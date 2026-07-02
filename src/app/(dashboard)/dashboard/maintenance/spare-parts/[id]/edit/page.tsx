@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,15 +11,45 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
-import { createSparePartAction } from "@/modules/maintenance/spare-parts/actions";
+import { updateSparePartAction } from "@/modules/maintenance/spare-parts/actions";
 import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form";
 
-export default async function NewSparePartPage() {
+type EditSparePartPageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function EditSparePartPage({
+  params,
+}: EditSparePartPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  const { id } = await params;
+  const sparePart = await prisma.repuesto.findUnique({
+    where: {
+      id_repuesto: id,
+    },
+  });
+
+  if (!sparePart) {
+    notFound();
+  }
 
   const providers = await prisma.proveedor.findMany({
     where: {
-      estado: true,
+      OR: [
+        {
+          estado: true,
+        },
+        ...(sparePart.id_proveedor
+          ? [
+              {
+                id_proveedor: sparePart.id_proveedor,
+              },
+            ]
+          : []),
+      ],
     },
     orderBy: {
       razon_social: "asc",
@@ -34,14 +65,13 @@ export default async function NewSparePartPage() {
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Nuevo repuesto
+            Dashboard - Mantenimiento de maquinaria - Editar repuesto
           </p>
           <h1 className="text-3xl font-bold tracking-tight">
-            Registrar repuesto
+            Editar repuesto
           </h1>
           <p className="mt-2 max-w-3xl text-slate-600">
-            Registra repuestos disponibles para mantenimiento, proveedor,
-            descripcion y costo unitario.
+            Actualiza datos maestros del repuesto sin tocar reparaciones.
           </p>
         </div>
 
@@ -62,15 +92,20 @@ export default async function NewSparePartPage() {
         </CardHeader>
         <CardContent>
           <SparePartForm
-            action={createSparePartAction}
+            action={updateSparePartAction}
             providers={providers.map((provider) => ({
               id: provider.id_proveedor,
               label: provider.razon_social,
             }))}
             defaultValues={{
-              estado: "true",
+              id_repuesto: sparePart.id_repuesto,
+              id_proveedor: sparePart.id_proveedor ?? "",
+              nombre_repuesto: sparePart.nombre_repuesto,
+              descripcion: sparePart.descripcion ?? "",
+              costo_unitario: sparePart.costo_unitario.toString(),
+              estado: String(sparePart.estado),
             }}
-            submitLabel="Registrar repuesto"
+            submitLabel="Guardar cambios"
           />
         </CardContent>
       </Card>
