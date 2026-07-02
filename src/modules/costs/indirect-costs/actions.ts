@@ -120,7 +120,7 @@ export async function createIndirectCostAction(formData: FormData) {
   redirect(`/dashboard/costs/costings/${data.id_costeo}`);
 }
 
-export async function deleteIndirectCostAction(formData: FormData) {
+export async function annulIndirectCostAction(formData: FormData) {
   const session = await auth();
 
   if (!session?.user) {
@@ -146,6 +146,8 @@ export async function deleteIndirectCostAction(formData: FormData) {
         id_costo_indirecto: true,
         id_costeo: true,
         concepto: true,
+        monto: true,
+        observaciones: true,
       },
     });
 
@@ -157,11 +159,26 @@ export async function deleteIndirectCostAction(formData: FormData) {
       throw new Error("El costo indirecto no está asociado a un costeo.");
     }
 
+    if (indirectCost.observaciones?.includes("[ANULADO]")) {
+      throw new Error("El costo indirecto ya se encuentra anulado.");
+    }
+
     idCosteo = indirectCost.id_costeo;
 
-    await tx.costo_indirecto.delete({
+    await tx.costo_indirecto.update({
       where: {
         id_costo_indirecto: idCostoIndirecto,
+      },
+      data: {
+        monto: 0,
+        observaciones: [
+          indirectCost.observaciones,
+          `[ANULADO] ${new Date().toISOString()} - Monto original: S/ ${Number(
+            indirectCost.monto.toString(),
+          ).toFixed(2)}.`,
+        ]
+          .filter(Boolean)
+          .join("\n"),
       },
     });
 
@@ -171,8 +188,8 @@ export async function deleteIndirectCostAction(formData: FormData) {
       userId: session.user.id,
       entidad_afectada: "costo_indirecto",
       id_registro_afectado: idCostoIndirecto,
-      accion: "eliminar",
-      detalle: `Costo indirecto eliminado del costeo ${idCosteo}: ${indirectCost.concepto}.`,
+      accion: "anular",
+      detalle: `Costo indirecto anulado del costeo ${idCosteo}: ${indirectCost.concepto}.`,
       tx,
     });
   });

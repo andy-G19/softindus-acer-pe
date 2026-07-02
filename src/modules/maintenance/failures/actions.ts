@@ -69,11 +69,16 @@ export async function createFailureAction(formData: FormData) {
     },
     select: {
       id_maquina: true,
+      estado: true,
     },
   });
 
   if (!machine) {
     throw new Error("La máquina seleccionada no existe.");
+  }
+
+  if (["inactiva", "dada_de_baja"].includes(machine.estado)) {
+    throw new Error("No se puede registrar una falla sobre una maquina inactiva.");
   }
 
   const lastFailure = await prisma.falla_maquina.findFirst({
@@ -82,6 +87,7 @@ export async function createFailureAction(formData: FormData) {
     },
     select: {
       id_falla: true,
+      estado_atencion: true,
     },
   });
 
@@ -146,6 +152,7 @@ export async function updateFailureStatusAction(formData: FormData) {
     },
     select: {
       id_falla: true,
+      estado_atencion: true,
     },
   });
 
@@ -153,13 +160,28 @@ export async function updateFailureStatusAction(formData: FormData) {
     throw new Error("La falla seleccionada no existe.");
   }
 
-  await prisma.falla_maquina.update({
-    where: {
-      id_falla: data.id_falla,
-    },
-    data: {
-      estado_atencion: data.estado_atencion,
-    },
+  if (["reparada", "anulada"].includes(failure.estado_atencion)) {
+    throw new Error("No se puede modificar una falla cerrada o anulada.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.falla_maquina.update({
+      where: {
+        id_falla: data.id_falla,
+      },
+      data: {
+        estado_atencion: data.estado_atencion,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "falla_maquina",
+      id_registro_afectado: data.id_falla,
+      accion: "actualizar",
+      detalle: `Estado de falla actualizado de ${failure.estado_atencion} a ${data.estado_atencion}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");

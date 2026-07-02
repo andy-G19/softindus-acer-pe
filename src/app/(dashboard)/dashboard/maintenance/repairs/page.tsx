@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +11,17 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import {
+  buildDateRangeFilter,
+  parseDateParam,
+  parseStringParam,
+  type SearchParamsRecord,
+} from "@/lib/search-params";
 import { updateRepairStatusAction } from "@/modules/maintenance/repairs/actions";
+
+type RepairsPageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function formatDate(value: Date | null | undefined) {
   if (!value) {
@@ -61,12 +72,70 @@ function getRepairStatusBadgeVariant(status: string) {
   return variants[status] ?? "secondary";
 }
 
-export default async function RepairsPage() {
+export default async function RepairsPage({ searchParams }: RepairsPageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
   const canManageRepairs = session.user.role === APP_ROLES.ADMIN;
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const machine = parseStringParam(params, "machine");
+  const failure = parseStringParam(params, "failure");
+  const status = parseStringParam(params, "status");
+  const dateRange = buildDateRangeFilter(
+    parseDateParam(params, "from"),
+    parseDateParam(params, "to"),
+  );
+
+  const filters: Prisma.reparacionWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { id_reparacion: { contains: q, mode: "insensitive" } },
+        { tecnico_proveedor: { contains: q, mode: "insensitive" } },
+        {
+          falla_maquina: {
+            descripcion: { contains: q, mode: "insensitive" },
+          },
+        },
+        {
+          falla_maquina: {
+            maquina: {
+              nombre: { contains: q, mode: "insensitive" },
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  if (machine) {
+    filters.push({
+      falla_maquina: {
+        maquina: {
+          nombre: { contains: machine, mode: "insensitive" },
+        },
+      },
+    });
+  }
+
+  if (failure) {
+    filters.push({ id_falla: { contains: failure, mode: "insensitive" } });
+  }
+
+  if (status) {
+    filters.push({ estado_reparacion: status });
+  }
+
+  if (dateRange) {
+    filters.push({ fecha_reparacion: dateRange });
+  }
+
+  const where: Prisma.reparacionWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
 
   const repairs = await prisma.reparacion.findMany({
+    where,
     orderBy: {
       fecha_reparacion: "desc",
     },
@@ -139,6 +208,66 @@ export default async function RepairsPage() {
             </Link>
           ) : null}
         </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar reparacion, falla o tecnico"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="machine"
+            defaultValue={machine}
+            placeholder="Maquina"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="failure"
+            defaultValue={failure}
+            placeholder="Falla"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <select
+            name="status"
+            defaultValue={status}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todos los estados</option>
+            <option value="programada">Programada</option>
+            <option value="ejecutada">Ejecutada</option>
+            <option value="observada">Observada</option>
+            <option value="anulada">Anulada</option>
+          </select>
+          <input
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/dashboard/maintenance/repairs"
+              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -320,34 +449,42 @@ export default async function RepairsPage() {
 
                         {canManageRepairs ? (
                           <td className="py-2 text-right">
-                            <form
-                              action={updateRepairStatusAction}
-                              className="flex justify-end gap-2"
-                            >
-                              <input
-                                type="hidden"
-                                name="id_reparacion"
-                                value={repair.id_reparacion}
-                              />
-
-                              <select
-                                name="estado_reparacion"
-                                defaultValue={repair.estado_reparacion}
-                                className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                            {["ejecutada", "anulada"].includes(
+                              repair.estado_reparacion,
+                            ) ? (
+                              <span className="text-xs text-muted-foreground">
+                                Sin accion
+                              </span>
+                            ) : (
+                              <form
+                                action={updateRepairStatusAction}
+                                className="flex justify-end gap-2"
                               >
-                                <option value="programada">Programada</option>
-                                <option value="ejecutada">Ejecutada</option>
-                                <option value="observada">Observada</option>
-                                <option value="anulada">Anulada</option>
-                              </select>
+                                <input
+                                  type="hidden"
+                                  name="id_reparacion"
+                                  value={repair.id_reparacion}
+                                />
 
-                              <button
-                                type="submit"
-                                className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                              >
-                                Guardar
-                              </button>
-                            </form>
+                                <select
+                                  name="estado_reparacion"
+                                  defaultValue={repair.estado_reparacion}
+                                  className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                                >
+                                  <option value="programada">Programada</option>
+                                  <option value="ejecutada">Ejecutada</option>
+                                  <option value="observada">Observada</option>
+                                  <option value="anulada">Anulada</option>
+                                </select>
+
+                                <button
+                                  type="submit"
+                                  className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
+                                >
+                                  Guardar
+                                </button>
+                              </form>
+                            )}
                           </td>
                         ) : null}
                       </tr>

@@ -5,7 +5,7 @@ import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
 import {
   createIndirectCostAction,
-  deleteIndirectCostAction,
+  annulIndirectCostAction,
 } from "@/modules/costs/indirect-costs/actions";
 import {
   recalculateCostingAction,
@@ -770,7 +770,12 @@ export default async function CostingDetailPage({
                       </td>
 
                       <td className="px-5 py-3 text-right">
-                        <form action={deleteIndirectCostAction}>
+                        {item.observaciones?.includes("[ANULADO]") ? (
+                          <span className="text-xs text-slate-500">
+                            Anulado
+                          </span>
+                        ) : (
+                        <form action={annulIndirectCostAction}>
                           <input
                             type="hidden"
                             name="id_costo_indirecto"
@@ -781,9 +786,10 @@ export default async function CostingDetailPage({
                             type="submit"
                             className="text-xs font-medium text-red-600 hover:text-red-800"
                           >
-                            Eliminar
+                            Anular
                           </button>
                         </form>
+                        )}
                       </td>
                     </tr>
                   ))}

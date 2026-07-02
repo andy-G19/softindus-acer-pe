@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { operatorTaskSchema } from "@/schemas/staff/operator-task.schema";
 
@@ -134,22 +135,33 @@ export async function createOperatorTaskAction(formData: FormData) {
     "TAR",
   );
 
-  await prisma.tarea_operario.create({
-    data: {
-      id_tarea_operario: idTareaOperario,
-      id_operario: data.id_operario,
-      id_orden_trabajo: data.id_orden_trabajo,
-      id_etapa_ruta: selectedStageId,
-      id_usuario_registro: session.user.id,
-      fecha_tarea: data.fecha_tarea,
-      descripcion: data.descripcion,
-      horas_dedicadas:
-        data.horas_dedicadas === null
-          ? null
-          : data.horas_dedicadas.toFixed(2),
-      estado: data.estado,
-      observaciones: data.observaciones || null,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.tarea_operario.create({
+      data: {
+        id_tarea_operario: idTareaOperario,
+        id_operario: data.id_operario,
+        id_orden_trabajo: data.id_orden_trabajo,
+        id_etapa_ruta: selectedStageId,
+        id_usuario_registro: session.user.id,
+        fecha_tarea: data.fecha_tarea,
+        descripcion: data.descripcion,
+        horas_dedicadas:
+          data.horas_dedicadas === null
+            ? null
+            : data.horas_dedicadas.toFixed(2),
+        estado: data.estado,
+        observaciones: data.observaciones || null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "tarea_operario",
+      id_registro_afectado: idTareaOperario,
+      accion: "crear",
+      detalle: `Tarea registrada para el operario ${data.id_operario} en la orden ${data.id_orden_trabajo}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/staff");
@@ -191,13 +203,24 @@ export async function cancelOperatorTaskAction(formData: FormData) {
     throw new Error("La tarea ya se encuentra anulada.");
   }
 
-  await prisma.tarea_operario.update({
-    where: {
-      id_tarea_operario: idTareaOperario,
-    },
-    data: {
-      estado: "anulada",
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.tarea_operario.update({
+      where: {
+        id_tarea_operario: idTareaOperario,
+      },
+      data: {
+        estado: "anulada",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "tarea_operario",
+      id_registro_afectado: idTareaOperario,
+      accion: "anular",
+      detalle: `Tarea de operario anulada: ${idTareaOperario}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/staff");

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { operatorPaymentSchema } from "@/schemas/staff/operator-payment.schema";
 
@@ -122,8 +123,8 @@ export async function registerOperatorPaymentAction(formData: FormData) {
     payroll.periodo_fin,
   )}`;
 
-  await prisma.$transaction([
-    prisma.historial_pago_operario.create({
+  await prisma.$transaction(async (tx) => {
+    await tx.historial_pago_operario.create({
       data: {
         id_historial_pago: idHistorialPago,
         id_planilla: payroll.id_planilla,
@@ -135,17 +136,26 @@ export async function registerOperatorPaymentAction(formData: FormData) {
         periodo,
         observaciones: data.observaciones || null,
       },
-    }),
+    });
 
-    prisma.planilla_pago.update({
+    await tx.planilla_pago.update({
       where: {
         id_planilla: payroll.id_planilla,
       },
       data: {
         estado_pago: "pagado",
       },
-    }),
-  ]);
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "historial_pago_operario",
+      id_registro_afectado: idHistorialPago,
+      accion: "crear",
+      detalle: `Pago registrado para la planilla ${payroll.id_planilla}.`,
+      tx,
+    });
+  });
 
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/payrolls");

@@ -251,13 +251,24 @@ export async function cancelPayrollAction(formData: FormData) {
     throw new Error("La planilla ya se encuentra anulada.");
   }
 
-  await prisma.planilla_pago.update({
-    where: {
-      id_planilla: idPlanilla,
-    },
-    data: {
-      estado_pago: "anulada",
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.planilla_pago.update({
+      where: {
+        id_planilla: idPlanilla,
+      },
+      data: {
+        estado_pago: "anulada",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "planilla_pago",
+      id_registro_afectado: idPlanilla,
+      accion: "anular",
+      detalle: `Planilla anulada para el operario ${payroll.id_operario}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/staff");

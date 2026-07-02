@@ -1,7 +1,18 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
+import { APP_ROLES } from "@/lib/permissions";
+import {
+  buildDateRangeFilter,
+  parseDateParam,
+  parseStringParam,
+  type SearchParamsRecord,
+} from "@/lib/search-params";
+
+type CostingsPageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -65,10 +76,96 @@ function getOriginTypeLabel(type: string | null | undefined) {
   return "Manual";
 }
 
-export default async function CostingsPage() {
+export default async function CostingsPage({
+  searchParams,
+}: CostingsPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const pedido = parseStringParam(params, "pedido");
+  const orden = parseStringParam(params, "orden");
+  const producto = parseStringParam(params, "producto");
+  const estado = parseStringParam(params, "estado");
+  const dateRange = buildDateRangeFilter(
+    parseDateParam(params, "from"),
+    parseDateParam(params, "to"),
+  );
+
+  const filters: Prisma.costeoWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { id_costeo: { contains: q, mode: "insensitive" } },
+        { id_pedido: { contains: q, mode: "insensitive" } },
+        { id_orden_trabajo: { contains: q, mode: "insensitive" } },
+        {
+          pedido: {
+            cliente: {
+              nombre_razon_social: { contains: q, mode: "insensitive" },
+            },
+          },
+        },
+        {
+          orden_trabajo: {
+            producto: {
+              nombre_producto: { contains: q, mode: "insensitive" },
+            },
+          },
+        },
+        {
+          orden_trabajo: {
+            cliente: {
+              nombre_razon_social: { contains: q, mode: "insensitive" },
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  if (pedido) {
+    filters.push({ id_pedido: { contains: pedido, mode: "insensitive" } });
+  }
+
+  if (orden) {
+    filters.push({
+      id_orden_trabajo: { contains: orden, mode: "insensitive" },
+    });
+  }
+
+  if (producto) {
+    filters.push({
+      orden_trabajo: {
+        producto: {
+          nombre_producto: { contains: producto, mode: "insensitive" },
+        },
+      },
+    });
+  }
+
+  if (dateRange) {
+    filters.push({ fecha_costeo: dateRange });
+  }
+
+  if (estado === "pendiente") {
+    filters.push({ rentabilidad: { none: {} } });
+  }
+
+  if (estado === "rentable") {
+    filters.push({ rentabilidad: { some: { alerta_bajo_margen: false } } });
+  }
+
+  if (estado === "margen_bajo") {
+    filters.push({ rentabilidad: { some: { alerta_bajo_margen: true } } });
+  }
+
+  const where: Prisma.costeoWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
+
   const costings = await prisma.costeo.findMany({
+    where,
     orderBy: {
       fecha_costeo: "desc",
     },
@@ -110,7 +207,7 @@ export default async function CostingsPage() {
     },
   });
 
-  const totalCostings = costings.length;
+  const totalCostings = await prisma.costeo.count({ where });
 
   const accumulatedCost = costings.reduce((total, item) => {
     return total + toNumber(item.costo_total);
@@ -165,6 +262,71 @@ export default async function CostingsPage() {
             Volver a costos
           </Link>
         </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar costeo, cliente, pedido"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="pedido"
+            defaultValue={pedido}
+            placeholder="Pedido"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="orden"
+            defaultValue={orden}
+            placeholder="Orden de trabajo"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="producto"
+            defaultValue={producto}
+            placeholder="Producto"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <select
+            name="estado"
+            defaultValue={estado}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="rentable">Rentable</option>
+            <option value="margen_bajo">Margen bajo</option>
+          </select>
+          <div className="flex gap-2 md:col-span-3 xl:col-span-7">
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/dashboard/costs/costings"
+              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +11,17 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import {
+  buildDateRangeFilter,
+  parseDateParam,
+  parseStringParam,
+  type SearchParamsRecord,
+} from "@/lib/search-params";
 import { updatePreventiveMaintenanceStatusAction } from "@/modules/maintenance/preventive/actions";
+
+type PreventiveMaintenancePageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function formatDate(value: Date | null | undefined) {
   if (!value) {
@@ -60,10 +71,63 @@ function getMachineStatusLabel(status: string) {
   return labels[status] ?? status;
 }
 
-export default async function PreventiveMaintenancePage() {
+export default async function PreventiveMaintenancePage({
+  searchParams,
+}: PreventiveMaintenancePageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
   const canManagePreventive = session.user.role === APP_ROLES.ADMIN;
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const machine = parseStringParam(params, "machine");
+  const responsible = parseStringParam(params, "responsible");
+  const status = parseStringParam(params, "status");
+  const dateRange = buildDateRangeFilter(
+    parseDateParam(params, "from"),
+    parseDateParam(params, "to"),
+  );
+
+  const filters: Prisma.mantenimiento_preventivoWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { id_mantenimiento: { contains: q, mode: "insensitive" } },
+        { actividad: { contains: q, mode: "insensitive" } },
+        { responsable: { contains: q, mode: "insensitive" } },
+        {
+          maquina: {
+            nombre: { contains: q, mode: "insensitive" },
+          },
+        },
+      ],
+    });
+  }
+
+  if (machine) {
+    filters.push({
+      maquina: {
+        nombre: { contains: machine, mode: "insensitive" },
+      },
+    });
+  }
+
+  if (responsible) {
+    filters.push({
+      responsable: { contains: responsible, mode: "insensitive" },
+    });
+  }
+
+  if (status) {
+    filters.push({ estado: status });
+  }
+
+  if (dateRange) {
+    filters.push({ fecha_programada: dateRange });
+  }
+
+  const where: Prisma.mantenimiento_preventivoWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
 
   const today = new Date();
 
@@ -74,6 +138,7 @@ export default async function PreventiveMaintenancePage() {
   );
 
   const maintenances = await prisma.mantenimiento_preventivo.findMany({
+    where,
     orderBy: [
       {
         fecha_programada: "asc",
@@ -143,6 +208,66 @@ export default async function PreventiveMaintenancePage() {
             </Link>
           ) : null}
         </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar mantenimiento o actividad"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="machine"
+            defaultValue={machine}
+            placeholder="Maquina"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="responsible"
+            defaultValue={responsible}
+            placeholder="Responsable"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <select
+            name="status"
+            defaultValue={status}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="realizado">Realizado</option>
+            <option value="vencido">Vencido</option>
+            <option value="anulado">Anulado</option>
+          </select>
+          <input
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/dashboard/maintenance/preventive"
+              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -309,36 +434,44 @@ export default async function PreventiveMaintenancePage() {
 
                         {canManagePreventive ? (
                           <td className="py-2 text-right">
-                            <form
-                              action={updatePreventiveMaintenanceStatusAction}
-                              className="flex justify-end gap-2"
-                            >
-                              <input
-                                type="hidden"
-                                name="id_mantenimiento"
-                                value={maintenance.id_mantenimiento}
-                              />
-
-                              <select
-                                name="estado"
-                                defaultValue={
-                                  isOverdue ? "vencido" : maintenance.estado
-                                }
-                                className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                            {["realizado", "anulado"].includes(
+                              maintenance.estado,
+                            ) ? (
+                              <span className="text-xs text-muted-foreground">
+                                Sin accion
+                              </span>
+                            ) : (
+                              <form
+                                action={updatePreventiveMaintenanceStatusAction}
+                                className="flex justify-end gap-2"
                               >
-                                <option value="pendiente">Pendiente</option>
-                                <option value="realizado">Realizado</option>
-                                <option value="vencido">Vencido</option>
-                                <option value="anulado">Anulado</option>
-                              </select>
+                                <input
+                                  type="hidden"
+                                  name="id_mantenimiento"
+                                  value={maintenance.id_mantenimiento}
+                                />
 
-                              <button
-                                type="submit"
-                                className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                              >
-                                Guardar
-                              </button>
-                            </form>
+                                <select
+                                  name="estado"
+                                  defaultValue={
+                                    isOverdue ? "vencido" : maintenance.estado
+                                  }
+                                  className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                                >
+                                  <option value="pendiente">Pendiente</option>
+                                  <option value="realizado">Realizado</option>
+                                  <option value="vencido">Vencido</option>
+                                  <option value="anulado">Anulado</option>
+                                </select>
+
+                                <button
+                                  type="submit"
+                                  className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
+                                >
+                                  Guardar
+                                </button>
+                              </form>
+                            )}
                           </td>
                         ) : null}
                       </tr>

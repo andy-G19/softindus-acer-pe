@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -88,19 +89,30 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
     "MTP",
   );
 
-  await prisma.mantenimiento_preventivo.create({
-    data: {
-      id_mantenimiento: idMantenimiento,
-      id_maquina: data.id_maquina,
-      id_usuario_programa: session.user.id,
-      fecha_programada: data.fecha_programada,
-      fecha_realizada:
-        data.estado === "realizado" ? data.fecha_programada : null,
-      responsable: data.responsable || null,
-      actividad: data.actividad,
-      estado: data.estado,
-      observaciones: data.observaciones || null,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.mantenimiento_preventivo.create({
+      data: {
+        id_mantenimiento: idMantenimiento,
+        id_maquina: data.id_maquina,
+        id_usuario_programa: session.user.id,
+        fecha_programada: data.fecha_programada,
+        fecha_realizada:
+          data.estado === "realizado" ? data.fecha_programada : null,
+        responsable: data.responsable || null,
+        actividad: data.actividad,
+        estado: data.estado,
+        observaciones: data.observaciones || null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "mantenimiento_preventivo",
+      id_registro_afectado: idMantenimiento,
+      accion: "crear",
+      detalle: `Mantenimiento preventivo programado para la maquina ${data.id_maquina}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");
@@ -143,6 +155,7 @@ export async function updatePreventiveMaintenanceStatusAction(
     select: {
       id_mantenimiento: true,
       fecha_programada: true,
+      estado: true,
     },
   });
 
@@ -150,15 +163,32 @@ export async function updatePreventiveMaintenanceStatusAction(
     throw new Error("El mantenimiento seleccionado no existe.");
   }
 
-  await prisma.mantenimiento_preventivo.update({
-    where: {
-      id_mantenimiento: data.id_mantenimiento,
-    },
-    data: {
-      estado: data.estado,
-      fecha_realizada:
-        data.estado === "realizado" ? new Date() : null,
-    },
+  if (["realizado", "anulado"].includes(maintenance.estado)) {
+    throw new Error(
+      "No se puede modificar un mantenimiento realizado o anulado.",
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.mantenimiento_preventivo.update({
+      where: {
+        id_mantenimiento: data.id_mantenimiento,
+      },
+      data: {
+        estado: data.estado,
+        fecha_realizada:
+          data.estado === "realizado" ? new Date() : null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "mantenimiento_preventivo",
+      id_registro_afectado: data.id_mantenimiento,
+      accion: "actualizar",
+      detalle: `Estado de mantenimiento preventivo actualizado de ${maintenance.estado} a ${data.estado}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");

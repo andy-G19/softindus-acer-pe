@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,6 +11,16 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import {
+  buildDateRangeFilter,
+  parseDateParam,
+  parseStringParam,
+  type SearchParamsRecord,
+} from "@/lib/search-params";
+
+type AttendancePageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function formatDate(value: Date | null | undefined) {
   if (!value) {
@@ -82,8 +93,64 @@ function getAttendanceBadgeVariant(attendance: {
   return "default";
 }
 
-export default async function AttendancePage() {
+export default async function AttendancePage({
+  searchParams,
+}: AttendancePageProps) {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const operario = parseStringParam(params, "operario");
+  const estado = parseStringParam(params, "estado");
+  const dateRange = buildDateRangeFilter(
+    parseDateParam(params, "from"),
+    parseDateParam(params, "to"),
+  );
+
+  const filters: Prisma.asistenciaWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { id_asistencia: { contains: q, mode: "insensitive" } },
+        {
+          operario: {
+            nombres: { contains: q, mode: "insensitive" },
+          },
+        },
+        {
+          operario: {
+            apellidos: { contains: q, mode: "insensitive" },
+          },
+        },
+      ],
+    });
+  }
+
+  if (operario) {
+    filters.push({
+      id_operario: { contains: operario, mode: "insensitive" },
+    });
+  }
+
+  if (estado === "presente") {
+    filters.push({ falta: false, tardanza: false });
+  }
+
+  if (estado === "tardanza") {
+    filters.push({ falta: false, tardanza: true });
+  }
+
+  if (estado === "falta") {
+    filters.push({ falta: true });
+  }
+
+  if (dateRange) {
+    filters.push({ fecha: dateRange });
+  }
+
+  const where: Prisma.asistenciaWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
 
   const today = new Date();
 
@@ -106,7 +173,7 @@ export default async function AttendancePage() {
     latenessToday,
     latestAttendance,
   ] = await Promise.all([
-    prisma.asistencia.count(),
+    prisma.asistencia.count({ where }),
 
     prisma.asistencia.count({
       where: {
@@ -138,6 +205,7 @@ export default async function AttendancePage() {
     }),
 
     prisma.asistencia.findMany({
+      where,
       orderBy: [
         {
           fecha: "desc",
@@ -188,6 +256,59 @@ export default async function AttendancePage() {
             Registrar asistencia
           </Link>
         </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar operario o codigo"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="operario"
+            defaultValue={operario}
+            placeholder="ID operario"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <select
+            name="estado"
+            defaultValue={estado}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todos los estados</option>
+            <option value="presente">Presente</option>
+            <option value="tardanza">Tardanza</option>
+            <option value="falta">Falta</option>
+          </select>
+          <input
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/dashboard/staff/attendance"
+              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -280,6 +401,7 @@ export default async function AttendancePage() {
                     <th className="py-2 pr-3 text-right">Estado</th>
                     <th className="py-2 pr-3">Registrado por</th>
                     <th className="py-2">Observaciones</th>
+                    <th className="py-2 text-right">Acciones</th>
                   </tr>
                 </thead>
 
@@ -326,6 +448,12 @@ export default async function AttendancePage() {
 
                       <td className="py-2">
                         {attendance.observaciones ?? "-"}
+                      </td>
+
+                      <td className="py-2 text-right">
+                        <span className="text-xs text-muted-foreground">
+                          Sin accion
+                        </span>
                       </td>
                     </tr>
                   ))}

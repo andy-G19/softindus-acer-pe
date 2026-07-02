@@ -10,6 +10,7 @@ import {
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
+import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
 
 type PettyCashMovementsPageProps = {
   searchParams?: Promise<{
@@ -500,6 +501,7 @@ export default async function PettyCashMovementsPage({
                     <th className="py-2 pr-3">Comprobante</th>
                     <th className="py-2 pr-3">Registrado por</th>
                     <th className="py-2 text-right">Monto</th>
+                    <th className="py-2 text-right">Acciones</th>
                   </tr>
                 </thead>
 
@@ -562,6 +564,28 @@ export default async function PettyCashMovementsPage({
                           movement.tipo_movimiento,
                           movement.concepto,
                           movement.monto,
+                        )}
+                      </td>
+
+                      <td className="py-2 text-right">
+                        {movement.observaciones?.includes("[ANULADO]") ? (
+                          <span className="text-xs text-muted-foreground">
+                            Anulado
+                          </span>
+                        ) : (
+                          <form action={annulPettyCashMovementAction}>
+                            <input
+                              type="hidden"
+                              name="id_movimiento_caja"
+                              value={movement.id_movimiento_caja}
+                            />
+                            <button
+                              type="submit"
+                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
+                            >
+                              Anular
+                            </button>
+                          </form>
                         )}
                       </td>
                     </tr>

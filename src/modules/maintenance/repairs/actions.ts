@@ -115,6 +115,10 @@ export async function createRepairAction(formData: FormData) {
     throw new Error("La falla seleccionada no existe.");
   }
 
+  if (["reparada", "anulada"].includes(failure.estado_atencion)) {
+    throw new Error("No se puede registrar una reparacion sobre una falla cerrada o anulada.");
+  }
+
   const spareParts =
     selectedSparePartIds.length > 0
       ? await prisma.repuesto.findMany({
@@ -314,6 +318,10 @@ export async function updateRepairStatusAction(formData: FormData) {
   }
 
   await prisma.$transaction(async (tx) => {
+    if (["ejecutada", "anulada"].includes(repair.estado_reparacion)) {
+      throw new Error("No se puede modificar una reparacion finalizada o anulada.");
+    }
+
     await tx.reparacion.update({
       where: {
         id_reparacion: data.id_reparacion,
@@ -376,6 +384,15 @@ export async function updateRepairStatusAction(formData: FormData) {
         },
       });
     }
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "reparacion",
+      id_registro_afectado: data.id_reparacion,
+      accion: "actualizar",
+      detalle: `Estado de reparacion actualizado de ${repair.estado_reparacion} a ${data.estado_reparacion}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");

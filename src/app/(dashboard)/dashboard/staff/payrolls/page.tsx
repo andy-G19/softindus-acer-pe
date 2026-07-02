@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +11,17 @@ import {
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
+import {
+  buildDateRangeFilter,
+  parseDateParam,
+  parseStringParam,
+  type SearchParamsRecord,
+} from "@/lib/search-params";
 import { cancelPayrollAction } from "@/modules/staff/payrolls/actions";
+
+type PayrollsPageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -68,8 +79,76 @@ function getPayrollBadgeVariant(status: string) {
   return "secondary";
 }
 
-export default async function PayrollsPage() {
+export default async function PayrollsPage({ searchParams }: PayrollsPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
+
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const operario = parseStringParam(params, "operario");
+  const periodo = parseStringParam(params, "periodo");
+  const modalidad = parseStringParam(params, "modalidad");
+  const estado = parseStringParam(params, "estado");
+  const dateRange = buildDateRangeFilter(
+    parseDateParam(params, "from"),
+    parseDateParam(params, "to"),
+  );
+
+  const filters: Prisma.planilla_pagoWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { id_planilla: { contains: q, mode: "insensitive" } },
+        {
+          operario: {
+            nombres: { contains: q, mode: "insensitive" },
+          },
+        },
+        {
+          operario: {
+            apellidos: { contains: q, mode: "insensitive" },
+          },
+        },
+      ],
+    });
+  }
+
+  if (operario) {
+    filters.push({
+      id_operario: { contains: operario, mode: "insensitive" },
+    });
+  }
+
+  if (periodo) {
+    const match = /^(\d{4})-(\d{2})$/.exec(periodo);
+
+    if (match) {
+      const year = Number(match[1]);
+      const monthIndex = Number(match[2]) - 1;
+      const start = new Date(year, monthIndex, 1);
+      const end = new Date(year, monthIndex + 1, 0);
+
+      filters.push({
+        periodo_inicio: { gte: start },
+        periodo_fin: { lte: end },
+      });
+    }
+  }
+
+  if (modalidad) {
+    filters.push({ modalidad_pago: modalidad });
+  }
+
+  if (estado) {
+    filters.push({ estado_pago: estado });
+  }
+
+  if (dateRange) {
+    filters.push({ fecha_generacion: dateRange });
+  }
+
+  const where: Prisma.planilla_pagoWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
 
   const [
     totalPayrolls,
@@ -79,7 +158,7 @@ export default async function PayrollsPage() {
     pendingNetAmount,
     latestPayrolls,
   ] = await Promise.all([
-    prisma.planilla_pago.count(),
+    prisma.planilla_pago.count({ where }),
 
     prisma.planilla_pago.count({
       where: {
@@ -109,6 +188,7 @@ export default async function PayrollsPage() {
     }),
 
     prisma.planilla_pago.findMany({
+      where,
       orderBy: [
         {
           fecha_generacion: "desc",
@@ -163,6 +243,75 @@ export default async function PayrollsPage() {
             Generar planilla
           </Link>
         </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar planilla u operario"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="operario"
+            defaultValue={operario}
+            placeholder="ID operario"
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="periodo"
+            type="month"
+            defaultValue={periodo}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <select
+            name="modalidad"
+            defaultValue={modalidad}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todas las modalidades</option>
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </select>
+          <select
+            name="estado"
+            defaultValue={estado}
+            className="rounded-md border px-3 py-2 text-sm"
+          >
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="pagado">Pagado</option>
+            <option value="anulada">Anulada</option>
+          </select>
+          <input
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+            className="rounded-md border px-3 py-2 text-sm"
+          />
+          <div className="flex gap-2 md:col-span-3 xl:col-span-7">
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/dashboard/staff/payrolls"
+              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
