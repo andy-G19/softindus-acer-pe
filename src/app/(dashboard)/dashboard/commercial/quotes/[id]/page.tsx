@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
 import { prisma } from "@/lib/db";
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 
 type QuoteDetailPageProps = {
   params: Promise<{
@@ -102,6 +103,10 @@ export default async function QuoteDetailPage({
   const activeReceipt = quote.comprobante_venta.find(
     (receipt) => receipt.estado === "emitido"
   );
+  const canAnnul =
+    quote.estado !== "anulada" &&
+    quote.pago_cliente.length === 0 &&
+    !activeReceipt;
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
@@ -122,6 +127,22 @@ export default async function QuoteDetailPage({
           </Link>
 
           <PrintButton />
+
+          {canAnnul ? (
+            <form action={annulQuoteAction}>
+              <input
+                type="hidden"
+                name="id_proforma"
+                value={quote.id_proforma}
+              />
+              <button
+                type="submit"
+                className="rounded-md border px-4 py-2 text-sm font-medium"
+              >
+                Anular
+              </button>
+            </form>
+          ) : null}
         </div>
       </div>
 
@@ -304,7 +325,11 @@ export default async function QuoteDetailPage({
               <PaymentForm
                 quoteId={quote.id_proforma}
                 currentBalance={quote.saldo.toString()}
-                isPaid={quote.estado === "pagada" || Number(quote.saldo.toString()) <= 0}
+                isPaid={
+                  quote.estado === "anulada" ||
+                  quote.estado === "pagada" ||
+                  Number(quote.saldo.toString()) <= 0
+                }
               />
 
               <div className="rounded-lg border p-4">
@@ -360,7 +385,7 @@ export default async function QuoteDetailPage({
               <ReceiptForm
                 quoteId={quote.id_proforma}
                 suggestedAmount={quote.monto_total.toString()}
-                hasReceipt={Boolean(activeReceipt)}
+                hasReceipt={Boolean(activeReceipt) || quote.estado === "anulada"}
               />
 
               <div className="rounded-lg border p-4">

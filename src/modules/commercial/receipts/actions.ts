@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { receiptSchema } from "@/schemas/commercial/receipt.schema";
@@ -14,16 +15,22 @@ function emptyToNull(value: FormDataEntryValue | null) {
   return text ? text : null;
 }
 
-export async function createReceiptAction(formData: FormData) {
+async function requireCommercialPermission() {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/login");
   }
 
   if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
     redirect("/dashboard/access-denied");
   }
+
+  return session;
+}
+
+export async function createReceiptAction(formData: FormData) {
+  const session = await requireCommercialPermission();
 
   const rawData = {
     id_proforma: formData.get("id_proforma")?.toString(),
@@ -115,9 +122,60 @@ export async function createReceiptAction(formData: FormData) {
     },
   });
 
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "comprobante_venta",
+    id_registro_afectado: id_comprobante,
+    accion: "crear",
+    detalle: `Comprobante registrado: ${numero_comprobante}`,
+  });
+
   revalidatePath("/dashboard/commercial/quotes");
   revalidatePath(`/dashboard/commercial/quotes/${id_proforma}`);
   revalidatePath("/dashboard/commercial/orders");
+  revalidatePath("/dashboard/commercial/receipts");
 
   redirect(`/dashboard/commercial/quotes/${id_proforma}`);
+}
+
+export async function annulReceiptAction(formData: FormData) {
+  const session = await requireCommercialPermission();
+  const receiptId = formData.get("id_comprobante")?.toString().trim();
+
+  if (!receiptId) {
+    redirect("/dashboard/commercial/receipts");
+  }
+
+  const receipt = await prisma.comprobante_venta.findUnique({
+    where: {
+      id_comprobante: receiptId,
+    },
+  });
+
+  if (!receipt || receipt.estado === "anulado") {
+    redirect("/dashboard/commercial/receipts");
+  }
+
+  await prisma.comprobante_venta.update({
+    where: {
+      id_comprobante: receiptId,
+    },
+    data: {
+      estado: "anulado",
+    },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "comprobante_venta",
+    id_registro_afectado: receiptId,
+    accion: "anular",
+    detalle: `Comprobante anulado: ${receipt.numero_comprobante}`,
+  });
+
+  revalidatePath("/dashboard/commercial/receipts");
+  revalidatePath("/dashboard/commercial/quotes");
+  revalidatePath(`/dashboard/commercial/quotes/${receipt.id_proforma}`);
+
+  redirect("/dashboard/commercial/receipts");
 }

@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { SearchableSelect } from "@/components/forms/searchable-select";
-import { createOrderAction } from "@/modules/commercial/orders/actions";
+import {
+  createOrderAction,
+  type OrderFormState,
+} from "@/modules/commercial/orders/actions";
 
 type ClientOption = {
   id_cliente: string;
@@ -30,7 +33,21 @@ type OrderItem = {
 type OrderFormProps = {
   clients: ClientOption[];
   products: ProductOption[];
+  action?: (
+    prevState: OrderFormState,
+    formData: FormData,
+  ) => Promise<OrderFormState>;
+  defaultValues?: {
+    id_pedido?: string;
+    id_cliente?: string;
+    fecha_entrega_estimada?: string;
+    observaciones?: string;
+    items?: Omit<OrderItem, "key">[];
+  };
+  submitLabel?: string;
 };
+
+const initialState: OrderFormState = { error: "" };
 
 function formatMoney(value: string | null) {
   if (!value) {
@@ -50,9 +67,27 @@ function createEmptyItem(key: string): OrderItem {
   };
 }
 
-export function OrderForm({ clients, products }: OrderFormProps) {
-  const [nextKey, setNextKey] = useState(2);
-  const [items, setItems] = useState<OrderItem[]>([createEmptyItem("row-1")]);
+export function OrderForm({
+  clients,
+  products,
+  action = createOrderAction,
+  defaultValues,
+  submitLabel = "Guardar pedido",
+}: OrderFormProps) {
+  const [state, formAction, isPending] = useActionState(action, initialState);
+  const initialItems = defaultValues?.items?.length
+    ? defaultValues.items.map((item, index) => ({
+        key: `row-${index + 1}`,
+        ...item,
+      }))
+    : [createEmptyItem("row-1")];
+  const [nextKey, setNextKey] = useState(initialItems.length + 1);
+  const [selectedClient, setSelectedClient] = useState(
+    defaultValues?.id_cliente ?? "",
+  );
+  const [items, setItems] = useState<OrderItem[]>(
+    initialItems,
+  );
 
   const canCreateOrder = clients.length > 0 && products.length > 0;
 
@@ -137,7 +172,21 @@ export function OrderForm({ clients, products }: OrderFormProps) {
   }
 
   return (
-    <form action={createOrderAction} className="space-y-5 rounded-lg border p-6">
+    <form action={formAction} className="space-y-5 rounded-lg border p-6">
+      {defaultValues?.id_pedido ? (
+        <input type="hidden" name="id_pedido" value={defaultValues.id_pedido} />
+      ) : null}
+
+      {state.error ? (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+        >
+          {state.error}
+        </div>
+      ) : null}
+
       {!canCreateOrder && (
         <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900">
           Para registrar un pedido necesitas tener al menos un cliente activo y
@@ -153,8 +202,15 @@ export function OrderForm({ clients, products }: OrderFormProps) {
           items={clientItems}
           required
           disabled={!canCreateOrder}
+          value={selectedClient}
+          onValueChange={setSelectedClient}
           emptyMessage="No hay clientes activos."
         />
+        {state.fieldErrors?.id_cliente ? (
+          <p className="text-sm text-destructive">
+            {state.fieldErrors.id_cliente[0]}
+          </p>
+        ) : null}
       </div>
 
       <div className="space-y-4 rounded-lg border p-4">
@@ -300,9 +356,15 @@ export function OrderForm({ clients, products }: OrderFormProps) {
         <input
           name="fecha_entrega_estimada"
           type="date"
+          defaultValue={defaultValues?.fecha_entrega_estimada ?? ""}
           className="w-full rounded-md border px-3 py-2"
           disabled={!canCreateOrder}
         />
+        {state.fieldErrors?.fecha_entrega_estimada ? (
+          <p className="text-sm text-destructive">
+            {state.fieldErrors.fecha_entrega_estimada[0]}
+          </p>
+        ) : null}
       </div>
 
       <div className="space-y-2">
@@ -314,16 +376,17 @@ export function OrderForm({ clients, products }: OrderFormProps) {
           placeholder="Ejemplo: Cliente solicita entrega urgente."
           className="min-h-24 w-full rounded-md border px-3 py-2"
           disabled={!canCreateOrder}
+          defaultValue={defaultValues?.observaciones ?? ""}
         />
       </div>
 
       <div className="flex items-center gap-3">
         <button
           type="submit"
-          disabled={!canCreateOrder}
+          disabled={!canCreateOrder || isPending}
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Guardar pedido
+          {isPending ? "Guardando..." : submitLabel}
         </button>
 
         <Link

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
+import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
 
 function formatMoney(value: unknown) {
   if (value === null || value === undefined) {
@@ -96,6 +97,7 @@ export default async function PurchaseDetailPage({
   const purchaseTotal = Number(purchase.monto_total.toString());
   const saldoPendiente = purchaseTotal - totalPaid;
   const canPay = purchase.estado_compra !== "anulada" && saldoPendiente > 0;
+  const canAnnul = purchase.estado_compra !== "anulada" && payments.length === 0;
 
   return (
     <main className="space-y-6">
@@ -112,12 +114,25 @@ export default async function PurchaseDetailPage({
           </p>
         </div>
 
-        <Link
-          href="/dashboard/inventory/purchases"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver a compras
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/dashboard/inventory/purchases"
+            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+          >
+            Volver a compras
+          </Link>
+          {canAnnul ? (
+            <form action={annulPurchaseAction}>
+              <input type="hidden" name="id_compra" value={purchase.id_compra} />
+              <button
+                type="submit"
+                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              >
+                Anular compra
+              </button>
+            </form>
+          ) : null}
+        </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">

@@ -295,3 +295,160 @@ export async function createPurchaseAction(formData: FormData) {
 
   redirect("/dashboard/inventory/purchases");
 }
+
+export async function annulPurchaseAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  requireAdmin(session.user.role);
+
+  const purchaseId = formData.get("id_compra")?.toString().trim();
+
+  if (!purchaseId) {
+    redirect("/dashboard/inventory/purchases");
+  }
+
+  const purchase = await prisma.compra.findUnique({
+    where: {
+      id_compra: purchaseId,
+    },
+    include: {
+      pago_proveedor: {
+        select: {
+          id_pago_proveedor: true,
+        },
+      },
+      movimiento_inventario: {
+        where: {
+          tipo_movimiento: "entrada",
+        },
+      },
+    },
+  });
+
+  if (!purchase || purchase.estado_compra === "anulada") {
+    redirect("/dashboard/inventory/purchases");
+  }
+
+  if (purchase.pago_proveedor.length > 0) {
+    redirect(`/dashboard/inventory/purchases/${purchaseId}`);
+  }
+
+  const materialIds = purchase.movimiento_inventario.map(
+    (movement) => movement.id_material,
+  );
+
+  const [materials, lastMovement] = await Promise.all([
+    prisma.material.findMany({
+      where: {
+        id_material: {
+          in: materialIds,
+        },
+      },
+      select: {
+        id_material: true,
+        stock_actual: true,
+      },
+    }),
+    prisma.movimiento_inventario.findFirst({
+      orderBy: {
+        id_movimiento: "desc",
+      },
+      select: {
+        id_movimiento: true,
+      },
+    }),
+  ]);
+
+  const materialById = new Map(
+    materials.map((material) => [material.id_material, material]),
+  );
+
+  const hasInsufficientStock = purchase.movimiento_inventario.some(
+    (movement) => {
+      const material = materialById.get(movement.id_material);
+
+      return (
+        !material ||
+        Number(material.stock_actual.toString()) <
+          Number(movement.cantidad.toString())
+      );
+    },
+  );
+
+  if (hasInsufficientStock) {
+    redirect(`/dashboard/inventory/purchases/${purchaseId}`);
+  }
+
+  const reversalIds = buildSequentialIds(
+    lastMovement?.id_movimiento,
+    "MVI",
+    purchase.movimiento_inventario.length,
+  );
+
+  await prisma.$transaction(async (tx) => {
+    for (const [index, movement] of purchase.movimiento_inventario.entries()) {
+      const material = materialById.get(movement.id_material);
+
+      if (!material) {
+        throw new Error("Material no encontrado durante la anulacion.");
+      }
+
+      const stockAnterior = Number(material.stock_actual.toString());
+      const quantity = Number(movement.cantidad.toString());
+      const stockResultante = stockAnterior - quantity;
+
+      await tx.material.update({
+        where: {
+          id_material: movement.id_material,
+        },
+        data: {
+          stock_actual: stockResultante,
+        },
+      });
+
+      await tx.movimiento_inventario.create({
+        data: {
+          id_movimiento: reversalIds[index],
+          id_material: movement.id_material,
+          id_compra: purchaseId,
+          tipo_movimiento: "salida",
+          cantidad: quantity,
+          stock_anterior: stockAnterior,
+          stock_resultante: stockResultante,
+          motivo: `Reversion por anulacion de compra ${purchaseId}`,
+          id_usuario_responsable: session.user.id,
+        },
+      });
+    }
+
+    await tx.compra.update({
+      where: {
+        id_compra: purchaseId,
+      },
+      data: {
+        estado_compra: "anulada",
+        estado_pago: "anulada",
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "compra",
+      id_registro_afectado: purchaseId,
+      accion: "anular",
+      detalle: `Compra anulada con reversion de inventario: ${purchaseId}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard/inventory");
+  revalidatePath("/dashboard/inventory/materials");
+  revalidatePath("/dashboard/inventory/purchases");
+  revalidatePath(`/dashboard/inventory/purchases/${purchaseId}`);
+
+  redirect("/dashboard/inventory/purchases");
+}

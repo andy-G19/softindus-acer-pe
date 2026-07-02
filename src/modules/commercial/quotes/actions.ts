@@ -9,13 +9,15 @@ import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
 import { quoteSchema } from "@/schemas/commercial/quote.schema";
 
+const QUOTES_PATH = "/dashboard/commercial/quotes";
+
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
 
   return text ? text : null;
 }
 
-export async function createQuoteAction(formData: FormData) {
+async function requireCommercialPermission() {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -25,6 +27,12 @@ export async function createQuoteAction(formData: FormData) {
   if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
     redirect("/dashboard/access-denied");
   }
+
+  return session;
+}
+
+export async function createQuoteAction(formData: FormData) {
+  const session = await requireCommercialPermission();
 
   const rawData = {
     id_pedido: formData.get("id_pedido")?.toString(),
@@ -129,8 +137,69 @@ export async function createQuoteAction(formData: FormData) {
     detalle: `Proforma creada para el pedido ${parsed.data.id_pedido}.`,
   });
 
-  revalidatePath("/dashboard/commercial/quotes");
+  revalidatePath(QUOTES_PATH);
   revalidatePath("/dashboard/commercial/orders");
 
-  redirect("/dashboard/commercial/quotes");
+  redirect(QUOTES_PATH);
+}
+
+export async function annulQuoteAction(formData: FormData) {
+  const session = await requireCommercialPermission();
+  const quoteId = formData.get("id_proforma")?.toString().trim();
+
+  if (!quoteId) {
+    redirect(QUOTES_PATH);
+  }
+
+  const quote = await prisma.proforma.findUnique({
+    where: {
+      id_proforma: quoteId,
+    },
+    include: {
+      pago_cliente: {
+        select: {
+          id_pago_cliente: true,
+        },
+      },
+      comprobante_venta: {
+        where: {
+          estado: "emitido",
+        },
+        select: {
+          id_comprobante: true,
+        },
+      },
+    },
+  });
+
+  if (!quote || quote.estado === "anulada") {
+    redirect(QUOTES_PATH);
+  }
+
+  if (quote.pago_cliente.length > 0 || quote.comprobante_venta.length > 0) {
+    redirect(`${QUOTES_PATH}/${quoteId}`);
+  }
+
+  await prisma.proforma.update({
+    where: {
+      id_proforma: quoteId,
+    },
+    data: {
+      estado: "anulada",
+    },
+  });
+
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "proforma",
+    id_registro_afectado: quoteId,
+    accion: "anular",
+    detalle: `Proforma anulada: ${quote.numero_proforma}`,
+  });
+
+  revalidatePath(QUOTES_PATH);
+  revalidatePath(`${QUOTES_PATH}/${quoteId}`);
+  revalidatePath("/dashboard/commercial/orders");
+
+  redirect(QUOTES_PATH);
 }
