@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 
 type AlertStatus = "normal" | "en riesgo" | "atrasada";
@@ -13,6 +14,10 @@ type StageSummary = {
   riskCount: number;
   maxElapsedHours: number;
   estimatedHours: number | null;
+};
+
+type ProductionBottlenecksPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function requireProductionAccess(role: string | undefined) {
@@ -80,7 +85,32 @@ function formatHours(value: number | null) {
   return `${value.toFixed(2)} h`;
 }
 
-export default async function ProductionBottlenecksPage() {
+function getSearchParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string,
+) {
+  const value = params[key];
+
+  if (Array.isArray(value)) {
+    return value[0]?.trim() ?? "";
+  }
+
+  return value?.trim() ?? "";
+}
+
+function parseDate(value: string, endOfDay = false) {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
+
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export default async function ProductionBottlenecksPage({
+  searchParams,
+}: ProductionBottlenecksPageProps) {
   const session = await auth();
 
   if (!session?.user) {
@@ -89,28 +119,116 @@ export default async function ProductionBottlenecksPage() {
 
   requireProductionAccess(session.user.role);
 
-  const activeAdvances = await prisma.avance_orden.findMany({
-    where: {
+  const params = (await searchParams) ?? {};
+  const product = getSearchParam(params, "product");
+  const route = getSearchParam(params, "route");
+  const stage = getSearchParam(params, "stage");
+  const orderStatus = getSearchParam(params, "orderStatus");
+  const from = getSearchParam(params, "from");
+  const to = getSearchParam(params, "to");
+  const fromDate = parseDate(from);
+  const toDate = parseDate(to, true);
+  const filters: Prisma.avance_ordenWhereInput[] = [
+    {
       estado_etapa: "en_proceso",
     },
-    include: {
-      etapa_ruta: true,
-      operario: true,
+  ];
+
+  if (product) {
+    filters.push({
       orden_trabajo: {
-        include: {
-          producto: true,
+        id_producto: product,
+      },
+    });
+  }
+
+  if (route) {
+    filters.push({
+      etapa_ruta: {
+        id_ruta: route,
+      },
+    });
+  }
+
+  if (stage) {
+    filters.push({
+      id_etapa_ruta: stage,
+    });
+  }
+
+  if (orderStatus) {
+    filters.push({
+      orden_trabajo: {
+        estado: orderStatus,
+      },
+    });
+  }
+
+  if (fromDate || toDate) {
+    filters.push({
+      fecha_inicio_etapa: {
+        ...(fromDate ? { gte: fromDate } : {}),
+        ...(toDate ? { lte: toDate } : {}),
+      },
+    });
+  }
+
+  const [activeAdvances, products, routes, stages] = await Promise.all([
+    prisma.avance_orden.findMany({
+      where: {
+        AND: filters,
+      },
+      include: {
+        etapa_ruta: true,
+        operario: true,
+        orden_trabajo: {
+          include: {
+            producto: true,
+          },
         },
       },
-    },
-    orderBy: [
-      {
-        fecha_inicio_etapa: "asc",
+      orderBy: [
+        {
+          fecha_inicio_etapa: "asc",
+        },
+        {
+          id_avance: "asc",
+        },
+      ],
+    }),
+    prisma.producto.findMany({
+      where: {
+        estado: true,
       },
-      {
-        id_avance: "asc",
+      orderBy: {
+        nombre_producto: "asc",
       },
-    ],
-  });
+      select: {
+        id_producto: true,
+        nombre_producto: true,
+      },
+    }),
+    prisma.ruta_fabricacion.findMany({
+      orderBy: {
+        nombre_ruta: "asc",
+      },
+      select: {
+        id_ruta: true,
+        nombre_ruta: true,
+      },
+    }),
+    prisma.etapa_ruta.findMany({
+      orderBy: [
+        {
+          nombre_etapa: "asc",
+        },
+      ],
+      select: {
+        id_etapa_ruta: true,
+        nombre_etapa: true,
+      },
+    }),
+  ]);
 
   const now = new Date();
 
@@ -210,6 +328,89 @@ export default async function ProductionBottlenecksPage() {
           Volver a produccion
         </Link>
       </section>
+
+      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
+        <select
+          name="product"
+          defaultValue={product}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todos los productos</option>
+          {products.map((item) => (
+            <option key={item.id_producto} value={item.id_producto}>
+              {item.nombre_producto}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="route"
+          defaultValue={route}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todas las rutas</option>
+          {routes.map((item) => (
+            <option key={item.id_ruta} value={item.id_ruta}>
+              {item.nombre_ruta}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="stage"
+          defaultValue={stage}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todas las etapas</option>
+          {stages.map((item) => (
+            <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
+              {item.nombre_etapa}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="orderStatus"
+          defaultValue={orderStatus}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Estado de orden</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="pausada">Pausada</option>
+        </select>
+
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            name="from"
+            type="date"
+            defaultValue={from}
+            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+          />
+          <input
+            name="to"
+            type="date"
+            defaultValue={to}
+            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+          />
+        </div>
+
+        <div className="flex gap-2 md:col-span-3">
+          <button
+            type="submit"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Filtrar
+          </button>
+
+          <Link
+            href="/dashboard/production/bottlenecks"
+            className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Limpiar filtros
+          </Link>
+        </div>
+      </form>
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">

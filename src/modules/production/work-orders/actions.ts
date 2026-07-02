@@ -633,3 +633,163 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
 
   redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 }
+
+export async function annulWorkOrderAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "");
+
+  if (!idOrdenTrabajo) {
+    throw new Error("No se recibio la orden de trabajo.");
+  }
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: {
+      id_orden_trabajo: idOrdenTrabajo,
+    },
+    select: {
+      id_orden_trabajo: true,
+      estado: true,
+      movimiento_inventario: {
+        select: {
+          id_movimiento: true,
+        },
+      },
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (workOrder.estado === "anulada") {
+    throw new Error("La orden de trabajo ya esta anulada.");
+  }
+
+  if (workOrder.estado === "finalizada") {
+    throw new Error("No se puede anular una orden finalizada desde el listado.");
+  }
+
+  if (workOrder.movimiento_inventario.length > 0) {
+    throw new Error(
+      "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.orden_trabajo.update({
+      where: {
+        id_orden_trabajo: idOrdenTrabajo,
+      },
+      data: {
+        estado: "anulada",
+        fecha_entrega_real: null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: idOrdenTrabajo,
+      accion: "anular",
+      detalle: `Orden de trabajo anulada: ${idOrdenTrabajo}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+
+  redirect("/dashboard/production/work-orders");
+}
+
+export async function finishWorkOrderAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "");
+
+  if (!idOrdenTrabajo) {
+    throw new Error("No se recibio la orden de trabajo.");
+  }
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: {
+      id_orden_trabajo: idOrdenTrabajo,
+    },
+    include: {
+      avance_orden: {
+        select: {
+          estado_etapa: true,
+        },
+      },
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (workOrder.estado === "anulada") {
+    throw new Error("No se puede finalizar una orden anulada.");
+  }
+
+  if (workOrder.estado === "finalizada") {
+    redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+  }
+
+  if (workOrder.avance_orden.length === 0) {
+    throw new Error("La orden no tiene avances generados.");
+  }
+
+  const allStagesFinished = workOrder.avance_orden.every(
+    (advance) => advance.estado_etapa === "terminada",
+  );
+
+  if (!allStagesFinished) {
+    throw new Error(
+      "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.orden_trabajo.update({
+      where: {
+        id_orden_trabajo: idOrdenTrabajo,
+      },
+      data: {
+        estado: "finalizada",
+        fecha_entrega_real: new Date(),
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: idOrdenTrabajo,
+      accion: "finalizar",
+      detalle: `Orden de trabajo finalizada: ${idOrdenTrabajo}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+
+  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+}

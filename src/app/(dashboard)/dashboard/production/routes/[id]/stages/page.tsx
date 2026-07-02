@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { toggleRouteStageStatusAction } from "@/modules/production/stages/actions";
 
@@ -8,6 +9,7 @@ type RouteStagesPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function requireProductionAccess(role: string | undefined) {
@@ -24,8 +26,46 @@ function formatHours(value: unknown) {
   return `${Number(value.toString()).toFixed(2)} h`;
 }
 
+function getSearchParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string,
+) {
+  const value = params[key];
+
+  if (Array.isArray(value)) {
+    return value[0]?.trim() ?? "";
+  }
+
+  return value?.trim() ?? "";
+}
+
+function getBooleanFilter(value: string) {
+  if (value === "yes") {
+    return true;
+  }
+
+  if (value === "no") {
+    return false;
+  }
+
+  return undefined;
+}
+
+function getStatusFilter(status: string) {
+  if (status === "active") {
+    return true;
+  }
+
+  if (status === "inactive") {
+    return false;
+  }
+
+  return undefined;
+}
+
 export default async function RouteStagesPage({
   params,
+  searchParams,
 }: RouteStagesPageProps) {
   const session = await auth();
 
@@ -36,6 +76,34 @@ export default async function RouteStagesPage({
   requireProductionAccess(session.user.role);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
+  const q = getSearchParam(queryParams, "q");
+  const requiresMachine = getSearchParam(queryParams, "requiresMachine");
+  const status = getSearchParam(queryParams, "status");
+  const machineFilter = getBooleanFilter(requiresMachine);
+  const statusFilter = getStatusFilter(status);
+  const stageFilters: Prisma.etapa_rutaWhereInput[] = [];
+
+  if (q) {
+    stageFilters.push({
+      nombre_etapa: {
+        contains: q,
+        mode: "insensitive",
+      },
+    });
+  }
+
+  if (machineFilter !== undefined) {
+    stageFilters.push({
+      requiere_maquina: machineFilter,
+    });
+  }
+
+  if (statusFilter !== undefined) {
+    stageFilters.push({
+      estado: statusFilter,
+    });
+  }
 
   const route = await prisma.ruta_fabricacion.findUnique({
     where: {
@@ -44,6 +112,7 @@ export default async function RouteStagesPage({
     include: {
       producto: true,
       etapa_ruta: {
+        where: stageFilters.length > 0 ? { AND: stageFilters } : undefined,
         include: {
           _count: {
             select: {
@@ -98,6 +167,49 @@ export default async function RouteStagesPage({
         </Link>
       </section>
 
+      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
+        <input
+          name="q"
+          defaultValue={q}
+          placeholder="Buscar etapa..."
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        />
+
+        <select
+          name="requiresMachine"
+          defaultValue={requiresMachine}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Maquina: todos</option>
+          <option value="yes">Requiere maquina</option>
+          <option value="no">No requiere maquina</option>
+        </select>
+
+        <select
+          name="status"
+          defaultValue={status}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todos los estados</option>
+          <option value="active">Activas</option>
+          <option value="inactive">Inactivas</option>
+        </select>
+
+        <button
+          type="submit"
+          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+        >
+          Filtrar
+        </button>
+
+        <Link
+          href={`/dashboard/production/routes/${route.id_ruta}/stages`}
+          className="rounded-lg border px-4 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Limpiar filtros
+        </Link>
+      </form>
+
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">Etapas registradas</p>
@@ -146,7 +258,7 @@ export default async function RouteStagesPage({
               <th className="px-4 py-3 font-semibold">Avances</th>
               <th className="px-4 py-3 font-semibold">Tareas</th>
               <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acción</th>
+              <th className="px-4 py-3 font-semibold">Acciones</th>
             </tr>
           </thead>
 
@@ -200,20 +312,29 @@ export default async function RouteStagesPage({
                 </td>
 
                 <td className="px-4 py-3">
-                  <form action={toggleRouteStageStatusAction}>
-                    <input
-                      type="hidden"
-                      name="id_etapa_ruta"
-                      value={stage.id_etapa_ruta}
-                    />
-
-                    <button
-                      type="submit"
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href={`/dashboard/production/routes/${route.id_ruta}/stages/${stage.id_etapa_ruta}/edit`}
                       className="text-sm font-medium text-slate-600 hover:text-slate-950"
                     >
-                      {stage.estado ? "Desactivar" : "Activar"}
-                    </button>
-                  </form>
+                      Editar
+                    </Link>
+
+                    <form action={toggleRouteStageStatusAction}>
+                      <input
+                        type="hidden"
+                        name="id_etapa_ruta"
+                        value={stage.id_etapa_ruta}
+                      />
+
+                      <button
+                        type="submit"
+                        className="text-left text-sm font-medium text-slate-600 hover:text-slate-950"
+                      >
+                        {stage.estado ? "Inactivar" : "Activar"}
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             ))}

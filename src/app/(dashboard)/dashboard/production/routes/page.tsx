@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/actions";
+
+type FabricationRoutesPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -9,7 +15,34 @@ function requireProductionAccess(role: string | undefined) {
   }
 }
 
-export default async function FabricationRoutesPage() {
+function getSearchParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string,
+) {
+  const value = params[key];
+
+  if (Array.isArray(value)) {
+    return value[0]?.trim() ?? "";
+  }
+
+  return value?.trim() ?? "";
+}
+
+function getStatusFilter(status: string) {
+  if (status === "active") {
+    return true;
+  }
+
+  if (status === "inactive") {
+    return false;
+  }
+
+  return undefined;
+}
+
+export default async function FabricationRoutesPage({
+  searchParams,
+}: FabricationRoutesPageProps) {
   const session = await auth();
 
   if (!session?.user) {
@@ -18,25 +51,89 @@ export default async function FabricationRoutesPage() {
 
   requireProductionAccess(session.user.role);
 
-  const routes = await prisma.ruta_fabricacion.findMany({
-    include: {
-      producto: true,
-      _count: {
-        select: {
-          etapa_ruta: true,
-          orden_trabajo: true,
+  const params = (await searchParams) ?? {};
+  const q = getSearchParam(params, "q");
+  const product = getSearchParam(params, "product");
+  const status = getSearchParam(params, "status");
+  const statusFilter = getStatusFilter(status);
+  const filters: Prisma.ruta_fabricacionWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        {
+          id_ruta: {
+            contains: q,
+            mode: "insensitive",
+          },
+        },
+        {
+          nombre_ruta: {
+            contains: q,
+            mode: "insensitive",
+          },
+        },
+        {
+          producto: {
+            nombre_producto: {
+              contains: q,
+              mode: "insensitive",
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  if (product) {
+    filters.push({
+      id_producto: product,
+    });
+  }
+
+  if (statusFilter !== undefined) {
+    filters.push({
+      estado: statusFilter,
+    });
+  }
+
+  const where: Prisma.ruta_fabricacionWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
+
+  const [routes, products] = await Promise.all([
+    prisma.ruta_fabricacion.findMany({
+      where,
+      include: {
+        producto: true,
+        _count: {
+          select: {
+            etapa_ruta: true,
+            orden_trabajo: true,
+          },
         },
       },
-    },
-    orderBy: [
-      {
-        estado: "desc",
+      orderBy: [
+        {
+          estado: "desc",
+        },
+        {
+          nombre_ruta: "asc",
+        },
+      ],
+    }),
+    prisma.producto.findMany({
+      where: {
+        estado: true,
       },
-      {
-        nombre_ruta: "asc",
+      orderBy: {
+        nombre_producto: "asc",
       },
-    ],
-  });
+      select: {
+        id_producto: true,
+        nombre_producto: true,
+      },
+    }),
+  ]);
 
   return (
     <main className="space-y-6">
@@ -64,6 +161,52 @@ export default async function FabricationRoutesPage() {
           Nueva ruta
         </Link>
       </section>
+
+      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
+        <input
+          name="q"
+          defaultValue={q}
+          placeholder="Buscar ruta, codigo o producto..."
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        />
+
+        <select
+          name="product"
+          defaultValue={product}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todos los productos</option>
+          {products.map((item) => (
+            <option key={item.id_producto} value={item.id_producto}>
+              {item.nombre_producto}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="status"
+          defaultValue={status}
+          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          <option value="">Todos los estados</option>
+          <option value="active">Activas</option>
+          <option value="inactive">Inactivas</option>
+        </select>
+
+        <button
+          type="submit"
+          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+        >
+          Filtrar
+        </button>
+
+        <Link
+          href="/dashboard/production/routes"
+          className="rounded-lg border px-4 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Limpiar filtros
+        </Link>
+      </form>
 
       <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
         <table className="w-full border-collapse text-sm">
@@ -125,12 +268,36 @@ export default async function FabricationRoutesPage() {
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <Link
-                    href={`/dashboard/production/routes/${route.id_ruta}/stages`}
-                    className="text-sm font-medium text-slate-600 hover:text-slate-950"
-                  >
-                    Ver etapas
-                  </Link>
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href={`/dashboard/production/routes/${route.id_ruta}/edit`}
+                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
+                    >
+                      Editar
+                    </Link>
+
+                    <Link
+                      href={`/dashboard/production/routes/${route.id_ruta}/stages`}
+                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
+                    >
+                      Gestionar etapas
+                    </Link>
+
+                    <form action={toggleFabricationRouteStatusAction}>
+                      <input
+                        type="hidden"
+                        name="id_ruta"
+                        value={route.id_ruta}
+                      />
+
+                      <button
+                        type="submit"
+                        className="text-left text-sm font-medium text-slate-600 hover:text-slate-950"
+                      >
+                        {route.estado ? "Inactivar" : "Activar"}
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             ))}

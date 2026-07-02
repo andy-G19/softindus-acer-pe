@@ -206,3 +206,156 @@ export async function addCampaignDetailAction(formData: FormData) {
 
   redirect(`/dashboard/production/campaigns/${campaign.id_campania}`);
 }
+
+export async function updateProductionCampaignAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const idCampania = String(formData.get("id_campania") ?? "");
+
+  if (!idCampania) {
+    throw new Error("No se recibio la campania.");
+  }
+
+  const parsed = productionCampaignSchema.safeParse({
+    nombre_campania: formData.get("nombre_campania"),
+    fecha_inicio: formData.get("fecha_inicio"),
+    fecha_fin: formData.get("fecha_fin") ?? "",
+    objetivo_general: formData.get("objetivo_general") ?? "",
+    estado: formData.get("estado"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+  const campaign = await prisma.campania_produccion.findUnique({
+    where: {
+      id_campania: idCampania,
+    },
+    select: {
+      id_campania: true,
+      estado: true,
+    },
+  });
+
+  if (!campaign) {
+    throw new Error("La campania seleccionada no existe.");
+  }
+
+  if (campaign.estado === "anulada") {
+    throw new Error("No se puede modificar una campania anulada.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.campania_produccion.update({
+      where: {
+        id_campania: idCampania,
+      },
+      data: {
+        nombre_campania: data.nombre_campania,
+        fecha_inicio: parseDate(data.fecha_inicio),
+        fecha_fin: parseNullableDate(data.fecha_fin),
+        objetivo_general: data.objetivo_general,
+        estado: data.estado,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "campania_produccion",
+      id_registro_afectado: idCampania,
+      accion: "actualizar",
+      detalle: `Campania actualizada: ${data.nombre_campania}.`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/campaigns");
+  revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
+
+  redirect(`/dashboard/production/campaigns/${idCampania}`);
+}
+
+export async function changeProductionCampaignStatusAction(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  requireProductionManager(session.user.role);
+
+  const idCampania = String(formData.get("id_campania") ?? "");
+  const nextStatus = String(formData.get("estado") ?? "");
+
+  if (!idCampania) {
+    throw new Error("No se recibio la campania.");
+  }
+
+  if (!["activa", "finalizada", "anulada"].includes(nextStatus)) {
+    throw new Error("Estado de campania invalido.");
+  }
+
+  const campaign = await prisma.campania_produccion.findUnique({
+    where: {
+      id_campania: idCampania,
+    },
+    select: {
+      id_campania: true,
+      nombre_campania: true,
+      estado: true,
+    },
+  });
+
+  if (!campaign) {
+    throw new Error("La campania seleccionada no existe.");
+  }
+
+  if (campaign.estado === "anulada") {
+    throw new Error("La campania ya esta anulada.");
+  }
+
+  if (campaign.estado === "finalizada" && nextStatus !== "anulada") {
+    throw new Error("Una campania finalizada solo puede anularse con trazabilidad.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.campania_produccion.update({
+      where: {
+        id_campania: idCampania,
+      },
+      data: {
+        estado: nextStatus,
+        fecha_fin:
+          nextStatus === "finalizada" || nextStatus === "anulada"
+            ? new Date()
+            : undefined,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "campania_produccion",
+      id_registro_afectado: idCampania,
+      accion: nextStatus,
+      detalle: `Campania ${nextStatus}: ${campaign.nombre_campania}.`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production");
+  revalidatePath("/dashboard/production/campaigns");
+  revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
+
+  redirect("/dashboard/production/campaigns");
+}

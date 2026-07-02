@@ -117,7 +117,7 @@ export default async function NewRouteStagePage({
             <input
               name="tiempo_estimado_horas"
               type="number"
-              min="0.01"
+              min="0"
               step="0.01"
               placeholder="Ej. 1.50"
               disabled={!route.estado}

@@ -36,8 +36,8 @@ export const routeStageSchema = z.object({
     .refine(
       (value) =>
         value === null ||
-        (!Number.isNaN(value) && value > 0 && value <= 9999.99),
-      "El tiempo estimado debe ser mayor a 0."
+        (!Number.isNaN(value) && value >= 0 && value <= 9999.99),
+      "El tiempo estimado no puede ser negativo."
     ),
 
   requiere_maquina: z.boolean(),
