@@ -5,6 +5,9 @@ import bcrypt from "bcrypt";
 import { prisma } from "@/lib/db";
 import { loginSchema } from "@/modules/auth/auth.schema";
 
+export const SESSION_MAX_AGE_SECONDS = 8 * 60 * 60;
+export const SESSION_UPDATE_AGE_SECONDS = 5 * 60;
+
 declare module "next-auth" {
   interface User {
     id: string;
@@ -28,6 +31,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   session: {
     strategy: "jwt",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
+  },
+
+  jwt: {
+    maxAge: SESSION_MAX_AGE_SECONDS,
   },
 
   providers: [

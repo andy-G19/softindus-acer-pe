@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Session } from "next-auth";
 
 import { Badge } from "@/components/ui/badge";
+import { SessionIdleGuard } from "@/modules/auth/components/session-idle-guard";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { getMenuForRole, getRoleLabel } from "@/lib/permissions";
 
@@ -15,6 +16,8 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
 
   return (
     <div className="min-h-screen bg-muted">
+      <SessionIdleGuard />
+
       <header className="border-b bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div>
