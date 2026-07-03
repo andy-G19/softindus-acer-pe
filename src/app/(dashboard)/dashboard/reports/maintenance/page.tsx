@@ -189,7 +189,7 @@ function SummaryCard({ title, value, description }: SummaryCardProps) {
 export default async function MaintenanceReportPage({
   searchParams,
 }: PageProps) {
-  await requireRole([APP_ROLES.ADMIN]);
+  await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const params = searchParams ? await searchParams : {};
 

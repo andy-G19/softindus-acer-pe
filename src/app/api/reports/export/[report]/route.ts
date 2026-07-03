@@ -32,6 +32,21 @@ const REPORT_MODULE_LABELS: Record<string, string> = {
   "suppliers-purchases": "Reporte de proveedores y compras",
   financial: "Reporte financiero",
   maintenance: "Reporte de mantenimiento",
+  profitability: "Reporte de costos y rentabilidad",
+  staff: "Reporte de personal y planillas",
+  audit: "Reporte de auditoria",
+};
+
+const REPORT_ALLOWED_ROLES: Record<string, string[]> = {
+  production: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  inventory: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  "sales-collections": [APP_ROLES.ADMIN, APP_ROLES.SELLER],
+  "suppliers-purchases": [APP_ROLES.ADMIN],
+  financial: [APP_ROLES.ADMIN],
+  maintenance: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+  profitability: [APP_ROLES.ADMIN],
+  staff: [APP_ROLES.ADMIN],
+  audit: [APP_ROLES.ADMIN],
 };
 
 function getParam(searchParams: URLSearchParams, key: string) {
@@ -1015,6 +1030,273 @@ async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<Expor
   };
 }
 
+async function buildProfitabilityCsv(
+  searchParams: URLSearchParams,
+): Promise<ExportReport> {
+  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
+  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
+  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
+  const lowMargin = getParam(searchParams, "lowMargin");
+  const negativeProfit = getParam(searchParams, "negativeProfit");
+  const dateRange = buildDateRange(dateFrom, dateTo);
+
+  const costings = await prisma.costeo.findMany({
+    where: {
+      ...(dateRange ? { fecha_costeo: dateRange } : {}),
+      ...(searchText
+        ? {
+            OR: [
+              { id_costeo: { contains: searchText, mode: "insensitive" } },
+              { id_pedido: { contains: searchText, mode: "insensitive" } },
+              { id_orden_trabajo: { contains: searchText, mode: "insensitive" } },
+              {
+                pedido: {
+                  cliente: {
+                    nombre_razon_social: {
+                      contains: searchText,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                orden_trabajo: {
+                  producto: {
+                    nombre_producto: {
+                      contains: searchText,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : {}),
+      ...(lowMargin === "true"
+        ? { rentabilidad: { some: { alerta_bajo_margen: true } } }
+        : {}),
+      ...(negativeProfit === "true"
+        ? { rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } }
+        : {}),
+    },
+    orderBy: {
+      fecha_costeo: "desc",
+    },
+    take: 300,
+    include: {
+      pedido: {
+        include: {
+          cliente: true,
+        },
+      },
+      orden_trabajo: {
+        include: {
+          producto: true,
+          cliente: true,
+        },
+      },
+      margen_ganancia: {
+        orderBy: {
+          fecha_aplicacion: "desc",
+        },
+        take: 1,
+      },
+      rentabilidad: {
+        orderBy: {
+          fecha_calculo: "desc",
+        },
+        take: 1,
+      },
+    },
+  });
+
+  return {
+    filename: `costos_rentabilidad_${getDateStamp()}.xlsx`,
+    pdfFilename: `costos_rentabilidad_${getDateStamp()}.pdf`,
+    title: "Reporte de Costos y Rentabilidad",
+    headers: [
+      "Costeo",
+      "Pedido",
+      "Orden",
+      "Cliente",
+      "Producto",
+      "Fecha",
+      "Materiales",
+      "Consumibles",
+      "Mano de obra",
+      "Indirectos",
+      "Costo total",
+      "Precio sugerido",
+      "Precio final",
+      "Ingreso",
+      "Utilidad",
+      "Margen real",
+      "Estado",
+    ],
+    rows: costings.map((costing) => {
+      const margin = costing.margen_ganancia[0];
+      const profitability = costing.rentabilidad[0];
+
+      return [
+        costing.id_costeo,
+        costing.id_pedido ?? "",
+        costing.id_orden_trabajo ?? "",
+        costing.pedido?.cliente.nombre_razon_social ??
+          costing.orden_trabajo?.cliente?.nombre_razon_social ??
+          "",
+        costing.orden_trabajo?.producto.nombre_producto ?? "",
+        formatDate(costing.fecha_costeo),
+        formatMoney(costing.costo_materiales),
+        formatMoney(costing.costo_consumibles),
+        formatMoney(costing.costo_mano_obra),
+        formatMoney(costing.costo_indirecto_total),
+        formatMoney(costing.costo_total),
+        formatMoney(margin?.precio_sugerido),
+        formatMoney(margin?.precio_final),
+        formatMoney(profitability?.ingreso_estimado),
+        formatMoney(profitability?.utilidad_estimada),
+        `${formatQuantity(profitability?.margen_real)}%`,
+        profitability?.alerta_bajo_margen ? "Margen bajo" : "Sin alerta",
+      ];
+    }),
+  };
+}
+
+async function buildStaffCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
+  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
+  const operatorId = getParam(searchParams, "operatorId") || getParam(searchParams, "operario");
+  const payrollStatus = getParam(searchParams, "payrollStatus") || getParam(searchParams, "estado");
+  const paymentMode = getParam(searchParams, "paymentMode") || getParam(searchParams, "modalidad");
+  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
+  const dateRange = buildDateRange(dateFrom, dateTo);
+
+  const payrolls = await prisma.planilla_pago.findMany({
+    where: {
+      ...(operatorId ? { id_operario: operatorId } : {}),
+      ...(payrollStatus ? { estado_pago: payrollStatus } : {}),
+      ...(paymentMode ? { modalidad_pago: paymentMode } : {}),
+      ...(dateRange ? { periodo_inicio: dateRange } : {}),
+      ...(searchText
+        ? {
+            operario: {
+              OR: [
+                { nombres: { contains: searchText, mode: "insensitive" } },
+                { apellidos: { contains: searchText, mode: "insensitive" } },
+              ],
+            },
+          }
+        : {}),
+    },
+    orderBy: {
+      fecha_generacion: "desc",
+    },
+    take: 300,
+    include: {
+      operario: true,
+      historial_pago_operario: true,
+    },
+  });
+
+  return {
+    filename: `personal_planillas_${getDateStamp()}.xlsx`,
+    pdfFilename: `personal_planillas_${getDateStamp()}.pdf`,
+    title: "Reporte de Personal y Planillas",
+    headers: [
+      "Planilla",
+      "Operario",
+      "Modalidad",
+      "Periodo inicio",
+      "Periodo fin",
+      "Monto bruto",
+      "Descuentos",
+      "Monto neto",
+      "Monto pagado",
+      "Estado",
+      "Fecha generacion",
+    ],
+    rows: payrolls.map((payroll) => {
+      const paidAmount = payroll.historial_pago_operario.reduce((sum, item) => {
+        return sum + toNumber(item.monto_pagado);
+      }, 0);
+
+      return [
+        payroll.id_planilla,
+        `${payroll.operario.apellidos}, ${payroll.operario.nombres}`,
+        payroll.modalidad_pago,
+        formatDate(payroll.periodo_inicio),
+        formatDate(payroll.periodo_fin),
+        formatMoney(payroll.monto_bruto),
+        formatMoney(payroll.descuentos),
+        formatMoney(payroll.monto_neto),
+        formatMoney(paidAmount),
+        payroll.estado_pago,
+        formatDateTime(payroll.fecha_generacion),
+      ];
+    }),
+  };
+}
+
+async function buildAuditCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
+  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
+  const userId = getParam(searchParams, "userId") || getParam(searchParams, "usuario");
+  const action = getParam(searchParams, "action") || getParam(searchParams, "accion");
+  const entity = getParam(searchParams, "entity") || getParam(searchParams, "entidad");
+  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
+  const dateRange = buildDateRange(dateFrom, dateTo);
+
+  const logs = await prisma.bitacora_operacion.findMany({
+    where: {
+      ...(dateRange ? { fecha_hora: dateRange } : {}),
+      ...(userId ? { id_usuario: userId } : {}),
+      ...(action ? { accion: action } : {}),
+      ...(entity ? { entidad_afectada: entity } : {}),
+      ...(searchText
+        ? {
+            OR: [
+              { detalle: { contains: searchText, mode: "insensitive" } },
+              { entidad_afectada: { contains: searchText, mode: "insensitive" } },
+              { accion: { contains: searchText, mode: "insensitive" } },
+              { id_registro_afectado: { contains: searchText, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
+    orderBy: {
+      fecha_hora: "desc",
+    },
+    take: 500,
+    include: {
+      usuario: true,
+    },
+  });
+
+  return {
+    filename: `auditoria_${getDateStamp()}.xlsx`,
+    pdfFilename: `auditoria_${getDateStamp()}.pdf`,
+    title: "Reporte de Auditoria",
+    headers: [
+      "Fecha",
+      "Usuario",
+      "Accion",
+      "Entidad",
+      "Registro",
+      "Detalle",
+      "IP",
+    ],
+    rows: logs.map((log) => [
+      formatDateTime(log.fecha_hora),
+      `${log.usuario.apellidos}, ${log.usuario.nombres}`,
+      log.accion,
+      log.entidad_afectada,
+      log.id_registro_afectado ?? "",
+      log.detalle ?? "",
+      log.ip_origen ?? "",
+    ]),
+  };
+}
+
 async function buildReport(report: string, searchParams: URLSearchParams): Promise<ExportReport | null> {
   switch (report) {
     case "production":
@@ -1035,6 +1317,15 @@ async function buildReport(report: string, searchParams: URLSearchParams): Promi
     case "maintenance":
       return buildMaintenanceCsv(searchParams);
 
+    case "profitability":
+      return buildProfitabilityCsv(searchParams);
+
+    case "staff":
+      return buildStaffCsv(searchParams);
+
+    case "audit":
+      return buildAuditCsv(searchParams);
+
     default:
       return null;
   }
@@ -1049,14 +1340,16 @@ export async function GET(request: Request, context: RouteContext) {
     });
   }
 
-  if (session.user.role !== APP_ROLES.ADMIN) {
+  const { report } = await context.params;
+  const url = new URL(request.url);
+
+  const allowedRoles = REPORT_ALLOWED_ROLES[report] ?? [];
+
+  if (!allowedRoles.includes(session.user.role)) {
     return new Response("Acceso denegado.", {
       status: 403,
     });
   }
-
-  const { report } = await context.params;
-  const url = new URL(request.url);
 
   const exportReport = await buildReport(report, url.searchParams);
 

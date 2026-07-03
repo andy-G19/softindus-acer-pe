@@ -168,7 +168,7 @@ function SummaryCard({ title, value, description }: SummaryCardProps) {
 export default async function SalesCollectionsReportPage({
   searchParams,
 }: PageProps) {
-  await requireRole([APP_ROLES.ADMIN]);
+  await requireRole([APP_ROLES.ADMIN, APP_ROLES.SELLER]);
 
   const params = searchParams ? await searchParams : {};
 

@@ -859,6 +859,39 @@ export default async function ReportsDashboardPage() {
               </Card>
             </Link>
 
+            <Link href="/dashboard/reports/profitability" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Reporte de costos y rentabilidad
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Costeos, margenes, ingresos, utilidad estimada y alertas de baja
+                    rentabilidad.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/dashboard/reports/staff" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Reporte de personal y planillas
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Asistencias, faltas, tardanzas, planillas, pagos y pendientes por
+                    operario.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             <Link href="/dashboard/reports/export-history" className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
@@ -877,6 +910,22 @@ export default async function ReportsDashboardPage() {
               </Card>
             </Link>
 
+            <Link href="/dashboard/audit" className="block">
+              <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Bitacora de auditoria
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Operaciones criticas por usuario, accion, entidad afectada y
+                    fecha.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
           </div>
         </section>

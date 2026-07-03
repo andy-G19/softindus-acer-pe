@@ -297,7 +297,25 @@ export default async function DashboardPage() {
   const canAccessPettyCash = role === "ADMIN";
   const canAccessStaff = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
   const canAccessMaintenance = ["ADMIN", "WORKSHOP_MASTER"].includes(role);
-  const canAccessReports = role === "ADMIN";
+  const canAccessReports = ["ADMIN", "SELLER", "WORKSHOP_MASTER"].includes(role);
+  const reportsHref =
+    role === "SELLER"
+      ? "/dashboard/reports/sales-collections"
+      : role === "WORKSHOP_MASTER"
+        ? "/dashboard/reports/production"
+        : "/dashboard/reports";
+  const reportsTitle =
+    role === "SELLER"
+      ? "Reportes comerciales"
+      : role === "WORKSHOP_MASTER"
+        ? "Reportes operativos"
+        : "Reportes, exportaciones y auditoria";
+  const reportsDescription =
+    role === "SELLER"
+      ? "Ventas, cobranzas, pedidos y saldos pendientes."
+      : role === "WORKSHOP_MASTER"
+        ? "Produccion, inventario operativo y mantenimiento."
+        : "Indicadores generales, exportaciones, historial y bitacora.";
 
   return (
     <div className="space-y-6">
@@ -782,18 +800,17 @@ export default async function DashboardPage() {
           ) : null}
 
           {canAccessReports ? (
-            <Link href="/dashboard/reports" className="block">
+            <Link href={reportsHref} className="block">
               <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-base">
-                    Reportes y dashboard general
+                    {reportsTitle}
                   </CardTitle>
                 </CardHeader>
 
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Indicadores generales, reportes administrativos y
-                    exportacion de datos.
+                    {reportsDescription}
                   </p>
                 </CardContent>
               </Card>

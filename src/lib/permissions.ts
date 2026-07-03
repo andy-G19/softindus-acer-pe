@@ -24,6 +24,7 @@ type DashboardRoute = {
   title: string;
   href: string;
   roles: AppRole[];
+  showInMenu?: boolean;
 };
 
 export const dashboardRoutes: DashboardRoute[] = [
@@ -83,6 +84,66 @@ export const dashboardRoutes: DashboardRoute[] = [
     roles: [APP_ROLES.ADMIN],
   },
   {
+    title: "Reporte de ventas y cobranzas",
+    href: "/dashboard/reports/sales-collections",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de inventario",
+    href: "/dashboard/reports/inventory",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de produccion",
+    href: "/dashboard/reports/production",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de mantenimiento",
+    href: "/dashboard/reports/maintenance",
+    roles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de proveedores y compras",
+    href: "/dashboard/reports/suppliers-purchases",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte financiero",
+    href: "/dashboard/reports/financial",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de costos y rentabilidad",
+    href: "/dashboard/reports/profitability",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
+    title: "Reporte de personal y planillas",
+    href: "/dashboard/reports/staff",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
+    title: "Historial de exportaciones",
+    href: "/dashboard/reports/export-history",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
+    title: "Auditoria",
+    href: "/dashboard/audit",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
+  {
     title: "Acceso denegado",
     href: "/dashboard/access-denied",
     roles: [APP_ROLES.ADMIN, APP_ROLES.SELLER, APP_ROLES.WORKSHOP_MASTER],
@@ -120,6 +181,10 @@ export function getMenuForRole(role: string) {
 
   return dashboardRoutes.filter((route) => {
     if (route.href === "/dashboard/access-denied") {
+      return false;
+    }
+
+    if (route.showInMenu === false) {
       return false;
     }
 

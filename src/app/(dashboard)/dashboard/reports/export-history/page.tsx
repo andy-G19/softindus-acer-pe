@@ -16,6 +16,9 @@ const REPORT_MODULE_OPTIONS = [
   "Reporte de proveedores y compras",
   "Reporte financiero",
   "Reporte de mantenimiento",
+  "Reporte de costos y rentabilidad",
+  "Reporte de personal y planillas",
+  "Reporte de auditoria",
 ];
 
 const FORMAT_OPTIONS = [
