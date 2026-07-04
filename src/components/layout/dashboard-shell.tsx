@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { Session } from "next-auth";
 
 import { Badge } from "@/components/ui/badge";
+import { DashboardNav } from "@/components/layout/dashboard-nav";
 import { SessionIdleGuard } from "@/modules/auth/components/session-idle-guard";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { getMenuForRole, getRoleLabel } from "@/lib/permissions";
@@ -15,22 +15,31 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   const menuItems = getMenuForRole(session.user.role);
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-muted/40">
       <SessionIdleGuard />
 
-      <header className="border-b bg-background">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div>
-            <h1 className="text-xl font-bold">Industrias Aceros Perú</h1>
+      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0 space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-bold tracking-tight">
+                Industrias Aceros Perú
+              </h1>
+              <Badge variant="secondary" className="text-[11px]">
+                Sistema activo
+              </Badge>
+            </div>
             <p className="text-sm text-muted-foreground">
               Sistema de Gestión Integral
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-medium">{session.user.name}</p>
-              <div className="mt-1 flex justify-end">
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+            <div className="min-w-0 text-left sm:text-right">
+              <p className="truncate text-sm font-medium">
+                {session.user.name}
+              </p>
+              <div className="mt-1 flex sm:justify-end">
                 <Badge variant="secondary">
                   {getRoleLabel(session.user.role)}
                 </Badge>
@@ -42,22 +51,19 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-6 md:grid-cols-[220px_1fr]">
-        <aside className="rounded-lg border bg-background p-4">
-          <nav className="space-y-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
-              >
-                {item.title}
-              </Link>
-            ))}
-          </nav>
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[260px_minmax(0,1fr)]">
+        <aside className="min-w-0">
+          <div className="rounded-2xl border bg-card p-3 shadow-sm md:sticky md:top-24">
+            <div className="px-2 pb-3">
+              <p className="text-xs font-semibold uppercase text-muted-foreground">
+                Navegación
+              </p>
+            </div>
+            <DashboardNav menuItems={menuItems} />
+          </div>
         </aside>
 
-        <main>{children}</main>
+        <main className="min-w-0">{children}</main>
       </div>
     </div>
   );
