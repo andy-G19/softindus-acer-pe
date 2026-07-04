@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 
@@ -302,21 +303,26 @@ export default async function ProductionBottlenecksPage({
   const saturatedStages = stageSummaries.filter(
     (summary) => summary.orderCount > 1,
   );
+  const productItems = products.map((item) => ({
+    id: item.id_producto,
+    label: item.nombre_producto,
+    description: item.id_producto,
+  }));
 
   return (
     <main className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Produccion - Cuellos de botella
+            Producción - Cuellos de botella
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
-            Cuellos de botella en produccion
+            Cuellos de botella en producción
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
-            Detecta avances en proceso que estan cerca de vencer, atrasados o
+            Detecta avances en proceso que están cerca de vencer, atrasados o
             concentrados en la misma etapa.
           </p>
         </div>
@@ -325,77 +331,105 @@ export default async function ProductionBottlenecksPage({
           href="/dashboard/production"
           className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
         >
-          Volver a produccion
+          Volver a producción
         </Link>
       </section>
 
-      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
-        <select
+      <form className="grid gap-4 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
+        <SearchableSelectFilter
+          key={product}
           name="product"
-          defaultValue={product}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los productos</option>
-          {products.map((item) => (
-            <option key={item.id_producto} value={item.id_producto}>
-              {item.nombre_producto}
-            </option>
-          ))}
-        </select>
+          label="Producto"
+          placeholder="Todos los productos"
+          items={productItems}
+          value={product}
+          emptyMessage="No se encontraron productos."
+        />
 
-        <select
-          name="route"
-          defaultValue={route}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las rutas</option>
-          {routes.map((item) => (
-            <option key={item.id_ruta} value={item.id_ruta}>
-              {item.nombre_ruta}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="stage"
-          defaultValue={stage}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las etapas</option>
-          {stages.map((item) => (
-            <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
-              {item.nombre_etapa}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="orderStatus"
-          defaultValue={orderStatus}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Estado de orden</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="en_proceso">En proceso</option>
-          <option value="pausada">Pausada</option>
-        </select>
-
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            name="from"
-            type="date"
-            defaultValue={from}
-            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={to}
-            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
+        <div className="space-y-2">
+          <label htmlFor="route" className="text-sm font-medium">
+            Ruta
+          </label>
+          <select
+            id="route"
+            name="route"
+            defaultValue={route}
+            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+          >
+            <option value="">Todas las rutas</option>
+            {routes.map((item) => (
+              <option key={item.id_ruta} value={item.id_ruta}>
+                {item.nombre_ruta}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="flex gap-2 md:col-span-3">
+        <div className="space-y-2">
+          <label htmlFor="stage" className="text-sm font-medium">
+            Etapa
+          </label>
+          <select
+            id="stage"
+            name="stage"
+            defaultValue={stage}
+            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+          >
+            <option value="">Todas las etapas</option>
+            {stages.map((item) => (
+              <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
+                {item.nombre_etapa}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="orderStatus" className="text-sm font-medium">
+            Estado de orden
+          </label>
+          <select
+            id="orderStatus"
+            name="orderStatus"
+            defaultValue={orderStatus}
+            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+          >
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="en_proceso">En proceso</option>
+            <option value="pausada">Pausada</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 md:col-span-2">
+          <div className="space-y-2">
+            <label htmlFor="from" className="text-sm font-medium">
+              Desde
+            </label>
+            <input
+              id="from"
+              name="from"
+              type="date"
+              defaultValue={from}
+              className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="to" className="text-sm font-medium">
+              Hasta
+            </label>
+            <input
+              id="to"
+              name="to"
+              type="date"
+              defaultValue={to}
+              className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-end gap-2 md:col-span-2">
           <button
             type="submit"
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
@@ -443,12 +477,12 @@ export default async function ProductionBottlenecksPage({
           <thead className="bg-slate-50 text-left">
             <tr>
               <th className="px-4 py-3 font-semibold">Etapa</th>
-              <th className="px-4 py-3 font-semibold">Ordenes en etapa</th>
+              <th className="px-4 py-3 font-semibold">Órdenes en etapa</th>
               <th className="px-4 py-3 font-semibold">Atrasadas</th>
               <th className="px-4 py-3 font-semibold">En riesgo</th>
               <th className="px-4 py-3 font-semibold">Tiempo estimado</th>
               <th className="px-4 py-3 font-semibold">Mayor permanencia</th>
-              <th className="px-4 py-3 font-semibold">Saturacion</th>
+              <th className="px-4 py-3 font-semibold">Saturación</th>
             </tr>
           </thead>
 
@@ -498,7 +532,7 @@ export default async function ProductionBottlenecksPage({
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50 text-left">
             <tr>
-              <th className="px-4 py-3 font-semibold">Codigo de orden</th>
+              <th className="px-4 py-3 font-semibold">Código de orden</th>
               <th className="px-4 py-3 font-semibold">Producto</th>
               <th className="px-4 py-3 font-semibold">Etapa</th>
               <th className="px-4 py-3 font-semibold">Operario</th>
