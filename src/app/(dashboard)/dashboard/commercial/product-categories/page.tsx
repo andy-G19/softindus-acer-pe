@@ -1,8 +1,9 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleProductCategoryStatusAction } from "@/modules/commercial/products/actions";
 import { ProductCategoryManager } from "@/modules/commercial/products/product-category-manager";
 
@@ -32,21 +33,17 @@ export default async function ProductCategoriesPage() {
 
   return (
     <main className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Categorías de productos</h1>
-          <p className="text-sm text-muted-foreground">
-            Administra las categorías usadas en productos comerciales.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/commercial/products"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Volver a productos
-        </Link>
-      </div>
+      <PageHeader
+        title="Categorías de productos"
+        description="Administra las categorías usadas en productos comerciales."
+        backHref={navigationHrefs.products}
+        backLabel="Volver a productos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Productos", href: navigationHrefs.products },
+          { label: "Categorías" },
+        ])}
+      />
 
       {!canManage ? (
         <div className="rounded-md border px-4 py-3 text-sm text-muted-foreground">

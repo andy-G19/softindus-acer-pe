@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
@@ -84,34 +85,25 @@ export default async function EditSupplierMaterialPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario - Proveedor-material - Editar asociacion
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Editar asociacion proveedor-material
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Actualiza el proveedor, material, precio referencial, disponibilidad
-            y tiempo de entrega.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge>Solo ADMIN</Badge>
-          <Link
-            href="/dashboard/inventory/supplier-materials"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al listado
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Editar asociación proveedor-material"
+        description="Actualiza el proveedor, material, precio referencial, disponibilidad y tiempo de entrega."
+        backHref={navigationHrefs.supplierMaterials}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          {
+            label: "Proveedor-material",
+            href: navigationHrefs.supplierMaterials,
+          },
+          { label: "Editar asociación" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Datos de la asociacion</CardTitle>
+          <CardTitle className="text-base">Datos de la asociación</CardTitle>
         </CardHeader>
         <CardContent>
           <SupplierMaterialForm

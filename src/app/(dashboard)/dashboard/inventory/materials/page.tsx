@@ -2,8 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toggleMaterialStatusAction } from "@/modules/inventory/materials/actions";
 
 type MaterialsPageProps = {
@@ -74,6 +81,7 @@ export default async function MaterialsPage({
   const unit = getSearchParam(params, "unit");
   const status = getSearchParam(params, "status");
   const stock = getSearchParam(params, "stock");
+  const returnTo = createReturnToHref(navigationHrefs.materials, params);
   const statusFilter = getStatusFilter(status);
   const filters: Prisma.materialWhereInput[] = [];
 
@@ -169,20 +177,15 @@ export default async function MaterialsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario · Materiales
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Materiales e insumos
-          </h1>
-          <p className="text-slate-600">
-            Consulta stock actual, stock reservado, stock mínimo y costo vigente.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Materiales e insumos"
+        description="Consulta stock actual, stock reservado, stock mínimo y costo vigente."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Materiales" },
+        ])}
+        actions={
+          <>
           <Link
             href="/dashboard/inventory/material-categories"
             className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
@@ -198,8 +201,9 @@ export default async function MaterialsPage({
               Nuevo material
             </Link>
           ) : null}
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <form
         action="/dashboard/inventory/materials"
@@ -343,7 +347,10 @@ export default async function MaterialsPage({
                     {isAdmin ? (
                       <div className="flex flex-wrap items-center gap-2">
                         <Link
-                          href={`/dashboard/inventory/materials/${material.id_material}/edit`}
+                          href={withReturnTo(
+                            `${navigationHrefs.materials}/${material.id_material}/edit`,
+                            returnTo,
+                          )}
                           className="rounded-md border px-3 py-1.5 text-xs font-medium"
                         >
                           Editar

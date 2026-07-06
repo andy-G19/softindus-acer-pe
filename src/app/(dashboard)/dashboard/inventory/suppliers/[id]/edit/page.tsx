@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateSupplierAction } from "@/modules/inventory/suppliers/actions";
 import { SupplierForm } from "@/modules/inventory/suppliers/supplier-form";
 
@@ -57,15 +59,17 @@ export default async function EditSupplierPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Inventario · Proveedores
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">Editar proveedor</h1>
-        <p className="text-slate-600">
-          Actualiza los datos comerciales del proveedor.
-        </p>
-      </section>
+      <PageHeader
+        title="Editar proveedor"
+        description="Actualiza los datos comerciales del proveedor."
+        backHref={navigationHrefs.suppliers}
+        backLabel="Volver a proveedores"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Proveedores", href: navigationHrefs.suppliers },
+          { label: "Editar proveedor" },
+        ])}
+      />
 
       <SupplierForm
         action={updateSupplierAction}

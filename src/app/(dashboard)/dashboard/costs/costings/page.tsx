@@ -1,7 +1,9 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -231,38 +233,22 @@ export default async function CostingsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Costos · Costeos registrados
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Detalle de costeos por orden o pedido
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta los costeos generados, su origen productivo o comercial, el
-            costo total, margen aplicado, precio final y rentabilidad estimada.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Costeos"
+        description="Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Costos", href: navigationHrefs.costs },
+          { label: "Costeos" },
+        ])}
+        actions={
           <Link
-            href="/dashboard/costs/work-orders"
+            href={navigationHrefs.costWorkOrders}
             className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
           >
             Generar costeo
           </Link>
-
-          <Link
-            href="/dashboard/costs"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Volver a costos
-          </Link>
-        </div>
-      </section>
+        }
+      />
 
       <section className="rounded-xl border bg-white p-5 shadow-sm">
         <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
@@ -413,7 +399,7 @@ export default async function CostingsPage({
                       : "Manual";
 
                   const originMain = workOrder
-                    ? `${workOrder.id_orden_trabajo} · ${workOrder.producto.nombre_producto}`
+                    ? `${workOrder.id_orden_trabajo} | ${workOrder.producto.nombre_producto}`
                     : costing.pedido
                       ? costing.pedido.id_pedido
                       : "Costeo manual";
@@ -460,7 +446,7 @@ export default async function CostingsPage({
                         <div className="font-medium">{originMain}</div>
 
                         <p className="mt-1 text-xs text-slate-500">
-                          {originType} · {originSecondary}
+                          {originType} ? {originSecondary}
                         </p>
                       </td>
 
@@ -519,7 +505,7 @@ export default async function CostingsPage({
                           href={`/dashboard/costs/costings/${costing.id_costeo}`}
                           className="text-sm font-medium text-slate-700 hover:text-slate-950"
                         >
-                          Ver detalle →
+                          Ver detalle ?
                         </Link>
                       </td>
                     </tr>
@@ -543,3 +529,4 @@ export default async function CostingsPage({
     </main>
   );
 }
+

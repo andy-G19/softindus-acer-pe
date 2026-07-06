@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleSupplierMaterialStatusAction } from "@/modules/inventory/supplier-materials/actions";
 
 type SupplierMaterialsPageProps = {
@@ -143,26 +145,22 @@ export default async function SupplierMaterialsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario - Proveedor-material
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Materiales por proveedor
-          </h1>
-          <p className="text-slate-600">
-            Consulta que proveedores abastecen cada material o insumo.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/inventory/supplier-materials/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva asociacion
-        </Link>
-      </section>
+      <PageHeader
+        title="Materiales por proveedor"
+        description="Consulta qué proveedores abastecen cada material o insumo."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Proveedor-material" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/inventory/supplier-materials/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva asociación
+          </Link>
+        }
+      />
 
       <form
         action="/dashboard/inventory/supplier-materials"
@@ -236,7 +234,7 @@ export default async function SupplierMaterialsPage({
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50 text-left">
             <tr>
-              <th className="px-4 py-3 font-semibold">Codigo</th>
+              <th className="px-4 py-3 font-semibold">Código</th>
               <th className="px-4 py-3 font-semibold">Proveedor</th>
               <th className="px-4 py-3 font-semibold">Material</th>
               <th className="px-4 py-3 font-semibold">Unidad</th>
@@ -266,7 +264,7 @@ export default async function SupplierMaterialsPage({
                 </td>
                 <td className="px-4 py-3">
                   {relation.tiempo_entrega_dias
-                    ? `${relation.tiempo_entrega_dias} dias`
+                    ? `${relation.tiempo_entrega_dias} días`
                     : "-"}
                 </td>
                 <td className="px-4 py-3">
@@ -304,7 +302,7 @@ export default async function SupplierMaterialsPage({
             {relations.length === 0 ? (
               <tr>
                 <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
-                  Todavia no hay asociaciones proveedor-material.
+                  Todavía no hay asociaciones proveedor-material.
                 </td>
               </tr>
             ) : null}

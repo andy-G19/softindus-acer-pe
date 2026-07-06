@@ -32,6 +32,9 @@ type SupplierFormProps = {
   supplierTypes: SupplierTypeOption[];
   defaultValues?: Partial<SupplierFormValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: SupplierFormState = {
@@ -58,6 +61,9 @@ export function SupplierForm({
   supplierTypes,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/inventory/suppliers",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: SupplierFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasSupplierTypes = supplierTypes.length > 0;
@@ -265,12 +271,16 @@ export function SupplierForm({
       </div>
 
       <div className="flex items-center justify-between pt-4">
-        <Link
-          href="/dashboard/inventory/suppliers"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a proveedores
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            {cancelLabel}
+          </Link>
+        ) : (
+          <span />
+        )}
 
         <button
           type="submit"

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -6,8 +6,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createScrapAction } from "@/modules/waste-scrap/scraps/actions";
 
@@ -38,30 +40,17 @@ export default async function NewScrapPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra · Chatarra generada
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar chatarra generada
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra sobrantes no reutilizables generados durante el corte,
-            fabricación o limpieza del área productiva. La chatarra quedará
-            acumulada hasta que se registre su venta.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/waste-scrap"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver al módulo
-        </Link>
-      </section>
+      <PageHeader
+        title="Registrar chatarra generada"
+        description="Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva. La chatarra quedará acumulada hasta que se registre su venta."
+        backHref={navigationHrefs.scraps}
+        backLabel="Volver a chatarra"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mermas y chatarra", href: navigationHrefs.wasteScrap },
+          { label: "Chatarra", href: navigationHrefs.scraps },
+          { label: "Nueva chatarra" },
+        ])}
+      />
 
       <Card>
         <CardHeader>
@@ -206,3 +195,4 @@ export default async function NewScrapPage() {
     </main>
   );
 }
+

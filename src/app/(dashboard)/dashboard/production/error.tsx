@@ -4,7 +4,7 @@ import Link from "next/link";
 
 type ProductionErrorPageProps = {
   error: Error & {
-    digest?: string;
+    digestá: string;
   };
   reset: () => void;
 };

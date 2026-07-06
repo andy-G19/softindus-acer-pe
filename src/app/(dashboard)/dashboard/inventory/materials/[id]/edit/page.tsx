@@ -1,7 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { updateMaterialAction } from "@/modules/inventory/materials/actions";
 import { MaterialForm } from "@/modules/inventory/materials/material-form";
 
@@ -9,6 +15,7 @@ type EditMaterialPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function formatDecimal(value: unknown) {
@@ -21,8 +28,10 @@ function formatDecimal(value: unknown) {
 
 export default async function EditMaterialPage({
   params,
+  searchParams,
 }: EditMaterialPageProps) {
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
   const session = await auth();
 
   if (!session?.user) {
@@ -62,19 +71,24 @@ export default async function EditMaterialPage({
       slug: true,
     },
   });
+  const backHref = getSafeReturnTo(
+    queryParams.returnTo,
+    navigationHrefs.materials,
+  );
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Inventario · Materiales
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">Editar material</h1>
-        <p className="text-slate-600">
-          Actualiza los datos maestros del material. El stock se mantiene por
-          movimientos de inventario.
-        </p>
-      </section>
+      <PageHeader
+        title="Editar material"
+        description="Actualiza los datos maestros del material. El stock se mantiene por movimientos de inventario."
+        backHref={backHref}
+        backLabel="Volver a materiales"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Materiales", href: backHref },
+          { label: "Editar material" },
+        ])}
+      />
 
       <MaterialForm
         action={updateMaterialAction}

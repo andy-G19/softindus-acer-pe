@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
 
 type ProductionCampaignsPageProps = {
@@ -218,35 +220,28 @@ export default async function ProductionCampaignsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Produccion · Campanias
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Campanias de produccion
-          </h1>
-
-          <p className="max-w-3xl text-slate-600">
-            Planifica lotes de produccion por campania y consulta el avance por
-            producto.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production/campaigns/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva campania
-        </Link>
-      </section>
+      <PageHeader
+        title="Campañas de producción"
+        description="Planifica lotes de producción por campaña y consulta el avance por producto."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Campañas" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/production/campaigns/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva campaña
+          </Link>
+        }
+      />
 
       <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
         <input
           name="q"
           defaultValue={q}
-          placeholder="Buscar campania..."
+          placeholder="Buscar campaña..."
           className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
 

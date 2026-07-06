@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -112,12 +114,14 @@ export default async function InventoryEntriesPage({
 
   return (
     <main className="space-y-6">
-      <section>
-        <h1 className="text-2xl font-bold">Entradas de inventario</h1>
-        <p className="text-sm text-muted-foreground">
-          Movimientos de entrada generados por compras u otros registros.
-        </p>
-      </section>
+      <PageHeader
+        title="Entradas de inventario"
+        description="Movimientos de entrada generados por compras u otros registros."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Entradas" },
+        ])}
+      />
 
       <form
         action="/dashboard/inventory/entries"
@@ -148,7 +152,7 @@ export default async function InventoryEntriesPage({
         <table className="w-full text-sm">
           <thead className="bg-slate-50 text-left">
             <tr>
-              <th className="px-4 py-3">Codigo</th>
+              <th className="px-4 py-3">Código</th>
               <th className="px-4 py-3">Fecha</th>
               <th className="px-4 py-3">Material</th>
               <th className="px-4 py-3">Compra</th>
@@ -172,7 +176,7 @@ export default async function InventoryEntriesPage({
               </tr>
             ))}
             {movements.length === 0 ? (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavia no hay entradas registradas.</td></tr>
+              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavía no hay entradas registradas.</td></tr>
             ) : null}
           </tbody>
         </table>

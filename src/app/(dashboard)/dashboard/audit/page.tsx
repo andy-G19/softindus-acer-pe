@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import {
   Card,
@@ -6,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -133,29 +135,21 @@ export default async function AuditPage({ searchParams }: PageProps) {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">Auditoria</p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Bitacora de operaciones
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta solo lectura de acciones criticas, entidades afectadas,
-            usuarios responsables, fecha, detalle e IP registrada.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link href="/dashboard" className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-            Volver
-          </Link>
-          <Link href={buildReportExportHref("audit", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-            Exportar Excel
-          </Link>
-          <Link href={buildReportExportHref("audit", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-            Exportar PDF
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Bitácora de operaciones"
+        description="Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Auditoría" }])}
+        actions={
+          <>
+            <Link href={buildReportExportHref("audit", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
+              Exportar Excel
+            </Link>
+            <Link href={buildReportExportHref("audit", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Exportar PDF
+            </Link>
+          </>
+        }
+      />
 
       <Card>
         <CardContent className="pt-6">
@@ -273,3 +267,5 @@ export default async function AuditPage({ searchParams }: PageProps) {
     </main>
   );
 }
+
+

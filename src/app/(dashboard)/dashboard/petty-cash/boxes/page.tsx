@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -6,7 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
 
@@ -78,39 +80,22 @@ export default async function PettyCashBoxesPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas · Cajas chicas
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de cajas chicas
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta las cajas chicas abiertas y cerradas, sus saldos,
-            responsables, fechas de apertura y cantidad de movimientos
-            registrados.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Cajas chicas"
+        description="Consulta las cajas chicas abiertas y cerradas, sus saldos, responsables, fechas de apertura y cantidad de movimientos registrados."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Cajas" },
+        ])}
+        actions={
           <Link
-            href="/dashboard/petty-cash"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/petty-cash/boxes/new"
+            href={`${navigationHrefs.pettyCashBoxes}/new`}
             className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
           >
             Abrir caja
           </Link>
-        </div>
-      </section>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>

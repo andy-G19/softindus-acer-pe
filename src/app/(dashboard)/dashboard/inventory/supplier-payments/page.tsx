@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -123,12 +125,14 @@ export default async function SupplierPaymentsPage({
 
   return (
     <main className="space-y-6">
-      <section>
-        <h1 className="text-2xl font-bold">Pagos a proveedores</h1>
-        <p className="text-sm text-muted-foreground">
-          Consulta pagos registrados desde compras.
-        </p>
-      </section>
+      <PageHeader
+        title="Pagos a proveedores"
+        description="Consulta pagos registrados desde compras."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Pagos a proveedores" },
+        ])}
+      />
 
       <form
         action="/dashboard/inventory/supplier-payments"
@@ -144,7 +148,7 @@ export default async function SupplierPaymentsPage({
           {purchases.map((item) => <option key={item.id_compra} value={item.id_compra}>{item.id_compra}</option>)}
         </select>
         <select name="method" defaultValue={method} className="rounded-md border px-3 py-2 text-sm">
-          <option value="">Metodo</option>
+          <option value="">Método</option>
           <option value="efectivo">Efectivo</option>
           <option value="transferencia">Transferencia</option>
           <option value="yape">Yape</option>
@@ -174,7 +178,7 @@ export default async function SupplierPaymentsPage({
               <th className="px-4 py-3">Fecha</th>
               <th className="px-4 py-3">Proveedor</th>
               <th className="px-4 py-3">Compra</th>
-              <th className="px-4 py-3">Metodo</th>
+              <th className="px-4 py-3">Método</th>
               <th className="px-4 py-3 text-right">Monto</th>
               <th className="px-4 py-3 text-right">Saldo</th>
               <th className="px-4 py-3">Estado</th>
@@ -197,7 +201,7 @@ export default async function SupplierPaymentsPage({
               </tr>
             ))}
             {payments.length === 0 ? (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavia no hay pagos a proveedores.</td></tr>
+              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavía no hay pagos a proveedores.</td></tr>
             ) : null}
           </tbody>
         </table>

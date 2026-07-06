@@ -14,13 +14,19 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   }
 
   return (
-    <nav aria-label="Ruta de navegación" className="text-sm text-muted-foreground">
-      <ol className="flex flex-wrap items-center gap-1">
+    <nav
+      aria-label="Ruta de navegación"
+      className="max-w-full overflow-x-auto text-sm text-muted-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      <ol className="flex min-w-0 items-center gap-1 whitespace-nowrap">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
 
           return (
-            <li key={`${item.label}-${index}`} className="flex min-w-0 items-center gap-1">
+            <li
+              key={`${item.label}-${index}`}
+              className="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink"
+            >
               {index > 0 ? (
                 <ChevronRight className="size-3.5 shrink-0" aria-hidden="true" />
               ) : null}
@@ -28,7 +34,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               {isLast ? (
                 <span
                   aria-current="page"
-                  className="max-w-48 truncate text-foreground sm:max-w-none"
+                  className="block max-w-48 truncate text-foreground sm:max-w-72 md:max-w-none"
                 >
                   {item.label}
                 </span>
@@ -36,13 +42,13 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                 <Link
                   href={item.href}
                   className={cn(
-                    "max-w-48 truncate transition hover:text-foreground sm:max-w-none",
+                    "block max-w-48 truncate transition hover:text-foreground sm:max-w-72 md:max-w-none",
                   )}
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="max-w-48 truncate sm:max-w-none">
+                <span className="block max-w-48 truncate sm:max-w-72 md:max-w-none">
                   {item.label}
                 </span>
               )}

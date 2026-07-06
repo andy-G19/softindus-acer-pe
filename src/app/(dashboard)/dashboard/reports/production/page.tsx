@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -266,44 +268,31 @@ export default async function ProductionReportPage({
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Fase 10 · Subfase 10.3.1
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reporte de producción
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta órdenes de trabajo por rango de fechas, producto, estado y
-            código de orden. Este reporte permite evaluar cumplimiento,
-            cantidad fabricada, avance y retrasos.
-          </p>
-        </div>
+      <PageHeader
+        title="Reporte de producción"
+        description="Consulta órdenes de trabajo por rango de fechas, producto, estado y código de orden. Este reporte permite evaluar cumplimiento, cantidad fabricada, avance y retrasos."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Producción" },
+        ])}
+        actions={
+          <>
+            <a
+              href={csvExportHref}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Exportar Excel
+            </a>
 
-        <div className="flex flex-wrap gap-2">
-          <a
-            href={csvExportHref}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Exportar Excel
-          </a>
-
-          <a
-            href={pdfExportHref}
-            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-          >
-            Exportar PDF
-          </a>
-
-          <Link
-            href="/dashboard/reports"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-          >
-            Volver al dashboard
-          </Link>
-        </div>
-      </section>
+            <a
+              href={pdfExportHref}
+              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+            >
+              Exportar PDF
+            </a>
+          </>
+        }
+      />
 
       <Card>
         <CardHeader>
@@ -413,7 +402,7 @@ export default async function ProductionReportPage({
         <SummaryCard
           title="Órdenes encontradas"
           value={totalOrders}
-          description="Cantidad de órdenes según los filtros aplicados."
+          description="Cantidad de Órdenes según los filtros aplicados."
         />
 
         <SummaryCard
@@ -451,7 +440,7 @@ export default async function ProductionReportPage({
         <CardContent>
           {workOrders.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No se encontraron órdenes de trabajo con los filtros aplicados.
+              No se encontraron Órdenes de trabajo con los filtros aplicados.
             </p>
           ) : (
             <div className="overflow-x-auto">
@@ -544,7 +533,7 @@ export default async function ProductionReportPage({
           )}
 
           <p className="mt-3 text-xs text-muted-foreground">
-            Se muestran como máximo 100 órdenes para mantener una consulta
+            Se muestran como máximo 100 Órdenes para mantener una consulta
             rápida. En la siguiente subfase agregaremos exportación para generar
             archivos completos.
           </p>
@@ -564,3 +553,4 @@ export default async function ProductionReportPage({
     </div>
   );
 }
+

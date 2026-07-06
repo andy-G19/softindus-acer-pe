@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 const REPORT_MODULE_OPTIONS = [
@@ -256,27 +258,14 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Fase 10 · Subfase 10.4.3
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Historial de exportaciones
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta la trazabilidad de reportes exportados: usuario, módulo,
-            formato, filtros aplicados, fecha y archivo generado.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/reports"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-        >
-          Volver al dashboard
-        </Link>
-      </section>
+      <PageHeader
+        title="Historial de exportaciones"
+        description="Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Historial de exportaciones" },
+        ])}
+      />
 
       <Card>
         <CardHeader>
@@ -552,3 +541,4 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
     </div>
   );
 }
+

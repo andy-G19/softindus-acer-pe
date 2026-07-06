@@ -22,6 +22,9 @@ type MachineFormProps = {
   ) => Promise<MachineFormState>;
   defaultValues?: Partial<MachineFormValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: MachineFormState = { error: "" };
@@ -56,6 +59,9 @@ export function MachineForm({
   action,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/maintenance/machines",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: MachineFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -180,12 +186,14 @@ export function MachineForm({
         >
           {isPending ? "Guardando..." : submitLabel}
         </button>
-        <Link
-          href="/dashboard/maintenance/machines"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-        >
-          Volver al listado
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );

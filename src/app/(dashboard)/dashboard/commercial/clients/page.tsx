@@ -3,7 +3,14 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -41,6 +48,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   const type = getSearchParam(params, "type");
   const status = getSearchParam(params, "status");
   const origin = getSearchParam(params, "origin");
+  const returnTo = createReturnToHref(navigationHrefs.clients, params);
   const filters: Prisma.clienteWhereInput[] = [];
 
   if (client) {
@@ -120,21 +128,22 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
 
   return (
     <main className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Clientes</h1>
-          <p className="text-sm text-muted-foreground">
-            Lista de clientes registrados en el sistema.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/commercial/clients/new"
-          className="w-fit rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
-          Nuevo cliente
-        </Link>
-      </div>
+      <PageHeader
+        title="Clientes"
+        description="Lista de clientes registrados en el sistema."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Clientes" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/commercial/clients/new"
+            className="w-fit rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          >
+            Nuevo cliente
+          </Link>
+        }
+      />
 
       <form
         method="GET"
@@ -265,7 +274,10 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
-                      href={`/dashboard/commercial/clients/${clientItem.id_cliente}/edit`}
+                      href={withReturnTo(
+                        `${navigationHrefs.clients}/${clientItem.id_cliente}/edit`,
+                        returnTo,
+                      )}
                       className="rounded-md border px-3 py-1.5 text-xs font-medium"
                     >
                       Editar

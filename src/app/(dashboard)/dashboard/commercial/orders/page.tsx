@@ -2,9 +2,16 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -51,6 +58,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   const status = parseStringParam(params, "status");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
+  const returnTo = createReturnToHref(navigationHrefs.orders, params);
   const dateRange = buildDateRangeFilter(from, to);
   const filters: Prisma.pedidoWhereInput[] = [];
 
@@ -171,21 +179,22 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
 
   return (
     <main className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Pedidos</h1>
-          <p className="text-sm text-muted-foreground">
-            Lista de pedidos registrados por cliente y productos asociados.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/commercial/orders/new"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
-          Nuevo pedido
-        </Link>
-      </div>
+      <PageHeader
+        title="Pedidos"
+        description="Lista de pedidos registrados por cliente y productos asociados."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Pedidos" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/commercial/orders/new"
+            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          >
+            Nuevo pedido
+          </Link>
+        }
+      />
 
       <form
         action="/dashboard/commercial/orders"
@@ -265,7 +274,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr>
-              <th className="px-4 py-3 text-left">Codigo</th>
+              <th className="px-4 py-3 text-left">Código</th>
               <th className="px-4 py-3 text-left">Cliente</th>
               <th className="px-4 py-3 text-left">Fecha pedido</th>
               <th className="px-4 py-3 text-left">Entrega estimada</th>
@@ -328,14 +337,20 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       <Link
-                        href={`/dashboard/commercial/orders/${order.id_pedido}`}
+                        href={withReturnTo(
+                          `${navigationHrefs.orders}/${order.id_pedido}`,
+                          returnTo,
+                        )}
                         className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                       >
                         Ver detalle
                       </Link>
                       {canEdit ? (
                         <Link
-                          href={`/dashboard/commercial/orders/${order.id_pedido}/edit`}
+                          href={withReturnTo(
+                            `${navigationHrefs.orders}/${order.id_pedido}/edit`,
+                            returnTo,
+                          )}
                           className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                         >
                           Editar
@@ -384,7 +399,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                   colSpan={9}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
-                  Todavia no hay pedidos registrados.
+                  Todavía no hay pedidos registrados.
                 </td>
               </tr>
             )}

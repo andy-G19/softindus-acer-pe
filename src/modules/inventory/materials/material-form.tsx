@@ -30,6 +30,9 @@ type MaterialFormProps = {
   defaultValues?: Partial<MaterialFormValues>;
   submitLabel: string;
   mode: "create" | "edit";
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: MaterialFormState = {
@@ -57,6 +60,9 @@ export function MaterialForm({
   defaultValues,
   submitLabel,
   mode,
+  cancelHref = "/dashboard/inventory/materials",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: MaterialFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasCategories = categories.length > 0;
@@ -247,12 +253,16 @@ export function MaterialForm({
       </div>
 
       <div className="flex items-center justify-between pt-4">
-        <Link
-          href="/dashboard/inventory/materials"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a materiales
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            {cancelLabel}
+          </Link>
+        ) : (
+          <span />
+        )}
 
         <button
           type="submit"

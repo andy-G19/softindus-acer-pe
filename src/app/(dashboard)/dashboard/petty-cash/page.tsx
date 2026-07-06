@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -6,7 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
 
@@ -163,27 +165,17 @@ export default async function PettyCashDashboardPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Módulo Caja Chica y Finanzas
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Controla cajas chicas, ingresos menores, egresos, categorías de
-            gasto y movimientos financieros menores del taller.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 7</Badge>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Caja chica"
+        description="Controla cajas chicas, ingresos menores, egresos, categorías de gasto y movimientos financieros menores del taller."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Caja chica" }])}
+        actions={
+          <>
+            <Badge variant="secondary">Fase 7</Badge>
+            <Badge>Solo ADMIN</Badge>
+          </>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -512,3 +504,4 @@ export default async function PettyCashDashboardPage() {
     </main>
   );
 }
+

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createProductionCampaignAction } from "@/modules/production/campaigns/actions";
 
 function requireProductionAccess(role: string | undefined) {
@@ -24,33 +26,30 @@ export default async function NewProductionCampaignPage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion · Campanias
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva campania de produccion
-        </h1>
-
-        <p className="text-slate-600">
-          Registra una campania para agrupar objetivos de produccion por
-          producto y asociarla luego a ordenes de trabajo.
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva campaña de producción"
+        description="Registra una campaña para agrupar objetivos de producción por producto y asociarla luego a órdenes de trabajo."
+        backHref={navigationHrefs.campaigns}
+        backLabel="Volver a campañas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Campañas", href: navigationHrefs.campaigns },
+          { label: "Nueva campaña" },
+        ])}
+      />
 
       <form
         action={createProductionCampaignAction}
         className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
       >
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre de la campania *</label>
+            <label className="text-sm font-medium">Nombre de la campaña *</label>
 
           <input
             name="nombre_campania"
             required
             maxLength={100}
-            placeholder="Ej. Campania escolar agosto"
+            placeholder="Ej. Campaña escolar agosto"
             className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
@@ -102,7 +101,7 @@ export default async function NewProductionCampaignPage() {
             name="objetivo_general"
             rows={4}
             maxLength={700}
-            placeholder="Ej. Fabricar lote de herramientas para reposicion de stock."
+            placeholder="Ej. Fabricar lote de herramientas para reposición de stock."
             className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
@@ -119,7 +118,7 @@ export default async function NewProductionCampaignPage() {
             type="submit"
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
           >
-            Guardar campania
+            Guardar campaña
           </button>
         </div>
       </form>

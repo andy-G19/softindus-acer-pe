@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createMaterialAction } from "@/modules/inventory/materials/actions";
 import { MaterialForm } from "@/modules/inventory/materials/material-form";
 
@@ -31,16 +33,17 @@ export default async function NewMaterialPage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Inventario · Materiales
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">Nuevo material</h1>
-        <p className="text-slate-600">
-          Registra materia prima, consumibles, repuestos, herramientas u otros
-          insumos del taller.
-        </p>
-      </section>
+      <PageHeader
+        title="Nuevo material"
+        description="Registra materia prima, consumibles, repuestos, herramientas u otros insumos del taller."
+        backHref={navigationHrefs.materials}
+        backLabel="Volver a materiales"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Materiales", href: navigationHrefs.materials },
+          { label: "Nuevo material" },
+        ])}
+      />
 
       <MaterialForm
         action={createMaterialAction}

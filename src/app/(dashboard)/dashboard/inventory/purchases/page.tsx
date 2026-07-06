@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -49,6 +56,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
   const material = parseStringParam(params, "material");
   const purchaseStatus = parseStringParam(params, "status");
   const paymentStatus = parseStringParam(params, "payment");
+  const returnTo = createReturnToHref(navigationHrefs.purchases, params);
   const dateRange = buildDateRangeFilter(
     parseDateParam(params, "from"),
     parseDateParam(params, "to"),
@@ -137,24 +145,22 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario - Compras
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">Compras</h1>
-          <p className="text-slate-600">
-            Consulta compras registradas, pagos y entradas generadas.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/inventory/purchases/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva compra
-        </Link>
-      </section>
+      <PageHeader
+        title="Compras"
+        description="Consulta compras registradas, pagos y entradas generadas."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Compras" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/inventory/purchases/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva compra
+          </Link>
+        }
+      />
 
       <form
         action="/dashboard/inventory/purchases"
@@ -245,7 +251,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50 text-left">
             <tr>
-              <th className="px-4 py-3 font-semibold">Codigo</th>
+              <th className="px-4 py-3 font-semibold">Código</th>
               <th className="px-4 py-3 font-semibold">Fecha</th>
               <th className="px-4 py-3 font-semibold">Proveedor</th>
               <th className="px-4 py-3 font-semibold">Comprobante</th>
@@ -286,7 +292,10 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       <Link
-                        href={`/dashboard/inventory/purchases/${purchase.id_compra}`}
+                        href={withReturnTo(
+                          `${navigationHrefs.purchases}/${purchase.id_compra}`,
+                          returnTo,
+                        )}
                         className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                       >
                         Ver detalle
@@ -315,7 +324,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
             {purchases.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Todavia no hay compras registradas.
+                  Todavía no hay compras registradas.
                 </td>
               </tr>
             ) : null}

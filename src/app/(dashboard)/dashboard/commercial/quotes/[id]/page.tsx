@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { ReceiptForm } from "@/components/commercial/receipt-form";
 import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 
@@ -110,22 +111,19 @@ export default async function QuoteDetailPage({
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <div className="flex items-center justify-between gap-4 print:hidden">
-        <div>
-          <h1 className="text-2xl font-bold">Detalle de proforma</h1>
-          <p className="text-sm text-muted-foreground">
-            Revisa, imprime o guarda la proforma como PDF desde el navegador.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="/dashboard/commercial/quotes"
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            Volver
-          </Link>
-
+      <div className="print:hidden">
+        <PageHeader
+          title="Detalle de proforma"
+          description="Revisa, imprime o guarda la proforma como PDF desde el navegador."
+          backHref={navigationHrefs.quotes}
+          backLabel="Volver a proformas"
+          breadcrumbs={dashboardBreadcrumbs([
+            { label: "Comercial", href: navigationHrefs.commercial },
+            { label: "Proformas", href: navigationHrefs.quotes },
+            { label: "Detalle de proforma" },
+          ])}
+          actions={
+            <>
           <PrintButton />
 
           {canAnnul ? (
@@ -143,7 +141,9 @@ export default async function QuoteDetailPage({
               </button>
             </form>
           ) : null}
-        </div>
+            </>
+          }
+        />
       </div>
 
       <section className="rounded-lg border bg-background p-8 print:border-0 print:p-0">

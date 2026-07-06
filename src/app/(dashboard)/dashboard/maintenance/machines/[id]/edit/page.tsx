@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/navigation/page-header";
 import {
   Card,
   CardContent,
@@ -10,6 +10,11 @@ import {
 } from "@/components/ui/card";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateMachineAction } from "@/modules/maintenance/machines/actions";
 import { MachineForm } from "@/modules/maintenance/machines/machine-form";
@@ -18,14 +23,17 @@ type EditMachinePageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function EditMachinePage({
   params,
+  searchParams,
 }: EditMachinePageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
   const machine = await prisma.maquina.findUnique({
     where: {
       id_maquina: id,
@@ -36,32 +44,22 @@ export default async function EditMachinePage({
     notFound();
   }
 
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.machines);
+
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Editar maquina
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Editar maquina
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Actualiza datos maestros de la maquina sin modificar fallas,
-            reparaciones ni mantenimientos preventivos.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge>Solo ADMIN</Badge>
-          <Link
-            href="/dashboard/maintenance/machines"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al listado
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Editar máquina"
+        description="Actualiza datos maestros de la máquina sin modificar fallas, reparaciones ni mantenimientos preventivos."
+        backHref={backHref}
+        backLabel="Volver a máquinas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Máquinas", href: backHref },
+          { label: "Editar máquina" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <Card>
         <CardHeader>

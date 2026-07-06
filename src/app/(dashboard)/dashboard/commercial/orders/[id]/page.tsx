@@ -1,16 +1,21 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 
 type OrderDetailPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function formatMoney(value: unknown) {
@@ -29,7 +34,10 @@ function formatDate(value: Date | string | null) {
   return new Intl.DateTimeFormat("es-PE").format(new Date(value));
 }
 
-export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
+export default async function OrderDetailPage({
+  params,
+  searchParams,
+}: OrderDetailPageProps) {
   const session = await auth();
 
   if (!session?.user) {
@@ -41,6 +49,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   }
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
   const order = await prisma.pedido.findUnique({
     where: {
       id_pedido: id,
@@ -76,17 +85,19 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     notFound();
   }
 
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.orders);
+
   return (
     <main className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Detalle de pedido"
         description="Consulta la información comercial, productos y estado del pedido."
-        backHref="/dashboard/commercial/orders"
+        backHref={backHref}
         backLabel="Volver a pedidos"
         breadcrumbs={dashboardBreadcrumbs([
-          { label: "Comercial", href: "/dashboard/commercial" },
-          { label: "Pedidos", href: "/dashboard/commercial/orders" },
-          { label: "Detalle de pedido" },
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Pedidos", href: backHref },
+          { label: order.id_pedido },
         ])}
       />
 
@@ -205,3 +216,4 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     </main>
   );
 }
+

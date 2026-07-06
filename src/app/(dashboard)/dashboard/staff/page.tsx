@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import {
   Card,
@@ -6,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 function formatDate(value: Date | null | undefined) {
@@ -178,16 +180,11 @@ export default async function StaffDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm text-muted-foreground">Fase 8</p>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Personal, asistencia y pagos
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Control de operarios, asistencia diaria, tareas realizadas,
-          modalidades de pago, planillas e historial de pagos.
-        </p>
-      </div>
+      <PageHeader
+        title="Personal"
+        description="Control de operarios, asistencia diaria, tareas realizadas, modalidades de pago, planillas e historial de pagos."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Personal" }])}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
@@ -288,7 +285,7 @@ export default async function StaffDashboardPage() {
                       {operator.apellidos}, {operator.nombres}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Cargo: {operator.cargo ?? "-"} · Modalidad:{" "}
+                      Cargo: {operator.cargo ?? "-"} | Modalidad:{" "}
                       {operator.modalidad_pago}
                     </p>
                     <p className="text-sm text-muted-foreground">
@@ -322,11 +319,11 @@ export default async function StaffDashboardPage() {
                       {attendance.operario.nombres}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Fecha: {formatDate(attendance.fecha)} · Horas:{" "}
+                      Fecha: {formatDate(attendance.fecha)} | Horas:{" "}
                       {formatHours(attendance.horas_trabajadas)}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Falta: {attendance.falta ? "Sí" : "No"} · Tardanza:{" "}
+                      Falta: {attendance.falta ? "Sí" : "No"} | Tardanza:{" "}
                       {attendance.tardanza ? "Sí" : "No"}
                     </p>
                   </div>
@@ -339,3 +336,4 @@ export default async function StaffDashboardPage() {
     </div>
   );
 }
+

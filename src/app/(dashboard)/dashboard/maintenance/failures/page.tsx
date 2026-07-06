@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -7,8 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateFailureStatusAction } from "@/modules/maintenance/failures/actions";
 
@@ -109,41 +111,24 @@ export default async function FailuresPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Fallas
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de fallas
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta las fallas registradas por máquina, su estado de atención,
-            tiempo perdido, impacto en producción y trazabilidad de
-            reparaciones asociadas.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/maintenance"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          {canManageFailures ? (
+      <PageHeader
+        title="Fallas"
+        description="Consulta las fallas registradas por máquina, su estado de atención, tiempo perdido, impacto en producción y trazabilidad de reparaciones asociadas."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Fallas" },
+        ])}
+        actions={
+          canManageFailures ? (
             <Link
-              href="/dashboard/maintenance/failures/new"
+              href={`${navigationHrefs.failures}/new`}
               className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
             >
               Registrar falla
             </Link>
-          ) : null}
-        </div>
-      </section>
+          ) : null
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <Card>
@@ -347,3 +332,4 @@ export default async function FailuresPage() {
     </main>
   );
 }
+

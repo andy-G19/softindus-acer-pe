@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -8,8 +8,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Prisma } from "@/generated/prisma/client";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleMachineStatusAction } from "@/modules/maintenance/machines/actions";
 
@@ -79,6 +86,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
   const type = getSearchParam(params, "type");
   const location = getSearchParam(params, "location");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.machines, params);
   const filters: Prisma.maquinaWhereInput[] = [];
 
   if (q) {
@@ -176,37 +184,24 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Maquinas
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de maquinas
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta maquinas del taller, estado operativo, ubicacion, codigo
-            interno y trazabilidad relacionada.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/maintenance"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al modulo
-          </Link>
-          {canManageMachines ? (
+      <PageHeader
+        title="Máquinas"
+        description="Consulta máquinas del taller, estado operativo, ubicación, código interno y trazabilidad relacionada."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Máquinas" },
+        ])}
+        actions={
+          canManageMachines ? (
             <Link
-              href="/dashboard/maintenance/machines/new"
+              href={`${navigationHrefs.machines}/new`}
               className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
             >
-              Registrar maquina
+              Registrar máquina
             </Link>
-          ) : null}
-        </div>
-      </section>
+          ) : null
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card>
@@ -362,7 +357,10 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
                       <td className="py-2">
                         <div className="flex justify-end gap-2">
                           <Link
-                            href={`/dashboard/maintenance/machines/${machine.id_maquina}/edit`}
+                            href={withReturnTo(
+                              `${navigationHrefs.machines}/${machine.id_maquina}/edit`,
+                              returnTo,
+                            )}
                             className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
                           >
                             Editar
@@ -405,3 +403,4 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
     </main>
   );
 }
+

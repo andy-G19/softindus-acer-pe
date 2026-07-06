@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -8,8 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Prisma } from "@/generated/prisma/client";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
 
@@ -189,37 +191,24 @@ export default async function OperatorsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Personal, asistencia y pagos - Operarios
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de operarios
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta operarios del taller, modalidad de pago y trazabilidad
-            relacionada con asistencia, tareas y planillas.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/staff"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al modulo
-          </Link>
-          {canManageOperators ? (
+      <PageHeader
+        title="Operarios"
+        description="Consulta operarios del taller, modalidad de pago y trazabilidad relacionada con asistencia, tareas y planillas."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Operarios" },
+        ])}
+        actions={
+          canManageOperators ? (
             <Link
-              href="/dashboard/staff/operators/new"
+              href={`${navigationHrefs.operators}/new`}
               className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
             >
               Registrar operario
             </Link>
-          ) : null}
-        </div>
-      </section>
+          ) : null
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card>
@@ -432,3 +421,4 @@ export default async function OperatorsPage({
     </main>
   );
 }
+

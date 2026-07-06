@@ -2,7 +2,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { QuoteForm } from "@/components/commercial/quote-form";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 
 type NewQuotePageProps = {
   searchParams?: Promise<{
@@ -77,12 +79,17 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Nueva proforma</h1>
-        <p className="text-sm text-muted-foreground">
-          Genera una proforma digital a partir de un pedido registrado.
-        </p>
-      </div>
+      <PageHeader
+        title="Nueva proforma"
+        description="Genera una proforma digital a partir de un pedido registrado."
+        backHref={navigationHrefs.quotes}
+        backLabel="Volver a proformas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Proformas", href: navigationHrefs.quotes },
+          { label: "Nueva proforma" },
+        ])}
+      />
 
       <QuoteForm orders={orderOptions} defaultOrderId={defaultOrderId}/>
     </main>

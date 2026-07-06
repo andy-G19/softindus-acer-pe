@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -489,43 +491,31 @@ export default async function MaintenanceReportPage({
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Fase 10 · Subfase 10.3.6
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reporte de mantenimiento
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta máquinas, fallas, reparaciones, costos, repuestos,
-            mantenimientos preventivos y reincidencias por equipo.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Reporte de mantenimiento"
+        description="Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Mantenimiento" },
+        ])}
+        actions={
+          <>
             <a
               href={csvExportHref}
               className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
             >
-             Exportar Excel
+              Exportar Excel
             </a>
 
             <a
-            href={pdfExportHref}
-            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              href={pdfExportHref}
+              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
             >
               Exportar PDF
             </a>
-
-            <Link
-              href="/dashboard/reports"
-              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Volver al dashboard
-            </Link>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <Card>
         <CardHeader>
@@ -771,7 +761,7 @@ export default async function MaintenanceReportPage({
                       <div>
                         <p className="font-medium">{machine.machineName}</p>
                         <p className="text-xs text-muted-foreground">
-                          {machine.machineType} · {machine.machineStatus}
+                          {machine.machineType} | {machine.machineStatus}
                         </p>
                       </div>
 
@@ -858,7 +848,7 @@ export default async function MaintenanceReportPage({
                       </div>
 
                       <p className="mt-2 text-xs text-muted-foreground">
-                        Responsable: {maintenance.responsable ?? "-"} · Usuario:{" "}
+                        Responsable: {maintenance.responsable ?? "-"} | Usuario:{" "}
                         {maintenance.usuario.apellidos},{" "}
                         {maintenance.usuario.nombres}
                       </p>
@@ -922,7 +912,7 @@ export default async function MaintenanceReportPage({
                               {failure.maquina.nombre}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {failure.maquina.tipo} ·{" "}
+                              {failure.maquina.tipo} ?{" "}
                               {failure.maquina.codigo_interno ?? "Sin código"}
                             </p>
                           </div>
@@ -962,15 +952,15 @@ export default async function MaintenanceReportPage({
                                   className="rounded-md border p-2"
                                 >
                                   <p className="font-medium">
-                                    {repair.id_reparacion} ·{" "}
+                                    {repair.id_reparacion} |{" "}
                                     {getRepairStatusLabel(
                                       repair.estado_reparacion,
                                     )}
                                   </p>
                                   <p className="text-xs text-muted-foreground">
-                                    {formatDate(repair.fecha_reparacion)} ·{" "}
+                                    {formatDate(repair.fecha_reparacion)} |{" "}
                                     {repair.tecnico_proveedor ?? "Sin técnico"}{" "}
-                                    · {formatMoney(repair.costo_total)}
+                                    | {formatMoney(repair.costo_total)}
                                   </p>
                                 </div>
                               ))}
@@ -998,8 +988,8 @@ export default async function MaintenanceReportPage({
                                     {detail.repuesto.nombre_repuesto}
                                   </p>
                                   <p className="text-xs text-muted-foreground">
-                                    {formatQuantity(detail.cantidad)} und ·{" "}
-                                    {formatMoney(detail.costo_unitario)} c/u ·{" "}
+                                    {formatQuantity(detail.cantidad)} und ?{" "}
+                                    {formatMoney(detail.costo_unitario)} c/u ?{" "}
                                     subtotal {formatMoney(detail.subtotal)}
                                   </p>
                                 </div>
@@ -1044,3 +1034,4 @@ export default async function MaintenanceReportPage({
     </div>
   );
 }
+

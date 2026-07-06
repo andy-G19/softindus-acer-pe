@@ -2,7 +2,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
 
@@ -26,10 +30,12 @@ type PurchaseDetailPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function PurchaseDetailPage({
   params,
+  searchParams,
 }: PurchaseDetailPageProps) {
   const session = await auth();
 
@@ -42,6 +48,7 @@ export default async function PurchaseDetailPage({
   }
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const purchase = await prisma.compra.findUnique({
     where: {
@@ -99,18 +106,22 @@ export default async function PurchaseDetailPage({
   const saldoPendiente = purchaseTotal - totalPaid;
   const canPay = purchase.estado_compra !== "anulada" && saldoPendiente > 0;
   const canAnnul = purchase.estado_compra !== "anulada" && payments.length === 0;
+  const backHref = getSafeReturnTo(
+    queryParams.returnTo,
+    navigationHrefs.purchases,
+  );
 
   return (
     <main className="space-y-6">
       <PageHeader
         title="Detalle de compra"
         description="Consulta los materiales adquiridos, montos, comprobante y estado de pago."
-        backHref="/dashboard/inventory/purchases"
+        backHref={backHref}
         backLabel="Volver a compras"
         breadcrumbs={dashboardBreadcrumbs([
-          { label: "Inventario", href: "/dashboard/inventory" },
-          { label: "Compras", href: "/dashboard/inventory/purchases" },
-          { label: "Detalle de compra" },
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Compras", href: backHref },
+          { label: purchase.id_compra },
         ])}
         actions={
           canAnnul ? (

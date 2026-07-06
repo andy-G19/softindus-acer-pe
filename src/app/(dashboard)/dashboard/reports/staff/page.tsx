@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import {
   Card,
@@ -6,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -175,29 +177,24 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">Reportes</p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Personal y planillas
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta asistencias, faltas, tardanzas, planillas generadas, pagos
-            realizados y pendientes por operario.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link href="/dashboard/reports" className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-            Volver
-          </Link>
-          <Link href={buildReportExportHref("staff", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-            Exportar Excel
-          </Link>
-          <Link href={buildReportExportHref("staff", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-            Exportar PDF
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Personal y planillas"
+        description="Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Personal" },
+        ])}
+        actions={
+          <>
+            <Link href={buildReportExportHref("staff", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
+              Exportar Excel
+            </Link>
+            <Link href={buildReportExportHref("staff", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Exportar PDF
+            </Link>
+          </>
+        }
+      />
 
       <Card>
         <CardContent className="pt-6">
@@ -297,3 +294,4 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
     </main>
   );
 }
+

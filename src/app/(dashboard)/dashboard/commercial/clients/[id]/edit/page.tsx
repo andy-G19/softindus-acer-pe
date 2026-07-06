@@ -3,7 +3,11 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { updateClientAction } from "@/modules/commercial/clients/actions";
 import { ClientForm } from "@/modules/commercial/clients/client-form";
 
@@ -11,10 +15,15 @@ type EditClientPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function EditClientPage({ params }: EditClientPageProps) {
+export default async function EditClientPage({
+  params,
+  searchParams,
+}: EditClientPageProps) {
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const session = await auth();
 
@@ -48,16 +57,18 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
     notFound();
   }
 
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.clients);
+
   return (
     <main className="mx-auto max-w-2xl space-y-6">
       <PageHeader
         title="Editar cliente"
         description="Actualiza los datos comerciales del cliente."
-        backHref="/dashboard/commercial/clients"
+        backHref={backHref}
         backLabel="Volver a clientes"
         breadcrumbs={dashboardBreadcrumbs([
-          { label: "Comercial", href: "/dashboard/commercial" },
-          { label: "Clientes", href: "/dashboard/commercial/clients" },
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Clientes", href: backHref },
           { label: "Editar cliente" },
         ])}
       />

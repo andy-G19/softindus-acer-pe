@@ -27,6 +27,9 @@ type ProductFormProps = {
   categories: ProductCategoryOption[];
   defaultValues?: Partial<ProductFormValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: ProductFormState = {
@@ -60,6 +63,9 @@ export function ProductForm({
   categories,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/commercial/products",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: ProductFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasCategories = categories.length > 0;
@@ -198,12 +204,14 @@ export function ProductForm({
           {isPending ? "Guardando..." : submitLabel}
         </button>
 
-        <Link
-          href="/dashboard/commercial/products"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Volver a productos
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-sm font-medium"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );

@@ -1,7 +1,13 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import {
   generateWorkOrderProgressAction,
   updateWorkOrderProgressAction,
@@ -11,6 +17,7 @@ type WorkOrderProgressPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function requireProductionAccess(role: string | undefined) {
@@ -102,6 +109,7 @@ function getDefaultPercentageByStatus(status: string, currentPercentage: unknown
 
 export default async function WorkOrderProgressPage({
   params,
+  searchParams,
 }: WorkOrderProgressPageProps) {
   const session = await auth();
 
@@ -112,6 +120,7 @@ export default async function WorkOrderProgressPage({
   requireProductionAccess(session.user.role);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const workOrder = await prisma.orden_trabajo.findUnique({
     where: {
@@ -155,6 +164,11 @@ export default async function WorkOrderProgressPage({
     notFound();
   }
 
+  const backHref = getSafeReturnTo(
+    queryParams.returnTo,
+    navigationHrefs.workOrders,
+  );
+
   const sortedAdvances = [...workOrder.avance_orden].sort(
     (a, b) => a.etapa_ruta.orden_secuencia - b.etapa_ruta.orden_secuencia,
   );
@@ -190,39 +204,27 @@ export default async function WorkOrderProgressPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Órdenes de trabajo · Avances
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Avances de producción
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Orden:{" "}
-            <span className="font-medium">{workOrder.id_orden_trabajo}</span> ·
-            Producto:{" "}
-            <span className="font-medium">
-              {workOrder.producto.nombre_producto}
-            </span>{" "}
-            · Cantidad:{" "}
-            <span className="font-medium">
-              {formatDecimal(workOrder.cantidad)}{" "}
-              {workOrder.producto.unidad_medida}
-            </span>
-          </p>
-        </div>
-
-        <span
-          className={`rounded-full px-3 py-1 text-sm font-medium ${getOrderStatusClass(
-            workOrder.estado,
-          )}`}
-        >
-          {workOrder.estado}
-        </span>
-      </section>
+      <PageHeader
+        title="Avances de producción"
+        description={`Orden: ${workOrder.id_orden_trabajo} · Producto: ${workOrder.producto.nombre_producto} · Cantidad: ${formatDecimal(workOrder.cantidad)} ${workOrder.producto.unidad_medida}`}
+        backHref={backHref}
+        backLabel="Volver a órdenes"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Órdenes de trabajo", href: backHref },
+          { label: workOrder.id_orden_trabajo, href: `${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}` },
+          { label: "Avances" },
+        ])}
+        actions={
+          <span
+            className={`rounded-full px-3 py-1 text-sm font-medium ${getOrderStatusClass(
+              workOrder.estado,
+            )}`}
+          >
+            {workOrder.estado}
+          </span>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-5">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -532,23 +534,8 @@ export default async function WorkOrderProgressPage({
           etapa pausada y ninguna está en proceso, la orden pasa a pausada.
         </p>
       </div>
-
-      <div className="flex items-center justify-between">
-        <Link
-          href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}`}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver a detalle de orden
-        </Link>
-
-        <Link
-          href="/dashboard/production/work-orders"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a órdenes
-        </Link>
-      </div>
     </main>
   );
 }
+
 

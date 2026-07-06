@@ -1,8 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 
 import { OrderForm } from "@/components/commercial/order-form";
+import { PageHeader } from "@/components/navigation/page-header";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateOrderAction } from "@/modules/commercial/orders/actions";
 
 type EditOrderPageProps = {
@@ -108,13 +110,17 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <section className="space-y-1">
-        <h1 className="text-2xl font-bold">Editar pedido</h1>
-        <p className="text-sm text-muted-foreground">
-          Solo se permite editar pedidos sin proforma, comprobante u orden
-          asociada.
-        </p>
-      </section>
+      <PageHeader
+        title="Editar pedido"
+        description="Solo se permite editar pedidos sin proforma, comprobante u orden asociada."
+        backHref={navigationHrefs.orders}
+        backLabel="Volver a pedidos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Pedidos", href: navigationHrefs.orders },
+          { label: "Editar pedido" },
+        ])}
+      />
 
       <OrderForm
         action={updateOrderAction}

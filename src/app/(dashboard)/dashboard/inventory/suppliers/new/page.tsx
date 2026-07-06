@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createSupplierAction } from "@/modules/inventory/suppliers/actions";
 import { SupplierForm } from "@/modules/inventory/suppliers/supplier-form";
 
@@ -31,16 +33,17 @@ export default async function NewSupplierPage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Inventario · Proveedores
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">Nuevo proveedor</h1>
-        <p className="text-slate-600">
-          Registra los datos comerciales del proveedor para usarlo luego en
-          compras y abastecimiento.
-        </p>
-      </section>
+      <PageHeader
+        title="Nuevo proveedor"
+        description="Registra los datos comerciales del proveedor para usarlo luego en compras y abastecimiento."
+        backHref={navigationHrefs.suppliers}
+        backLabel="Volver a proveedores"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Proveedores", href: navigationHrefs.suppliers },
+          { label: "Nuevo proveedor" },
+        ])}
+      />
 
       <SupplierForm
         action={createSupplierAction}

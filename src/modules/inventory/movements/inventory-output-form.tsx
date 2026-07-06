@@ -17,6 +17,9 @@ type InventoryOutputFormProps = {
   ) => Promise<InventoryOutputFormState>;
   materials: Option[];
   workOrders: Option[];
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: InventoryOutputFormState = { error: "" };
@@ -33,6 +36,9 @@ export function InventoryOutputForm({
   action,
   materials,
   workOrders,
+  cancelHref = "/dashboard/inventory/outputs",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: InventoryOutputFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -127,12 +133,14 @@ export function InventoryOutputForm({
         >
           {isPending ? "Guardando..." : "Registrar salida"}
         </button>
-        <Link
-          href="/dashboard/inventory/outputs"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Volver
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-sm font-medium"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );

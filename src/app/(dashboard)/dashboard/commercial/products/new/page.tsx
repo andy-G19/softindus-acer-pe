@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createProductAction } from "@/modules/commercial/products/actions";
 import { ProductForm } from "@/modules/commercial/products/product-form";
 
@@ -31,13 +33,17 @@ export default async function NewProductPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Nuevo producto</h1>
-        <p className="text-sm text-muted-foreground">
-          Registra productos fabricados por el taller usando categorías
-          dinámicas.
-        </p>
-      </div>
+      <PageHeader
+        title="Nuevo producto"
+        description="Registra productos fabricados por el taller usando categorías dinámicas."
+        backHref={navigationHrefs.products}
+        backLabel="Volver a productos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Productos", href: navigationHrefs.products },
+          { label: "Nuevo producto" },
+        ])}
+      />
 
       <ProductForm
         action={createProductAction}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -6,7 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createPettyCashBoxAction } from "@/modules/petty-cash/boxes/actions";
 
@@ -17,27 +19,23 @@ export default async function NewPettyCashBoxPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas · Nueva caja
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Abrir caja chica
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra una nueva caja chica indicando nombre, saldo inicial,
-            fecha de apertura, responsable y observaciones.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 7.2</Badge>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Abrir caja chica"
+        description="Registra una nueva caja chica indicando nombre, saldo inicial, fecha de apertura, responsable y observaciones."
+        backHref={navigationHrefs.pettyCashBoxes}
+        backLabel="Volver a cajas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Cajas", href: navigationHrefs.pettyCashBoxes },
+          { label: "Nueva caja" },
+        ])}
+        actions={
+          <>
+            <Badge variant="secondary">Fase 7.2</Badge>
+            <Badge>Solo ADMIN</Badge>
+          </>
+        }
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">

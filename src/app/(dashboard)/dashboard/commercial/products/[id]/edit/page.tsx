@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateProductAction } from "@/modules/commercial/products/actions";
 import { ProductForm } from "@/modules/commercial/products/product-form";
 
@@ -63,12 +65,17 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
   return (
     <main className="mx-auto max-w-2xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Editar producto</h1>
-        <p className="text-sm text-muted-foreground">
-          Actualiza los datos comerciales del producto.
-        </p>
-      </div>
+      <PageHeader
+        title="Editar producto"
+        description="Actualiza los datos comerciales del producto."
+        backHref={navigationHrefs.products}
+        backLabel="Volver a productos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Productos", href: navigationHrefs.products },
+          { label: "Editar producto" },
+        ])}
+      />
 
       <ProductForm
         action={updateProductAction}

@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 type SearchParams = {
@@ -181,49 +183,33 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra · Consulta
-          </p>
+      <PageHeader
+        title="Chatarra generada"
+        description="Consulta los materiales no reutilizables acumulados durante la producción. Puedes filtrar por estado, material de origen o buscar por código, tipo de material u observación."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mermas y chatarra", href: navigationHrefs.wasteScrap },
+          { label: "Chatarra" },
+        ])}
+        actions={
+          <>
+            <Link
+              href={`${navigationHrefs.scraps}/new`}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Registrar chatarra
+            </Link>
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Chatarra generada
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta los materiales no reutilizables acumulados durante la
-            producción. Puedes filtrar por estado, material de origen o buscar
-            por código, tipo de material u observación.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/waste-scrap"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/waste-scrap/scraps/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Registrar chatarra
-          </Link>
-
-          {canRegisterSale ? (
-          <Link
-            href="/dashboard/waste-scrap/scrap-sales/new"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Registrar venta
-          </Link>
+            {canRegisterSale ? (
+              <Link
+                href={`${navigationHrefs.scrapSales}/new`}
+                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              >
+                Registrar venta
+              </Link>
             ) : null}
-
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <Card>
@@ -330,7 +316,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
 
               {materials.map((item) => (
                 <option key={item.id_material} value={item.id_material}>
-                  {item.nombre_material} · {item.categoria}
+                  {item.nombre_material} | {item.categoria}
                 </option>
               ))}
             </select>
@@ -472,7 +458,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
                           href={`/dashboard/waste-scrap/scrap-sales/new?id_chatarra=${item.id_chatarra}`}
                           className="text-sm font-medium text-slate-700 hover:text-slate-950"
                         >
-                          Vender →
+                          Vender
                         </Link>
                       ) : (
                         <span className="text-sm text-slate-400">-</span>

@@ -2,9 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -176,21 +178,22 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
 
   return (
     <main className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Proformas</h1>
-          <p className="text-sm text-muted-foreground">
-            Lista de proformas digitales generadas desde pedidos registrados.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/commercial/quotes/new"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
-          Nueva proforma
-        </Link>
-      </div>
+      <PageHeader
+        title="Proformas"
+        description="Lista de proformas digitales generadas desde pedidos registrados."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Proformas" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/commercial/quotes/new"
+            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          >
+            Nueva proforma
+          </Link>
+        }
+      />
 
       <form
         action="/dashboard/commercial/quotes"
@@ -375,7 +378,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                   colSpan={9}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
-                  Todavia no hay proformas registradas.
+                  Todavía no hay proformas registradas.
                 </td>
               </tr>
             )}

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleSupplierStatusAction } from "@/modules/inventory/suppliers/actions";
 
 type SuppliersPageProps = {
@@ -146,19 +148,15 @@ export default async function SuppliersPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario · Proveedores
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">Proveedores</h1>
-          <p className="text-slate-600">
-            Registra proveedores de materia prima, consumibles, repuestos y
-            servicios.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Proveedores"
+        description="Registra proveedores de materia prima, consumibles, repuestos y servicios."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Proveedores" },
+        ])}
+        actions={
+          <>
           <Link
             href="/dashboard/inventory/supplier-types"
             className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
@@ -172,8 +170,9 @@ export default async function SuppliersPage({
           >
             Nuevo proveedor
           </Link>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <form
         action="/dashboard/inventory/suppliers"

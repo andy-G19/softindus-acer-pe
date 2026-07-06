@@ -2,8 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
 
 type ProductsPageProps = {
@@ -138,15 +140,15 @@ export default async function ProductsPage({
 
   return (
     <main className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Productos</h1>
-          <p className="text-sm text-muted-foreground">
-            Lista de productos registrados para ventas, pedidos y producción.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title="Productos"
+        description="Lista de productos registrados para ventas, pedidos y producción."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Productos" },
+        ])}
+        actions={
+          <>
           <Link
             href="/dashboard/commercial/product-categories"
             className="rounded-md border px-4 py-2 text-sm font-medium"
@@ -162,8 +164,9 @@ export default async function ProductsPage({
               Nuevo producto
             </Link>
           ) : null}
-        </div>
-      </div>
+          </>
+        }
+      />
 
       <form
         action="/dashboard/commercial/products"

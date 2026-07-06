@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -140,12 +142,14 @@ export default async function CustomerPaymentsPage({
 
   return (
     <main className="space-y-6">
-      <section>
-        <h1 className="text-2xl font-bold">Pagos de cliente</h1>
-        <p className="text-sm text-muted-foreground">
-          Consulta pagos registrados desde proformas.
-        </p>
-      </section>
+      <PageHeader
+        title="Pagos de cliente"
+        description="Consulta pagos registrados desde proformas."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Pagos de cliente" },
+        ])}
+      />
 
       <form
         action="/dashboard/commercial/payments"
@@ -186,7 +190,7 @@ export default async function CustomerPaymentsPage({
           defaultValue={method}
           className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         >
-          <option value="">Metodo</option>
+          <option value="">Método</option>
           <option value="efectivo">Efectivo</option>
           <option value="transferencia">Transferencia</option>
           <option value="yape">Yape</option>
@@ -200,8 +204,8 @@ export default async function CustomerPaymentsPage({
         >
           <option value="">Tipo pago</option>
           <option value="adelanto">Adelanto</option>
-          <option value="amortizacion">Amortizacion</option>
-          <option value="cancelacion">Cancelacion</option>
+          <option value="amortizacion">Amortización</option>
+          <option value="cancelacion">Cancelación</option>
         </select>
         <div className="grid gap-2 sm:grid-cols-2">
           <input
@@ -242,7 +246,7 @@ export default async function CustomerPaymentsPage({
               <th className="px-4 py-3 text-left">Pedido</th>
               <th className="px-4 py-3 text-left">Proforma</th>
               <th className="px-4 py-3 text-left">Tipo</th>
-              <th className="px-4 py-3 text-left">Metodo</th>
+              <th className="px-4 py-3 text-left">Método</th>
               <th className="px-4 py-3 text-right">Monto</th>
               <th className="px-4 py-3 text-right">Saldo</th>
               <th className="px-4 py-3 text-left">Acciones</th>
@@ -281,7 +285,7 @@ export default async function CustomerPaymentsPage({
                   colSpan={9}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
-                  Todavia no hay pagos registrados.
+                  Todavía no hay pagos registrados.
                 </td>
               </tr>
             ) : null}

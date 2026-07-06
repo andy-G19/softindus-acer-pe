@@ -1,8 +1,9 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   createMaterialCategoryAction,
   toggleMaterialCategoryStatusAction,
@@ -36,27 +37,17 @@ export default async function MaterialCategoriesPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario · Materiales
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Categorías de materiales
-          </h1>
-          <p className="text-slate-600">
-            Administra las categorías dinámicas usadas por materiales e
-            insumos.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/inventory/materials"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver a materiales
-        </Link>
-      </section>
+      <PageHeader
+        title="Categorías de materiales"
+        description="Administra las categorías dinámicas usadas por materiales e insumos."
+        backHref={navigationHrefs.materials}
+        backLabel="Volver a materiales"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Materiales", href: navigationHrefs.materials },
+          { label: "Categorías" },
+        ])}
+      />
 
       {!canManage ? (
         <div className="rounded-md border px-4 py-3 text-sm text-slate-600">

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 function assertCanViewInventory(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -40,20 +42,11 @@ export default async function InventoryPage() {
 
   return (
     <main className="space-y-8">
-      <section className="space-y-2">
-        <p className="text-sm font-medium text-slate-500">
-          Fase 3 · Inventario y proveedores
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Inventario y abastecimiento
-        </h1>
-
-        <p className="max-w-3xl text-slate-600">
-          Controla materiales, insumos, proveedores, compras, movimientos de
-          inventario y alertas de stock bajo.
-        </p>
-      </section>
+      <PageHeader
+        title="Inventario"
+        description="Controla materiales, insumos, proveedores, compras, movimientos de inventario y alertas de stock bajo."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Inventario" }])}
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">

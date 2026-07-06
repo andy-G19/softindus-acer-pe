@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -180,29 +182,19 @@ export default async function ProductionDashboardPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Producción
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Módulo Producción
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Gestiona rutas de fabricación, etapas, recetas técnicas, versiones,
-            materiales requeridos, órdenes de trabajo y avances de producción.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production/work-orders/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva orden
-        </Link>
-      </section>
+      <PageHeader
+        title="Producción"
+        description="Gestiona rutas de fabricación, etapas, recetas técnicas, versiones, materiales requeridos, órdenes de trabajo y avances de producción."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Producción" }])}
+        actions={
+          <Link
+            href="/dashboard/production/work-orders/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva orden
+          </Link>
+        }
+      />
 
       <section
         className={`rounded-xl border p-5 text-sm ${

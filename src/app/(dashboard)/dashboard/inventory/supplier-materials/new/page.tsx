@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -7,8 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
@@ -46,34 +46,25 @@ export default async function NewSupplierMaterialPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario - Proveedor-material - Nueva asociacion
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Nueva asociacion proveedor-material
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Relaciona proveedores activos con materiales activos para mantener
-            precios referenciales, disponibilidad y tiempos de entrega.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge>Solo ADMIN</Badge>
-          <Link
-            href="/dashboard/inventory/supplier-materials"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al listado
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Nueva asociación proveedor-material"
+        description="Relaciona proveedores activos con materiales activos para mantener precios referenciales, disponibilidad y tiempos de entrega."
+        backHref={navigationHrefs.supplierMaterials}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          {
+            label: "Proveedor-material",
+            href: navigationHrefs.supplierMaterials,
+          },
+          { label: "Nueva asociación" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Datos de la asociacion</CardTitle>
+          <CardTitle className="text-base">Datos de la asociación</CardTitle>
         </CardHeader>
         <CardContent>
           <SupplierMaterialForm
@@ -86,7 +77,7 @@ export default async function NewSupplierMaterialPage() {
               id: material.id_material,
               label: `${material.nombre_material} (${material.unidad_medida})`,
             }))}
-            submitLabel="Guardar asociacion"
+            submitLabel="Guardar asociación"
           />
         </CardContent>
       </Card>

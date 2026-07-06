@@ -2,9 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -98,12 +100,14 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
 
   return (
     <main className="space-y-6">
-      <section>
-        <h1 className="text-2xl font-bold">Comprobantes de venta</h1>
-        <p className="text-sm text-muted-foreground">
-          Consulta comprobantes emitidos y anulados.
-        </p>
-      </section>
+      <PageHeader
+        title="Comprobantes de venta"
+        description="Consulta comprobantes emitidos y anulados."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Comprobantes de venta" },
+        ])}
+      />
 
       <form
         action="/dashboard/commercial/receipts"
@@ -167,7 +171,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr>
-              <th className="px-4 py-3 text-left">Numero</th>
+              <th className="px-4 py-3 text-left">Número</th>
               <th className="px-4 py-3 text-left">Cliente</th>
               <th className="px-4 py-3 text-left">Pedido</th>
               <th className="px-4 py-3 text-left">Tipo</th>
@@ -232,7 +236,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                   colSpan={8}
                   className="px-4 py-6 text-center text-muted-foreground"
                 >
-                  Todavia no hay comprobantes registrados.
+                  Todavía no hay comprobantes registrados.
                 </td>
               </tr>
             ) : null}

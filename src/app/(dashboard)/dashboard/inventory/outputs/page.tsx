@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -91,20 +93,22 @@ export default async function InventoryOutputsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Salidas de inventario</h1>
-          <p className="text-sm text-muted-foreground">
-            Movimientos de salida asociados a producción u otros motivos.
-          </p>
-        </div>
-        <Link
-          href="/dashboard/inventory/outputs/new"
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-        >
-          Registrar salida
-        </Link>
-      </section>
+      <PageHeader
+        title="Salidas de inventario"
+        description="Movimientos de salida asociados a producción u otros motivos."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Salidas" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/inventory/outputs/new"
+            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
+          >
+            Registrar salida
+          </Link>
+        }
+      />
 
       <form
         action="/dashboard/inventory/outputs"
@@ -116,7 +120,7 @@ export default async function InventoryOutputsPage({
           {materials.map((item) => <option key={item.id_material} value={item.id_material}>{item.nombre_material}</option>)}
         </select>
         <select name="order" defaultValue={order} className="rounded-md border px-3 py-2 text-sm">
-          <option value="">Todas las ordenes</option>
+          <option value="">Todas las órdenes</option>
           {workOrders.map((item) => <option key={item.id_orden_trabajo} value={item.id_orden_trabajo}>{item.id_orden_trabajo}</option>)}
         </select>
         <input name="from" type="date" defaultValue={parseStringParam(params, "from")} className="rounded-md border px-3 py-2 text-sm" />
@@ -131,7 +135,7 @@ export default async function InventoryOutputsPage({
         <table className="w-full text-sm">
           <thead className="bg-slate-50 text-left">
             <tr>
-              <th className="px-4 py-3">Codigo</th>
+              <th className="px-4 py-3">Código</th>
               <th className="px-4 py-3">Fecha</th>
               <th className="px-4 py-3">Material</th>
               <th className="px-4 py-3">Orden</th>
@@ -155,7 +159,7 @@ export default async function InventoryOutputsPage({
               </tr>
             ))}
             {movements.length === 0 ? (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavia no hay salidas registradas.</td></tr>
+              <tr><td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Todavía no hay salidas registradas.</td></tr>
             ) : null}
           </tbody>
         </table>

@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { PurchaseForm } from "@/components/inventory/purchase-form";
 
 export default async function NewPurchasePage() {
@@ -45,18 +47,17 @@ export default async function NewPurchasePage() {
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Inventario · Compras
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva compra
-        </h1>
-        <p className="text-slate-600">
-          Registra una compra de materiales y genera automáticamente la entrada
-          de inventario.
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva compra"
+        description="Registra una compra de materiales y genera automáticamente la entrada de inventario."
+        backHref={navigationHrefs.purchases}
+        backLabel="Volver a compras"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Compras", href: navigationHrefs.purchases },
+          { label: "Nueva compra" },
+        ])}
+      />
 
       <PurchaseForm
         suppliers={suppliers}

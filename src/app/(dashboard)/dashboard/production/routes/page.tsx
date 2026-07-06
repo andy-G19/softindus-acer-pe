@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/actions";
 
 type FabricationRoutesPageProps = {
@@ -137,30 +139,22 @@ export default async function FabricationRoutesPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Rutas de fabricación
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Rutas de fabricación
-          </h1>
-
-          <p className="max-w-3xl text-slate-600">
-            Consulta las rutas productivas definidas para cada producto del
-            taller. En la siguiente subfase agregaremos las etapas internas de
-            cada ruta.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production/routes/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva ruta
-        </Link>
-      </section>
+      <PageHeader
+        title="Rutas de fabricación"
+        description="Consulta las rutas productivas definidas para cada producto del taller."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Rutas" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/production/routes/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva ruta
+          </Link>
+        }
+      />
 
       <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
         <input

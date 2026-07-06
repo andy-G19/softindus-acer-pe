@@ -21,8 +21,16 @@ export function BackButton({
   function handleClick() {
     const hasHistory = window.history.length > 1;
     const referrer = document.referrer;
-    const hasInternalReferrer =
-      referrer.length > 0 && referrer.startsWith(window.location.origin);
+    let hasInternalReferrer = false;
+
+    if (referrer) {
+      try {
+        const referrerUrl = new URL(referrer);
+        hasInternalReferrer = referrerUrl.origin === window.location.origin;
+      } catch {
+        hasInternalReferrer = false;
+      }
+    }
 
     if (hasHistory && hasInternalReferrer) {
       router.back();

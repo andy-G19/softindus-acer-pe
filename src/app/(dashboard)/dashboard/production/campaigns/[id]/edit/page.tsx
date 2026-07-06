@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateProductionCampaignAction } from "@/modules/production/campaigns/actions";
 
 type EditProductionCampaignPageProps = {
@@ -51,23 +53,21 @@ export default async function EditProductionCampaignPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Campanias
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Editar campania
-        </h1>
-
-        <p className="text-slate-600">
-          Actualiza los datos generales y el estado operativo de la campania.
-        </p>
-      </section>
+      <PageHeader
+        title="Editar campaña"
+        description="Actualiza los datos generales y el estado operativo de la campaña."
+        backHref={`${navigationHrefs.campaigns}/${campaign.id_campania}`}
+        backLabel="Volver a detalle"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Campañas", href: navigationHrefs.campaigns },
+          { label: "Editar campaña" },
+        ])}
+      />
 
       {isVoided ? (
         <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-          Esta campania esta anulada y ya no puede modificarse.
+          Esta campaña está anulada y ya no puede modificarse.
         </section>
       ) : null}
 

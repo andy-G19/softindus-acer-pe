@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
 
 function formatDecimal(value: unknown) {
@@ -78,27 +79,16 @@ export default async function InventoryAlertsPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario · Alertas
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Alertas y stock crítico
-          </h1>
-          <p className="text-slate-600">
-            Consulta materiales por debajo del stock mínimo y alertas generadas
-            por el sistema.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/inventory"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver al módulo
-        </Link>
-      </section>
+      <PageHeader
+        title="Alertas y stock crítico"
+        description="Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema."
+        backHref={navigationHrefs.inventory}
+        backLabel="Volver a inventario"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: navigationHrefs.inventory },
+          { label: "Alertas" },
+        ])}
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-xl border bg-white p-5 shadow-sm">

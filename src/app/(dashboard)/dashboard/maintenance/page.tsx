@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 function formatDate(value: Date | null | undefined) {
@@ -203,16 +205,11 @@ export default async function MaintenanceDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm text-muted-foreground">Fase 9</p>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Mantenimiento de maquinaria
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Control de máquinas, fallas, reparaciones, repuestos, costos,
-          reincidencias y mantenimientos preventivos del taller.
-        </p>
-      </div>
+      <PageHeader
+        title="Mantenimiento"
+        description="Control de máquinas, fallas, reparaciones, repuestos, costos, reincidencias y mantenimientos preventivos del taller."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Mantenimiento" }])}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
@@ -300,7 +297,7 @@ export default async function MaintenanceDashboardPage() {
                   {section.description}
                 </p>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  {section.phase} · Acceso: {section.access}
+                  {section.phase} | Acceso: {section.access}
                 </p>
               </CardContent>
             </Card>
@@ -334,7 +331,7 @@ export default async function MaintenanceDashboardPage() {
                   <div key={failure.id_falla} className="rounded-lg border p-3">
                     <p className="font-medium">{failure.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
-                      Fecha: {formatDate(failure.fecha_falla)} · Estado:{" "}
+                      Fecha: {formatDate(failure.fecha_falla)} | Estado:{" "}
                       {failure.estado_atencion}
                     </p>
                     <p className="text-sm text-muted-foreground">
@@ -368,7 +365,7 @@ export default async function MaintenanceDashboardPage() {
                     <p className="font-medium">{maintenance.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
                       Fecha programada:{" "}
-                      {formatDate(maintenance.fecha_programada)} · Estado:{" "}
+                      {formatDate(maintenance.fecha_programada)} | Estado:{" "}
                       {maintenance.estado}
                     </p>
                     <p className="mt-2 text-sm">{maintenance.actividad}</p>
@@ -385,3 +382,4 @@ export default async function MaintenanceDashboardPage() {
     </div>
   );
 }
+

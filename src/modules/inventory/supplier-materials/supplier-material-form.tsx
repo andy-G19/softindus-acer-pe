@@ -29,6 +29,9 @@ type SupplierMaterialFormProps = {
   materials: Option[];
   defaultValues?: Partial<SupplierMaterialValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: SupplierMaterialFormState = { error: "" };
@@ -62,6 +65,9 @@ export function SupplierMaterialForm({
   materials,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/inventory/supplier-materials",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: SupplierMaterialFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasOptions = suppliers.length > 0 && materials.length > 0;
@@ -219,12 +225,14 @@ export function SupplierMaterialForm({
           {isPending ? "Guardando..." : submitLabel}
         </button>
 
-        <Link
-          href="/dashboard/inventory/supplier-materials"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-        >
-          Volver al listado
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );

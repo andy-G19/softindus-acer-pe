@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 
 type ProductionCampaignDetailPageProps = {
   params: Promise<{
@@ -39,22 +41,6 @@ function toNumber(value: unknown) {
   }
 
   return Number(value.toString());
-}
-
-function getStatusClass(status: string) {
-  if (status === "activa" || status === "finalizada") {
-    return "bg-emerald-50 text-emerald-700";
-  }
-
-  if (status === "planificada") {
-    return "bg-blue-50 text-blue-700";
-  }
-
-  if (status === "anulada") {
-    return "bg-red-50 text-red-700";
-  }
-
-  return "bg-slate-100 text-slate-700";
 }
 
 export default async function ProductionCampaignDetailPage({
@@ -114,40 +100,18 @@ export default async function ProductionCampaignDetailPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Produccion · Campanias · Detalle
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            {campaign.nombre_campania}
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            {campaign.objetivo_general ?? "Campania sin objetivo general."}
-          </p>
-
-          <div className="mt-3 flex flex-wrap gap-2 text-sm">
-            <span
-              className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                campaign.estado,
-              )}`}
-            >
-              {campaign.estado}
-            </span>
-
-            <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
-              Inicio: {formatDate(campaign.fecha_inicio)}
-            </span>
-
-            <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
-              Fin: {formatDate(campaign.fecha_fin)}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        title={campaign.nombre_campania}
+        description={campaign.objetivo_general ?? "Campaña sin objetivo general."}
+        backHref={navigationHrefs.campaigns}
+        backLabel="Volver a campañas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Campañas", href: navigationHrefs.campaigns },
+          { label: "Detalle de campaña" },
+        ])}
+        actions={
+          <>
           {canAddDetails ? (
             <Link
               href={`/dashboard/production/campaigns/${campaign.id_campania}/details/new`}
@@ -163,8 +127,9 @@ export default async function ProductionCampaignDetailPage({
           >
             Crear orden
           </Link>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -347,7 +312,7 @@ export default async function ProductionCampaignDetailPage({
             {campaign.orden_trabajo.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
-                  No hay ordenes de trabajo asociadas a esta campania.
+                  No hay órdenes de trabajo asociadas a esta campaña.
                 </td>
               </tr>
             ) : null}
@@ -355,14 +320,6 @@ export default async function ProductionCampaignDetailPage({
         </table>
       </section>
 
-      <div>
-        <Link
-          href="/dashboard/production/campaigns"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a campanias
-        </Link>
-      </div>
     </main>
   );
 }

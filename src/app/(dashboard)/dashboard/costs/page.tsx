@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
 
 function toNumber(value: unknown) {
@@ -224,39 +226,28 @@ export default async function CostsDashboardPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Costos y rentabilidad
-          </p>
+      <PageHeader
+        title="Costos y rentabilidad"
+        description="Controla costeos de producción, costos indirectos, márgenes, precios sugeridos, precios finales, utilidad estimada y alertas de bajo margen."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Costos" }])}
+        actions={
+          <>
+            <Link
+              href={navigationHrefs.costings}
+              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+            >
+              Ver costeos
+            </Link>
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Módulo Costos y Rentabilidad
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Controla costeos de producción, costos indirectos, márgenes,
-            precios sugeridos, precios finales, utilidad estimada y alertas de
-            bajo margen.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/costs/costings"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Ver costeos
-          </Link>
-
-          <Link
-            href="/dashboard/costs/work-orders"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Generar costeo
-          </Link>
-        </div>
-      </section>
+            <Link
+              href={navigationHrefs.costWorkOrders}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Generar costeo
+            </Link>
+          </>
+        }
+      />
 
       <section
         className={`rounded-xl border p-5 text-sm ${
@@ -267,14 +258,14 @@ export default async function CostsDashboardPage() {
       >
         <p className="font-semibold">
           {moduleReady
-            ? "✅ Módulo de costos operativo"
-            : "⚠️ Módulo de costos pendiente de datos"}
+            ? "Módulo de costos operativo"
+            : "Módulo de costos pendiente de datos"}
         </p>
 
         <p className="mt-1">
           {moduleReady
             ? "El módulo ya cuenta con información económica para gestionar costeos, márgenes y rentabilidad."
-            : "Para iniciar, crea órdenes de trabajo con receta técnica y luego genera su costeo."}
+            : "Para iniciar, crea Órdenes de trabajo con receta técnica y luego genera su costeo."}
         </p>
       </section>
 
@@ -420,7 +411,7 @@ export default async function CostsDashboardPage() {
               href="/dashboard/costs/costings"
               className="text-sm font-medium text-slate-700 hover:text-slate-950"
             >
-              Ver todos →
+              Ver todos
             </Link>
           </div>
 
@@ -436,9 +427,9 @@ export default async function CostsDashboardPage() {
                 const latestProfitability = item.rentabilidad[0];
 
                 const sourceLabel = item.orden_trabajo
-                  ? `${item.orden_trabajo.id_orden_trabajo} · ${item.orden_trabajo.producto.nombre_producto}`
+                  ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
                   : item.pedido
-                    ? `${item.pedido.id_pedido} · ${item.pedido.cliente.nombre_razon_social}`
+                    ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
                     : "Costeo manual";
 
                 return (
@@ -448,13 +439,13 @@ export default async function CostsDashboardPage() {
                   >
                     <div>
                       <p className="font-mono text-xs text-slate-500">
-                        {item.id_costeo} · {formatDate(item.fecha_costeo)}
+                        {item.id_costeo} | {formatDate(item.fecha_costeo)}
                       </p>
 
                       <p className="font-medium">{sourceLabel}</p>
 
                       <p className="mt-1 text-sm text-slate-500">
-                        Costo total: {formatMoney(item.costo_total)} · Margen:{" "}
+                        Costo total: {formatMoney(item.costo_total)} | Margen:{" "}
                         {latestMargin
                           ? formatPercent(latestMargin.porcentaje_margen)
                           : "Pendiente"}
@@ -482,7 +473,7 @@ export default async function CostsDashboardPage() {
                         href={`/dashboard/costs/costings/${item.id_costeo}`}
                         className="text-sm font-medium text-slate-700 hover:text-slate-950"
                       >
-                        Detalle →
+                        Detalle
                       </Link>
                     </div>
                   </div>
@@ -510,9 +501,9 @@ export default async function CostsDashboardPage() {
                 const latestProfitability = item.rentabilidad[0];
 
                 const sourceLabel = item.orden_trabajo
-                  ? `${item.orden_trabajo.id_orden_trabajo} · ${item.orden_trabajo.producto.nombre_producto}`
+                  ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
                   : item.pedido
-                    ? `${item.pedido.id_pedido} · ${item.pedido.cliente.nombre_razon_social}`
+                    ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
                     : "Costeo manual";
 
                 return (
@@ -534,7 +525,7 @@ export default async function CostsDashboardPage() {
                       href={`/dashboard/costs/costings/${item.id_costeo}`}
                       className="mt-3 inline-block text-sm font-medium text-red-700 hover:text-red-900"
                     >
-                      Revisar alerta →
+                      Revisar alerta
                     </Link>
                   </div>
                 );
@@ -556,3 +547,4 @@ export default async function CostsDashboardPage() {
     </main>
   );
 }
+

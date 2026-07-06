@@ -1,7 +1,9 @@
 import Link from "next/link";
 
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 export default async function CommercialPage() {
   const [
@@ -114,13 +116,11 @@ export default async function CommercialPage() {
 
   return (
     <main className="space-y-8">
-      <section className="space-y-1">
-        <h1 className="text-2xl font-bold">Módulo Comercial</h1>
-        <p className="text-sm text-muted-foreground">
-          Gestión de clientes, productos, pedidos, proformas, pagos y
-          comprobantes.
-        </p>
-      </section>
+      <PageHeader
+        title="Comercial"
+        description="Gestiona clientes, productos, pedidos, proformas, pagos y comprobantes."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Comercial" }])}
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {summaryCards.map((card) => (

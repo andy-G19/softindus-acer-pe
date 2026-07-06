@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 const ACTIVE_WORK_ORDER_STATES = ["pendiente", "en_proceso", "pausada"];
@@ -423,25 +425,19 @@ export default async function ReportsDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">Fase 10 · Subfase 10.2</p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Dashboard general del taller
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Vista gerencial consolidada de producción, ventas, inventario,
-            cobranzas, caja chica, utilidad, proveedores y mantenimiento.
-          </p>
-        </div>
-
-        <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm">
-          <p className="font-medium">Periodo actual</p>
-          <p className="text-muted-foreground">
-            {formatDate(startOfMonth)} - {formatDate(today)}
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        title="Reportes"
+        description="Vista gerencial consolidada de producción, ventas, inventario, cobranzas, caja chica, utilidad, proveedores y mantenimiento."
+        breadcrumbs={dashboardBreadcrumbs([{ label: "Reportes" }])}
+        actions={
+          <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm">
+            <p className="font-medium">Periodo actual</p>
+            <p className="text-muted-foreground">
+              {formatDate(startOfMonth)} - {formatDate(today)}
+            </p>
+          </div>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <IndicatorCard
@@ -541,14 +537,14 @@ export default async function ReportsDashboardPage() {
         <Card className="xl:col-span-2">
           <CardHeader>
             <CardTitle className="text-base">
-              Últimas órdenes de trabajo
+              Últimas Órdenes de trabajo
             </CardTitle>
           </CardHeader>
 
           <CardContent>
             {latestWorkOrders.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Aún no hay órdenes de trabajo registradas.
+                Aún no hay Órdenes de trabajo registradas.
               </p>
             ) : (
               <div className="overflow-x-auto">
@@ -730,7 +726,7 @@ export default async function ReportsDashboardPage() {
                       <p className="text-xs text-muted-foreground">
                         {movement.categoria_gasto?.nombre_categoria ??
                           "Sin categoría"}{" "}
-                        · {formatDate(movement.fecha_movimiento)}
+                        | {formatDate(movement.fecha_movimiento)}
                       </p>
                     </div>
 
@@ -942,3 +938,5 @@ export default async function ReportsDashboardPage() {
     </div>
   );
 }
+
+

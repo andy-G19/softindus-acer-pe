@@ -1,11 +1,16 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 
 type AlertStatus = "normal" | "en riesgo" | "atrasada";
 
@@ -129,6 +134,7 @@ export default async function ProductionBottlenecksPage({
   const orderStatus = getSearchParam(params, "orderStatus");
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
+  const returnTo = createReturnToHref(navigationHrefs.bottlenecks, params);
   const fromDate = parseDate(from);
   const toDate = parseDate(to, true);
   const filters: Prisma.avance_ordenWhereInput[] = [
@@ -316,10 +322,10 @@ export default async function ProductionBottlenecksPage({
       <PageHeader
         title="Cuellos de botella en producción"
         description="Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa."
-        backHref="/dashboard/production"
+        backHref={navigationHrefs.production}
         backLabel="Volver a producción"
         breadcrumbs={dashboardBreadcrumbs([
-          { label: "Producción", href: "/dashboard/production" },
+          { label: "Producción", href: navigationHrefs.production },
           { label: "Cuellos de botella" },
         ])}
       />
@@ -536,7 +542,10 @@ export default async function ProductionBottlenecksPage({
               <tr key={row.id_avance} className="border-t">
                 <td className="px-4 py-3 font-mono text-xs">
                   <Link
-                    href={`/dashboard/production/work-orders/${row.id_orden_trabajo}/progress`}
+                    href={withReturnTo(
+                      `${navigationHrefs.workOrders}/${row.id_orden_trabajo}/progress`,
+                      returnTo,
+                    )}
                     className="font-medium text-slate-700 hover:text-slate-950"
                   >
                     {row.id_orden_trabajo}
@@ -577,3 +586,4 @@ export default async function ProductionBottlenecksPage({
     </main>
   );
 }
+

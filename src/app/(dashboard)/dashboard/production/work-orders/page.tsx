@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import {
   annulWorkOrderAction,
   finishWorkOrderAction,
@@ -112,6 +119,7 @@ export default async function WorkOrdersPage({
   const priority = getSearchParam(params, "priority");
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
+  const returnTo = createReturnToHref(navigationHrefs.workOrders, params);
   const fromDate = parseDate(from);
   const toDate = parseDate(to, true);
   const filters: Prisma.orden_trabajoWhereInput[] = [];
@@ -305,29 +313,22 @@ export default async function WorkOrdersPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Produccion - Ordenes de trabajo
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Ordenes de trabajo
-          </h1>
-
-          <p className="max-w-3xl text-slate-600">
-            Registra y consulta ordenes de produccion por pedido, campania o
-            reposicion de stock.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production/work-orders/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva orden
-        </Link>
-      </section>
+      <PageHeader
+        title="Órdenes de trabajo"
+        description="Registra y consulta órdenes de producción por pedido, campaña o reposición de stock."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Órdenes de trabajo" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/production/work-orders/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva orden
+          </Link>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -575,14 +576,20 @@ export default async function WorkOrdersPage({
                   <td className="px-4 py-3">
                     <div className="flex flex-col gap-2">
                       <Link
-                        href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
+                        href={withReturnTo(
+                          `${navigationHrefs.workOrders}/${order.id_orden_trabajo}`,
+                          returnTo,
+                        )}
                         className="text-sm font-medium text-slate-600 hover:text-slate-950"
                       >
                         Ver detalle
                       </Link>
 
                       <Link
-                        href={`/dashboard/production/work-orders/${order.id_orden_trabajo}/progress`}
+                        href={withReturnTo(
+                          `${navigationHrefs.workOrders}/${order.id_orden_trabajo}/progress`,
+                          returnTo,
+                        )}
                         className="text-sm font-medium text-slate-600 hover:text-slate-950"
                       >
                         Ver avances

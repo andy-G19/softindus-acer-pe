@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -268,43 +270,31 @@ export default async function InventoryReportPage({
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Fase 10 · Subfase 10.3.2
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reporte de inventario
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta movimientos de inventario por material, tipo de movimiento,
-            responsable, fechas y orden de trabajo asociada.
-          </p>
-        </div>
+      <PageHeader
+        title="Reporte de inventario"
+        description="Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Inventario" },
+        ])}
+        actions={
+          <>
+            <a
+              href={csvExportHref}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Exportar Excel
+            </a>
 
-        <div className="flex flex-wrap gap-2">
-          <a
-            href={csvExportHref}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Exportar Excel
-          </a>
-          <a
-            href={pdfExportHref}
-            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-          >
-            Exportar PDF
-          </a>
-
-          <Link
-            href="/dashboard/reports"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-          >
-            Volver al dashboard
-          </Link>
-        </div>
-
-      </section>
+            <a
+              href={pdfExportHref}
+              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+            >
+              Exportar PDF
+            </a>
+          </>
+        }
+      />
 
       <Card>
         <CardHeader>
@@ -512,7 +502,7 @@ export default async function InventoryReportPage({
                             {movement.material.nombre_material}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {movement.material.categoria} ·{" "}
+                            {movement.material.categoria} ?{" "}
                             {movement.material.unidad_medida}
                           </p>
                         </div>
@@ -608,3 +598,4 @@ export default async function InventoryReportPage({
     </div>
   );
 }
+

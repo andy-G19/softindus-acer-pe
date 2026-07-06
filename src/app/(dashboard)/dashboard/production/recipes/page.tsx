@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleTechnicalRecipeStatusAction } from "@/modules/production/recipes/actions";
 
 type RecipesPageProps = {
@@ -159,29 +161,22 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Produccion - Recetas tecnicas
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Recetas tecnicas
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Administra recetas por producto, version vigente e historial de
-            materiales requeridos para produccion.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production/recipes/new"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva receta
-        </Link>
-      </section>
+      <PageHeader
+        title="Recetas técnicas"
+        description="Administra recetas por producto, versión vigente e historial de materiales requeridos para producción."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas" },
+        ])}
+        actions={
+          <Link
+            href="/dashboard/production/recipes/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            Nueva receta
+          </Link>
+        }
+      />
 
       <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
         <input

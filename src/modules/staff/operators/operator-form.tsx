@@ -27,6 +27,9 @@ type OperatorFormProps = {
   ) => Promise<OperatorFormState>;
   defaultValues?: Partial<OperatorFormValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: OperatorFormState = { error: "" };
@@ -50,6 +53,9 @@ export function OperatorForm({
   action,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/staff/operators",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: OperatorFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -244,12 +250,14 @@ export function OperatorForm({
         >
           {isPending ? "Guardando..." : submitLabel}
         </button>
-        <Link
-          href="/dashboard/staff/operators"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-        >
-          Volver al listado
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );

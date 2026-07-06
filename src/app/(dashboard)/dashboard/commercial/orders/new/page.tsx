@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { OrderForm } from "@/components/commercial/order-form";
 
 export default async function NewOrderPage() {
@@ -60,13 +62,17 @@ export default async function NewOrderPage() {
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Nuevo pedido</h1>
-        <p className="text-sm text-muted-foreground">
-          Registra un pedido comercial con uno o varios productos asociados al
-          mismo cliente.
-        </p>
-      </div>
+      <PageHeader
+        title="Nuevo pedido"
+        description="Registra un pedido comercial con uno o varios productos asociados al mismo cliente."
+        backHref={navigationHrefs.orders}
+        backLabel="Volver a pedidos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: navigationHrefs.commercial },
+          { label: "Pedidos", href: navigationHrefs.orders },
+          { label: "Nuevo pedido" },
+        ])}
+      />
 
       <OrderForm clients={clientOptions} products={productOptions} />
     </main>

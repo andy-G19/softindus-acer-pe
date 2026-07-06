@@ -1,12 +1,14 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -339,43 +341,31 @@ export default async function SuppliersPurchasesReportPage({
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Fase 10 · Subfase 10.3.4
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reporte de proveedores y compras
-          </h1>
-          <p className="mt-2 max-w-4xl text-muted-foreground">
-            Consulta compras realizadas, proveedores, materiales adquiridos,
-            comprobantes, montos, pagos, saldos pendientes y precios históricos.
-          </p>
-        </div>
+      <PageHeader
+        title="Reporte de proveedores y compras"
+        description="Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos."
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Reportes", href: navigationHrefs.reports },
+          { label: "Proveedores y compras" },
+        ])}
+        actions={
+          <>
+            <a
+              href={csvExportHref}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+              Exportar Excel
+            </a>
 
-        <div className="flex flex-wrap gap-2">
-          <a
-            href={csvExportHref}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Exportar Excel
-          </a>
-
-          <a
-            href={pdfExportHref}
-            className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-          >
-            Exportar PDF
-          </a>
-
-          <Link
-            href="/dashboard/reports"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-          >
-            Volver al dashboard
-          </Link>
-        </div>
-      </section>
+            <a
+              href={pdfExportHref}
+              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+            >
+              Exportar PDF
+            </a>
+          </>
+        }
+      />
 
       <Card>
         <CardHeader>
@@ -645,8 +635,8 @@ export default async function SuppliersPurchasesReportPage({
                               </p>
                               <p className="text-xs text-muted-foreground">
                                 {formatQuantity(detail.cantidad)}{" "}
-                                {detail.unidad_medida} ·{" "}
-                                {formatMoney(detail.costo_unitario)} c/u ·{" "}
+                                {detail.unidad_medida} ?{" "}
+                                {formatMoney(detail.costo_unitario)} c/u ?{" "}
                                 subtotal {formatMoney(detail.subtotal)}
                               </p>
                             </div>
@@ -691,8 +681,8 @@ export default async function SuppliersPurchasesReportPage({
                                     {history.material.nombre_material}
                                   </p>
                                   <p className="text-xs text-muted-foreground">
-                                    {formatMoney(history.precio_unitario)} ·{" "}
-                                    {formatDate(history.fecha_registro)} ·{" "}
+                                    {formatMoney(history.precio_unitario)} ?{" "}
+                                    {formatDate(history.fecha_registro)} ?{" "}
                                     {history.origen_registro}
                                   </p>
                                 </div>
@@ -726,3 +716,4 @@ export default async function SuppliersPurchasesReportPage({
     </div>
   );
 }
+

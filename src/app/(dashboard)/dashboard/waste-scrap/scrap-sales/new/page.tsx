@@ -85,7 +85,7 @@ export default async function NewScrapSalePage({
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra · Venta de chatarra
+            Mermas y chatarra | Venta de chatarra
           </p>
 
           <h1 className="text-3xl font-bold tracking-tight">
@@ -146,8 +146,8 @@ export default async function NewScrapSalePage({
 
                   {scraps.map((item) => (
                     <option key={item.id_chatarra} value={item.id_chatarra}>
-                      {item.id_chatarra} · {item.tipo_material} · Peso:{" "}
-                      {item.peso_kg ? `${item.peso_kg.toString()} kg` : "-"} ·
+                      {item.id_chatarra} | {item.tipo_material} | Peso:{" "}
+                      {item.peso_kg ? `${item.peso_kg.toString()} kg` : "-"} |
                       Cantidad: {item.cantidad ? item.cantidad.toString() : "-"}
                     </option>
                   ))}
@@ -164,7 +164,7 @@ export default async function NewScrapSalePage({
                     Chatarra seleccionada
                   </p>
                   <p className="mt-1">
-                    Código: {selectedScrap.id_chatarra} · Tipo:{" "}
+                    Código: {selectedScrap.id_chatarra} | Tipo:{" "}
                     {selectedScrap.tipo_material}
                   </p>
                   <p className="mt-1">
@@ -177,7 +177,7 @@ export default async function NewScrapSalePage({
                     {selectedScrap.peso_kg
                       ? `${formatNumber(selectedScrap.peso_kg)} kg`
                       : "-"}{" "}
-                    · Cantidad registrada:{" "}
+                    | Cantidad registrada:{" "}
                     {selectedScrap.cantidad
                       ? formatNumber(selectedScrap.cantidad)
                       : "-"}
@@ -289,7 +289,7 @@ export default async function NewScrapSalePage({
 
                   {cashBoxes.map((box) => (
                     <option key={box.id_caja_chica} value={box.id_caja_chica}>
-                      {box.nombre_caja} · Saldo: S/{" "}
+                      {box.nombre_caja} | Saldo: S/{" "}
                       {formatNumber(box.saldo_actual)}
                     </option>
                   ))}

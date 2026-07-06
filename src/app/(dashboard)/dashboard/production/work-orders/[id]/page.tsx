@@ -1,13 +1,20 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { consumeWorkOrderMaterialsAction } from "@/modules/production/work-orders/actions";
 
 type WorkOrderDetailPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function requireProductionAccess(role: string | undefined) {
@@ -76,6 +83,7 @@ function getStatusClass(status: string) {
 
 export default async function WorkOrderDetailPage({
   params,
+  searchParams,
 }: WorkOrderDetailPageProps) {
   const session = await auth();
 
@@ -86,6 +94,7 @@ export default async function WorkOrderDetailPage({
   requireProductionAccess(session.user.role);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const workOrder = await prisma.orden_trabajo.findUnique({
     where: {
@@ -198,6 +207,10 @@ export default async function WorkOrderDetailPage({
     ["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "") &&
     !["anulada", "finalizada"].includes(workOrder.estado) &&
     !materialsConsumed;
+  const backHref = getSafeReturnTo(
+    queryParams.returnTo,
+    navigationHrefs.workOrders,
+  );
 
   const origin =
     workOrder.tipo_produccion === "pedido"
@@ -210,71 +223,58 @@ export default async function WorkOrderDetailPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Órdenes de trabajo
-          </p>
+      <PageHeader
+        title={`Orden ${workOrder.id_orden_trabajo}`}
+        description={`Producto: ${workOrder.producto.nombre_producto} · Cantidad: ${formatDecimal(workOrder.cantidad)} ${workOrder.producto.unidad_medida}`}
+        backHref={backHref}
+        backLabel="Volver a órdenes"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Órdenes de trabajo", href: backHref },
+          { label: workOrder.id_orden_trabajo },
+        ])}
+        actions={
+          <>
+            {materialsConsumed ? (
+              <span className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
+                Materiales consumidos
+              </span>
+            ) : null}
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Orden {workOrder.id_orden_trabajo}
-          </h1>
+            {canConsumeMaterials ? (
+              <form action={consumeWorkOrderMaterialsAction}>
+                <input
+                  type="hidden"
+                  name="id_orden_trabajo"
+                  value={workOrder.id_orden_trabajo}
+                />
 
+                <button
+                  type="submit"
+                  className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+                >
+                  Consumir materiales
+                </button>
+              </form>
+            ) : null}
 
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Producto:{" "}
-            <span className="font-medium">
-              {workOrder.producto.nombre_producto}
-            </span>{" "}
-            · Cantidad:{" "}
-            <span className="font-medium">
-              {formatDecimal(workOrder.cantidad)}{" "}
-              {workOrder.producto.unidad_medida}
+            <Link
+              href={`${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}/progress`}
+              className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            >
+              Ver avances
+            </Link>
+
+            <span
+              className={`rounded-full px-3 py-2 text-sm font-medium ${getStatusClass(
+                workOrder.estado,
+              )}`}
+            >
+              {workOrder.estado}
             </span>
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-2 sm:flex-row">
-          {materialsConsumed ? (
-            <span className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
-              Materiales consumidos
-            </span>
-          ) : null}
-
-          {canConsumeMaterials ? (
-            <form action={consumeWorkOrderMaterialsAction}>
-              <input
-                type="hidden"
-                name="id_orden_trabajo"
-                value={workOrder.id_orden_trabajo}
-              />
-
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Consumir materiales
-              </button>
-            </form>
-          ) : null}
-
-          <Link
-            href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress`}
-            className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Ver avances
-          </Link>
-        
-          <span
-            className={`rounded-full px-3 py-2 text-sm font-medium ${getStatusClass(
-              workOrder.estado,
-            )}`}
-          >
-            {workOrder.estado}
-          </span>
-        </div>
-
-      </section>
+          </>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -469,22 +469,7 @@ export default async function WorkOrderDetailPage({
           terminada.
         </p>
       </div>
-
-      <div className="flex items-center justify-between">
-        <Link
-          href="/dashboard/production/work-orders"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver a órdenes
-        </Link>
-
-        <Link
-          href="/dashboard/production"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver al módulo producción
-        </Link>
-      </div>
     </main>
   );
 }
+
