@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { createClientAction } from "@/modules/commercial/clients/actions";
 import { ClientForm } from "@/modules/commercial/clients/client-form";
 
@@ -17,12 +19,17 @@ export default async function NewClientPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Nuevo cliente</h1>
-        <p className="text-sm text-muted-foreground">
-          Registra los datos comerciales del cliente.
-        </p>
-      </div>
+      <PageHeader
+        title="Nuevo cliente"
+        description="Registra los datos comerciales del cliente."
+        backHref="/dashboard/commercial/clients"
+        backLabel="Volver a clientes"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: "/dashboard/commercial" },
+          { label: "Clientes", href: "/dashboard/commercial/clients" },
+          { label: "Nuevo cliente" },
+        ])}
+      />
 
       <ClientForm action={createClientAction} submitLabel="Guardar cliente" />
     </main>

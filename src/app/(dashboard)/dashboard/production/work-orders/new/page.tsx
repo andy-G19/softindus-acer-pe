@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { WorkOrderForm } from "@/modules/production/work-orders/components/work-order-form";
 
 function requireProductionAccess(role: string | undefined) {
@@ -184,20 +186,20 @@ export default async function NewWorkOrderPage() {
 
   return (
     <main className="mx-auto max-w-4xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Ordenes de trabajo
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva orden de trabajo
-        </h1>
-
-        <p className="mt-2 text-slate-600">
-          Crea una orden de produccion asociando producto, ruta de fabricacion,
-          version de receta y cantidad a fabricar.
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva orden de trabajo"
+        description="Registra una orden de producción por pedido, campaña o reposición de stock."
+        backHref="/dashboard/production/work-orders"
+        backLabel="Volver a órdenes"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: "/dashboard/production" },
+          {
+            label: "Órdenes de trabajo",
+            href: "/dashboard/production/work-orders",
+          },
+          { label: "Nueva orden" },
+        ])}
+      />
 
       {!canCreateOrder ? (
         <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">

@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
 import { auth } from "@/auth";
+import { StatusBadge } from "@/components/commercial/status-badge";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 type OrderDetailPageProps = {
   params: Promise<{
@@ -76,20 +78,17 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Pedido {order.id_pedido}</h1>
-          <p className="text-sm text-muted-foreground">
-            Detalle comercial del pedido, productos, proformas y comprobantes.
-          </p>
-        </div>
-        <Link
-          href="/dashboard/commercial/orders"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Volver a pedidos
-        </Link>
-      </section>
+      <PageHeader
+        title="Detalle de pedido"
+        description="Consulta la información comercial, productos y estado del pedido."
+        backHref="/dashboard/commercial/orders"
+        backLabel="Volver a pedidos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Comercial", href: "/dashboard/commercial" },
+          { label: "Pedidos", href: "/dashboard/commercial/orders" },
+          { label: "Detalle de pedido" },
+        ])}
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-lg border p-4">

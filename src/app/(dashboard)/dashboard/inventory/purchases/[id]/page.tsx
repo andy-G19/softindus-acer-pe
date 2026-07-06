@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
 
@@ -101,27 +102,18 @@ export default async function PurchaseDetailPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Inventario · Compras
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Compra {purchase.id_compra}
-          </h1>
-          <p className="text-slate-600">
-            Detalle de compra, materiales adquiridos y pagos al proveedor.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/inventory/purchases"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Volver a compras
-          </Link>
-          {canAnnul ? (
+      <PageHeader
+        title="Detalle de compra"
+        description="Consulta los materiales adquiridos, montos, comprobante y estado de pago."
+        backHref="/dashboard/inventory/purchases"
+        backLabel="Volver a compras"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Inventario", href: "/dashboard/inventory" },
+          { label: "Compras", href: "/dashboard/inventory/purchases" },
+          { label: "Detalle de compra" },
+        ])}
+        actions={
+          canAnnul ? (
             <form action={annulPurchaseAction}>
               <input type="hidden" name="id_compra" value={purchase.id_compra} />
               <button
@@ -131,9 +123,9 @@ export default async function PurchaseDetailPage({
                 Anular compra
               </button>
             </form>
-          ) : null}
-        </div>
-      </section>
+          ) : null
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border bg-white p-5 shadow-sm">

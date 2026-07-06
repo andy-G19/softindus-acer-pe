@@ -2,8 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 type AlertStatus = "normal" | "en riesgo" | "atrasada";
 
@@ -311,29 +313,16 @@ export default async function ProductionBottlenecksPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción - Cuellos de botella
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Cuellos de botella en producción
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Detecta avances en proceso que están cerca de vencer, atrasados o
-            concentrados en la misma etapa.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/production"
-          className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Volver a producción
-        </Link>
-      </section>
+      <PageHeader
+        title="Cuellos de botella en producción"
+        description="Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa."
+        backHref="/dashboard/production"
+        backLabel="Volver a producción"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: "/dashboard/production" },
+          { label: "Cuellos de botella" },
+        ])}
+      />
 
       <form className="grid gap-4 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
         <SearchableSelectFilter

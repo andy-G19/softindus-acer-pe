@@ -25,6 +25,9 @@ type ClientFormProps = {
   ) => Promise<ClientFormState>;
   defaultValues?: Partial<ClientFormValues>;
   submitLabel: string;
+  cancelHref?: string;
+  cancelLabel?: string;
+  showCancelAction?: boolean;
 };
 
 const initialState: ClientFormState = {
@@ -65,6 +68,9 @@ export function ClientForm({
   action,
   defaultValues,
   submitLabel,
+  cancelHref = "/dashboard/commercial/clients",
+  cancelLabel = "Cancelar",
+  showCancelAction = true,
 }: ClientFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -233,12 +239,14 @@ export function ClientForm({
           {isPending ? "Guardando..." : submitLabel}
         </button>
 
-        <Link
-          href="/dashboard/commercial/clients"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Volver a clientes
-        </Link>
+        {showCancelAction ? (
+          <Link
+            href={cancelHref}
+            className="rounded-md border px-4 py-2 text-sm font-medium"
+          >
+            {cancelLabel}
+          </Link>
+        ) : null}
       </div>
     </form>
   );
