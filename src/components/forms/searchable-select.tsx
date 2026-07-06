@@ -192,7 +192,7 @@ export function SearchableSelect({
 
   return (
     <div className="space-y-2" onBlur={handleBlur}>
-      <label htmlFor={inputId} className="text-sm font-medium">
+      <label htmlFor={inputId} className="text-sm font-medium text-foreground">
         {label}
         {required ? " *" : ""}
       </label>
@@ -221,9 +221,9 @@ export function SearchableSelect({
           onFocus={handleFocus}
           onKeyDown={handleKeyDown}
           className={cn(
-            "h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-2 pr-16 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50",
+            "h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100",
             required && !selectedValue
-              ? "invalid:border-destructive invalid:ring-destructive/20"
+              ? "invalid:border-destructive invalid:ring-destructive/25"
               : "",
           )}
         />
@@ -234,7 +234,7 @@ export function SearchableSelect({
             disabled={disabled}
             onMouseDown={(event) => event.preventDefault()}
             onClick={clearSelection}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50"
           >
             Limpiar
           </button>
@@ -244,7 +244,7 @@ export function SearchableSelect({
           <div
             id={listboxId}
             role="listbox"
-            className="absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-lg border bg-background p-1 shadow-lg"
+            className="absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-[0_18px_42px_rgba(0,0,0,0.35)]"
           >
             {filteredItems.length > 0 ? (
               filteredItems.map((item, index) => (
@@ -258,10 +258,10 @@ export function SearchableSelect({
                   onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => updateSelection(item.id, item)}
                   className={cn(
-                    "flex w-full flex-col rounded-md px-3 py-2 text-left text-sm outline-none",
+                    "flex w-full flex-col rounded-md px-3 py-2 text-left text-sm outline-none transition-colors",
                     index === activeIndex
-                      ? "bg-muted text-foreground"
-                      : "hover:bg-muted",
+                      ? "bg-primary/12 text-foreground ring-1 ring-primary/25"
+                      : "text-popover-foreground hover:bg-secondary hover:text-foreground",
                   )}
                 >
                   <span className="font-medium">{item.label}</span>

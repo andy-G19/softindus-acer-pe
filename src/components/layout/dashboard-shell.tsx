@@ -15,17 +15,20 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   const menuItems = getMenuForRole(session.user.role);
 
   return (
-    <div className="min-h-screen bg-muted/40">
+    <div className="industrial-dark dark min-h-screen bg-[#0f1011] text-foreground">
       <SessionIdleGuard />
 
-      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+      <header className="sticky top-0 z-40 border-b border-border/80 bg-[#17181a]/95 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur supports-[backdrop-filter]:bg-[#17181a]/85">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="min-w-0 space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-bold tracking-tight">
+              <h1 className="text-xl font-bold text-foreground">
                 Industrias Aceros Perú
               </h1>
-              <Badge variant="secondary" className="text-[11px]">
+              <Badge
+                variant="secondary"
+                className="border border-primary/30 bg-primary/10 text-[11px] text-primary"
+              >
                 Sistema activo
               </Badge>
             </div>
@@ -36,11 +39,14 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
 
           <div className="flex flex-wrap items-center gap-3 sm:justify-end">
             <div className="min-w-0 text-left sm:text-right">
-              <p className="truncate text-sm font-medium">
+              <p className="truncate text-sm font-medium text-foreground">
                 {session.user.name}
               </p>
               <div className="mt-1 flex sm:justify-end">
-                <Badge variant="secondary">
+                <Badge
+                  variant="secondary"
+                  className="border border-border/80 bg-secondary text-secondary-foreground"
+                >
                   {getRoleLabel(session.user.role)}
                 </Badge>
               </div>
@@ -53,7 +59,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
 
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[260px_minmax(0,1fr)]">
         <aside className="min-w-0">
-          <div className="rounded-2xl border bg-card p-3 shadow-sm md:sticky md:top-24">
+          <div className="rounded-xl border border-sidebar-border/80 bg-sidebar p-3 shadow-[0_18px_45px_rgba(0,0,0,0.22)] md:sticky md:top-24">
             <div className="px-2 pb-3">
               <p className="text-xs font-semibold uppercase text-muted-foreground">
                 Navegación
@@ -63,7 +69,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
           </div>
         </aside>
 
-        <main className="min-w-0">{children}</main>
+        <main className="min-w-0 pb-8">{children}</main>
       </div>
     </div>
   );

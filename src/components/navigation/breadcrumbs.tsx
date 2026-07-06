@@ -28,7 +28,10 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               className="flex min-w-0 shrink-0 items-center gap-1 last:min-w-0 last:shrink"
             >
               {index > 0 ? (
-                <ChevronRight className="size-3.5 shrink-0" aria-hidden="true" />
+                <ChevronRight
+                  className="size-3.5 shrink-0 text-muted-foreground/60"
+                  aria-hidden="true"
+                />
               ) : null}
 
               {isLast ? (
@@ -42,7 +45,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                 <Link
                   href={item.href}
                   className={cn(
-                    "block max-w-48 truncate transition hover:text-foreground sm:max-w-72 md:max-w-none",
+                    "block max-w-48 truncate transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:max-w-72 md:max-w-none"
                   )}
                 >
                   {item.label}

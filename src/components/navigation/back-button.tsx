@@ -46,7 +46,7 @@ export function BackButton({
       aria-label={label}
       onClick={handleClick}
       className={cn(
-        "inline-flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm font-medium transition hover:bg-muted",
+        "inline-flex items-center gap-2 rounded-lg border border-border/80 bg-secondary px-3 py-2 text-sm font-medium text-secondary-foreground transition hover:border-primary/50 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45",
         className,
       )}
     >

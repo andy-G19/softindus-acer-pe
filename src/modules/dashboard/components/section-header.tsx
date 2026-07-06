@@ -5,8 +5,8 @@ type SectionHeaderProps = {
 
 export function SectionHeader({ title, description }: SectionHeaderProps) {
   return (
-    <div className="space-y-1">
-      <h3 className="text-xl font-semibold tracking-tight text-foreground">
+    <div className="space-y-2 border-l-2 border-primary/80 pl-3">
+      <h3 className="text-xl font-semibold text-foreground">
         {title}
       </h3>
       {description ? (

@@ -26,23 +26,23 @@ export function PageHeader({
   const hasControls = Boolean(backHref || actions);
 
   return (
-    <section className="max-w-full space-y-3 overflow-hidden">
+    <section className="max-w-full space-y-4 overflow-hidden border-b border-border/70 pb-6">
       {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
 
-      <div className="flex min-w-0 flex-col justify-between gap-4 md:flex-row md:items-start">
-        <div className="min-w-0 flex-1 space-y-1">
-          <h1 className="break-words text-2xl font-bold tracking-tight md:text-3xl">
+      <div className="flex min-w-0 flex-col justify-between gap-5 md:flex-row md:items-start">
+        <div className="min-w-0 flex-1 space-y-2 border-l-2 border-primary/70 pl-4">
+          <h1 className="break-words text-3xl font-semibold leading-tight text-foreground md:text-[2rem]">
             {title}
           </h1>
           {description ? (
-            <p className="max-w-3xl text-sm text-muted-foreground md:text-base">
+            <p className="max-w-4xl text-sm leading-relaxed text-muted-foreground md:text-[0.95rem]">
               {description}
             </p>
           ) : null}
         </div>
 
         {hasControls ? (
-          <div className="flex min-w-0 flex-wrap items-center gap-2 md:max-w-[50%] md:justify-end">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 md:max-w-[50%] md:justify-end md:pt-1">
             {backHref ? (
               <BackButton
                 fallbackHref={backHref}

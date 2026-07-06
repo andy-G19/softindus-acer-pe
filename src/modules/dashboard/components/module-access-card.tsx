@@ -19,10 +19,15 @@ export function ModuleAccessCard({
   href,
 }: ModuleAccessCardProps) {
   return (
-    <Link href={href} className="block h-full">
-      <Card className="h-full border bg-card/95 transition hover:-translate-y-0.5 hover:bg-background hover:shadow-sm">
+    <Link
+      href={href}
+      className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/45"
+    >
+      <Card className="h-full border border-border/80 bg-card transition hover:-translate-y-0.5 hover:border-primary/45 hover:bg-secondary hover:shadow-[0_16px_34px_rgba(0,0,0,0.24)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold">{title}</CardTitle>
+          <CardTitle className="text-base font-semibold text-foreground">
+            {title}
+          </CardTitle>
         </CardHeader>
 
         <CardContent>
