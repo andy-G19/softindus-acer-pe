@@ -146,6 +146,7 @@
 
   .industrial-dark .bg-amber-50,
   .industrial-dark .bg-yellow-50,
+  .industrial-dark .bg-amber-100,
   .industrial-dark .bg-yellow-100 {
     background-color: color-mix(in srgb, var(--primary) 14%, transparent);
   }
@@ -163,6 +164,13 @@
   .industrial-dark .bg-blue-50,
   .industrial-dark .bg-blue-100 {
     background-color: color-mix(in srgb, #38bdf8 14%, transparent);
+  }
+
+  .industrial-dark .bg-indigo-50,
+  .industrial-dark .bg-indigo-100,
+  .industrial-dark .bg-purple-50,
+  .industrial-dark .bg-purple-100 {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
   }
 
   .industrial-dark .bg-slate-900 {
@@ -183,6 +191,7 @@
 
   .industrial-dark .text-amber-700,
   .industrial-dark .text-amber-800,
+  .industrial-dark .text-amber-900,
   .industrial-dark .text-yellow-700,
   .industrial-dark .text-yellow-900 {
     color: #fbbf24;
@@ -204,6 +213,13 @@
     color: #7dd3fc;
   }
 
+  .industrial-dark .text-indigo-700,
+  .industrial-dark .text-indigo-900,
+  .industrial-dark .text-purple-700,
+  .industrial-dark .text-purple-900 {
+    color: #fbbf24;
+  }
+
   .industrial-dark .border-slate-100,
   .industrial-dark .border-slate-200,
   .industrial-dark .border-gray-100,
@@ -212,7 +228,9 @@
   .industrial-dark .border-yellow-300,
   .industrial-dark .border-red-200,
   .industrial-dark .border-green-300,
-  .industrial-dark .border-blue-200 {
+  .industrial-dark .border-blue-200,
+  .industrial-dark .border-indigo-200,
+  .industrial-dark .border-purple-200 {
     border-color: var(--border);
   }
 
@@ -227,6 +245,10 @@
   }
 
   .industrial-dark .hover\:text-slate-900:hover {
+    color: var(--foreground);
+  }
+
+  .industrial-dark .hover\:text-slate-950:hover {
     color: var(--foreground);
   }
 
@@ -293,4 +315,53 @@
     background-color: var(--popover);
     color: var(--popover-foreground);
   }
+
+  .industrial-dark :is(section, div).overflow-hidden:has(table) {
+    overflow-x: auto;
+  }
+
+  .industrial-dark table {
+    min-width: max-content;
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .industrial-dark thead {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark th {
+    border-color: var(--border);
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  .industrial-dark td {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+  }
+
+  .industrial-dark tbody tr {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+    transition-property: background-color;
+    transition-duration: 150ms;
+  }
+
+  .industrial-dark tbody tr:hover {
+    background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
+  }
+
+  .industrial-dark tfoot {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark caption {
+    color: var(--muted-foreground);
+  }
+
+  .industrial-dark td[colspan] {
+    color: var(--muted-foreground);
+  }
+
 }

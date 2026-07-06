@@ -3,21 +3,21 @@ type StatusBadgeProps = {
 };
 
 const statusStyles: Record<string, string> = {
-  registrado: "bg-blue-100 text-blue-700",
-  aprobado: "bg-indigo-100 text-indigo-700",
-  vigente: "bg-blue-100 text-blue-700",
-  aceptada: "bg-indigo-100 text-indigo-700",
-  pagada: "bg-green-100 text-green-700",
-  emitido: "bg-green-100 text-green-700",
-  entregado: "bg-green-100 text-green-700",
-  pendiente: "bg-yellow-100 text-yellow-700",
-  parcial: "bg-yellow-100 text-yellow-700",
-  anulada: "bg-red-100 text-red-700",
-  anulado: "bg-red-100 text-red-700",
-  cancelado: "bg-red-100 text-red-700",
-  "sin-proforma": "bg-yellow-100 text-yellow-700",
-  "sin-comprobante": "bg-yellow-100 text-yellow-700",
-  "en-produccion": "bg-purple-100 text-purple-700",
+  registrado: "border-blue-300/30 bg-blue-400/10 text-blue-200",
+  aprobado: "border-blue-300/30 bg-blue-400/10 text-blue-200",
+  vigente: "border-blue-300/30 bg-blue-400/10 text-blue-200",
+  aceptada: "border-blue-300/30 bg-blue-400/10 text-blue-200",
+  pagada: "border-green-300/30 bg-green-400/10 text-green-200",
+  emitido: "border-green-300/30 bg-green-400/10 text-green-200",
+  entregado: "border-green-300/30 bg-green-400/10 text-green-200",
+  pendiente: "border-primary/35 bg-primary/10 text-primary",
+  parcial: "border-primary/35 bg-primary/10 text-primary",
+  anulada: "border-red-300/30 bg-red-400/10 text-red-200",
+  anulado: "border-red-300/30 bg-red-400/10 text-red-200",
+  cancelado: "border-red-300/30 bg-red-400/10 text-red-200",
+  "sin-proforma": "border-primary/35 bg-primary/10 text-primary",
+  "sin-comprobante": "border-primary/35 bg-primary/10 text-primary",
+  "en-produccion": "border-primary/35 bg-primary/10 text-primary",
 };
 
 const statusLabels: Record<string, string> = {
@@ -51,7 +51,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
   const style =
     normalizedStatus && statusStyles[normalizedStatus]
       ? statusStyles[normalizedStatus]
-      : "bg-muted text-muted-foreground";
+      : "border-border bg-secondary text-muted-foreground";
 
   const label =
     normalizedStatus && statusLabels[normalizedStatus]
@@ -59,7 +59,9 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       : status ?? "-";
 
   return (
-    <span className={`rounded-full px-2 py-1 text-xs font-medium ${style}`}>
+    <span
+      className={`rounded-full border px-2 py-1 text-xs font-medium ${style}`}
+    >
       {label}
     </span>
   );
