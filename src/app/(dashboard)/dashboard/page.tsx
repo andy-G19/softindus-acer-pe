@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireAuth } from "@/lib/authz";
 import { getDashboardData } from "@/modules/dashboard/data";
 import { DashboardKpiGrid } from "@/modules/dashboard/components/dashboard-kpi-grid";
@@ -14,12 +15,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-7">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
-        <p className="text-sm text-muted-foreground">
-          Bienvenido al panel principal del sistema.
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Panel principal del sistema interno de gestión."
+      />
 
       <DashboardStatusCards session={session} />
 

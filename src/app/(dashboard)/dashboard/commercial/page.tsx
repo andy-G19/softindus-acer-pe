@@ -124,10 +124,17 @@ export default async function CommercialPage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {summaryCards.map((card) => (
-          <div key={card.label} className="rounded-lg border p-5">
-            <p className="text-sm text-muted-foreground">{card.label}</p>
-            <p className="mt-2 text-2xl font-bold">{card.value}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
+          <div
+            key={card.label}
+            className="rounded-xl border border-border/80 bg-card p-5 shadow-sm transition-colors hover:bg-secondary/70"
+          >
+            <p className="text-sm font-medium text-muted-foreground">
+              {card.label}
+            </p>
+            <p className="mt-2 text-3xl font-bold text-foreground">
+              {card.value}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
               {card.description}
             </p>
           </div>
@@ -142,15 +149,17 @@ export default async function CommercialPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2">
           {modules.map((module) => (
             <Link
               key={module.href}
               href={module.href}
-              className="rounded-lg border p-5 transition hover:bg-muted"
+              className="rounded-xl border border-border/80 bg-card p-6 shadow-sm transition-colors hover:bg-secondary/70"
             >
-              <h3 className="font-semibold">{module.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h3 className="text-xl font-semibold text-foreground">
+                {module.title}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
                 {module.description}
               </p>
             </Link>

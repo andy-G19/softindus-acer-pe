@@ -11,9 +11,9 @@ type DashboardStatusCardsProps = {
 export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
   return (
     <section>
-      <Card className="rounded-xl border bg-card shadow-sm">
+      <Card className="rounded-xl border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold">
+          <CardTitle className="text-base font-semibold text-foreground">
             Sesión actual
           </CardTitle>
         </CardHeader>
@@ -23,12 +23,16 @@ export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
             <p className="text-xs font-medium text-muted-foreground">
               Usuario
             </p>
-            <p className="truncate text-sm font-medium">{session.user.name}</p>
+            <p className="truncate text-sm font-medium text-foreground">
+              {session.user.name}
+            </p>
           </div>
 
           <div className="min-w-0">
             <p className="text-xs font-medium text-muted-foreground">Correo</p>
-            <p className="truncate text-sm">{session.user.email}</p>
+            <p className="truncate text-sm text-foreground">
+              {session.user.email}
+            </p>
           </div>
 
           <div className="flex items-center gap-2">

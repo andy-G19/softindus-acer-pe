@@ -22,9 +22,9 @@ export function DashboardRecentSummary({
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {dashboardData.canSeeProduction ? (
-        <Card>
+        <Card className="border-border/80 bg-card">
           <CardHeader>
-            <CardTitle className="text-base">
+            <CardTitle className="text-base font-semibold text-foreground">
               Últimas 5 órdenes de trabajo
             </CardTitle>
           </CardHeader>
@@ -36,12 +36,12 @@ export function DashboardRecentSummary({
               dashboardData.latestWorkOrders.map((order) => (
                 <div
                   key={order.id_orden_trabajo}
-                  className="flex items-start justify-between gap-4 border-b pb-3 last:border-0 last:pb-0"
+                  className="flex items-start justify-between gap-4 border-b border-border/70 pb-3 last:border-0 last:pb-0"
                 >
                   <div className="space-y-1">
                     <Link
                       href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
-                      className="text-sm font-medium hover:underline"
+                      className="text-sm font-medium text-foreground hover:text-primary"
                     >
                       {order.id_orden_trabajo}
                     </Link>
@@ -69,9 +69,11 @@ export function DashboardRecentSummary({
       ) : null}
 
       {dashboardData.canSeeCommercial ? (
-        <Card>
+        <Card className="border-border/80 bg-card">
           <CardHeader>
-            <CardTitle className="text-base">Últimos 5 pedidos</CardTitle>
+            <CardTitle className="text-base font-semibold text-foreground">
+              Últimos 5 pedidos
+            </CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3">
@@ -81,10 +83,12 @@ export function DashboardRecentSummary({
               dashboardData.latestOrders.map((order) => (
                 <div
                   key={order.id_pedido}
-                  className="flex items-start justify-between gap-4 border-b pb-3 last:border-0 last:pb-0"
+                  className="flex items-start justify-between gap-4 border-b border-border/70 pb-3 last:border-0 last:pb-0"
                 >
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">{order.id_pedido}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {order.id_pedido}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {order.cliente.nombre_razon_social}
                     </p>
@@ -107,9 +111,11 @@ export function DashboardRecentSummary({
       ) : null}
 
       {dashboardData.canSeeInventory ? (
-        <Card>
+        <Card className="border-border/80 bg-card">
           <CardHeader>
-            <CardTitle className="text-base">Materiales críticos</CardTitle>
+            <CardTitle className="text-base font-semibold text-foreground">
+              Materiales críticos
+            </CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3">
@@ -119,10 +125,10 @@ export function DashboardRecentSummary({
               dashboardData.criticalMaterials.slice(0, 5).map((material) => (
                 <div
                   key={material.id_material}
-                  className="flex items-start justify-between gap-4 border-b pb-3 last:border-0 last:pb-0"
+                  className="flex items-start justify-between gap-4 border-b border-border/70 pb-3 last:border-0 last:pb-0"
                 >
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">
+                    <p className="text-sm font-medium text-foreground">
                       {material.nombre_material}
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -144,9 +150,9 @@ export function DashboardRecentSummary({
 
       {dashboardData.canSeePettyCash &&
       dashboardData.latestCashMovements.length > 0 ? (
-        <Card>
+        <Card className="border-border/80 bg-card">
           <CardHeader>
-            <CardTitle className="text-base">
+            <CardTitle className="text-base font-semibold text-foreground">
               Últimos movimientos de caja
             </CardTitle>
           </CardHeader>
@@ -155,10 +161,12 @@ export function DashboardRecentSummary({
             {dashboardData.latestCashMovements.map((movement) => (
               <div
                 key={movement.id_movimiento_caja}
-                className="flex items-start justify-between gap-4 border-b pb-3 last:border-0 last:pb-0"
+                className="flex items-start justify-between gap-4 border-b border-border/70 pb-3 last:border-0 last:pb-0"
               >
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">{movement.concepto}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {movement.concepto}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {movement.caja_chica.nombre_caja} -{" "}
                     {formatDate(movement.fecha_movimiento)}

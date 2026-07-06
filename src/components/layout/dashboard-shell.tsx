@@ -18,7 +18,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
     <div className="industrial-dark dark min-h-screen bg-[#0f1011] text-foreground">
       <SessionIdleGuard />
 
-      <header className="sticky top-0 z-40 border-b border-border/80 bg-[#17181a]/95 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur supports-[backdrop-filter]:bg-[#17181a]/85">
+      <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="min-w-0 space-y-1">
             <div className="flex flex-wrap items-center gap-2">
