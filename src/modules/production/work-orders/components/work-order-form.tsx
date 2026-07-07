@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { createWorkOrderAction } from "@/modules/production/work-orders/actions";
 
 type ProductionType = "pedido" | "campania" | "reposicion_stock";
@@ -228,7 +234,7 @@ export function WorkOrderForm({
 
     if (!canCreateOrder) {
       event.preventDefault();
-      setValidationMessage("No hay catalogos suficientes para crear la orden.");
+      setValidationMessage("No hay catálogos suficientes para crear la orden.");
       return;
     }
 
@@ -240,7 +246,7 @@ export function WorkOrderForm({
 
     if (productionType === "campania" && !selectedCampaign) {
       event.preventDefault();
-      setValidationMessage("Seleccione una campania.");
+      setValidationMessage("Seleccione una campaña.");
       return;
     }
 
@@ -257,7 +263,7 @@ export function WorkOrderForm({
       !selectedCampaign.productIds.includes(selectedProductId)
     ) {
       event.preventDefault();
-      setValidationMessage("El producto no pertenece a la campania seleccionada.");
+      setValidationMessage("El producto no pertenece a la campaña seleccionada.");
       return;
     }
 
@@ -289,19 +295,18 @@ export function WorkOrderForm({
     <form
       action={createWorkOrderAction}
       onSubmit={validateBeforeSubmit}
-      className="space-y-6 rounded-xl border bg-white p-6 shadow-sm"
+      className="space-y-6 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
     >
       {validationMessage ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {validationMessage}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{validationMessage}</AlertDescription>
+        </Alert>
       ) : null}
 
       <section className="grid gap-5 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Tipo de produccion *</label>
-
-          <select
+          <Label>Tipo de producción *</Label>
+          <NativeSelect
             name="tipo_produccion"
             required
             value={productionType}
@@ -309,32 +314,28 @@ export function WorkOrderForm({
             onChange={(event) => {
               handleProductionTypeChange(event.target.value as ProductionType);
             }}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           >
             <option value="pedido">Por pedido</option>
-            <option value="campania">Por campania</option>
-            <option value="reposicion_stock">Reposicion de stock</option>
-          </select>
-
-          <p className="text-xs text-slate-500">
+            <option value="campania">Por campaña</option>
+            <option value="reposicion_stock">Reposición de stock</option>
+          </NativeSelect>
+          <p className="text-xs text-muted-foreground">
             El producto controla las rutas y recetas disponibles.
           </p>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Prioridad *</label>
-
-          <select
+          <Label>Prioridad *</Label>
+          <NativeSelect
             name="prioridad"
             required
             defaultValue="media"
             disabled={!canCreateOrder}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           >
             <option value="alta">Alta</option>
             <option value="media">Media</option>
             <option value="baja">Baja</option>
-          </select>
+          </NativeSelect>
         </div>
       </section>
 
@@ -358,13 +359,13 @@ export function WorkOrderForm({
         <section>
           <SearchableSelect
             name="id_campania"
-            label="Campania"
-            placeholder="Buscar campania activa o planificada..."
+            label="Campaña"
+            placeholder="Buscar campaña activa o planificada..."
             items={campaignItems}
             value={selectedCampaignId}
             required
             disabled={!canCreateOrder}
-            emptyMessage="No hay campanias activas o planificadas."
+            emptyMessage="No hay campañas activas o planificadas."
             onValueChange={handleCampaignChange}
           />
         </section>
@@ -373,9 +374,9 @@ export function WorkOrderForm({
       <section className="space-y-2">
         {productionType === "pedido" ? (
           <>
-            <label className="text-sm font-medium">Producto *</label>
+            <Label>Producto *</Label>
             <input type="hidden" name="id_producto" value={selectedProductId} />
-            <div className="rounded-lg border bg-slate-100 px-3 py-2 text-sm text-slate-700">
+            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
               {selectedProduct
                 ? formatProductLabel(selectedProduct)
                 : "Seleccione primero un detalle de pedido"}
@@ -398,7 +399,7 @@ export function WorkOrderForm({
           />
         )}
 
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted-foreground">
           Al cambiar de producto se limpian la ruta y la receta seleccionadas.
         </p>
       </section>
@@ -407,7 +408,7 @@ export function WorkOrderForm({
         <div className="space-y-2">
           <SearchableSelect
             name="id_ruta"
-            label="Ruta de fabricacion"
+            label="Ruta de fabricación"
             placeholder="Buscar ruta del producto..."
             items={routeItems}
             value={selectedRouteId}
@@ -421,7 +422,7 @@ export function WorkOrderForm({
           />
 
           {selectedProductId && availableRoutes.length === 0 ? (
-            <p className="text-xs text-red-600">
+            <p className="text-xs text-destructive">
               El producto seleccionado no tiene rutas activas con etapas.
             </p>
           ) : null}
@@ -430,7 +431,7 @@ export function WorkOrderForm({
         <div className="space-y-2">
           <SearchableSelect
             name="id_version_receta"
-            label="Version de receta"
+            label="Versión de receta"
             placeholder="Buscar receta del producto..."
             items={versionItems}
             value={selectedVersionId}
@@ -444,8 +445,9 @@ export function WorkOrderForm({
           />
 
           {selectedProductId && availableVersions.length === 0 ? (
-            <p className="text-xs text-red-600">
-              El producto seleccionado no tiene recetas vigentes con materiales.
+            <p className="text-xs text-destructive">
+              El producto seleccionado no tiene recetas vigentes con
+              materiales.
             </p>
           ) : null}
         </div>
@@ -453,9 +455,8 @@ export function WorkOrderForm({
 
       <section className="grid gap-5 md:grid-cols-3">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Cantidad *</label>
-
-          <input
+          <Label>Cantidad *</Label>
+          <Input
             name="cantidad"
             type="number"
             min="0.01"
@@ -465,73 +466,57 @@ export function WorkOrderForm({
             disabled={!canCreateOrder}
             onChange={(event) => setQuantity(event.target.value)}
             placeholder="Ej. 50"
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Fecha de inicio *</label>
-
-          <input
+          <Label>Fecha de inicio *</Label>
+          <Input
             name="fecha_inicio"
             type="date"
             required
             defaultValue={initialStartDate}
             disabled={!canCreateOrder}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Entrega estimada</label>
-
-          <input
+          <Label>Entrega estimada</Label>
+          <Input
             name="fecha_entrega_estimada"
             type="date"
             disabled={!canCreateOrder}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
       </section>
 
       <section className="space-y-2">
-        <label className="text-sm font-medium">Observaciones</label>
-
-        <textarea
+        <Label>Observaciones</Label>
+        <Textarea
           name="observaciones"
           rows={4}
           maxLength={700}
           disabled={!canCreateOrder}
-          placeholder="Ej. Priorizar corte y prensado durante la manana."
-          className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
+          placeholder="Ej. Priorizar corte y prensado durante la mañana."
         />
       </section>
 
-      <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-        <p className="font-medium text-slate-800">Importante</p>
-
-        <p className="mt-1">
-          Esta fase crea la orden de trabajo y la deja en estado pendiente. En
-          la siguiente fase se generan y actualizan los avances por etapa de
-          produccion.
-        </p>
-      </div>
+      <Alert variant="info">
+        <AlertDescription>
+          Esta orden queda registrada en estado pendiente. Los avances por
+          etapa de producción se generan y actualizan desde la pantalla de
+          avances de la orden.
+        </AlertDescription>
+      </Alert>
 
       <div className="flex items-center justify-between pt-4">
-        <Link
-          href="/dashboard/production/work-orders"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Cancelar
-        </Link>
+        <Button variant="link" className="h-auto p-0" asChild>
+          <Link href="/dashboard/production/work-orders">Cancelar</Link>
+        </Button>
 
-        <button
-          type="submit"
-          disabled={!canCreateOrder}
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-        >
+        <Button type="submit" disabled={!canCreateOrder}>
           Crear orden
-        </button>
+        </Button>
       </div>
     </form>
   );

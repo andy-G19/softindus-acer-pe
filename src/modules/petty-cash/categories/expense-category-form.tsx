@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import type { ExpenseCategoryFormState } from "@/modules/petty-cash/categories/actions";
 
 type ExpenseCategoryValues = {
@@ -56,73 +62,53 @@ export function ExpenseCategoryForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="nombre_categoria" className="text-sm font-medium">
-          Nombre de categoria
-        </label>
-        <input
+        <Label htmlFor="nombre_categoria">Nombre de categoría</Label>
+        <Input
           id="nombre_categoria"
           name="nombre_categoria"
           required
           defaultValue={getValue(defaultValues, "nombre_categoria")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.nombre_categoria} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="descripcion" className="text-sm font-medium">
-          Descripcion
-        </label>
-        <textarea
+        <Label htmlFor="descripcion">Descripción</Label>
+        <Textarea
           id="descripcion"
           name="descripcion"
           rows={4}
           defaultValue={getValue(defaultValues, "descripcion")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.descripcion} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="estado" className="text-sm font-medium">
-          Estado
-        </label>
-        <select
+        <Label htmlFor="estado">Estado</Label>
+        <NativeSelect
           id="estado"
           name="estado"
           defaultValue={getValue(defaultValues, "estado") || "true"}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         >
           <option value="true">Activa</option>
           <option value="false">Inactiva</option>
-        </select>
+        </NativeSelect>
         <FieldError messages={state.fieldErrors?.estado} />
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
-        <Link
-          href="/dashboard/petty-cash/categories"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-        >
-          Volver al listado
-        </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/petty-cash/categories">Volver al listado</Link>
+        </Button>
       </div>
     </form>
   );

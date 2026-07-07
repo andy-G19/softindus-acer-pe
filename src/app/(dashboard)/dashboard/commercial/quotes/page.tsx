@@ -3,6 +3,20 @@ import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -186,117 +200,105 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
           { label: "Proformas" },
         ])}
         actions={
-          <Link
-            href="/dashboard/commercial/quotes/new"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-          >
-            Nueva proforma
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/commercial/quotes/new">Nueva proforma</Link>
+          </Button>
         }
       />
 
       <form
         action="/dashboard/commercial/quotes"
-        className="grid gap-3 rounded-lg border bg-white p-4 md:grid-cols-6"
+        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-6"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar proforma..."
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <select
-          name="client"
-          defaultValue={client}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los clientes</option>
-          {clients.map((item) => (
-            <option key={item.id_cliente} value={item.id_cliente}>
-              {item.nombre_razon_social}
-            </option>
-          ))}
-        </select>
-        <select
-          name="order"
-          defaultValue={order}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los pedidos</option>
-          {orders.map((item) => (
-            <option key={item.id_pedido} value={item.id_pedido}>
-              {item.id_pedido}
-            </option>
-          ))}
-        </select>
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="vigente">Vigente</option>
-          <option value="aceptada">Aceptada</option>
-          <option value="pagada">Pagada</option>
-          <option value="anulada">Anulada</option>
-        </select>
-        <select
-          name="balance"
-          defaultValue={balance}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los saldos</option>
-          <option value="pending">Con saldo</option>
-          <option value="paid">Sin saldo</option>
-        </select>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar proforma..." />
         </div>
-        <div className="flex gap-2 md:col-span-6">
-          <button
-            type="submit"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Filtrar
-          </button>
-          <Link
-            href="/dashboard/commercial/quotes"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Limpiar filtros
-          </Link>
+        <div className="space-y-2">
+          <Label htmlFor="client">Cliente</Label>
+          <NativeSelect id="client" name="client" defaultValue={client}>
+            <option value="">Todos los clientes</option>
+            {clients.map((item) => (
+              <option key={item.id_cliente} value={item.id_cliente}>
+                {item.nombre_razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="order">Pedido</Label>
+          <NativeSelect id="order" name="order" defaultValue={order}>
+            <option value="">Todos los pedidos</option>
+            {orders.map((item) => (
+              <option key={item.id_pedido} value={item.id_pedido}>
+                {item.id_pedido}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="vigente">Vigente</option>
+            <option value="aceptada">Aceptada</option>
+            <option value="pagada">Pagada</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="balance">Saldo</Label>
+          <NativeSelect id="balance" name="balance" defaultValue={balance}>
+            <option value="">Todos los saldos</option>
+            <option value="pending">Con saldo</option>
+            <option value="paid">Sin saldo</option>
+          </NativeSelect>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="from">Desde</Label>
+            <Input
+              id="from"
+              name="from"
+              type="date"
+              defaultValue={parseStringParam(params, "from")}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="to">Hasta</Label>
+            <Input
+              id="to"
+              name="to"
+              type="date"
+              defaultValue={parseStringParam(params, "to")}
+            />
+          </div>
+        </div>
+        <div className="flex items-end gap-2 md:col-span-6">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/commercial/quotes">Limpiar filtros</Link>
+          </Button>
         </div>
       </form>
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Nro. Proforma</th>
-              <th className="px-4 py-3 text-left">Pedido</th>
-              <th className="px-4 py-3 text-left">Cliente</th>
-              <th className="px-4 py-3 text-left">Fecha</th>
-              <th className="px-4 py-3 text-left">Total</th>
-              <th className="px-4 py-3 text-left">Saldo</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Comprobante</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nro. Proforma</TableHead>
+            <TableHead>Pedido</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead>Total</TableHead>
+            <TableHead>Saldo</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Comprobante</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {quotes.map((quote) => {
+        <TableBody>
+          {quotes.map((quote) => {
               const canPay =
                 quote.estado !== "pagada" &&
                 quote.estado !== "anulada" &&
@@ -307,49 +309,47 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                 quote.comprobante_venta.length === 0;
 
               return (
-                <tr key={quote.id_proforma} className="border-t">
-                  <td className="px-4 py-3 font-medium">
+                <TableRow key={quote.id_proforma}>
+                  <TableCell className="font-medium">
                     {quote.numero_proforma}
-                  </td>
-                  <td className="px-4 py-3">{quote.id_pedido}</td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>{quote.id_pedido}</TableCell>
+                  <TableCell>
                     {quote.pedido.cliente.nombre_razon_social}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDate(quote.fecha_emision)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatMoney(quote.monto_total)}
-                  </td>
-                  <td className="px-4 py-3">{formatMoney(quote.saldo)}</td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>{formatDate(quote.fecha_emision)}</TableCell>
+                  <TableCell>{formatMoney(quote.monto_total)}</TableCell>
+                  <TableCell>{formatMoney(quote.saldo)}</TableCell>
+                  <TableCell>
                     <StatusBadge status={quote.estado} />
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     {quote.comprobante_venta[0] ? (
-                      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                      <Badge variant="success">
                         {quote.comprobante_venta[0].tipo_comprobante}{" "}
                         {quote.comprobante_venta[0].numero_comprobante}
-                      </span>
+                      </Badge>
                     ) : (
                       <StatusBadge status="sin-comprobante" />
                     )}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
-                      >
-                        Ver detalle
-                      </Link>
-                      {canPay ? (
+                      <Button variant="outline" size="sm" asChild>
                         <Link
                           href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
-                          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
                         >
-                          Registrar pago
+                          Ver detalle
                         </Link>
+                      </Button>
+                      {canPay ? (
+                        <Button size="sm" asChild>
+                          <Link
+                            href={`/dashboard/commercial/quotes/${quote.id_proforma}`}
+                          >
+                            Registrar pago
+                          </Link>
+                        </Button>
                       ) : null}
                       {canAnnul ? (
                         <form action={annulQuoteAction}>
@@ -358,33 +358,29 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                             name="id_proforma"
                             value={quote.id_proforma}
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
-                          >
+                          <Button type="submit" variant="outline" size="sm">
                             Anular
-                          </button>
+                          </Button>
                         </form>
                       ) : null}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
 
             {quotes.length === 0 && (
-              <tr>
-                <td
-                  colSpan={9}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  Todavía no hay proformas registradas.
-                </td>
-              </tr>
+              <TableRow>
+                <TableCell colSpan={9} className="p-0">
+                  <EmptyState
+                    className="border-0"
+                    label="Todavía no hay proformas registradas."
+                  />
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+      </Table>
     </main>
   );
 }

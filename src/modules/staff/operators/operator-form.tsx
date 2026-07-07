@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import type { OperatorFormState } from "@/modules/staff/operators/actions";
 
 type OperatorFormValues = {
@@ -66,40 +72,30 @@ export function OperatorForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="nombres" className="text-sm font-medium">
-            Nombres
-          </label>
-          <input
+          <Label htmlFor="nombres">Nombres</Label>
+          <Input
             id="nombres"
             name="nombres"
             required
             defaultValue={getValue(defaultValues, "nombres")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.nombres} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="apellidos" className="text-sm font-medium">
-            Apellidos
-          </label>
-          <input
+          <Label htmlFor="apellidos">Apellidos</Label>
+          <Input
             id="apellidos"
             name="apellidos"
             required
             defaultValue={getValue(defaultValues, "apellidos")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.apellidos} />
         </div>
@@ -107,27 +103,21 @@ export function OperatorForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="cargo" className="text-sm font-medium">
-            Cargo
-          </label>
-          <input
+          <Label htmlFor="cargo">Cargo</Label>
+          <Input
             id="cargo"
             name="cargo"
             defaultValue={getValue(defaultValues, "cargo")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.cargo} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="especialidad" className="text-sm font-medium">
-            Especialidad
-          </label>
-          <input
+          <Label htmlFor="especialidad">Especialidad</Label>
+          <Input
             id="especialidad"
             name="especialidad"
             defaultValue={getValue(defaultValues, "especialidad")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.especialidad} />
         </div>
@@ -135,128 +125,100 @@ export function OperatorForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="telefono" className="text-sm font-medium">
-            Telefono
-          </label>
-          <input
+          <Label htmlFor="telefono">Telefono</Label>
+          <Input
             id="telefono"
             name="telefono"
             defaultValue={getValue(defaultValues, "telefono")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.telefono} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="fecha_ingreso" className="text-sm font-medium">
-            Fecha de ingreso
-          </label>
-          <input
+          <Label htmlFor="fecha_ingreso">Fecha de ingreso</Label>
+          <Input
             id="fecha_ingreso"
             name="fecha_ingreso"
             type="date"
             defaultValue={getValue(defaultValues, "fecha_ingreso")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.fecha_ingreso} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="direccion" className="text-sm font-medium">
-          Direccion
-        </label>
-        <input
+        <Label htmlFor="direccion">Direccion</Label>
+        <Input
           id="direccion"
           name="direccion"
           defaultValue={getValue(defaultValues, "direccion")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.direccion} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <div className="space-y-2">
-          <label htmlFor="modalidad_pago" className="text-sm font-medium">
-            Modalidad de pago
-          </label>
-          <select
+          <Label htmlFor="modalidad_pago">Modalidad de pago</Label>
+          <NativeSelect
             id="modalidad_pago"
             name="modalidad_pago"
             required
             defaultValue={getValue(defaultValues, "modalidad_pago") || "semanal"}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="semanal">Semanal</option>
             <option value="quincenal">Quincenal</option>
             <option value="mensual">Mensual</option>
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.modalidad_pago} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="tarifa" className="text-sm font-medium">
-            Tarifa
-          </label>
-          <input
+          <Label htmlFor="tarifa">Tarifa</Label>
+          <Input
             id="tarifa"
             name="tarifa"
             type="number"
             min="0"
             step="0.01"
             defaultValue={getValue(defaultValues, "tarifa")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.tarifa} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="estado" className="text-sm font-medium">
-            Estado
-          </label>
-          <select
+          <Label htmlFor="estado">Estado</Label>
+          <NativeSelect
             id="estado"
             name="estado"
             required
             defaultValue={getValue(defaultValues, "estado") || "activo"}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="activo">Activo</option>
             <option value="inactivo">Inactivo</option>
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.estado} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="observaciones" className="text-sm font-medium">
-          Observaciones
-        </label>
-        <textarea
+        <Label htmlFor="observaciones">Observaciones</Label>
+        <Textarea
           id="observaciones"
           name="observaciones"
           rows={4}
           defaultValue={getValue(defaultValues, "observaciones")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.observaciones} />
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : null}
       </div>
     </form>

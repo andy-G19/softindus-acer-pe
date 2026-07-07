@@ -1,4 +1,3 @@
-﻿import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -6,6 +5,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
@@ -48,14 +58,14 @@ function getMovementLabel(type: string) {
 
 function getMovementBadgeVariant(type: string) {
   if (type === "ingreso") {
-    return "default";
+    return "success" as const;
   }
 
   if (type === "egreso") {
-    return "destructive";
+    return "destructive" as const;
   }
 
-  return "secondary";
+  return "secondary" as const;
 }
 
 export default async function PettyCashDashboardPage() {
@@ -163,124 +173,64 @@ export default async function PettyCashDashboardPage() {
   const totalMonthlyExpenses = toNumber(monthlyExpenses._sum.monto);
   const monthlyResult = totalMonthlyIncome - totalMonthlyExpenses;
 
+  const modules = [
+    {
+      title: "Listado de cajas chicas",
+      href: "/dashboard/petty-cash/boxes",
+      description: "Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.",
+    },
+    {
+      title: "Abrir caja chica",
+      href: "/dashboard/petty-cash/boxes/new",
+      description: "Registrar una nueva caja con saldo inicial y responsable.",
+    },
+    {
+      title: "Registrar egreso",
+      href: "/dashboard/petty-cash/expenses/new",
+      description: "Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.",
+    },
+    {
+      title: "Registrar ingreso o ajuste",
+      href: "/dashboard/petty-cash/income-adjustments/new",
+      description: "Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.",
+    },
+    {
+      title: "Movimientos de caja",
+      href: "/dashboard/petty-cash/movements",
+      description: "Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.",
+    },
+    {
+      title: "Resumen mensual",
+      href: "/dashboard/petty-cash/monthly-summary",
+      description: "Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.",
+    },
+    {
+      title: "Categorías de gasto",
+      href: "/dashboard/petty-cash/categories",
+      description: "Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.",
+    },
+  ];
+
   return (
     <main className="space-y-6">
       <PageHeader
         title="Caja chica"
         description="Controla cajas chicas, ingresos menores, egresos, categorías de gasto y movimientos financieros menores del taller."
         breadcrumbs={dashboardBreadcrumbs([{ label: "Caja chica" }])}
-        actions={
-          <>
-            <Badge variant="secondary">Fase 7</Badge>
-            <Badge>Solo ADMIN</Badge>
-          </>
-        }
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Saldo actual abierto</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalCurrentBalance)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Suma de saldos de cajas abiertas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ingresos del mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalMonthlyIncome)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Incluye ingresos menores y ventas de chatarra vinculadas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Egresos del mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalMonthlyExpenses)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gastos menores registrados en caja chica.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Resultado mensual</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(monthlyResult)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ingresos menos egresos del mes actual.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Saldo actual abierto" value={formatMoney(totalCurrentBalance)} description="Suma de saldos de cajas abiertas." tone="info" />
+        <KpiCard title="Ingresos del mes" value={formatMoney(totalMonthlyIncome)} description="Incluye ingresos menores y ventas de chatarra vinculadas." tone="success" />
+        <KpiCard title="Egresos del mes" value={formatMoney(totalMonthlyExpenses)} description="Gastos menores registrados en caja chica." tone="warning" />
+        <KpiCard title="Resultado mensual" value={formatMoney(monthlyResult)} description="Ingresos menos egresos del mes actual." tone="info" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas abiertas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{openBoxes}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total de cajas chicas actualmente abiertas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalBoxes}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Historial total de cajas creadas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Categorías activas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{activeCategories}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Categorías disponibles para clasificar egresos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Movimientos del mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{monthlyMovements}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total de ingresos, egresos y ajustes registrados este mes.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Cajas abiertas" value={openBoxes.toString()} description="Total de cajas chicas actualmente abiertas." tone="info" />
+        <KpiCard title="Cajas registradas" value={totalBoxes.toString()} description="Historial total de cajas creadas." tone="info" />
+        <KpiCard title="Categorías activas" value={activeCategories.toString()} description="Disponibles para clasificar egresos." tone="info" />
+        <KpiCard title="Movimientos del mes" value={monthlyMovements.toString()} description="Ingresos, egresos y ajustes registrados este mes." tone="info" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
@@ -291,63 +241,46 @@ export default async function PettyCashDashboardPage() {
             </CardTitle>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="px-0">
             {latestMovements.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aún no hay movimientos de caja registrados.
-              </p>
+              <EmptyState
+                className="mx-6 border-0"
+                label="Aún no hay movimientos de caja registrados."
+              />
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b text-left">
-                      <th className="py-2 pr-3">Fecha</th>
-                      <th className="py-2 pr-3">Tipo</th>
-                      <th className="py-2 pr-3">Concepto</th>
-                      <th className="py-2 pr-3">Caja</th>
-                      <th className="py-2 pr-3">Categoría</th>
-                      <th className="py-2 text-right">Monto</th>
-                    </tr>
-                  </thead>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Concepto</TableHead>
+                    <TableHead>Caja</TableHead>
+                    <TableHead>Categoría</TableHead>
+                    <TableHead className="text-right">Monto</TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                  <tbody>
-                    {latestMovements.map((movement) => (
-                      <tr
-                        key={movement.id_movimiento_caja}
-                        className="border-b"
-                      >
-                        <td className="py-2 pr-3">
-                          {formatDate(movement.fecha_movimiento)}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          <Badge
-                            variant={getMovementBadgeVariant(
-                              movement.tipo_movimiento,
-                            )}
-                          >
-                            {getMovementLabel(movement.tipo_movimiento)}
-                          </Badge>
-                        </td>
-
-                        <td className="py-2 pr-3">{movement.concepto}</td>
-
-                        <td className="py-2 pr-3">
-                          {movement.caja_chica.nombre_caja}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {movement.categoria_gasto?.nombre_categoria ?? "-"}
-                        </td>
-
-                        <td className="py-2 text-right font-medium">
-                          {formatMoney(movement.monto)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                <TableBody>
+                  {latestMovements.map((movement) => (
+                    <TableRow key={movement.id_movimiento_caja}>
+                      <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                      <TableCell>
+                        <Badge variant={getMovementBadgeVariant(movement.tipo_movimiento)}>
+                          {getMovementLabel(movement.tipo_movimiento)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{movement.concepto}</TableCell>
+                      <TableCell>{movement.caja_chica.nombre_caja}</TableCell>
+                      <TableCell>
+                        {movement.categoria_gasto?.nombre_categoria ?? "-"}
+                      </TableCell>
+                      <TableCell className="text-right font-medium">
+                        {formatMoney(movement.monto)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </CardContent>
         </Card>
@@ -359,18 +292,18 @@ export default async function PettyCashDashboardPage() {
 
           <CardContent>
             {latestBoxes.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aún no se registraron cajas chicas.
-              </p>
+              <EmptyState label="Aún no se registraron cajas chicas." />
             ) : (
               <div className="space-y-3">
                 {latestBoxes.map((box) => (
                   <div
                     key={box.id_caja_chica}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <p className="font-medium">{box.nombre_caja}</p>
+                      <p className="font-medium text-foreground">
+                        {box.nombre_caja}
+                      </p>
                       <Badge variant="secondary">{box.estado}</Badge>
                     </div>
 
@@ -380,7 +313,7 @@ export default async function PettyCashDashboardPage() {
 
                     <p className="mt-1 text-sm">
                       Saldo actual:{" "}
-                      <span className="font-medium">
+                      <span className="font-medium text-foreground">
                         {formatMoney(box.saldo_actual)}
                       </span>
                     </p>
@@ -392,116 +325,16 @@ export default async function PettyCashDashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-
-        <Link href="/dashboard/petty-cash/boxes" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">
-                Listado de cajas chicas
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/dashboard/petty-cash/boxes/new" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">Abrir caja chica</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Registrar una nueva caja con saldo inicial y responsable.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/dashboard/petty-cash/expenses/new" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">
-                Registrar egreso
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Registrar gastos menores, descontar saldo de caja y clasificar el egreso
-                por categoría.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/dashboard/petty-cash/income-adjustments/new" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">
-                Registrar ingreso o ajuste
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Registrar ingresos menores, ajustes positivos o ajustes negativos de
-                caja chica.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/dashboard/petty-cash/movements" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">
-                Movimientos de caja
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Consultar ingresos, egresos y ajustes con filtros por caja, tipo,
-                categoría, fechas y concepto.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/dashboard/petty-cash/monthly-summary" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">
-                Resumen mensual
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Consultar ventas cobradas, saldos pendientes, costos, caja chica y
-                utilidad estimada por mes.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-
-
-        <Link href="/dashboard/petty-cash/categories" className="block">
-          <Card className="h-full transition hover:bg-muted/50 hover:shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">Categorías de gasto</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Administrar categorías como repuestos, transporte,
-                mantenimiento, refrigerios y otros.
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {modules.map((module) => (
+          <ModuleAccessCard
+            key={module.href}
+            title={module.title}
+            description={module.description}
+            href={module.href}
+          />
+        ))}
       </section>
     </main>
   );
 }
-

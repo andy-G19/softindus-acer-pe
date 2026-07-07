@@ -1,15 +1,36 @@
 ﻿import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+
+function getStatusBadgeVariant(status: string) {
+  if (["disponible", "acumulada"].includes(status)) {
+    return "success" as const;
+  }
+
+  if (["reutilizado", "vendida"].includes(status)) {
+    return "info" as const;
+  }
+
+  if (status === "descartado") {
+    return "destructive" as const;
+  }
+
+  return "secondary" as const;
+}
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -40,22 +61,6 @@ function formatDate(value: Date | null | undefined) {
     month: "2-digit",
     year: "numeric",
   }).format(value);
-}
-
-function getStatusClass(status: string) {
-  if (["disponible", "acumulada"].includes(status)) {
-    return "bg-emerald-50 text-emerald-700";
-  }
-
-  if (["reutilizado", "vendida"].includes(status)) {
-    return "bg-blue-50 text-blue-700";
-  }
-
-  if (status === "descartado") {
-    return "bg-red-50 text-red-700";
-  }
-
-  return "bg-slate-100 text-slate-700";
 }
 
 export default async function WasteScrapDashboardPage() {
@@ -193,290 +198,207 @@ export default async function WasteScrapDashboardPage() {
         breadcrumbs={dashboardBreadcrumbs([{ label: "Mermas y chatarra" }])}
         actions={
           <>
-            <Link
-              href={`${navigationHrefs.reusableScraps}/new`}
-              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Registrar retazo
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={`${navigationHrefs.reusableScraps}/new`}>
+                Registrar retazo
+              </Link>
+            </Button>
 
-            <Link
-              href={`${navigationHrefs.scraps}/new`}
-              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Registrar chatarra
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={`${navigationHrefs.scraps}/new`}>
+                Registrar chatarra
+              </Link>
+            </Button>
 
             {canRegisterSale ? (
-              <Link
-                href={`${navigationHrefs.scrapSales}/new`}
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-              >
-                Registrar venta
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href={`${navigationHrefs.scrapSales}/new`}>
+                  Registrar venta
+                </Link>
+              </Button>
             ) : null}
 
-            <Link
-              href={navigationHrefs.reusableScraps}
-              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Ver retazos
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={navigationHrefs.reusableScraps}>Ver retazos</Link>
+            </Button>
 
-            <Link
-              href={navigationHrefs.scraps}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Ver chatarra
-            </Link>
+            <Button asChild>
+              <Link href={navigationHrefs.scraps}>Ver chatarra</Link>
+            </Button>
           </>
         }
       />
 
-      <section
-        className={`rounded-xl border p-5 text-sm ${
-          moduleReady
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : "border-amber-200 bg-amber-50 text-amber-800"
-        }`}
-      >
-        <p className="font-semibold">
+      <Alert variant={moduleReady ? "success" : "warning"}>
+        <AlertTitle>
           {moduleReady
             ? "Módulo operativo y con registros"
             : "Módulo listo para iniciar registros"}
-        </p>
-
-        <p className="mt-1">
+        </AlertTitle>
+        <AlertDescription>
           {moduleReady
             ? "El módulo ya permite registrar, consultar y controlar retazos, chatarra y ventas de chatarra."
             : "Aún no hay registros. Empieza registrando retazos reutilizables o chatarra generada."}
-        </p>
-      </section>
+        </AlertDescription>
+      </Alert>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Retazos registrados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{totalRetazos}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {retazosDisponibles} disponibles
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Retazos reutilizados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{retazosReutilizados}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {retazosDescartados} descartados
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Chatarra pendiente
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{chatarraAcumulada}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {chatarraVendida} registros vendidos
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Ingresos por chatarra
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{formatMoney(totalIngresos)}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {ventasChatarra} venta(s) registradas
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Retazos registrados" value={totalRetazos.toString()} description={`${retazosDisponibles} disponibles`} tone="info" />
+        <KpiCard title="Retazos reutilizados" value={retazosReutilizados.toString()} description={`${retazosDescartados} descartados`} tone="success" />
+        <KpiCard title="Chatarra pendiente" value={chatarraAcumulada.toString()} description={`${chatarraVendida} registros vendidos`} tone="info" />
+        <KpiCard title="Ingresos por chatarra" value={formatMoney(totalIngresos)} description={`${ventasChatarra} venta(s) registradas`} tone="success" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">
-            Retazos disponibles
-          </p>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm font-medium text-muted-foreground">
+              Retazos disponibles
+            </p>
+            <p className="mt-2 text-2xl font-bold text-foreground">
+              {hasAvailableReusableScraps ? "Sí" : "No"}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {hasAvailableReusableScraps
+                ? "Existen retazos que pueden ser reutilizados en producción."
+                : "No hay retazos disponibles para reutilizar."}
+            </p>
+          </CardContent>
+        </Card>
 
-          <p className="mt-2 text-2xl font-bold">
-            {hasAvailableReusableScraps ? "Sí" : "No"}
-          </p>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm font-medium text-muted-foreground">
+              Chatarra pendiente de venta
+            </p>
+            <p className="mt-2 text-2xl font-bold text-foreground">
+              {hasPendingScrapSales ? "Sí" : "No"}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {hasPendingScrapSales
+                ? "Hay chatarra acumulada que puede generar ingreso menor."
+                : "No hay chatarra acumulada pendiente de venta."}
+            </p>
+          </CardContent>
+        </Card>
 
-          <p className="mt-1 text-sm text-slate-500">
-            {hasAvailableReusableScraps
-              ? "Existen retazos que pueden ser reutilizados en producción."
-              : "No hay retazos disponibles para reutilizar."}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">
-            Chatarra pendiente de venta
-          </p>
-
-          <p className="mt-2 text-2xl font-bold">
-            {hasPendingScrapSales ? "Sí" : "No"}
-          </p>
-
-          <p className="mt-1 text-sm text-slate-500">
-            {hasPendingScrapSales
-              ? "Hay chatarra acumulada que puede generar ingreso menor."
-              : "No hay chatarra acumulada pendiente de venta."}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">
-            Ingreso recuperado
-          </p>
-
-          <p className="mt-2 text-2xl font-bold">
-            {hasScrapIncome ? "Registrado" : "Sin ingresos"}
-          </p>
-
-          <p className="mt-1 text-sm text-slate-500">
-            Peso vendido: {formatNumber(totalPesoVendido)} kg | Cantidad:{" "}
-            {formatNumber(totalCantidadVendida)}
-          </p>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm font-medium text-muted-foreground">
+              Ingreso recuperado
+            </p>
+            <p className="mt-2 text-2xl font-bold text-foreground">
+              {hasScrapIncome ? "Registrado" : "Sin ingresos"}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Peso vendido: {formatNumber(totalPesoVendido)} kg | Cantidad:{" "}
+              {formatNumber(totalCantidadVendida)}
+            </p>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-        <div className="rounded-xl border bg-white shadow-sm">
-          <div className="flex flex-col justify-between gap-3 border-b p-5 md:flex-row md:items-center">
+        <Card className="overflow-hidden py-0">
+          <div className="flex flex-col justify-between gap-3 border-b border-border/70 p-5 md:flex-row md:items-center">
             <div>
-              <h2 className="text-lg font-semibold">Últimos retazos</h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <h2 className="text-lg font-semibold text-foreground">Últimos retazos</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
                 Retazos reutilizables registrados recientemente.
               </p>
             </div>
 
             <Link
               href="/dashboard/waste-scrap/reusable-scraps"
-              className="text-sm font-medium text-slate-700 hover:text-slate-950"
+              className="text-sm font-medium text-primary hover:underline"
             >
               Ver todos
             </Link>
           </div>
 
           {latestRetazos.length === 0 ? (
-            <div className="p-5 text-sm text-slate-500">
-              Aún no hay retazos registrados.
-            </div>
+            <EmptyState className="border-0" label="Aún no hay retazos registrados." />
           ) : (
-            <div className="divide-y">
+            <div className="divide-y divide-border/70">
               {latestRetazos.map((item) => (
                 <div
                   key={item.id_retazo}
                   className="flex flex-col justify-between gap-3 p-5 md:flex-row md:items-center"
                 >
                   <div>
-                    <p className="font-mono text-xs text-slate-500">
+                    <p className="font-mono text-xs text-muted-foreground">
                       {item.id_retazo} | {formatDate(item.fecha_registro)}
                     </p>
 
-                    <p className="font-medium">
+                    <p className="font-medium text-foreground">
                       {item.material.nombre_material}
                     </p>
 
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {formatNumber(item.cantidad)} {item.unidad_medida} |{" "}
                       {item.medida_aproximada ?? "Sin medida"} |{" "}
                       {item.ubicacion ?? "Sin ubicación"}
                     </p>
 
                     {item.orden_trabajo ? (
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-muted-foreground">
                         Orden: {item.orden_trabajo.id_orden_trabajo} |{" "}
                         {item.orden_trabajo.producto.nombre_producto}
                       </p>
                     ) : null}
                   </div>
 
-                  <span
-                    className={`w-fit rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                      item.estado,
-                    )}`}
-                  >
+                  <Badge variant={getStatusBadgeVariant(item.estado)} className="w-fit">
                     {item.estado}
-                  </span>
+                  </Badge>
                 </div>
               ))}
             </div>
           )}
-        </div>
+        </Card>
 
-        <div className="rounded-xl border bg-white shadow-sm">
-          <div className="flex flex-col justify-between gap-3 border-b p-5 md:flex-row md:items-center">
+        <Card className="overflow-hidden py-0">
+          <div className="flex flex-col justify-between gap-3 border-b border-border/70 p-5 md:flex-row md:items-center">
             <div>
-              <h2 className="text-lg font-semibold">Chatarra pendiente</h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <h2 className="text-lg font-semibold text-foreground">Chatarra pendiente</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
                 Chatarra acumulada o disponible para venta.
               </p>
             </div>
 
             <Link
               href="/dashboard/waste-scrap/scraps"
-              className="text-sm font-medium text-slate-700 hover:text-slate-950"
+              className="text-sm font-medium text-primary hover:underline"
             >
               Ver todos
             </Link>
           </div>
 
           {pendingScraps.length === 0 ? (
-            <div className="p-5 text-sm text-slate-500">
-              No hay chatarra pendiente de venta.
-            </div>
+            <EmptyState className="border-0" label="No hay chatarra pendiente de venta." />
           ) : (
-            <div className="divide-y">
+            <div className="divide-y divide-border/70">
               {pendingScraps.map((item) => (
                 <div key={item.id_chatarra} className="p-5">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="font-mono text-xs text-slate-500">
+                    <p className="font-mono text-xs text-muted-foreground">
                       {item.id_chatarra}
                     </p>
 
-                    <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                        item.estado,
-                      )}`}
-                    >
+                    <Badge variant={getStatusBadgeVariant(item.estado)}>
                       {item.estado}
-                    </span>
+                    </Badge>
                   </div>
 
-                  <p className="mt-2 font-medium">{item.tipo_material}</p>
+                  <p className="mt-2 font-medium text-foreground">{item.tipo_material}</p>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Peso:{" "}
                     {item.peso_kg ? `${formatNumber(item.peso_kg)} kg` : "-"} |
                     Cantidad: {item.cantidad ? formatNumber(item.cantidad) : "-"}
                   </p>
 
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Material origen:{" "}
                     {item.material?.nombre_material ?? "No identificado"}
                   </p>
@@ -484,7 +406,7 @@ export default async function WasteScrapDashboardPage() {
                   {canRegisterSale ? (
                     <Link
                       href={`/dashboard/waste-scrap/scrap-sales/new?id_chatarra=${item.id_chatarra}`}
-                      className="mt-3 inline-block text-sm font-medium text-slate-700 hover:text-slate-950"
+                      className="mt-3 inline-block text-sm font-medium text-primary hover:underline"
                     >
                       Registrar venta
                     </Link>
@@ -493,38 +415,36 @@ export default async function WasteScrapDashboardPage() {
               ))}
             </div>
           )}
-        </div>
+        </Card>
       </section>
 
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">Últimas ventas de chatarra</h2>
-          <p className="mt-1 text-sm text-slate-500">
+      <Card className="overflow-hidden py-0">
+        <div className="border-b border-border/70 p-5">
+          <h2 className="text-lg font-semibold text-foreground">Últimas ventas de chatarra</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             Ingresos menores obtenidos por venta de chatarra.
           </p>
         </div>
 
         {latestSales.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            Aún no hay ventas de chatarra registradas.
-          </div>
+          <EmptyState className="border-0" label="Aún no hay ventas de chatarra registradas." />
         ) : (
-          <div className="divide-y">
+          <div className="divide-y divide-border/70">
             {latestSales.map((item) => (
               <div
                 key={item.id_venta_chatarra}
                 className="flex flex-col justify-between gap-3 p-5 md:flex-row md:items-center"
               >
                 <div>
-                  <p className="font-mono text-xs text-slate-500">
+                  <p className="font-mono text-xs text-muted-foreground">
                     {item.id_venta_chatarra} | {formatDate(item.fecha_venta)}
                   </p>
 
-                  <p className="font-medium">
+                  <p className="font-medium text-foreground">
                     {item.chatarra.tipo_material}
                   </p>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Peso vendido:{" "}
                     {item.peso_vendido_kg
                       ? `${formatNumber(item.peso_vendido_kg)} kg`
@@ -536,11 +456,11 @@ export default async function WasteScrapDashboardPage() {
                     | Monto: {formatMoney(item.monto_recibido)}
                   </p>
 
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Destino: {item.destino_dinero ?? "No especificado"}
                   </p>
 
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Caja chica:{" "}
                     {item.id_movimiento_caja
                       ? `vinculada al movimiento ${item.id_movimiento_caja}`
@@ -548,60 +468,63 @@ export default async function WasteScrapDashboardPage() {
                   </p>
                 </div>
 
-                <span className="w-fit rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                <Badge variant="info" className="w-fit">
                   Venta registrada
-                </span>
+                </Badge>
               </div>
             ))}
           </div>
         )}
-      </section>
+      </Card>
 
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold">Validaciones finales del módulo</h2>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Validaciones finales del módulo</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+              <p className="font-medium text-foreground">
+                Registro de retazos reutilizables
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                Se pueden registrar retazos con material, cantidad, unidad,
+                ubicación y orden relacionada opcional.
+              </p>
+            </div>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium text-slate-800">
-              Registro de retazos reutilizables
-            </p>
-            <p className="mt-1 text-slate-500">
-              Se pueden registrar retazos con material, cantidad, unidad,
-              ubicación y orden relacionada opcional.
-            </p>
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+              <p className="font-medium text-foreground">
+                Registro de chatarra generada
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                Se puede registrar chatarra por tipo, peso, cantidad y material de
+                origen opcional.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+              <p className="font-medium text-foreground">
+                Venta de chatarra
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                La venta cambia la chatarra a vendida y puede generar ingreso en
+                caja chica.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+              <p className="font-medium text-foreground">
+                Cambio de estado de retazos
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                Los retazos disponibles pueden marcarse como reutilizados o
+                descartados.
+              </p>
+            </div>
           </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium text-slate-800">
-              Registro de chatarra generada
-            </p>
-            <p className="mt-1 text-slate-500">
-              Se puede registrar chatarra por tipo, peso, cantidad y material de
-              origen opcional.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium text-slate-800">
-              Venta de chatarra
-            </p>
-            <p className="mt-1 text-slate-500">
-              La venta cambia la chatarra a vendida y puede generar ingreso en
-              caja chica.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium text-slate-800">
-              Cambio de estado de retazos
-            </p>
-            <p className="mt-1 text-slate-500">
-              Los retazos disponibles pueden marcarse como reutilizados o
-              descartados.
-            </p>
-          </div>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
     </main>
   );
 }

@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { addCampaignDetailAction } from "@/modules/production/campaigns/actions";
 
 type NewCampaignDetailPageProps = {
@@ -73,54 +81,49 @@ export default async function NewCampaignDetailPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion · Campanias · Productos
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Agregar producto a campania
-        </h1>
-
-        <p className="text-slate-600">
-          Campania:{" "}
-          <span className="font-medium">{campaign.nombre_campania}</span>
-        </p>
-      </section>
+      <PageHeader
+        title="Agregar producto a campaña"
+        description={`Campaña: ${campaign.nombre_campania}`}
+        backHref={`/dashboard/production/campaigns/${campaign.id_campania}`}
+        backLabel="Volver al detalle"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Campañas", href: navigationHrefs.campaigns },
+          { label: "Agregar producto" },
+        ])}
+      />
 
       {isClosedCampaign ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta campania esta finalizada o anulada. No se pueden agregar nuevos
-          productos.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta campaña está finalizada o anulada. No se pueden agregar
+            nuevos productos.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {!isClosedCampaign && products.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          No hay productos activos disponibles para agregar, o todos los
-          productos activos ya estan registrados en esta campania.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            No hay productos activos disponibles para agregar, o todos los
+            productos activos ya están registrados en esta campaña.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {!isClosedCampaign ? (
         <form
           action={addCampaignDetailAction}
-          className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+          className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
         >
-          <input
-            type="hidden"
-            name="id_campania"
-            value={campaign.id_campania}
-          />
+          <input type="hidden" name="id_campania" value={campaign.id_campania} />
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Producto *</label>
-
-            <select
+            <Label>Producto *</Label>
+            <NativeSelect
               name="id_producto"
               required
               disabled={products.length === 0}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             >
               <option value="">Seleccione un producto</option>
 
@@ -130,13 +133,12 @@ export default async function NewCampaignDetailPage({
                   {product.unidad_medida}
                 </option>
               ))}
-            </select>
+            </NativeSelect>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Cantidad objetivo *</label>
-
-            <input
+            <Label>Cantidad objetivo *</Label>
+            <Input
               name="cantidad_objetivo"
               type="number"
               min="0.01"
@@ -144,60 +146,46 @@ export default async function NewCampaignDetailPage({
               required
               disabled={products.length === 0}
               placeholder="Ej. 100"
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Observaciones</label>
-
-            <textarea
+            <Label>Observaciones</Label>
+            <Textarea
               name="observaciones"
               rows={4}
               maxLength={500}
               disabled={products.length === 0}
               placeholder="Ej. Priorizar este producto durante la primera semana."
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
 
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-            <p className="font-medium text-slate-800">Control de duplicados</p>
-            <p className="mt-1">
+          <Alert variant="info">
+            <AlertDescription>
               Un producto solo puede registrarse una vez dentro de la misma
-              campania.
-            </p>
-          </div>
+              campaña.
+            </AlertDescription>
+          </Alert>
 
           <div className="flex items-center justify-between pt-4">
-            <Link
-              href={`/dashboard/production/campaigns/${campaign.id_campania}`}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900"
-            >
-              Cancelar
-            </Link>
+            <Button variant="link" className="h-auto p-0" asChild>
+              <Link href={`/dashboard/production/campaigns/${campaign.id_campania}`}>
+                Cancelar
+              </Link>
+            </Button>
 
-            <button
-              type="submit"
-              disabled={products.length === 0}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-            >
+            <Button type="submit" disabled={products.length === 0}>
               Agregar producto
-            </button>
+            </Button>
           </div>
         </form>
-      ) : null}
-
-      {isClosedCampaign ? (
-        <div>
-          <Link
-            href={`/dashboard/production/campaigns/${campaign.id_campania}`}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Volver al detalle de campania
+      ) : (
+        <Button variant="link" className="h-auto p-0" asChild>
+          <Link href={`/dashboard/production/campaigns/${campaign.id_campania}`}>
+            Volver al detalle de campaña
           </Link>
-        </div>
-      ) : null}
+        </Button>
+      )}
     </main>
   );
 }

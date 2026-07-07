@@ -2,6 +2,12 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateProductionCampaignAction } from "@/modules/production/campaigns/actions";
@@ -66,100 +72,87 @@ export default async function EditProductionCampaignPage({
       />
 
       {isVoided ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-          Esta campaña está anulada y ya no puede modificarse.
-        </section>
+        <Alert variant="destructive">
+          <AlertDescription>
+            Esta campaña está anulada y ya no puede modificarse.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <form
         action={updateProductionCampaignAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <input type="hidden" name="id_campania" value={campaign.id_campania} />
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre *</label>
-
-          <input
+          <Label>Nombre *</Label>
+          <Input
             name="nombre_campania"
             required
             maxLength={100}
             defaultValue={campaign.nombre_campania}
             disabled={isVoided}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Fecha de inicio *</label>
-
-            <input
+            <Label>Fecha de inicio *</Label>
+            <Input
               name="fecha_inicio"
               type="date"
               required
               defaultValue={formatDateInput(campaign.fecha_inicio)}
               disabled={isVoided}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Fecha de fin</label>
-
-            <input
+            <Label>Fecha de fin</Label>
+            <Input
               name="fecha_fin"
               type="date"
               defaultValue={formatDateInput(campaign.fecha_fin)}
               disabled={isVoided}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Estado</label>
-
-          <select
+          <Label>Estado</Label>
+          <NativeSelect
             name="estado"
             defaultValue={campaign.estado}
             disabled={isVoided}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           >
             <option value="planificada">Planificada</option>
             <option value="activa">Activa</option>
             <option value="finalizada">Finalizada</option>
             <option value="anulada">Anulada</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Objetivo general</label>
-
-          <textarea
+          <Label>Objetivo general</Label>
+          <Textarea
             name="objetivo_general"
             rows={4}
             defaultValue={campaign.objetivo_general ?? ""}
             disabled={isVoided}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href={`/dashboard/production/campaigns/${campaign.id_campania}`}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Volver a detalle
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href={`/dashboard/production/campaigns/${campaign.id_campania}`}>
+              Volver a detalle
+            </Link>
+          </Button>
 
-          <button
-            type="submit"
-            disabled={isVoided}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
+          <Button type="submit" disabled={isVoided}>
             Guardar cambios
-          </button>
+          </Button>
         </div>
       </form>
     </main>

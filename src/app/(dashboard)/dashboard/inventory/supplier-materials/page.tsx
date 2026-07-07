@@ -2,6 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -153,162 +166,156 @@ export default async function SupplierMaterialsPage({
           { label: "Proveedor-material" },
         ])}
         actions={
-          <Link
-            href="/dashboard/inventory/supplier-materials/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva asociación
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/inventory/supplier-materials/new">
+              Nueva asociación
+            </Link>
+          </Button>
         }
       />
 
       <form
         action="/dashboard/inventory/supplier-materials"
-        className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-5"
+        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-5"
       >
-        <select
-          name="supplier"
-          defaultValue={supplier}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los proveedores</option>
-          {suppliers.map((item) => (
-            <option key={item.id_proveedor} value={item.id_proveedor}>
-              {item.razon_social}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="supplier">Proveedor</Label>
+          <NativeSelect id="supplier" name="supplier" defaultValue={supplier}>
+            <option value="">Todos los proveedores</option>
+            {suppliers.map((item) => (
+              <option key={item.id_proveedor} value={item.id_proveedor}>
+                {item.razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="material"
-          defaultValue={material}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los materiales</option>
-          {materials.map((item) => (
-            <option key={item.id_material} value={item.id_material}>
-              {item.nombre_material}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="material">Material</Label>
+          <NativeSelect id="material" name="material" defaultValue={material}>
+            <option value="">Todos los materiales</option>
+            {materials.map((item) => (
+              <option key={item.id_material} value={item.id_material}>
+                {item.nombre_material}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="availability"
-          defaultValue={availability}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Disponibilidad</option>
-          <option value="alta">Alta</option>
-          <option value="media">Media</option>
-          <option value="baja">Baja</option>
-          <option value="no_disponible">No disponible</option>
-        </select>
-
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activo</option>
-          <option value="inactive">Inactivo</option>
-        </select>
-
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="flex-1 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+        <div className="space-y-2">
+          <Label htmlFor="availability">Disponibilidad</Label>
+          <NativeSelect
+            id="availability"
+            name="availability"
+            defaultValue={availability}
           >
+            <option value="">Disponibilidad</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+            <option value="no_disponible">No disponible</option>
+          </NativeSelect>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </NativeSelect>
+        </div>
+
+        <div className="flex items-end gap-2">
+          <Button type="submit" className="flex-1">
             Filtrar
-          </button>
-          <Link
-            href="/dashboard/inventory/supplier-materials"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Limpiar
-          </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/inventory/supplier-materials">
+              Limpiar
+            </Link>
+          </Button>
         </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Proveedor</th>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Unidad</th>
-              <th className="px-4 py-3 font-semibold">Precio referencial</th>
-              <th className="px-4 py-3 font-semibold">Entrega</th>
-              <th className="px-4 py-3 font-semibold">Disponibilidad</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 text-right font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Proveedor</TableHead>
+            <TableHead>Material</TableHead>
+            <TableHead>Unidad</TableHead>
+            <TableHead>Precio referencial</TableHead>
+            <TableHead>Entrega</TableHead>
+            <TableHead>Disponibilidad</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {relations.map((relation) => (
-              <tr key={relation.id_proveedor_material} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {relation.id_proveedor_material}
-                </td>
-                <td className="px-4 py-3 font-medium">
-                  {relation.proveedor.razon_social}
-                </td>
-                <td className="px-4 py-3">
-                  {relation.material.nombre_material}
-                </td>
-                <td className="px-4 py-3">{relation.unidad_medida}</td>
-                <td className="px-4 py-3">
-                  {formatMoney(relation.precio_referencial)}
-                </td>
-                <td className="px-4 py-3">
-                  {relation.tiempo_entrega_dias
-                    ? `${relation.tiempo_entrega_dias} días`
-                    : "-"}
-                </td>
-                <td className="px-4 py-3">
-                  {getAvailabilityLabel(relation.disponibilidad)}
-                </td>
-                <td className="px-4 py-3">
+        <TableBody>
+          {relations.map((relation) => (
+            <TableRow key={relation.id_proveedor_material}>
+              <TableCell className="text-xs">
+                {relation.id_proveedor_material}
+              </TableCell>
+              <TableCell className="font-medium">
+                {relation.proveedor.razon_social}
+              </TableCell>
+              <TableCell>{relation.material.nombre_material}</TableCell>
+              <TableCell>{relation.unidad_medida}</TableCell>
+              <TableCell>
+                {formatMoney(relation.precio_referencial)}
+              </TableCell>
+              <TableCell>
+                {relation.tiempo_entrega_dias
+                  ? `${relation.tiempo_entrega_dias} días`
+                  : "-"}
+              </TableCell>
+              <TableCell>
+                {getAvailabilityLabel(relation.disponibilidad)}
+              </TableCell>
+              <TableCell>
+                <Badge variant={relation.estado ? "success" : "outline"}>
                   {relation.estado ? "Activo" : "Inactivo"}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex justify-end gap-2">
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" size="sm" asChild>
                     <Link
                       href={`/dashboard/inventory/supplier-materials/${relation.id_proveedor_material}/edit`}
-                      className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
                     >
                       Editar
                     </Link>
-                    <form action={toggleSupplierMaterialStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_proveedor_material"
-                        value={relation.id_proveedor_material}
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                      >
-                        {relation.estado ? "Inactivar" : "Activar"}
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </Button>
+                  <form action={toggleSupplierMaterialStatusAction}>
+                    <input
+                      type="hidden"
+                      name="id_proveedor_material"
+                      value={relation.id_proveedor_material}
+                    />
+                    <Button type="submit" variant="outline" size="sm">
+                      {relation.estado ? "Inactivar" : "Activar"}
+                    </Button>
+                  </form>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {relations.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay asociaciones proveedor-material.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+          {relations.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={9} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay asociaciones proveedor-material."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

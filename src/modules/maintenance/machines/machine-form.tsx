@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import type { MachineFormState } from "@/modules/maintenance/machines/actions";
 
 type MachineFormValues = {
@@ -72,127 +78,98 @@ export function MachineForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="nombre" className="text-sm font-medium">
-            Nombre de la maquina
-          </label>
-          <input
+          <Label htmlFor="nombre">Nombre de la maquina</Label>
+          <Input
             id="nombre"
             name="nombre"
             required
             defaultValue={getValue(defaultValues, "nombre")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.nombre} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="tipo" className="text-sm font-medium">
-            Tipo de maquina
-          </label>
-          <select
+          <Label htmlFor="tipo">Tipo de maquina</Label>
+          <NativeSelect
             id="tipo"
             name="tipo"
             required
             defaultValue={getValue(defaultValues, "tipo") || "prensa"}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             {machineTypes.map((type) => (
               <option key={type} value={type}>
                 {type}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.tipo} />
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="codigo_interno" className="text-sm font-medium">
-            Codigo interno
-          </label>
-          <input
+          <Label htmlFor="codigo_interno">Codigo interno</Label>
+          <Input
             id="codigo_interno"
             name="codigo_interno"
             defaultValue={getValue(defaultValues, "codigo_interno")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.codigo_interno} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="ubicacion" className="text-sm font-medium">
-            Ubicacion
-          </label>
-          <input
+          <Label htmlFor="ubicacion">Ubicacion</Label>
+          <Input
             id="ubicacion"
             name="ubicacion"
             defaultValue={getValue(defaultValues, "ubicacion")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.ubicacion} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="estado" className="text-sm font-medium">
-          Estado
-        </label>
-        <select
+        <Label htmlFor="estado">Estado</Label>
+        <NativeSelect
           id="estado"
           name="estado"
           required
           defaultValue={getValue(defaultValues, "estado") || "operativa"}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         >
           <option value="operativa">Operativa</option>
           <option value="en_reparacion">En mantenimiento</option>
           <option value="dada_de_baja">Fuera de servicio</option>
           <option value="inactiva">Inactiva</option>
-        </select>
+        </NativeSelect>
         <FieldError messages={state.fieldErrors?.estado} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="observaciones" className="text-sm font-medium">
-          Observaciones
-        </label>
-        <textarea
+        <Label htmlFor="observaciones">Observaciones</Label>
+        <Textarea
           id="observaciones"
           name="observaciones"
           rows={4}
           defaultValue={getValue(defaultValues, "observaciones")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.observaciones} />
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : null}
       </div>
     </form>

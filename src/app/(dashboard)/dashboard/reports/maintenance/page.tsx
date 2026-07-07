@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -165,27 +179,6 @@ function getSparePartCost(
   return details.reduce((sum, detail) => {
     return sum + toNumber(detail.subtotal);
   }, 0);
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function MaintenanceReportPage({
@@ -500,19 +493,13 @@ export default async function MaintenanceReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -525,215 +512,99 @@ export default async function MaintenanceReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="machineId" className="text-sm font-medium">
-                Máquina
-              </label>
-              <select
-                id="machineId"
-                name="machineId"
-                defaultValue={machineId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="machineId">Máquina</Label>
+              <NativeSelect id="machineId" name="machineId" defaultValue={machineId}>
                 <option value="">Todas las máquinas</option>
                 {machines.map((machine) => (
                   <option key={machine.id_maquina} value={machine.id_maquina}>
                     {machine.nombre}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="failureStatus" className="text-sm font-medium">
-                Estado falla
-              </label>
-              <select
-                id="failureStatus"
-                name="failureStatus"
-                defaultValue={failureStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="failureStatus">Estado falla</Label>
+              <NativeSelect id="failureStatus" name="failureStatus" defaultValue={failureStatus}>
                 <option value="">Todos</option>
                 {FAILURE_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="repairStatus" className="text-sm font-medium">
-                Estado reparación
-              </label>
-              <select
-                id="repairStatus"
-                name="repairStatus"
-                defaultValue={repairStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="repairStatus">Estado reparación</Label>
+              <NativeSelect id="repairStatus" name="repairStatus" defaultValue={repairStatus}>
                 <option value="">Todos</option>
                 {REPAIR_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label
-                htmlFor="preventiveStatus"
-                className="text-sm font-medium"
-              >
-                Estado preventivo
-              </label>
-              <select
-                id="preventiveStatus"
-                name="preventiveStatus"
-                defaultValue={preventiveStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="preventiveStatus">Estado preventivo</Label>
+              <NativeSelect id="preventiveStatus" name="preventiveStatus" defaultValue={preventiveStatus}>
                 <option value="">Todos</option>
                 {PREVENTIVE_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="searchText" className="text-sm font-medium">
-                Buscar
-              </label>
-              <input
+              <Label htmlFor="searchText">Buscar</Label>
+              <Input
                 id="searchText"
                 name="searchText"
                 type="text"
                 defaultValue={searchText}
                 placeholder="Máquina, falla, responsable..."
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-7">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/maintenance"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/maintenance">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard
-          title="Fallas registradas"
-          value={totalFailures}
-          description="Fallas encontradas según los filtros aplicados."
-        />
-
-        <SummaryCard
-          title="Fallas abiertas"
-          value={openFailures}
-          description="Fallas pendientes o en atención."
-        />
-
-        <SummaryCard
-          title="Fallas reparadas"
-          value={repairedFailures}
-          description="Fallas marcadas como reparadas."
-        />
-
-        <SummaryCard
-          title="Tiempo perdido"
-          value={formatHours(totalLostHours)}
-          description="Horas perdidas por fallas registradas."
-        />
-
-        <SummaryCard
-          title="Costo reparación"
-          value={formatMoney(totalRepairCost)}
-          description="Costo total de reparaciones filtradas."
-        />
-
-        <SummaryCard
-          title="Mano de obra"
-          value={formatMoney(totalLaborCost)}
-          description="Costo de mano de obra en reparaciones."
-        />
-
-        <SummaryCard
-          title="Costo repuestos"
-          value={formatMoney(totalSparePartCost)}
-          description="Subtotal de repuestos usados."
-        />
-
-        <SummaryCard
-          title="Máquinas reincidentes"
-          value={recurrentMachines}
-          description="Máquinas con dos o más fallas en el reporte."
-        />
-
-        <SummaryCard
-          title="Preventivos pendientes"
-          value={pendingPreventives}
-          description={`Preventivos vencidos: ${overduePreventives}.`}
-        />
-
-        <SummaryCard
-          title="Preventivos realizados"
-          value={completedPreventives}
-          description="Mantenimientos preventivos completados."
-        />
-
-        <SummaryCard
-          title="Reparaciones"
-          value={repairs.length}
-          description="Reparaciones encontradas en el periodo."
-        />
-
-        <SummaryCard
-          title="Máquinas afectadas"
-          value={machineRecurrences.length}
-          description="Máquinas con al menos una falla en el reporte."
-        />
+        <KpiCard title="Fallas registradas" value={totalFailures.toString()} description="Fallas encontradas según los filtros aplicados." tone="info" />
+        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description="Fallas pendientes o en atención." tone={openFailures > 0 ? "warning" : "info"} />
+        <KpiCard title="Fallas reparadas" value={repairedFailures.toString()} description="Fallas marcadas como reparadas." tone="success" />
+        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Horas perdidas por fallas registradas." tone="warning" />
+        <KpiCard title="Costo reparación" value={formatMoney(totalRepairCost)} description="Costo total de reparaciones filtradas." tone="info" />
+        <KpiCard title="Mano de obra" value={formatMoney(totalLaborCost)} description="Costo de mano de obra en reparaciones." tone="info" />
+        <KpiCard title="Costo repuestos" value={formatMoney(totalSparePartCost)} description="Subtotal de repuestos usados." tone="info" />
+        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.toString()} description="Máquinas con dos o más fallas en el reporte." tone={recurrentMachines > 0 ? "warning" : "info"} />
+        <KpiCard title="Preventivos pendientes" value={pendingPreventives.toString()} description={`Preventivos vencidos: ${overduePreventives}.`} tone={overduePreventives > 0 ? "warning" : "info"} />
+        <KpiCard title="Preventivos realizados" value={completedPreventives.toString()} description="Mantenimientos preventivos completados." tone="success" />
+        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Reparaciones encontradas en el periodo." tone="info" />
+        <KpiCard title="Máquinas afectadas" value={machineRecurrences.length.toString()} description="Máquinas con al menos una falla en el reporte." tone="info" />
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
@@ -746,27 +617,24 @@ export default async function MaintenanceReportPage({
 
           <CardContent>
             {machineRecurrences.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay reincidencias o fallas registradas con los filtros
-                aplicados.
-              </p>
+              <EmptyState label="No hay reincidencias o fallas registradas con los filtros aplicados." />
             ) : (
               <div className="space-y-3">
                 {machineRecurrences.slice(0, 8).map((machine) => (
                   <div
                     key={machine.machineId}
-                    className="rounded-lg border p-3 text-sm"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-medium">{machine.machineName}</p>
+                        <p className="font-medium text-foreground">{machine.machineName}</p>
                         <p className="text-xs text-muted-foreground">
                           {machine.machineType} | {machine.machineStatus}
                         </p>
                       </div>
 
                       <div className="text-right">
-                        <p className="font-bold">{machine.failures} fallas</p>
+                        <p className="font-bold text-foreground">{machine.failures} fallas</p>
                         <p className="text-xs text-muted-foreground">
                           Abiertas: {machine.openFailures}
                         </p>
@@ -803,10 +671,7 @@ export default async function MaintenanceReportPage({
 
           <CardContent>
             {preventiveMaintenances.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No se encontraron mantenimientos preventivos con los filtros
-                aplicados.
-              </p>
+              <EmptyState label="No se encontraron mantenimientos preventivos con los filtros aplicados." />
             ) : (
               <div className="space-y-3">
                 {preventiveMaintenances.slice(0, 8).map((maintenance) => {
@@ -817,11 +682,11 @@ export default async function MaintenanceReportPage({
                   return (
                     <div
                       key={maintenance.id_mantenimiento}
-                      className="rounded-lg border p-3 text-sm"
+                      className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="font-medium">
+                          <p className="font-medium text-foreground">
                             {maintenance.maquina.nombre}
                           </p>
                           <p className="text-xs text-muted-foreground">
@@ -830,13 +695,13 @@ export default async function MaintenanceReportPage({
                         </div>
 
                         <div className="text-right">
-                          <p className="font-bold">
+                          <p className="font-bold text-foreground">
                             {formatDate(maintenance.fecha_programada)}
                           </p>
                           <p
                             className={`text-xs ${
                               isOverdue
-                                ? "font-medium text-red-600"
+                                ? "font-medium text-destructive"
                                 : "text-muted-foreground"
                             }`}
                           >
@@ -868,154 +733,151 @@ export default async function MaintenanceReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {failures.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron fallas con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron fallas con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Falla</th>
-                    <th className="py-2 pr-3 font-medium">Máquina</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Estado</th>
-                    <th className="py-2 pr-3 font-medium">Tiempo perdido</th>
-                    <th className="py-2 pr-3 font-medium">Descripción</th>
-                    <th className="py-2 pr-3 font-medium">Reparaciones</th>
-                    <th className="py-2 pr-3 font-medium">Repuestos</th>
-                    <th className="py-2 pr-3 font-medium">Responsable</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Falla</TableHead>
+                  <TableHead>Máquina</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Tiempo perdido</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead>Reparaciones</TableHead>
+                  <TableHead>Repuestos</TableHead>
+                  <TableHead>Responsable</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {failures.map((failure) => {
-                    const failureRepairCost = getRepairCost(
-                      failure.reparacion,
-                    );
+              <TableBody>
+                {failures.map((failure) => {
+                  const failureRepairCost = getRepairCost(
+                    failure.reparacion,
+                  );
 
-                    const spareDetails = failure.reparacion.flatMap((repair) => {
-                      return repair.detalle_repuesto_reparacion;
-                    });
+                  const spareDetails = failure.reparacion.flatMap((repair) => {
+                    return repair.detalle_repuesto_reparacion;
+                  });
 
-                    return (
-                      <tr key={failure.id_falla} className="border-b align-top">
-                        <td className="py-2 pr-3 font-medium">
-                          {failure.id_falla}
-                        </td>
+                  return (
+                    <TableRow key={failure.id_falla} className="align-top">
+                      <TableCell className="font-medium">
+                        {failure.id_falla}
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          <div>
-                            <p className="font-medium">
-                              {failure.maquina.nombre}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {failure.maquina.tipo} ?{" "}
-                              {failure.maquina.codigo_interno ?? "Sin código"}
-                            </p>
-                          </div>
-                        </td>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">
+                            {failure.maquina.nombre}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {failure.maquina.tipo} ·{" "}
+                            {failure.maquina.codigo_interno ?? "Sin código"}
+                          </p>
+                        </div>
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {formatDateTime(failure.fecha_falla)}
-                        </td>
+                      <TableCell>{formatDateTime(failure.fecha_falla)}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          {getFailureStatusLabel(failure.estado_atencion)}
-                        </td>
+                      <TableCell>
+                        {getFailureStatusLabel(failure.estado_atencion)}
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {formatHours(failure.tiempo_perdido_horas)}
-                        </td>
+                      <TableCell>
+                        {formatHours(failure.tiempo_perdido_horas)}
+                      </TableCell>
 
-                        <td className="min-w-64 py-2 pr-3">
-                          <p>{failure.descripcion}</p>
-                          {failure.impacto_produccion ? (
-                            <p className="mt-1 text-xs text-muted-foreground">
-                              Impacto: {failure.impacto_produccion}
-                            </p>
-                          ) : null}
-                        </td>
+                      <TableCell className="min-w-64">
+                        <p>{failure.descripcion}</p>
+                        {failure.impacto_produccion ? (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            Impacto: {failure.impacto_produccion}
+                          </p>
+                        ) : null}
+                      </TableCell>
 
-                        <td className="min-w-72 py-2 pr-3">
-                          {failure.reparacion.length === 0 ? (
-                            <span className="text-muted-foreground">
-                              Sin reparación
-                            </span>
-                          ) : (
-                            <div className="space-y-2">
-                              {failure.reparacion.map((repair) => (
-                                <div
-                                  key={repair.id_reparacion}
-                                  className="rounded-md border p-2"
-                                >
-                                  <p className="font-medium">
-                                    {repair.id_reparacion} |{" "}
-                                    {getRepairStatusLabel(
-                                      repair.estado_reparacion,
-                                    )}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {formatDate(repair.fecha_reparacion)} |{" "}
-                                    {repair.tecnico_proveedor ?? "Sin técnico"}{" "}
-                                    | {formatMoney(repair.costo_total)}
-                                  </p>
-                                </div>
-                              ))}
+                      <TableCell className="min-w-72">
+                        {failure.reparacion.length === 0 ? (
+                          <span className="text-muted-foreground">
+                            Sin reparación
+                          </span>
+                        ) : (
+                          <div className="space-y-2">
+                            {failure.reparacion.map((repair) => (
+                              <div
+                                key={repair.id_reparacion}
+                                className="rounded-md border border-border/80 bg-secondary/40 p-2"
+                              >
+                                <p className="font-medium">
+                                  {repair.id_reparacion} |{" "}
+                                  {getRepairStatusLabel(
+                                    repair.estado_reparacion,
+                                  )}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {formatDate(repair.fecha_reparacion)} |{" "}
+                                  {repair.tecnico_proveedor ?? "Sin técnico"}{" "}
+                                  | {formatMoney(repair.costo_total)}
+                                </p>
+                              </div>
+                            ))}
 
-                              <p className="text-xs font-medium">
-                                Costo total: {formatMoney(failureRepairCost)}
-                              </p>
-                            </div>
-                          )}
-                        </td>
-
-                        <td className="min-w-64 py-2 pr-3">
-                          {spareDetails.length === 0 ? (
-                            <span className="text-muted-foreground">
-                              Sin repuestos
-                            </span>
-                          ) : (
-                            <div className="space-y-2">
-                              {spareDetails.map((detail) => (
-                                <div
-                                  key={detail.id_detalle_repuesto}
-                                  className="rounded-md border p-2"
-                                >
-                                  <p className="font-medium">
-                                    {detail.repuesto.nombre_repuesto}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {formatQuantity(detail.cantidad)} und ?{" "}
-                                    {formatMoney(detail.costo_unitario)} c/u ?{" "}
-                                    subtotal {formatMoney(detail.subtotal)}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          <div>
-                            <p>{failure.responsable_registro ?? "-"}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {failure.usuario.apellidos},{" "}
-                              {failure.usuario.nombres}
+                            <p className="text-xs font-medium">
+                              Costo total: {formatMoney(failureRepairCost)}
                             </p>
                           </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                        )}
+                      </TableCell>
+
+                      <TableCell className="min-w-64">
+                        {spareDetails.length === 0 ? (
+                          <span className="text-muted-foreground">
+                            Sin repuestos
+                          </span>
+                        ) : (
+                          <div className="space-y-2">
+                            {spareDetails.map((detail) => (
+                              <div
+                                key={detail.id_detalle_repuesto}
+                                className="rounded-md border border-border/80 bg-secondary/40 p-2"
+                              >
+                                <p className="font-medium">
+                                  {detail.repuesto.nombre_repuesto}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {formatQuantity(detail.cantidad)} und ·{" "}
+                                  {formatMoney(detail.costo_unitario)} c/u ·{" "}
+                                  subtotal {formatMoney(detail.subtotal)}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p>{failure.responsable_registro ?? "-"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {failure.usuario.apellidos},{" "}
+                            {failure.usuario.nombres}
+                          </p>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 fallas, 100 reparaciones y 100
             mantenimientos preventivos para mantener una consulta rápida. En la
             subfase de exportación se generarán archivos completos según los

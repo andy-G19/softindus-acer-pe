@@ -1,8 +1,23 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import {
@@ -73,16 +88,16 @@ function getAlertStatus(
   return "normal";
 }
 
-function getAlertClass(status: AlertStatus) {
+function getAlertBadgeVariant(status: AlertStatus) {
   if (status === "atrasada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
   if (status === "en riesgo") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
-  return "bg-emerald-50 text-emerald-700";
+  return "success" as const;
 }
 
 function formatHours(value: number | null) {
@@ -330,7 +345,7 @@ export default async function ProductionBottlenecksPage({
         ])}
       />
 
-      <form className="grid gap-4 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
+      <form className="grid gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
         <SearchableSelectFilter
           key={product}
           name="product"
@@ -342,248 +357,174 @@ export default async function ProductionBottlenecksPage({
         />
 
         <div className="space-y-2">
-          <label htmlFor="route" className="text-sm font-medium">
-            Ruta
-          </label>
-          <select
-            id="route"
-            name="route"
-            defaultValue={route}
-            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          >
+          <Label htmlFor="route">Ruta</Label>
+          <NativeSelect id="route" name="route" defaultValue={route}>
             <option value="">Todas las rutas</option>
             {routes.map((item) => (
               <option key={item.id_ruta} value={item.id_ruta}>
                 {item.nombre_ruta}
               </option>
             ))}
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="stage" className="text-sm font-medium">
-            Etapa
-          </label>
-          <select
-            id="stage"
-            name="stage"
-            defaultValue={stage}
-            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          >
+          <Label htmlFor="stage">Etapa</Label>
+          <NativeSelect id="stage" name="stage" defaultValue={stage}>
             <option value="">Todas las etapas</option>
             {stages.map((item) => (
               <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
                 {item.nombre_etapa}
               </option>
             ))}
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="orderStatus" className="text-sm font-medium">
-            Estado de orden
-          </label>
-          <select
+          <Label htmlFor="orderStatus">Estado de orden</Label>
+          <NativeSelect
             id="orderStatus"
             name="orderStatus"
             defaultValue={orderStatus}
-            className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="">Todos los estados</option>
             <option value="pendiente">Pendiente</option>
             <option value="en_proceso">En proceso</option>
             <option value="pausada">Pausada</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="grid grid-cols-2 gap-2 md:col-span-2">
           <div className="space-y-2">
-            <label htmlFor="from" className="text-sm font-medium">
-              Desde
-            </label>
-            <input
-              id="from"
-              name="from"
-              type="date"
-              defaultValue={from}
-              className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            />
+            <Label htmlFor="from">Desde</Label>
+            <Input id="from" name="from" type="date" defaultValue={from} />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="to" className="text-sm font-medium">
-              Hasta
-            </label>
-            <input
-              id="to"
-              name="to"
-              type="date"
-              defaultValue={to}
-              className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            />
+            <Label htmlFor="to">Hasta</Label>
+            <Input id="to" name="to" type="date" defaultValue={to} />
           </div>
         </div>
 
         <div className="flex flex-wrap items-end gap-2 md:col-span-2">
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Filtrar
-          </button>
+          <Button type="submit">Filtrar</Button>
 
-          <Link
-            href="/dashboard/production/bottlenecks"
-            className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Limpiar filtros
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/production/bottlenecks">
+              Limpiar filtros
+            </Link>
+          </Button>
         </div>
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Avances en proceso</p>
-          <p className="mt-2 text-3xl font-bold">{rows.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Atrasados</p>
-          <p className="mt-2 text-3xl font-bold">{delayedRows.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">En riesgo</p>
-          <p className="mt-2 text-3xl font-bold">{riskRows.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Etapas saturadas</p>
-          <p className="mt-2 text-3xl font-bold">{saturatedStages.length}</p>
-        </div>
+        <KpiCard title="Avances en proceso" value={rows.length.toString()} description="Etapas activas monitoreadas." tone="info" />
+        <KpiCard title="Atrasados" value={delayedRows.length.toString()} description="Superan el tiempo estimado." tone="warning" />
+        <KpiCard title="En riesgo" value={riskRows.length.toString()} description="Cerca de vencer." tone="warning" />
+        <KpiCard title="Etapas saturadas" value={saturatedStages.length.toString()} description="Más de una orden simultánea." tone="warning" />
       </section>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-xl font-semibold">Resumen por etapa</h2>
-        </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Etapa</TableHead>
+            <TableHead>Órdenes en etapa</TableHead>
+            <TableHead>Atrasadas</TableHead>
+            <TableHead>En riesgo</TableHead>
+            <TableHead>Tiempo estimado</TableHead>
+            <TableHead>Mayor permanencia</TableHead>
+            <TableHead>Saturación</TableHead>
+          </TableRow>
+        </TableHeader>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Etapa</th>
-              <th className="px-4 py-3 font-semibold">Órdenes en etapa</th>
-              <th className="px-4 py-3 font-semibold">Atrasadas</th>
-              <th className="px-4 py-3 font-semibold">En riesgo</th>
-              <th className="px-4 py-3 font-semibold">Tiempo estimado</th>
-              <th className="px-4 py-3 font-semibold">Mayor permanencia</th>
-              <th className="px-4 py-3 font-semibold">Saturación</th>
-            </tr>
-          </thead>
+        <TableBody>
+          {stageSummaries.map((summary) => (
+            <TableRow key={summary.id}>
+              <TableCell className="font-medium">{summary.name}</TableCell>
+              <TableCell>{summary.orderCount}</TableCell>
+              <TableCell>{summary.delayedCount}</TableCell>
+              <TableCell>{summary.riskCount}</TableCell>
+              <TableCell>{formatHours(summary.estimatedHours)}</TableCell>
+              <TableCell>{formatHours(summary.maxElapsedHours)}</TableCell>
+              <TableCell>
+                <Badge variant={summary.orderCount > 1 ? "warning" : "outline"}>
+                  {summary.orderCount > 1 ? "Saturada" : "Normal"}
+                </Badge>
+              </TableCell>
+            </TableRow>
+          ))}
 
-          <tbody>
-            {stageSummaries.map((summary) => (
-              <tr key={summary.id} className="border-t">
-                <td className="px-4 py-3 font-medium">{summary.name}</td>
-                <td className="px-4 py-3">{summary.orderCount}</td>
-                <td className="px-4 py-3">{summary.delayedCount}</td>
-                <td className="px-4 py-3">{summary.riskCount}</td>
-                <td className="px-4 py-3">
-                  {formatHours(summary.estimatedHours)}
-                </td>
-                <td className="px-4 py-3">
-                  {formatHours(summary.maxElapsedHours)}
-                </td>
-                <td className="px-4 py-3">
-                  {summary.orderCount > 1 ? (
-                    <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
-                      Saturada
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
-                      Normal
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
+          {stageSummaries.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="No hay avances en proceso para analizar."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
 
-            {stageSummaries.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
-                  No hay avances en proceso para analizar.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código de orden</TableHead>
+            <TableHead>Producto</TableHead>
+            <TableHead>Etapa</TableHead>
+            <TableHead>Operario</TableHead>
+            <TableHead>Horas estimadas</TableHead>
+            <TableHead>Horas transcurridas</TableHead>
+            <TableHead>Estado de alerta</TableHead>
+          </TableRow>
+        </TableHeader>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-xl font-semibold">Avances monitoreados</h2>
-        </div>
-
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código de orden</th>
-              <th className="px-4 py-3 font-semibold">Producto</th>
-              <th className="px-4 py-3 font-semibold">Etapa</th>
-              <th className="px-4 py-3 font-semibold">Operario</th>
-              <th className="px-4 py-3 font-semibold">Horas estimadas</th>
-              <th className="px-4 py-3 font-semibold">Horas transcurridas</th>
-              <th className="px-4 py-3 font-semibold">Estado de alerta</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id_avance} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.id_avance}>
+              <TableCell className="text-xs">
+                <Button variant="link" className="h-auto p-0" asChild>
                   <Link
                     href={withReturnTo(
                       `${navigationHrefs.workOrders}/${row.id_orden_trabajo}/progress`,
                       returnTo,
                     )}
-                    className="font-medium text-slate-700 hover:text-slate-950"
                   >
                     {row.id_orden_trabajo}
                   </Link>
-                </td>
-                <td className="px-4 py-3">{row.productName}</td>
-                <td className="px-4 py-3">
-                  <div className="font-medium">{row.stageName}</div>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Secuencia: {row.stageOrder}
-                  </p>
-                </td>
-                <td className="px-4 py-3">{row.operatorName}</td>
-                <td className="px-4 py-3">{formatHours(row.estimatedHours)}</td>
-                <td className="px-4 py-3">{formatHours(row.elapsedHours)}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${getAlertClass(
-                      row.alertStatus,
-                    )}`}
-                  >
-                    {row.alertStatus}
-                  </span>
-                </td>
-              </tr>
-            ))}
+                </Button>
+              </TableCell>
+              <TableCell>{row.productName}</TableCell>
+              <TableCell>
+                <div className="font-medium">{row.stageName}</div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Secuencia: {row.stageOrder}
+                </p>
+              </TableCell>
+              <TableCell>{row.operatorName}</TableCell>
+              <TableCell>{formatHours(row.estimatedHours)}</TableCell>
+              <TableCell>{formatHours(row.elapsedHours)}</TableCell>
+              <TableCell>
+                <Badge variant={getAlertBadgeVariant(row.alertStatus)}>
+                  {row.alertStatus}
+                </Badge>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {rows.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
-                  No hay avances con estado en_proceso.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="No hay avances con estado en_proceso."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }
-

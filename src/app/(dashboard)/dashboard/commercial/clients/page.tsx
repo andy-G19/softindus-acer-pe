@@ -4,6 +4,20 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
 import {
   createReturnToHref,
@@ -136,18 +150,15 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
           { label: "Clientes" },
         ])}
         actions={
-          <Link
-            href="/dashboard/commercial/clients/new"
-            className="w-fit rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-          >
-            Nuevo cliente
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/commercial/clients/new">Nuevo cliente</Link>
+          </Button>
         }
       />
 
       <form
         method="GET"
-        className="grid gap-4 rounded-xl border bg-card p-4 shadow-sm md:grid-cols-3 xl:grid-cols-5"
+        className="grid gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-3 xl:grid-cols-5"
       >
         <SearchableSelectFilter
           key={client}
@@ -160,82 +171,54 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         />
 
         <div className="space-y-2">
-          <label htmlFor="q" className="text-sm font-medium">
-            Búsqueda general
-          </label>
-          <input
+          <Label htmlFor="q">Búsqueda general</Label>
+          <Input
             id="q"
             name="q"
             type="text"
             defaultValue={q}
             placeholder="Buscar por nombre, documento, teléfono o correo"
-            className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="type" className="text-sm font-medium">
-            Tipo
-          </label>
-          <select
-            id="type"
-            name="type"
-            defaultValue={type}
-            className="h-9 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
+          <Label htmlFor="type">Tipo</Label>
+          <NativeSelect id="type" name="type" defaultValue={type}>
             <option value="">Todos los tipos</option>
             {clientTypes.map((clientType) => (
               <option key={clientType} value={clientType}>
                 {clientType}
               </option>
             ))}
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="status" className="text-sm font-medium">
-            Estado
-          </label>
-          <select
-            id="status"
-            name="status"
-            defaultValue={status}
-            className="h-9 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
             <option value="">Todos los estados</option>
             <option value="activo">Activo</option>
             <option value="inactivo">Inactivo</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="origin" className="text-sm font-medium">
-            Origen
-          </label>
-          <input
+          <Label htmlFor="origin">Origen</Label>
+          <Input
             id="origin"
             name="origin"
             type="text"
             defaultValue={origin}
             placeholder="Origen"
-            className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         </div>
 
         <div className="flex flex-wrap items-end gap-2 md:col-span-3 xl:col-span-5">
-          <button
-            type="submit"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-          >
-            Filtrar
-          </button>
+          <Button type="submit">Filtrar</Button>
 
-          <Link
-            href="/dashboard/commercial/clients"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-          >
-            Limpiar filtros
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/commercial/clients">Limpiar filtros</Link>
+          </Button>
         </div>
       </form>
 
@@ -243,77 +226,73 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         Resultados encontrados: {clients.length}
       </p>
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Código</th>
-              <th className="px-4 py-3 text-left">Cliente</th>
-              <th className="px-4 py-3 text-left">Tipo</th>
-              <th className="px-4 py-3 text-left">Teléfono</th>
-              <th className="px-4 py-3 text-left">Origen</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clients.map((clientItem) => (
-              <tr key={clientItem.id_cliente} className="border-t">
-                <td className="px-4 py-3">{clientItem.id_cliente}</td>
-                <td className="px-4 py-3">
-                  {clientItem.nombre_razon_social}
-                </td>
-                <td className="px-4 py-3">{clientItem.tipo_cliente}</td>
-                <td className="px-4 py-3">{clientItem.telefono ?? "-"}</td>
-                <td className="px-4 py-3">
-                  {clientItem.lugar_origen ?? "-"}
-                </td>
-                <td className="px-4 py-3">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Teléfono</TableHead>
+            <TableHead>Origen</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {clients.map((clientItem) => (
+            <TableRow key={clientItem.id_cliente}>
+              <TableCell>{clientItem.id_cliente}</TableCell>
+              <TableCell className="font-medium">
+                {clientItem.nombre_razon_social}
+              </TableCell>
+              <TableCell>{clientItem.tipo_cliente}</TableCell>
+              <TableCell>{clientItem.telefono ?? "-"}</TableCell>
+              <TableCell>{clientItem.lugar_origen ?? "-"}</TableCell>
+              <TableCell>
+                <Badge variant={clientItem.estado ? "success" : "outline"}>
                   {clientItem.estado ? "Activo" : "Inactivo"}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap items-center gap-2">
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button variant="outline" size="sm" asChild>
                     <Link
                       href={withReturnTo(
                         `${navigationHrefs.clients}/${clientItem.id_cliente}/edit`,
                         returnTo,
                       )}
-                      className="rounded-md border px-3 py-1.5 text-xs font-medium"
                     >
                       Editar
                     </Link>
+                  </Button>
 
-                    <form action={toggleClientStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_cliente"
-                        value={clientItem.id_cliente}
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium"
-                      >
-                        {clientItem.estado ? "Inactivar" : "Activar"}
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  <form action={toggleClientStatusAction}>
+                    <input
+                      type="hidden"
+                      name="id_cliente"
+                      value={clientItem.id_cliente}
+                    />
+                    <Button type="submit" variant="outline" size="sm">
+                      {clientItem.estado ? "Inactivar" : "Activar"}
+                    </Button>
+                  </form>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {clients.length === 0 && (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  No se encontraron clientes con los filtros aplicados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+          {clients.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={7} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="No se encontraron clientes con los filtros aplicados."
+                />
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </main>
   );
 }

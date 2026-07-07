@@ -2,6 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createProductionCampaignAction } from "@/modules/production/campaigns/actions";
 
@@ -40,86 +45,61 @@ export default async function NewProductionCampaignPage() {
 
       <form
         action={createProductionCampaignAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <div className="space-y-2">
-            <label className="text-sm font-medium">Nombre de la campaña *</label>
-
-          <input
+          <Label>Nombre de la campaña *</Label>
+          <Input
             name="nombre_campania"
             required
             maxLength={100}
             placeholder="Ej. Campaña escolar agosto"
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <section className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Fecha de inicio *</label>
-
-            <input
+            <Label>Fecha de inicio *</Label>
+            <Input
               name="fecha_inicio"
               type="date"
               required
               defaultValue={getTodayInputValue()}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Fecha de fin</label>
-
-            <input
-              name="fecha_fin"
-              type="date"
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
-            />
+            <Label>Fecha de fin</Label>
+            <Input name="fecha_fin" type="date" />
           </div>
         </section>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Estado *</label>
-
-          <select
-            name="estado"
-            required
-            defaultValue="planificada"
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
-          >
+          <Label>Estado *</Label>
+          <NativeSelect name="estado" required defaultValue="planificada">
             <option value="planificada">Planificada</option>
             <option value="activa">Activa</option>
             <option value="finalizada">Finalizada</option>
             <option value="anulada">Anulada</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Objetivo general</label>
-
-          <textarea
+          <Label>Objetivo general</Label>
+          <Textarea
             name="objetivo_general"
             rows={4}
             maxLength={700}
             placeholder="Ej. Fabricar lote de herramientas para reposición de stock."
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href="/dashboard/production/campaigns"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Cancelar
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href="/dashboard/production/campaigns">Cancelar</Link>
+          </Button>
 
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Guardar campaña
-          </button>
+          <Button type="submit">Guardar campaña</Button>
         </div>
       </form>
     </main>

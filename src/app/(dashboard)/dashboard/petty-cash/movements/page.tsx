@@ -1,14 +1,30 @@
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
 
@@ -73,14 +89,14 @@ function getMovementLabel(type: string, concept: string) {
 
 function getMovementBadgeVariant(type: string, concept: string) {
   if (type === "egreso" || concept.startsWith("Ajuste negativo")) {
-    return "destructive";
+    return "destructive" as const;
   }
 
   if (type === "ajuste") {
-    return "secondary";
+    return "secondary" as const;
   }
 
-  return "default";
+  return "success" as const;
 }
 
 function isNegativeMovement(type: string, concept: string) {
@@ -243,97 +259,23 @@ export default async function PettyCashMovementsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas · Movimientos
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de movimientos de caja
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta ingresos, egresos y ajustes de caja chica usando filtros
-            por caja, tipo, categoría, fecha, concepto, comprobante o
-            responsable.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/petty-cash"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Badge variant="secondary">Fase 7.6</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Listado de movimientos de caja"
+        description="Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable."
+        backHref={navigationHrefs.pettyCash}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Movimientos" },
+        ])}
+      />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Movimientos encontrados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalMatches}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Se muestran hasta 100 registros.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ingresos mostrados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(totalIncome)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total de ingresos en la vista actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Egresos mostrados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(totalExpenses)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total de egresos en la vista actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ajustes netos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalPositiveAdjustments - totalNegativeAdjustments)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ajustes positivos menos negativos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Resultado neto</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(netResult)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ingresos y ajustes positivos menos egresos y ajustes negativos.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Movimientos encontrados" value={totalMatches.toString()} description="Se muestran hasta 100 registros." tone="info" />
+        <KpiCard title="Ingresos mostrados" value={formatMoney(totalIncome)} description="Total de ingresos en la vista actual." tone="success" />
+        <KpiCard title="Egresos mostrados" value={formatMoney(totalExpenses)} description="Total de egresos en la vista actual." tone="warning" />
+        <KpiCard title="Ajustes netos" value={formatMoney(totalPositiveAdjustments - totalNegativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" />
+        <KpiCard title="Resultado neto" value={formatMoney(netResult)} description="Ingresos y ajustes positivos menos egresos y ajustes negativos." tone="info" />
       </section>
 
       <Card>
@@ -344,57 +286,31 @@ export default async function PettyCashMovementsPage({
         <CardContent>
           <form method="GET" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
-              <label htmlFor="caja" className="text-sm font-medium">
-                Caja chica
-              </label>
-
-              <select
-                id="caja"
-                name="caja"
-                defaultValue={selectedCashBox}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              >
+              <Label htmlFor="caja">Caja chica</Label>
+              <NativeSelect id="caja" name="caja" defaultValue={selectedCashBox}>
                 <option value="">Todas las cajas</option>
-
                 {cashBoxes.map((box) => (
                   <option key={box.id_caja_chica} value={box.id_caja_chica}>
                     {box.nombre_caja}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="tipo" className="text-sm font-medium">
-                Tipo de movimiento
-              </label>
-
-              <select
-                id="tipo"
-                name="tipo"
-                defaultValue={selectedType}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              >
+              <Label htmlFor="tipo">Tipo de movimiento</Label>
+              <NativeSelect id="tipo" name="tipo" defaultValue={selectedType}>
                 <option value="">Todos</option>
                 <option value="ingreso">Ingresos</option>
                 <option value="egreso">Egresos</option>
                 <option value="ajuste">Ajustes</option>
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="categoria" className="text-sm font-medium">
-                Categoría
-              </label>
-
-              <select
-                id="categoria"
-                name="categoria"
-                defaultValue={selectedCategory}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              >
+              <Label htmlFor="categoria">Categoría</Label>
+              <NativeSelect id="categoria" name="categoria" defaultValue={selectedCategory}>
                 <option value="">Todas las categorías</option>
-
                 {categories.map((category) => (
                   <option
                     key={category.id_categoria_gasto}
@@ -403,66 +319,37 @@ export default async function PettyCashMovementsPage({
                     {category.nombre_categoria}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="desde" className="text-sm font-medium">
-                Desde
-              </label>
-
-              <input
-                id="desde"
-                name="desde"
-                type="date"
-                defaultValue={selectedStartDate}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              />
+              <Label htmlFor="desde">Desde</Label>
+              <Input id="desde" name="desde" type="date" defaultValue={selectedStartDate} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="hasta" className="text-sm font-medium">
-                Hasta
-              </label>
-
-              <input
-                id="hasta"
-                name="hasta"
-                type="date"
-                defaultValue={selectedEndDate}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              />
+              <Label htmlFor="hasta">Hasta</Label>
+              <Input id="hasta" name="hasta" type="date" defaultValue={selectedEndDate} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="q" className="text-sm font-medium">
-                Buscar
-              </label>
-
-              <input
+              <Label htmlFor="q">Buscar</Label>
+              <Input
                 id="q"
                 name="q"
                 type="text"
                 defaultValue={searchText}
                 placeholder="Concepto, comprobante, responsable..."
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
 
             <div className="flex flex-col gap-2 md:flex-row lg:col-span-3">
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/petty-cash/movements"
-                className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/petty-cash/movements">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
@@ -475,124 +362,102 @@ export default async function PettyCashMovementsPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {movements.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                No se encontraron movimientos.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Ajusta los filtros o registra nuevos ingresos, egresos o ajustes
-                de caja chica.
-              </p>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron movimientos."
+              description="Ajusta los filtros o registra nuevos ingresos, egresos o ajustes de caja chica."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Tipo</th>
-                    <th className="py-2 pr-3">Concepto</th>
-                    <th className="py-2 pr-3">Caja</th>
-                    <th className="py-2 pr-3">Categoría</th>
-                    <th className="py-2 pr-3">Responsable</th>
-                    <th className="py-2 pr-3">Comprobante</th>
-                    <th className="py-2 pr-3">Registrado por</th>
-                    <th className="py-2 text-right">Monto</th>
-                    <th className="py-2 text-right">Acciones</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Concepto</TableHead>
+                  <TableHead>Caja</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Comprobante</TableHead>
+                  <TableHead>Registrado por</TableHead>
+                  <TableHead className="text-right">Monto</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {movements.map((movement) => (
-                    <tr
-                      key={movement.id_movimiento_caja}
-                      className="border-b align-top"
-                    >
-                      <td className="py-2 pr-3">
-                        {formatDate(movement.fecha_movimiento)}
-                      </td>
+              <TableBody>
+                {movements.map((movement) => (
+                  <TableRow key={movement.id_movimiento_caja} className="align-top">
+                    <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        <Badge
-                          variant={getMovementBadgeVariant(
-                            movement.tipo_movimiento,
-                            movement.concepto,
-                          )}
-                        >
-                          {getMovementLabel(
-                            movement.tipo_movimiento,
-                            movement.concepto,
-                          )}
-                        </Badge>
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        <p className="font-medium">{movement.concepto}</p>
-
-                        {movement.observaciones ? (
-                          <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-                            {movement.observaciones}
-                          </p>
-                        ) : null}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.caja_chica.nombre_caja}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.categoria_gasto?.nombre_categoria ?? "-"}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.responsable ?? "-"}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.comprobante ?? "-"}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.usuario.nombres} {movement.usuario.apellidos}
-                      </td>
-
-                      <td className="py-2 text-right font-medium">
-                        {formatSignedMoney(
+                    <TableCell>
+                      <Badge
+                        variant={getMovementBadgeVariant(
                           movement.tipo_movimiento,
                           movement.concepto,
-                          movement.monto,
                         )}
-                      </td>
+                      >
+                        {getMovementLabel(
+                          movement.tipo_movimiento,
+                          movement.concepto,
+                        )}
+                      </Badge>
+                    </TableCell>
 
-                      <td className="py-2 text-right">
-                        {movement.observaciones?.includes("[ANULADO]") ? (
-                          <span className="text-xs text-muted-foreground">
-                            Anulado
-                          </span>
-                        ) : (
-                          <form action={annulPettyCashMovementAction}>
-                            <input
-                              type="hidden"
-                              name="id_movimiento_caja"
-                              value={movement.id_movimiento_caja}
-                            />
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
-                              Anular
-                            </button>
-                          </form>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>
+                      <p className="font-medium">{movement.concepto}</p>
+                      {movement.observaciones ? (
+                        <p className="mt-1 max-w-xs text-xs text-muted-foreground">
+                          {movement.observaciones}
+                        </p>
+                      ) : null}
+                    </TableCell>
+
+                    <TableCell>{movement.caja_chica.nombre_caja}</TableCell>
+
+                    <TableCell>
+                      {movement.categoria_gasto?.nombre_categoria ?? "-"}
+                    </TableCell>
+
+                    <TableCell>{movement.responsable ?? "-"}</TableCell>
+
+                    <TableCell>{movement.comprobante ?? "-"}</TableCell>
+
+                    <TableCell>
+                      {movement.usuario.nombres} {movement.usuario.apellidos}
+                    </TableCell>
+
+                    <TableCell className="text-right font-medium">
+                      {formatSignedMoney(
+                        movement.tipo_movimiento,
+                        movement.concepto,
+                        movement.monto,
+                      )}
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      {movement.observaciones?.includes("[ANULADO]") ? (
+                        <span className="text-xs text-muted-foreground">
+                          Anulado
+                        </span>
+                      ) : (
+                        <form action={annulPettyCashMovementAction}>
+                          <input
+                            type="hidden"
+                            name="id_movimiento_caja"
+                            value={movement.id_movimiento_caja}
+                          />
+                          <Button type="submit" variant="outline" size="sm">
+                            Anular
+                          </Button>
+                        </form>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

@@ -1,7 +1,21 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
 import {
   dashboardBreadcrumbs,
@@ -53,32 +67,24 @@ function calculateRequiredWithWaste(baseQuantity: number, wastePercentage: numbe
   return baseQuantity * (1 + wastePercentage / 100);
 }
 
-function getStockStatusClass(hasEnoughStock: boolean) {
-  if (hasEnoughStock) {
-    return "bg-emerald-50 text-emerald-700";
-  }
-
-  return "bg-red-50 text-red-700";
-}
-
-function getStatusClass(status: string) {
+function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "en_proceso") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "pausada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
   if (status === "anulada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 export default async function WorkOrderDetailPage({
@@ -236,9 +242,7 @@ export default async function WorkOrderDetailPage({
         actions={
           <>
             {materialsConsumed ? (
-              <span className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
-                Materiales consumidos
-              </span>
+              <Badge variant="success">Materiales consumidos</Badge>
             ) : null}
 
             {canConsumeMaterials ? (
@@ -249,80 +253,52 @@ export default async function WorkOrderDetailPage({
                   value={workOrder.id_orden_trabajo}
                 />
 
-                <button
-                  type="submit"
-                  className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-                >
-                  Consumir materiales
-                </button>
+                <Button type="submit">Consumir materiales</Button>
               </form>
             ) : null}
 
-            <Link
-              href={`${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}/progress`}
-              className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Ver avances
-            </Link>
+            <Button variant="outline" asChild>
+              <Link
+                href={`${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}/progress`}
+              >
+                Ver avances
+              </Link>
+            </Button>
 
-            <span
-              className={`rounded-full px-3 py-2 text-sm font-medium ${getStatusClass(
-                workOrder.estado,
-              )}`}
-            >
+            <Badge variant={getOrderBadgeVariant(workOrder.estado)}>
               {workOrder.estado}
-            </span>
+            </Badge>
           </>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Origen</p>
-          <p className="mt-2 text-xl font-bold">{origin}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Inicio</p>
-          <p className="mt-2 text-xl font-bold">
-            {formatDate(workOrder.fecha_inicio)}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Entrega estimada</p>
-          <p className="mt-2 text-xl font-bold">
-            {formatDate(workOrder.fecha_entrega_estimada)}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Costo material estimado</p>
-          <p className="mt-2 text-xl font-bold">
-            {formatMoney(totalEstimatedCost)}
-          </p>
-        </div>
+        <KpiCard title="Origen" value={origin} description="Origen de la orden." tone="info" />
+        <KpiCard title="Inicio" value={formatDate(workOrder.fecha_inicio)} description="Fecha de inicio." tone="info" />
+        <KpiCard title="Entrega estimada" value={formatDate(workOrder.fecha_entrega_estimada)} description="Compromiso de entrega." tone="info" />
+        <KpiCard title="Costo material estimado" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">Ruta de fabricación</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Ruta de fabricación</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {workOrder.ruta_fabricacion?.nombre_ruta ?? "Sin ruta asociada"}
+            </p>
+          </CardHeader>
 
-          <p className="mt-2 text-sm text-slate-600">
-            {workOrder.ruta_fabricacion?.nombre_ruta ?? "Sin ruta asociada"}
-          </p>
-
-          <div className="mt-4 space-y-3">
+          <CardContent className="space-y-3">
             {workOrder.ruta_fabricacion?.etapa_ruta.map((stage) => (
               <div
                 key={stage.id_etapa_ruta}
-                className="rounded-lg border bg-slate-50 p-3 text-sm"
+                className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
               >
                 <p className="font-medium">
                   {stage.orden_secuencia}. {stage.nombre_etapa}
                 </p>
 
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {stage.requiere_maquina
                     ? "Requiere máquina"
                     : "No requiere máquina"}
@@ -331,22 +307,23 @@ export default async function WorkOrderDetailPage({
             ))}
 
             {workOrder.ruta_fabricacion?.etapa_ruta.length === 0 ? (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted-foreground">
                 Esta ruta no tiene etapas activas.
               </p>
             ) : null}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">Receta técnica</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Receta técnica</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {workOrder.version_receta?.receta_tecnica.nombre_receta ??
+                "Sin receta asociada"}
+            </p>
+          </CardHeader>
 
-          <p className="mt-2 text-sm text-slate-600">
-            {workOrder.version_receta?.receta_tecnica.nombre_receta ??
-              "Sin receta asociada"}
-          </p>
-
-          <div className="mt-4 space-y-2 text-sm">
+          <CardContent className="space-y-2 text-sm">
             <p>
               <span className="font-medium">Versión:</span>{" "}
               {workOrder.version_receta?.numero_version ?? "-"}
@@ -363,113 +340,108 @@ export default async function WorkOrderDetailPage({
             </p>
 
             {workOrder.observaciones ? (
-              <p className="pt-2 text-slate-600">{workOrder.observaciones}</p>
+              <p className="pt-2 text-muted-foreground">
+                {workOrder.observaciones}
+              </p>
             ) : null}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </section>
 
       {criticalMaterials.length > 0 ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-          Hay {criticalMaterials.length} material(es) sin stock suficiente para
-          esta orden. Revisa la columna de faltante antes de iniciar la
-          producción.
-        </section>
+        <Alert variant="destructive">
+          <AlertDescription>
+            Hay {criticalMaterials.length} material(es) sin stock suficiente
+            para esta orden. Revisa la columna de faltante antes de iniciar la
+            producción.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b bg-slate-50 px-4 py-3">
-          <h2 className="font-semibold">Materiales requeridos para la orden</h2>
-        </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">
+            Materiales requeridos para la orden
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Material</TableHead>
+                <TableHead>Tipo</TableHead>
+                <TableHead>Cant. por unidad</TableHead>
+                <TableHead>Requerido total</TableHead>
+                <TableHead>Stock disponible</TableHead>
+                <TableHead>Faltante</TableHead>
+                <TableHead>Costo estimado</TableHead>
+                <TableHead>Estado</TableHead>
+              </TableRow>
+            </TableHeader>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Tipo</th>
-              <th className="px-4 py-3 font-semibold">Cant. por unidad</th>
-              <th className="px-4 py-3 font-semibold">Requerido total</th>
-              <th className="px-4 py-3 font-semibold">Stock disponible</th>
-              <th className="px-4 py-3 font-semibold">Faltante</th>
-              <th className="px-4 py-3 font-semibold">Costo estimado</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-            </tr>
-          </thead>
+            <TableBody>
+              {materialRows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <div className="font-medium">{row.materialName}</div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Categoría: {row.materialCategory}
+                    </p>
+                  </TableCell>
 
-          <tbody>
-            {materialRows.map((row) => (
-              <tr key={row.id} className="border-t">
-                <td className="px-4 py-3">
-                  <div className="font-medium">{row.materialName}</div>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Categoría: {row.materialCategory}
-                  </p>
-                </td>
+                  <TableCell className="capitalize">
+                    {row.consumptionType}
+                  </TableCell>
 
-                <td className="px-4 py-3 capitalize">
-                  {row.consumptionType}
-                </td>
+                  <TableCell>
+                    {formatDecimal(row.baseQuantityPerUnit)} {row.unit}
+                  </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.baseQuantityPerUnit)} {row.unit}
-                </td>
+                  <TableCell className="font-medium">
+                    {formatDecimal(row.requiredWithWaste)} {row.unit}
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Incluye merma: {formatDecimal(row.wastePercentage)}%
+                    </p>
+                  </TableCell>
 
-                <td className="px-4 py-3 font-medium">
-                  {formatDecimal(row.requiredWithWaste)} {row.unit}
-                  <p className="mt-1 text-xs text-slate-400">
-                    Incluye merma: {formatDecimal(row.wastePercentage)}%
-                  </p>
-                </td>
+                  <TableCell>
+                    {formatDecimal(row.availableStock)} {row.materialUnit}
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Stock: {formatDecimal(row.currentStock)} · Reservado:{" "}
+                      {formatDecimal(row.reservedStock)}
+                    </p>
+                  </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.availableStock)} {row.materialUnit}
-                  <p className="mt-1 text-xs text-slate-400">
-                    Stock: {formatDecimal(row.currentStock)} · Reservado:{" "}
-                    {formatDecimal(row.reservedStock)}
-                  </p>
-                </td>
+                  <TableCell>
+                    {formatDecimal(row.shortage)} {row.materialUnit}
+                  </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.shortage)} {row.materialUnit}
-                </td>
+                  <TableCell className="font-medium">
+                    {formatMoney(row.estimatedCost)}
+                  </TableCell>
 
-                <td className="px-4 py-3 font-medium">
-                  {formatMoney(row.estimatedCost)}
-                </td>
+                  <TableCell>
+                    <Badge variant={row.hasEnoughStock ? "success" : "destructive"}>
+                      {row.hasEnoughStock ? "Suficiente" : "Insuficiente"}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
 
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${getStockStatusClass(
-                      row.hasEnoughStock,
-                    )}`}
-                  >
-                    {row.hasEnoughStock ? "Suficiente" : "Insuficiente"}
-                  </span>
-                </td>
-              </tr>
-            ))}
-
-            {materialRows.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Esta orden no tiene materiales calculados.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-        <p className="font-medium text-slate-900">Siguiente paso</p>
-
-        <p className="mt-1">
-          En la Fase 4.8 generaremos los avances de producción por cada etapa de
-          la ruta. Ahí podrás marcar etapas como pendiente, en proceso, pausada o
-          terminada.
-        </p>
-      </div>
+              {materialRows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="p-0">
+                    <EmptyState
+                      className="border-0"
+                      label="Esta orden no tiene materiales calculados."
+                    />
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </main>
   );
 }
-

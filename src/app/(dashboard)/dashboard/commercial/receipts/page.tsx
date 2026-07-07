@@ -4,6 +4,19 @@ import { redirect } from "next/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -112,141 +125,137 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
 
       <form
         action="/dashboard/commercial/receipts"
-        className="grid gap-3 rounded-lg border bg-white p-4 md:grid-cols-5"
+        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-5"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar comprobante..."
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <select
-          name="type"
-          defaultValue={type}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los tipos</option>
-          <option value="boleta">Boleta</option>
-          <option value="factura">Factura</option>
-          <option value="recibo">Recibo</option>
-          <option value="otro">Otro</option>
-        </select>
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="emitido">Emitido</option>
-          <option value="anulado">Anulado</option>
-        </select>
-        <input
-          name="from"
-          type="date"
-          defaultValue={parseStringParam(params, "from")}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <input
-          name="to"
-          type="date"
-          defaultValue={parseStringParam(params, "to")}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <div className="flex gap-2 md:col-span-5">
-          <button
-            type="submit"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-          >
-            Filtrar
-          </button>
-          <Link
-            href="/dashboard/commercial/receipts"
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            Limpiar filtros
-          </Link>
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar comprobante..."
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="type">Tipo</Label>
+          <NativeSelect id="type" name="type" defaultValue={type}>
+            <option value="">Todos los tipos</option>
+            <option value="boleta">Boleta</option>
+            <option value="factura">Factura</option>
+            <option value="recibo">Recibo</option>
+            <option value="otro">Otro</option>
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="emitido">Emitido</option>
+            <option value="anulado">Anulado</option>
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="from">Desde</Label>
+          <Input
+            id="from"
+            name="from"
+            type="date"
+            defaultValue={parseStringParam(params, "from")}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="to">Hasta</Label>
+          <Input
+            id="to"
+            name="to"
+            type="date"
+            defaultValue={parseStringParam(params, "to")}
+          />
+        </div>
+        <div className="flex items-end gap-2 md:col-span-5">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/commercial/receipts">Limpiar filtros</Link>
+          </Button>
         </div>
       </form>
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Número</th>
-              <th className="px-4 py-3 text-left">Cliente</th>
-              <th className="px-4 py-3 text-left">Pedido</th>
-              <th className="px-4 py-3 text-left">Tipo</th>
-              <th className="px-4 py-3 text-left">Fecha</th>
-              <th className="px-4 py-3 text-right">Total</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {receipts.map((receipt) => (
-              <tr key={receipt.id_comprobante} className="border-t">
-                <td className="px-4 py-3 font-medium">
-                  {receipt.numero_comprobante}
-                </td>
-                <td className="px-4 py-3">
-                  {receipt.pedido.cliente.nombre_razon_social}
-                </td>
-                <td className="px-4 py-3">{receipt.id_pedido}</td>
-                <td className="px-4 py-3">{receipt.tipo_comprobante}</td>
-                <td className="px-4 py-3">
-                  {formatDate(receipt.fecha_emision)}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  {formatMoney(receipt.monto_total)}
-                </td>
-                <td className="px-4 py-3">
-                  <StatusBadge status={receipt.estado} />
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-2">
-                    {receipt.id_proforma ? (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Número</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Pedido</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead className="text-right">Total</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {receipts.map((receipt) => (
+            <TableRow key={receipt.id_comprobante}>
+              <TableCell className="font-medium">
+                {receipt.numero_comprobante}
+              </TableCell>
+              <TableCell>
+                {receipt.pedido.cliente.nombre_razon_social}
+              </TableCell>
+              <TableCell>{receipt.id_pedido}</TableCell>
+              <TableCell>{receipt.tipo_comprobante}</TableCell>
+              <TableCell>{formatDate(receipt.fecha_emision)}</TableCell>
+              <TableCell className="text-right">
+                {formatMoney(receipt.monto_total)}
+              </TableCell>
+              <TableCell>
+                <StatusBadge status={receipt.estado} />
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-wrap gap-2">
+                  {receipt.id_proforma ? (
+                    <Button variant="outline" size="sm" asChild>
                       <Link
                         href={`/dashboard/commercial/quotes/${receipt.id_proforma}`}
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                       >
                         Ver proforma
                       </Link>
-                    ) : null}
-                    {receipt.estado !== "anulado" ? (
-                      <form action={annulReceiptAction}>
-                        <input
-                          type="hidden"
-                          name="id_comprobante"
-                          value={receipt.id_comprobante}
-                        />
-                        <ConfirmDeleteButton
-                          title="¿Anular comprobante?"
-                          description="Esta acción marcará el comprobante como anulado. Verifique antes de continuar."
-                          confirmText="Confirmar anulación"
-                          entityName="comprobante"
-                          className="hover:bg-destructive/20"
-                        >
-                          Anular
-                        </ConfirmDeleteButton>
-                      </form>
-                    ) : null}
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {receipts.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={8}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  Todavía no hay comprobantes registrados.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+                    </Button>
+                  ) : null}
+                  {receipt.estado !== "anulado" ? (
+                    <form action={annulReceiptAction}>
+                      <input
+                        type="hidden"
+                        name="id_comprobante"
+                        value={receipt.id_comprobante}
+                      />
+                      <ConfirmDeleteButton
+                        title="¿Anular comprobante?"
+                        description="Esta acción marcará el comprobante como anulado. Verifique antes de continuar."
+                        confirmText="Confirmar anulación"
+                        entityName="comprobante"
+                        className="hover:bg-destructive/20"
+                      >
+                        Anular
+                      </ConfirmDeleteButton>
+                    </form>
+                  ) : null}
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+          {receipts.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay comprobantes registrados."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

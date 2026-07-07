@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   createOrderAction,
   type OrderFormState,
@@ -172,26 +177,27 @@ export function OrderForm({
   }
 
   return (
-    <form action={formAction} className="space-y-5 rounded-lg border p-6">
+    <form
+      action={formAction}
+      className="space-y-5 rounded-lg border border-border/80 bg-card p-6"
+    >
       {defaultValues?.id_pedido ? (
         <input type="hidden" name="id_pedido" value={defaultValues.id_pedido} />
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       {!canCreateOrder && (
-        <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900">
-          Para registrar un pedido necesitas tener al menos un cliente activo y
-          un producto activo.
-        </div>
+        <Alert variant="warning">
+          <AlertDescription>
+            Para registrar un pedido necesitas tener al menos un cliente
+            activo y un producto activo.
+          </AlertDescription>
+        </Alert>
       )}
 
       <div className="space-y-2">
@@ -213,7 +219,7 @@ export function OrderForm({
         ) : null}
       </div>
 
-      <div className="space-y-4 rounded-lg border p-4">
+      <div className="space-y-4 rounded-lg border border-border/80 p-4">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="font-semibold">Detalle del pedido</h2>
@@ -222,14 +228,15 @@ export function OrderForm({
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={addItem}
             disabled={!canCreateOrder}
-            className="rounded-md border px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
           >
             Agregar producto
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -238,20 +245,25 @@ export function OrderForm({
               Number(item.cantidad || 0) * Number(item.precio_unitario || 0);
 
             return (
-              <div key={item.key} className="rounded-lg border p-4">
+              <div
+                key={item.key}
+                className="rounded-lg border border-border/80 p-4"
+              >
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-sm font-semibold">
                     Producto {index + 1}
                   </h3>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() => removeItem(item.key)}
                     disabled={items.length === 1}
-                    className="text-sm text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="text-destructive hover:text-destructive"
                   >
                     Quitar
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="space-y-2">
@@ -272,8 +284,8 @@ export function OrderForm({
 
                 <div className="mt-4 grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Cantidad</label>
-                    <input
+                    <Label>Cantidad</Label>
+                    <Input
                       name="cantidad"
                       type="number"
                       min="1"
@@ -282,17 +294,14 @@ export function OrderForm({
                       onChange={(event) =>
                         updateItem(item.key, "cantidad", event.target.value)
                       }
-                      className="w-full rounded-md border px-3 py-2"
                       required
                       disabled={!canCreateOrder}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Precio unitario
-                    </label>
-                    <input
+                    <Label>Precio unitario</Label>
+                    <Input
                       name="precio_unitario"
                       type="number"
                       min="0"
@@ -305,25 +314,22 @@ export function OrderForm({
                           event.target.value,
                         )
                       }
-                      className="w-full rounded-md border px-3 py-2"
                       required
                       disabled={!canCreateOrder}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Subtotal</label>
-                    <div className="rounded-md border bg-muted px-3 py-2 text-sm">
+                    <Label>Subtotal</Label>
+                    <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
                       S/ {subtotal.toFixed(2)}
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-2">
-                  <label className="text-sm font-medium">
-                    Observacion del producto
-                  </label>
-                  <input
+                  <Label>Observacion del producto</Label>
+                  <Input
                     name="observacion_detalle"
                     value={item.observacion_detalle}
                     onChange={(event) =>
@@ -334,7 +340,6 @@ export function OrderForm({
                       )
                     }
                     placeholder="Ejemplo: entregar pintado de color negro"
-                    className="w-full rounded-md border px-3 py-2"
                     disabled={!canCreateOrder}
                   />
                 </div>
@@ -343,7 +348,7 @@ export function OrderForm({
           })}
         </div>
 
-        <div className="flex justify-end border-t pt-4">
+        <div className="flex justify-end border-t border-border/80 pt-4">
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Total estimado</p>
             <p className="text-2xl font-bold">S/ {total.toFixed(2)}</p>
@@ -352,12 +357,11 @@ export function OrderForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Fecha estimada de entrega</label>
-        <input
+        <Label>Fecha estimada de entrega</Label>
+        <Input
           name="fecha_entrega_estimada"
           type="date"
           defaultValue={defaultValues?.fecha_entrega_estimada ?? ""}
-          className="w-full rounded-md border px-3 py-2"
           disabled={!canCreateOrder}
         />
         {state.fieldErrors?.fecha_entrega_estimada ? (
@@ -368,33 +372,24 @@ export function OrderForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Observaciones generales del pedido
-        </label>
-        <textarea
+        <Label>Observaciones generales del pedido</Label>
+        <Textarea
           name="observaciones"
           placeholder="Ejemplo: Cliente solicita entrega urgente."
-          className="min-h-24 w-full rounded-md border px-3 py-2"
+          className="min-h-24"
           disabled={!canCreateOrder}
           defaultValue={defaultValues?.observaciones ?? ""}
         />
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={!canCreateOrder || isPending}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
-        >
+        <Button type="submit" disabled={!canCreateOrder || isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
 
-        <Link
-          href="/dashboard/commercial/orders"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Cancelar
-        </Link>
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/commercial/orders">Cancelar</Link>
+        </Button>
       </div>
     </form>
   );

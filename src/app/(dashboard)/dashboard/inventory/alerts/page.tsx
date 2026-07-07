@@ -1,6 +1,19 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
@@ -91,181 +104,179 @@ export default async function InventoryAlertsPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales activos</p>
-          <p className="mt-2 text-3xl font-bold">{materials.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales críticos</p>
-          <p className="mt-2 text-3xl font-bold">{criticalMaterials.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Alertas activas</p>
-          <p className="mt-2 text-3xl font-bold">
-            {alerts.filter((alert) => alert.estado_alerta === "activa").length}
-          </p>
-        </div>
+        <KpiCard
+          title="Materiales activos"
+          value={materials.length.toString()}
+          description="Materiales disponibles para uso."
+          tone="info"
+        />
+        <KpiCard
+          title="Materiales críticos"
+          value={criticalMaterials.length.toString()}
+          description="Bajo el stock mínimo definido."
+          tone="warning"
+        />
+        <KpiCard
+          title="Alertas activas"
+          value={alerts
+            .filter((alert) => alert.estado_alerta === "activa")
+            .length.toString()}
+          description="Alertas generadas sin atender."
+          tone="warning"
+        />
       </section>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-4">
-          <h2 className="text-lg font-semibold">Stock crítico actual</h2>
-          <p className="text-sm text-slate-600">
-            Materiales cuyo stock disponible está igual o por debajo del stock
-            mínimo.
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Stock crítico actual</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Materiales cuyo stock disponible está igual o por debajo del
+            stock mínimo.
           </p>
-        </div>
+        </CardHeader>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Categoría</th>
-              <th className="px-4 py-3 font-semibold">Stock actual</th>
-              <th className="px-4 py-3 font-semibold">Reservado</th>
-              <th className="px-4 py-3 font-semibold">Disponible</th>
-              <th className="px-4 py-3 font-semibold">Stock mínimo</th>
-              <th className="px-4 py-3 font-semibold">Unidad</th>
-            </tr>
-          </thead>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Material</TableHead>
+                <TableHead>Categoría</TableHead>
+                <TableHead>Stock actual</TableHead>
+                <TableHead>Reservado</TableHead>
+                <TableHead>Disponible</TableHead>
+                <TableHead>Stock mínimo</TableHead>
+                <TableHead>Unidad</TableHead>
+              </TableRow>
+            </TableHeader>
 
-          <tbody>
-            {criticalMaterials.map((material) => {
-              const stockActual = Number(material.stock_actual.toString());
-              const stockReservado = Number(material.stock_reservado.toString());
-              const stockDisponible = stockActual - stockReservado;
+            <TableBody>
+              {criticalMaterials.map((material) => {
+                const stockActual = Number(material.stock_actual.toString());
+                const stockReservado = Number(
+                  material.stock_reservado.toString(),
+                );
+                const stockDisponible = stockActual - stockReservado;
 
-              return (
-                <tr key={material.id_material} className="border-t">
-                  <td className="px-4 py-3 font-medium">
-                    {material.nombre_material}
-                  </td>
-                  <td className="px-4 py-3">{material.categoria}</td>
-                  <td className="px-4 py-3">
-                    {formatDecimal(material.stock_actual)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDecimal(material.stock_reservado)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
-                      {stockDisponible.toFixed(2)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDecimal(material.stock_minimo)}
-                  </td>
-                  <td className="px-4 py-3">{material.unidad_medida}</td>
-                </tr>
-              );
-            })}
+                return (
+                  <TableRow key={material.id_material}>
+                    <TableCell className="font-medium">
+                      {material.nombre_material}
+                    </TableCell>
+                    <TableCell>{material.categoria}</TableCell>
+                    <TableCell>
+                      {formatDecimal(material.stock_actual)}
+                    </TableCell>
+                    <TableCell>
+                      {formatDecimal(material.stock_reservado)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="destructive">
+                        {stockDisponible.toFixed(2)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {formatDecimal(material.stock_minimo)}
+                    </TableCell>
+                    <TableCell>{material.unidad_medida}</TableCell>
+                  </TableRow>
+                );
+              })}
 
-            {criticalMaterials.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
-                  No hay materiales en stock crítico.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+              {criticalMaterials.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="p-0">
+                    <EmptyState
+                      className="border-0"
+                      label="No hay materiales en stock crítico."
+                    />
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-4">
-          <h2 className="text-lg font-semibold">Historial de alertas</h2>
-          <p className="text-sm text-slate-600">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Historial de alertas</CardTitle>
+          <p className="text-sm text-muted-foreground">
             Alertas generadas cuando un material llega al stock mínimo.
           </p>
-        </div>
+        </CardHeader>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Fecha</th>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Stock detectado</th>
-              <th className="px-4 py-3 font-semibold">Stock mínimo</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Mensaje</th>
-              {isAdmin ? (
-                <th className="px-4 py-3 font-semibold">Acción</th>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Fecha</TableHead>
+                <TableHead>Material</TableHead>
+                <TableHead>Stock detectado</TableHead>
+                <TableHead>Stock mínimo</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Mensaje</TableHead>
+                {isAdmin ? <TableHead>Acción</TableHead> : null}
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {alerts.map((alert) => {
+                const material = materialById.get(alert.id_material);
+                const isActive = alert.estado_alerta === "activa";
+
+                return (
+                  <TableRow key={alert.id_alerta}>
+                    <TableCell>{formatDate(alert.fecha_alerta)}</TableCell>
+                    <TableCell className="font-medium">
+                      {material?.nombre_material ?? alert.id_material}
+                    </TableCell>
+                    <TableCell>
+                      {formatDecimal(alert.stock_detectado)}
+                    </TableCell>
+                    <TableCell>{formatDecimal(alert.stock_minimo)}</TableCell>
+                    <TableCell>
+                      <Badge variant={isActive ? "destructive" : "success"}>
+                        {alert.estado_alerta}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{alert.mensaje ?? "-"}</TableCell>
+
+                    {isAdmin ? (
+                      <TableCell>
+                        {isActive ? (
+                          <form action={attendStockAlertAction}>
+                            <input
+                              type="hidden"
+                              name="id_alerta"
+                              value={alert.id_alerta}
+                            />
+                            <Button type="submit" variant="outline" size="sm">
+                              Marcar atendida
+                            </Button>
+                          </form>
+                        ) : (
+                          "-"
+                        )}
+                      </TableCell>
+                    ) : null}
+                  </TableRow>
+                );
+              })}
+
+              {alerts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={isAdmin ? 7 : 6} className="p-0">
+                    <EmptyState
+                      className="border-0"
+                      label="Todavía no hay alertas registradas."
+                    />
+                  </TableCell>
+                </TableRow>
               ) : null}
-            </tr>
-          </thead>
-
-          <tbody>
-            {alerts.map((alert) => {
-              const material = materialById.get(alert.id_material);
-              const isActive = alert.estado_alerta === "activa";
-
-              return (
-                <tr key={alert.id_alerta} className="border-t">
-                  <td className="px-4 py-3">
-                    {formatDate(alert.fecha_alerta)}
-                  </td>
-                  <td className="px-4 py-3 font-medium">
-                    {material?.nombre_material ?? alert.id_material}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDecimal(alert.stock_detectado)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDecimal(alert.stock_minimo)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={
-                        isActive
-                          ? "rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700"
-                          : "rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700"
-                      }
-                    >
-                      {alert.estado_alerta}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">{alert.mensaje ?? "-"}</td>
-
-                  {isAdmin ? (
-                    <td className="px-4 py-3">
-                      {isActive ? (
-                        <form action={attendStockAlertAction}>
-                          <input
-                            type="hidden"
-                            name="id_alerta"
-                            value={alert.id_alerta}
-                          />
-                          <button
-                            type="submit"
-                            className="text-sm font-medium text-slate-700 underline-offset-4 hover:underline"
-                          >
-                            Marcar atendida
-                          </button>
-                        </form>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  ) : null}
-                </tr>
-              );
-            })}
-
-            {alerts.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={isAdmin ? 7 : 6}
-                  className="px-4 py-8 text-center text-slate-500"
-                >
-                  Todavía no hay alertas registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </main>
   );
 }

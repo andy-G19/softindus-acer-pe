@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -104,27 +118,6 @@ function getPaidSupplierAmount(
   return payments.reduce((sum, payment) => {
     return sum + toNumber(payment.monto_pagado);
   }, 0);
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function FinancialReportPage({
@@ -424,19 +417,13 @@ export default async function FinancialReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -449,79 +436,42 @@ export default async function FinancialReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="cashBoxId" className="text-sm font-medium">
-                Caja chica
-              </label>
-              <select
-                id="cashBoxId"
-                name="cashBoxId"
-                defaultValue={cashBoxId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="cashBoxId">Caja chica</Label>
+              <NativeSelect id="cashBoxId" name="cashBoxId" defaultValue={cashBoxId}>
                 <option value="">Todas las cajas</option>
                 {cashBoxes.map((cashBox) => (
                   <option key={cashBox.id_caja_chica} value={cashBox.id_caja_chica}>
                     {cashBox.nombre_caja}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="movementType" className="text-sm font-medium">
-                Tipo movimiento
-              </label>
-              <select
-                id="movementType"
-                name="movementType"
-                defaultValue={movementType}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="movementType">Tipo movimiento</Label>
+              <NativeSelect id="movementType" name="movementType" defaultValue={movementType}>
                 <option value="">Todos los tipos</option>
                 {CASH_MOVEMENT_TYPE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="categoryId" className="text-sm font-medium">
-                Categoría
-              </label>
-              <select
-                id="categoryId"
-                name="categoryId"
-                defaultValue={categoryId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="categoryId">Categoría</Label>
+              <NativeSelect id="categoryId" name="categoryId" defaultValue={categoryId}>
                 <option value="">Todas las categorías</option>
                 {categories.map((category) => (
                   <option
@@ -531,114 +481,45 @@ export default async function FinancialReportPage({
                     {category.nombre_categoria}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="searchText" className="text-sm font-medium">
-                Concepto / responsable
-              </label>
-              <input
+              <Label htmlFor="searchText">Concepto / responsable</Label>
+              <Input
                 id="searchText"
                 name="searchText"
                 type="text"
                 defaultValue={searchText}
                 placeholder="Ej: transporte, repuesto..."
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-6">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/financial"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/financial">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard
-          title="Saldo caja chica"
-          value={formatMoney(totalOpenCashBalance)}
-          description="Saldo actual acumulado de cajas abiertas."
-        />
-
-        <SummaryCard
-          title="Ingresos caja chica"
-          value={formatMoney(totalCashIncome)}
-          description="Ingresos menores según filtros aplicados."
-        />
-
-        <SummaryCard
-          title="Egresos caja chica"
-          value={formatMoney(totalCashExpense)}
-          description="Gastos menores registrados según filtros."
-        />
-
-        <SummaryCard
-          title="Movimiento neto"
-          value={formatMoney(cashNetMovement)}
-          description="Ingresos menos egresos de caja chica."
-        />
-
-        <SummaryCard
-          title="Cobrado a clientes"
-          value={formatMoney(totalCollectedPayments)}
-          description="Pagos de clientes registrados en el periodo."
-        />
-
-        <SummaryCard
-          title="Cuentas por cobrar"
-          value={formatMoney(totalReceivables)}
-          description="Saldo pendiente de proformas activas."
-        />
-
-        <SummaryCard
-          title="Compras por pagar"
-          value={formatMoney(totalSupplierPendingBalance)}
-          description={`Compras pendientes o parciales: ${supplierPendingRows.length}.`}
-        />
-
-        <SummaryCard
-          title="Resultado estimado"
-          value={formatMoney(financialEstimatedResult)}
-          description="Cobros + ingresos caja - egresos - costos."
-        />
-
-        <SummaryCard
-          title="Costo producción"
-          value={formatMoney(totalProductionCost)}
-          description="Costos de producción registrados en costeo."
-        />
-
-        <SummaryCard
-          title="Utilidad estimada"
-          value={formatMoney(totalEstimatedProfit)}
-          description={`Alertas de bajo margen: ${lowMarginAlerts}.`}
-        />
-
-        <SummaryCard
-          title="Ingreso estimado"
-          value={formatMoney(totalEstimatedIncome)}
-          description="Ingreso estimado registrado en rentabilidad."
-        />
-
-        <SummaryCard
-          title="Costo estimado"
-          value={formatMoney(totalEstimatedCost)}
-          description="Costo total usado en cálculo de rentabilidad."
-        />
+        <KpiCard title="Saldo caja chica" value={formatMoney(totalOpenCashBalance)} description="Saldo actual acumulado de cajas abiertas." tone="info" />
+        <KpiCard title="Ingresos caja chica" value={formatMoney(totalCashIncome)} description="Ingresos menores según filtros aplicados." tone="success" />
+        <KpiCard title="Egresos caja chica" value={formatMoney(totalCashExpense)} description="Gastos menores registrados según filtros." tone="warning" />
+        <KpiCard title="Movimiento neto" value={formatMoney(cashNetMovement)} description="Ingresos menos egresos de caja chica." tone="info" />
+        <KpiCard title="Cobrado a clientes" value={formatMoney(totalCollectedPayments)} description="Pagos de clientes registrados en el periodo." tone="success" />
+        <KpiCard title="Cuentas por cobrar" value={formatMoney(totalReceivables)} description="Saldo pendiente de proformas activas." tone="info" />
+        <KpiCard title="Compras por pagar" value={formatMoney(totalSupplierPendingBalance)} description={`Compras pendientes o parciales: ${supplierPendingRows.length}.`} tone={supplierPendingRows.length > 0 ? "warning" : "info"} />
+        <KpiCard title="Resultado estimado" value={formatMoney(financialEstimatedResult)} description="Cobros + ingresos caja - egresos - costos." tone="info" />
+        <KpiCard title="Costo producción" value={formatMoney(totalProductionCost)} description="Costos de producción registrados en costeo." tone="info" />
+        <KpiCard title="Utilidad estimada" value={formatMoney(totalEstimatedProfit)} description={`Alertas de bajo margen: ${lowMarginAlerts}.`} tone={lowMarginAlerts > 0 ? "warning" : "success"} />
+        <KpiCard title="Ingreso estimado" value={formatMoney(totalEstimatedIncome)} description="Ingreso estimado registrado en rentabilidad." tone="info" />
+        <KpiCard title="Costo estimado" value={formatMoney(totalEstimatedCost)} description="Costo total usado en cálculo de rentabilidad." tone="info" />
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
@@ -651,32 +532,32 @@ export default async function FinancialReportPage({
 
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border p-3">
+              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Materiales</p>
-                <p className="text-xl font-bold">
+                <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalMaterialCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border p-3">
+              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Consumibles</p>
-                <p className="text-xl font-bold">
+                <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalConsumableCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border p-3">
+              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">Mano de obra</p>
-                <p className="text-xl font-bold">
+                <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalLaborCost)}
                 </p>
               </div>
 
-              <div className="rounded-lg border p-3">
+              <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
                 <p className="text-xs text-muted-foreground">
                   Costos indirectos
                 </p>
-                <p className="text-xl font-bold">
+                <p className="text-xl font-bold text-foreground">
                   {formatMoney(totalIndirectCost)}
                 </p>
               </div>
@@ -693,26 +574,24 @@ export default async function FinancialReportPage({
 
           <CardContent className="space-y-3">
             {supplierPendingRows.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay compras pendientes de pago en el periodo filtrado.
-              </p>
+              <EmptyState label="No hay compras pendientes de pago en el periodo filtrado." />
             ) : (
               supplierPendingRows.slice(0, 5).map((row) => (
                 <div
                   key={row.purchase.id_compra}
-                  className="rounded-lg border p-3 text-sm"
+                  className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium">{row.purchase.id_compra}</p>
+                      <p className="font-medium text-foreground">{row.purchase.id_compra}</p>
                       <p className="text-xs text-muted-foreground">
-                        {row.purchase.proveedor.razon_social} ?{" "}
+                        {row.purchase.proveedor.razon_social} ·{" "}
                         {formatDate(row.purchase.fecha_compra)}
                       </p>
                     </div>
 
                     <div className="text-right">
-                      <p className="font-bold">
+                      <p className="font-bold text-foreground">
                         {formatMoney(row.pendingBalance)}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -734,77 +613,66 @@ export default async function FinancialReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {cashMovements.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron movimientos de caja con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron movimientos de caja con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Movimiento</th>
-                    <th className="py-2 pr-3 font-medium">Caja</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Tipo</th>
-                    <th className="py-2 pr-3 font-medium">Concepto</th>
-                    <th className="py-2 pr-3 font-medium">Categoría</th>
-                    <th className="py-2 pr-3 font-medium">Monto</th>
-                    <th className="py-2 pr-3 font-medium">Responsable</th>
-                    <th className="py-2 pr-3 font-medium">Usuario</th>
-                    <th className="py-2 pr-3 font-medium">Comprobante</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Movimiento</TableHead>
+                  <TableHead>Caja</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Concepto</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead>Monto</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Usuario</TableHead>
+                  <TableHead>Comprobante</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {cashMovements.map((movement) => (
-                    <tr key={movement.id_movimiento_caja} className="border-b">
-                      <td className="py-2 pr-3 font-medium">
-                        {movement.id_movimiento_caja}
-                      </td>
+              <TableBody>
+                {cashMovements.map((movement) => (
+                  <TableRow key={movement.id_movimiento_caja}>
+                    <TableCell className="font-medium">
+                      {movement.id_movimiento_caja}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {movement.caja_chica.nombre_caja}
-                      </td>
+                    <TableCell>{movement.caja_chica.nombre_caja}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(movement.fecha_movimiento)}
-                      </td>
+                    <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getCashMovementTypeLabel(movement.tipo_movimiento)}
-                      </td>
+                    <TableCell>
+                      {getCashMovementTypeLabel(movement.tipo_movimiento)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">{movement.concepto}</td>
+                    <TableCell>{movement.concepto}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {movement.categoria_gasto?.nombre_categoria ?? "-"}
-                      </td>
+                    <TableCell>
+                      {movement.categoria_gasto?.nombre_categoria ?? "-"}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatMoney(movement.monto)}
-                      </td>
+                    <TableCell>{formatMoney(movement.monto)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {movement.responsable ?? "-"}
-                      </td>
+                    <TableCell>{movement.responsable ?? "-"}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {movement.usuario.apellidos}, {movement.usuario.nombres}
-                      </td>
+                    <TableCell>
+                      {movement.usuario.apellidos}, {movement.usuario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {movement.comprobante ?? "-"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>{movement.comprobante ?? "-"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 movimientos de caja para mantener una
             consulta rápida. En la subfase de exportación se generarán archivos
             completos según los filtros aplicados.

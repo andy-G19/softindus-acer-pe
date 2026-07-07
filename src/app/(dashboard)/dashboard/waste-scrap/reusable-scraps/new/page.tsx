@@ -1,13 +1,20 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createReusableScrapAction } from "@/modules/waste-scrap/reusable-scraps/actions";
 
@@ -64,38 +71,23 @@ export default async function NewReusableScrapPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra · Retazos reutilizables
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar retazo reutilizable
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra sobrantes aprovechables generados durante el corte o la
-            producción. Estos retazos quedarán disponibles para reutilización
-            futura dentro del taller.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/waste-scrap"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver al módulo
-        </Link>
-      </section>
+      <PageHeader
+        title="Registrar retazo reutilizable"
+        description="Registra sobrantes aprovechables generados durante el corte o la producción. Estos retazos quedarán disponibles para reutilización futura dentro del taller."
+        backHref={navigationHrefs.wasteScrap}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mermas y chatarra", href: navigationHrefs.wasteScrap },
+          { label: "Retazos reutilizables", href: navigationHrefs.reusableScraps },
+          { label: "Nuevo retazo" },
+        ])}
+      />
 
       {materials.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          <p className="font-semibold">No hay materiales activos.</p>
-          <p className="mt-1">
-            Primero registra materiales o insumos en el módulo de inventario.
-          </p>
-        </section>
+        <EmptyState
+          label="No hay materiales activos."
+          description="Primero registra materiales o insumos en el módulo de inventario."
+        />
       ) : null}
 
       <Card>
@@ -117,7 +109,7 @@ export default async function NewReusableScrapPage() {
                   emptyMessage="No hay materiales activos disponibles."
                 />
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   El tipo de material del retazo se tomará automáticamente desde
                   la categoría del material seleccionado.
                 </p>
@@ -132,55 +124,35 @@ export default async function NewReusableScrapPage() {
                   emptyMessage="No hay órdenes de trabajo disponibles."
                 />
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Usa este campo cuando el retazo provenga de una orden
                   productiva identificable.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="medida_aproximada"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Medida aproximada
-                </label>
-
-                <input
+                <Label htmlFor="medida_aproximada">Medida aproximada</Label>
+                <Input
                   id="medida_aproximada"
                   name="medida_aproximada"
                   type="text"
                   placeholder="Ejemplo: 30 cm x 15 cm"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="ubicacion"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Ubicación física
-                </label>
-
-                <input
+                <Label htmlFor="ubicacion">Ubicación física</Label>
+                <Input
                   id="ubicacion"
                   name="ubicacion"
                   type="text"
                   placeholder="Ejemplo: Estante A, zona de corte"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="cantidad"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Cantidad *
-                </label>
-
-                <input
+                <Label htmlFor="cantidad">Cantidad *</Label>
+                <Input
                   id="cantidad"
                   name="cantidad"
                   type="number"
@@ -188,23 +160,15 @@ export default async function NewReusableScrapPage() {
                   step="0.01"
                   required
                   placeholder="Ejemplo: 2"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="unidad_medida"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Unidad de medida *
-                </label>
-
-                <select
+                <Label htmlFor="unidad_medida">Unidad de medida *</Label>
+                <NativeSelect
                   id="unidad_medida"
                   name="unidad_medida"
                   required
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   defaultValue=""
                 >
                   <option value="" disabled>
@@ -215,12 +179,12 @@ export default async function NewReusableScrapPage() {
                   <option value="metro">Metro</option>
                   <option value="plancha">Plancha</option>
                   <option value="pieza">Pieza</option>
-                </select>
+                </NativeSelect>
               </div>
             </div>
 
-            <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-              <p className="font-medium text-slate-800">
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+              <p className="font-medium text-foreground">
                 Estado inicial del retazo
               </p>
               <p className="mt-1">
@@ -231,20 +195,13 @@ export default async function NewReusableScrapPage() {
             </div>
 
             <div className="flex flex-col-reverse gap-3 md:flex-row md:justify-end">
-              <Link
-                href="/dashboard/waste-scrap"
-                className="rounded-lg border px-4 py-2 text-center text-sm font-medium hover:bg-slate-50"
-              >
-                Cancelar
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/waste-scrap">Cancelar</Link>
+              </Button>
 
-              <button
-                type="submit"
-                disabled={materials.length === 0}
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
+              <Button type="submit" disabled={materials.length === 0}>
                 Guardar retazo
-              </button>
+              </Button>
             </div>
           </form>
         </CardContent>

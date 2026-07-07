@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -119,27 +133,6 @@ function getPaidAmount(
   return payments.reduce((sum, payment) => {
     return sum + toNumber(payment.monto_pagado);
   }, 0);
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function SuppliersPurchasesReportPage({
@@ -350,19 +343,13 @@ export default async function SuppliersPurchasesReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -375,188 +362,95 @@ export default async function SuppliersPurchasesReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="supplierId" className="text-sm font-medium">
-                Proveedor
-              </label>
-              <select
-                id="supplierId"
-                name="supplierId"
-                defaultValue={supplierId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="supplierId">Proveedor</Label>
+              <NativeSelect id="supplierId" name="supplierId" defaultValue={supplierId}>
                 <option value="">Todos los proveedores</option>
                 {suppliers.map((supplier) => (
                   <option key={supplier.id_proveedor} value={supplier.id_proveedor}>
                     {supplier.razon_social}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="materialId" className="text-sm font-medium">
-                Material
-              </label>
-              <select
-                id="materialId"
-                name="materialId"
-                defaultValue={materialId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="materialId">Material</Label>
+              <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
                 <option value="">Todos los materiales</option>
                 {materials.map((material) => (
                   <option key={material.id_material} value={material.id_material}>
                     {material.nombre_material}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="purchaseStatus" className="text-sm font-medium">
-                Estado compra
-              </label>
-              <select
-                id="purchaseStatus"
-                name="purchaseStatus"
-                defaultValue={purchaseStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="purchaseStatus">Estado compra</Label>
+              <NativeSelect id="purchaseStatus" name="purchaseStatus" defaultValue={purchaseStatus}>
                 <option value="">Todos los estados</option>
                 {PURCHASE_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="paymentStatus" className="text-sm font-medium">
-                Estado pago
-              </label>
-              <select
-                id="paymentStatus"
-                name="paymentStatus"
-                defaultValue={paymentStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="paymentStatus">Estado pago</Label>
+              <NativeSelect id="paymentStatus" name="paymentStatus" defaultValue={paymentStatus}>
                 <option value="">Todos los estados</option>
                 {PAYMENT_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="searchCode" className="text-sm font-medium">
-                Compra o comprobante
-              </label>
-              <input
+              <Label htmlFor="searchCode">Compra o comprobante</Label>
+              <Input
                 id="searchCode"
                 name="searchCode"
                 type="text"
                 defaultValue={searchCode}
                 placeholder="Ej: COM00000001"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-7">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/suppliers-purchases"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/suppliers-purchases">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard
-          title="Compras encontradas"
-          value={totalPurchases}
-          description="Compras según los filtros aplicados."
-        />
-
-        <SummaryCard
-          title="Monto comprado"
-          value={formatMoney(totalPurchaseAmount)}
-          description="Suma total de compras encontradas."
-        />
-
-        <SummaryCard
-          title="Monto pagado"
-          value={formatMoney(totalPaidAmount)}
-          description="Pagos registrados a proveedores."
-        />
-
-        <SummaryCard
-          title="Saldo pendiente"
-          value={formatMoney(totalPendingBalance)}
-          description="Monto estimado aún pendiente de pago."
-        />
-
-        <SummaryCard
-          title="Compras pendientes"
-          value={pendingPurchases}
-          description={`Parciales: ${partialPurchases}. Pagadas: ${paidPurchases}.`}
-        />
-
-        <SummaryCard
-          title="Proveedores"
-          value={uniqueSuppliers}
-          description="Proveedores presentes en el reporte."
-        />
-
-        <SummaryCard
-          title="Materiales distintos"
-          value={uniqueMaterials}
-          description="Materiales comprados en el periodo filtrado."
-        />
-
-        <SummaryCard
-          title="Cantidad comprada"
-          value={formatQuantity(totalPurchasedQuantity)}
-          description="Suma general de cantidades compradas."
-        />
+        <KpiCard title="Compras encontradas" value={totalPurchases.toString()} description="Compras según los filtros aplicados." tone="info" />
+        <KpiCard title="Monto comprado" value={formatMoney(totalPurchaseAmount)} description="Suma total de compras encontradas." tone="info" />
+        <KpiCard title="Monto pagado" value={formatMoney(totalPaidAmount)} description="Pagos registrados a proveedores." tone="success" />
+        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description="Monto estimado aún pendiente de pago." tone={totalPendingBalance > 0 ? "warning" : "info"} />
+        <KpiCard title="Compras pendientes" value={pendingPurchases.toString()} description={`Parciales: ${partialPurchases}. Pagadas: ${paidPurchases}.`} tone={pendingPurchases > 0 ? "warning" : "info"} />
+        <KpiCard title="Proveedores" value={uniqueSuppliers.toString()} description="Proveedores presentes en el reporte." tone="info" />
+        <KpiCard title="Materiales distintos" value={uniqueMaterials.toString()} description="Materiales comprados en el periodo filtrado." tone="info" />
+        <KpiCard title="Cantidad comprada" value={formatQuantity(totalPurchasedQuantity)} description="Suma general de cantidades compradas." tone="info" />
       </section>
 
       <Card>
@@ -566,139 +460,128 @@ export default async function SuppliersPurchasesReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {reportRows.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron compras con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron compras con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Compra</th>
-                    <th className="py-2 pr-3 font-medium">Proveedor</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Comprobante</th>
-                    <th className="py-2 pr-3 font-medium">Materiales</th>
-                    <th className="py-2 pr-3 font-medium">Monto total</th>
-                    <th className="py-2 pr-3 font-medium">Pagado</th>
-                    <th className="py-2 pr-3 font-medium">Saldo</th>
-                    <th className="py-2 pr-3 font-medium">Estado compra</th>
-                    <th className="py-2 pr-3 font-medium">Estado pago</th>
-                    <th className="py-2 pr-3 font-medium">Precios históricos</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Compra</TableHead>
+                  <TableHead>Proveedor</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Comprobante</TableHead>
+                  <TableHead>Materiales</TableHead>
+                  <TableHead>Monto total</TableHead>
+                  <TableHead>Pagado</TableHead>
+                  <TableHead>Saldo</TableHead>
+                  <TableHead>Estado compra</TableHead>
+                  <TableHead>Estado pago</TableHead>
+                  <TableHead>Precios históricos</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {reportRows.map((row) => (
-                    <tr key={row.purchase.id_compra} className="border-b align-top">
-                      <td className="py-2 pr-3 font-medium">
-                        {row.purchase.id_compra}
-                      </td>
+              <TableBody>
+                {reportRows.map((row) => (
+                  <TableRow key={row.purchase.id_compra} className="align-top">
+                    <TableCell className="font-medium">
+                      {row.purchase.id_compra}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        <div>
-                          <p className="font-medium">
-                            {row.purchase.proveedor.razon_social}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {row.purchase.proveedor.tipo_proveedor}
-                          </p>
-                        </div>
-                      </td>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">
+                          {row.purchase.proveedor.razon_social}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {row.purchase.proveedor.tipo_proveedor}
+                        </p>
+                      </div>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(row.purchase.fecha_compra)}
-                      </td>
+                    <TableCell>{formatDate(row.purchase.fecha_compra)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        <div>
-                          <p>
-                            {row.purchase.tipo_comprobante ?? "-"}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {row.purchase.numero_comprobante ?? "Sin número"}
-                          </p>
-                        </div>
-                      </td>
+                    <TableCell>
+                      <div>
+                        <p>{row.purchase.tipo_comprobante ?? "-"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {row.purchase.numero_comprobante ?? "Sin número"}
+                        </p>
+                      </div>
+                    </TableCell>
 
-                      <td className="min-w-72 py-2 pr-3">
-                        <div className="space-y-2">
-                          {row.purchase.detalle_compra.map((detail) => (
-                            <div
-                              key={detail.id_detalle_compra}
-                              className="rounded-md border p-2"
-                            >
-                              <p className="font-medium">
-                                {detail.material.nombre_material}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {formatQuantity(detail.cantidad)}{" "}
-                                {detail.unidad_medida} ?{" "}
-                                {formatMoney(detail.costo_unitario)} c/u ?{" "}
-                                subtotal {formatMoney(detail.subtotal)}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.purchase.monto_total)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.paidAmount)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.pendingBalance)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {getPurchaseStatusLabel(row.purchase.estado_compra)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {getPaymentStatusLabel(row.purchase.estado_pago)}
-                      </td>
-
-                      <td className="min-w-64 py-2 pr-3">
-                        {row.purchase.historial_precio_proveedor.length === 0 ? (
-                          <span className="text-muted-foreground">
-                            Sin historial
-                          </span>
-                        ) : (
-                          <div className="space-y-2">
-                            {row.purchase.historial_precio_proveedor.map(
-                              (history) => (
-                                <div
-                                  key={history.id_historial_precio}
-                                  className="rounded-md border p-2"
-                                >
-                                  <p className="font-medium">
-                                    {history.material.nombre_material}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {formatMoney(history.precio_unitario)} ?{" "}
-                                    {formatDate(history.fecha_registro)} ?{" "}
-                                    {history.origen_registro}
-                                  </p>
-                                </div>
-                              ),
-                            )}
+                    <TableCell className="min-w-72">
+                      <div className="space-y-2">
+                        {row.purchase.detalle_compra.map((detail) => (
+                          <div
+                            key={detail.id_detalle_compra}
+                            className="rounded-md border border-border/80 bg-secondary/40 p-2"
+                          >
+                            <p className="font-medium">
+                              {detail.material.nombre_material}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {formatQuantity(detail.cantidad)}{" "}
+                              {detail.unidad_medida} ·{" "}
+                              {formatMoney(detail.costo_unitario)} c/u ·{" "}
+                              subtotal {formatMoney(detail.subtotal)}
+                            </p>
                           </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        ))}
+                      </div>
+                    </TableCell>
+
+                    <TableCell>{formatMoney(row.purchase.monto_total)}</TableCell>
+
+                    <TableCell>{formatMoney(row.paidAmount)}</TableCell>
+
+                    <TableCell>{formatMoney(row.pendingBalance)}</TableCell>
+
+                    <TableCell>
+                      {getPurchaseStatusLabel(row.purchase.estado_compra)}
+                    </TableCell>
+
+                    <TableCell>
+                      {getPaymentStatusLabel(row.purchase.estado_pago)}
+                    </TableCell>
+
+                    <TableCell className="min-w-64">
+                      {row.purchase.historial_precio_proveedor.length === 0 ? (
+                        <span className="text-muted-foreground">
+                          Sin historial
+                        </span>
+                      ) : (
+                        <div className="space-y-2">
+                          {row.purchase.historial_precio_proveedor.map(
+                            (history) => (
+                              <div
+                                key={history.id_historial_precio}
+                                className="rounded-md border border-border/80 bg-secondary/40 p-2"
+                              >
+                                <p className="font-medium">
+                                  {history.material.nombre_material}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {formatMoney(history.precio_unitario)} ·{" "}
+                                  {formatDate(history.fecha_registro)} ·{" "}
+                                  {history.origen_registro}
+                                </p>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 compras para mantener una consulta
             rápida. En la subfase de exportación se generarán archivos completos
             según los filtros aplicados.

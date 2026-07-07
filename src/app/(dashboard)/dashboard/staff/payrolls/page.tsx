@@ -2,14 +2,30 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -69,14 +85,14 @@ function getPayrollStatusLabel(status: string) {
 
 function getPayrollBadgeVariant(status: string) {
   if (status === "pagado") {
-    return "default";
+    return "success" as const;
   }
 
   if (status === "anulada") {
-    return "destructive";
+    return "destructive" as const;
   }
 
-  return "secondary";
+  return "secondary" as const;
 }
 
 export default async function PayrollsPage({ searchParams }: PayrollsPageProps) {
@@ -212,156 +228,91 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Planillas
-          </p>
+      <PageHeader
+        title="Planillas de pago"
+        description="Genera y consulta planillas de pago según operario, periodo, modalidad, tarifa configurada, asistencias válidas y descuentos."
+        backHref={navigationHrefs.staff}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Planillas" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/staff/payrolls/new">Generar planilla</Link>
+          </Button>
+        }
+      />
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Planillas de pago
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Genera y consulta planillas de pago según operario, periodo,
-            modalidad, tarifa configurada, asistencias válidas y descuentos.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/staff"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/staff/payrolls/new"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Generar planilla
-          </Link>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar planilla u operario"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="operario"
-            defaultValue={operario}
-            placeholder="ID operario"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="periodo"
-            type="month"
-            defaultValue={periodo}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <select
-            name="modalidad"
-            defaultValue={modalidad}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Todas las modalidades</option>
-            <option value="semanal">Semanal</option>
-            <option value="quincenal">Quincenal</option>
-            <option value="mensual">Mensual</option>
-          </select>
-          <select
-            name="estado"
-            defaultValue={estado}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="pagado">Pagado</option>
-            <option value="anulada">Anulada</option>
-          </select>
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <div className="flex gap-2 md:col-span-3 xl:col-span-7">
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Filtrar
-            </button>
-            <Link
-              href="/dashboard/staff/payrolls"
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Limpiar filtros
-            </Link>
-          </div>
-        </form>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar planilla u operario" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="operario">ID operario</Label>
+              <Input id="operario" name="operario" defaultValue={operario} placeholder="ID operario" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="periodo">Periodo</Label>
+              <Input id="periodo" name="periodo" type="month" defaultValue={periodo} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="modalidad">Modalidad</Label>
+              <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
+                <option value="">Todas las modalidades</option>
+                <option value="semanal">Semanal</option>
+                <option value="quincenal">Quincenal</option>
+                <option value="mensual">Mensual</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="pagado">Pagado</option>
+                <option value="anulada">Anulada</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input
+                id="from"
+                name="from"
+                type="date"
+                defaultValue={parseStringParam(params, "from")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input
+                id="to"
+                name="to"
+                type="date"
+                defaultValue={parseStringParam(params, "to")}
+              />
+            </div>
+            <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
+              <Button type="submit">Filtrar</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/staff/payrolls">Limpiar filtros</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Planillas generadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalPayrolls}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico registrado.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pendientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{pendingPayrolls}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Por pagar: {formatMoney(pendingNetAmount._sum.monto_neto)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pagadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{paidPayrolls}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Se marcarán en la siguiente subfase.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Anuladas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{canceledPayrolls}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Registros descartados.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" />
+        <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} />
+        <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Se marcarán en la siguiente subfase." tone="success" />
+        <KpiCard title="Anuladas" value={canceledPayrolls.toString()} description="Registros descartados." tone="info" />
       </section>
 
       <Card>
@@ -371,118 +322,103 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {latestPayrolls.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Todavía no hay planillas generadas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Genera la primera planilla usando asistencias válidas del
-                periodo seleccionado.
-              </p>
-
-              <Link
-                href="/dashboard/staff/payrolls/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Generar primera planilla
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Todavía no hay planillas generadas."
+              description="Genera la primera planilla usando asistencias válidas del periodo seleccionado."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/staff/payrolls/new">
+                    Generar primera planilla
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Periodo</th>
-                    <th className="py-2 pr-3">Modalidad</th>
-                    <th className="py-2 pr-3 text-right">Bruto</th>
-                    <th className="py-2 pr-3 text-right">Descuentos</th>
-                    <th className="py-2 pr-3 text-right">Neto</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    <th className="py-2 pr-3">Generado por</th>
-                    <th className="py-2 text-right">Acción</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Periodo</TableHead>
+                  <TableHead>Modalidad</TableHead>
+                  <TableHead className="text-right">Bruto</TableHead>
+                  <TableHead className="text-right">Descuentos</TableHead>
+                  <TableHead className="text-right">Neto</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  <TableHead>Generado por</TableHead>
+                  <TableHead className="text-right">Acción</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {latestPayrolls.map((payroll) => (
-                    <tr key={payroll.id_planilla} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {payroll.id_planilla}
-                      </td>
+              <TableBody>
+                {latestPayrolls.map((payroll) => (
+                  <TableRow key={payroll.id_planilla}>
+                    <TableCell className="font-mono text-xs">
+                      {payroll.id_planilla}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {payroll.operario.apellidos},{" "}
-                        {payroll.operario.nombres}
-                      </td>
+                    <TableCell className="font-medium">
+                      {payroll.operario.apellidos}, {payroll.operario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(payroll.periodo_inicio)} -{" "}
-                        {formatDate(payroll.periodo_fin)}
-                      </td>
+                    <TableCell>
+                      {formatDate(payroll.periodo_inicio)} -{" "}
+                      {formatDate(payroll.periodo_fin)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getPaymentModeLabel(payroll.modalidad_pago)}
-                      </td>
+                    <TableCell>
+                      {getPaymentModeLabel(payroll.modalidad_pago)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(payroll.monto_bruto)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(payroll.monto_bruto)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(payroll.descuentos)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(payroll.descuentos)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right font-medium">
-                        {formatMoney(payroll.monto_neto)}
-                      </td>
+                    <TableCell className="text-right font-medium">
+                      {formatMoney(payroll.monto_neto)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        <Badge
-                          variant={getPayrollBadgeVariant(
-                            payroll.estado_pago,
-                          )}
-                        >
-                          {getPayrollStatusLabel(payroll.estado_pago)}
-                        </Badge>
-                      </td>
+                    <TableCell className="text-right">
+                      <Badge variant={getPayrollBadgeVariant(payroll.estado_pago)}>
+                        {getPayrollStatusLabel(payroll.estado_pago)}
+                      </Badge>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {payroll.usuario.nombres} {payroll.usuario.apellidos}
-                      </td>
+                    <TableCell>
+                      {payroll.usuario.nombres} {payroll.usuario.apellidos}
+                    </TableCell>
 
-                      <td className="py-2 text-right">
-                        {payroll.estado_pago !== "pendiente" ||
-                        payroll._count.historial_pago_operario > 0 ? (
-                          <span className="text-xs text-muted-foreground">
-                            Sin acción
-                          </span>
-                        ) : (
-                          <form action={cancelPayrollAction}>
-                            <input
-                              type="hidden"
-                              name="id_planilla"
-                              value={payroll.id_planilla}
-                            />
+                    <TableCell className="text-right">
+                      {payroll.estado_pago !== "pendiente" ||
+                      payroll._count.historial_pago_operario > 0 ? (
+                        <span className="text-xs text-muted-foreground">
+                          Sin acción
+                        </span>
+                      ) : (
+                        <form action={cancelPayrollAction}>
+                          <input
+                            type="hidden"
+                            name="id_planilla"
+                            value={payroll.id_planilla}
+                          />
 
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
-                              Anular
-                            </button>
-                          </form>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                          <Button type="submit" variant="outline" size="sm">
+                            Anular
+                          </Button>
+                        </form>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

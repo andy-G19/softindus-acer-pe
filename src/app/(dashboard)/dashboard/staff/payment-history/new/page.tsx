@@ -1,14 +1,30 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { registerOperatorPaymentAction } from "@/modules/staff/payment-history/actions";
 
@@ -70,28 +86,18 @@ export default async function NewOperatorPaymentPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Registrar pago
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar pago de planilla
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Selecciona una planilla pendiente y registra el pago realizado al
-            operario. El sistema guardará el historial y marcará la planilla
-            como pagada.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 8.6</Badge>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar pago de planilla"
+        description="Selecciona una planilla pendiente y registra el pago realizado al operario. El sistema guardará el historial y marcará la planilla como pagada."
+        backHref={navigationHrefs.paymentHistory}
+        backLabel="Volver al historial"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Historial de pagos", href: navigationHrefs.paymentHistory },
+          { label: "Registrar pago" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -101,48 +107,36 @@ export default async function NewOperatorPaymentPage() {
 
           <CardContent>
             {pendingPayrolls.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay planillas pendientes de pago.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Primero genera una planilla pendiente para poder registrar su
-                  pago.
-                </p>
-
-                <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
-                  <Link
-                    href="/dashboard/staff/payrolls"
-                    className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver planillas
-                  </Link>
-
-                  <Link
-                    href="/dashboard/staff/payrolls/new"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Generar planilla
-                  </Link>
-                </div>
-              </div>
+              <EmptyState
+                label="No hay planillas pendientes de pago."
+                description="Primero genera una planilla pendiente para poder registrar su pago."
+                action={
+                  <div className="flex flex-col justify-center gap-2 sm:flex-row">
+                    <Button variant="outline" asChild>
+                      <Link href="/dashboard/staff/payrolls">
+                        Ver planillas
+                      </Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/dashboard/staff/payrolls/new">
+                        Generar planilla
+                      </Link>
+                    </Button>
+                  </div>
+                }
+              />
             ) : (
               <form
                 action={registerOperatorPaymentAction}
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <label htmlFor="id_planilla" className="text-sm font-medium">
-                    Planilla pendiente
-                  </label>
-
-                  <select
+                  <Label htmlFor="id_planilla">Planilla pendiente</Label>
+                  <NativeSelect
                     id="id_planilla"
                     name="id_planilla"
                     required
                     defaultValue=""
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   >
                     <option value="" disabled>
                       Seleccione una planilla
@@ -159,7 +153,7 @@ export default async function NewOperatorPaymentPage() {
                         {formatMoney(payroll.monto_neto)}
                       </option>
                     ))}
-                  </select>
+                  </NativeSelect>
 
                   <p className="text-xs text-muted-foreground">
                     Para esta versión, el monto pagado debe ser igual al monto
@@ -169,29 +163,19 @@ export default async function NewOperatorPaymentPage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label htmlFor="fecha_pago" className="text-sm font-medium">
-                      Fecha de pago
-                    </label>
-
-                    <input
+                    <Label htmlFor="fecha_pago">Fecha de pago</Label>
+                    <Input
                       id="fecha_pago"
                       name="fecha_pago"
                       type="date"
                       required
                       defaultValue={today}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="monto_pagado"
-                      className="text-sm font-medium"
-                    >
-                      Monto pagado
-                    </label>
-
-                    <input
+                    <Label htmlFor="monto_pagado">Monto pagado</Label>
+                    <Input
                       id="monto_pagado"
                       name="monto_pagado"
                       type="number"
@@ -199,62 +183,43 @@ export default async function NewOperatorPaymentPage() {
                       step="0.01"
                       required
                       placeholder="Ejemplo: 160.00"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="metodo_pago"
-                      className="text-sm font-medium"
-                    >
-                      Método de pago
-                    </label>
-
-                    <select
+                    <Label htmlFor="metodo_pago">Método de pago</Label>
+                    <NativeSelect
                       id="metodo_pago"
                       name="metodo_pago"
                       required
                       defaultValue="efectivo"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <option value="efectivo">Efectivo</option>
                       <option value="transferencia">Transferencia</option>
                       <option value="yape">Yape</option>
                       <option value="plin">Plin</option>
                       <option value="otro">Otro</option>
-                    </select>
+                    </NativeSelect>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="observaciones" className="text-sm font-medium">
-                    Observaciones
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Textarea
                     id="observaciones"
                     name="observaciones"
                     rows={4}
                     placeholder="Ejemplo: Pago entregado en efectivo al finalizar la semana."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Registrar pago
-                  </button>
-
-                  <Link
-                    href="/dashboard/staff/payment-history"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver historial
-                  </Link>
+                  <Button type="submit">Registrar pago</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/staff/payment-history">
+                      Ver historial
+                    </Link>
+                  </Button>
                 </div>
               </form>
             )}
@@ -295,63 +260,61 @@ export default async function NewOperatorPaymentPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {pendingPayrolls.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No hay planillas pendientes para mostrar.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No hay planillas pendientes para mostrar."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Planilla</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Periodo</th>
-                    <th className="py-2 pr-3">Modalidad</th>
-                    <th className="py-2 pr-3 text-right">Bruto</th>
-                    <th className="py-2 pr-3 text-right">Descuento</th>
-                    <th className="py-2 text-right">Neto</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Planilla</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Periodo</TableHead>
+                  <TableHead>Modalidad</TableHead>
+                  <TableHead className="text-right">Bruto</TableHead>
+                  <TableHead className="text-right">Descuento</TableHead>
+                  <TableHead className="text-right">Neto</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {pendingPayrolls.map((payroll) => (
-                    <tr key={payroll.id_planilla} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {payroll.id_planilla}
-                      </td>
+              <TableBody>
+                {pendingPayrolls.map((payroll) => (
+                  <TableRow key={payroll.id_planilla}>
+                    <TableCell className="font-mono text-xs">
+                      {payroll.id_planilla}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {payroll.operario.apellidos},{" "}
-                        {payroll.operario.nombres}
-                      </td>
+                    <TableCell className="font-medium">
+                      {payroll.operario.apellidos}, {payroll.operario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(payroll.periodo_inicio)} -{" "}
-                        {formatDate(payroll.periodo_fin)}
-                      </td>
+                    <TableCell>
+                      {formatDate(payroll.periodo_inicio)} -{" "}
+                      {formatDate(payroll.periodo_fin)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getPaymentModeLabel(payroll.modalidad_pago)}
-                      </td>
+                    <TableCell>
+                      {getPaymentModeLabel(payroll.modalidad_pago)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(payroll.monto_bruto)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(payroll.monto_bruto)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(payroll.descuentos)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(payroll.descuentos)}
+                    </TableCell>
 
-                      <td className="py-2 text-right font-medium">
-                        {formatMoney(payroll.monto_neto)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell className="text-right font-medium">
+                      {formatMoney(payroll.monto_neto)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

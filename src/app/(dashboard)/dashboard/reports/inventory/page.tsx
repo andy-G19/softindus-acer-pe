@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -95,27 +109,6 @@ function getMovementTypeLabel(type: string) {
   return (
     INVENTORY_MOVEMENT_OPTIONS.find((option) => option.value === type)?.label ??
     type
-  );
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
   );
 }
 
@@ -279,19 +272,13 @@ export default async function InventoryReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -304,157 +291,91 @@ export default async function InventoryReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input
                 id="dateFrom"
                 name="dateFrom"
                 type="date"
                 defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input
                 id="dateTo"
                 name="dateTo"
                 type="date"
                 defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="materialId" className="text-sm font-medium">
-                Material
-              </label>
-              <select
-                id="materialId"
-                name="materialId"
-                defaultValue={materialId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="materialId">Material</Label>
+              <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
                 <option value="">Todos los materiales</option>
                 {materials.map((material) => (
                   <option key={material.id_material} value={material.id_material}>
                     {material.nombre_material}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="movementType" className="text-sm font-medium">
-                Tipo
-              </label>
-              <select
-                id="movementType"
-                name="movementType"
-                defaultValue={movementType}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="movementType">Tipo</Label>
+              <NativeSelect id="movementType" name="movementType" defaultValue={movementType}>
                 <option value="">Todos los tipos</option>
                 {INVENTORY_MOVEMENT_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="userId" className="text-sm font-medium">
-                Responsable
-              </label>
-              <select
-                id="userId"
-                name="userId"
-                defaultValue={userId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="userId">Responsable</Label>
+              <NativeSelect id="userId" name="userId" defaultValue={userId}>
                 <option value="">Todos los responsables</option>
                 {users.map((user) => (
                   <option key={user.id_usuario} value={user.id_usuario}>
                     {user.apellidos}, {user.nombres}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="workOrderId" className="text-sm font-medium">
-                Orden de trabajo
-              </label>
-              <input
+              <Label htmlFor="workOrderId">Orden de trabajo</Label>
+              <Input
                 id="workOrderId"
                 name="workOrderId"
                 type="text"
                 defaultValue={workOrderId}
                 placeholder="Ej: OTR00000001"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-6">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/inventory"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/inventory">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <SummaryCard
-          title="Movimientos"
-          value={totalMovements}
-          description="Total de movimientos encontrados."
-        />
-
-        <SummaryCard
-          title="Entradas"
-          value={totalEntries}
-          description={`Cantidad ingresada: ${formatQuantity(entryQuantity)}.`}
-        />
-
-        <SummaryCard
-          title="Salidas"
-          value={totalOutputs}
-          description={`Cantidad retirada: ${formatQuantity(outputQuantity)}.`}
-        />
-
-        <SummaryCard
-          title="Ajustes"
-          value={totalAdjustments}
-          description="Movimientos correctivos de inventario."
-        />
-
-        <SummaryCard
-          title="Reservas"
-          value={totalReserved}
-          description={`Cantidad reservada: ${formatQuantity(reservedQuantity)}.`}
-        />
-
-        <SummaryCard
-          title="Balance cantidad"
-          value={formatQuantity(entryQuantity - outputQuantity)}
-          description="Entradas menos salidas del reporte."
-        />
+        <KpiCard title="Movimientos" value={totalMovements.toString()} description="Total de movimientos encontrados." tone="info" />
+        <KpiCard title="Entradas" value={totalEntries.toString()} description={`Cantidad ingresada: ${formatQuantity(entryQuantity)}.`} tone="success" />
+        <KpiCard title="Salidas" value={totalOutputs.toString()} description={`Cantidad retirada: ${formatQuantity(outputQuantity)}.`} tone="warning" />
+        <KpiCard title="Ajustes" value={totalAdjustments.toString()} description="Movimientos correctivos de inventario." tone="info" />
+        <KpiCard title="Reservas" value={totalReserved.toString()} description={`Cantidad reservada: ${formatQuantity(reservedQuantity)}.`} tone="info" />
+        <KpiCard title="Balance cantidad" value={formatQuantity(entryQuantity - outputQuantity)} description="Entradas menos salidas del reporte." tone="info" />
       </section>
 
       <Card>
@@ -464,122 +385,116 @@ export default async function InventoryReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {movements.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron movimientos de inventario con los filtros
-              aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron movimientos de inventario con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Movimiento</th>
-                    <th className="py-2 pr-3 font-medium">Material</th>
-                    <th className="py-2 pr-3 font-medium">Tipo</th>
-                    <th className="py-2 pr-3 font-medium">Cantidad</th>
-                    <th className="py-2 pr-3 font-medium">Stock anterior</th>
-                    <th className="py-2 pr-3 font-medium">Stock resultante</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Responsable</th>
-                    <th className="py-2 pr-3 font-medium">Orden</th>
-                    <th className="py-2 pr-3 font-medium">Compra</th>
-                    <th className="py-2 pr-3 font-medium">Motivo</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Movimiento</TableHead>
+                  <TableHead>Material</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Stock anterior</TableHead>
+                  <TableHead>Stock resultante</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Compra</TableHead>
+                  <TableHead>Motivo</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {movements.map((movement) => (
-                    <tr key={movement.id_movimiento} className="border-b">
-                      <td className="py-2 pr-3 font-medium">
-                        {movement.id_movimiento}
-                      </td>
+              <TableBody>
+                {movements.map((movement) => (
+                  <TableRow key={movement.id_movimiento}>
+                    <TableCell className="font-medium">
+                      {movement.id_movimiento}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">
+                          {movement.material.nombre_material}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {movement.material.categoria} ·{" "}
+                          {movement.material.unidad_medida}
+                        </p>
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      {getMovementTypeLabel(movement.tipo_movimiento)}
+                    </TableCell>
+
+                    <TableCell>{formatQuantity(movement.cantidad)}</TableCell>
+
+                    <TableCell>
+                      {formatQuantity(movement.stock_anterior)}
+                    </TableCell>
+
+                    <TableCell>
+                      {formatQuantity(movement.stock_resultante)}
+                    </TableCell>
+
+                    <TableCell>
+                      {formatDateTime(movement.fecha_movimiento)}
+                    </TableCell>
+
+                    <TableCell>
+                      {movement.usuario.apellidos}, {movement.usuario.nombres}
+                    </TableCell>
+
+                    <TableCell>
+                      {movement.orden_trabajo ? (
+                        <Link
+                          href={`/dashboard/production/work-orders/${movement.orden_trabajo.id_orden_trabajo}`}
+                          className="hover:underline"
+                        >
+                          <span className="font-medium">
+                            {movement.orden_trabajo.id_orden_trabajo}
+                          </span>
+                          <br />
+                          <span className="text-xs text-muted-foreground">
+                            {
+                              movement.orden_trabajo.producto
+                                .nombre_producto
+                            }
+                          </span>
+                        </Link>
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      {movement.compra ? (
                         <div>
                           <p className="font-medium">
-                            {movement.material.nombre_material}
+                            {movement.compra.id_compra}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {movement.material.categoria} ?{" "}
-                            {movement.material.unidad_medida}
+                            {movement.compra.proveedor.razon_social}
                           </p>
                         </div>
-                      </td>
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getMovementTypeLabel(movement.tipo_movimiento)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatQuantity(movement.cantidad)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatQuantity(movement.stock_anterior)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatQuantity(movement.stock_resultante)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatDateTime(movement.fecha_movimiento)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.usuario.apellidos}, {movement.usuario.nombres}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.orden_trabajo ? (
-                          <Link
-                            href={`/dashboard/production/work-orders/${movement.orden_trabajo.id_orden_trabajo}`}
-                            className="hover:underline"
-                          >
-                            <span className="font-medium">
-                              {movement.orden_trabajo.id_orden_trabajo}
-                            </span>
-                            <br />
-                            <span className="text-xs text-muted-foreground">
-                              {
-                                movement.orden_trabajo.producto
-                                  .nombre_producto
-                              }
-                            </span>
-                          </Link>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.compra ? (
-                          <div>
-                            <p className="font-medium">
-                              {movement.compra.id_compra}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {movement.compra.proveedor.razon_social}
-                            </p>
-                          </div>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {movement.motivo ?? "-"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>{movement.motivo ?? "-"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 movimientos para mantener una consulta
             rápida. En la subfase de exportación se generarán archivos completos
             según los filtros aplicados.

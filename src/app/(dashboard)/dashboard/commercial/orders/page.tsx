@@ -4,6 +4,20 @@ import { redirect } from "next/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -188,107 +202,96 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
           { label: "Pedidos" },
         ])}
         actions={
-          <Link
-            href="/dashboard/commercial/orders/new"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-          >
-            Nuevo pedido
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/commercial/orders/new">Nuevo pedido</Link>
+          </Button>
         }
       />
 
       <form
         action="/dashboard/commercial/orders"
-        className="grid gap-3 rounded-lg border bg-white p-4 md:grid-cols-6"
+        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-6"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar pedido..."
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <select
-          name="client"
-          defaultValue={client}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los clientes</option>
-          {clients.map((item) => (
-            <option key={item.id_cliente} value={item.id_cliente}>
-              {item.nombre_razon_social}
-            </option>
-          ))}
-        </select>
-        <select
-          name="product"
-          defaultValue={product}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los productos</option>
-          {products.map((item) => (
-            <option key={item.id_producto} value={item.id_producto}>
-              {item.nombre_producto}
-            </option>
-          ))}
-        </select>
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="registrado">Registrado</option>
-          <option value="aprobado">Aprobado</option>
-          <option value="cancelado">Cancelado</option>
-        </select>
-        <div className="grid gap-2 sm:grid-cols-2 md:col-span-2">
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar pedido..." />
         </div>
-        <div className="flex gap-2 md:col-span-6">
-          <button
-            type="submit"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Filtrar
-          </button>
-          <Link
-            href="/dashboard/commercial/orders"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Limpiar filtros
-          </Link>
+        <div className="space-y-2">
+          <Label htmlFor="client">Cliente</Label>
+          <NativeSelect id="client" name="client" defaultValue={client}>
+            <option value="">Todos los clientes</option>
+            {clients.map((item) => (
+              <option key={item.id_cliente} value={item.id_cliente}>
+                {item.nombre_razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="product">Producto</Label>
+          <NativeSelect id="product" name="product" defaultValue={product}>
+            <option value="">Todos los productos</option>
+            {products.map((item) => (
+              <option key={item.id_producto} value={item.id_producto}>
+                {item.nombre_producto}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="registrado">Registrado</option>
+            <option value="aprobado">Aprobado</option>
+            <option value="cancelado">Cancelado</option>
+          </NativeSelect>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2 md:col-span-2">
+          <div className="space-y-2">
+            <Label htmlFor="from">Desde</Label>
+            <Input
+              id="from"
+              name="from"
+              type="date"
+              defaultValue={parseStringParam(params, "from")}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="to">Hasta</Label>
+            <Input
+              id="to"
+              name="to"
+              type="date"
+              defaultValue={parseStringParam(params, "to")}
+            />
+          </div>
+        </div>
+        <div className="flex items-end gap-2 md:col-span-6">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/commercial/orders">Limpiar filtros</Link>
+          </Button>
         </div>
       </form>
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Código</th>
-              <th className="px-4 py-3 text-left">Cliente</th>
-              <th className="px-4 py-3 text-left">Fecha pedido</th>
-              <th className="px-4 py-3 text-left">Entrega estimada</th>
-              <th className="px-4 py-3 text-left">Productos</th>
-              <th className="px-4 py-3 text-left">Monto estimado</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Proforma</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Fecha pedido</TableHead>
+            <TableHead>Entrega estimada</TableHead>
+            <TableHead>Productos</TableHead>
+            <TableHead>Monto estimado</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Proforma</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {orders.map((order) => {
+        <TableBody>
+          {orders.map((order) => {
               const productsText = order.detalle_pedido
                 .map((detail) => {
                   const cantidad = Number(detail.cantidad.toString());
@@ -310,68 +313,70 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                 !hasWorkOrder;
 
               return (
-                <tr key={order.id_pedido} className="border-t">
-                  <td className="px-4 py-3">{order.id_pedido}</td>
-                  <td className="px-4 py-3 font-medium">
+                <TableRow key={order.id_pedido}>
+                  <TableCell>{order.id_pedido}</TableCell>
+                  <TableCell className="font-medium">
                     {order.cliente.nombre_razon_social}
-                  </td>
-                  <td className="px-4 py-3">{formatDate(order.fecha_pedido)}</td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>{formatDate(order.fecha_pedido)}</TableCell>
+                  <TableCell>
                     {formatDate(order.fecha_entrega_estimada)}
-                  </td>
-                  <td className="px-4 py-3">{productsText}</td>
-                  <td className="px-4 py-3">
-                    {formatMoney(order.monto_estimado)}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>{productsText}</TableCell>
+                  <TableCell>{formatMoney(order.monto_estimado)}</TableCell>
+                  <TableCell>
                     <StatusBadge status={order.estado} />
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     {activeQuote ? (
-                      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                      <Badge variant="success">
                         {activeQuote.numero_proforma}
-                      </span>
+                      </Badge>
                     ) : (
                       <StatusBadge status="sin-proforma" />
                     )}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={withReturnTo(
-                          `${navigationHrefs.orders}/${order.id_pedido}`,
-                          returnTo,
-                        )}
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
-                      >
-                        Ver detalle
-                      </Link>
-                      {canEdit ? (
+                      <Button variant="outline" size="sm" asChild>
                         <Link
                           href={withReturnTo(
-                            `${navigationHrefs.orders}/${order.id_pedido}/edit`,
+                            `${navigationHrefs.orders}/${order.id_pedido}`,
                             returnTo,
                           )}
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                         >
-                          Editar
+                          Ver detalle
                         </Link>
+                      </Button>
+                      {canEdit ? (
+                        <Button variant="outline" size="sm" asChild>
+                          <Link
+                            href={withReturnTo(
+                              `${navigationHrefs.orders}/${order.id_pedido}/edit`,
+                              returnTo,
+                            )}
+                          >
+                            Editar
+                          </Link>
+                        </Button>
                       ) : null}
                       {activeQuote ? (
-                        <Link
-                          href={`/dashboard/commercial/quotes/${activeQuote.id_proforma}`}
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
-                        >
-                          Ver proforma
-                        </Link>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link
+                            href={`/dashboard/commercial/quotes/${activeQuote.id_proforma}`}
+                          >
+                            Ver proforma
+                          </Link>
+                        </Button>
                       ) : null}
                       {canGenerateQuote ? (
-                        <Link
-                          href={`/dashboard/commercial/quotes/new?orderId=${order.id_pedido}`}
-                          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
-                        >
-                          Generar proforma
-                        </Link>
+                        <Button size="sm" asChild>
+                          <Link
+                            href={`/dashboard/commercial/quotes/new?orderId=${order.id_pedido}`}
+                          >
+                            Generar proforma
+                          </Link>
+                        </Button>
                       ) : null}
                       {canEdit ? (
                         <form action={cancelOrderAction}>
@@ -392,24 +397,23 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                         </form>
                       ) : null}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
 
             {orders.length === 0 && (
-              <tr>
-                <td
-                  colSpan={9}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  Todavía no hay pedidos registrados.
-                </td>
-              </tr>
+              <TableRow>
+                <TableCell colSpan={9} className="p-0">
+                  <EmptyState
+                    className="border-0"
+                    label="Todavía no hay pedidos registrados."
+                  />
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
     </main>
   );
 }

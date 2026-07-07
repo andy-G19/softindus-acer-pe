@@ -1,5 +1,5 @@
-import Link from "next/link";
-
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
@@ -60,34 +60,40 @@ export default async function CommercialPage() {
 
   const summaryCards = [
     {
-      label: "Clientes activos",
-      value: activeClients,
+      title: "Clientes activos",
+      value: activeClients.toString(),
       description: "Clientes disponibles para pedidos.",
+      tone: "info" as const,
     },
     {
-      label: "Productos activos",
-      value: activeProducts,
+      title: "Productos activos",
+      value: activeProducts.toString(),
       description: "Productos disponibles para venta.",
+      tone: "info" as const,
     },
     {
-      label: "Pedidos registrados",
-      value: registeredOrders,
+      title: "Pedidos registrados",
+      value: registeredOrders.toString(),
       description: "Pedidos comerciales acumulados.",
+      tone: "info" as const,
     },
     {
-      label: "Proformas activas",
-      value: activeQuotes,
+      title: "Proformas activas",
+      value: activeQuotes.toString(),
       description: "Proformas vigentes o aceptadas.",
+      tone: "warning" as const,
     },
     {
-      label: "Saldo por cobrar",
+      title: "Saldo por cobrar",
       value: formatMoney(totalPendingBalance),
       description: "Saldo pendiente en proformas activas.",
+      tone: "warning" as const,
     },
     {
-      label: "Comprobantes emitidos",
-      value: issuedReceipts,
+      title: "Comprobantes emitidos",
+      value: issuedReceipts.toString(),
       description: "Comprobantes internos registrados.",
+      tone: "success" as const,
     },
   ];
 
@@ -124,26 +130,21 @@ export default async function CommercialPage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {summaryCards.map((card) => (
-          <div
-            key={card.label}
-            className="rounded-xl border border-border/80 bg-card p-5 shadow-sm transition-colors hover:bg-secondary/70"
-          >
-            <p className="text-sm font-medium text-muted-foreground">
-              {card.label}
-            </p>
-            <p className="mt-2 text-3xl font-bold text-foreground">
-              {card.value}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {card.description}
-            </p>
-          </div>
+          <KpiCard
+            key={card.title}
+            title={card.title}
+            value={card.value}
+            description={card.description}
+            tone={card.tone}
+          />
         ))}
       </section>
 
       <section className="space-y-3">
         <div>
-          <h2 className="text-lg font-semibold">Operaciones comerciales</h2>
+          <h2 className="text-lg font-semibold text-foreground">
+            Operaciones comerciales
+          </h2>
           <p className="text-sm text-muted-foreground">
             Accede rápidamente a las funcionalidades principales del módulo.
           </p>
@@ -151,18 +152,12 @@ export default async function CommercialPage() {
 
         <div className="grid gap-4 md:grid-cols-2">
           {modules.map((module) => (
-            <Link
+            <ModuleAccessCard
               key={module.href}
+              title={module.title}
+              description={module.description}
               href={module.href}
-              className="rounded-xl border border-border/80 bg-card p-6 shadow-sm transition-colors hover:bg-secondary/70"
-            >
-              <h3 className="text-xl font-semibold text-foreground">
-                {module.title}
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {module.description}
-              </p>
-            </Link>
+            />
           ))}
         </div>
       </section>

@@ -2,6 +2,20 @@
 
 import { useActionState } from "react";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   createProductCategoryAction,
   updateProductCategoryAction,
@@ -41,27 +55,25 @@ function CategoryCreateForm({ canManage }: { canManage: boolean }) {
   );
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border p-6">
-      <h2 className="text-base font-semibold">Nueva categoría</h2>
+    <form
+      action={formAction}
+      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
+    >
+      <h2 className="text-base font-semibold text-foreground">
+        Nueva categoría
+      </h2>
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-        >
+        <p role="alert" aria-live="polite" className="text-sm text-destructive">
           {state.error}
-        </div>
+        </p>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="nombre" className="text-sm font-medium">
-          Nombre
-        </label>
-        <input
+        <Label htmlFor="nombre">Nombre</Label>
+        <Input
           id="nombre"
           name="nombre"
-          className="w-full rounded-md border px-3 py-2 text-sm"
           placeholder="Ejemplo: Herramientas agrícolas"
           disabled={!canManage}
           required
@@ -70,26 +82,20 @@ function CategoryCreateForm({ canManage }: { canManage: boolean }) {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="descripcion" className="text-sm font-medium">
-          Descripción
-        </label>
-        <textarea
+        <Label htmlFor="descripcion">Descripción</Label>
+        <Textarea
           id="descripcion"
           name="descripcion"
-          className="min-h-24 w-full rounded-md border px-3 py-2 text-sm"
+          className="min-h-24"
           placeholder="Uso interno de la categoría."
           disabled={!canManage}
         />
         <FieldError messages={state.fieldErrors?.descripcion} />
       </div>
 
-      <button
-        type="submit"
-        disabled={!canManage || isPending}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-70"
-      >
+      <Button type="submit" disabled={!canManage || isPending}>
         {isPending ? "Guardando..." : "Crear categoría"}
-      </button>
+      </Button>
     </form>
   );
 }
@@ -109,30 +115,29 @@ function CategoryRow({
   );
 
   return (
-    <tr className="border-t align-top">
-      <td className="px-4 py-3 font-mono text-xs">
+    <TableRow className="align-top">
+      <TableCell className="text-xs">
         {category.id_categoria_producto}
-      </td>
-      <td className="px-4 py-3" colSpan={2}>
+      </TableCell>
+      <TableCell colSpan={2}>
         <form action={formAction} className="space-y-2">
           <input
             type="hidden"
             name="id_categoria_producto"
             value={category.id_categoria_producto}
           />
-          <input
+          <Input
             name="nombre"
             defaultValue={category.nombre}
-            className="w-full rounded-md border px-3 py-2 text-sm"
             disabled={!canManage}
             required
           />
           <p className="text-xs text-muted-foreground">{category.slug}</p>
           <FieldError messages={state.fieldErrors?.nombre} />
-          <textarea
+          <Textarea
             name="descripcion"
             defaultValue={category.descripcion ?? ""}
-            className="min-h-20 w-full rounded-md border px-3 py-2 text-sm"
+            className="min-h-20"
             disabled={!canManage}
           />
           <FieldError messages={state.fieldErrors?.descripcion} />
@@ -142,20 +147,18 @@ function CategoryRow({
             </p>
           ) : null}
           {canManage ? (
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded-md border px-3 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-70"
-            >
+            <Button type="submit" variant="outline" size="sm" disabled={isPending}>
               {isPending ? "Guardando..." : "Guardar"}
-            </button>
+            </Button>
           ) : null}
         </form>
-      </td>
-      <td className="px-4 py-3">
-        {category.estado ? "Activa" : "Inactiva"}
-      </td>
-      <td className="px-4 py-3">
+      </TableCell>
+      <TableCell>
+        <Badge variant={category.estado ? "success" : "outline"}>
+          {category.estado ? "Activa" : "Inactiva"}
+        </Badge>
+      </TableCell>
+      <TableCell>
         {canManage ? (
           <form action={toggleAction}>
             <input
@@ -163,18 +166,15 @@ function CategoryRow({
               name="id_categoria_producto"
               value={category.id_categoria_producto}
             />
-            <button
-              type="submit"
-              className="rounded-md border px-3 py-1.5 text-xs font-medium"
-            >
+            <Button type="submit" variant="outline" size="sm">
               {category.estado ? "Inactivar" : "Activar"}
-            </button>
+            </Button>
           </form>
         ) : (
           <span className="text-xs text-muted-foreground">Solo lectura</span>
         )}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -187,40 +187,38 @@ export function ProductCategoryManager({
     <div className="grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
       <CategoryCreateForm canManage={canManage} />
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Código</th>
-              <th className="px-4 py-3 text-left">Categoría</th>
-              <th className="px-4 py-3 text-left">Descripción</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => (
-              <CategoryRow
-                key={category.id_categoria_producto}
-                category={category}
-                canManage={canManage}
-                toggleAction={toggleAction}
-              />
-            ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Categoría</TableHead>
+            <TableHead>Descripción</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {categories.map((category) => (
+            <CategoryRow
+              key={category.id_categoria_producto}
+              category={category}
+              canManage={canManage}
+              toggleAction={toggleAction}
+            />
+          ))}
 
-            {categories.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  Todavía no hay categorías de productos registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+          {categories.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay categorías de productos registradas."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </div>
   );
 }

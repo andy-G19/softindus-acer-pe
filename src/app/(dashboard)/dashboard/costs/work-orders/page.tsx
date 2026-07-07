@@ -1,7 +1,23 @@
 import Link from "next/link";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
 
 function toNumber(value: unknown) {
@@ -26,24 +42,24 @@ function formatDate(value: Date | null | undefined) {
   }).format(value);
 }
 
-function getStatusClass(status: string) {
+function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "en_proceso") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "pausada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
   if (status === "anulada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 export default async function CostingWorkOrdersPage() {
@@ -154,141 +170,89 @@ export default async function CostingWorkOrdersPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Costos · Órdenes de trabajo
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Generar costeo desde producción
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Selecciona una orden de trabajo con versión de receta registrada para
-            calcular automáticamente el costo estimado de materiales y
-            consumibles.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/costs/costings"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Ver costeos
-          </Link>
-
-          <Link
-            href="/dashboard/costs"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Volver a costos
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Generar costeo desde producción"
+        description="Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles."
+        backHref={navigationHrefs.costs}
+        backLabel="Volver a costos"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Costos", href: navigationHrefs.costs },
+          { label: "Órdenes de trabajo" },
+        ])}
+        actions={
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/costs/costings">Ver costeos</Link>
+          </Button>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Órdenes pendientes</p>
-          <p className="mt-2 text-3xl font-bold">
-            {workOrdersWithoutCosting.length}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            Con receta y sin costeo
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Total de órdenes</p>
-          <p className="mt-2 text-3xl font-bold">{totalWorkOrders}</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Incluye activas y anuladas
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Sin receta técnica</p>
-          <p className="mt-2 text-3xl font-bold">{workOrdersWithoutRecipe}</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Deben completarse en producción
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Ya costeadas / anuladas</p>
-          <p className="mt-2 text-3xl font-bold">
-            {workOrdersAlreadyCosted} / {anulledWorkOrders}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            No aparecen como pendientes
-          </p>
-        </div>
+        <KpiCard title="Órdenes pendientes" value={workOrdersWithoutCosting.length.toString()} description="Con receta y sin costeo." tone="warning" />
+        <KpiCard title="Total de órdenes" value={totalWorkOrders.toString()} description="Incluye activas y anuladas." tone="info" />
+        <KpiCard title="Sin receta técnica" value={workOrdersWithoutRecipe.toString()} description="Deben completarse en producción." tone="warning" />
+        <KpiCard title="Ya costeadas / anuladas" value={`${workOrdersAlreadyCosted} / ${anulledWorkOrders}`} description="No aparecen como pendientes." tone="info" />
       </section>
 
       {workOrdersWithoutCosting.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          <p className="font-semibold">
-            No hay órdenes disponibles para costeo
-          </p>
-
-          <p className="mt-1">
-            Esto puede ocurrir porque no existen órdenes de trabajo, porque las
-            órdenes no tienen receta técnica, porque ya fueron costeadas o
-            porque están anuladas.
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link
-              href="/dashboard/production/work-orders"
-              className="rounded-lg border border-amber-300 px-4 py-2 text-sm font-medium hover:bg-amber-100"
-            >
-              Revisar órdenes de producción
-            </Link>
-
-            <Link
-              href="/dashboard/production/recipes"
-              className="rounded-lg border border-amber-300 px-4 py-2 text-sm font-medium hover:bg-amber-100"
-            >
-              Revisar recetas técnicas
-            </Link>
-          </div>
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            <span className="font-medium text-foreground">
+              No hay órdenes disponibles para costeo
+            </span>
+            <span className="mt-1 block">
+              Esto puede ocurrir porque no existen órdenes de trabajo, porque
+              las órdenes no tienen receta técnica, porque ya fueron
+              costeadas o porque están anuladas.
+            </span>
+            <span className="mt-3 flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/dashboard/production/work-orders">
+                  Revisar órdenes de producción
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/dashboard/production/recipes">
+                  Revisar recetas técnicas
+                </Link>
+              </Button>
+            </span>
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">
             Órdenes disponibles para costeo
-          </h2>
-
-          <p className="mt-1 text-sm text-slate-500">
+          </CardTitle>
+          <p className="text-sm text-muted-foreground">
             Solo se muestran órdenes no anuladas, con versión de receta y sin
             costeo previo.
           </p>
-        </div>
+        </CardHeader>
 
-        {workOrdersWithoutCosting.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            No hay órdenes pendientes de costeo.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-slate-50 text-left">
-                <tr>
-                  <th className="px-5 py-3 font-medium">Orden</th>
-                  <th className="px-5 py-3 font-medium">Producto</th>
-                  <th className="px-5 py-3 font-medium">Origen</th>
-                  <th className="px-5 py-3 font-medium">Cantidad</th>
-                  <th className="px-5 py-3 font-medium">Receta</th>
-                  <th className="px-5 py-3 font-medium">Fecha</th>
-                  <th className="px-5 py-3 font-medium">Estado</th>
-                  <th className="px-5 py-3 font-medium">Acción</th>
-                </tr>
-              </thead>
+        <CardContent className="px-0">
+          {workOrdersWithoutCosting.length === 0 ? (
+            <EmptyState
+              className="mx-6 border-0"
+              label="No hay órdenes pendientes de costeo."
+            />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Producto</TableHead>
+                  <TableHead>Origen</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Receta</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Acción</TableHead>
+                </TableRow>
+              </TableHeader>
 
-              <tbody>
+              <TableBody>
                 {workOrdersWithoutCosting.map((order) => {
                   const origin =
                     order.tipo_produccion === "pedido"
@@ -307,47 +271,39 @@ export default async function CostingWorkOrdersPage() {
                   const canGenerateCosting = recipeDetailCount > 0;
 
                   return (
-                    <tr
-                      key={order.id_orden_trabajo}
-                      className="border-b last:border-0"
-                    >
-                      <td className="px-5 py-3 font-mono text-xs">
+                    <TableRow key={order.id_orden_trabajo}>
+                      <TableCell className="text-xs">
                         {order.id_orden_trabajo}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
+                      <TableCell>
                         <div className="font-medium">
                           {order.producto.nombre_producto}
                         </div>
-
-                        <p className="mt-1 text-xs text-slate-500">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           {order.producto.categoria}
                         </p>
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
+                      <TableCell>
                         <div className="font-medium">{origin}</div>
-                        <p className="mt-1 text-xs text-slate-500">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           Tipo: {order.tipo_produccion}
                         </p>
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
+                      <TableCell>
                         {formatDecimal(order.cantidad)}{" "}
                         {order.producto.unidad_medida}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
+                      <TableCell>
                         {order.version_receta ? (
                           <>
                             <div>
-                              {
-                                order.version_receta.receta_tecnica
-                                  .nombre_receta
-                              }
+                              {order.version_receta.receta_tecnica.nombre_receta}
                             </div>
-
-                            <p className="mt-1 text-xs text-slate-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                               Versión: {order.version_receta.numero_version} ·{" "}
                               Materiales: {recipeDetailCount}
                             </p>
@@ -355,23 +311,17 @@ export default async function CostingWorkOrdersPage() {
                         ) : (
                           "-"
                         )}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
-                        {formatDate(order.fecha_inicio)}
-                      </td>
+                      <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
 
-                      <td className="px-5 py-3">
-                        <span
-                          className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                            order.estado,
-                          )}`}
-                        >
+                      <TableCell>
+                        <Badge variant={getOrderBadgeVariant(order.estado)}>
                           {order.estado}
-                        </span>
-                      </td>
+                        </Badge>
+                      </TableCell>
 
-                      <td className="px-5 py-3">
+                      <TableCell>
                         {canGenerateCosting ? (
                           <form action={createCostingFromWorkOrderAction}>
                             <input
@@ -379,90 +329,72 @@ export default async function CostingWorkOrdersPage() {
                               name="id_orden_trabajo"
                               value={order.id_orden_trabajo}
                             />
-
-                            <button
-                              type="submit"
-                              className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-medium text-white hover:bg-slate-700"
-                            >
+                            <Button type="submit" size="sm">
                               Generar costeo
-                            </button>
+                            </Button>
                           </form>
                         ) : (
-                          <span className="text-xs text-red-600">
+                          <span className="text-xs text-destructive">
                             Sin materiales
                           </span>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
 
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">Costeos recientes</h2>
-
-          <p className="mt-1 text-sm text-slate-500">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Costeos recientes</CardTitle>
+          <p className="text-sm text-muted-foreground">
             Últimos costeos generados desde órdenes de trabajo o pedidos.
           </p>
-        </div>
+        </CardHeader>
 
-        {latestCostings.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            Todavía no hay costeos registrados.
-          </div>
-        ) : (
-          <div className="divide-y">
-            {latestCostings.map((costing) => {
-              const source = costing.orden_trabajo
-                ? `${costing.orden_trabajo.id_orden_trabajo} · ${costing.orden_trabajo.producto.nombre_producto}`
-                : costing.pedido
-                  ? `${costing.pedido.id_pedido} · ${costing.pedido.cliente.nombre_razon_social}`
-                  : "Costeo manual";
+        <CardContent>
+          {latestCostings.length === 0 ? (
+            <EmptyState label="Todavía no hay costeos registrados." />
+          ) : (
+            <div className="divide-y divide-border/70">
+              {latestCostings.map((costing) => {
+                const source = costing.orden_trabajo
+                  ? `${costing.orden_trabajo.id_orden_trabajo} · ${costing.orden_trabajo.producto.nombre_producto}`
+                  : costing.pedido
+                    ? `${costing.pedido.id_pedido} · ${costing.pedido.cliente.nombre_razon_social}`
+                    : "Costeo manual";
 
-              return (
-                <div
-                  key={costing.id_costeo}
-                  className="flex flex-col justify-between gap-3 p-5 md:flex-row md:items-center"
-                >
-                  <div>
-                    <p className="font-mono text-xs text-slate-500">
-                      {costing.id_costeo}
-                    </p>
-
-                    <p className="font-medium">{source}</p>
-
-                    <p className="mt-1 text-sm text-slate-500">
-                      Costo total: S/ {toNumber(costing.costo_total).toFixed(2)}
-                    </p>
-                  </div>
-
-                  <Link
-                    href={`/dashboard/costs/costings/${costing.id_costeo}`}
-                    className="text-sm font-medium text-slate-700 hover:text-slate-950"
+                return (
+                  <div
+                    key={costing.id_costeo}
+                    className="flex flex-col justify-between gap-3 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center"
                   >
-                    Ver detalle →
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        {costing.id_costeo}
+                      </p>
+                      <p className="font-medium text-foreground">{source}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Costo total: S/ {toNumber(costing.costo_total).toFixed(2)}
+                      </p>
+                    </div>
 
-      <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-800">
-        <p className="font-semibold">Validaciones finales activas</p>
-
-        <p className="mt-1">
-          Esta pantalla permite identificar si una orden no aparece porque no
-          tiene receta técnica, porque ya fue costeada, porque fue anulada o
-          porque todavía no existe información productiva suficiente.
-        </p>
-      </section>
+                    <Button variant="link" className="h-auto p-0" asChild>
+                      <Link href={`/dashboard/costs/costings/${costing.id_costeo}`}>
+                        Ver detalle
+                      </Link>
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </main>
   );
 }

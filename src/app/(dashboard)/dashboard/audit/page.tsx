@@ -1,11 +1,25 @@
 ﻿import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -141,12 +155,16 @@ export default async function AuditPage({ searchParams }: PageProps) {
         breadcrumbs={dashboardBreadcrumbs([{ label: "Auditoría" }])}
         actions={
           <>
-            <Link href={buildReportExportHref("audit", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-              Exportar Excel
-            </Link>
-            <Link href={buildReportExportHref("audit", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-              Exportar PDF
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={buildReportExportHref("audit", exportParams)}>
+                Exportar Excel
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href={buildReportExportHref("audit", exportParams, "pdf")}>
+                Exportar PDF
+              </Link>
+            </Button>
           </>
         }
       />
@@ -154,113 +172,110 @@ export default async function AuditPage({ searchParams }: PageProps) {
       <Card>
         <CardContent className="pt-6">
           <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-            <input name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" className="rounded-md border px-3 py-2 text-sm" />
-            <select name="usuario" defaultValue={usuario} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todos los usuarios</option>
-              {users.map((user) => (
-                <option key={user.id_usuario} value={user.id_usuario}>
-                  {user.apellidos}, {user.nombres}
-                </option>
-              ))}
-            </select>
-            <select name="accion" defaultValue={accion} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todas las acciones</option>
-              {actions.map((item) => (
-                <option key={item.accion} value={item.accion}>
-                  {item.accion}
-                </option>
-              ))}
-            </select>
-            <select name="entidad" defaultValue={entidad} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todas las entidades</option>
-              {entities.map((item) => (
-                <option key={item.entidad_afectada} value={item.entidad_afectada}>
-                  {item.entidad_afectada}
-                </option>
-              ))}
-            </select>
-            <input name="from" type="date" defaultValue={from} className="rounded-md border px-3 py-2 text-sm" />
-            <input name="to" type="date" defaultValue={to} className="rounded-md border px-3 py-2 text-sm" />
-            <div className="flex gap-2">
-              <button type="submit" className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-                Filtrar
-              </button>
-              <Link href="/dashboard/audit" className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-                Limpiar
-              </Link>
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="usuario">Usuario</Label>
+              <NativeSelect id="usuario" name="usuario" defaultValue={usuario}>
+                <option value="">Todos los usuarios</option>
+                {users.map((user) => (
+                  <option key={user.id_usuario} value={user.id_usuario}>
+                    {user.apellidos}, {user.nombres}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="accion">Acción</Label>
+              <NativeSelect id="accion" name="accion" defaultValue={accion}>
+                <option value="">Todas las acciones</option>
+                {actions.map((item) => (
+                  <option key={item.accion} value={item.accion}>
+                    {item.accion}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="entidad">Entidad</Label>
+              <NativeSelect id="entidad" name="entidad" defaultValue={entidad}>
+                <option value="">Todas las entidades</option>
+                {entities.map((item) => (
+                  <option key={item.entidad_afectada} value={item.entidad_afectada}>
+                    {item.entidad_afectada}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input id="from" name="from" type="date" defaultValue={from} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input id="to" name="to" type="date" defaultValue={to} />
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit">Filtrar</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/audit">Limpiar</Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Operaciones</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalLogs}</p>
-            <p className="text-xs text-muted-foreground">Coincidencias segun filtros.</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Usuarios</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{new Set(logs.map((log) => log.id_usuario)).size}</p>
-            <p className="text-xs text-muted-foreground">Usuarios en la vista actual.</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Entidades</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{new Set(logs.map((log) => log.entidad_afectada)).size}</p>
-            <p className="text-xs text-muted-foreground">Entidades afectadas.</p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Operaciones" value={totalLogs.toString()} description="Coincidencias segun filtros." tone="info" />
+        <KpiCard title="Usuarios" value={new Set(logs.map((log) => log.id_usuario)).size.toString()} description="Usuarios en la vista actual." tone="info" />
+        <KpiCard title="Entidades" value={new Set(logs.map((log) => log.entidad_afectada)).size.toString()} description="Entidades afectadas." tone="info" />
       </section>
 
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Operaciones registradas</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0">
           {logs.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron operaciones con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron operaciones con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Usuario</th>
-                    <th className="py-2 pr-3">Accion</th>
-                    <th className="py-2 pr-3">Entidad</th>
-                    <th className="py-2 pr-3">Registro</th>
-                    <th className="py-2 pr-3">Detalle</th>
-                    <th className="py-2">IP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map((log) => (
-                    <tr key={log.id_bitacora} className="border-b align-top">
-                      <td className="py-2 pr-3">{formatDateTime(log.fecha_hora)}</td>
-                      <td className="py-2 pr-3">{log.usuario.apellidos}, {log.usuario.nombres}</td>
-                      <td className="py-2 pr-3">{log.accion}</td>
-                      <td className="py-2 pr-3">{log.entidad_afectada}</td>
-                      <td className="py-2 pr-3 font-mono text-xs">{log.id_registro_afectado ?? "-"}</td>
-                      <td className="max-w-xl py-2 pr-3">{log.detalle ?? "-"}</td>
-                      <td className="py-2">{log.ip_origen ?? "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Usuario</TableHead>
+                  <TableHead>Acción</TableHead>
+                  <TableHead>Entidad</TableHead>
+                  <TableHead>Registro</TableHead>
+                  <TableHead>Detalle</TableHead>
+                  <TableHead>IP</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {logs.map((log) => (
+                  <TableRow key={log.id_bitacora} className="align-top">
+                    <TableCell>{formatDateTime(log.fecha_hora)}</TableCell>
+                    <TableCell>
+                      {log.usuario.apellidos}, {log.usuario.nombres}
+                    </TableCell>
+                    <TableCell>{log.accion}</TableCell>
+                    <TableCell>{log.entidad_afectada}</TableCell>
+                    <TableCell className="font-mono text-xs">
+                      {log.id_registro_afectado ?? "-"}
+                    </TableCell>
+                    <TableCell className="max-w-xl">
+                      {log.detalle ?? "-"}
+                    </TableCell>
+                    <TableCell>{log.ip_origen ?? "-"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

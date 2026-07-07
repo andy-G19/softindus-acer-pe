@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -144,27 +158,6 @@ function getCollectionStatus(data: {
   }
 
   return "pagado";
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function SalesCollectionsReportPage({
@@ -396,19 +389,13 @@ export default async function SalesCollectionsReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -421,172 +408,83 @@ export default async function SalesCollectionsReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="clientId" className="text-sm font-medium">
-                Cliente
-              </label>
-              <select
-                id="clientId"
-                name="clientId"
-                defaultValue={clientId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="clientId">Cliente</Label>
+              <NativeSelect id="clientId" name="clientId" defaultValue={clientId}>
                 <option value="">Todos los clientes</option>
                 {clients.map((client) => (
                   <option key={client.id_cliente} value={client.id_cliente}>
                     {client.nombre_razon_social}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="orderStatus" className="text-sm font-medium">
-                Estado del pedido
-              </label>
-              <select
-                id="orderStatus"
-                name="orderStatus"
-                defaultValue={orderStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="orderStatus">Estado del pedido</Label>
+              <NativeSelect id="orderStatus" name="orderStatus" defaultValue={orderStatus}>
                 <option value="">Todos los estados</option>
                 {ORDER_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label
-                htmlFor="collectionStatus"
-                className="text-sm font-medium"
-              >
-                Estado de cobranza
-              </label>
-              <select
-                id="collectionStatus"
-                name="collectionStatus"
-                defaultValue={collectionStatus}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="collectionStatus">Estado de cobranza</Label>
+              <NativeSelect id="collectionStatus" name="collectionStatus" defaultValue={collectionStatus}>
                 <option value="">Todos los estados</option>
                 {COLLECTION_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="searchCode" className="text-sm font-medium">
-                Pedido o proforma
-              </label>
-              <input
+              <Label htmlFor="searchCode">Pedido o proforma</Label>
+              <Input
                 id="searchCode"
                 name="searchCode"
                 type="text"
                 defaultValue={searchCode}
                 placeholder="Ej: PED00000001 o PF-00000001"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-6">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/sales-collections"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/sales-collections">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard
-          title="Pedidos encontrados"
-          value={totalOrders}
-          description="Pedidos según los filtros aplicados."
-        />
-
-        <SummaryCard
-          title="Monto estimado"
-          value={formatMoney(estimatedAmount)}
-          description="Suma del monto estimado de pedidos."
-        />
-
-        <SummaryCard
-          title="Monto proformado"
-          value={formatMoney(totalQuoted)}
-          description="Suma de proformas emitidas."
-        />
-
-        <SummaryCard
-          title="Total cobrado"
-          value={formatMoney(totalPaid)}
-          description="Adelantos iniciales, adelantos, amortizaciones y cancelaciones."
-        />
-
-        <SummaryCard
-          title="Saldo pendiente"
-          value={formatMoney(totalPendingBalance)}
-          description={`Pedidos con saldo: ${pendingBalanceOrders}.`}
-        />
-
-        <SummaryCard
-          title="Pedidos pagados"
-          value={paidOrders}
-          description="Pedidos con proforma sin saldo pendiente."
-        />
-
-        <SummaryCard
-          title="Adelantos"
-          value={formatMoney(totalInitialAdvances + totalAdvancePayments)}
-          description="Adelantos iniciales y pagos tipo adelanto."
-        />
-
-        <SummaryCard
-          title="Amortizaciones"
-          value={formatMoney(totalAmortizations)}
-          description={`Cancelaciones: ${formatMoney(totalCancellations)}.`}
-        />
+        <KpiCard title="Pedidos encontrados" value={totalOrders.toString()} description="Pedidos según los filtros aplicados." tone="info" />
+        <KpiCard title="Monto estimado" value={formatMoney(estimatedAmount)} description="Suma del monto estimado de pedidos." tone="info" />
+        <KpiCard title="Monto proformado" value={formatMoney(totalQuoted)} description="Suma de proformas emitidas." tone="info" />
+        <KpiCard title="Total cobrado" value={formatMoney(totalPaid)} description="Adelantos iniciales, adelantos, amortizaciones y cancelaciones." tone="success" />
+        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description={`Pedidos con saldo: ${pendingBalanceOrders}.`} tone={totalPendingBalance > 0 ? "warning" : "info"} />
+        <KpiCard title="Pedidos pagados" value={paidOrders.toString()} description="Pedidos con proforma sin saldo pendiente." tone="success" />
+        <KpiCard title="Adelantos" value={formatMoney(totalInitialAdvances + totalAdvancePayments)} description="Adelantos iniciales y pagos tipo adelanto." tone="info" />
+        <KpiCard title="Amortizaciones" value={formatMoney(totalAmortizations)} description={`Cancelaciones: ${formatMoney(totalCancellations)}.`} tone="info" />
       </section>
 
       <Card>
@@ -596,123 +494,108 @@ export default async function SalesCollectionsReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {reportRows.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron ventas o cobranzas con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron ventas o cobranzas con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Pedido</th>
-                    <th className="py-2 pr-3 font-medium">Cliente</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Estado pedido</th>
-                    <th className="py-2 pr-3 font-medium">Monto estimado</th>
-                    <th className="py-2 pr-3 font-medium">Proforma</th>
-                    <th className="py-2 pr-3 font-medium">Monto proformado</th>
-                    <th className="py-2 pr-3 font-medium">Adelantos</th>
-                    <th className="py-2 pr-3 font-medium">Amortizaciones</th>
-                    <th className="py-2 pr-3 font-medium">Cancelaciones</th>
-                    <th className="py-2 pr-3 font-medium">Cobrado</th>
-                    <th className="py-2 pr-3 font-medium">Saldo</th>
-                    <th className="py-2 pr-3 font-medium">Cobranza</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Pedido</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Estado pedido</TableHead>
+                  <TableHead>Monto estimado</TableHead>
+                  <TableHead>Proforma</TableHead>
+                  <TableHead>Monto proformado</TableHead>
+                  <TableHead>Adelantos</TableHead>
+                  <TableHead>Amortizaciones</TableHead>
+                  <TableHead>Cancelaciones</TableHead>
+                  <TableHead>Cobrado</TableHead>
+                  <TableHead>Saldo</TableHead>
+                  <TableHead>Cobranza</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {reportRows.map((row) => (
-                    <tr key={row.order.id_pedido} className="border-b">
-                      <td className="py-2 pr-3 font-medium">
+              <TableBody>
+                {reportRows.map((row) => (
+                  <TableRow key={row.order.id_pedido}>
+                    <TableCell className="font-medium">
+                      <Link
+                        href={`/dashboard/commercial/orders/${row.order.id_pedido}`}
+                        className="hover:underline"
+                      >
+                        {row.order.id_pedido}
+                      </Link>
+                    </TableCell>
+
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">
+                          {row.order.cliente.nombre_razon_social}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {row.order.cliente.tipo_cliente}
+                        </p>
+                      </div>
+                    </TableCell>
+
+                    <TableCell>{formatDate(row.order.fecha_pedido)}</TableCell>
+
+                    <TableCell>{getOrderStatusLabel(row.order.estado)}</TableCell>
+
+                    <TableCell>{formatMoney(row.order.monto_estimado)}</TableCell>
+
+                    <TableCell>
+                      {row.quote ? (
                         <Link
-                          href={`/dashboard/commercial/orders/${row.order.id_pedido}`}
+                          href={`/dashboard/commercial/quotes/${row.quote.id_proforma}`}
                           className="hover:underline"
                         >
-                          {row.order.id_pedido}
+                          <span className="font-medium">
+                            {row.quote.numero_proforma}
+                          </span>
+                          <br />
+                          <span className="text-xs text-muted-foreground">
+                            {row.quote.estado}
+                          </span>
                         </Link>
-                      </td>
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        <div>
-                          <p className="font-medium">
-                            {row.order.cliente.nombre_razon_social}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {row.order.cliente.tipo_cliente}
-                          </p>
-                        </div>
-                      </td>
+                    <TableCell>{formatMoney(row.quotedAmount)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(row.order.fecha_pedido)}
-                      </td>
+                    <TableCell>
+                      {formatMoney(row.initialAdvance + row.advancePayments)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getOrderStatusLabel(row.order.estado)}
-                      </td>
+                    <TableCell>
+                      {formatMoney(row.amortizationPayments)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.order.monto_estimado)}
-                      </td>
+                    <TableCell>
+                      {formatMoney(row.cancellationPayments)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {row.quote ? (
-                          <Link
-                            href={`/dashboard/commercial/quotes/${row.quote.id_proforma}`}
-                            className="hover:underline"
-                          >
-                            <span className="font-medium">
-                              {row.quote.numero_proforma}
-                            </span>
-                            <br />
-                            <span className="text-xs text-muted-foreground">
-                              {row.quote.estado}
-                            </span>
-                          </Link>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
+                    <TableCell>{formatMoney(row.totalPaid)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.quotedAmount)}
-                      </td>
+                    <TableCell>{formatMoney(row.pendingBalance)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatMoney(
-                          row.initialAdvance + row.advancePayments,
-                        )}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.amortizationPayments)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.cancellationPayments)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.totalPaid)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatMoney(row.pendingBalance)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {getCollectionStatusLabel(row.collectionStatus)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>
+                      {getCollectionStatusLabel(row.collectionStatus)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 pedidos para mantener una consulta
             rápida. En la subfase de exportación se generarán archivos completos
             según los filtros aplicados.

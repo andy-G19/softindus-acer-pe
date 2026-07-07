@@ -1,12 +1,24 @@
 ﻿import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -54,11 +66,11 @@ function getFailureStatusLabel(status: string) {
 function getFailureStatusBadgeVariant(status: string) {
   const variants: Record<
     string,
-    "default" | "secondary" | "destructive" | "outline"
+    "warning" | "secondary" | "destructive" | "success"
   > = {
-    pendiente: "secondary",
-    en_atencion: "default",
-    reparada: "outline",
+    pendiente: "warning",
+    en_atencion: "secondary",
+    reparada: "success",
     anulada: "destructive",
   };
 
@@ -120,78 +132,21 @@ export default async function FailuresPage() {
         ])}
         actions={
           canManageFailures ? (
-            <Link
-              href={`${navigationHrefs.failures}/new`}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Registrar falla
-            </Link>
+            <Button asChild>
+              <Link href={`${navigationHrefs.failures}/new`}>
+                Registrar falla
+              </Link>
+            </Button>
           ) : null
         }
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Fallas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{failures.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico de fallas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pendientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{pendingFailures.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Aún no atendidas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">En atención</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{inAttentionFailures.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Requieren seguimiento.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Reparadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{repairedFailures.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Anuladas: {cancelledFailures.length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tiempo perdido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatHours(totalLostHours)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Acumulado por fallas.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Fallas registradas" value={failures.length.toString()} description="Total histórico de fallas." tone="info" />
+        <KpiCard title="Pendientes" value={pendingFailures.length.toString()} description="Aún no atendidas." tone={pendingFailures.length > 0 ? "warning" : "info"} />
+        <KpiCard title="En atención" value={inAttentionFailures.length.toString()} description="Requieren seguimiento." tone="info" />
+        <KpiCard title="Reparadas" value={repairedFailures.length.toString()} description={`Anuladas: ${cancelledFailures.length}`} tone="success" />
+        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Acumulado por fallas." tone="warning" />
       </section>
 
       <Card>
@@ -199,133 +154,119 @@ export default async function FailuresPage() {
           <CardTitle className="text-base">Fallas registradas</CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {failures.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Aún no hay fallas registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra la primera falla para documentar paradas, problemas
-                técnicos y tiempos perdidos.
-              </p>
-
-              {canManageFailures ? (
-                <Link
-                  href="/dashboard/maintenance/failures/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Registrar primera falla
-                </Link>
-              ) : null}
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aún no hay fallas registradas."
+              description="Registra la primera falla para documentar paradas, problemas técnicos y tiempos perdidos."
+              action={
+                canManageFailures ? (
+                  <Button asChild>
+                    <Link href="/dashboard/maintenance/failures/new">
+                      Registrar primera falla
+                    </Link>
+                  </Button>
+                ) : undefined
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Máquina</th>
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Descripción</th>
-                    <th className="py-2 pr-3">Responsable</th>
-                    <th className="py-2 pr-3 text-right">Tiempo perdido</th>
-                    <th className="py-2 pr-3 text-right">Reparaciones</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    {canManageFailures ? (
-                      <th className="py-2 text-right">Cambiar estado</th>
-                    ) : null}
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Máquina</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead className="text-right">Tiempo perdido</TableHead>
+                  <TableHead className="text-right">Reparaciones</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  {canManageFailures ? (
+                    <TableHead className="text-right">Cambiar estado</TableHead>
+                  ) : null}
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {failures.map((failure) => (
-                    <tr key={failure.id_falla} className="border-b align-top">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {failure.id_falla}
-                      </td>
+              <TableBody>
+                {failures.map((failure) => (
+                  <TableRow key={failure.id_falla} className="align-top">
+                    <TableCell className="font-mono text-xs">
+                      {failure.id_falla}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {failure.maquina.nombre}
-                        <p className="text-xs font-normal text-muted-foreground">
-                          {failure.maquina.codigo_interno ?? "Sin código interno"}
+                    <TableCell className="font-medium">
+                      {failure.maquina.nombre}
+                      <p className="text-xs font-normal text-muted-foreground">
+                        {failure.maquina.codigo_interno ?? "Sin código interno"}
+                      </p>
+                    </TableCell>
+
+                    <TableCell>{formatDateTime(failure.fecha_falla)}</TableCell>
+
+                    <TableCell>
+                      <p className="max-w-md">{failure.descripcion}</p>
+
+                      {failure.impacto_produccion ? (
+                        <p className="mt-1 max-w-md text-xs text-muted-foreground">
+                          Impacto: {failure.impacto_produccion}
                         </p>
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {formatDateTime(failure.fecha_falla)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        <p className="max-w-md">{failure.descripcion}</p>
-
-                        {failure.impacto_produccion ? (
-                          <p className="mt-1 max-w-md text-xs text-muted-foreground">
-                            Impacto: {failure.impacto_produccion}
-                          </p>
-                        ) : null}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {failure.responsable_registro ?? "-"}
-                      </td>
-
-                      <td className="py-2 pr-3 text-right">
-                        {formatHours(failure.tiempo_perdido_horas)}
-                      </td>
-
-                      <td className="py-2 pr-3 text-right">
-                        {failure._count.reparacion}
-                      </td>
-
-                      <td className="py-2 pr-3 text-right">
-                        <Badge
-                          variant={getFailureStatusBadgeVariant(
-                            failure.estado_atencion,
-                          )}
-                        >
-                          {getFailureStatusLabel(failure.estado_atencion)}
-                        </Badge>
-                      </td>
-
-                      {canManageFailures ? (
-                        <td className="py-2 text-right">
-                          <form
-                            action={updateFailureStatusAction}
-                            className="flex justify-end gap-2"
-                          >
-                            <input
-                              type="hidden"
-                              name="id_falla"
-                              value={failure.id_falla}
-                            />
-
-                            <select
-                              name="estado_atencion"
-                              defaultValue={failure.estado_atencion}
-                              className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
-                            >
-                              <option value="pendiente">Pendiente</option>
-                              <option value="en_atencion">En atención</option>
-                              <option value="reparada">Reparada</option>
-                              <option value="anulada">Anulada</option>
-                            </select>
-
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
-                              Guardar
-                            </button>
-                          </form>
-                        </td>
                       ) : null}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    </TableCell>
+
+                    <TableCell>{failure.responsable_registro ?? "-"}</TableCell>
+
+                    <TableCell className="text-right">
+                      {formatHours(failure.tiempo_perdido_horas)}
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      {failure._count.reparacion}
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      <Badge
+                        variant={getFailureStatusBadgeVariant(
+                          failure.estado_atencion,
+                        )}
+                      >
+                        {getFailureStatusLabel(failure.estado_atencion)}
+                      </Badge>
+                    </TableCell>
+
+                    {canManageFailures ? (
+                      <TableCell className="text-right">
+                        <form
+                          action={updateFailureStatusAction}
+                          className="flex justify-end gap-2"
+                        >
+                          <input
+                            type="hidden"
+                            name="id_falla"
+                            value={failure.id_falla}
+                          />
+
+                          <NativeSelect
+                            name="estado_atencion"
+                            defaultValue={failure.estado_atencion}
+                            className="h-8 text-xs"
+                          >
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en_atencion">En atención</option>
+                            <option value="reparada">Reparada</option>
+                            <option value="anulada">Anulada</option>
+                          </NativeSelect>
+
+                          <Button type="submit" variant="outline" size="sm">
+                            Guardar
+                          </Button>
+                        </form>
+                      </TableCell>
+                    ) : null}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

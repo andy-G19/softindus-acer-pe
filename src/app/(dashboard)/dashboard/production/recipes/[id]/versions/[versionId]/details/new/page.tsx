@@ -1,9 +1,17 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createRecipeDetailAction } from "@/modules/production/recipe-details/actions";
+import Link from "next/link";
 
 type NewRecipeDetailPageProps = {
   params: Promise<{
@@ -114,59 +122,56 @@ export default async function NewRecipeDetailPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Recetas tecnicas - Materiales requeridos
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Agregar material a receta
-        </h1>
-
-        <p className="mt-2 text-slate-600">
-          Receta:{" "}
-          <span className="font-medium">
-            {version.receta_tecnica.nombre_receta}
-          </span>{" "}
-          - Version:{" "}
-          <span className="font-medium">{version.numero_version}</span> -
-          Producto:{" "}
-          <span className="font-medium">
-            {version.receta_tecnica.producto.nombre_producto}
-          </span>
-        </p>
-      </section>
+      <PageHeader
+        title="Agregar material a receta"
+        description={`Receta: ${version.receta_tecnica.nombre_receta} · Versión: ${version.numero_version} · Producto: ${version.receta_tecnica.producto.nombre_producto}`}
+        backHref={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
+        backLabel="Volver al detalle"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Agregar material" },
+        ])}
+      />
 
       {version.estado !== "vigente" ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta version no esta vigente. Solo se pueden agregar materiales a una
-          version vigente.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta versión no está vigente. Solo se pueden agregar materiales a
+            una versión vigente.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {version.receta_tecnica.estado !== "activa" ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no esta activa. Activala antes de agregar materiales.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta receta no está activa. Actívala antes de agregar materiales.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {materials.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          No hay materiales activos disponibles o todos los materiales activos ya
-          fueron agregados a esta version de receta.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            No hay materiales activos disponibles o todos los materiales
+            activos ya fueron agregados a esta versión de receta.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {version._count.orden_trabajo > 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta version ya fue usada por ordenes de trabajo. Crea una nueva
-          version para cambiar materiales sin afectar ordenes historicas.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta versión ya fue usada por órdenes de trabajo. Crea una nueva
+            versión para cambiar materiales sin afectar órdenes históricas.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <form
         action={createRecipeDetailAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <input
           type="hidden"
@@ -185,19 +190,16 @@ export default async function NewRecipeDetailPage({
             emptyMessage="No hay materiales disponibles para esta receta."
           />
 
-          <p className="text-xs text-slate-500">
-            La unidad de medida se tomara automaticamente desde el material
+          <p className="text-xs text-muted-foreground">
+            La unidad de medida se tomará automáticamente desde el material
             registrado en inventario.
           </p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              Cantidad requerida por unidad *
-            </label>
-
-            <input
+            <Label>Cantidad requerida por unidad *</Label>
+            <Input
               name="cantidad_requerida"
               type="number"
               min="0.01"
@@ -205,14 +207,12 @@ export default async function NewRecipeDetailPage({
               required
               disabled={!canAddDetail}
               placeholder="Ej. 1.20"
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Merma estimada (%)</label>
-
-            <input
+            <Label>Merma estimada (%)</Label>
+            <Input
               name="merma_estimada_porcentaje"
               type="number"
               min="0"
@@ -220,65 +220,51 @@ export default async function NewRecipeDetailPage({
               step="0.01"
               disabled={!canAddDetail}
               placeholder="Ej. 5"
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Tipo de consumo *</label>
-
-          <select
-            name="tipo_consumo"
-            required
-            disabled={!canAddDetail}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
-          >
+          <Label>Tipo de consumo *</Label>
+          <NativeSelect name="tipo_consumo" required disabled={!canAddDetail}>
             <option value="">Seleccione el tipo</option>
             <option value="materia_prima">Materia prima</option>
             <option value="consumible">Consumible</option>
             <option value="auxiliar">Auxiliar</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Observaciones</label>
-
-          <textarea
+          <Label>Observaciones</Label>
+          <Textarea
             name="observaciones"
             rows={4}
             maxLength={700}
             disabled={!canAddDetail}
             placeholder="Ej. Considerar margen adicional si la plancha viene con defectos o cortes irregulares."
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
           />
         </div>
 
-        <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-          <p className="font-medium text-slate-800">Importante</p>
-
-          <p className="mt-1">
-            La cantidad registrada representa el consumo estimado para fabricar
-            una unidad del producto. En la siguiente fase usaremos estos datos
-            para calcular materiales requeridos segun la cantidad a producir.
-          </p>
-        </div>
+        <Alert variant="info">
+          <AlertDescription>
+            La cantidad registrada representa el consumo estimado para
+            fabricar una unidad del producto. Estos datos se usan luego para
+            calcular materiales requeridos según la cantidad a producir.
+          </AlertDescription>
+        </Alert>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Cancelar
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link
+              href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
+            >
+              Cancelar
+            </Link>
+          </Button>
 
-          <button
-            type="submit"
-            disabled={!canAddDetail}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
+          <Button type="submit" disabled={!canAddDetail}>
             Guardar material
-          </button>
+          </Button>
         </div>
       </form>
     </main>

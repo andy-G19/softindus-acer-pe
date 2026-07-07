@@ -1,14 +1,26 @@
 import Link from "next/link";
 
-//import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 function toNumber(value: unknown) {
@@ -121,92 +133,29 @@ export default async function PaymentHistoryPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Historial
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Historial de pagos por operario
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta los pagos realizados a operarios a partir de planillas
-            generadas, registrando fecha, método de pago, monto pagado,
-            periodo y usuario responsable.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/staff"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/staff/payment-history/new"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Registrar pago
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Historial de pagos por operario"
+        description="Consulta los pagos realizados a operarios a partir de planillas generadas, registrando fecha, método de pago, monto pagado, periodo y usuario responsable."
+        backHref={navigationHrefs.staff}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Historial de pagos" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/staff/payment-history/new">
+              Registrar pago
+            </Link>
+          </Button>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pagos registrados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalPayments}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico de pagos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pagos del mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{paymentsThisMonth}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Registros del periodo actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Total pagado</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalPaidAmount._sum.monto_pagado)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Acumulado histórico.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pagado este mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(monthlyPaidAmount._sum.monto_pagado)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total mensual registrado.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Pagos registrados" value={totalPayments.toString()} description="Total histórico de pagos." tone="info" />
+        <KpiCard title="Pagos del mes" value={paymentsThisMonth.toString()} description="Registros del periodo actual." tone="info" />
+        <KpiCard title="Total pagado" value={formatMoney(totalPaidAmount._sum.monto_pagado)} description="Acumulado histórico." tone="success" />
+        <KpiCard title="Pagado este mes" value={formatMoney(monthlyPaidAmount._sum.monto_pagado)} description="Total mensual registrado." tone="success" />
       </section>
 
       <Card>
@@ -216,84 +165,73 @@ export default async function PaymentHistoryPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {latestPayments.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Todavía no hay pagos registrados.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra el pago de una planilla pendiente para construir el
-                historial del operario.
-              </p>
-
-              <Link
-                href="/dashboard/staff/payment-history/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Registrar primer pago
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Todavía no hay pagos registrados."
+              description="Registra el pago de una planilla pendiente para construir el historial del operario."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/staff/payment-history/new">
+                    Registrar primer pago
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Planilla</th>
-                    <th className="py-2 pr-3">Periodo</th>
-                    <th className="py-2 pr-3">Método</th>
-                    <th className="py-2 pr-3 text-right">Monto</th>
-                    <th className="py-2 pr-3">Registrado por</th>
-                    <th className="py-2">Observaciones</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Planilla</TableHead>
+                  <TableHead>Periodo</TableHead>
+                  <TableHead>Método</TableHead>
+                  <TableHead className="text-right">Monto</TableHead>
+                  <TableHead>Registrado por</TableHead>
+                  <TableHead>Observaciones</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {latestPayments.map((payment) => (
-                    <tr key={payment.id_historial_pago} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {payment.id_historial_pago}
-                      </td>
+              <TableBody>
+                {latestPayments.map((payment) => (
+                  <TableRow key={payment.id_historial_pago}>
+                    <TableCell className="font-mono text-xs">
+                      {payment.id_historial_pago}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(payment.fecha_pago)}
-                      </td>
+                    <TableCell>{formatDate(payment.fecha_pago)}</TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {payment.planilla_pago.operario.apellidos},{" "}
-                        {payment.planilla_pago.operario.nombres}
-                      </td>
+                    <TableCell className="font-medium">
+                      {payment.planilla_pago.operario.apellidos},{" "}
+                      {payment.planilla_pago.operario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {payment.id_planilla}
-                      </td>
+                    <TableCell className="font-mono text-xs">
+                      {payment.id_planilla}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">{payment.periodo}</td>
+                    <TableCell>{payment.periodo}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getPaymentMethodLabel(payment.metodo_pago)}
-                      </td>
+                    <TableCell>
+                      {getPaymentMethodLabel(payment.metodo_pago)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right font-medium">
-                        {formatMoney(payment.monto_pagado)}
-                      </td>
+                    <TableCell className="text-right font-medium">
+                      {formatMoney(payment.monto_pagado)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {payment.usuario.nombres} {payment.usuario.apellidos}
-                      </td>
+                    <TableCell>
+                      {payment.usuario.nombres} {payment.usuario.apellidos}
+                    </TableCell>
 
-                      <td className="py-2">
-                        {payment.observaciones ?? "-"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>{payment.observaciones ?? "-"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

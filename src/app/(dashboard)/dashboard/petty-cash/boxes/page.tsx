@@ -1,11 +1,23 @@
 ﻿import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -88,65 +100,19 @@ export default async function PettyCashBoxesPage() {
           { label: "Cajas" },
         ])}
         actions={
-          <Link
-            href={`${navigationHrefs.pettyCashBoxes}/new`}
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Abrir caja
-          </Link>
+          <Button asChild>
+            <Link href={`${navigationHrefs.pettyCashBoxes}/new`}>
+              Abrir caja
+            </Link>
+          </Button>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{boxes.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico de cajas chicas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas abiertas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{openBoxes.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Cajas disponibles para nuevos movimientos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas cerradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{closedBoxes.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Cajas que ya no deberían recibir movimientos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Saldo abierto</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalCurrentBalance)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Suma actual de cajas abiertas.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Cajas registradas" value={boxes.length.toString()} description="Total histórico de cajas chicas." tone="info" />
+        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Cajas disponibles para nuevos movimientos." tone="success" />
+        <KpiCard title="Cajas cerradas" value={closedBoxes.length.toString()} description="Cajas que ya no deberían recibir movimientos." tone="info" />
+        <KpiCard title="Saldo abierto" value={formatMoney(totalCurrentBalance)} description="Suma actual de cajas abiertas." tone="info" />
       </section>
 
       <Card>
@@ -156,112 +122,93 @@ export default async function PettyCashBoxesPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {boxes.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Aún no hay cajas chicas registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Abre una caja chica para empezar a registrar movimientos
-                financieros menores.
-              </p>
-
-              <Link
-                href="/dashboard/petty-cash/boxes/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Abrir primera caja
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aún no hay cajas chicas registradas."
+              description="Abre una caja chica para empezar a registrar movimientos financieros menores."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/petty-cash/boxes/new">
+                    Abrir primera caja
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Caja</th>
-                    <th className="py-2 pr-3">Responsable</th>
-                    <th className="py-2 pr-3">Apertura</th>
-                    <th className="py-2 pr-3 text-right">Saldo inicial</th>
-                    <th className="py-2 pr-3 text-right">Saldo actual</th>
-                    <th className="py-2 pr-3 text-right">Movimientos</th>
-                    <th className="py-2 text-right">Estado</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Caja</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Apertura</TableHead>
+                  <TableHead className="text-right">Saldo inicial</TableHead>
+                  <TableHead className="text-right">Saldo actual</TableHead>
+                  <TableHead className="text-right">Movimientos</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {boxes.map((box) => (
-                    <tr key={box.id_caja_chica} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {box.id_caja_chica}
-                      </td>
+              <TableBody>
+                {boxes.map((box) => (
+                  <TableRow key={box.id_caja_chica}>
+                    <TableCell className="text-xs">
+                      {box.id_caja_chica}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {box.nombre_caja}
-                      </td>
+                    <TableCell className="font-medium">
+                      {box.nombre_caja}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {box.responsable ?? "-"}
-                      </td>
+                    <TableCell>{box.responsable ?? "-"}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(box.fecha_apertura)}
-                      </td>
+                    <TableCell>{formatDate(box.fecha_apertura)}</TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(box.saldo_inicial)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(box.saldo_inicial)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right font-medium">
-                        {formatMoney(box.saldo_actual)}
-                      </td>
+                    <TableCell className="text-right font-medium">
+                      {formatMoney(box.saldo_actual)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {box._count.movimiento_caja}
-                      </td>
+                    <TableCell className="text-right">
+                      {box._count.movimiento_caja}
+                    </TableCell>
 
-                      <td className="py-2 text-right">
-                        <Badge
-                          variant={
-                            box.estado === "abierta"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          {getBoxStatusLabel(box.estado)}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                    <TableCell className="text-right">
+                      <Badge
+                        variant={
+                          box.estado === "abierta" ? "success" : "secondary"
+                        }
+                      >
+                        {getBoxStatusLabel(box.estado)}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
 
-                <tfoot>
-                  <tr className="border-t font-medium">
-                    <td className="py-3 pr-3" colSpan={4}>
-                      Totales
-                    </td>
-
-                    <td className="py-3 pr-3 text-right">
-                      {formatMoney(totalInitialBalance)}
-                    </td>
-
-                    <td className="py-3 pr-3 text-right">
-                      {formatMoney(totalCurrentBalance)}
-                    </td>
-
-                    <td className="py-3 pr-3 text-right">
-                      {boxes.reduce((total, box) => {
-                        return total + box._count.movimiento_caja;
-                      }, 0)}
-                    </td>
-
-                    <td />
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={4}>Totales</TableCell>
+                  <TableCell className="text-right">
+                    {formatMoney(totalInitialBalance)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {formatMoney(totalCurrentBalance)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {boxes.reduce((total, box) => {
+                      return total + box._count.movimiento_caja;
+                    }, 0)}
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableFooter>
+            </Table>
           )}
         </CardContent>
       </Card>

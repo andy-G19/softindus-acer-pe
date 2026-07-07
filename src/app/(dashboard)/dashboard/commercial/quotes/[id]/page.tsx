@@ -5,6 +5,7 @@ import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
@@ -124,23 +125,20 @@ export default async function QuoteDetailPage({
           ])}
           actions={
             <>
-          <PrintButton />
+              <PrintButton />
 
-          {canAnnul ? (
-            <form action={annulQuoteAction}>
-              <input
-                type="hidden"
-                name="id_proforma"
-                value={quote.id_proforma}
-              />
-              <button
-                type="submit"
-                className="rounded-md border px-4 py-2 text-sm font-medium"
-              >
-                Anular
-              </button>
-            </form>
-          ) : null}
+              {canAnnul ? (
+                <form action={annulQuoteAction}>
+                  <input
+                    type="hidden"
+                    name="id_proforma"
+                    value={quote.id_proforma}
+                  />
+                  <Button type="submit" variant="outline">
+                    Anular
+                  </Button>
+                </form>
+              ) : null}
             </>
           }
         />

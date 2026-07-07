@@ -2,6 +2,22 @@
 
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+
 type CatalogFormState = {
   error: string;
   fieldErrors?: Partial<Record<string, string[]>>;
@@ -40,7 +56,7 @@ function FieldError({ messages }: { messages?: string[] }) {
     return null;
   }
 
-  return <p className="text-xs text-red-600">{messages[0]}</p>;
+  return <p className="text-xs text-destructive">{messages[0]}</p>;
 }
 
 function CreateCatalogForm({
@@ -55,41 +71,29 @@ function CreateCatalogForm({
   const [state, formAction, isPending] = useActionState(action, initialState);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="text-base font-semibold">{title}</h2>
+    <form
+      action={formAction}
+      className="space-y-4 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
+    >
+      <h2 className="text-base font-semibold text-foreground">{title}</h2>
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="nombre" className="text-sm font-medium">
-          Nombre
-        </label>
-        <input
-          id="nombre"
-          name="nombre"
-          className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          disabled={!canManage}
-          required
-        />
+        <Label htmlFor="nombre">Nombre</Label>
+        <Input id="nombre" name="nombre" disabled={!canManage} required />
         <FieldError messages={state.fieldErrors?.nombre} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="slug" className="text-sm font-medium">
-          Slug
-        </label>
-        <input
+        <Label htmlFor="slug">Slug</Label>
+        <Input
           id="slug"
           name="slug"
-          className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           placeholder="materia_prima"
           disabled={!canManage}
           required
@@ -98,26 +102,19 @@ function CreateCatalogForm({
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="descripcion" className="text-sm font-medium">
-          Descripción
-        </label>
-        <textarea
+        <Label htmlFor="descripcion">Descripción</Label>
+        <Textarea
           id="descripcion"
           name="descripcion"
           rows={4}
-          className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           disabled={!canManage}
         />
         <FieldError messages={state.fieldErrors?.descripcion} />
       </div>
 
-      <button
-        type="submit"
-        disabled={!canManage || isPending}
-        className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70"
-      >
+      <Button type="submit" disabled={!canManage || isPending}>
         {isPending ? "Guardando..." : "Crear"}
-      </button>
+      </Button>
     </form>
   );
 }
@@ -141,73 +138,76 @@ function CatalogRow({
   );
 
   return (
-    <tr className="border-t align-top">
-      <td className="px-4 py-3 font-mono text-xs">{item.id}</td>
-      <td className="px-4 py-3" colSpan={3}>
-        <form action={formAction} className="grid gap-2 md:grid-cols-[1fr_1fr_1.4fr_auto]">
+    <TableRow className="align-top">
+      <TableCell className="text-xs">{item.id}</TableCell>
+      <TableCell colSpan={3}>
+        <form
+          action={formAction}
+          className="grid gap-2 md:grid-cols-[1fr_1fr_1.4fr_auto]"
+        >
           <input type="hidden" name={idFieldName} value={item.id} />
           <div className="space-y-1">
-            <input
+            <Input
               name="nombre"
               defaultValue={item.nombre}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
               disabled={!canManage}
               required
             />
             <FieldError messages={state.fieldErrors?.nombre} />
           </div>
           <div className="space-y-1">
-            <input
+            <Input
               name="slug"
               defaultValue={item.slug}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
               disabled={!canManage}
               required
             />
             <FieldError messages={state.fieldErrors?.slug} />
           </div>
           <div className="space-y-1">
-            <textarea
+            <Textarea
               name="descripcion"
               defaultValue={item.descripcion ?? ""}
-              className="min-h-10 w-full rounded-lg border px-3 py-2 text-sm"
+              className="min-h-10"
               disabled={!canManage}
             />
             <FieldError messages={state.fieldErrors?.descripcion} />
             {state.error ? (
-              <p role="alert" className="text-xs text-red-600">
+              <p role="alert" className="text-xs text-destructive">
                 {state.error}
               </p>
             ) : null}
           </div>
           {canManage ? (
-            <button
+            <Button
               type="submit"
+              variant="outline"
+              size="sm"
               disabled={isPending}
-              className="h-9 rounded-md border px-3 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isPending ? "Guardando..." : "Editar"}
-            </button>
+            </Button>
           ) : null}
         </form>
-      </td>
-      <td className="px-4 py-3">{item.estado ? "Activa" : "Inactiva"}</td>
-      <td className="px-4 py-3">
+      </TableCell>
+      <TableCell>
+        <Badge variant={item.estado ? "success" : "outline"}>
+          {item.estado ? "Activa" : "Inactiva"}
+        </Badge>
+      </TableCell>
+      <TableCell>
         {canManage ? (
           <form action={toggleAction}>
             <input type="hidden" name={idFieldName} value={item.id} />
-            <button
-              type="submit"
-              className="rounded-md border px-3 py-1.5 text-xs font-medium"
-            >
+            <Button type="submit" variant="outline" size="sm">
               {item.estado ? "Inactivar" : "Activar"}
-            </button>
+            </Button>
           </form>
         ) : (
-          <span className="text-xs text-slate-500">Solo lectura</span>
+          <span className="text-xs text-muted-foreground">Solo lectura</span>
         )}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -229,40 +229,38 @@ export function InventoryCatalogManager({
         title={createTitle}
       />
 
-      <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Nombre</th>
-              <th className="px-4 py-3 font-semibold">Slug</th>
-              <th className="px-4 py-3 font-semibold">Descripción</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <CatalogRow
-                key={item.id}
-                idFieldName={idFieldName}
-                item={item}
-                updateAction={updateAction}
-                toggleAction={toggleAction}
-                canManage={canManage}
-              />
-            ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Nombre</TableHead>
+            <TableHead>Slug</TableHead>
+            <TableHead>Descripción</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {items.map((item) => (
+            <CatalogRow
+              key={item.id}
+              idFieldName={idFieldName}
+              item={item}
+              updateAction={updateAction}
+              toggleAction={toggleAction}
+              canManage={canManage}
+            />
+          ))}
 
-            {items.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
-                  {emptyMessage}
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+          {items.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} className="p-0">
+                <EmptyState className="border-0" label={emptyMessage} />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </div>
   );
 }

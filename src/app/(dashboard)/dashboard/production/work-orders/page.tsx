@@ -2,6 +2,21 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import {
@@ -43,36 +58,36 @@ function formatDecimal(value: unknown) {
   return Number(value.toString()).toFixed(2);
 }
 
-function getStatusClass(status: string) {
+function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "en_proceso") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "pausada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
   if (status === "anulada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
-function getPriorityClass(priority: string) {
+function getPriorityBadgeVariant(priority: string) {
   if (priority === "alta") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
   if (priority === "media") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 function getSearchParam(
@@ -316,341 +331,294 @@ export default async function WorkOrdersPage({
       <PageHeader
         title="Órdenes de trabajo"
         description="Registra y consulta órdenes de producción por pedido, campaña o reposición de stock."
+        backHref={navigationHrefs.production}
+        backLabel="Volver a producción"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
           { label: "Órdenes de trabajo" },
         ])}
         actions={
-          <Link
-            href="/dashboard/production/work-orders/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva orden
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/production/work-orders/new">
+              Nueva orden
+            </Link>
+          </Button>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Ordenes registradas</p>
-          <p className="mt-2 text-3xl font-bold">{workOrders.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Ordenes activas</p>
-          <p className="mt-2 text-3xl font-bold">{activeOrders.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Pendientes</p>
-          <p className="mt-2 text-3xl font-bold">{pendingOrders.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Finalizadas</p>
-          <p className="mt-2 text-3xl font-bold">{finishedOrders.length}</p>
-        </div>
+        <KpiCard title="Órdenes registradas" value={workOrders.length.toString()} description="Total histórico." tone="info" />
+        <KpiCard title="Órdenes activas" value={activeOrders.length.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
+        <KpiCard title="Pendientes" value={pendingOrders.length.toString()} description="Sin iniciar todavía." tone="info" />
+        <KpiCard title="Finalizadas" value={finishedOrders.length.toString()} description="Órdenes completadas." tone="success" />
       </section>
 
-      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-4">
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar orden, cliente o producto..."
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-
-        <select
-          name="product"
-          defaultValue={product}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los productos</option>
-          {products.map((item) => (
-            <option key={item.id_producto} value={item.id_producto}>
-              {item.nombre_producto}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="client"
-          defaultValue={client}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los clientes</option>
-          {clients.map((item) => (
-            <option key={item.id_cliente} value={item.id_cliente}>
-              {item.nombre_razon_social}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="campaign"
-          defaultValue={campaign}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las campanias</option>
-          {campaigns.map((item) => (
-            <option key={item.id_campania} value={item.id_campania}>
-              {item.nombre_campania}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="type"
-          defaultValue={type}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los tipos</option>
-          <option value="pedido">Pedido</option>
-          <option value="campania">Campania</option>
-          <option value="reposicion_stock">Reposicion de stock</option>
-        </select>
-
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="en_proceso">En proceso</option>
-          <option value="pausada">Pausada</option>
-          <option value="finalizada">Finalizada</option>
-          <option value="anulada">Anulada</option>
-        </select>
-
-        <select
-          name="priority"
-          defaultValue={priority}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las prioridades</option>
-          <option value="alta">Alta</option>
-          <option value="media">Media</option>
-          <option value="baja">Baja</option>
-        </select>
-
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            name="from"
-            type="date"
-            defaultValue={from}
-            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={to}
-            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar orden, cliente o producto..."
           />
         </div>
 
-        <div className="flex gap-2 md:col-span-4">
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Filtrar
-          </button>
+        <div className="space-y-2">
+          <Label htmlFor="product">Producto</Label>
+          <NativeSelect id="product" name="product" defaultValue={product}>
+            <option value="">Todos los productos</option>
+            {products.map((item) => (
+              <option key={item.id_producto} value={item.id_producto}>
+                {item.nombre_producto}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-          <Link
-            href="/dashboard/production/work-orders"
-            className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Limpiar filtros
-          </Link>
+        <div className="space-y-2">
+          <Label htmlFor="client">Cliente</Label>
+          <NativeSelect id="client" name="client" defaultValue={client}>
+            <option value="">Todos los clientes</option>
+            {clients.map((item) => (
+              <option key={item.id_cliente} value={item.id_cliente}>
+                {item.nombre_razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="campaign">Campaña</Label>
+          <NativeSelect id="campaign" name="campaign" defaultValue={campaign}>
+            <option value="">Todas las campañas</option>
+            {campaigns.map((item) => (
+              <option key={item.id_campania} value={item.id_campania}>
+                {item.nombre_campania}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="type">Tipo</Label>
+          <NativeSelect id="type" name="type" defaultValue={type}>
+            <option value="">Todos los tipos</option>
+            <option value="pedido">Pedido</option>
+            <option value="campania">Campaña</option>
+            <option value="reposicion_stock">Reposición de stock</option>
+          </NativeSelect>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="en_proceso">En proceso</option>
+            <option value="pausada">Pausada</option>
+            <option value="finalizada">Finalizada</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="priority">Prioridad</Label>
+          <NativeSelect id="priority" name="priority" defaultValue={priority}>
+            <option value="">Todas las prioridades</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </NativeSelect>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label htmlFor="from">Desde</Label>
+            <Input id="from" name="from" type="date" defaultValue={from} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="to">Hasta</Label>
+            <Input id="to" name="to" type="date" defaultValue={to} />
+          </div>
+        </div>
+
+        <div className="flex items-end gap-2 md:col-span-4">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/production/work-orders">
+              Limpiar filtros
+            </Link>
+          </Button>
         </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Codigo</th>
-              <th className="px-4 py-3 font-semibold">Producto</th>
-              <th className="px-4 py-3 font-semibold">Origen</th>
-              <th className="px-4 py-3 font-semibold">Cantidad</th>
-              <th className="px-4 py-3 font-semibold">Ruta</th>
-              <th className="px-4 py-3 font-semibold">Receta</th>
-              <th className="px-4 py-3 font-semibold">Fechas</th>
-              <th className="px-4 py-3 font-semibold">Prioridad</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Producto</TableHead>
+            <TableHead>Origen</TableHead>
+            <TableHead>Cantidad</TableHead>
+            <TableHead>Ruta</TableHead>
+            <TableHead>Receta</TableHead>
+            <TableHead>Fechas</TableHead>
+            <TableHead>Prioridad</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {workOrders.map((order) => {
-              const origin =
-                order.tipo_produccion === "pedido"
-                  ? order.detalle_pedido?.pedido.cliente.nombre_razon_social ??
-                    order.cliente?.nombre_razon_social ??
-                    "Pedido"
-                  : order.tipo_produccion === "campania"
-                    ? order.campania_produccion?.nombre_campania ?? "Campania"
-                    : "Reposicion de stock";
+        <TableBody>
+          {workOrders.map((order) => {
+            const origin =
+              order.tipo_produccion === "pedido"
+                ? order.detalle_pedido?.pedido.cliente.nombre_razon_social ??
+                  order.cliente?.nombre_razon_social ??
+                  "Pedido"
+                : order.tipo_produccion === "campania"
+                  ? order.campania_produccion?.nombre_campania ?? "Campaña"
+                  : "Reposición de stock";
 
-              const canChangeStatus = !["anulada", "finalizada"].includes(
-                order.estado,
-              );
+            const canChangeStatus = !["anulada", "finalizada"].includes(
+              order.estado,
+            );
 
-              return (
-                <tr key={order.id_orden_trabajo} className="border-t">
-                  <td className="px-4 py-3 font-mono text-xs">
-                    {order.id_orden_trabajo}
-                  </td>
+            return (
+              <TableRow key={order.id_orden_trabajo}>
+                <TableCell className="text-xs">
+                  {order.id_orden_trabajo}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    <div className="font-medium">
-                      {order.producto.nombre_producto}
-                    </div>
+                <TableCell>
+                  <div className="font-medium">
+                    {order.producto.nombre_producto}
+                  </div>
+                  <p className="mt-1 text-xs capitalize text-muted-foreground">
+                    {order.producto.categoria}
+                  </p>
+                </TableCell>
 
-                    <p className="mt-1 text-xs text-slate-500 capitalize">
-                      {order.producto.categoria}
-                    </p>
-                  </td>
+                <TableCell>
+                  <div className="font-medium">{origin}</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Tipo: {order.tipo_produccion}
+                  </p>
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    <div className="font-medium">{origin}</div>
+                <TableCell>
+                  {formatDecimal(order.cantidad)} {order.producto.unidad_medida}
+                </TableCell>
 
-                    <p className="mt-1 text-xs text-slate-500">
-                      Tipo: {order.tipo_produccion}
-                    </p>
-                  </td>
+                <TableCell>
+                  {order.ruta_fabricacion?.nombre_ruta ?? "-"}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {formatDecimal(order.cantidad)}{" "}
-                    {order.producto.unidad_medida}
-                  </td>
+                <TableCell>
+                  {order.version_receta ? (
+                    <>
+                      <div>
+                        {order.version_receta.receta_tecnica.nombre_receta}
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Versión: {order.version_receta.numero_version}
+                      </p>
+                    </>
+                  ) : (
+                    "-"
+                  )}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {order.ruta_fabricacion?.nombre_ruta ?? "-"}
-                  </td>
+                <TableCell>
+                  <div>Inicio: {formatDate(order.fecha_inicio)}</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Entrega: {formatDate(order.fecha_entrega_estimada)}
+                  </p>
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {order.version_receta ? (
-                      <>
-                        <div>
-                          {order.version_receta.receta_tecnica.nombre_receta}
-                        </div>
-                        <p className="mt-1 text-xs text-slate-500">
-                          Version: {order.version_receta.numero_version}
-                        </p>
-                      </>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
+                <TableCell>
+                  <Badge variant={getPriorityBadgeVariant(order.prioridad)}>
+                    {order.prioridad}
+                  </Badge>
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    <div>Inicio: {formatDate(order.fecha_inicio)}</div>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Entrega: {formatDate(order.fecha_entrega_estimada)}
-                    </p>
-                  </td>
+                <TableCell>
+                  <Badge variant={getOrderBadgeVariant(order.estado)}>
+                    {order.estado}
+                  </Badge>
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${getPriorityClass(
-                        order.prioridad,
-                      )}`}
-                    >
-                      {order.prioridad}
-                    </span>
-                  </td>
-
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                        order.estado,
-                      )}`}
-                    >
-                      {order.estado}
-                    </span>
-                  </td>
-
-                  <td className="px-4 py-3">
-                    <div className="flex flex-col gap-2">
+                <TableCell>
+                  <div className="flex flex-col gap-2">
+                    <Button variant="link" className="h-auto justify-start p-0" asChild>
                       <Link
                         href={withReturnTo(
                           `${navigationHrefs.workOrders}/${order.id_orden_trabajo}`,
                           returnTo,
                         )}
-                        className="text-sm font-medium text-slate-600 hover:text-slate-950"
                       >
                         Ver detalle
                       </Link>
+                    </Button>
 
+                    <Button variant="link" className="h-auto justify-start p-0" asChild>
                       <Link
                         href={withReturnTo(
                           `${navigationHrefs.workOrders}/${order.id_orden_trabajo}/progress`,
                           returnTo,
                         )}
-                        className="text-sm font-medium text-slate-600 hover:text-slate-950"
                       >
                         Ver avances
                       </Link>
+                    </Button>
 
-                      {canChangeStatus ? (
-                        <form action={annulWorkOrderAction}>
-                          <input
-                            type="hidden"
-                            name="id_orden_trabajo"
-                            value={order.id_orden_trabajo}
-                          />
-                          <button
-                            type="submit"
-                            className="text-left text-sm font-medium text-red-600 hover:text-red-700"
-                          >
-                            Anular
-                          </button>
-                        </form>
-                      ) : null}
+                    {canChangeStatus ? (
+                      <form action={annulWorkOrderAction}>
+                        <input
+                          type="hidden"
+                          name="id_orden_trabajo"
+                          value={order.id_orden_trabajo}
+                        />
+                        <Button
+                          type="submit"
+                          variant="link"
+                          className="h-auto justify-start p-0 text-destructive hover:text-destructive"
+                        >
+                          Anular
+                        </Button>
+                      </form>
+                    ) : null}
 
-                      {canChangeStatus && order._count.avance_orden > 0 ? (
-                        <form action={finishWorkOrderAction}>
-                          <input
-                            type="hidden"
-                            name="id_orden_trabajo"
-                            value={order.id_orden_trabajo}
-                          />
-                          <button
-                            type="submit"
-                            className="text-left text-sm font-medium text-slate-600 hover:text-slate-950"
-                          >
-                            Finalizar
-                          </button>
-                        </form>
-                      ) : null}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    {canChangeStatus && order._count.avance_orden > 0 ? (
+                      <form action={finishWorkOrderAction}>
+                        <input
+                          type="hidden"
+                          name="id_orden_trabajo"
+                          value={order.id_orden_trabajo}
+                        />
+                        <Button type="submit" variant="link" className="h-auto justify-start p-0">
+                          Finalizar
+                        </Button>
+                      </form>
+                    ) : null}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
-            {workOrders.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-8 text-center text-slate-500">
-                  Todavia no hay ordenes de trabajo registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div>
-        <Link
-          href="/dashboard/production"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver al modulo de produccion
-        </Link>
-      </div>
+          {workOrders.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={10} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay órdenes de trabajo registradas."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

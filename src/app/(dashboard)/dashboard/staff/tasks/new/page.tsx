@@ -1,15 +1,23 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createOperatorTaskAction } from "@/modules/staff/tasks/actions";
 
@@ -110,27 +118,18 @@ export default async function NewOperatorTaskPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Nueva tarea
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar tarea diaria
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Asocia un operario con una orden de trabajo, una etapa productiva
-            opcional, la fecha de actividad, descripción y horas dedicadas.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 8.4</Badge>
-          <Badge>ADMIN / Maestro de taller</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar tarea diaria"
+        description="Asocia un operario con una orden de trabajo, una etapa productiva opcional, la fecha de actividad, descripción y horas dedicadas."
+        backHref="/dashboard/staff/tasks"
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Tareas diarias", href: "/dashboard/staff/tasks" },
+          { label: "Nueva tarea" },
+        ])}
+        actions={<Badge>ADMIN / Maestro de taller</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -140,32 +139,24 @@ export default async function NewOperatorTaskPage() {
 
           <CardContent>
             {!hasRequiredData ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  Faltan datos para registrar tareas.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Debes tener al menos un operario activo y una orden de trabajo
-                  registrada o en proceso.
-                </p>
-
-                <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
-                  <Link
-                    href="/dashboard/staff/operators"
-                    className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver operarios
-                  </Link>
-
-                  <Link
-                    href="/dashboard/production/work-orders"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Ver órdenes
-                  </Link>
-                </div>
-              </div>
+              <EmptyState
+                label="Faltan datos para registrar tareas."
+                description="Debes tener al menos un operario activo y una orden de trabajo registrada o en proceso."
+                action={
+                  <div className="flex flex-col justify-center gap-2 sm:flex-row">
+                    <Button variant="outline" asChild>
+                      <Link href="/dashboard/staff/operators">
+                        Ver operarios
+                      </Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/dashboard/production/work-orders">
+                        Ver órdenes
+                      </Link>
+                    </Button>
+                  </div>
+                }
+              />
             ) : (
               <form action={createOperatorTaskAction} className="space-y-4">
                 <div className="space-y-2">
@@ -207,29 +198,19 @@ export default async function NewOperatorTaskPage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label htmlFor="fecha_tarea" className="text-sm font-medium">
-                      Fecha de tarea
-                    </label>
-
-                    <input
+                    <Label htmlFor="fecha_tarea">Fecha de tarea</Label>
+                    <Input
                       id="fecha_tarea"
                       name="fecha_tarea"
                       type="date"
                       required
                       defaultValue={today}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="horas_dedicadas"
-                      className="text-sm font-medium"
-                    >
-                      Horas dedicadas
-                    </label>
-
-                    <input
+                    <Label htmlFor="horas_dedicadas">Horas dedicadas</Label>
+                    <Input
                       id="horas_dedicadas"
                       name="horas_dedicadas"
                       type="number"
@@ -237,72 +218,50 @@ export default async function NewOperatorTaskPage() {
                       max="24"
                       step="0.01"
                       placeholder="Ejemplo: 4.50"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="estado" className="text-sm font-medium">
-                      Estado
-                    </label>
-
-                    <select
+                    <Label htmlFor="estado">Estado</Label>
+                    <NativeSelect
                       id="estado"
                       name="estado"
                       required
                       defaultValue="registrada"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <option value="registrada">Registrada</option>
                       <option value="en_proceso">En proceso</option>
                       <option value="terminada">Terminada</option>
-                    </select>
+                    </NativeSelect>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="descripcion" className="text-sm font-medium">
-                    Descripción de la tarea
-                  </label>
-
-                  <input
+                  <Label htmlFor="descripcion">Descripción de la tarea</Label>
+                  <Input
                     id="descripcion"
                     name="descripcion"
                     type="text"
                     required
                     placeholder="Ejemplo: Corte de piezas para lote de lampas"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="observaciones" className="text-sm font-medium">
-                    Observaciones
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Textarea
                     id="observaciones"
                     name="observaciones"
                     rows={4}
                     placeholder="Ejemplo: Se avanzó parcialmente por falta de material."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Registrar tarea
-                  </button>
-
-                  <Link
-                    href="/dashboard/staff/tasks"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver listado
-                  </Link>
+                  <Button type="submit">Registrar tarea</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/staff/tasks">Ver listado</Link>
+                  </Button>
                 </div>
               </form>
             )}

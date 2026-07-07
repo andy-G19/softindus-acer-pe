@@ -1,13 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 export function PrintButton() {
   return (
-    <button
-      type="button"
-      onClick={() => window.print()}
-      className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-    >
+    <Button type="button" onClick={() => window.print()}>
       Imprimir proforma
-    </button>
+    </Button>
   );
 }

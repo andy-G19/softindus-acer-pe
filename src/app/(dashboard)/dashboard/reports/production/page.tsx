@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -116,27 +130,6 @@ function getAverageProgress(
   }, 0);
 
   return total / progress.length;
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function ProductionReportPage({
@@ -277,19 +270,13 @@ export default async function ProductionReportPage({
         ])}
         actions={
           <>
-            <a
-              href={csvExportHref}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Exportar Excel
-            </a>
+            <Button asChild>
+              <a href={csvExportHref}>Exportar Excel</a>
+            </Button>
 
-            <a
-              href={pdfExportHref}
-              className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-            >
-              Exportar PDF
-            </a>
+            <Button variant="destructive" asChild>
+              <a href={pdfExportHref}>Exportar PDF</a>
+            </Button>
           </>
         }
       />
@@ -302,132 +289,78 @@ export default async function ProductionReportPage({
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input
                 id="dateFrom"
                 name="dateFrom"
                 type="date"
                 defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input
                 id="dateTo"
                 name="dateTo"
                 type="date"
                 defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="productId" className="text-sm font-medium">
-                Producto
-              </label>
-              <select
-                id="productId"
-                name="productId"
-                defaultValue={productId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="productId">Producto</Label>
+              <NativeSelect id="productId" name="productId" defaultValue={productId}>
                 <option value="">Todos los productos</option>
                 {products.map((product) => (
                   <option key={product.id_producto} value={product.id_producto}>
                     {product.nombre_producto}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="status" className="text-sm font-medium">
-                Estado
-              </label>
-              <select
-                id="status"
-                name="status"
-                defaultValue={status}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="status">Estado</Label>
+              <NativeSelect id="status" name="status" defaultValue={status}>
                 <option value="">Todos los estados</option>
                 {WORK_ORDER_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="orderId" className="text-sm font-medium">
-                Código de orden
-              </label>
-              <input
+              <Label htmlFor="orderId">Código de orden</Label>
+              <Input
                 id="orderId"
                 name="orderId"
                 type="text"
                 defaultValue={orderId}
                 placeholder="Ej: OTR00000001"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-5">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/production"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-5">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/production">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <SummaryCard
-          title="Órdenes encontradas"
-          value={totalOrders}
-          description="Cantidad de Órdenes según los filtros aplicados."
-        />
-
-        <SummaryCard
-          title="Órdenes activas"
-          value={activeOrders}
-          description="Pendientes, en proceso o pausadas."
-        />
-
-        <SummaryCard
-          title="Órdenes finalizadas"
-          value={finishedOrders}
-          description="Órdenes marcadas como finalizadas."
-        />
-
-        <SummaryCard
-          title="Órdenes retrasadas"
-          value={delayedOrders}
-          description="Órdenes activas con fecha estimada vencida."
-        />
-
-        <SummaryCard
-          title="Cantidad total"
-          value={formatQuantity(totalQuantity)}
-          description="Suma de cantidades planificadas a fabricar."
-        />
+        <KpiCard title="Órdenes encontradas" value={totalOrders.toString()} description="Cantidad de Órdenes según los filtros aplicados." tone="info" />
+        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="info" />
+        <KpiCard title="Órdenes finalizadas" value={finishedOrders.toString()} description="Órdenes marcadas como finalizadas." tone="success" />
+        <KpiCard title="Órdenes retrasadas" value={delayedOrders.toString()} description="Órdenes activas con fecha estimada vencida." tone={delayedOrders > 0 ? "warning" : "info"} />
+        <KpiCard title="Cantidad total" value={formatQuantity(totalQuantity)} description="Suma de cantidades planificadas a fabricar." tone="info" />
       </section>
 
       <Card>
@@ -437,102 +370,91 @@ export default async function ProductionReportPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {workOrders.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron Órdenes de trabajo con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron Órdenes de trabajo con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Orden</th>
-                    <th className="py-2 pr-3 font-medium">Producto</th>
-                    <th className="py-2 pr-3 font-medium">Cliente</th>
-                    <th className="py-2 pr-3 font-medium">Tipo</th>
-                    <th className="py-2 pr-3 font-medium">Cantidad</th>
-                    <th className="py-2 pr-3 font-medium">Inicio</th>
-                    <th className="py-2 pr-3 font-medium">Entrega estimada</th>
-                    <th className="py-2 pr-3 font-medium">Estado</th>
-                    <th className="py-2 pr-3 font-medium">Avance</th>
-                    <th className="py-2 pr-3 font-medium">Ruta</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Producto</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Inicio</TableHead>
+                  <TableHead>Entrega estimada</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Avance</TableHead>
+                  <TableHead>Ruta</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {workOrders.map((order) => {
-                    const averageOrderProgress = getAverageProgress(
-                      order.avance_orden,
-                    );
+              <TableBody>
+                {workOrders.map((order) => {
+                  const averageOrderProgress = getAverageProgress(
+                    order.avance_orden,
+                  );
 
-                    const isDelayed =
-                      ACTIVE_WORK_ORDER_STATES.includes(order.estado) &&
-                      order.fecha_entrega_estimada !== null &&
-                      order.fecha_entrega_estimada < startOfToday;
+                  const isDelayed =
+                    ACTIVE_WORK_ORDER_STATES.includes(order.estado) &&
+                    order.fecha_entrega_estimada !== null &&
+                    order.fecha_entrega_estimada < startOfToday;
 
-                    return (
-                      <tr key={order.id_orden_trabajo} className="border-b">
-                        <td className="py-2 pr-3 font-medium">
-                          <Link
-                            href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
-                            className="hover:underline"
-                          >
-                            {order.id_orden_trabajo}
-                          </Link>
-                        </td>
+                  return (
+                    <TableRow key={order.id_orden_trabajo}>
+                      <TableCell className="font-medium">
+                        <Link
+                          href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
+                          className="hover:underline"
+                        >
+                          {order.id_orden_trabajo}
+                        </Link>
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {order.producto.nombre_producto}
-                        </td>
+                      <TableCell>{order.producto.nombre_producto}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          {order.cliente?.nombre_razon_social ?? "-"}
-                        </td>
+                      <TableCell>
+                        {order.cliente?.nombre_razon_social ?? "-"}
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {order.tipo_produccion}
-                        </td>
+                      <TableCell>{order.tipo_produccion}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          {formatQuantity(order.cantidad)}
-                        </td>
+                      <TableCell>{formatQuantity(order.cantidad)}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          {formatDate(order.fecha_inicio)}
-                        </td>
+                      <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          <div className="space-y-1">
-                            <p>{formatDate(order.fecha_entrega_estimada)}</p>
-                            {isDelayed ? (
-                              <p className="text-xs font-medium text-red-600">
-                                Retrasada
-                              </p>
-                            ) : null}
-                          </div>
-                        </td>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <p>{formatDate(order.fecha_entrega_estimada)}</p>
+                          {isDelayed ? (
+                            <p className="text-xs font-medium text-destructive">
+                              Retrasada
+                            </p>
+                          ) : null}
+                        </div>
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {getStatusLabel(order.estado)}
-                        </td>
+                      <TableCell>{getStatusLabel(order.estado)}</TableCell>
 
-                        <td className="py-2 pr-3">
-                          {formatPercent(averageOrderProgress)}
-                        </td>
+                      <TableCell>
+                        {formatPercent(averageOrderProgress)}
+                      </TableCell>
 
-                        <td className="py-2 pr-3">
-                          {order.ruta_fabricacion?.nombre_ruta ?? "-"}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                      <TableCell>
+                        {order.ruta_fabricacion?.nombre_ruta ?? "-"}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 100 Órdenes para mantener una consulta
             rápida. En la siguiente subfase agregaremos exportación para generar
             archivos completos.

@@ -1,13 +1,28 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
 
 type MonthlySummaryPageProps = {
@@ -115,14 +130,14 @@ function getMovementLabel(type: string, concept: string) {
 
 function getMovementBadgeVariant(type: string, concept: string) {
   if (type === "egreso" || concept.startsWith("Ajuste negativo")) {
-    return "destructive";
+    return "destructive" as const;
   }
 
   if (type === "ajuste") {
-    return "secondary";
+    return "secondary" as const;
   }
 
-  return "default";
+  return "success" as const;
 }
 
 export default async function MonthlyFinancialSummaryPage({
@@ -370,33 +385,17 @@ export default async function MonthlyFinancialSummaryPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas · Resumen mensual
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Resumen mensual financiero
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta ventas cobradas, saldos pendientes, costos de producción,
-            movimientos de caja chica y utilidad estimada del mes seleccionado.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/petty-cash"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Badge variant="secondary">Fase 7.7</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Resumen mensual financiero"
+        description="Consulta ventas cobradas, saldos pendientes, costos de producción, movimientos de caja chica y utilidad estimada del mes seleccionado."
+        backHref={navigationHrefs.pettyCash}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Resumen mensual" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <Card>
         <CardHeader>
@@ -406,50 +405,44 @@ export default async function MonthlyFinancialSummaryPage({
         <CardContent>
           <form method="GET" className="flex flex-col gap-3 md:flex-row">
             <div className="space-y-2">
-              <label htmlFor="month" className="text-sm font-medium">
-                Mes
-              </label>
-
-              <input
+              <Label htmlFor="month">Mes</Label>
+              <Input
                 id="month"
                 name="month"
                 type="month"
                 defaultValue={selectedMonth}
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 md:w-64"
+                className="md:w-64"
               />
             </div>
 
             <div className="flex items-end gap-2">
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Consultar
-              </button>
+              <Button type="submit">Consultar</Button>
 
-              <Link
-                href={`/dashboard/petty-cash/monthly-summary?month=${getMonthValue(
-                  previousMonthDate,
-                )}`}
-                className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-              >
-                Mes anterior
-              </Link>
+              <Button variant="outline" asChild>
+                <Link
+                  href={`/dashboard/petty-cash/monthly-summary?month=${getMonthValue(
+                    previousMonthDate,
+                  )}`}
+                >
+                  Mes anterior
+                </Link>
+              </Button>
 
-              <Link
-                href={`/dashboard/petty-cash/monthly-summary?month=${getMonthValue(
-                  nextMonthDate,
-                )}`}
-                className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-              >
-                Mes siguiente
-              </Link>
+              <Button variant="outline" asChild>
+                <Link
+                  href={`/dashboard/petty-cash/monthly-summary?month=${getMonthValue(
+                    nextMonthDate,
+                  )}`}
+                >
+                  Mes siguiente
+                </Link>
+              </Button>
             </div>
           </form>
 
           <p className="mt-4 text-sm text-muted-foreground">
             Periodo seleccionado:{" "}
-            <span className="font-medium text-slate-700">
+            <span className="font-medium text-foreground">
               {formatMonthLabel(startOfMonth)}
             </span>
           </p>
@@ -457,126 +450,18 @@ export default async function MonthlyFinancialSummaryPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ventas cobradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalCollectedSales)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {collectedPayments._count.id_pago_cliente} pagos de cliente en el
-              mes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Saldos pendientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalPendingBalances)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {pendingBalances._count.id_proforma} proformas con saldo pendiente.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Costos de producción</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalProductionCost)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {productionCosts._count.id_costeo} costeos registrados en el mes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Utilidad estimada</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(estimatedProfit)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Margen promedio: {formatPercent(profitability._avg.margen_real)}
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Ventas cobradas" value={formatMoney(totalCollectedSales)} description={`${collectedPayments._count.id_pago_cliente} pagos de cliente en el mes.`} tone="success" />
+        <KpiCard title="Saldos pendientes" value={formatMoney(totalPendingBalances)} description={`${pendingBalances._count.id_proforma} proformas con saldo pendiente.`} tone="warning" />
+        <KpiCard title="Costos de producción" value={formatMoney(totalProductionCost)} description={`${productionCosts._count.id_costeo} costeos registrados en el mes.`} tone="warning" />
+        <KpiCard title="Utilidad estimada" value={formatMoney(estimatedProfit)} description={`Margen promedio: ${formatPercent(profitability._avg.margen_real)}`} tone="info" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ingresos caja chica</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(cashIncome)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ingresos menores del mes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Egresos caja chica</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(cashExpenses)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gastos menores del mes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ajustes netos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(positiveAdjustments - negativeAdjustments)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ajustes positivos menos negativos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Resultado caja chica</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(cashNetResult)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ingresos + ajustes - egresos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Saldo abierto actual</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(openCashBalance)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Suma de cajas abiertas.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Ingresos caja chica" value={formatMoney(cashIncome)} description="Ingresos menores del mes." tone="success" />
+        <KpiCard title="Egresos caja chica" value={formatMoney(cashExpenses)} description="Gastos menores del mes." tone="warning" />
+        <KpiCard title="Ajustes netos" value={formatMoney(positiveAdjustments - negativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" />
+        <KpiCard title="Resultado caja chica" value={formatMoney(cashNetResult)} description="Ingresos + ajustes - egresos." tone="info" />
+        <KpiCard title="Saldo abierto actual" value={formatMoney(openCashBalance)} description="Suma de cajas abiertas." tone="info" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
@@ -611,7 +496,7 @@ export default async function MonthlyFinancialSummaryPage({
               </span>
             </div>
 
-            <div className="border-t pt-3">
+            <div className="border-t border-border/70 pt-3">
               <div className="flex justify-between gap-3">
                 <span className="font-medium">Resultado referencial</span>
                 <span className="font-bold">
@@ -621,7 +506,8 @@ export default async function MonthlyFinancialSummaryPage({
 
               <p className="mt-2 text-xs text-muted-foreground">
                 Este resultado no reemplaza el módulo contable. Resume ventas
-                cobradas, caja chica y costos registrados dentro del sistema.
+                cobradas, caja chica y costos registrados dentro del
+                sistema.
               </p>
             </div>
           </CardContent>
@@ -636,29 +522,23 @@ export default async function MonthlyFinancialSummaryPage({
 
           <CardContent className="space-y-3">
             <div className="flex justify-between gap-3 text-sm">
-              <span className="text-muted-foreground">
-                Ingreso estimado
-              </span>
+              <span className="text-muted-foreground">Ingreso estimado</span>
               <span className="font-medium">{formatMoney(estimatedIncome)}</span>
             </div>
 
             <div className="flex justify-between gap-3 text-sm">
-              <span className="text-muted-foreground">
-                Costo estimado
-              </span>
+              <span className="text-muted-foreground">Costo estimado</span>
               <span className="font-medium">
                 {formatMoney(estimatedCostFromProfitability)}
               </span>
             </div>
 
             <div className="flex justify-between gap-3 text-sm">
-              <span className="text-muted-foreground">
-                Utilidad estimada
-              </span>
+              <span className="text-muted-foreground">Utilidad estimada</span>
               <span className="font-medium">{formatMoney(estimatedProfit)}</span>
             </div>
 
-            <div className="flex justify-between gap-3 border-t pt-3 text-sm">
+            <div className="flex justify-between gap-3 border-t border-border/70 pt-3 text-sm">
               <span className="font-medium">Cálculos de rentabilidad</span>
               <span className="font-bold">
                 {profitability._count.id_rentabilidad}
@@ -669,25 +549,23 @@ export default async function MonthlyFinancialSummaryPage({
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              Gastos por categoría
-            </CardTitle>
+            <CardTitle className="text-base">Gastos por categoría</CardTitle>
           </CardHeader>
 
           <CardContent>
             {expenseCategoryRows.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay egresos categorizados en este mes.
-              </p>
+              <EmptyState label="No hay egresos categorizados en este mes." />
             ) : (
               <div className="space-y-3">
                 {expenseCategoryRows.map((row) => (
                   <div
                     key={row.category}
-                    className="flex items-center justify-between gap-3 rounded-lg border p-3"
+                    className="flex items-center justify-between gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
-                    <span className="text-sm font-medium">{row.category}</span>
-                    <span className="text-sm font-bold">
+                    <span className="text-sm font-medium text-foreground">
+                      {row.category}
+                    </span>
+                    <span className="text-sm font-bold text-foreground">
                       {formatMoney(row.amount)}
                     </span>
                   </div>
@@ -706,67 +584,61 @@ export default async function MonthlyFinancialSummaryPage({
             </CardTitle>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="px-0">
             {cashMovements.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay movimientos de caja chica en el mes seleccionado.
-              </p>
+              <EmptyState
+                className="mx-6 border-0"
+                label="No hay movimientos de caja chica en el mes seleccionado."
+              />
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b text-left">
-                      <th className="py-2 pr-3">Fecha</th>
-                      <th className="py-2 pr-3">Tipo</th>
-                      <th className="py-2 pr-3">Concepto</th>
-                      <th className="py-2 pr-3">Caja</th>
-                      <th className="py-2 text-right">Monto</th>
-                    </tr>
-                  </thead>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Concepto</TableHead>
+                    <TableHead>Caja</TableHead>
+                    <TableHead className="text-right">Monto</TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                  <tbody>
-                    {cashMovements.slice(0, 8).map((movement) => (
-                      <tr key={movement.id_movimiento_caja} className="border-b">
-                        <td className="py-2 pr-3">
-                          {formatDate(movement.fecha_movimiento)}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          <Badge
-                            variant={getMovementBadgeVariant(
-                              movement.tipo_movimiento,
-                              movement.concepto,
-                            )}
-                          >
-                            {getMovementLabel(
-                              movement.tipo_movimiento,
-                              movement.concepto,
-                            )}
-                          </Badge>
-                        </td>
-
-                        <td className="py-2 pr-3">{movement.concepto}</td>
-
-                        <td className="py-2 pr-3">
-                          {movement.caja_chica.nombre_caja}
-                        </td>
-
-                        <td className="py-2 text-right font-medium">
-                          {formatMoney(movement.monto)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                <TableBody>
+                  {cashMovements.slice(0, 8).map((movement) => (
+                    <TableRow key={movement.id_movimiento_caja}>
+                      <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={getMovementBadgeVariant(
+                            movement.tipo_movimiento,
+                            movement.concepto,
+                          )}
+                        >
+                          {getMovementLabel(
+                            movement.tipo_movimiento,
+                            movement.concepto,
+                          )}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{movement.concepto}</TableCell>
+                      <TableCell>{movement.caja_chica.nombre_caja}</TableCell>
+                      <TableCell className="text-right font-medium">
+                        {formatMoney(movement.monto)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
 
-            <Link
-              href={`/dashboard/petty-cash/movements?desde=${selectedMonth}-01&hasta=${selectedMonth}-31`}
-              className="mt-4 inline-flex rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-            >
-              Ver movimientos filtrados
-            </Link>
+            <div className="px-6 pt-4">
+              <Button variant="outline" asChild>
+                <Link
+                  href={`/dashboard/petty-cash/movements?desde=${selectedMonth}-01&hasta=${selectedMonth}-31`}
+                >
+                  Ver movimientos filtrados
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -779,35 +651,30 @@ export default async function MonthlyFinancialSummaryPage({
 
           <CardContent>
             {latestPayments.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay pagos de clientes registrados en este mes.
-              </p>
+              <EmptyState label="No hay pagos de clientes registrados en este mes." />
             ) : (
               <div className="space-y-3">
                 {latestPayments.map((payment) => (
                   <div
                     key={payment.id_pago_cliente}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-sm font-medium">
-                          {
-                            payment.proforma.pedido.cliente
-                              .nombre_razon_social
-                          }
+                        <p className="text-sm font-medium text-foreground">
+                          {payment.proforma.pedido.cliente.nombre_razon_social}
                         </p>
-
                         <p className="mt-1 text-xs text-muted-foreground">
                           {payment.tipo_pago} · {payment.metodo_pago}
                         </p>
-
                         <p className="mt-1 text-xs text-muted-foreground">
                           {formatDate(payment.fecha_pago)}
                         </p>
                       </div>
 
-                      <Badge>{formatMoney(payment.monto_pagado)}</Badge>
+                      <Badge variant="success">
+                        {formatMoney(payment.monto_pagado)}
+                      </Badge>
                     </div>
                   </div>
                 ))}
@@ -824,81 +691,74 @@ export default async function MonthlyFinancialSummaryPage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
-          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border p-3">
+        <CardContent className="px-0">
+          <section className="mx-6 mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Materiales</p>
-              <p className="text-lg font-bold">
+              <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_materiales)}
               </p>
             </div>
 
-            <div className="rounded-lg border p-3">
+            <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Consumibles</p>
-              <p className="text-lg font-bold">
+              <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_consumibles)}
               </p>
             </div>
 
-            <div className="rounded-lg border p-3">
+            <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Mano de obra</p>
-              <p className="text-lg font-bold">
+              <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_mano_obra)}
               </p>
             </div>
 
-            <div className="rounded-lg border p-3">
+            <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">
                 Costos indirectos
               </p>
-              <p className="text-lg font-bold">
+              <p className="text-lg font-bold text-foreground">
                 {formatMoney(productionCosts._sum.costo_indirecto_total)}
               </p>
             </div>
           </section>
 
           {latestCostings.length === 0 ? (
-            <p className="mt-4 text-sm text-muted-foreground">
-              No hay costeos registrados en el mes seleccionado.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No hay costeos registrados en el mes seleccionado."
+            />
           ) : (
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Referencia</th>
-                    <th className="py-2 pr-3">Producto</th>
-                    <th className="py-2 text-right">Costo total</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Referencia</TableHead>
+                  <TableHead>Producto</TableHead>
+                  <TableHead className="text-right">Costo total</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {latestCostings.map((costing) => (
-                    <tr key={costing.id_costeo} className="border-b">
-                      <td className="py-2 pr-3">
-                        {formatDate(costing.fecha_costeo)}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {costing.pedido?.cliente.nombre_razon_social ??
-                          costing.id_orden_trabajo ??
-                          "-"}
-                      </td>
-
-                      <td className="py-2 pr-3">
-                        {costing.orden_trabajo?.producto.nombre_producto ??
-                          "-"}
-                      </td>
-
-                      <td className="py-2 text-right font-medium">
-                        {formatMoney(costing.costo_total)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+              <TableBody>
+                {latestCostings.map((costing) => (
+                  <TableRow key={costing.id_costeo}>
+                    <TableCell>{formatDate(costing.fecha_costeo)}</TableCell>
+                    <TableCell>
+                      {costing.pedido?.cliente.nombre_razon_social ??
+                        costing.id_orden_trabajo ??
+                        "-"}
+                    </TableCell>
+                    <TableCell>
+                      {costing.orden_trabajo?.producto.nombre_producto ?? "-"}
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
+                      {formatMoney(costing.costo_total)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

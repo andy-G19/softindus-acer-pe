@@ -1,15 +1,29 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { generatePayrollAction } from "@/modules/staff/payrolls/actions";
 
@@ -75,27 +89,18 @@ export default async function NewPayrollPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Nueva planilla
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Generar planilla de pago
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Selecciona un operario y un periodo. El sistema calculará el monto
-            según asistencias válidas, tarifa configurada y descuentos.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 8.5</Badge>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Generar planilla de pago"
+        description="Selecciona un operario y un periodo. El sistema calculará el monto según asistencias válidas, tarifa configurada y descuentos."
+        backHref={navigationHrefs.payrolls}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Planillas", href: navigationHrefs.payrolls },
+          { label: "Nueva planilla" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -107,22 +112,15 @@ export default async function NewPayrollPage() {
 
           <CardContent>
             {operators.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay operarios activos disponibles.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra o activa operarios para generar planillas.
-                </p>
-
-                <Link
-                  href="/dashboard/staff/operators"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Ir a operarios
-                </Link>
-              </div>
+              <EmptyState
+                label="No hay operarios activos disponibles."
+                description="Primero registra o activa operarios para generar planillas."
+                action={
+                  <Button asChild>
+                    <Link href="/dashboard/staff/operators">Ir a operarios</Link>
+                  </Button>
+                }
+              />
             ) : (
               <form action={generatePayrollAction} className="space-y-4">
                 <div className="space-y-2">
@@ -143,47 +141,30 @@ export default async function NewPayrollPage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label
-                      htmlFor="periodo_inicio"
-                      className="text-sm font-medium"
-                    >
-                      Inicio del periodo
-                    </label>
-
-                    <input
+                    <Label htmlFor="periodo_inicio">Inicio del periodo</Label>
+                    <Input
                       id="periodo_inicio"
                       name="periodo_inicio"
                       type="date"
                       required
                       defaultValue={sevenDaysAgo}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="periodo_fin"
-                      className="text-sm font-medium"
-                    >
-                      Fin del periodo
-                    </label>
-
-                    <input
+                    <Label htmlFor="periodo_fin">Fin del periodo</Label>
+                    <Input
                       id="periodo_fin"
                       name="periodo_fin"
                       type="date"
                       required
                       defaultValue={currentDate}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="descuentos" className="text-sm font-medium">
-                      Descuentos
-                    </label>
-
-                    <input
+                    <Label htmlFor="descuentos">Descuentos</Label>
+                    <Input
                       id="descuentos"
                       name="descuentos"
                       type="number"
@@ -191,25 +172,15 @@ export default async function NewPayrollPage() {
                       step="0.01"
                       defaultValue="0"
                       placeholder="Ejemplo: 10.00"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Generar planilla
-                  </button>
-
-                  <Link
-                    href="/dashboard/staff/payrolls"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver listado
-                  </Link>
+                  <Button type="submit">Generar planilla</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/staff/payrolls">Ver listado</Link>
+                  </Button>
                 </div>
               </form>
             )}
@@ -255,46 +226,44 @@ export default async function NewPayrollPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="py-2 pr-3">Operario</th>
-                  <th className="py-2 pr-3">Modalidad</th>
-                  <th className="py-2 pr-3 text-right">Tarifa</th>
-                  <th className="py-2 pr-3 text-right">Asistencias</th>
-                  <th className="py-2 text-right">Planillas</th>
-                </tr>
-              </thead>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Operario</TableHead>
+                <TableHead>Modalidad</TableHead>
+                <TableHead className="text-right">Tarifa</TableHead>
+                <TableHead className="text-right">Asistencias</TableHead>
+                <TableHead className="text-right">Planillas</TableHead>
+              </TableRow>
+            </TableHeader>
 
-              <tbody>
-                {operators.map((operator) => (
-                  <tr key={operator.id_operario} className="border-b">
-                    <td className="py-2 pr-3 font-medium">
-                      {operator.apellidos}, {operator.nombres}
-                    </td>
+            <TableBody>
+              {operators.map((operator) => (
+                <TableRow key={operator.id_operario}>
+                  <TableCell className="font-medium">
+                    {operator.apellidos}, {operator.nombres}
+                  </TableCell>
 
-                    <td className="py-2 pr-3">
-                      {getPaymentModeLabel(operator.modalidad_pago)}
-                    </td>
+                  <TableCell>
+                    {getPaymentModeLabel(operator.modalidad_pago)}
+                  </TableCell>
 
-                    <td className="py-2 pr-3 text-right">
-                      {formatMoney(operator.tarifa)}
-                    </td>
+                  <TableCell className="text-right">
+                    {formatMoney(operator.tarifa)}
+                  </TableCell>
 
-                    <td className="py-2 pr-3 text-right">
-                      {operator._count.asistencia}
-                    </td>
+                  <TableCell className="text-right">
+                    {operator._count.asistencia}
+                  </TableCell>
 
-                    <td className="py-2 text-right">
-                      {operator._count.planilla_pago}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  <TableCell className="text-right">
+                    {operator._count.planilla_pago}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </main>

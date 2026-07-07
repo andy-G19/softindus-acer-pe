@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
 
 type PaymentFormProps = {
@@ -25,7 +31,10 @@ export function PaymentForm({
   const nextBalance = Math.max(balance - amountNumber, 0);
 
   return (
-    <form action={createPaymentAction} className="space-y-4 rounded-lg border p-4">
+    <form
+      action={createPaymentAction}
+      className="space-y-4 rounded-lg border border-border/80 bg-card p-4"
+    >
       <input type="hidden" name="id_proforma" value={quoteId} />
 
       <div>
@@ -37,15 +46,17 @@ export function PaymentForm({
       </div>
 
       {isPaid && (
-        <div className="rounded-lg border border-green-300 bg-green-50 p-3 text-sm text-green-900">
-          Esta proforma ya está pagada. No requiere nuevos pagos.
-        </div>
+        <Alert variant="success">
+          <AlertDescription>
+            Esta proforma ya está pagada. No requiere nuevos pagos.
+          </AlertDescription>
+        </Alert>
       )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Monto pagado</label>
-          <input
+          <Label>Monto pagado</Label>
+          <Input
             name="monto_pagado"
             type="number"
             min="0.01"
@@ -53,53 +64,43 @@ export function PaymentForm({
             step="0.01"
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
-            className="w-full rounded-md border px-3 py-2"
             placeholder="Ejemplo: 150.00"
             required
             disabled={isPaid}
           />
-          <button
+          <Button
             type="button"
+            variant="link"
+            className="h-auto p-0 text-xs"
             onClick={() => setAmount(balance.toFixed(2))}
-            className="text-xs font-medium text-primary hover:underline"
             disabled={isPaid}
           >
             Usar saldo total: {formatMoney(balance)}
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Método de pago</label>
-          <select
-            name="metodo_pago"
-            className="w-full rounded-md border px-3 py-2"
-            required
-            disabled={isPaid}
-          >
+          <Label>Método de pago</Label>
+          <NativeSelect name="metodo_pago" required disabled={isPaid}>
             <option value="efectivo">Efectivo</option>
             <option value="transferencia">Transferencia</option>
             <option value="yape">Yape</option>
             <option value="plin">Plin</option>
             <option value="otro">Otro</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Tipo de pago</label>
-          <select
-            name="tipo_pago"
-            className="w-full rounded-md border px-3 py-2"
-            required
-            disabled={isPaid}
-          >
+          <Label>Tipo de pago</Label>
+          <NativeSelect name="tipo_pago" required disabled={isPaid}>
             <option value="amortizacion">Amortización</option>
             <option value="adelanto">Adelanto</option>
             <option value="cancelacion">Cancelación</option>
-          </select>
+          </NativeSelect>
         </div>
       </div>
 
-      <div className="rounded-lg border bg-muted/40 p-3 text-sm">
+      <div className="rounded-lg border border-border/80 bg-muted/40 p-3 text-sm">
         <div className="flex justify-between">
           <span>Saldo actual</span>
           <span className="font-medium">{formatMoney(balance)}</span>
@@ -111,22 +112,18 @@ export function PaymentForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Observaciones</label>
-        <textarea
+        <Label>Observaciones</Label>
+        <Textarea
           name="observaciones"
-          className="min-h-20 w-full rounded-md border px-3 py-2"
+          className="min-h-20"
           placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente."
           disabled={isPaid}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={isPaid}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button type="submit" disabled={isPaid}>
         Registrar pago
-      </button>
+      </Button>
     </form>
   );
 }

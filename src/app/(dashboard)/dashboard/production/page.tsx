@@ -1,9 +1,15 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import Link from "next/link";
+import { CheckCircle2, Circle } from "lucide-react";
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -180,6 +186,43 @@ export default async function ProductionDashboardPage() {
     validVersions > 0 &&
     recipeDetails > 0;
 
+  const checklist = [
+    { label: "Productos activos", ok: activeProducts > 0, hint: "Necesarios para crear rutas, recetas y órdenes." },
+    { label: "Rutas de fabricación", ok: activeRoutes > 0, hint: "Definen el flujo productivo de cada producto." },
+    { label: "Etapas activas", ok: activeStages > 0, hint: "Permiten generar avances de producción." },
+    { label: "Recetas técnicas activas", ok: activeRecipes > 0, hint: "Permiten asociar materiales al producto." },
+    { label: "Versiones vigentes", ok: validVersions > 0, hint: "Cada receta necesita una versión vigente para operar." },
+    { label: "Materiales requeridos", ok: recipeDetails > 0, hint: "Necesarios para calcular requerimientos de producción." },
+  ];
+
+  const modules = [
+    {
+      title: "Rutas de fabricación",
+      href: "/dashboard/production/routes",
+      description: "Define rutas por producto y estructura el proceso productivo.",
+    },
+    {
+      title: "Recetas técnicas",
+      href: "/dashboard/production/recipes",
+      description: "Administra recetas, versiones y materiales requeridos por producto.",
+    },
+    {
+      title: "Órdenes de trabajo",
+      href: "/dashboard/production/work-orders",
+      description: "Crea órdenes, revisa materiales y controla avances por etapa.",
+    },
+    {
+      title: "Campañas",
+      href: "/dashboard/production/campaigns",
+      description: "Planifica lotes de producción y vincúlalos con órdenes de trabajo.",
+    },
+    {
+      title: "Cuellos de botella",
+      href: "/dashboard/production/bottlenecks",
+      description: "Detecta etapas en proceso atrasadas, en riesgo o saturadas.",
+    },
+  ];
+
   return (
     <main className="space-y-6">
       <PageHeader
@@ -187,237 +230,93 @@ export default async function ProductionDashboardPage() {
         description="Gestiona rutas de fabricación, etapas, recetas técnicas, versiones, materiales requeridos, órdenes de trabajo y avances de producción."
         breadcrumbs={dashboardBreadcrumbs([{ label: "Producción" }])}
         actions={
-          <Link
-            href="/dashboard/production/work-orders/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva orden
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/production/work-orders/new">
+              Nueva orden
+            </Link>
+          </Button>
         }
       />
 
-      <section
-        className={`rounded-xl border p-5 text-sm ${
-          isModuleReady
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : "border-amber-200 bg-amber-50 text-amber-800"
-        }`}
-      >
-        <p className="font-semibold">
-          {isModuleReady ? "✅ Producción lista" : "⚠️ Producción incompleta"}
-        </p>
+      <Alert variant={isModuleReady ? "success" : "warning"}>
+        <AlertDescription>
+          <span className="font-medium text-foreground">
+            {isModuleReady ? "Producción lista" : "Producción incompleta"}
+          </span>
+          <span className="block mt-1">{moduleHealthMessage}</span>
+        </AlertDescription>
+      </Alert>
 
-        <p className="mt-1">{moduleHealthMessage}</p>
+      <section className="grid gap-4 md:grid-cols-4">
+        <KpiCard title="Órdenes registradas" value={totalOrders.toString()} description="Total histórico." tone="info" />
+        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
+        <KpiCard title="En proceso" value={inProcessOrders.toString()} description="Con avance operativo actual." tone="info" />
+        <KpiCard title="Finalizadas" value={finishedOrders.toString()} description="Órdenes completadas." tone="success" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Órdenes registradas</p>
-          <p className="mt-2 text-3xl font-bold">{totalOrders}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Órdenes activas</p>
-          <p className="mt-2 text-3xl font-bold">{activeOrders}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">En proceso</p>
-          <p className="mt-2 text-3xl font-bold">{inProcessOrders}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Finalizadas</p>
-          <p className="mt-2 text-3xl font-bold">{finishedOrders}</p>
-        </div>
+        <KpiCard title="Productos activos" value={activeProducts.toString()} description="Disponibles para producción." tone="info" />
+        <KpiCard title="Rutas activas" value={activeRoutes.toString()} description="Rutas de fabricación habilitadas." tone="info" />
+        <KpiCard title="Etapas activas" value={activeStages.toString()} description="Etapas dentro de rutas activas." tone="info" />
+        <KpiCard title="Materiales en recetas" value={recipeDetails.toString()} description="Registrados en versión vigente." tone="info" />
       </section>
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Productos activos</p>
-          <p className="mt-2 text-3xl font-bold">{activeProducts}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Rutas activas</p>
-          <p className="mt-2 text-3xl font-bold">{activeRoutes}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Etapas activas</p>
-          <p className="mt-2 text-3xl font-bold">{activeStages}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales en recetas</p>
-          <p className="mt-2 text-3xl font-bold">{recipeDetails}</p>
-        </div>
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {modules.map((module) => (
+          <ModuleAccessCard
+            key={module.href}
+            title={module.title}
+            description={module.description}
+            href={module.href}
+          />
+        ))}
       </section>
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <Link
-          href="/dashboard/production/routes"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Rutas de fabricación</h2>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Define rutas por producto y estructura el proceso productivo.
-          </p>
-
-          <p className="mt-4 text-sm font-medium text-slate-900">
-            Ver rutas →
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/production/recipes"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Recetas técnicas</h2>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Administra recetas, versiones y materiales requeridos por producto.
-          </p>
-
-          <p className="mt-4 text-sm font-medium text-slate-900">
-            Ver recetas →
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/production/work-orders"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Órdenes de trabajo</h2>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Crea órdenes, revisa materiales y controla avances por etapa.
-          </p>
-
-          <p className="mt-4 text-sm font-medium text-slate-900">
-            Ver órdenes →
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/production/campaigns"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Campanias</h2>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Planifica lotes de produccion y vinculalos con ordenes de trabajo.
-          </p>
-
-          <p className="mt-4 text-sm font-medium text-slate-900">
-            Ver campanias -&gt;
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/production/bottlenecks"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Cuellos de botella</h2>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Detecta etapas en proceso atrasadas, en riesgo o saturadas.
-          </p>
-
-          <p className="mt-4 text-sm font-medium text-slate-900">
-            Ver indicador -&gt;
-          </p>
-        </Link>
-      </section>
-
-      <section className="rounded-xl border bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-semibold">Checklist operativo</h2>
+      <section className="rounded-xl border border-border/80 bg-card p-6">
+        <h2 className="font-heading text-xl font-semibold text-foreground">
+          Checklist operativo
+        </h2>
 
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {activeProducts > 0 ? "✅" : "⬜"} Productos activos
-            </p>
-            <p className="mt-1 text-slate-600">
-              Necesarios para crear rutas, recetas y órdenes.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {activeRoutes > 0 ? "✅" : "⬜"} Rutas de fabricación
-            </p>
-            <p className="mt-1 text-slate-600">
-              Definen el flujo productivo de cada producto.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {activeStages > 0 ? "✅" : "⬜"} Etapas activas
-            </p>
-            <p className="mt-1 text-slate-600">
-              Permiten generar avances de producción.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {activeRecipes > 0 ? "✅" : "⬜"} Recetas técnicas activas
-            </p>
-            <p className="mt-1 text-slate-600">
-              Permiten asociar materiales al producto.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {validVersions > 0 ? "✅" : "⬜"} Versiones vigentes
-            </p>
-            <p className="mt-1 text-slate-600">
-              Cada receta necesita una versión vigente para operar.
-            </p>
-          </div>
-
-          <div className="rounded-lg border bg-slate-50 p-4 text-sm">
-            <p className="font-medium">
-              {recipeDetails > 0 ? "✅" : "⬜"} Materiales requeridos
-            </p>
-            <p className="mt-1 text-slate-600">
-              Necesarios para calcular requerimientos de producción.
-            </p>
-          </div>
+          {checklist.map((item) => (
+            <div
+              key={item.label}
+              className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm"
+            >
+              {item.ok ? (
+                <CheckCircle2
+                  className="mt-0.5 size-4 shrink-0 text-chart-3"
+                  aria-hidden="true"
+                />
+              ) : (
+                <Circle
+                  className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
+              )}
+              <div>
+                <p className="font-medium text-foreground">{item.label}</p>
+                <p className="mt-1 text-muted-foreground">{item.hint}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-        <p className="font-medium text-slate-900">Estados actuales</p>
+      <section className="rounded-xl border border-border/80 bg-card p-5">
+        <p className="font-medium text-foreground">Estados actuales</p>
 
         <div className="mt-3 flex flex-wrap gap-2">
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-            Pendientes: {pendingOrders}
-          </span>
-
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-blue-700">
-            En proceso: {inProcessOrders}
-          </span>
-
-          <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-700">
-            Pausadas: {pausedOrders}
-          </span>
-
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
-            Finalizadas: {finishedOrders}
-          </span>
-
-          <span className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-700">
-            Campanias activas/planificadas: {activeCampaigns}
-          </span>
-
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-            Campanias registradas: {totalCampaigns}
-          </span>
+          <Badge variant="secondary">Pendientes: {pendingOrders}</Badge>
+          <Badge variant="info">En proceso: {inProcessOrders}</Badge>
+          <Badge variant="warning">Pausadas: {pausedOrders}</Badge>
+          <Badge variant="success">Finalizadas: {finishedOrders}</Badge>
+          <Badge variant="secondary">
+            Campañas activas/planificadas: {activeCampaigns}
+          </Badge>
+          <Badge variant="secondary">
+            Campañas registradas: {totalCampaigns}
+          </Badge>
         </div>
       </section>
     </main>

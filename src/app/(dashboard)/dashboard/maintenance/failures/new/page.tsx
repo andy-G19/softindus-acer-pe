@@ -2,14 +2,22 @@ import Link from "next/link";
 
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createFailureAction } from "@/modules/maintenance/failures/actions";
 
@@ -54,28 +62,18 @@ export default async function NewFailurePage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Nueva falla
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar falla de maquinaria
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Documenta una falla tecnica de una maquina o equipo critico,
-            registrando fecha, descripcion, responsable, tiempo perdido e
-            impacto en produccion.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 9.3</Badge>
-          <Badge>ADMIN / Maestro de taller</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar falla de maquinaria"
+        description="Documenta una falla tecnica de una maquina o equipo critico, registrando fecha, descripcion, responsable, tiempo perdido e impacto en produccion."
+        backHref={navigationHrefs.failures}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Fallas", href: navigationHrefs.failures },
+          { label: "Nueva falla" },
+        ])}
+        actions={<Badge>ADMIN / Maestro de taller</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -85,22 +83,17 @@ export default async function NewFailurePage() {
 
           <CardContent>
             {machines.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay maquinas registradas.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra una maquina para poder documentar sus fallas.
-                </p>
-
-                <Link
-                  href="/dashboard/maintenance/machines/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Registrar maquina
-                </Link>
-              </div>
+              <EmptyState
+                label="No hay maquinas registradas."
+                description="Primero registra una maquina para poder documentar sus fallas."
+                action={
+                  <Button asChild>
+                    <Link href="/dashboard/maintenance/machines/new">
+                      Registrar maquina
+                    </Link>
+                  </Button>
+                }
+              />
             ) : (
               <form action={createFailureAction} className="space-y-4">
                 <div className="space-y-2">
@@ -116,134 +109,93 @@ export default async function NewFailurePage() {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <label htmlFor="fecha_falla" className="text-sm font-medium">
-                      Fecha y hora de falla
-                    </label>
-
-                    <input
+                    <Label htmlFor="fecha_falla">Fecha y hora de falla</Label>
+                    <Input
                       id="fecha_falla"
                       name="fecha_falla"
                       type="datetime-local"
                       required
                       defaultValue={currentDateTime}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="estado_atencion"
-                      className="text-sm font-medium"
-                    >
-                      Estado de atencion
-                    </label>
-
-                    <select
+                    <Label htmlFor="estado_atencion">Estado de atencion</Label>
+                    <NativeSelect
                       id="estado_atencion"
                       name="estado_atencion"
                       required
                       defaultValue="pendiente"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <option value="pendiente">Pendiente</option>
                       <option value="en_atencion">En atencion</option>
                       <option value="reparada">Reparada</option>
                       <option value="anulada">Anulada</option>
-                    </select>
+                    </NativeSelect>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="descripcion" className="text-sm font-medium">
-                    Descripcion de la falla
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="descripcion">Descripcion de la falla</Label>
+                  <Textarea
                     id="descripcion"
                     name="descripcion"
                     rows={4}
                     required
                     placeholder="Ejemplo: La prensa hidraulica perdio presion durante el proceso de doblado."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <label
-                      htmlFor="responsable_registro"
-                      className="text-sm font-medium"
-                    >
+                    <Label htmlFor="responsable_registro">
                       Responsable del registro
-                    </label>
-
-                    <input
+                    </Label>
+                    <Input
                       id="responsable_registro"
                       name="responsable_registro"
                       type="text"
                       placeholder="Ejemplo: Maestro de taller"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="tiempo_perdido_horas"
-                      className="text-sm font-medium"
-                    >
+                    <Label htmlFor="tiempo_perdido_horas">
                       Tiempo perdido en horas
-                    </label>
-
-                    <input
+                    </Label>
+                    <Input
                       id="tiempo_perdido_horas"
                       name="tiempo_perdido_horas"
                       type="number"
                       min="0"
                       step="0.01"
                       placeholder="Ejemplo: 2.50"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="impacto_produccion"
-                    className="text-sm font-medium"
-                  >
+                  <Label htmlFor="impacto_produccion">
                     Impacto en produccion
-                  </label>
-
-                  <textarea
+                  </Label>
+                  <Textarea
                     id="impacto_produccion"
                     name="impacto_produccion"
                     rows={3}
                     placeholder="Ejemplo: Se detuvo el doblado de piezas durante la tarde."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Registrar falla
-                  </button>
-
-                  <Link
-                    href="/dashboard/maintenance/failures"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver listado
-                  </Link>
-
-                  <Link
-                    href="/dashboard/maintenance"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Volver al modulo
-                  </Link>
+                  <Button type="submit">Registrar falla</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/maintenance/failures">
+                      Ver listado
+                    </Link>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/maintenance">Volver al modulo</Link>
+                  </Button>
                 </div>
               </form>
             )}

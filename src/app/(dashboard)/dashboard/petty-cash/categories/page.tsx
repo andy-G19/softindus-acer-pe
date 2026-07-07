@@ -1,15 +1,31 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   createExpenseCategoryAction,
@@ -92,182 +108,133 @@ export default async function ExpenseCategoriesPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Caja chica y finanzas - Categorias
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Categorias de gasto
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra y consulta categorias utilizadas para clasificar egresos de
-            caja chica del taller.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/petty-cash"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al modulo
-          </Link>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Categorías de gasto"
+        description="Registra y consulta categorías utilizadas para clasificar egresos de caja chica del taller."
+        backHref={navigationHrefs.pettyCash}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Categorías" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Categorias registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{categories.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Activas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{activeCategories.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Inactivas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{inactiveCategories.length}</p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Categorías registradas" value={categories.length.toString()} description="Total histórico." tone="info" />
+        <KpiCard title="Activas" value={activeCategories.length.toString()} description="Disponibles para clasificar egresos." tone="success" />
+        <KpiCard title="Inactivas" value={inactiveCategories.length.toString()} description="Ya no disponibles." tone="warning" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">
-              Nueva categoria de gasto
+              Nueva categoría de gasto
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ExpenseCategoryForm
               action={createExpenseCategoryAction}
               defaultValues={{ estado: "true" }}
-              submitLabel="Guardar categoria"
+              submitLabel="Guardar categoría"
             />
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">Listado de categorias</CardTitle>
+            <CardTitle className="text-base">Listado de categorías</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <form
               action="/dashboard/petty-cash/categories"
               className="grid gap-3 md:grid-cols-3"
             >
-              <input
-                name="q"
-                defaultValue={q}
-                placeholder="Buscar categoria..."
-                className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              />
-              <select
-                name="status"
-                defaultValue={status}
-                className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-              >
-                <option value="">Todos los estados</option>
-                <option value="active">Activa</option>
-                <option value="inactive">Inactiva</option>
-              </select>
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="flex-1 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
+              <div className="space-y-2">
+                <Label htmlFor="q">Buscar</Label>
+                <Input id="q" name="q" defaultValue={q} placeholder="Buscar categoría..." />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="status">Estado</Label>
+                <NativeSelect id="status" name="status" defaultValue={status}>
+                  <option value="">Todos los estados</option>
+                  <option value="active">Activa</option>
+                  <option value="inactive">Inactiva</option>
+                </NativeSelect>
+              </div>
+              <div className="flex items-end gap-2">
+                <Button type="submit" className="flex-1">
                   Filtrar
-                </button>
-                <Link
-                  href="/dashboard/petty-cash/categories"
-                  className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-                >
-                  Limpiar
-                </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link href="/dashboard/petty-cash/categories">Limpiar</Link>
+                </Button>
               </div>
             </form>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Codigo</th>
-                    <th className="py-2 pr-3">Categoria</th>
-                    <th className="py-2 pr-3">Descripcion</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    <th className="py-2 text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((category) => (
-                    <tr key={category.id_categoria_gasto} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {category.id_categoria_gasto}
-                      </td>
-                      <td className="py-2 pr-3 font-medium">
-                        {category.nombre_categoria}
-                      </td>
-                      <td className="py-2 pr-3 text-muted-foreground">
-                        {category.descripcion ?? "-"}
-                      </td>
-                      <td className="py-2 pr-3 text-right">
-                        <Badge
-                          variant={category.estado ? "default" : "secondary"}
-                        >
-                          {category.estado ? "Activa" : "Inactiva"}
-                        </Badge>
-                      </td>
-                      <td className="py-2">
-                        <div className="flex justify-end gap-2">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id_categoria_gasto}>
+                    <TableCell className="text-xs">
+                      {category.id_categoria_gasto}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {category.nombre_categoria}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {category.descripcion ?? "-"}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant={category.estado ? "success" : "secondary"}>
+                        {category.estado ? "Activa" : "Inactiva"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" asChild>
                           <Link
                             href={`/dashboard/petty-cash/categories/${category.id_categoria_gasto}/edit`}
-                            className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
                           >
                             Editar
                           </Link>
-                          <form action={toggleExpenseCategoryStatusAction}>
-                            <input
-                              type="hidden"
-                              name="id_categoria_gasto"
-                              value={category.id_categoria_gasto}
-                            />
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
-                              {category.estado ? "Inactivar" : "Activar"}
-                            </button>
-                          </form>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {categories.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="py-8 text-center text-muted-foreground"
-                      >
-                        Aun no hay categorias registradas.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
+                        </Button>
+                        <form action={toggleExpenseCategoryStatusAction}>
+                          <input
+                            type="hidden"
+                            name="id_categoria_gasto"
+                            value={category.id_categoria_gasto}
+                          />
+                          <Button type="submit" variant="outline" size="sm">
+                            {category.estado ? "Inactivar" : "Activar"}
+                          </Button>
+                        </form>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {categories.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="p-0">
+                      <EmptyState
+                        className="border-0"
+                        label="Aún no hay categorías registradas."
+                      />
+                    </TableCell>
+                  </TableRow>
+                ) : null}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </section>

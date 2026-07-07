@@ -2,6 +2,20 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -142,179 +156,152 @@ export default async function FabricationRoutesPage({
       <PageHeader
         title="Rutas de fabricación"
         description="Consulta las rutas productivas definidas para cada producto del taller."
+        backHref={navigationHrefs.production}
+        backLabel="Volver a producción"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
           { label: "Rutas" },
         ])}
         actions={
-          <Link
-            href="/dashboard/production/routes/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva ruta
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/production/routes/new">Nueva ruta</Link>
+          </Button>
         }
       />
 
-      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar ruta, codigo o producto..."
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
+      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar ruta, código o producto..."
+          />
+        </div>
 
-        <select
-          name="product"
-          defaultValue={product}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los productos</option>
-          {products.map((item) => (
-            <option key={item.id_producto} value={item.id_producto}>
-              {item.nombre_producto}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="product">Producto</Label>
+          <NativeSelect id="product" name="product" defaultValue={product}>
+            <option value="">Todos los productos</option>
+            {products.map((item) => (
+              <option key={item.id_producto} value={item.id_producto}>
+                {item.nombre_producto}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activas</option>
-          <option value="inactive">Inactivas</option>
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activas</option>
+            <option value="inactive">Inactivas</option>
+          </NativeSelect>
+        </div>
 
-        <button
-          type="submit"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Filtrar
-        </button>
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Filtrar
+          </Button>
+        </div>
 
-        <Link
-          href="/dashboard/production/routes"
-          className="rounded-lg border px-4 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Limpiar filtros
-        </Link>
+        <div className="flex items-end">
+          <Button variant="outline" className="w-full" asChild>
+            <Link href="/dashboard/production/routes">Limpiar filtros</Link>
+          </Button>
+        </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Ruta</th>
-              <th className="px-4 py-3 font-semibold">Producto</th>
-              <th className="px-4 py-3 font-semibold">Categoría</th>
-              <th className="px-4 py-3 font-semibold">Etapas</th>
-              <th className="px-4 py-3 font-semibold">Órdenes asociadas</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Ruta</TableHead>
+            <TableHead>Producto</TableHead>
+            <TableHead>Categoría</TableHead>
+            <TableHead>Etapas</TableHead>
+            <TableHead>Órdenes asociadas</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {routes.map((route) => (
-              <tr key={route.id_ruta} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {route.id_ruta}
-                </td>
+        <TableBody>
+          {routes.map((route) => (
+            <TableRow key={route.id_ruta}>
+              <TableCell className="text-xs">{route.id_ruta}</TableCell>
 
-                <td className="px-4 py-3">
-                  <div className="font-medium">{route.nombre_ruta}</div>
+              <TableCell>
+                <div className="font-medium">{route.nombre_ruta}</div>
 
-                  {route.descripcion ? (
-                    <p className="mt-1 max-w-xl text-xs text-slate-500">
-                      {route.descripcion}
-                    </p>
-                  ) : null}
-                </td>
+                {route.descripcion ? (
+                  <p className="mt-1 max-w-xl text-xs text-muted-foreground">
+                    {route.descripcion}
+                  </p>
+                ) : null}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {route.producto.nombre_producto}
-                </td>
+              <TableCell>{route.producto.nombre_producto}</TableCell>
 
-                <td className="px-4 py-3 capitalize">
-                  {route.producto.categoria}
-                </td>
+              <TableCell className="capitalize">
+                {route.producto.categoria}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {route._count.etapa_ruta}
-                </td>
+              <TableCell>{route._count.etapa_ruta}</TableCell>
 
-                <td className="px-4 py-3">
-                  {route._count.orden_trabajo}
-                </td>
+              <TableCell>{route._count.orden_trabajo}</TableCell>
 
-                <td className="px-4 py-3">
-                  {route.estado ? (
-                    <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">
-                      Activa
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                      Inactiva
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-col gap-2">
-                    <Link
-                      href={`/dashboard/production/routes/${route.id_ruta}/edit`}
-                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
-                    >
+              <TableCell>
+                <Badge variant={route.estado ? "success" : "outline"}>
+                  {route.estado ? "Activa" : "Inactiva"}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-col gap-2">
+                  <Button variant="link" className="h-auto justify-start p-0" asChild>
+                    <Link href={`/dashboard/production/routes/${route.id_ruta}/edit`}>
                       Editar
                     </Link>
+                  </Button>
 
+                  <Button variant="link" className="h-auto justify-start p-0" asChild>
                     <Link
                       href={`/dashboard/production/routes/${route.id_ruta}/stages`}
-                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
                     >
                       Gestionar etapas
                     </Link>
+                  </Button>
 
-                    <form action={toggleFabricationRouteStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_ruta"
-                        value={route.id_ruta}
-                      />
+                  <form action={toggleFabricationRouteStatusAction}>
+                    <input type="hidden" name="id_ruta" value={route.id_ruta} />
 
-                      <button
-                        type="submit"
-                        className="text-left text-sm font-medium text-slate-600 hover:text-slate-950"
-                      >
-                        {route.estado ? "Inactivar" : "Activar"}
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                    <Button
+                      type="submit"
+                      variant="link"
+                      className="h-auto justify-start p-0"
+                    >
+                      {route.estado ? "Inactivar" : "Activar"}
+                    </Button>
+                  </form>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {routes.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay rutas de fabricación registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div>
-        <Link
-          href="/dashboard/production"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver al módulo de producción
-        </Link>
-      </div>
+          {routes.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay rutas de fabricación registradas."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

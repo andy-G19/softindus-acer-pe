@@ -2,14 +2,22 @@ import Link from "next/link";
 
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createRepairAction } from "@/modules/maintenance/repairs/actions";
 
@@ -87,27 +95,18 @@ export default async function NewRepairPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Nueva reparacion
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar reparacion
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra la atencion realizada a una falla, incluyendo tecnico,
-            mano de obra, repuestos utilizados y costo total calculado.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 9.5</Badge>
-          <Badge>Solo ADMIN</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar reparacion"
+        description="Registra la atencion realizada a una falla, incluyendo tecnico, mano de obra, repuestos utilizados y costo total calculado."
+        backHref={navigationHrefs.repairs}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Reparaciones", href: navigationHrefs.repairs },
+          { label: "Nueva reparación" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -117,22 +116,17 @@ export default async function NewRepairPage() {
 
           <CardContent>
             {failures.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay fallas pendientes o en atencion.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra una falla para poder asociarle una reparacion.
-                </p>
-
-                <Link
-                  href="/dashboard/maintenance/failures/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Registrar falla
-                </Link>
-              </div>
+              <EmptyState
+                label="No hay fallas pendientes o en atencion."
+                description="Primero registra una falla para poder asociarle una reparacion."
+                action={
+                  <Button asChild>
+                    <Link href="/dashboard/maintenance/failures/new">
+                      Registrar falla
+                    </Link>
+                  </Button>
+                }
+              />
             ) : (
               <form action={createRepairAction} className="space-y-5">
                 <div className="space-y-2">
@@ -148,80 +142,55 @@ export default async function NewRepairPage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label
-                      htmlFor="fecha_reparacion"
-                      className="text-sm font-medium"
-                    >
-                      Fecha de reparacion
-                    </label>
-
-                    <input
+                    <Label htmlFor="fecha_reparacion">Fecha de reparacion</Label>
+                    <Input
                       id="fecha_reparacion"
                       name="fecha_reparacion"
                       type="date"
                       required
                       defaultValue={today}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="estado_reparacion"
-                      className="text-sm font-medium"
-                    >
-                      Estado
-                    </label>
-
-                    <select
+                    <Label htmlFor="estado_reparacion">Estado</Label>
+                    <NativeSelect
                       id="estado_reparacion"
                       name="estado_reparacion"
                       required
                       defaultValue="programada"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <option value="programada">Programada</option>
                       <option value="ejecutada">Ejecutada</option>
                       <option value="observada">Observada</option>
                       <option value="anulada">Anulada</option>
-                    </select>
+                    </NativeSelect>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="mano_obra" className="text-sm font-medium">
-                      Mano de obra
-                    </label>
-
-                    <input
+                    <Label htmlFor="mano_obra">Mano de obra</Label>
+                    <Input
                       id="mano_obra"
                       name="mano_obra"
                       type="number"
                       min="0"
                       step="0.01"
                       placeholder="Ejemplo: 80.00"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="tecnico_proveedor"
-                    className="text-sm font-medium"
-                  >
-                    Tecnico o proveedor
-                  </label>
-
-                  <input
+                  <Label htmlFor="tecnico_proveedor">Tecnico o proveedor</Label>
+                  <Input
                     id="tecnico_proveedor"
                     name="tecnico_proveedor"
                     type="text"
                     placeholder="Ejemplo: Tecnico interno / proveedor externo"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
-                <div className="rounded-lg border p-4">
+                <div className="rounded-lg border border-border/80 bg-secondary/40 p-4">
                   <div>
                     <h2 className="text-base font-semibold">
                       Repuestos usados
@@ -250,21 +219,14 @@ export default async function NewRepairPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <label
-                            htmlFor={`cantidad_${index}`}
-                            className="text-sm font-medium"
-                          >
-                            Cantidad
-                          </label>
-
-                          <input
+                          <Label htmlFor={`cantidad_${index}`}>Cantidad</Label>
+                          <Input
                             id={`cantidad_${index}`}
                             name={`cantidad_${index}`}
                             type="number"
                             min="0"
                             step="0.01"
                             placeholder="Ejemplo: 1"
-                            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                           />
                         </div>
                       </div>
@@ -273,40 +235,25 @@ export default async function NewRepairPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="observaciones" className="text-sm font-medium">
-                    Observaciones
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Textarea
                     id="observaciones"
                     name="observaciones"
                     rows={4}
                     placeholder="Ejemplo: Se cambio la manguera hidraulica y se realizo prueba de presion."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Registrar reparacion
-                  </button>
-
-                  <Link
-                    href="/dashboard/maintenance/repairs"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver listado
-                  </Link>
-
-                  <Link
-                    href="/dashboard/maintenance"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Volver al modulo
-                  </Link>
+                  <Button type="submit">Registrar reparacion</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/maintenance/repairs">
+                      Ver listado
+                    </Link>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/maintenance">Volver al modulo</Link>
+                  </Button>
                 </div>
               </form>
             )}

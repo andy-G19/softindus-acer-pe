@@ -1,8 +1,25 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleRouteStageStatusAction } from "@/modules/production/stages/actions";
 
 type RouteStagesPageProps = {
@@ -132,239 +149,186 @@ export default async function RouteStagesPage({
     notFound();
   }
 
+  const totalEstimatedHours = route.etapa_ruta.reduce((total, stage) => {
+    if (!stage.tiempo_estimado_horas) {
+      return total;
+    }
+
+    return total + Number(stage.tiempo_estimado_horas.toString());
+  }, 0);
+
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Rutas de fabricación · Etapas
-          </p>
+      <PageHeader
+        title="Etapas de la ruta"
+        description={`Ruta: ${route.nombre_ruta} · Producto: ${route.producto.nombre_producto}${route.descripcion ? ` · ${route.descripcion}` : ""}`}
+        backHref={`${navigationHrefs.routes}`}
+        backLabel="Volver a rutas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Rutas", href: navigationHrefs.routes },
+          { label: "Etapas" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href={`/dashboard/production/routes/${route.id_ruta}/stages/new`}>
+              Nueva etapa
+            </Link>
+          </Button>
+        }
+      />
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Etapas de la ruta
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Ruta: <span className="font-medium">{route.nombre_ruta}</span> ·
-            Producto:{" "}
-            <span className="font-medium">
-              {route.producto.nombre_producto}
-            </span>
-          </p>
-
-          {route.descripcion ? (
-            <p className="mt-1 max-w-3xl text-sm text-slate-500">
-              {route.descripcion}
-            </p>
-          ) : null}
+      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar etapa..." />
         </div>
 
-        <Link
-          href={`/dashboard/production/routes/${route.id_ruta}/stages/new`}
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Nueva etapa
-        </Link>
-      </section>
+        <div className="space-y-2">
+          <Label htmlFor="requiresMachine">Máquina</Label>
+          <NativeSelect
+            id="requiresMachine"
+            name="requiresMachine"
+            defaultValue={requiresMachine}
+          >
+            <option value="">Máquina: todos</option>
+            <option value="yes">Requiere máquina</option>
+            <option value="no">No requiere máquina</option>
+          </NativeSelect>
+        </div>
 
-      <form className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[1.5fr_1fr_1fr_auto_auto]">
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar etapa..."
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activas</option>
+            <option value="inactive">Inactivas</option>
+          </NativeSelect>
+        </div>
 
-        <select
-          name="requiresMachine"
-          defaultValue={requiresMachine}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Maquina: todos</option>
-          <option value="yes">Requiere maquina</option>
-          <option value="no">No requiere maquina</option>
-        </select>
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Filtrar
+          </Button>
+        </div>
 
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activas</option>
-          <option value="inactive">Inactivas</option>
-        </select>
-
-        <button
-          type="submit"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Filtrar
-        </button>
-
-        <Link
-          href={`/dashboard/production/routes/${route.id_ruta}/stages`}
-          className="rounded-lg border px-4 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Limpiar filtros
-        </Link>
+        <div className="flex items-end">
+          <Button variant="outline" className="w-full" asChild>
+            <Link href={`/dashboard/production/routes/${route.id_ruta}/stages`}>
+              Limpiar filtros
+            </Link>
+          </Button>
+        </div>
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Etapas registradas</p>
-          <p className="mt-2 text-3xl font-bold">{route.etapa_ruta.length}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Etapas activas</p>
-          <p className="mt-2 text-3xl font-bold">
-            {route.etapa_ruta.filter((stage) => stage.estado).length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Requieren máquina</p>
-          <p className="mt-2 text-3xl font-bold">
-            {route.etapa_ruta.filter((stage) => stage.requiere_maquina).length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Tiempo estimado total</p>
-          <p className="mt-2 text-3xl font-bold">
-            {route.etapa_ruta
-              .reduce((total, stage) => {
-                if (!stage.tiempo_estimado_horas) {
-                  return total;
-                }
-
-                return total + Number(stage.tiempo_estimado_horas.toString());
-              }, 0)
-              .toFixed(2)}{" "}
-            h
-          </p>
-        </div>
+        <KpiCard title="Etapas registradas" value={route.etapa_ruta.length.toString()} description="Total en esta ruta." tone="info" />
+        <KpiCard
+          title="Etapas activas"
+          value={route.etapa_ruta.filter((stage) => stage.estado).length.toString()}
+          description="Disponibles para producción."
+          tone="success"
+        />
+        <KpiCard
+          title="Requieren máquina"
+          value={route.etapa_ruta.filter((stage) => stage.requiere_maquina).length.toString()}
+          description="Dependen de equipo crítico."
+          tone="warning"
+        />
+        <KpiCard title="Tiempo estimado total" value={`${totalEstimatedHours.toFixed(2)} h`} description="Suma de etapas activas." tone="info" />
       </section>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Orden</th>
-              <th className="px-4 py-3 font-semibold">Etapa</th>
-              <th className="px-4 py-3 font-semibold">Tiempo estimado</th>
-              <th className="px-4 py-3 font-semibold">Máquina</th>
-              <th className="px-4 py-3 font-semibold">Avances</th>
-              <th className="px-4 py-3 font-semibold">Tareas</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Orden</TableHead>
+            <TableHead>Etapa</TableHead>
+            <TableHead>Tiempo estimado</TableHead>
+            <TableHead>Máquina</TableHead>
+            <TableHead>Avances</TableHead>
+            <TableHead>Tareas</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {route.etapa_ruta.map((stage) => (
-              <tr key={stage.id_etapa_ruta} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {stage.orden_secuencia}
-                </td>
+        <TableBody>
+          {route.etapa_ruta.map((stage) => (
+            <TableRow key={stage.id_etapa_ruta}>
+              <TableCell className="text-xs">
+                {stage.orden_secuencia}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  <div className="font-medium">{stage.nombre_etapa}</div>
+              <TableCell>
+                <div className="font-medium">{stage.nombre_etapa}</div>
 
-                  {stage.descripcion ? (
-                    <p className="mt-1 max-w-xl text-xs text-slate-500">
-                      {stage.descripcion}
-                    </p>
-                  ) : null}
-                </td>
+                {stage.descripcion ? (
+                  <p className="mt-1 max-w-xl text-xs text-muted-foreground">
+                    {stage.descripcion}
+                  </p>
+                ) : null}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatHours(stage.tiempo_estimado_horas)}
-                </td>
+              <TableCell>{formatHours(stage.tiempo_estimado_horas)}</TableCell>
 
-                <td className="px-4 py-3">
-                  {stage.requiere_maquina ? (
-                    <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
-                      Requiere
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                      No requiere
-                    </span>
-                  )}
-                </td>
+              <TableCell>
+                <Badge variant={stage.requiere_maquina ? "warning" : "outline"}>
+                  {stage.requiere_maquina ? "Requiere" : "No requiere"}
+                </Badge>
+              </TableCell>
 
-                <td className="px-4 py-3">{stage._count.avance_orden}</td>
+              <TableCell>{stage._count.avance_orden}</TableCell>
 
-                <td className="px-4 py-3">{stage._count.tarea_operario}</td>
+              <TableCell>{stage._count.tarea_operario}</TableCell>
 
-                <td className="px-4 py-3">
-                  {stage.estado ? (
-                    <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">
-                      Activa
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                      Inactiva
-                    </span>
-                  )}
-                </td>
+              <TableCell>
+                <Badge variant={stage.estado ? "success" : "outline"}>
+                  {stage.estado ? "Activa" : "Inactiva"}
+                </Badge>
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  <div className="flex flex-col gap-2">
+              <TableCell>
+                <div className="flex flex-col gap-2">
+                  <Button variant="link" className="h-auto justify-start p-0" asChild>
                     <Link
                       href={`/dashboard/production/routes/${route.id_ruta}/stages/${stage.id_etapa_ruta}/edit`}
-                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
                     >
                       Editar
                     </Link>
+                  </Button>
 
-                    <form action={toggleRouteStageStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_etapa_ruta"
-                        value={stage.id_etapa_ruta}
-                      />
+                  <form action={toggleRouteStageStatusAction}>
+                    <input
+                      type="hidden"
+                      name="id_etapa_ruta"
+                      value={stage.id_etapa_ruta}
+                    />
 
-                      <button
-                        type="submit"
-                        className="text-left text-sm font-medium text-slate-600 hover:text-slate-950"
-                      >
-                        {stage.estado ? "Inactivar" : "Activar"}
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                    <Button
+                      type="submit"
+                      variant="link"
+                      className="h-auto justify-start p-0"
+                    >
+                      {stage.estado ? "Inactivar" : "Activar"}
+                    </Button>
+                  </form>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {route.etapa_ruta.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Esta ruta todavía no tiene etapas registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="flex items-center justify-between">
-        <Link
-          href="/dashboard/production/routes"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver a rutas
-        </Link>
-
-        <Link
-          href="/dashboard/production"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver al módulo producción
-        </Link>
-      </div>
+          {route.etapa_ruta.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Esta ruta todavía no tiene etapas registradas."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

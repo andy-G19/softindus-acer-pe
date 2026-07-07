@@ -1,4 +1,4 @@
-import { ModuleAccessCard } from "./module-access-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
 
 type DashboardModuleGridProps = {
   role: string;

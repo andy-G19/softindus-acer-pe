@@ -1,6 +1,21 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -50,16 +65,6 @@ function formatDate(value: Date | null | undefined) {
     month: "2-digit",
     year: "numeric",
   }).format(value);
-}
-
-function getProfitabilityStatusLabel(alert: boolean) {
-  return alert ? "Margen bajo" : "Rentable";
-}
-
-function getProfitabilityStatusClass(alert: boolean) {
-  return alert
-    ? "bg-red-50 text-red-700"
-    : "bg-emerald-50 text-emerald-700";
 }
 
 function getOriginTypeLabel(type: string | null | undefined) {
@@ -241,292 +246,203 @@ export default async function CostingsPage({
           { label: "Costeos" },
         ])}
         actions={
-          <Link
-            href={navigationHrefs.costWorkOrders}
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Generar costeo
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={navigationHrefs.costWorkOrders}>Generar costeo</Link>
+          </Button>
         }
       />
 
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar costeo, cliente, pedido"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="pedido"
-            defaultValue={pedido}
-            placeholder="Pedido"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="orden"
-            defaultValue={orden}
-            placeholder="Orden de trabajo"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="producto"
-            defaultValue={producto}
-            placeholder="Producto"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <select
-            name="estado"
-            defaultValue={estado}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
+      <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-3 xl:grid-cols-7">
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Costeo, cliente, pedido" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="pedido">Pedido</Label>
+          <Input id="pedido" name="pedido" defaultValue={pedido} placeholder="Pedido" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="orden">Orden de trabajo</Label>
+          <Input id="orden" name="orden" defaultValue={orden} placeholder="Orden de trabajo" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="producto">Producto</Label>
+          <Input id="producto" name="producto" defaultValue={producto} placeholder="Producto" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="from">Desde</Label>
+          <Input id="from" name="from" type="date" defaultValue={parseStringParam(params, "from")} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="to">Hasta</Label>
+          <Input id="to" name="to" type="date" defaultValue={parseStringParam(params, "to")} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="estado">Estado</Label>
+          <NativeSelect id="estado" name="estado" defaultValue={estado}>
             <option value="">Todos los estados</option>
             <option value="pendiente">Pendiente</option>
             <option value="rentable">Rentable</option>
             <option value="margen_bajo">Margen bajo</option>
-          </select>
-          <div className="flex gap-2 md:col-span-3 xl:col-span-7">
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Filtrar
-            </button>
-            <Link
-              href="/dashboard/costs/costings"
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Limpiar filtros
-            </Link>
-          </div>
-        </form>
-      </section>
+          </NativeSelect>
+        </div>
+        <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/costs/costings">Limpiar filtros</Link>
+          </Button>
+        </div>
+      </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Costeos listados</p>
-          <p className="mt-2 text-3xl font-bold">{totalCostings}</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Últimos 50 registros
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Costo acumulado</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatMoney(accumulatedCost)}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            Suma de costos totales
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Utilidad acumulada</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatMoney(accumulatedProfit)}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            Según rentabilidades calculadas
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Alertas de bajo margen</p>
-          <p className="mt-2 text-3xl font-bold">{lowMarginCount}</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Costeos con rentabilidad crítica
-          </p>
-        </div>
+        <KpiCard title="Costeos listados" value={totalCostings.toString()} description="Últimos 50 registros." tone="info" />
+        <KpiCard title="Costo acumulado" value={formatMoney(accumulatedCost)} description="Suma de costos totales." tone="info" />
+        <KpiCard title="Utilidad acumulada" value={formatMoney(accumulatedProfit)} description="Según rentabilidades calculadas." tone="success" />
+        <KpiCard title="Alertas de bajo margen" value={lowMarginCount.toString()} description="Rentabilidad crítica." tone="warning" />
       </section>
 
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">Costeos registrados</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Costeo</TableHead>
+            <TableHead>Origen</TableHead>
+            <TableHead>Cliente / Pedido</TableHead>
+            <TableHead>Cantidad</TableHead>
+            <TableHead>Costo total</TableHead>
+            <TableHead>Margen</TableHead>
+            <TableHead>Precio final</TableHead>
+            <TableHead>Utilidad</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acción</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <p className="mt-1 text-sm text-slate-500">
-            Cada fila muestra el origen del costeo, su costo consolidado y el
-            estado económico más reciente.
-          </p>
-        </div>
+        <TableBody>
+          {costings.map((costing) => {
+            const workOrder = costing.orden_trabajo;
+            const latestMargin = costing.margen_ganancia[0];
+            const latestProfitability = costing.rentabilidad[0];
 
-        {costings.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            Todavía no hay costeos registrados. Puedes generar uno desde una
-            orden de trabajo.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-slate-50 text-left">
-                <tr>
-                  <th className="px-5 py-3 font-medium">Costeo</th>
-                  <th className="px-5 py-3 font-medium">Origen</th>
-                  <th className="px-5 py-3 font-medium">Cliente / Pedido</th>
-                  <th className="px-5 py-3 font-medium">Cantidad</th>
-                  <th className="px-5 py-3 font-medium">Costo total</th>
-                  <th className="px-5 py-3 font-medium">Margen</th>
-                  <th className="px-5 py-3 font-medium">Precio final</th>
-                  <th className="px-5 py-3 font-medium">Utilidad</th>
-                  <th className="px-5 py-3 font-medium">Estado</th>
-                  <th className="px-5 py-3 font-medium">Acción</th>
-                </tr>
-              </thead>
+            const originType = workOrder
+              ? getOriginTypeLabel(workOrder.tipo_produccion)
+              : costing.pedido
+                ? "Pedido"
+                : "Manual";
 
-              <tbody>
-                {costings.map((costing) => {
-                  const workOrder = costing.orden_trabajo;
-                  const latestMargin = costing.margen_ganancia[0];
-                  const latestProfitability = costing.rentabilidad[0];
+            const originMain = workOrder
+              ? `${workOrder.id_orden_trabajo} | ${workOrder.producto.nombre_producto}`
+              : costing.pedido
+                ? costing.pedido.id_pedido
+                : "Costeo manual";
 
-                  const originType = workOrder
-                    ? getOriginTypeLabel(workOrder.tipo_produccion)
-                    : costing.pedido
-                      ? "Pedido"
-                      : "Manual";
+            const originSecondary = workOrder
+              ? `Producto: ${workOrder.producto.categoria}`
+              : costing.pedido
+                ? `Pedido comercial`
+                : "Sin origen asociado";
 
-                  const originMain = workOrder
-                    ? `${workOrder.id_orden_trabajo} | ${workOrder.producto.nombre_producto}`
-                    : costing.pedido
-                      ? costing.pedido.id_pedido
-                      : "Costeo manual";
+            const clientName =
+              workOrder?.detalle_pedido?.pedido.cliente.nombre_razon_social ??
+              workOrder?.cliente?.nombre_razon_social ??
+              costing.pedido?.cliente.nombre_razon_social ??
+              "-";
 
-                  const originSecondary = workOrder
-                    ? `Producto: ${workOrder.producto.categoria}`
-                    : costing.pedido
-                      ? `Pedido comercial`
-                      : "Sin origen asociado";
+            const orderOrPedidoId =
+              workOrder?.detalle_pedido?.id_pedido ??
+              costing.pedido?.id_pedido ??
+              "-";
 
-                  const clientName =
-                    workOrder?.detalle_pedido?.pedido.cliente
-                      .nombre_razon_social ??
-                    workOrder?.cliente?.nombre_razon_social ??
-                    costing.pedido?.cliente.nombre_razon_social ??
-                    "-";
+            const priceFinal =
+              latestMargin?.precio_final ??
+              latestMargin?.precio_sugerido ??
+              null;
 
-                  const orderOrPedidoId =
-                    workOrder?.detalle_pedido?.id_pedido ??
-                    costing.pedido?.id_pedido ??
-                    "-";
+            return (
+              <TableRow key={costing.id_costeo}>
+                <TableCell>
+                  <div className="text-xs font-medium">
+                    {costing.id_costeo}
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {formatDate(costing.fecha_costeo)}
+                  </p>
+                </TableCell>
 
-                  const priceFinal =
-                    latestMargin?.precio_final ??
-                    latestMargin?.precio_sugerido ??
-                    null;
+                <TableCell>
+                  <div className="font-medium">{originMain}</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {originType} · {originSecondary}
+                  </p>
+                </TableCell>
 
-                  return (
-                    <tr
-                      key={costing.id_costeo}
-                      className="border-b last:border-0"
+                <TableCell>
+                  <div className="font-medium">{clientName}</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Pedido: {orderOrPedidoId}
+                  </p>
+                </TableCell>
+
+                <TableCell>{formatDecimal(costing.cantidad_base)}</TableCell>
+
+                <TableCell>{formatMoney(costing.costo_total)}</TableCell>
+
+                <TableCell>
+                  {latestMargin
+                    ? formatPercent(latestMargin.porcentaje_margen)
+                    : "-"}
+                </TableCell>
+
+                <TableCell>
+                  {priceFinal ? formatMoney(priceFinal) : "-"}
+                </TableCell>
+
+                <TableCell>
+                  {latestProfitability
+                    ? formatMoney(latestProfitability.utilidad_estimada)
+                    : "-"}
+                </TableCell>
+
+                <TableCell>
+                  {latestProfitability ? (
+                    <Badge
+                      variant={
+                        latestProfitability.alerta_bajo_margen
+                          ? "destructive"
+                          : "success"
+                      }
                     >
-                      <td className="px-5 py-3">
-                        <div className="font-mono text-xs font-medium">
-                          {costing.id_costeo}
-                        </div>
+                      {latestProfitability.alerta_bajo_margen
+                        ? "Margen bajo"
+                        : "Rentable"}
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary">Pendiente</Badge>
+                  )}
+                </TableCell>
 
-                        <p className="mt-1 text-xs text-slate-500">
-                          {formatDate(costing.fecha_costeo)}
-                        </p>
-                      </td>
+                <TableCell>
+                  <Button variant="link" className="h-auto p-0" asChild>
+                    <Link href={`/dashboard/costs/costings/${costing.id_costeo}`}>
+                      Ver detalle
+                    </Link>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
-                      <td className="px-5 py-3">
-                        <div className="font-medium">{originMain}</div>
-
-                        <p className="mt-1 text-xs text-slate-500">
-                          {originType} ? {originSecondary}
-                        </p>
-                      </td>
-
-                      <td className="px-5 py-3">
-                        <div className="font-medium">{clientName}</div>
-
-                        <p className="mt-1 text-xs text-slate-500">
-                          Pedido: {orderOrPedidoId}
-                        </p>
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {formatDecimal(costing.cantidad_base)}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {formatMoney(costing.costo_total)}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {latestMargin
-                          ? formatPercent(latestMargin.porcentaje_margen)
-                          : "-"}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {priceFinal ? formatMoney(priceFinal) : "-"}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {latestProfitability
-                          ? formatMoney(latestProfitability.utilidad_estimada)
-                          : "-"}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        {latestProfitability ? (
-                          <span
-                            className={`rounded-full px-2 py-1 text-xs font-medium ${getProfitabilityStatusClass(
-                              latestProfitability.alerta_bajo_margen,
-                            )}`}
-                          >
-                            {getProfitabilityStatusLabel(
-                              latestProfitability.alerta_bajo_margen,
-                            )}
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                            Pendiente
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="px-5 py-3">
-                        <Link
-                          href={`/dashboard/costs/costings/${costing.id_costeo}`}
-                          className="text-sm font-medium text-slate-700 hover:text-slate-950"
-                        >
-                          Ver detalle ?
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-800">
-        <p className="font-semibold">Fase 5.6 implementada</p>
-
-        <p className="mt-1">
-          El sistema ahora permite consultar los costeos registrados por orden o
-          pedido, revisar su origen, costo consolidado, margen aplicado, precio
-          final, utilidad estimada y estado económico.
-        </p>
-      </section>
+          {costings.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={10} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay costeos registrados. Puedes generar uno desde una orden de trabajo."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }
-

@@ -1,16 +1,26 @@
-﻿import Link from "next/link";
-
+﻿import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+
+function getOperatorStatusVariant(status: string) {
+  if (status === "activo") {
+    return "success" as const;
+  }
+
+  return "secondary" as const;
+}
 
 function formatDate(value: Date | null | undefined) {
   if (!value) {
@@ -187,80 +197,40 @@ export default async function StaffDashboardPage() {
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Operarios registrados
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalOperators}</p>
-            <p className="text-xs text-muted-foreground">
-              Total de trabajadores registrados.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Operarios activos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{activeOperators}</p>
-            <p className="text-xs text-muted-foreground">
-              Inactivos o retirados: {inactiveOperators}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Asistencias de hoy
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{attendanceToday}</p>
-            <p className="text-xs text-muted-foreground">
-              Faltas registradas hoy: {absencesToday}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Planillas pendientes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{pendingPayrolls}</p>
-            <p className="text-xs text-muted-foreground">
-              Tareas registradas este mes: {tasksThisMonth}
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard
+          title="Operarios registrados"
+          value={totalOperators.toString()}
+          description="Total de trabajadores registrados."
+          tone="info"
+        />
+        <KpiCard
+          title="Operarios activos"
+          value={activeOperators.toString()}
+          description={`Inactivos o retirados: ${inactiveOperators}`}
+          tone="success"
+        />
+        <KpiCard
+          title="Asistencias de hoy"
+          value={attendanceToday.toString()}
+          description={`Faltas registradas hoy: ${absencesToday}`}
+          tone={absencesToday > 0 ? "warning" : "info"}
+        />
+        <KpiCard
+          title="Planillas pendientes"
+          value={pendingPayrolls.toString()}
+          description={`Tareas registradas este mes: ${tasksThisMonth}`}
+          tone={pendingPayrolls > 0 ? "warning" : "info"}
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {quickLinks.map((link) => (
-          <Link key={link.href} href={link.href}>
-            <Card className="h-full transition hover:bg-muted/50">
-              <CardHeader>
-                <CardTitle className="text-base">{link.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {link.description}
-                </p>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Acceso: {link.roles}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+          <ModuleAccessCard
+            key={link.href}
+            title={link.title}
+            description={`${link.description} Acceso: ${link.roles}.`}
+            href={link.href}
+          />
         ))}
       </div>
 
@@ -271,26 +241,28 @@ export default async function StaffDashboardPage() {
           </CardHeader>
           <CardContent>
             {latestOperators.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Todavía no hay operarios registrados.
-              </p>
+              <EmptyState label="Todavía no hay operarios registrados." />
             ) : (
               <div className="space-y-3">
                 {latestOperators.map((operator) => (
                   <div
                     key={operator.id_operario}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
-                    <p className="font-medium">
-                      {operator.apellidos}, {operator.nombres}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Cargo: {operator.cargo ?? "-"} | Modalidad:{" "}
-                      {operator.modalidad_pago}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Estado: {operator.estado}
-                    </p>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-foreground">
+                          {operator.apellidos}, {operator.nombres}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Cargo: {operator.cargo ?? "-"} | Modalidad:{" "}
+                          {operator.modalidad_pago}
+                        </p>
+                      </div>
+                      <Badge variant={getOperatorStatusVariant(operator.estado)}>
+                        {operator.estado}
+                      </Badge>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -304,28 +276,33 @@ export default async function StaffDashboardPage() {
           </CardHeader>
           <CardContent>
             {latestAttendance.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Todavía no hay asistencias registradas.
-              </p>
+              <EmptyState label="Todavía no hay asistencias registradas." />
             ) : (
               <div className="space-y-3">
                 {latestAttendance.map((attendance) => (
                   <div
                     key={attendance.id_asistencia}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
-                    <p className="font-medium">
-                      {attendance.operario.apellidos},{" "}
-                      {attendance.operario.nombres}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Fecha: {formatDate(attendance.fecha)} | Horas:{" "}
-                      {formatHours(attendance.horas_trabajadas)}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Falta: {attendance.falta ? "Sí" : "No"} | Tardanza:{" "}
-                      {attendance.tardanza ? "Sí" : "No"}
-                    </p>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-foreground">
+                          {attendance.operario.apellidos},{" "}
+                          {attendance.operario.nombres}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Fecha: {formatDate(attendance.fecha)} | Horas:{" "}
+                          {formatHours(attendance.horas_trabajadas)}
+                        </p>
+                      </div>
+                      {attendance.falta ? (
+                        <Badge variant="destructive">Falta</Badge>
+                      ) : attendance.tardanza ? (
+                        <Badge variant="warning">Tardanza</Badge>
+                      ) : (
+                        <Badge variant="success">Puntual</Badge>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

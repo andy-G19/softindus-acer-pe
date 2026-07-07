@@ -1,8 +1,15 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateRouteStageAction } from "@/modules/production/stages/actions";
+import Link from "next/link";
 
 type EditRouteStagePageProps = {
   params: Promise<{
@@ -64,101 +71,82 @@ export default async function EditRouteStagePage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Rutas de fabricacion - Etapas
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Editar etapa de ruta
-        </h1>
-
-        <p className="mt-2 text-slate-600">
-          Ruta:{" "}
-          <span className="font-medium">
-            {stage.ruta_fabricacion.nombre_ruta}
-          </span>{" "}
-          - Producto:{" "}
-          <span className="font-medium">
-            {stage.ruta_fabricacion.producto.nombre_producto}
-          </span>
-        </p>
-      </section>
+      <PageHeader
+        title="Editar etapa de ruta"
+        description={`Ruta: ${stage.ruta_fabricacion.nombre_ruta} · Producto: ${stage.ruta_fabricacion.producto.nombre_producto}`}
+        backHref={`/dashboard/production/routes/${stage.id_ruta}/stages`}
+        backLabel="Volver a etapas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Rutas", href: navigationHrefs.routes },
+          { label: "Etapas", href: `/dashboard/production/routes/${stage.id_ruta}/stages` },
+          { label: "Editar etapa" },
+        ])}
+      />
 
       {stage._count.avance_orden > 0 || stage._count.tarea_operario > 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta etapa ya tiene trazabilidad operativa. Los cambios quedan
-          auditados; evita alterar su significado productivo si ya fue usada.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta etapa ya tiene trazabilidad operativa. Los cambios quedan
+            auditados; evita alterar su significado productivo si ya fue
+            usada.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <form
         action={updateRouteStageAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <input type="hidden" name="id_ruta" value={stage.id_ruta} />
-        <input
-          type="hidden"
-          name="id_etapa_ruta"
-          value={stage.id_etapa_ruta}
-        />
+        <input type="hidden" name="id_etapa_ruta" value={stage.id_etapa_ruta} />
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre de la etapa *</label>
-
-          <input
+          <Label>Nombre de la etapa *</Label>
+          <Input
             name="nombre_etapa"
             required
             maxLength={100}
             defaultValue={stage.nombre_etapa}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Orden de ejecucion *</label>
-
-            <input
+            <Label>Orden de ejecución *</Label>
+            <Input
               name="orden_secuencia"
               type="number"
               min={1}
               max={999}
               required
               defaultValue={stage.orden_secuencia}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              Tiempo estimado en horas
-            </label>
-
-            <input
+            <Label>Tiempo estimado en horas</Label>
+            <Input
               name="tiempo_estimado_horas"
               type="number"
               min="0"
               step="0.01"
               defaultValue={formatDecimalInput(stage.tiempo_estimado_horas)}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Descripcion tecnica</label>
-
-          <textarea
+          <Label>Descripción técnica</Label>
+          <Textarea
             name="descripcion"
             rows={4}
             maxLength={500}
             defaultValue={stage.descripcion ?? ""}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
-        <label className="flex items-start gap-3 rounded-lg border bg-slate-50 p-4 text-sm">
+        <label className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
           <input
             type="checkbox"
             name="requiere_maquina"
@@ -167,30 +155,24 @@ export default async function EditRouteStagePage({
           />
 
           <span>
-            <span className="block font-medium text-slate-900">
-              Esta etapa requiere maquina o equipo critico
+            <span className="block font-medium text-foreground">
+              Esta etapa requiere máquina o equipo crítico
             </span>
 
-            <span className="text-slate-600">
-              Se usara para identificar posibles cuellos de botella.
+            <span className="text-muted-foreground">
+              Se usará para identificar posibles cuellos de botella.
             </span>
           </span>
         </label>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href={`/dashboard/production/routes/${stage.id_ruta}/stages`}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Volver a etapas
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href={`/dashboard/production/routes/${stage.id_ruta}/stages`}>
+              Volver a etapas
+            </Link>
+          </Button>
 
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Guardar cambios
-          </button>
+          <Button type="submit">Guardar cambios</Button>
         </div>
       </form>
     </main>

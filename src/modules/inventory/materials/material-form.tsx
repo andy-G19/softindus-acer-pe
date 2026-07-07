@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import type { MaterialFormState } from "@/modules/inventory/materials/actions";
 
 type MaterialCategoryOption = {
@@ -51,7 +56,7 @@ function FieldError({ messages }: { messages?: string[] }) {
     return null;
   }
 
-  return <p className="text-sm text-red-600">{messages[0]}</p>;
+  return <p className="text-sm text-destructive">{messages[0]}</p>;
 }
 
 export function MaterialForm({
@@ -70,7 +75,7 @@ export function MaterialForm({
   return (
     <form
       action={formAction}
-      className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+      className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
     >
       {defaultValues?.id_material ? (
         <input
@@ -81,55 +86,44 @@ export function MaterialForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       {!hasCategories ? (
-        <div className="rounded-md border border-dashed px-4 py-3 text-sm text-slate-600">
-          No hay categorías de materiales activas.{" "}
-          <Link
-            href="/dashboard/inventory/material-categories"
-            className="font-medium text-slate-900 underline-offset-4 hover:underline"
-          >
-            Crear categorías de materiales
-          </Link>
-          .
-        </div>
+        <Alert variant="info">
+          <AlertDescription>
+            No hay categorías de materiales activas.{" "}
+            <Link href="/dashboard/inventory/material-categories">
+              Crear categorías de materiales
+            </Link>
+            .
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="nombre_material" className="text-sm font-medium">
-          Nombre del material *
-        </label>
-        <input
+        <Label htmlFor="nombre_material">Nombre del material *</Label>
+        <Input
           id="nombre_material"
           name="nombre_material"
           required
           placeholder="Ej. Plancha metálica 1/20"
           defaultValue={getValue(defaultValues, "nombre_material")}
-          className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.nombre_material} />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="categoria" className="text-sm font-medium">
-            Categoría *
-          </label>
-          <select
+          <Label htmlFor="categoria">Categoría *</Label>
+          <NativeSelect
             id="categoria"
             name="categoria"
             required
             disabled={!hasCategories}
             defaultValue={getValue(defaultValues, "categoria")}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:cursor-not-allowed disabled:opacity-70"
           >
             <option value="">Selecciona una categoría</option>
             {categories.map((category) => (
@@ -137,21 +131,18 @@ export function MaterialForm({
                 {category.nombre}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.categoria} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="unidad_medida" className="text-sm font-medium">
-            Unidad de medida *
-          </label>
-          <input
+          <Label htmlFor="unidad_medida">Unidad de medida *</Label>
+          <Input
             id="unidad_medida"
             name="unidad_medida"
             required
             placeholder="Ej. kg, unidad, metro, plancha"
             defaultValue={getValue(defaultValues, "unidad_medida")}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.unidad_medida} />
         </div>
@@ -160,10 +151,8 @@ export function MaterialForm({
       {mode === "create" ? (
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="stock_actual" className="text-sm font-medium">
-              Stock actual *
-            </label>
-            <input
+            <Label htmlFor="stock_actual">Stock actual *</Label>
+            <Input
               id="stock_actual"
               name="stock_actual"
               type="number"
@@ -171,16 +160,13 @@ export function MaterialForm({
               min="0"
               defaultValue={getValue(defaultValues, "stock_actual") || "0"}
               required
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
             <FieldError messages={state.fieldErrors?.stock_actual} />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="stock_reservado" className="text-sm font-medium">
-              Stock reservado *
-            </label>
-            <input
+            <Label htmlFor="stock_reservado">Stock reservado *</Label>
+            <Input
               id="stock_reservado"
               name="stock_reservado"
               type="number"
@@ -188,7 +174,6 @@ export function MaterialForm({
               min="0"
               defaultValue={getValue(defaultValues, "stock_reservado") || "0"}
               required
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
             <FieldError messages={state.fieldErrors?.stock_reservado} />
           </div>
@@ -197,14 +182,14 @@ export function MaterialForm({
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
             <span className="text-sm font-medium">Stock actual</span>
-            <div className="rounded-lg border bg-slate-50 px-3 py-2 text-sm">
+            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
               {getValue(defaultValues, "stock_actual") || "0.00"}
             </div>
           </div>
 
           <div className="space-y-2">
             <span className="text-sm font-medium">Stock reservado</span>
-            <div className="rounded-lg border bg-slate-50 px-3 py-2 text-sm">
+            <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
               {getValue(defaultValues, "stock_reservado") || "0.00"}
             </div>
           </div>
@@ -213,10 +198,8 @@ export function MaterialForm({
 
       <div className="grid gap-5 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="stock_minimo" className="text-sm font-medium">
-            Stock mínimo *
-          </label>
-          <input
+          <Label htmlFor="stock_minimo">Stock mínimo *</Label>
+          <Input
             id="stock_minimo"
             name="stock_minimo"
             type="number"
@@ -224,19 +207,13 @@ export function MaterialForm({
             min="0"
             defaultValue={getValue(defaultValues, "stock_minimo") || "0"}
             required
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.stock_minimo} />
         </div>
 
         <div className="space-y-2">
-          <label
-            htmlFor="costo_unitario_actual"
-            className="text-sm font-medium"
-          >
-            Costo unitario actual *
-          </label>
-          <input
+          <Label htmlFor="costo_unitario_actual">Costo unitario actual *</Label>
+          <Input
             id="costo_unitario_actual"
             name="costo_unitario_actual"
             type="number"
@@ -246,7 +223,6 @@ export function MaterialForm({
               getValue(defaultValues, "costo_unitario_actual") || "0"
             }
             required
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.costo_unitario_actual} />
         </div>
@@ -254,23 +230,16 @@ export function MaterialForm({
 
       <div className="flex items-center justify-between pt-4">
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : (
           <span />
         )}
 
-        <button
-          type="submit"
-          disabled={isPending || !hasCategories}
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending || !hasCategories}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import type { SparePartFormState } from "@/modules/maintenance/spare-parts/actions";
 
 type ProviderOption = {
@@ -61,39 +67,29 @@ export function SparePartForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="nombre_repuesto" className="text-sm font-medium">
-          Nombre del repuesto
-        </label>
-        <input
+        <Label htmlFor="nombre_repuesto">Nombre del repuesto</Label>
+        <Input
           id="nombre_repuesto"
           name="nombre_repuesto"
           required
           defaultValue={getValue(defaultValues, "nombre_repuesto")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.nombre_repuesto} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="id_proveedor" className="text-sm font-medium">
-            Proveedor
-          </label>
-          <select
+          <Label htmlFor="id_proveedor">Proveedor</Label>
+          <NativeSelect
             id="id_proveedor"
             name="id_proveedor"
             defaultValue={getValue(defaultValues, "id_proveedor")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="">Sin proveedor</option>
             {providers.map((provider) => (
@@ -101,15 +97,13 @@ export function SparePartForm({
                 {provider.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.id_proveedor} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="costo_unitario" className="text-sm font-medium">
-            Costo unitario
-          </label>
-          <input
+          <Label htmlFor="costo_unitario">Costo unitario</Label>
+          <Input
             id="costo_unitario"
             name="costo_unitario"
             type="number"
@@ -117,57 +111,43 @@ export function SparePartForm({
             step="0.01"
             required
             defaultValue={getValue(defaultValues, "costo_unitario")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.costo_unitario} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="estado" className="text-sm font-medium">
-          Estado
-        </label>
-        <select
+        <Label htmlFor="estado">Estado</Label>
+        <NativeSelect
           id="estado"
           name="estado"
           required
           defaultValue={getValue(defaultValues, "estado") || "true"}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         >
           <option value="true">Activo</option>
           <option value="false">Inactivo</option>
-        </select>
+        </NativeSelect>
         <FieldError messages={state.fieldErrors?.estado} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="descripcion" className="text-sm font-medium">
-          Descripcion
-        </label>
-        <textarea
+        <Label htmlFor="descripcion">Descripcion</Label>
+        <Textarea
           id="descripcion"
           name="descripcion"
           rows={4}
           defaultValue={getValue(defaultValues, "descripcion")}
-          className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
         />
         <FieldError messages={state.fieldErrors?.descripcion} />
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
-        <Link
-          href="/dashboard/maintenance/spare-parts"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-        >
-          Volver al listado
-        </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/maintenance/spare-parts">Volver al listado</Link>
+        </Button>
       </div>
     </form>
   );

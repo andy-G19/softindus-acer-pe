@@ -476,6 +476,36 @@
     color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
   }
 
+  .alert-state-success {
+    border-color: color-mix(in srgb, var(--accent-forge) 35%, transparent);
+    background-color: color-mix(in srgb, var(--accent-forge) 12%, transparent);
+    color: color-mix(in srgb, var(--accent-forge) 80%, var(--foreground) 20%);
+  }
+
+  .alert-state-success [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--accent-forge) 55%, var(--foreground) 45%);
+  }
+
+  .alert-state-warning {
+    border-color: color-mix(in srgb, var(--accent-ember) 35%, transparent);
+    background-color: color-mix(in srgb, var(--accent-ember) 12%, transparent);
+    color: color-mix(in srgb, var(--accent-ember) 80%, var(--foreground) 20%);
+  }
+
+  .alert-state-warning [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--accent-ember) 55%, var(--foreground) 45%);
+  }
+
+  .alert-state-info {
+    border-color: color-mix(in srgb, var(--accent-steel) 40%, transparent);
+    background-color: color-mix(in srgb, var(--accent-steel) 12%, transparent);
+    color: color-mix(in srgb, var(--accent-steel) 78%, var(--foreground) 22%);
+  }
+
+  .alert-state-info [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--accent-steel) 55%, var(--foreground) 45%);
+  }
+
   .sidebar-nav-link {
     color: color-mix(in srgb, var(--foreground) 68%, transparent);
   }
@@ -631,7 +661,7 @@
 
   .industrial-dark .hover\:bg-slate-700:hover,
   .industrial-dark .hover\:bg-slate-800:hover {
-    background-color: #d97706;
+    background-color: color-mix(in srgb, var(--primary) 88%, black 12%);
   }
 
   .industrial-dark .hover\:text-slate-900:hover {

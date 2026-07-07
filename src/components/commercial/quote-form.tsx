@@ -3,6 +3,20 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { createQuoteAction } from "@/modules/commercial/quotes/actions";
 
 type QuoteOrderItem = {
@@ -63,26 +77,33 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
   const hasDefaultOrder = Boolean(defaultOrderId && selectedOrder);
 
   return (
-    <form action={createQuoteAction} className="space-y-5 rounded-lg border p-6">
+    <form
+      action={createQuoteAction}
+      className="space-y-5 rounded-lg border border-border/80 bg-card p-6"
+    >
       {!canCreateQuote && (
-        <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900">
-          No existen pedidos disponibles para generar proforma. Primero registra
-          un pedido o verifica que el pedido no tenga ya una proforma vigente.
-        </div>
+        <Alert variant="warning">
+          <AlertDescription>
+            No existen pedidos disponibles para generar proforma. Primero
+            registra un pedido o verifica que el pedido no tenga ya una
+            proforma vigente.
+          </AlertDescription>
+        </Alert>
       )}
       {hasDefaultOrder && (
-        <div className="rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-900">
+        <Alert variant="success">
+          <AlertDescription>
             Pedido preseleccionado correctamente desde el listado de pedidos.
-        </div>
+          </AlertDescription>
+        </Alert>
       )}
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Pedido</label>
-        <select
+        <Label>Pedido</Label>
+        <NativeSelect
           name="id_pedido"
           value={selectedOrderId}
           onChange={(event) => setSelectedOrderId(event.target.value)}
-          className="w-full rounded-md border px-3 py-2"
           required
           disabled={!canCreateQuote}
         >
@@ -94,11 +115,11 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
               {formatMoney(order.monto_total)}
             </option>
           ))}
-        </select>
+        </NativeSelect>
       </div>
 
       {selectedOrder && (
-        <div className="space-y-4 rounded-lg border bg-muted/30 p-4">
+        <div className="space-y-4 rounded-lg border border-border/80 bg-muted/30 p-4">
           <div>
             <h2 className="font-semibold">Resumen del pedido</h2>
             <p className="text-sm text-muted-foreground">
@@ -107,19 +128,19 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-lg border bg-background p-3">
+            <div className="rounded-lg border border-border/80 bg-background p-3">
               <p className="text-xs text-muted-foreground">Cliente</p>
               <p className="font-medium">{selectedOrder.cliente}</p>
             </div>
 
-            <div className="rounded-lg border bg-background p-3">
+            <div className="rounded-lg border border-border/80 bg-background p-3">
               <p className="text-xs text-muted-foreground">Fecha de pedido</p>
               <p className="font-medium">
                 {formatDate(selectedOrder.fecha_pedido)}
               </p>
             </div>
 
-            <div className="rounded-lg border bg-background p-3">
+            <div className="rounded-lg border border-border/80 bg-background p-3">
               <p className="text-xs text-muted-foreground">Entrega estimada</p>
               <p className="font-medium">
                 {formatDate(selectedOrder.fecha_entrega_estimada)}
@@ -127,35 +148,27 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-lg border bg-background">
-            <table className="w-full text-sm">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="px-4 py-3 text-left">Producto</th>
-                  <th className="px-4 py-3 text-left">Cantidad</th>
-                  <th className="px-4 py-3 text-left">Precio unitario</th>
-                  <th className="px-4 py-3 text-left">Subtotal</th>
-                </tr>
-              </thead>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Producto</TableHead>
+                <TableHead>Cantidad</TableHead>
+                <TableHead>Precio unitario</TableHead>
+                <TableHead>Subtotal</TableHead>
+              </TableRow>
+            </TableHeader>
 
-              <tbody>
-                {selectedOrder.productos.map((item) => (
-                  <tr key={item.id_detalle_pedido} className="border-t">
-                    <td className="px-4 py-3">{item.producto}</td>
-                    <td className="px-4 py-3">
-                      {Number(item.cantidad).toFixed(2)}
-                    </td>
-                    <td className="px-4 py-3">
-                      {formatMoney(item.precio_unitario)}
-                    </td>
-                    <td className="px-4 py-3">
-                      {formatMoney(item.subtotal)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            <TableBody>
+              {selectedOrder.productos.map((item) => (
+                <TableRow key={item.id_detalle_pedido}>
+                  <TableCell>{item.producto}</TableCell>
+                  <TableCell>{Number(item.cantidad).toFixed(2)}</TableCell>
+                  <TableCell>{formatMoney(item.precio_unitario)}</TableCell>
+                  <TableCell>{formatMoney(item.subtotal)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
           <div className="flex justify-end">
             <div className="text-right">
@@ -170,8 +183,8 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
 
       <div className="grid gap-4 md:grid-cols-3">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Adelanto inicial</label>
-          <input
+          <Label>Adelanto inicial</Label>
+          <Input
             name="adelanto_inicial"
             type="number"
             min="0"
@@ -179,7 +192,6 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
             value={advanceAmount}
             onChange={(event) => setAdvanceAmount(event.target.value)}
             placeholder="Ejemplo: 100.00"
-            className="w-full rounded-md border px-3 py-2"
             disabled={!canCreateQuote}
           />
           <p className="text-xs text-muted-foreground">
@@ -188,8 +200,8 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Saldo calculado</label>
-          <div className="rounded-md border bg-muted px-3 py-2 text-sm font-medium">
+          <Label>Saldo calculado</Label>
+          <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm font-medium">
             {formatMoney(balance)}
           </div>
           <p className="text-xs text-muted-foreground">
@@ -198,14 +210,13 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Validez en días</label>
-          <input
+          <Label>Validez en días</Label>
+          <Input
             name="validez_dias"
             type="number"
             min="1"
             step="1"
             placeholder="Ejemplo: 15"
-            className="w-full rounded-md border px-3 py-2"
             disabled={!canCreateQuote}
           />
           <p className="text-xs text-muted-foreground">
@@ -215,30 +226,23 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Observaciones</label>
-        <textarea
+        <Label>Observaciones</Label>
+        <Textarea
           name="observaciones"
           placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación."
-          className="min-h-24 w-full rounded-md border px-3 py-2"
+          className="min-h-24"
           disabled={!canCreateQuote}
         />
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={!canCreateQuote}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
-        >
+        <Button type="submit" disabled={!canCreateQuote}>
           Generar proforma
-        </button>
+        </Button>
 
-        <Link
-          href="/dashboard/commercial/quotes"
-          className="rounded-md border px-4 py-2 text-sm font-medium"
-        >
-          Cancelar
-        </Link>
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/commercial/quotes">Cancelar</Link>
+        </Button>
       </div>
     </form>
   );

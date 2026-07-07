@@ -1,14 +1,27 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
 function toNumber(value: unknown) {
@@ -75,14 +88,14 @@ function getRiskLabel(risk: string) {
 function getRiskBadgeVariant(risk: string) {
   const variants: Record<
     string,
-    "default" | "secondary" | "destructive" | "outline"
+    "destructive" | "warning" | "success"
   > = {
     alto: "destructive",
-    medio: "secondary",
-    bajo: "outline",
+    medio: "warning",
+    bajo: "success",
   };
 
-  return variants[risk] ?? "secondary";
+  return variants[risk] ?? "warning";
 }
 
 export default async function MaintenanceRecurrencesPage() {
@@ -259,106 +272,35 @@ export default async function MaintenanceRecurrencesPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Reincidencias
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Reincidencias y reportes básicos
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Analiza máquinas con mayor número de fallas, horas perdidas, costo
-            acumulado de reparaciones y mantenimientos preventivos vencidos.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/maintenance"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/maintenance/failures"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Ver fallas
-          </Link>
-
-          <Link
-            href="/dashboard/maintenance/repairs"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Ver reparaciones
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Reincidencias y reportes básicos"
+        description="Analiza máquinas con mayor número de fallas, horas perdidas, costo acumulado de reparaciones y mantenimientos preventivos vencidos."
+        backHref={navigationHrefs.maintenance}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Reincidencias" },
+        ])}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/maintenance/failures">Ver fallas</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/maintenance/repairs">
+                Ver reparaciones
+              </Link>
+            </Button>
+          </div>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Fallas totales</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalFailures}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Este mes: {monthlyFailures}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Fallas abiertas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{pendingFailuresCount}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Pendientes o en atención.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Horas perdidas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatHours(totalLostHours)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Acumuladas por fallas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Costo acumulado</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(totalRepairCost)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Este mes: {formatMoney(monthlyRepairCost._sum.costo_total)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Preventivos vencidos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{overduePreventiveCount}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Requieren atención.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Fallas totales" value={totalFailures.toString()} description={`Este mes: ${monthlyFailures}`} tone="info" />
+        <KpiCard title="Fallas abiertas" value={pendingFailuresCount.toString()} description="Pendientes o en atención." tone={pendingFailuresCount > 0 ? "warning" : "info"} />
+        <KpiCard title="Horas perdidas" value={formatHours(totalLostHours)} description="Acumuladas por fallas." tone="warning" />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalRepairCost)} description={`Este mes: ${formatMoney(monthlyRepairCost._sum.costo_total)}`} tone="info" />
+        <KpiCard title="Preventivos vencidos" value={overduePreventiveCount.toString()} description="Requieren atención." tone={overduePreventiveCount > 0 ? "warning" : "info"} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
@@ -371,18 +313,16 @@ export default async function MaintenanceRecurrencesPage() {
 
           <CardContent>
             {topFailureMachines.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aún no hay fallas registradas para generar este ranking.
-              </p>
+              <EmptyState label="Aún no hay fallas registradas para generar este ranking." />
             ) : (
               <div className="space-y-3">
                 {topFailureMachines.map((machine, index) => (
                   <div
                     key={machine.id_maquina}
-                    className="flex items-center justify-between gap-4 rounded-lg border p-3"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
                     <div>
-                      <p className="text-sm font-medium">
+                      <p className="text-sm font-medium text-foreground">
                         {index + 1}. {machine.nombre}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -391,7 +331,7 @@ export default async function MaintenanceRecurrencesPage() {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-sm font-semibold">
+                      <p className="text-sm font-semibold text-foreground">
                         {machine.failureCount} fallas
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -414,18 +354,16 @@ export default async function MaintenanceRecurrencesPage() {
 
           <CardContent>
             {topCostMachines.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aún no hay reparaciones con costo registrado.
-              </p>
+              <EmptyState label="Aún no hay reparaciones con costo registrado." />
             ) : (
               <div className="space-y-3">
                 {topCostMachines.map((machine, index) => (
                   <div
                     key={machine.id_maquina}
-                    className="flex items-center justify-between gap-4 rounded-lg border p-3"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
                     <div>
-                      <p className="text-sm font-medium">
+                      <p className="text-sm font-medium text-foreground">
                         {index + 1}. {machine.nombre}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -434,7 +372,7 @@ export default async function MaintenanceRecurrencesPage() {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-sm font-semibold">
+                      <p className="text-sm font-semibold text-foreground">
                         {formatMoney(machine.totalRepairCost)}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -456,129 +394,96 @@ export default async function MaintenanceRecurrencesPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {machineReports.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Aún no hay máquinas registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra máquinas, fallas y reparaciones para generar reportes
-                de reincidencia.
-              </p>
-
-              <Link
-                href="/dashboard/maintenance/machines/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Registrar máquina
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aún no hay máquinas registradas."
+              description="Registra máquinas, fallas y reparaciones para generar reportes de reincidencia."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/maintenance/machines/new">
+                    Registrar máquina
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Máquina</th>
-                    <th className="py-2 pr-3">Estado</th>
-                    <th className="py-2 pr-3 text-right">Fallas</th>
-                    <th className="py-2 pr-3 text-right">Abiertas</th>
-                    <th className="py-2 pr-3 text-right">Reparadas</th>
-                    <th className="py-2 pr-3 text-right">Horas perdidas</th>
-                    <th className="py-2 pr-3 text-right">Costo reparación</th>
-                    <th className="py-2 pr-3 text-right">Preventivos</th>
-                    <th className="py-2 pr-3 text-right">Vencidos</th>
-                    <th className="py-2 pr-3">Última falla</th>
-                    <th className="py-2 text-right">Riesgo</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Máquina</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead className="text-right">Fallas</TableHead>
+                  <TableHead className="text-right">Abiertas</TableHead>
+                  <TableHead className="text-right">Reparadas</TableHead>
+                  <TableHead className="text-right">Horas perdidas</TableHead>
+                  <TableHead className="text-right">Costo reparación</TableHead>
+                  <TableHead className="text-right">Preventivos</TableHead>
+                  <TableHead className="text-right">Vencidos</TableHead>
+                  <TableHead>Última falla</TableHead>
+                  <TableHead className="text-right">Riesgo</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {machineReports.map((machine) => (
-                    <tr key={machine.id_maquina} className="border-b align-top">
-                      <td className="py-2 pr-3 font-medium">
-                        {machine.nombre}
-                        <p className="text-xs font-normal text-muted-foreground">
-                          {machine.tipo} · {machine.ubicacion ?? "Sin ubicación"}
-                        </p>
-                      </td>
+              <TableBody>
+                {machineReports.map((machine) => (
+                  <TableRow key={machine.id_maquina} className="align-top">
+                    <TableCell className="font-medium">
+                      {machine.nombre}
+                      <p className="text-xs font-normal text-muted-foreground">
+                        {machine.tipo} · {machine.ubicacion ?? "Sin ubicación"}
+                      </p>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getMachineStatusLabel(machine.estado)}
-                      </td>
+                    <TableCell>{getMachineStatusLabel(machine.estado)}</TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {machine.failureCount}
-                      </td>
+                    <TableCell className="text-right">
+                      {machine.failureCount}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {machine.openFailures}
-                      </td>
+                    <TableCell className="text-right">
+                      {machine.openFailures}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {machine.repairedFailures}
-                      </td>
+                    <TableCell className="text-right">
+                      {machine.repairedFailures}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatHours(machine.lostHours)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatHours(machine.lostHours)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatMoney(machine.totalRepairCost)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatMoney(machine.totalRepairCost)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {machine.preventiveCount}
-                      </td>
+                    <TableCell className="text-right">
+                      {machine.preventiveCount}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {machine.overduePreventives}
-                      </td>
+                    <TableCell className="text-right">
+                      {machine.overduePreventives}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(machine.lastFailureDate)}
-                      </td>
+                    <TableCell>{formatDate(machine.lastFailureDate)}</TableCell>
 
-                      <td className="py-2 text-right">
-                        <Badge variant={getRiskBadgeVariant(machine.risk)}>
-                          {getRiskLabel(machine.risk)}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell className="text-right">
+                      <Badge variant={getRiskBadgeVariant(machine.risk)}>
+                        {getRiskLabel(machine.risk)}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
 
       <section className="grid gap-4 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Máquinas críticas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{criticalMachines.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Riesgo alto por fallas, horas perdidas o costo acumulado.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Máquinas reincidentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{recurrentMachines.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Máquinas con 3 o más fallas registradas.
-            </p>
-          </CardContent>
-        </Card>
-
+        <KpiCard title="Máquinas críticas" value={criticalMachines.length.toString()} description="Riesgo alto por fallas, horas perdidas o costo acumulado." tone="warning" />
+        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.length.toString()} description="Máquinas con 3 o más fallas registradas." tone="warning" />
         <Card>
           <CardHeader>
             <CardTitle className="text-base">

@@ -2,14 +2,30 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -83,14 +99,14 @@ function getAttendanceBadgeVariant(attendance: {
   tardanza: boolean;
 }) {
   if (attendance.falta) {
-    return "destructive";
+    return "destructive" as const;
   }
 
   if (attendance.tardanza) {
-    return "secondary";
+    return "warning" as const;
   }
 
-  return "default";
+  return "success" as const;
 }
 
 export default async function AttendancePage({
@@ -224,141 +240,87 @@ export default async function AttendancePage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Asistencia
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Asistencia diaria
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra y consulta la asistencia de los operarios del taller,
-            incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y
-            observaciones.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/staff"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/staff/attendance/new"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Registrar asistencia
-          </Link>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar operario o codigo"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="operario"
-            defaultValue={operario}
-            placeholder="ID operario"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <select
-            name="estado"
-            defaultValue={estado}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Todos los estados</option>
-            <option value="presente">Presente</option>
-            <option value="tardanza">Tardanza</option>
-            <option value="falta">Falta</option>
-          </select>
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Filtrar
-            </button>
-            <Link
-              href="/dashboard/staff/attendance"
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Limpiar filtros
+      <PageHeader
+        title="Asistencia diaria"
+        description="Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones."
+        backHref={navigationHrefs.staff}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Asistencia" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/staff/attendance/new">
+              Registrar asistencia
             </Link>
-          </div>
-        </form>
-      </section>
+          </Button>
+        }
+      />
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input
+                id="q"
+                name="q"
+                defaultValue={q}
+                placeholder="Buscar operario o codigo"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="operario">ID operario</Label>
+              <Input id="operario" name="operario" defaultValue={operario} placeholder="ID operario" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos los estados</option>
+                <option value="presente">Presente</option>
+                <option value="tardanza">Tardanza</option>
+                <option value="falta">Falta</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input
+                id="from"
+                name="from"
+                type="date"
+                defaultValue={parseStringParam(params, "from")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input
+                id="to"
+                name="to"
+                type="date"
+                defaultValue={parseStringParam(params, "to")}
+              />
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit" className="flex-1">
+                Filtrar
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/staff/attendance">Limpiar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Registros totales</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalAttendance}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Historial general de asistencia.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Asistencias de hoy</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{attendanceToday}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Registros creados para la fecha actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Faltas de hoy</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{absencesToday}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Operarios marcados como ausentes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tardanzas de hoy</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{latenessToday}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Registros marcados con tardanza.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Registros totales" value={totalAttendance.toString()} description="Historial general de asistencia." tone="info" />
+        <KpiCard title="Asistencias de hoy" value={attendanceToday.toString()} description="Registros creados para la fecha actual." tone="info" />
+        <KpiCard title="Faltas de hoy" value={absencesToday.toString()} description="Operarios marcados como ausentes." tone={absencesToday > 0 ? "warning" : "info"} />
+        <KpiCard title="Tardanzas de hoy" value={latenessToday.toString()} description="Registros marcados con tardanza." tone={latenessToday > 0 ? "warning" : "info"} />
       </section>
 
       <Card>
@@ -368,98 +330,74 @@ export default async function AttendancePage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {latestAttendance.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Todavía no hay asistencias registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra la primera asistencia diaria para empezar a reemplazar
-                el control manual en cuaderno.
-              </p>
-
-              <Link
-                href="/dashboard/staff/attendance/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Registrar primera asistencia
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Todavía no hay asistencias registradas."
+              description="Registra la primera asistencia diaria para empezar a reemplazar el control manual en cuaderno."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/staff/attendance/new">
+                    Registrar primera asistencia
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Ingreso</th>
-                    <th className="py-2 pr-3">Salida</th>
-                    <th className="py-2 pr-3 text-right">Horas</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    <th className="py-2 pr-3">Registrado por</th>
-                    <th className="py-2">Observaciones</th>
-                    <th className="py-2 text-right">Acciones</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Ingreso</TableHead>
+                  <TableHead>Salida</TableHead>
+                  <TableHead className="text-right">Horas</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  <TableHead>Registrado por</TableHead>
+                  <TableHead>Observaciones</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {latestAttendance.map((attendance) => (
-                    <tr key={attendance.id_asistencia} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {attendance.id_asistencia}
-                      </td>
+              <TableBody>
+                {latestAttendance.map((attendance) => (
+                  <TableRow key={attendance.id_asistencia}>
+                    <TableCell className="font-mono text-xs">
+                      {attendance.id_asistencia}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(attendance.fecha)}
-                      </td>
+                    <TableCell>{formatDate(attendance.fecha)}</TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {attendance.operario.apellidos},{" "}
-                        {attendance.operario.nombres}
-                      </td>
+                    <TableCell className="font-medium">
+                      {attendance.operario.apellidos},{" "}
+                      {attendance.operario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatTime(attendance.hora_ingreso)}
-                      </td>
+                    <TableCell>{formatTime(attendance.hora_ingreso)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatTime(attendance.hora_salida)}
-                      </td>
+                    <TableCell>{formatTime(attendance.hora_salida)}</TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatHours(attendance.horas_trabajadas)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatHours(attendance.horas_trabajadas)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        <Badge
-                          variant={getAttendanceBadgeVariant(attendance)}
-                        >
-                          {getAttendanceStatus(attendance)}
-                        </Badge>
-                      </td>
+                    <TableCell className="text-right">
+                      <Badge variant={getAttendanceBadgeVariant(attendance)}>
+                        {getAttendanceStatus(attendance)}
+                      </Badge>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {attendance.usuario.nombres}{" "}
-                        {attendance.usuario.apellidos}
-                      </td>
+                    <TableCell>
+                      {attendance.usuario.nombres}{" "}
+                      {attendance.usuario.apellidos}
+                    </TableCell>
 
-                      <td className="py-2">
-                        {attendance.observaciones ?? "-"}
-                      </td>
-
-                      <td className="py-2 text-right">
-                        <span className="text-xs text-muted-foreground">
-                          Sin accion
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell>{attendance.observaciones ?? "-"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

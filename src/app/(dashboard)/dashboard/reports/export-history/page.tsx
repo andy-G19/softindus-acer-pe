@@ -1,10 +1,24 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -124,27 +138,6 @@ function formatParams(value: string | null) {
   } catch {
     return value;
   }
-}
-
-type SummaryCardProps = {
-  title: string;
-  value: string | number;
-  description: string;
-};
-
-function SummaryCard({ title, value, description }: SummaryCardProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function ExportHistoryPage({ searchParams }: PageProps) {
@@ -275,176 +268,93 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
         <CardContent>
           <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
             <div className="space-y-2">
-              <label htmlFor="dateFrom" className="text-sm font-medium">
-                Fecha desde
-              </label>
-              <input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateFrom">Fecha desde</Label>
+              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="dateTo" className="text-sm font-medium">
-                Fecha hasta
-              </label>
-              <input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              />
+              <Label htmlFor="dateTo">Fecha hasta</Label>
+              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="module" className="text-sm font-medium">
-                Reporte
-              </label>
-              <select
-                id="module"
-                name="module"
-                defaultValue={reportModule}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="module">Reporte</Label>
+              <NativeSelect id="module" name="module" defaultValue={reportModule}>
                 <option value="">Todos los reportes</option>
                 {REPORT_MODULE_OPTIONS.map((moduleOption) => (
                   <option key={moduleOption} value={moduleOption}>
                     {moduleOption}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="format" className="text-sm font-medium">
-                Formato
-              </label>
-              <select
-                id="format"
-                name="format"
-                defaultValue={format}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="format">Formato</Label>
+              <NativeSelect id="format" name="format" defaultValue={format}>
                 <option value="">Todos los formatos</option>
                 {FORMAT_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="status" className="text-sm font-medium">
-                Estado
-              </label>
-              <select
-                id="status"
-                name="status"
-                defaultValue={status}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="status">Estado</Label>
+              <NativeSelect id="status" name="status" defaultValue={status}>
                 <option value="">Todos los estados</option>
                 {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="userId" className="text-sm font-medium">
-                Usuario
-              </label>
-              <select
-                id="userId"
-                name="userId"
-                defaultValue={userId}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-              >
+              <Label htmlFor="userId">Usuario</Label>
+              <NativeSelect id="userId" name="userId" defaultValue={userId}>
                 <option value="">Todos los usuarios</option>
                 {users.map((user) => (
                   <option key={user.id_usuario} value={user.id_usuario}>
                     {user.apellidos}, {user.nombres}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="searchText" className="text-sm font-medium">
-                Buscar
-              </label>
-              <input
+              <Label htmlFor="searchText">Buscar</Label>
+              <Input
                 id="searchText"
                 name="searchText"
                 type="text"
                 defaultValue={searchText}
                 placeholder="Archivo, filtros..."
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
             </div>
 
-            <div className="flex gap-2 md:col-span-2 xl:col-span-7">
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Aplicar filtros
-              </button>
-
-              <Link
-                href="/dashboard/reports/export-history"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Limpiar filtros
-              </Link>
+            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
+              <Button type="submit">Aplicar filtros</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/export-history">
+                  Limpiar filtros
+                </Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <SummaryCard
-          title="Exportaciones"
-          value={totalExports}
-          description="Registros encontrados según filtros."
-        />
-
-        <SummaryCard
-          title="Excel"
-          value={excelExports}
-          description="Exportaciones registradas como Excel."
-        />
-
-        <SummaryCard
-          title="PDF"
-          value={pdfExports}
-          description="Exportaciones PDF registradas."
-        />
-
-        <SummaryCard
-          title="Generadas"
-          value={generatedExports}
-          description="Exportaciones completadas correctamente."
-        />
-
-        <SummaryCard
-          title="Usuarios"
-          value={uniqueUsers}
-          description="Usuarios que exportaron reportes."
-        />
-
-        <SummaryCard
-          title="Módulos"
-          value={uniqueModules}
-          description="Tipos de reporte exportados."
-        />
+        <KpiCard title="Exportaciones" value={totalExports.toString()} description="Registros encontrados según filtros." tone="info" />
+        <KpiCard title="Excel" value={excelExports.toString()} description="Exportaciones registradas como Excel." tone="info" />
+        <KpiCard title="PDF" value={pdfExports.toString()} description="Exportaciones PDF registradas." tone="info" />
+        <KpiCard title="Generadas" value={generatedExports.toString()} description="Exportaciones completadas correctamente." tone="success" />
+        <KpiCard title="Usuarios" value={uniqueUsers.toString()} description="Usuarios que exportaron reportes." tone="info" />
+        <KpiCard title="Módulos" value={uniqueModules.toString()} description="Tipos de reporte exportados." tone="info" />
       </section>
 
       <Card>
@@ -454,77 +364,70 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {exports.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron exportaciones con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron exportaciones con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="py-2 pr-3 font-medium">Código</th>
-                    <th className="py-2 pr-3 font-medium">Fecha</th>
-                    <th className="py-2 pr-3 font-medium">Usuario</th>
-                    <th className="py-2 pr-3 font-medium">Reporte</th>
-                    <th className="py-2 pr-3 font-medium">Formato</th>
-                    <th className="py-2 pr-3 font-medium">Estado</th>
-                    <th className="py-2 pr-3 font-medium">Archivo</th>
-                    <th className="py-2 pr-3 font-medium">Filtros usados</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Usuario</TableHead>
+                  <TableHead>Reporte</TableHead>
+                  <TableHead>Formato</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Archivo</TableHead>
+                  <TableHead>Filtros usados</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {exports.map((exportItem) => (
-                    <tr key={exportItem.id_exportacion} className="border-b align-top">
-                      <td className="py-2 pr-3 font-medium">
-                        {exportItem.id_exportacion}
-                      </td>
+              <TableBody>
+                {exports.map((exportItem) => (
+                  <TableRow key={exportItem.id_exportacion} className="align-top">
+                    <TableCell className="font-medium">
+                      {exportItem.id_exportacion}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDateTime(exportItem.fecha_exportacion)}
-                      </td>
+                    <TableCell>
+                      {formatDateTime(exportItem.fecha_exportacion)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        <div>
-                          <p className="font-medium">
-                            {exportItem.usuario.apellidos},{" "}
-                            {exportItem.usuario.nombres}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {exportItem.usuario.correo}
-                          </p>
-                        </div>
-                      </td>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">
+                          {exportItem.usuario.apellidos},{" "}
+                          {exportItem.usuario.nombres}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {exportItem.usuario.correo}
+                        </p>
+                      </div>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {exportItem.modulo_origen}
-                      </td>
+                    <TableCell>{exportItem.modulo_origen}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getFormatLabel(exportItem.formato)}
-                      </td>
+                    <TableCell>{getFormatLabel(exportItem.formato)}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {getStatusLabel(exportItem.estado)}
-                      </td>
+                    <TableCell>{getStatusLabel(exportItem.estado)}</TableCell>
 
-                      <td className="min-w-56 py-2 pr-3">
-                        {exportItem.ruta_archivo ?? "-"}
-                      </td>
+                    <TableCell className="min-w-56">
+                      {exportItem.ruta_archivo ?? "-"}
+                    </TableCell>
 
-                      <td className="min-w-80 py-2 pr-3 text-xs text-muted-foreground">
-                        {formatParams(exportItem.parametros)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <TableCell className="min-w-80 text-xs text-muted-foreground">
+                      {formatParams(exportItem.parametros)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-3 px-6 text-xs text-muted-foreground">
             Se muestran como máximo 150 exportaciones para mantener una consulta
             rápida.
           </p>

@@ -2,14 +2,30 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -49,12 +65,12 @@ function getPreventiveStatusLabel(status: string) {
 function getPreventiveStatusBadgeVariant(status: string) {
   const variants: Record<
     string,
-    "default" | "secondary" | "destructive" | "outline"
+    "warning" | "secondary" | "destructive" | "success"
   > = {
-    pendiente: "secondary",
-    realizado: "default",
+    pendiente: "warning",
+    realizado: "success",
     vencido: "destructive",
-    anulado: "outline",
+    anulado: "secondary",
   };
 
   return variants[status] ?? "secondary";
@@ -174,150 +190,89 @@ export default async function PreventiveMaintenancePage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Preventivos
-          </p>
+      <PageHeader
+        title="Mantenimientos preventivos"
+        description="Programa y consulta mantenimientos preventivos por máquina, responsable, fecha programada, fecha realizada y estado de cumplimiento."
+        backHref={navigationHrefs.maintenance}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Preventivos" },
+        ])}
+        actions={
+          canManagePreventive ? (
+            <Button asChild>
+              <Link href="/dashboard/maintenance/preventive/new">
+                Programar preventivo
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Mantenimientos preventivos
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Programa y consulta mantenimientos preventivos por máquina,
-            responsable, fecha programada, fecha realizada y estado de
-            cumplimiento.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/maintenance"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          {canManagePreventive ? (
-            <Link
-              href="/dashboard/maintenance/preventive/new"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Programar preventivo
-            </Link>
-          ) : null}
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar mantenimiento o actividad"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="machine"
-            defaultValue={machine}
-            placeholder="Maquina"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="responsible"
-            defaultValue={responsible}
-            placeholder="Responsable"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <select
-            name="status"
-            defaultValue={status}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="realizado">Realizado</option>
-            <option value="vencido">Vencido</option>
-            <option value="anulado">Anulado</option>
-          </select>
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Filtrar
-            </button>
-            <Link
-              href="/dashboard/maintenance/preventive"
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Limpiar filtros
-            </Link>
-          </div>
-        </form>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar mantenimiento o actividad" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="machine">Máquina</Label>
+              <Input id="machine" name="machine" defaultValue={machine} placeholder="Maquina" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="responsible">Responsable</Label>
+              <Input id="responsible" name="responsible" defaultValue={responsible} placeholder="Responsable" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Estado</Label>
+              <NativeSelect id="status" name="status" defaultValue={status}>
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="realizado">Realizado</option>
+                <option value="vencido">Vencido</option>
+                <option value="anulado">Anulado</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input
+                id="from"
+                name="from"
+                type="date"
+                defaultValue={parseStringParam(params, "from")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input
+                id="to"
+                name="to"
+                type="date"
+                defaultValue={parseStringParam(params, "to")}
+              />
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit" className="flex-1">
+                Filtrar
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/maintenance/preventive">Limpiar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Preventivos registrados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{maintenances.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico de programaciones.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Pendientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{pendingMaintenances.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Vencidos: {overdueMaintenances.length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Realizados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{completedMaintenances.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Cumplidos según registro.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Anulados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{cancelledMaintenances.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Programaciones canceladas.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Preventivos registrados" value={maintenances.length.toString()} description="Total histórico de programaciones." tone="info" />
+        <KpiCard title="Pendientes" value={pendingMaintenances.length.toString()} description={`Vencidos: ${overdueMaintenances.length}`} tone={overdueMaintenances.length > 0 ? "warning" : "info"} />
+        <KpiCard title="Realizados" value={completedMaintenances.length.toString()} description="Cumplidos según registro." tone="success" />
+        <KpiCard title="Anulados" value={cancelledMaintenances.length.toString()} description="Programaciones canceladas." tone="info" />
       </section>
 
       <Card>
@@ -327,159 +282,141 @@ export default async function PreventiveMaintenancePage({
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {maintenances.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Aún no hay mantenimientos preventivos registrados.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Programa el primer mantenimiento preventivo para anticipar
-                fallas y reducir paradas imprevistas.
-              </p>
-
-              {canManagePreventive ? (
-                <Link
-                  href="/dashboard/maintenance/preventive/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Programar primer preventivo
-                </Link>
-              ) : null}
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aún no hay mantenimientos preventivos registrados."
+              description="Programa el primer mantenimiento preventivo para anticipar fallas y reducir paradas imprevistas."
+              action={
+                canManagePreventive ? (
+                  <Button asChild>
+                    <Link href="/dashboard/maintenance/preventive/new">
+                      Programar primer preventivo
+                    </Link>
+                  </Button>
+                ) : undefined
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Máquina</th>
-                    <th className="py-2 pr-3">Actividad</th>
-                    <th className="py-2 pr-3">Responsable</th>
-                    <th className="py-2 pr-3">Programada</th>
-                    <th className="py-2 pr-3">Realizada</th>
-                    <th className="py-2 pr-3">Usuario</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    {canManagePreventive ? (
-                      <th className="py-2 text-right">Cambiar estado</th>
-                    ) : null}
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Máquina</TableHead>
+                  <TableHead>Actividad</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Programada</TableHead>
+                  <TableHead>Realizada</TableHead>
+                  <TableHead>Usuario</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  {canManagePreventive ? (
+                    <TableHead className="text-right">Cambiar estado</TableHead>
+                  ) : null}
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {maintenances.map((maintenance) => {
-                    const isOverdue =
-                      maintenance.estado === "pendiente" &&
-                      maintenance.fecha_programada < startOfToday;
+              <TableBody>
+                {maintenances.map((maintenance) => {
+                  const isOverdue =
+                    maintenance.estado === "pendiente" &&
+                    maintenance.fecha_programada < startOfToday;
 
-                    return (
-                      <tr
-                        key={maintenance.id_mantenimiento}
-                        className="border-b align-top"
-                      >
-                        <td className="py-2 pr-3 font-mono text-xs">
-                          {maintenance.id_mantenimiento}
-                        </td>
+                  return (
+                    <TableRow key={maintenance.id_mantenimiento} className="align-top">
+                      <TableCell className="font-mono text-xs">
+                        {maintenance.id_mantenimiento}
+                      </TableCell>
 
-                        <td className="py-2 pr-3 font-medium">
-                          {maintenance.maquina.nombre}
-                          <p className="text-xs font-normal text-muted-foreground">
-                            {maintenance.maquina.tipo} ·{" "}
-                            {getMachineStatusLabel(maintenance.maquina.estado)}
+                      <TableCell className="font-medium">
+                        {maintenance.maquina.nombre}
+                        <p className="text-xs font-normal text-muted-foreground">
+                          {maintenance.maquina.tipo} ·{" "}
+                          {getMachineStatusLabel(maintenance.maquina.estado)}
+                        </p>
+                      </TableCell>
+
+                      <TableCell>
+                        <p className="max-w-md">{maintenance.actividad}</p>
+                        {maintenance.observaciones ? (
+                          <p className="mt-1 max-w-md text-xs text-muted-foreground">
+                            {maintenance.observaciones}
                           </p>
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          <p className="max-w-md">{maintenance.actividad}</p>
-
-                          {maintenance.observaciones ? (
-                            <p className="mt-1 max-w-md text-xs text-muted-foreground">
-                              {maintenance.observaciones}
-                            </p>
-                          ) : null}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {maintenance.responsable ?? "-"}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {formatDate(maintenance.fecha_programada)}
-                          {isOverdue ? (
-                            <p className="text-xs text-red-600">Vencido</p>
-                          ) : null}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {formatDate(maintenance.fecha_realizada)}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {maintenance.usuario.nombres}{" "}
-                          {maintenance.usuario.apellidos}
-                        </td>
-
-                        <td className="py-2 pr-3 text-right">
-                          <Badge
-                            variant={getPreventiveStatusBadgeVariant(
-                              isOverdue ? "vencido" : maintenance.estado,
-                            )}
-                          >
-                            {isOverdue
-                              ? "Vencido"
-                              : getPreventiveStatusLabel(maintenance.estado)}
-                          </Badge>
-                        </td>
-
-                        {canManagePreventive ? (
-                          <td className="py-2 text-right">
-                            {["realizado", "anulado"].includes(
-                              maintenance.estado,
-                            ) ? (
-                              <span className="text-xs text-muted-foreground">
-                                Sin accion
-                              </span>
-                            ) : (
-                              <form
-                                action={updatePreventiveMaintenanceStatusAction}
-                                className="flex justify-end gap-2"
-                              >
-                                <input
-                                  type="hidden"
-                                  name="id_mantenimiento"
-                                  value={maintenance.id_mantenimiento}
-                                />
-
-                                <select
-                                  name="estado"
-                                  defaultValue={
-                                    isOverdue ? "vencido" : maintenance.estado
-                                  }
-                                  className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
-                                >
-                                  <option value="pendiente">Pendiente</option>
-                                  <option value="realizado">Realizado</option>
-                                  <option value="vencido">Vencido</option>
-                                  <option value="anulado">Anulado</option>
-                                </select>
-
-                                <button
-                                  type="submit"
-                                  className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                                >
-                                  Guardar
-                                </button>
-                              </form>
-                            )}
-                          </td>
                         ) : null}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                      </TableCell>
+
+                      <TableCell>{maintenance.responsable ?? "-"}</TableCell>
+
+                      <TableCell>
+                        {formatDate(maintenance.fecha_programada)}
+                        {isOverdue ? (
+                          <p className="text-xs text-destructive">Vencido</p>
+                        ) : null}
+                      </TableCell>
+
+                      <TableCell>{formatDate(maintenance.fecha_realizada)}</TableCell>
+
+                      <TableCell>
+                        {maintenance.usuario.nombres}{" "}
+                        {maintenance.usuario.apellidos}
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={getPreventiveStatusBadgeVariant(
+                            isOverdue ? "vencido" : maintenance.estado,
+                          )}
+                        >
+                          {isOverdue
+                            ? "Vencido"
+                            : getPreventiveStatusLabel(maintenance.estado)}
+                        </Badge>
+                      </TableCell>
+
+                      {canManagePreventive ? (
+                        <TableCell className="text-right">
+                          {["realizado", "anulado"].includes(
+                            maintenance.estado,
+                          ) ? (
+                            <span className="text-xs text-muted-foreground">
+                              Sin accion
+                            </span>
+                          ) : (
+                            <form
+                              action={updatePreventiveMaintenanceStatusAction}
+                              className="flex justify-end gap-2"
+                            >
+                              <input
+                                type="hidden"
+                                name="id_mantenimiento"
+                                value={maintenance.id_mantenimiento}
+                              />
+
+                              <NativeSelect
+                                name="estado"
+                                defaultValue={
+                                  isOverdue ? "vencido" : maintenance.estado
+                                }
+                                className="h-8 text-xs"
+                              >
+                                <option value="pendiente">Pendiente</option>
+                                <option value="realizado">Realizado</option>
+                                <option value="vencido">Vencido</option>
+                                <option value="anulado">Anulado</option>
+                              </NativeSelect>
+
+                              <Button type="submit" variant="outline" size="sm">
+                                Guardar
+                              </Button>
+                            </form>
+                          )}
+                        </TableCell>
+                      ) : null}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

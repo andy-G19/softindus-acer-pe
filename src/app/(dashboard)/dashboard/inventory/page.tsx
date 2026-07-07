@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 
@@ -40,6 +41,36 @@ export default async function InventoryPage() {
       prisma.movimiento_inventario.count(),
     ]);
 
+  const modules = [
+    {
+      title: "Materiales e insumos",
+      href: "/dashboard/inventory/materials",
+      description:
+        "Registra materia prima, consumibles, repuestos, herramientas y stock mínimo.",
+    },
+    {
+      title: "Proveedores",
+      href: "/dashboard/inventory/suppliers",
+      description:
+        "Registra proveedores y prepara la asociación con materiales y compras.",
+    },
+    {
+      title: "Proveedor-material",
+      href: "/dashboard/inventory/supplier-materials",
+      description: "Asocia proveedores con los materiales que pueden abastecer.",
+    },
+    {
+      title: "Compras",
+      href: "/dashboard/inventory/purchases",
+      description: "Registra compras y genera entradas automáticas de inventario.",
+    },
+    {
+      title: "Alertas y stock crítico",
+      href: "/dashboard/inventory/alerts",
+      description: "Consulta materiales críticos y alertas activas de inventario.",
+    },
+  ];
+
   return (
     <main className="space-y-8">
       <PageHeader
@@ -49,79 +80,41 @@ export default async function InventoryPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales activos</p>
-          <p className="mt-2 text-3xl font-bold">{materialsCount}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Proveedores activos</p>
-          <p className="mt-2 text-3xl font-bold">{suppliersCount}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Alertas activas</p>
-          <p className="mt-2 text-3xl font-bold">{activeAlertsCount}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Movimientos registrados</p>
-          <p className="mt-2 text-3xl font-bold">{movementsCount}</p>
-        </div>
+        <KpiCard
+          title="Materiales activos"
+          value={materialsCount.toString()}
+          description="Materiales disponibles para uso."
+          tone="info"
+        />
+        <KpiCard
+          title="Proveedores activos"
+          value={suppliersCount.toString()}
+          description="Proveedores habilitados para compras."
+          tone="info"
+        />
+        <KpiCard
+          title="Alertas activas"
+          value={activeAlertsCount.toString()}
+          description="Alertas de stock sin atender."
+          tone="warning"
+        />
+        <KpiCard
+          title="Movimientos registrados"
+          value={movementsCount.toString()}
+          description="Entradas y salidas acumuladas."
+          tone="success"
+        />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <Link
-          href="/dashboard/inventory/materials"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Materiales e insumos</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Registra materia prima, consumibles, repuestos, herramientas y
-            stock mínimo.
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/inventory/suppliers"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Proveedores</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Registra proveedores y prepara la asociación con materiales y
-            compras.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/inventory/supplier-materials"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Proveedor-material</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Asocia proveedores con los materiales que pueden abastecer.
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/inventory/purchases"
-         className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Compras</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Registra compras y genera entradas automáticas de inventario.
-          </p>
-        </Link>
-
-        <Link
-          href="/dashboard/inventory/alerts"
-          className="rounded-xl border bg-white p-6 shadow-sm transition hover:bg-slate-50"
-        >
-          <h2 className="text-xl font-semibold">Alertas y stock crítico</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Consulta materiales críticos y alertas activas de inventario.
-          </p>
-        </Link>
-        
+        {modules.map((module) => (
+          <ModuleAccessCard
+            key={module.href}
+            title={module.title}
+            description={module.description}
+            href={module.href}
+          />
+        ))}
       </section>
     </main>
   );

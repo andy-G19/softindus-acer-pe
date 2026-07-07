@@ -1,14 +1,27 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { cancelOperatorTaskAction } from "@/modules/staff/tasks/actions";
 
@@ -53,14 +66,14 @@ function getTaskStatusLabel(status: string) {
 
 function getTaskBadgeVariant(status: string) {
   if (status === "anulada") {
-    return "destructive";
+    return "destructive" as const;
   }
 
   if (status === "terminada") {
-    return "default";
+    return "success" as const;
   }
 
-  return "secondary";
+  return "secondary" as const;
 }
 
 export default async function OperatorTasksPage() {
@@ -153,88 +166,27 @@ export default async function OperatorTasksPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Tareas diarias
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Tareas diarias por operario
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra y consulta qué actividad realizó cada operario,
-            asociándola con una orden de trabajo, etapa productiva, fecha,
-            horas dedicadas y responsable del registro.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/staff"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/staff/tasks/new"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            Registrar tarea
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Tareas diarias por operario"
+        description="Registra y consulta qué actividad realizó cada operario, asociándola con una orden de trabajo, etapa productiva, fecha, horas dedicadas y responsable del registro."
+        backHref={navigationHrefs.staff}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Tareas diarias" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/staff/tasks/new">Registrar tarea</Link>
+          </Button>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tareas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalTasks}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Historial general de tareas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tareas de hoy</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{tasksToday}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Actividades registradas para la fecha actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tareas del mes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{tasksThisMonth}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Registros del periodo actual.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Horas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatHours(totalHours)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Terminadas históricas: {finishedTasks}
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Tareas registradas" value={totalTasks.toString()} description="Historial general de tareas." tone="info" />
+        <KpiCard title="Tareas de hoy" value={tasksToday.toString()} description="Actividades registradas para la fecha actual." tone="info" />
+        <KpiCard title="Tareas del mes" value={tasksThisMonth.toString()} description="Registros del periodo actual." tone="info" />
+        <KpiCard title="Horas registradas" value={formatHours(totalHours)} description={`Terminadas históricas: ${finishedTasks}`} tone="success" />
       </section>
 
       <Card>
@@ -244,121 +196,107 @@ export default async function OperatorTasksPage() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {latestTasks.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Todavía no hay tareas registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra la primera tarea diaria para conocer qué actividad
-                realizó cada operario.
-              </p>
-
-              <Link
-                href="/dashboard/staff/tasks/new"
-                className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-              >
-                Registrar primera tarea
-              </Link>
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Todavía no hay tareas registradas."
+              description="Registra la primera tarea diaria para conocer qué actividad realizó cada operario."
+              action={
+                <Button asChild>
+                  <Link href="/dashboard/staff/tasks/new">
+                    Registrar primera tarea
+                  </Link>
+                </Button>
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Orden</th>
-                    <th className="py-2 pr-3">Producto</th>
-                    <th className="py-2 pr-3">Etapa</th>
-                    <th className="py-2 pr-3">Descripción</th>
-                    <th className="py-2 pr-3 text-right">Horas</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    <th className="py-2 pr-3">Registrado por</th>
-                    <th className="py-2 text-right">Acción</th>
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Producto</TableHead>
+                  <TableHead>Etapa</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead className="text-right">Horas</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  <TableHead>Registrado por</TableHead>
+                  <TableHead className="text-right">Acción</TableHead>
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {latestTasks.map((task) => (
-                    <tr key={task.id_tarea_operario} className="border-b">
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {task.id_tarea_operario}
-                      </td>
+              <TableBody>
+                {latestTasks.map((task) => (
+                  <TableRow key={task.id_tarea_operario}>
+                    <TableCell className="font-mono text-xs">
+                      {task.id_tarea_operario}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {formatDate(task.fecha_tarea)}
-                      </td>
+                    <TableCell>{formatDate(task.fecha_tarea)}</TableCell>
 
-                      <td className="py-2 pr-3 font-medium">
-                        {task.operario.apellidos}, {task.operario.nombres}
-                      </td>
+                    <TableCell className="font-medium">
+                      {task.operario.apellidos}, {task.operario.nombres}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 font-mono text-xs">
-                        {task.id_orden_trabajo}
-                      </td>
+                    <TableCell className="font-mono text-xs">
+                      {task.id_orden_trabajo}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {task.orden_trabajo.producto.nombre_producto}
-                      </td>
+                    <TableCell>
+                      {task.orden_trabajo.producto.nombre_producto}
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {task.etapa_ruta?.nombre_etapa ?? "-"}
-                      </td>
+                    <TableCell>{task.etapa_ruta?.nombre_etapa ?? "-"}</TableCell>
 
-                      <td className="py-2 pr-3">
-                        {task.descripcion}
-                        {task.observaciones ? (
-                          <p className="text-xs text-muted-foreground">
-                            {task.observaciones}
-                          </p>
-                        ) : null}
-                      </td>
+                    <TableCell>
+                      {task.descripcion}
+                      {task.observaciones ? (
+                        <p className="text-xs text-muted-foreground">
+                          {task.observaciones}
+                        </p>
+                      ) : null}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        {formatHours(task.horas_dedicadas)}
-                      </td>
+                    <TableCell className="text-right">
+                      {formatHours(task.horas_dedicadas)}
+                    </TableCell>
 
-                      <td className="py-2 pr-3 text-right">
-                        <Badge variant={getTaskBadgeVariant(task.estado)}>
-                          {getTaskStatusLabel(task.estado)}
-                        </Badge>
-                      </td>
+                    <TableCell className="text-right">
+                      <Badge variant={getTaskBadgeVariant(task.estado)}>
+                        {getTaskStatusLabel(task.estado)}
+                      </Badge>
+                    </TableCell>
 
-                      <td className="py-2 pr-3">
-                        {task.usuario.nombres} {task.usuario.apellidos}
-                      </td>
+                    <TableCell>
+                      {task.usuario.nombres} {task.usuario.apellidos}
+                    </TableCell>
 
-                      <td className="py-2 text-right">
-                        {task.estado === "anulada" ? (
-                          <span className="text-xs text-muted-foreground">
-                            Sin acción
-                          </span>
-                        ) : (
-                          <form action={cancelOperatorTaskAction}>
-                            <input
-                              type="hidden"
-                              name="id_tarea_operario"
-                              value={task.id_tarea_operario}
-                            />
+                    <TableCell className="text-right">
+                      {task.estado === "anulada" ? (
+                        <span className="text-xs text-muted-foreground">
+                          Sin acción
+                        </span>
+                      ) : (
+                        <form action={cancelOperatorTaskAction}>
+                          <input
+                            type="hidden"
+                            name="id_tarea_operario"
+                            value={task.id_tarea_operario}
+                          />
 
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
-                              Anular
-                            </button>
-                          </form>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                          <Button type="submit" variant="outline" size="sm">
+                            Anular
+                          </Button>
+                        </form>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

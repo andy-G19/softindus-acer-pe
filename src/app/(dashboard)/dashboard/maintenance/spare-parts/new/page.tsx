@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -7,8 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createSparePartAction } from "@/modules/maintenance/spare-parts/actions";
 import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form";
@@ -31,30 +31,18 @@ export default async function NewSparePartPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard - Mantenimiento de maquinaria - Nuevo repuesto
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar repuesto
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra repuestos disponibles para mantenimiento, proveedor,
-            descripcion y costo unitario.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge>Solo ADMIN</Badge>
-          <Link
-            href="/dashboard/maintenance/spare-parts"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al listado
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar repuesto"
+        description="Registra repuestos disponibles para mantenimiento, proveedor, descripcion y costo unitario."
+        backHref={navigationHrefs.spareParts}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Repuestos", href: navigationHrefs.spareParts },
+          { label: "Nuevo repuesto" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <Card>
         <CardHeader>

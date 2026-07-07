@@ -1,9 +1,16 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createFabricationRouteAction } from "@/modules/production/routes/actions";
+import Link from "next/link";
 
 function requireProductionAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -42,31 +49,30 @@ export default async function NewFabricationRoutePage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Producción · Rutas de fabricación
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva ruta de fabricación
-        </h1>
-
-        <p className="text-slate-600">
-          Registra una ruta productiva para un producto. Luego agregaremos sus
-          etapas: corte, forjado, soldadura, lijado, pintura u otras.
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva ruta de fabricación"
+        description="Registra una ruta productiva para un producto. Luego agregaremos sus etapas: corte, forjado, soldadura, lijado, pintura u otras."
+        backHref={navigationHrefs.routes}
+        backLabel="Volver a rutas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Rutas", href: navigationHrefs.routes },
+          { label: "Nueva ruta" },
+        ])}
+      />
 
       {products.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          No hay productos activos registrados. Primero registra productos en el
-          módulo comercial para poder crear rutas de fabricación.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            No hay productos activos registrados. Primero registra productos
+            en el módulo comercial para poder crear rutas de fabricación.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <form
         action={createFabricationRouteAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <SearchableSelect
           name="id_producto"
@@ -79,52 +85,41 @@ export default async function NewFabricationRoutePage() {
         />
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre de la ruta *</label>
-
-          <input
+          <Label>Nombre de la ruta *</Label>
+          <Input
             name="nombre_ruta"
             required
             maxLength={100}
             placeholder="Ej. Ruta estándar para lampa"
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Descripción</label>
-
-          <textarea
+          <Label>Descripción</Label>
+          <Textarea
             name="descripcion"
             rows={4}
             maxLength={500}
             placeholder="Ej. Corte de plancha, formado, soldadura, lijado y pintura."
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
-        <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-          <p className="font-medium text-slate-800">Importante</p>
-          <p className="mt-1">
+        <Alert variant="info">
+          <AlertDescription>
             En esta pantalla solo registramos la ruta general. Las etapas
-            ordenadas de la ruta se crearán en la Fase 4.2.
-          </p>
-        </div>
+            ordenadas de la ruta se crean desde la gestión de etapas de cada
+            ruta.
+          </AlertDescription>
+        </Alert>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href="/dashboard/production/routes"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Cancelar
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href="/dashboard/production/routes">Cancelar</Link>
+          </Button>
 
-          <button
-            type="submit"
-            disabled={products.length === 0}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
+          <Button type="submit" disabled={products.length === 0}>
             Guardar ruta
-          </button>
+          </Button>
         </div>
       </form>
     </main>

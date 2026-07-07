@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import type { InventoryOutputFormState } from "@/modules/inventory/movements/actions";
 
 type Option = {
@@ -43,103 +49,71 @@ export function InventoryOutputForm({
   const [state, formAction, isPending] = useActionState(action, initialState);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-xl border bg-white p-6">
+    <form
+      action={formAction}
+      className="space-y-4 rounded-xl border border-border/80 bg-card p-6"
+    >
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="id_material" className="text-sm font-medium">
-            Material
-          </label>
-          <select
-            id="id_material"
-            name="id_material"
-            required
-            className="w-full rounded-md border px-3 py-2 text-sm"
-          >
+          <Label htmlFor="id_material">Material</Label>
+          <NativeSelect id="id_material" name="id_material" required>
             <option value="">Seleccione material</option>
             {materials.map((material) => (
               <option key={material.id} value={material.id}>
                 {material.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.id_material} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="id_orden_trabajo" className="text-sm font-medium">
-            Orden de trabajo
-          </label>
-          <select
-            id="id_orden_trabajo"
-            name="id_orden_trabajo"
-            className="w-full rounded-md border px-3 py-2 text-sm"
-          >
+          <Label htmlFor="id_orden_trabajo">Orden de trabajo</Label>
+          <NativeSelect id="id_orden_trabajo" name="id_orden_trabajo">
             <option value="">Sin orden asociada</option>
             {workOrders.map((order) => (
               <option key={order.id} value={order.id}>
                 {order.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.id_orden_trabajo} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="cantidad" className="text-sm font-medium">
-          Cantidad
-        </label>
-        <input
+        <Label htmlFor="cantidad">Cantidad</Label>
+        <Input
           id="cantidad"
           name="cantidad"
           type="number"
           min="0.01"
           step="0.01"
           required
-          className="w-full rounded-md border px-3 py-2 text-sm"
         />
         <FieldError messages={state.fieldErrors?.cantidad} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="motivo" className="text-sm font-medium">
-          Motivo
-        </label>
-        <textarea
-          id="motivo"
-          name="motivo"
-          rows={4}
-          required
-          className="w-full rounded-md border px-3 py-2 text-sm"
-        />
+        <Label htmlFor="motivo">Motivo</Label>
+        <Textarea id="motivo" name="motivo" rows={4} required />
         <FieldError messages={state.fieldErrors?.motivo} />
       </div>
 
       <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : "Registrar salida"}
-        </button>
+        </Button>
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : null}
       </div>
     </form>

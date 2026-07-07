@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { WorkOrderForm } from "@/modules/production/work-orders/components/work-order-form";
@@ -202,11 +203,13 @@ export default async function NewWorkOrderPage() {
       />
 
       {!canCreateOrder ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Para crear una orden necesitas tener productos activos, rutas de
-          fabricacion activas y versiones de receta vigentes con materiales
-          registrados.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Para crear una orden necesitas tener productos activos, rutas de
+            fabricación activas y versiones de receta vigentes con
+            materiales registrados.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <WorkOrderForm

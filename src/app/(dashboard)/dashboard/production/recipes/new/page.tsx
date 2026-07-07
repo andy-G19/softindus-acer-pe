@@ -2,7 +2,14 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createTechnicalRecipeAction } from "@/modules/production/recipes/actions";
 
 function requireProductionAccess(role: string | undefined) {
@@ -51,31 +58,30 @@ export default async function NewTechnicalRecipePage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Recetas tecnicas
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva receta tecnica
-        </h1>
-
-        <p className="mt-2 text-slate-600">
-          Registra la receta tecnica base de un producto. Luego agregaremos
-          versiones y materiales requeridos.
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva receta técnica"
+        description="Registra la receta técnica base de un producto. Luego agregaremos versiones y materiales requeridos."
+        backHref={navigationHrefs.recipes}
+        backLabel="Volver a recetas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Nueva receta" },
+        ])}
+      />
 
       {products.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          No hay productos activos registrados. Primero registra productos en el
-          modulo comercial para poder crear recetas tecnicas.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            No hay productos activos registrados. Primero registra productos
+            en el módulo comercial para poder crear recetas técnicas.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <form
         action={createTechnicalRecipeAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <div className="space-y-2">
           <SearchableSelect
@@ -88,62 +94,49 @@ export default async function NewTechnicalRecipePage() {
             emptyMessage="No hay productos activos."
           />
 
-          <p className="text-xs text-slate-500">
-            Puedes tener mas de una receta por producto siempre que el nombre de
-            la receta sea diferente.
+          <p className="text-xs text-muted-foreground">
+            Puedes tener más de una receta por producto siempre que el nombre
+            de la receta sea diferente.
           </p>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre de la receta *</label>
-
-          <input
+          <Label>Nombre de la receta *</Label>
+          <Input
             name="nombre_receta"
             required
             maxLength={100}
-            placeholder="Ej. Receta tecnica estandar para lampa"
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
+            placeholder="Ej. Receta técnica estándar para lampa"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Descripcion tecnica</label>
-
-          <textarea
+          <Label>Descripción técnica</Label>
+          <Textarea
             name="descripcion"
             rows={5}
             maxLength={700}
-            placeholder="Ej. Receta base para fabricar lampas metalicas considerando materiales principales, consumibles y procesos estandar."
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
+            placeholder="Ej. Receta base para fabricar lampas metálicas considerando materiales principales, consumibles y procesos estándar."
           />
         </div>
 
-        <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-          <p className="font-medium text-slate-800">Importante</p>
-
-          <p className="mt-1">
-            En esta pantalla solo registramos la cabecera de la receta tecnica.
-            En la siguiente subfase agregaremos la version inicial de la receta.
-            Despues registraremos los materiales, cantidades, unidad de medida,
-            tipo de consumo y merma estimada.
-          </p>
-        </div>
+        <Alert variant="info">
+          <AlertDescription>
+            En esta pantalla solo registramos la cabecera de la receta
+            técnica. Luego agregarás la versión inicial y registrarás los
+            materiales, cantidades, unidad de medida, tipo de consumo y merma
+            estimada.
+          </AlertDescription>
+        </Alert>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href="/dashboard/production/recipes"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Cancelar
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href="/dashboard/production/recipes">Cancelar</Link>
+          </Button>
 
-          <button
-            type="submit"
-            disabled={products.length === 0}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
+          <Button type="submit" disabled={products.length === 0}>
             Guardar receta
-          </button>
+          </Button>
         </div>
       </form>
     </main>

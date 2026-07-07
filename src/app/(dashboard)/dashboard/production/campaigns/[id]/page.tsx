@@ -2,6 +2,20 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 
@@ -112,214 +126,201 @@ export default async function ProductionCampaignDetailPage({
         ])}
         actions={
           <>
-          {canAddDetails ? (
-            <Link
-              href={`/dashboard/production/campaigns/${campaign.id_campania}/details/new`}
-              className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Agregar producto
-            </Link>
-          ) : null}
+            {canAddDetails ? (
+              <Button variant="outline" asChild>
+                <Link
+                  href={`/dashboard/production/campaigns/${campaign.id_campania}/details/new`}
+                >
+                  Agregar producto
+                </Link>
+              </Button>
+            ) : null}
 
-          <Link
-            href="/dashboard/production/work-orders/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Crear orden
-          </Link>
+            <Button asChild>
+              <Link href="/dashboard/production/work-orders/new">
+                Crear orden
+              </Link>
+            </Button>
           </>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Productos</p>
-          <p className="mt-2 text-3xl font-bold">
-            {campaign.campania_detalle.length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Cantidad objetivo</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatDecimal(totalTarget)}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Cantidad producida</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatDecimal(totalProduced)}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Pendiente estimado</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatDecimal(pendingProduction)}
-          </p>
-        </div>
+        <KpiCard title="Productos" value={campaign.campania_detalle.length.toString()} description="Productos en la campaña." tone="info" />
+        <KpiCard title="Cantidad objetivo" value={formatDecimal(totalTarget)} description="Meta total planificada." tone="info" />
+        <KpiCard title="Cantidad producida" value={formatDecimal(totalProduced)} description="Avance real registrado." tone="success" />
+        <KpiCard title="Pendiente estimado" value={formatDecimal(pendingProduction)} description="Restante por producir." tone="warning" />
       </section>
 
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold">Avance general</h2>
-            <p className="text-sm text-slate-500">
-              Calculado con las cantidades producidas registradas por producto.
-            </p>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-base">Avance general</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Calculado con las cantidades producidas registradas por
+                producto.
+              </p>
+            </div>
+
+            <span className="text-sm font-medium text-foreground">
+              {progress.toFixed(2)}%
+            </span>
           </div>
+        </CardHeader>
 
-          <span className="text-sm font-medium text-slate-700">
-            {progress.toFixed(2)}%
-          </span>
-        </div>
-
-        <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-100">
-          <div
-            className="h-full rounded-full bg-emerald-500"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </section>
+        <CardContent>
+          <div className="h-3 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-chart-3"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {!canAddDetails ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta campania esta finalizada o anulada. No se pueden agregar nuevos
-          productos.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta campaña está finalizada o anulada. No se pueden agregar
+            nuevos productos.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-xl font-semibold">Productos de la campania</h2>
-        </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Productos de la campaña</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Producto</TableHead>
+                <TableHead>Categoría</TableHead>
+                <TableHead>Unidad</TableHead>
+                <TableHead>Objetivo</TableHead>
+                <TableHead>Producido</TableHead>
+                <TableHead>Pendiente</TableHead>
+                <TableHead>Observaciones</TableHead>
+              </TableRow>
+            </TableHeader>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Producto</th>
-              <th className="px-4 py-3 font-semibold">Categoria</th>
-              <th className="px-4 py-3 font-semibold">Unidad</th>
-              <th className="px-4 py-3 font-semibold">Objetivo</th>
-              <th className="px-4 py-3 font-semibold">Producido</th>
-              <th className="px-4 py-3 font-semibold">Pendiente</th>
-              <th className="px-4 py-3 font-semibold">Observaciones</th>
-            </tr>
-          </thead>
+            <TableBody>
+              {campaign.campania_detalle.map((detail) => {
+                const target = toNumber(detail.cantidad_objetivo);
+                const produced = toNumber(detail.cantidad_producida);
 
-          <tbody>
-            {campaign.campania_detalle.map((detail) => {
-              const target = toNumber(detail.cantidad_objetivo);
-              const produced = toNumber(detail.cantidad_producida);
+                return (
+                  <TableRow key={detail.id_campania_detalle}>
+                    <TableCell>
+                      <div className="font-medium">
+                        {detail.producto.nombre_producto}
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {detail.id_campania_detalle}
+                      </p>
+                    </TableCell>
 
-              return (
-                <tr key={detail.id_campania_detalle} className="border-t">
-                  <td className="px-4 py-3">
-                    <div className="font-medium">
-                      {detail.producto.nombre_producto}
-                    </div>
-                    <p className="mt-1 font-mono text-xs text-slate-500">
-                      {detail.id_campania_detalle}
-                    </p>
-                  </td>
+                    <TableCell className="capitalize">
+                      {detail.producto.categoria}
+                    </TableCell>
 
-                  <td className="px-4 py-3 capitalize">
-                    {detail.producto.categoria}
-                  </td>
+                    <TableCell>{detail.producto.unidad_medida}</TableCell>
 
-                  <td className="px-4 py-3">
-                    {detail.producto.unidad_medida}
-                  </td>
+                    <TableCell>{formatDecimal(target)}</TableCell>
 
-                  <td className="px-4 py-3">{formatDecimal(target)}</td>
+                    <TableCell>{formatDecimal(produced)}</TableCell>
 
-                  <td className="px-4 py-3">{formatDecimal(produced)}</td>
+                    <TableCell>
+                      {formatDecimal(Math.max(target - produced, 0))}
+                    </TableCell>
 
-                  <td className="px-4 py-3">
-                    {formatDecimal(Math.max(target - produced, 0))}
-                  </td>
+                    <TableCell className="text-muted-foreground">
+                      {detail.observaciones ?? "-"}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
 
-                  <td className="px-4 py-3 text-slate-600">
-                    {detail.observaciones ?? "-"}
-                  </td>
-                </tr>
-              );
-            })}
+              {campaign.campania_detalle.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="p-0">
+                    <EmptyState
+                      className="border-0"
+                      label="Esta campaña todavía no tiene productos registrados."
+                    />
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-            {campaign.campania_detalle.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
-                  Esta campania todavia no tiene productos registrados.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Órdenes asociadas</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código</TableHead>
+                <TableHead>Producto</TableHead>
+                <TableHead>Cantidad</TableHead>
+                <TableHead>Inicio</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Acción</TableHead>
+              </TableRow>
+            </TableHeader>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-xl font-semibold">Ordenes asociadas</h2>
-        </div>
+            <TableBody>
+              {campaign.orden_trabajo.map((order) => (
+                <TableRow key={order.id_orden_trabajo}>
+                  <TableCell className="text-xs">
+                    {order.id_orden_trabajo}
+                  </TableCell>
 
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Codigo</th>
-              <th className="px-4 py-3 font-semibold">Producto</th>
-              <th className="px-4 py-3 font-semibold">Cantidad</th>
-              <th className="px-4 py-3 font-semibold">Inicio</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Accion</th>
-            </tr>
-          </thead>
+                  <TableCell>{order.producto.nombre_producto}</TableCell>
 
-          <tbody>
-            {campaign.orden_trabajo.map((order) => (
-              <tr key={order.id_orden_trabajo} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {order.id_orden_trabajo}
-                </td>
+                  <TableCell>
+                    {formatDecimal(order.cantidad)}{" "}
+                    {order.producto.unidad_medida}
+                  </TableCell>
 
-                <td className="px-4 py-3">
-                  {order.producto.nombre_producto}
-                </td>
+                  <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(order.cantidad)} {order.producto.unidad_medida}
-                </td>
+                  <TableCell>
+                    <Badge variant="secondary">{order.estado}</Badge>
+                  </TableCell>
 
-                <td className="px-4 py-3">{formatDate(order.fecha_inicio)}</td>
+                  <TableCell>
+                    <Button variant="link" className="h-auto p-0" asChild>
+                      <Link
+                        href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
+                      >
+                        Ver orden
+                      </Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
 
-                <td className="px-4 py-3">
-                  <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
-                    {order.estado}
-                  </span>
-                </td>
-
-                <td className="px-4 py-3">
-                  <Link
-                    href={`/dashboard/production/work-orders/${order.id_orden_trabajo}`}
-                    className="text-sm font-medium text-slate-600 hover:text-slate-950"
-                  >
-                    Ver orden
-                  </Link>
-                </td>
-              </tr>
-            ))}
-
-            {campaign.orden_trabajo.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
-                  No hay órdenes de trabajo asociadas a esta campaña.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
+              {campaign.orden_trabajo.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="p-0">
+                    <EmptyState
+                      className="border-0"
+                      label="No hay órdenes de trabajo asociadas a esta campaña."
+                    />
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </main>
   );
 }

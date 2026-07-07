@@ -1,7 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 import {
   dashboardBreadcrumbs,
@@ -49,40 +57,40 @@ function formatDateTime(value: Date | null | undefined) {
   }).format(value);
 }
 
-function getStageStatusClass(status: string) {
+function getStageBadgeVariant(status: string) {
   if (status === "terminada") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "en_proceso") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "pausada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
-function getOrderStatusClass(status: string) {
+function getOrderBadgeVariant(status: string) {
   if (status === "finalizada") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "en_proceso") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "pausada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
   if (status === "anulada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 function getDefaultPercentageByStatus(status: string, currentPercentage: unknown) {
@@ -212,71 +220,53 @@ export default async function WorkOrderProgressPage({
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
           { label: "Órdenes de trabajo", href: backHref },
-          { label: workOrder.id_orden_trabajo, href: `${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}` },
+          {
+            label: workOrder.id_orden_trabajo,
+            href: `${navigationHrefs.workOrders}/${workOrder.id_orden_trabajo}`,
+          },
           { label: "Avances" },
         ])}
         actions={
-          <span
-            className={`rounded-full px-3 py-1 text-sm font-medium ${getOrderStatusClass(
-              workOrder.estado,
-            )}`}
-          >
+          <Badge variant={getOrderBadgeVariant(workOrder.estado)}>
             {workOrder.estado}
-          </span>
+          </Badge>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-5">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Etapas generadas</p>
-          <p className="mt-2 text-3xl font-bold">{totalStages}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">En proceso</p>
-          <p className="mt-2 text-3xl font-bold">{inProgressStages}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Pausadas</p>
-          <p className="mt-2 text-3xl font-bold">{pausedStages}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Terminadas</p>
-          <p className="mt-2 text-3xl font-bold">{finishedStages}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Avance general</p>
-          <p className="mt-2 text-3xl font-bold">
-            {averageProgress.toFixed(2)}%
-          </p>
-        </div>
+        <KpiCard title="Etapas generadas" value={totalStages.toString()} description="Total de la ruta." tone="info" />
+        <KpiCard title="En proceso" value={inProgressStages.toString()} description="Con avance activo." tone="info" />
+        <KpiCard title="Pausadas" value={pausedStages.toString()} description="Requieren atención." tone="warning" />
+        <KpiCard title="Terminadas" value={finishedStages.toString()} description="Etapas completadas." tone="success" />
+        <KpiCard title="Avance general" value={`${averageProgress.toFixed(2)}%`} description="Promedio de todas las etapas." tone="info" />
       </section>
 
       {sortedAdvances.length === 0 ? (
-        <section className="rounded-xl border bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">
+        <section className="rounded-xl border border-border/80 bg-card p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-foreground">
             La orden todavía no tiene avances generados
           </h2>
 
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             El sistema puede crear automáticamente un avance por cada etapa
             activa de la ruta de fabricación asociada a esta orden.
           </p>
 
           {!workOrder.ruta_fabricacion ? (
-            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-              Esta orden no tiene una ruta de fabricación asociada.
-            </p>
+            <Alert variant="destructive" className="mt-4">
+              <AlertDescription>
+                Esta orden no tiene una ruta de fabricación asociada.
+              </AlertDescription>
+            </Alert>
           ) : null}
 
           {workOrder.ruta_fabricacion &&
           workOrder.ruta_fabricacion.etapa_ruta.length === 0 ? (
-            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-              La ruta asociada no tiene etapas activas.
-            </p>
+            <Alert variant="destructive" className="mt-4">
+              <AlertDescription>
+                La ruta asociada no tiene etapas activas.
+              </AlertDescription>
+            </Alert>
           ) : null}
 
           <form action={generateWorkOrderProgressAction} className="mt-5">
@@ -286,13 +276,9 @@ export default async function WorkOrderProgressPage({
               value={workOrder.id_orden_trabajo}
             />
 
-            <button
-              type="submit"
-              disabled={!canGenerateProgress}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-            >
+            <Button type="submit" disabled={!canGenerateProgress}>
               Generar avances por etapa
-            </button>
+            </Button>
           </form>
         </section>
       ) : null}
@@ -309,70 +295,57 @@ export default async function WorkOrderProgressPage({
               <form
                 key={advance.id_avance}
                 action={updateWorkOrderProgressAction}
-                className="rounded-xl border bg-white p-5 shadow-sm"
+                className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"
               >
-                <input
-                  type="hidden"
-                  name="id_avance"
-                  value={advance.id_avance}
-                />
+                <input type="hidden" name="id_avance" value={advance.id_avance} />
 
                 <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                   <div>
-                    <p className="font-mono text-xs text-slate-400">
+                    <p className="font-mono text-xs text-muted-foreground">
                       {advance.id_avance}
                     </p>
 
-                    <h2 className="mt-1 text-xl font-semibold">
+                    <h2 className="mt-1 text-xl font-semibold text-foreground">
                       {advance.etapa_ruta.orden_secuencia}.{" "}
                       {advance.etapa_ruta.nombre_etapa}
                     </h2>
 
                     {advance.etapa_ruta.descripcion ? (
-                      <p className="mt-1 max-w-3xl text-sm text-slate-600">
+                      <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
                         {advance.etapa_ruta.descripcion}
                       </p>
                     ) : null}
 
-                    <p className="mt-2 text-xs text-slate-500">
+                    <p className="mt-2 text-xs text-muted-foreground">
                       Actualizado por: {advance.usuario.nombres}{" "}
                       {advance.usuario.apellidos}
                     </p>
                   </div>
 
-                  <span
-                    className={`w-fit rounded-full px-2 py-1 text-xs font-medium ${getStageStatusClass(
-                      advance.estado_etapa,
-                    )}`}
-                  >
+                  <Badge variant={getStageBadgeVariant(advance.estado_etapa)}>
                     {advance.estado_etapa}
-                  </span>
+                  </Badge>
                 </div>
 
                 <div className="mt-5 grid gap-5 md:grid-cols-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Estado *</label>
-
-                    <select
+                    <Label>Estado *</Label>
+                    <NativeSelect
                       name="estado_etapa"
                       required
                       defaultValue={advance.estado_etapa}
                       disabled={!canEditProgress}
-                      className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                     >
                       <option value="pendiente">Pendiente</option>
                       <option value="en_proceso">En proceso</option>
                       <option value="pausada">Pausada</option>
                       <option value="terminada">Terminada</option>
-                    </select>
+                    </NativeSelect>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Porcentaje *
-                    </label>
-
-                    <input
+                    <Label>Porcentaje *</Label>
+                    <Input
                       name="porcentaje_avance"
                       type="number"
                       min="0"
@@ -381,61 +354,59 @@ export default async function WorkOrderProgressPage({
                       required
                       defaultValue={defaultPercentage}
                       disabled={!canEditProgress}
-                      className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                     />
-
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-muted-foreground">
                       Pendiente se guarda como 0%. Terminada se guarda como
                       100%.
                     </p>
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
-                    <label className="text-sm font-medium">Operario</label>
-
-                    <div className="flex flex-col gap-3 rounded-lg border bg-slate-50 p-3 text-sm md:flex-row md:items-center md:justify-between">
+                    <Label>Operario</Label>
+                    <div className="flex flex-col gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm md:flex-row md:items-center md:justify-between">
                       <div>
-                        <p className="font-medium text-slate-900">
+                        <p className="font-medium text-foreground">
                           {advance.operario
                             ? `${advance.operario.apellidos}, ${advance.operario.nombres}`
                             : "Sin operario asignado"}
                         </p>
 
-                        <p className="mt-1 text-xs text-slate-500">
-                          {advance.operario?.cargo ?? "Operario de produccion"}
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {advance.operario?.cargo ?? "Operario de producción"}
                         </p>
                       </div>
 
                       {canEditProgress ? (
-                        <Link
-                          href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress/${advance.id_avance}/reassign`}
-                          className="rounded-lg border bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
-                        >
-                          Reasignar
-                        </Link>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link
+                            href={`/dashboard/production/work-orders/${workOrder.id_orden_trabajo}/progress/${advance.id_avance}/reassign`}
+                          >
+                            Reasignar
+                          </Link>
+                        </Button>
                       ) : null}
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-5 grid gap-5 md:grid-cols-3">
-                  <div className="rounded-lg border bg-slate-50 p-3 text-sm">
-                    <p className="text-slate-500">Inicio de etapa</p>
-                    <p className="mt-1 font-medium">
+                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <p className="text-muted-foreground">Inicio de etapa</p>
+                    <p className="mt-1 font-medium text-foreground">
                       {formatDateTime(advance.fecha_inicio_etapa)}
                     </p>
                   </div>
 
-                  <div className="rounded-lg border bg-slate-50 p-3 text-sm">
-                    <p className="text-slate-500">Fin de etapa</p>
-                    <p className="mt-1 font-medium">
+                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <p className="text-muted-foreground">Fin de etapa</p>
+                    <p className="mt-1 font-medium text-foreground">
                       {formatDateTime(advance.fecha_fin_etapa)}
                     </p>
                   </div>
 
-                  <div className="rounded-lg border bg-slate-50 p-3 text-sm">
-                    <p className="text-slate-500">Máquina</p>
-                    <p className="mt-1 font-medium">
+                  <div className="rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
+                    <p className="text-muted-foreground">Máquina</p>
+                    <p className="mt-1 font-medium text-foreground">
                       {advance.etapa_ruta.requiere_maquina
                         ? "Requiere máquina"
                         : "No requiere máquina"}
@@ -444,32 +415,26 @@ export default async function WorkOrderProgressPage({
                 </div>
 
                 <div className="mt-5 space-y-2">
-                  <label className="text-sm font-medium">Observaciones</label>
-
-                  <textarea
+                  <Label>Observaciones</Label>
+                  <Textarea
                     name="observaciones"
                     rows={3}
                     maxLength={700}
                     defaultValue={advance.observaciones ?? ""}
                     disabled={!canEditProgress}
                     placeholder="Ej. Etapa pausada por falta de material o máquina ocupada."
-                    className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                   />
                 </div>
 
                 <div className="mt-5 flex justify-end">
-                  <button
-                    type="submit"
-                    disabled={!canEditProgress}
-                    className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-                  >
+                  <Button type="submit" disabled={!canEditProgress}>
                     Actualizar etapa
-                  </button>
+                  </Button>
                 </div>
 
                 {advance.reasignacion_tarea.length > 0 ? (
-                  <div className="mt-5 rounded-lg border bg-slate-50 p-4 text-sm">
-                    <p className="font-medium text-slate-900">
+                  <div className="mt-5 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
+                    <p className="font-medium text-foreground">
                       Historial de reasignaciones
                     </p>
 
@@ -485,10 +450,10 @@ export default async function WorkOrderProgressPage({
                         return (
                           <div
                             key={reassignment.id_reasignacion}
-                            className="rounded-md border bg-white p-3"
+                            className="rounded-md border border-border/80 bg-card p-3"
                           >
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                              <p className="font-medium text-slate-800">
+                              <p className="font-medium text-foreground">
                                 {previousOperator
                                   ? `${previousOperator.apellidos}, ${previousOperator.nombres}`
                                   : "Sin operario anterior"}{" "}
@@ -496,18 +461,18 @@ export default async function WorkOrderProgressPage({
                                 {nextOperator.nombres}
                               </p>
 
-                              <span className="text-xs text-slate-500">
+                              <span className="text-xs text-muted-foreground">
                                 {formatDateTime(
                                   reassignment.fecha_reasignacion,
                                 )}
                               </span>
                             </div>
 
-                            <p className="mt-2 text-slate-600">
+                            <p className="mt-2 text-muted-foreground">
                               {reassignment.motivo}
                             </p>
 
-                            <p className="mt-1 text-xs text-slate-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                               Responsable: {reassignment.usuario.nombres}{" "}
                               {reassignment.usuario.apellidos}
                             </p>
@@ -522,20 +487,6 @@ export default async function WorkOrderProgressPage({
           })}
         </section>
       ) : null}
-
-      <div className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-        <p className="font-medium text-slate-900">
-          Regla automática aplicada
-        </p>
-
-        <p className="mt-1">
-          Si todas las etapas están terminadas, la orden pasa a finalizada. Si
-          existe una etapa en proceso, la orden pasa a en_proceso. Si existe una
-          etapa pausada y ninguna está en proceso, la orden pasa a pausada.
-        </p>
-      </div>
     </main>
   );
 }
-
-

@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { createReceiptAction } from "@/modules/commercial/receipts/actions";
 
 type ReceiptFormProps = {
@@ -50,7 +56,7 @@ export function ReceiptForm({
   return (
     <form
       action={createReceiptAction}
-      className="space-y-4 rounded-lg border p-4"
+      className="space-y-4 rounded-lg border border-border/80 bg-card p-4"
     >
       <input type="hidden" name="id_proforma" value={quoteId} />
 
@@ -63,15 +69,17 @@ export function ReceiptForm({
       </div>
 
       {hasReceipt && (
-        <div className="rounded-lg border border-green-300 bg-green-50 p-3 text-sm text-green-900">
-          Esta proforma ya tiene un comprobante emitido.
-        </div>
+        <Alert variant="success">
+          <AlertDescription>
+            Esta proforma ya tiene un comprobante emitido.
+          </AlertDescription>
+        </Alert>
       )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Tipo</label>
-          <select
+          <Label>Tipo</Label>
+          <NativeSelect
             name="tipo_comprobante"
             value={type}
             onChange={(event) => {
@@ -80,7 +88,6 @@ export function ReceiptForm({
               setType(nextType);
               setNumber(buildSuggestedNumber(nextType));
             }}
-            className="w-full rounded-md border px-3 py-2"
             disabled={hasReceipt}
             required
           >
@@ -88,30 +95,28 @@ export function ReceiptForm({
             <option value="factura">Factura</option>
             <option value="recibo">Recibo</option>
             <option value="otro">Otro</option>
-          </select>
+          </NativeSelect>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Número</label>
-          <input
+          <Label>Número</Label>
+          <Input
             name="numero_comprobante"
             value={number}
             onChange={(event) => setNumber(event.target.value)}
-            className="w-full rounded-md border px-3 py-2"
             disabled={hasReceipt}
             required
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Monto total</label>
-          <input
+          <Label>Monto total</Label>
+          <Input
             name="monto_total"
             type="number"
             min="0.01"
             step="0.01"
             defaultValue={Number(suggestedAmount).toFixed(2)}
-            className="w-full rounded-md border px-3 py-2"
             disabled={hasReceipt}
             required
           />
@@ -122,22 +127,18 @@ export function ReceiptForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Observaciones</label>
-        <textarea
+        <Label>Observaciones</Label>
+        <Textarea
           name="observaciones"
-          className="min-h-20 w-full rounded-md border px-3 py-2"
+          className="min-h-20"
           placeholder="Ejemplo: Comprobante emitido por cancelación del pedido."
           disabled={hasReceipt}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={hasReceipt}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button type="submit" disabled={hasReceipt}>
         Registrar comprobante
-      </button>
+      </Button>
     </form>
   );
 }

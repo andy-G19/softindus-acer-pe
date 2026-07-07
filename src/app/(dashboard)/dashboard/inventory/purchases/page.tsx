@@ -3,6 +3,20 @@ import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -154,187 +168,194 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
           { label: "Compras" },
         ])}
         actions={
-          <Link
-            href="/dashboard/inventory/purchases/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva compra
-          </Link>
+          <Button asChild>
+            <Link href="/dashboard/inventory/purchases/new">Nueva compra</Link>
+          </Button>
         }
       />
 
       <form
         action="/dashboard/inventory/purchases"
-        className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-6"
+        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-6"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar compra..."
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <select
-          name="supplier"
-          defaultValue={supplier}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los proveedores</option>
-          {suppliers.map((item) => (
-            <option key={item.id_proveedor} value={item.id_proveedor}>
-              {item.razon_social}
-            </option>
-          ))}
-        </select>
-        <select
-          name="material"
-          defaultValue={material}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los materiales</option>
-          {materials.map((item) => (
-            <option key={item.id_material} value={item.id_material}>
-              {item.nombre_material}
-            </option>
-          ))}
-        </select>
-        <select
-          name="status"
-          defaultValue={purchaseStatus}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Estado compra</option>
-          <option value="registrada">Registrada</option>
-          <option value="confirmada">Confirmada</option>
-          <option value="anulada">Anulada</option>
-        </select>
-        <select
-          name="payment"
-          defaultValue={paymentStatus}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Estado pago</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="parcial">Parcial</option>
-          <option value="pagado">Pagado</option>
-          <option value="anulada">Anulada</option>
-        </select>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-          />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar compra..." />
         </div>
-        <div className="flex gap-2 md:col-span-6">
-          <button
-            type="submit"
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-          >
-            Filtrar
-          </button>
-          <Link
-            href="/dashboard/inventory/purchases"
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            Limpiar filtros
-          </Link>
+        <div className="space-y-2">
+          <Label htmlFor="supplier">Proveedor</Label>
+          <NativeSelect id="supplier" name="supplier" defaultValue={supplier}>
+            <option value="">Todos los proveedores</option>
+            {suppliers.map((item) => (
+              <option key={item.id_proveedor} value={item.id_proveedor}>
+                {item.razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="material">Material</Label>
+          <NativeSelect id="material" name="material" defaultValue={material}>
+            <option value="">Todos los materiales</option>
+            {materials.map((item) => (
+              <option key={item.id_material} value={item.id_material}>
+                {item.nombre_material}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado compra</Label>
+          <NativeSelect id="status" name="status" defaultValue={purchaseStatus}>
+            <option value="">Estado compra</option>
+            <option value="registrada">Registrada</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="payment">Estado pago</Label>
+          <NativeSelect id="payment" name="payment" defaultValue={paymentStatus}>
+            <option value="">Estado pago</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="parcial">Parcial</option>
+            <option value="pagado">Pagado</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="from">Desde</Label>
+            <Input
+              id="from"
+              name="from"
+              type="date"
+              defaultValue={parseStringParam(params, "from")}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="to">Hasta</Label>
+            <Input
+              id="to"
+              name="to"
+              type="date"
+              defaultValue={parseStringParam(params, "to")}
+            />
+          </div>
+        </div>
+        <div className="flex items-end gap-2 md:col-span-6">
+          <Button type="submit">Filtrar</Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/inventory/purchases">Limpiar filtros</Link>
+          </Button>
         </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Fecha</th>
-              <th className="px-4 py-3 font-semibold">Proveedor</th>
-              <th className="px-4 py-3 font-semibold">Comprobante</th>
-              <th className="px-4 py-3 font-semibold">Total</th>
-              <th className="px-4 py-3 font-semibold">Pago</th>
-              <th className="px-4 py-3 font-semibold">Estado compra</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {purchases.map((purchase) => {
-              const canAnnul =
-                purchase.estado_compra !== "anulada" &&
-                purchase.pago_proveedor.length === 0 &&
-                purchase.movimiento_inventario.length > 0;
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead>Proveedor</TableHead>
+            <TableHead>Comprobante</TableHead>
+            <TableHead>Total</TableHead>
+            <TableHead>Pago</TableHead>
+            <TableHead>Estado compra</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {purchases.map((purchase) => {
+            const canAnnul =
+              purchase.estado_compra !== "anulada" &&
+              purchase.pago_proveedor.length === 0 &&
+              purchase.movimiento_inventario.length > 0;
 
-              return (
-                <tr key={purchase.id_compra} className="border-t">
-                  <td className="px-4 py-3 font-mono text-xs">
-                    {purchase.id_compra}
-                  </td>
-                  <td className="px-4 py-3">
-                    {formatDate(purchase.fecha_compra)}
-                  </td>
-                  <td className="px-4 py-3 font-medium">
-                    {purchase.proveedor.razon_social}
-                  </td>
-                  <td className="px-4 py-3">
-                    {purchase.numero_comprobante
-                      ? `${purchase.tipo_comprobante ?? "-"} ${purchase.numero_comprobante}`
-                      : "-"}
-                  </td>
-                  <td className="px-4 py-3 font-medium">
-                    {formatMoney(purchase.monto_total)}
-                  </td>
-                  <td className="px-4 py-3">{purchase.estado_pago}</td>
-                  <td className="px-4 py-3">{purchase.estado_compra}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-2">
+            return (
+              <TableRow key={purchase.id_compra}>
+                <TableCell className="text-xs">
+                  {purchase.id_compra}
+                </TableCell>
+                <TableCell>{formatDate(purchase.fecha_compra)}</TableCell>
+                <TableCell className="font-medium">
+                  {purchase.proveedor.razon_social}
+                </TableCell>
+                <TableCell>
+                  {purchase.numero_comprobante
+                    ? `${purchase.tipo_comprobante ?? "-"} ${purchase.numero_comprobante}`
+                    : "-"}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {formatMoney(purchase.monto_total)}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      purchase.estado_pago === "pagado" ? "success" : "secondary"
+                    }
+                  >
+                    {purchase.estado_pago}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      purchase.estado_compra === "anulada"
+                        ? "destructive"
+                        : "secondary"
+                    }
+                  >
+                    {purchase.estado_compra}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" size="sm" asChild>
                       <Link
                         href={withReturnTo(
                           `${navigationHrefs.purchases}/${purchase.id_compra}`,
                           returnTo,
                         )}
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
                       >
                         Ver detalle
                       </Link>
-                      {canAnnul ? (
-                        <form action={annulPurchaseAction}>
-                          <input
-                            type="hidden"
-                            name="id_compra"
-                            value={purchase.id_compra}
-                          />
-                          <ConfirmDeleteButton
-                            title="¿Anular compra?"
-                            description="Esta acción marcará la compra como anulada. Verifique antes de continuar."
-                            confirmText="Confirmar anulación"
-                            entityName="compra"
-                            className="hover:bg-destructive/20"
-                          >
-                            Anular
-                          </ConfirmDeleteButton>
-                        </form>
-                      ) : null}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    </Button>
+                    {canAnnul ? (
+                      <form action={annulPurchaseAction}>
+                        <input
+                          type="hidden"
+                          name="id_compra"
+                          value={purchase.id_compra}
+                        />
+                        <ConfirmDeleteButton
+                          title="¿Anular compra?"
+                          description="Esta acción marcará la compra como anulada. Verifique antes de continuar."
+                          confirmText="Confirmar anulación"
+                          entityName="compra"
+                          className="hover:bg-destructive/20"
+                        >
+                          Anular
+                        </ConfirmDeleteButton>
+                      </form>
+                    ) : null}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
-            {purchases.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay compras registradas.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+          {purchases.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay compras registradas."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

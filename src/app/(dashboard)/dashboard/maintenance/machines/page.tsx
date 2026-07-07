@@ -1,12 +1,26 @@
 ﻿import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
@@ -63,9 +77,9 @@ function getMachineStatusLabel(status: string) {
 function getMachineStatusBadgeVariant(status: string) {
   const variants: Record<
     string,
-    "default" | "secondary" | "destructive" | "outline"
+    "success" | "secondary" | "destructive" | "outline"
   > = {
-    operativa: "default",
+    operativa: "success",
     en_reparacion: "secondary",
     dada_de_baja: "destructive",
     inactiva: "outline",
@@ -193,211 +207,172 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
         ])}
         actions={
           canManageMachines ? (
-            <Link
-              href={`${navigationHrefs.machines}/new`}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Registrar máquina
-            </Link>
+            <Button asChild>
+              <Link href={`${navigationHrefs.machines}/new`}>
+                Registrar máquina
+              </Link>
+            </Button>
           ) : null
         }
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Maquinas registradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{machines.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Operativas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{operationalMachines.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Inactivas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{inactiveMachines.length}</p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Maquinas registradas" value={machines.length.toString()} description="Total de equipos registrados." tone="info" />
+        <KpiCard title="Operativas" value={operationalMachines.length.toString()} description="Disponibles para producción." tone="success" />
+        <KpiCard title="Inactivas" value={inactiveMachines.length.toString()} description="Fuera de operación." tone="warning" />
       </section>
 
-      <form
-        action="/dashboard/maintenance/machines"
-        className="grid gap-3 rounded-lg border bg-white p-4 md:grid-cols-5"
-      >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar maquina..."
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
-        <select
-          name="type"
-          defaultValue={type}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los tipos</option>
-          {types.map((item) => (
-            <option key={item.tipo} value={item.tipo}>
-              {item.tipo}
-            </option>
-          ))}
-        </select>
-        <select
-          name="location"
-          defaultValue={location}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las ubicaciones</option>
-          {locations.map((item) =>
-            item.ubicacion ? (
-              <option key={item.ubicacion} value={item.ubicacion}>
-                {item.ubicacion}
-              </option>
-            ) : null,
-          )}
-        </select>
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="operativa">Operativa</option>
-          <option value="en_reparacion">En mantenimiento</option>
-          <option value="dada_de_baja">Fuera de servicio</option>
-          <option value="inactiva">Inactiva</option>
-        </select>
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="flex-1 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            action="/dashboard/maintenance/machines"
+            className="grid gap-3 md:grid-cols-5"
           >
-            Filtrar
-          </button>
-          <Link
-            href="/dashboard/maintenance/machines"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Limpiar
-          </Link>
-        </div>
-      </form>
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar maquina..." />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="type">Tipo</Label>
+              <NativeSelect id="type" name="type" defaultValue={type}>
+                <option value="">Todos los tipos</option>
+                {types.map((item) => (
+                  <option key={item.tipo} value={item.tipo}>
+                    {item.tipo}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="location">Ubicación</Label>
+              <NativeSelect id="location" name="location" defaultValue={location}>
+                <option value="">Todas las ubicaciones</option>
+                {locations.map((item) =>
+                  item.ubicacion ? (
+                    <option key={item.ubicacion} value={item.ubicacion}>
+                      {item.ubicacion}
+                    </option>
+                  ) : null,
+                )}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Estado</Label>
+              <NativeSelect id="status" name="status" defaultValue={status}>
+                <option value="">Todos los estados</option>
+                <option value="operativa">Operativa</option>
+                <option value="en_reparacion">En mantenimiento</option>
+                <option value="dada_de_baja">Fuera de servicio</option>
+                <option value="inactiva">Inactiva</option>
+              </NativeSelect>
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit" className="flex-1">
+                Filtrar
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/maintenance/machines">Limpiar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Maquinas registradas</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="py-2 pr-3">Codigo</th>
-                  <th className="py-2 pr-3">Maquina</th>
-                  <th className="py-2 pr-3">Tipo</th>
-                  <th className="py-2 pr-3">Ubicacion</th>
-                  <th className="py-2 pr-3">Codigo interno</th>
-                  <th className="py-2 pr-3">Registro</th>
-                  <th className="py-2 pr-3 text-right">Fallas</th>
-                  <th className="py-2 pr-3 text-right">Preventivos</th>
-                  <th className="py-2 pr-3 text-right">Etapas</th>
-                  <th className="py-2 pr-3 text-right">Estado</th>
+        <CardContent className="px-0">
+          {machines.length === 0 ? (
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aun no hay maquinas registradas."
+            />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Máquina</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Ubicación</TableHead>
+                  <TableHead>Código interno</TableHead>
+                  <TableHead>Registro</TableHead>
+                  <TableHead className="text-right">Fallas</TableHead>
+                  <TableHead className="text-right">Preventivos</TableHead>
+                  <TableHead className="text-right">Etapas</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
                   {canManageMachines ? (
-                    <th className="py-2 text-right">Acciones</th>
+                    <TableHead className="text-right">Acciones</TableHead>
                   ) : null}
-                </tr>
-              </thead>
-              <tbody>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {machines.map((machine) => (
-                  <tr key={machine.id_maquina} className="border-b align-top">
-                    <td className="py-2 pr-3 font-mono text-xs">
+                  <TableRow key={machine.id_maquina} className="align-top">
+                    <TableCell className="font-mono text-xs">
                       {machine.id_maquina}
-                    </td>
-                    <td className="py-2 pr-3 font-medium">
+                    </TableCell>
+                    <TableCell className="font-medium">
                       {machine.nombre}
                       <p className="text-xs font-normal text-muted-foreground">
                         {machine.observaciones ?? "Sin observaciones"}
                       </p>
-                    </td>
-                    <td className="py-2 pr-3">{machine.tipo}</td>
-                    <td className="py-2 pr-3">{machine.ubicacion ?? "-"}</td>
-                    <td className="py-2 pr-3">
-                      {machine.codigo_interno ?? "-"}
-                    </td>
-                    <td className="py-2 pr-3">
-                      {formatDate(machine.fecha_registro)}
-                    </td>
-                    <td className="py-2 pr-3 text-right">
+                    </TableCell>
+                    <TableCell>{machine.tipo}</TableCell>
+                    <TableCell>{machine.ubicacion ?? "-"}</TableCell>
+                    <TableCell>{machine.codigo_interno ?? "-"}</TableCell>
+                    <TableCell>{formatDate(machine.fecha_registro)}</TableCell>
+                    <TableCell className="text-right">
                       {machine._count.falla_maquina}
-                    </td>
-                    <td className="py-2 pr-3 text-right">
+                    </TableCell>
+                    <TableCell className="text-right">
                       {machine._count.mantenimiento_preventivo}
-                    </td>
-                    <td className="py-2 pr-3 text-right">
+                    </TableCell>
+                    <TableCell className="text-right">
                       {machine._count.etapa_ruta_maquina}
-                    </td>
-                    <td className="py-2 pr-3 text-right">
-                      <Badge
-                        variant={getMachineStatusBadgeVariant(machine.estado)}
-                      >
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant={getMachineStatusBadgeVariant(machine.estado)}>
                         {getMachineStatusLabel(machine.estado)}
                       </Badge>
-                    </td>
+                    </TableCell>
                     {canManageMachines ? (
-                      <td className="py-2">
+                      <TableCell>
                         <div className="flex justify-end gap-2">
-                          <Link
-                            href={withReturnTo(
-                              `${navigationHrefs.machines}/${machine.id_maquina}/edit`,
-                              returnTo,
-                            )}
-                            className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                          >
-                            Editar
-                          </Link>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link
+                              href={withReturnTo(
+                                `${navigationHrefs.machines}/${machine.id_maquina}/edit`,
+                                returnTo,
+                              )}
+                            >
+                              Editar
+                            </Link>
+                          </Button>
                           <form action={toggleMachineStatusAction}>
                             <input
                               type="hidden"
                               name="id_maquina"
                               value={machine.id_maquina}
                             />
-                            <button
-                              type="submit"
-                              className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                            >
+                            <Button type="submit" variant="outline" size="sm">
                               {machine.estado === "inactiva"
                                 ? "Activar"
                                 : "Inactivar"}
-                            </button>
+                            </Button>
                           </form>
                         </div>
-                      </td>
+                      </TableCell>
                     ) : null}
-                  </tr>
+                  </TableRow>
                 ))}
-                {machines.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={canManageMachines ? 11 : 10}
-                      className="py-8 text-center text-muted-foreground"
-                    >
-                      Aun no hay maquinas registradas.
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </main>

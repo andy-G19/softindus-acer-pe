@@ -1,10 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
@@ -41,16 +46,6 @@ function formatPercent(value: unknown) {
   }
 
   return `${toNumber(value).toFixed(2)}%`;
-}
-
-function getProfitabilityStatusLabel(alert: boolean) {
-  return alert ? "Margen bajo" : "Rentable";
-}
-
-function getProfitabilityStatusClass(alert: boolean) {
-  return alert
-    ? "bg-red-50 text-red-700"
-    : "bg-emerald-50 text-emerald-700";
 }
 
 export default async function CostsDashboardPage() {
@@ -232,319 +227,189 @@ export default async function CostsDashboardPage() {
         breadcrumbs={dashboardBreadcrumbs([{ label: "Costos" }])}
         actions={
           <>
-            <Link
-              href={navigationHrefs.costings}
-              className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Ver costeos
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={navigationHrefs.costings}>Ver costeos</Link>
+            </Button>
 
-            <Link
-              href={navigationHrefs.costWorkOrders}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Generar costeo
-            </Link>
+            <Button asChild>
+              <Link href={navigationHrefs.costWorkOrders}>
+                Generar costeo
+              </Link>
+            </Button>
           </>
         }
       />
 
-      <section
-        className={`rounded-xl border p-5 text-sm ${
-          moduleReady
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : "border-amber-200 bg-amber-50 text-amber-800"
-        }`}
-      >
-        <p className="font-semibold">
-          {moduleReady
-            ? "Módulo de costos operativo"
-            : "Módulo de costos pendiente de datos"}
-        </p>
+      <Alert variant={moduleReady ? "success" : "warning"}>
+        <AlertDescription>
+          <span className="font-medium text-foreground">
+            {moduleReady
+              ? "Módulo de costos operativo"
+              : "Módulo de costos pendiente de datos"}
+          </span>
+          <span className="mt-1 block">
+            {moduleReady
+              ? "El módulo ya cuenta con información económica para gestionar costeos, márgenes y rentabilidad."
+              : "Para iniciar, crea órdenes de trabajo con receta técnica y luego genera su costeo."}
+          </span>
+        </AlertDescription>
+      </Alert>
 
-        <p className="mt-1">
-          {moduleReady
-            ? "El módulo ya cuenta con información económica para gestionar costeos, márgenes y rentabilidad."
-            : "Para iniciar, crea Órdenes de trabajo con receta técnica y luego genera su costeo."}
-        </p>
+      <section className="grid gap-4 md:grid-cols-4">
+        <KpiCard title="Costeos registrados" value={totalCostings.toString()} description={`${costingsThisMonth} generados este mes`} tone="info" />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalCostAmount._sum.costo_total)} description={`Promedio: ${formatMoney(averageCost)}`} tone="info" />
+        <KpiCard title="Costos indirectos" value={formatMoney(totalIndirectCosts._sum.monto)} description="Gastos agregados a costeos." tone="warning" />
+        <KpiCard title="Alertas de bajo margen" value={lowMarginAlerts.toString()} description="Rentabilidades críticas." tone="warning" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Costeos registrados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{totalCostings}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {costingsThisMonth} generados este mes
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Costo acumulado
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">
-              {formatMoney(totalCostAmount._sum.costo_total)}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">
-              Promedio: {formatMoney(averageCost)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Costos indirectos
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">
-              {formatMoney(totalIndirectCosts._sum.monto)}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">
-              Gastos agregados a costeos
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Alertas de bajo margen
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{lowMarginAlerts}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Rentabilidades críticas
-            </p>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Órdenes activas
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{workOrdersTotal}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              No anuladas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Órdenes sin receta
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{workOrdersWithoutRecipe}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              No pueden costearse aún
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Órdenes pendientes de costeo
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{workOrdersWithoutCosting}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Con receta y sin costeo
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Rentabilidades calculadas
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{profitabilityCalculations}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Márgenes reales evaluados
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Órdenes activas" value={workOrdersTotal.toString()} description="No anuladas." tone="info" />
+        <KpiCard title="Órdenes sin receta" value={workOrdersWithoutRecipe.toString()} description="No pueden costearse aún." tone="warning" />
+        <KpiCard title="Órdenes pendientes de costeo" value={workOrdersWithoutCosting.toString()} description="Con receta y sin costeo." tone="warning" />
+        <KpiCard title="Rentabilidades calculadas" value={profitabilityCalculations.toString()} description="Márgenes reales evaluados." tone="success" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-xl border bg-white shadow-sm">
-          <div className="flex flex-col justify-between gap-3 border-b p-5 md:flex-row md:items-center">
-            <div>
-              <h2 className="text-lg font-semibold">Últimos costeos</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Resumen de los registros económicos más recientes.
-              </p>
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+              <div>
+                <CardTitle className="text-base">Últimos costeos</CardTitle>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Resumen de los registros económicos más recientes.
+                </p>
+              </div>
+
+              <Button variant="link" className="h-auto p-0" asChild>
+                <Link href="/dashboard/costs/costings">Ver todos</Link>
+              </Button>
             </div>
+          </CardHeader>
 
-            <Link
-              href="/dashboard/costs/costings"
-              className="text-sm font-medium text-slate-700 hover:text-slate-950"
-            >
-              Ver todos
-            </Link>
-          </div>
+          <CardContent>
+            {latestCostings.length === 0 ? (
+              <EmptyState label="Aún no hay costeos registrados. Genera uno desde una orden de trabajo con receta técnica." />
+            ) : (
+              <div className="divide-y divide-border/70">
+                {latestCostings.map((item) => {
+                  const latestMargin = item.margen_ganancia[0];
+                  const latestProfitability = item.rentabilidad[0];
 
-          {latestCostings.length === 0 ? (
-            <div className="p-5 text-sm text-slate-500">
-              Aún no hay costeos registrados. Genera uno desde una orden de
-              trabajo con receta técnica.
-            </div>
-          ) : (
-            <div className="divide-y">
-              {latestCostings.map((item) => {
-                const latestMargin = item.margen_ganancia[0];
-                const latestProfitability = item.rentabilidad[0];
+                  const sourceLabel = item.orden_trabajo
+                    ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
+                    : item.pedido
+                      ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
+                      : "Costeo manual";
 
-                const sourceLabel = item.orden_trabajo
-                  ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
-                  : item.pedido
-                    ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
-                    : "Costeo manual";
+                  return (
+                    <div
+                      key={item.id_costeo}
+                      className="flex flex-col justify-between gap-3 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center"
+                    >
+                      <div>
+                        <p className="text-xs text-muted-foreground">
+                          {item.id_costeo} | {formatDate(item.fecha_costeo)}
+                        </p>
 
-                return (
-                  <div
-                    key={item.id_costeo}
-                    className="flex flex-col justify-between gap-3 p-5 md:flex-row md:items-center"
-                  >
-                    <div>
-                      <p className="font-mono text-xs text-slate-500">
-                        {item.id_costeo} | {formatDate(item.fecha_costeo)}
-                      </p>
+                        <p className="font-medium text-foreground">
+                          {sourceLabel}
+                        </p>
 
-                      <p className="font-medium">{sourceLabel}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Costo total: {formatMoney(item.costo_total)} | Margen:{" "}
+                          {latestMargin
+                            ? formatPercent(latestMargin.porcentaje_margen)
+                            : "Pendiente"}
+                        </p>
+                      </div>
 
-                      <p className="mt-1 text-sm text-slate-500">
-                        Costo total: {formatMoney(item.costo_total)} | Margen:{" "}
-                        {latestMargin
-                          ? formatPercent(latestMargin.porcentaje_margen)
-                          : "Pendiente"}
-                      </p>
+                      <div className="flex items-center gap-3">
+                        {latestProfitability ? (
+                          <Badge
+                            variant={
+                              latestProfitability.alerta_bajo_margen
+                                ? "destructive"
+                                : "success"
+                            }
+                          >
+                            {latestProfitability.alerta_bajo_margen
+                              ? "Margen bajo"
+                              : "Rentable"}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">Pendiente</Badge>
+                        )}
+
+                        <Button variant="link" className="h-auto p-0" asChild>
+                          <Link href={`/dashboard/costs/costings/${item.id_costeo}`}>
+                            Detalle
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-                    <div className="flex items-center gap-3">
-                      {latestProfitability ? (
-                        <span
-                          className={`rounded-full px-2 py-1 text-xs font-medium ${getProfitabilityStatusClass(
-                            latestProfitability.alerta_bajo_margen,
-                          )}`}
-                        >
-                          {getProfitabilityStatusLabel(
-                            latestProfitability.alerta_bajo_margen,
-                          )}
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                          Pendiente
-                        </span>
-                      )}
-
-                      <Link
-                        href={`/dashboard/costs/costings/${item.id_costeo}`}
-                        className="text-sm font-medium text-slate-700 hover:text-slate-950"
-                      >
-                        Detalle
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="rounded-xl border bg-white shadow-sm">
-          <div className="border-b p-5">
-            <h2 className="text-lg font-semibold">Alertas recientes</h2>
-            <p className="mt-1 text-sm text-slate-500">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Alertas recientes</CardTitle>
+            <p className="mt-1 text-sm text-muted-foreground">
               Costeos con bajo margen de rentabilidad.
             </p>
-          </div>
+          </CardHeader>
 
-          {latestLowMarginCostings.length === 0 ? (
-            <div className="p-5 text-sm text-slate-500">
-              No hay alertas de bajo margen registradas.
-            </div>
-          ) : (
-            <div className="divide-y">
-              {latestLowMarginCostings.map((item) => {
-                const latestProfitability = item.rentabilidad[0];
+          <CardContent>
+            {latestLowMarginCostings.length === 0 ? (
+              <EmptyState label="No hay alertas de bajo margen registradas." />
+            ) : (
+              <div className="divide-y divide-border/70">
+                {latestLowMarginCostings.map((item) => {
+                  const latestProfitability = item.rentabilidad[0];
 
-                const sourceLabel = item.orden_trabajo
-                  ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
-                  : item.pedido
-                    ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
-                    : "Costeo manual";
+                  const sourceLabel = item.orden_trabajo
+                    ? `${item.orden_trabajo.id_orden_trabajo} | ${item.orden_trabajo.producto.nombre_producto}`
+                    : item.pedido
+                      ? `${item.pedido.id_pedido} | ${item.pedido.cliente.nombre_razon_social}`
+                      : "Costeo manual";
 
-                return (
-                  <div key={item.id_costeo} className="p-5">
-                    <p className="font-mono text-xs text-slate-500">
-                      {item.id_costeo}
-                    </p>
+                  return (
+                    <div key={item.id_costeo} className="py-4 first:pt-0 last:pb-0">
+                      <p className="text-xs text-muted-foreground">
+                        {item.id_costeo}
+                      </p>
 
-                    <p className="mt-1 font-medium">{sourceLabel}</p>
+                      <p className="mt-1 font-medium text-foreground">
+                        {sourceLabel}
+                      </p>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      Margen real:{" "}
-                      {latestProfitability
-                        ? formatPercent(latestProfitability.margen_real)
-                        : "-"}
-                    </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Margen real:{" "}
+                        {latestProfitability
+                          ? formatPercent(latestProfitability.margen_real)
+                          : "-"}
+                      </p>
 
-                    <Link
-                      href={`/dashboard/costs/costings/${item.id_costeo}`}
-                      className="mt-3 inline-block text-sm font-medium text-red-700 hover:text-red-900"
-                    >
-                      Revisar alerta
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-800">
-        <p className="font-semibold">Fase 5.7 implementada</p>
-
-        <p className="mt-1">
-          El módulo de costos queda consolidado con dashboard, generación de
-          costeos, costos indirectos, márgenes, precios, rentabilidad, alertas y
-          navegación final del módulo.
-        </p>
+                      <Button
+                        variant="link"
+                        className="mt-2 h-auto p-0 text-destructive hover:text-destructive"
+                        asChild
+                      >
+                        <Link href={`/dashboard/costs/costings/${item.id_costeo}`}>
+                          Revisar alerta
+                        </Link>
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </section>
     </main>
   );
 }
-

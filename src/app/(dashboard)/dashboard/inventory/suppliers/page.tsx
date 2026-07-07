@@ -3,6 +3,20 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -157,164 +171,154 @@ export default async function SuppliersPage({
         ])}
         actions={
           <>
-          <Link
-            href="/dashboard/inventory/supplier-types"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Tipos de proveedor
-          </Link>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/inventory/supplier-types">
+                Tipos de proveedor
+              </Link>
+            </Button>
 
-          <Link
-            href="/dashboard/inventory/suppliers/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nuevo proveedor
-          </Link>
+            <Button asChild>
+              <Link href="/dashboard/inventory/suppliers/new">
+                Nuevo proveedor
+              </Link>
+            </Button>
           </>
         }
       />
 
       <form
         action="/dashboard/inventory/suppliers"
-        className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_auto_auto]"
+        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_auto_auto]"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar proveedor..."
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar proveedor..." />
+        </div>
 
-        <select
-          name="type"
-          defaultValue={type}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los tipos</option>
-          {supplierTypes.map((item) => (
-            <option key={item.slug} value={item.slug}>
-              {item.nombre}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="payment"
-          defaultValue={payment}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las condiciones</option>
-          {paymentConditions.map((item) =>
-            item.condicion_pago ? (
-              <option key={item.condicion_pago} value={item.condicion_pago}>
-                {item.condicion_pago}
+        <div className="space-y-2">
+          <Label htmlFor="type">Tipo</Label>
+          <NativeSelect id="type" name="type" defaultValue={type}>
+            <option value="">Todos los tipos</option>
+            {supplierTypes.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {item.nombre}
               </option>
-            ) : null,
-          )}
-        </select>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activo</option>
-          <option value="inactive">Inactivo</option>
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="payment">Condición de pago</Label>
+          <NativeSelect id="payment" name="payment" defaultValue={payment}>
+            <option value="">Todas las condiciones</option>
+            {paymentConditions.map((item) =>
+              item.condicion_pago ? (
+                <option key={item.condicion_pago} value={item.condicion_pago}>
+                  {item.condicion_pago}
+                </option>
+              ) : null,
+            )}
+          </NativeSelect>
+        </div>
 
-        <button
-          type="submit"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Filtrar
-        </button>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </NativeSelect>
+        </div>
 
-        <Link
-          href="/dashboard/inventory/suppliers"
-          className="rounded-lg border px-4 py-2 text-center text-sm font-medium hover:bg-slate-50"
-        >
-          Limpiar filtros
-        </Link>
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Filtrar
+          </Button>
+        </div>
+
+        <div className="flex items-end">
+          <Button variant="outline" className="w-full" asChild>
+            <Link href="/dashboard/inventory/suppliers">Limpiar filtros</Link>
+          </Button>
+        </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Razón social</th>
-              <th className="px-4 py-3 font-semibold">Documento</th>
-              <th className="px-4 py-3 font-semibold">Tipo</th>
-              <th className="px-4 py-3 font-semibold">Teléfono</th>
-              <th className="px-4 py-3 font-semibold">Condición de pago</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Razón social</TableHead>
+            <TableHead>Documento</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Teléfono</TableHead>
+            <TableHead>Condición de pago</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {suppliers.map((supplier) => (
-              <tr key={supplier.id_proveedor} className="border-t">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {supplier.id_proveedor}
-                </td>
-                <td className="px-4 py-3 font-medium">
-                  {supplier.razon_social}
-                </td>
-                <td className="px-4 py-3">
-                  {supplier.numero_documento
-                    ? `${supplier.tipo_documento ?? "-"} ${supplier.numero_documento}`
-                    : "-"}
-                </td>
-                <td className="px-4 py-3">
-                  {typeLabels.get(supplier.tipo_proveedor) ??
-                    supplier.tipo_proveedor}
-                </td>
-                <td className="px-4 py-3">{supplier.telefono ?? "-"}</td>
-                <td className="px-4 py-3">
-                  {supplier.condicion_pago ?? "-"}
-                </td>
-                <td className="px-4 py-3">
+        <TableBody>
+          {suppliers.map((supplier) => (
+            <TableRow key={supplier.id_proveedor}>
+              <TableCell className="text-xs">
+                {supplier.id_proveedor}
+              </TableCell>
+              <TableCell className="font-medium">
+                {supplier.razon_social}
+              </TableCell>
+              <TableCell>
+                {supplier.numero_documento
+                  ? `${supplier.tipo_documento ?? "-"} ${supplier.numero_documento}`
+                  : "-"}
+              </TableCell>
+              <TableCell>
+                {typeLabels.get(supplier.tipo_proveedor) ??
+                  supplier.tipo_proveedor}
+              </TableCell>
+              <TableCell>{supplier.telefono ?? "-"}</TableCell>
+              <TableCell>{supplier.condicion_pago ?? "-"}</TableCell>
+              <TableCell>
+                <Badge variant={supplier.estado ? "success" : "outline"}>
                   {supplier.estado ? "Activo" : "Inactivo"}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap items-center gap-2">
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button variant="outline" size="sm" asChild>
                     <Link
                       href={`/dashboard/inventory/suppliers/${supplier.id_proveedor}/edit`}
-                      className="rounded-md border px-3 py-1.5 text-xs font-medium"
                     >
                       Editar
                     </Link>
+                  </Button>
 
-                    <form action={toggleSupplierStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_proveedor"
-                        value={supplier.id_proveedor}
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium"
-                      >
-                        {supplier.estado ? "Inactivar" : "Activar"}
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  <form action={toggleSupplierStatusAction}>
+                    <input
+                      type="hidden"
+                      name="id_proveedor"
+                      value={supplier.id_proveedor}
+                    />
+                    <Button type="submit" variant="outline" size="sm">
+                      {supplier.estado ? "Inactivar" : "Activar"}
+                    </Button>
+                  </form>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {suppliers.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay proveedores registrados.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
+          {suppliers.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay proveedores registrados."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

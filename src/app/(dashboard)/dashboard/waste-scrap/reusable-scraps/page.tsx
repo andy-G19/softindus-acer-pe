@@ -1,12 +1,29 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateReusableScrapStatusAction } from "@/modules/waste-scrap/reusable-scraps/status-actions";
 
@@ -47,20 +64,20 @@ function formatDate(value: Date | null | undefined) {
   }).format(value);
 }
 
-function getStatusClass(status: string) {
+function getStatusBadgeVariant(status: string) {
   if (status === "disponible") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "reutilizado") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
   if (status === "descartado") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 export default async function ReusableScrapsPage({
@@ -194,307 +211,187 @@ export default async function ReusableScrapsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra · Consulta
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Retazos reutilizables
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta los retazos aprovechables registrados durante producción.
-            Puedes filtrar por estado, material de origen o buscar por código,
-            medida, ubicación u orden de trabajo. Desde este listado también puedes
-            marcar retazos disponibles como reutilizados o descartados.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/waste-scrap"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Volver al módulo
-          </Link>
-
-          <Link
-            href="/dashboard/waste-scrap/reusable-scraps/new"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Registrar retazo
-          </Link>
-        </div>
-      </section>
+      <PageHeader
+        title="Retazos reutilizables"
+        description="Consulta los retazos aprovechables registrados durante producción. Puedes filtrar por estado, material de origen o buscar por código, medida, ubicación u orden de trabajo. Desde este listado también puedes marcar retazos disponibles como reutilizados o descartados."
+        backHref={navigationHrefs.wasteScrap}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mermas y chatarra", href: navigationHrefs.wasteScrap },
+          { label: "Retazos reutilizables" },
+        ])}
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/waste-scrap/reusable-scraps/new">
+              Registrar retazo
+            </Link>
+          </Button>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Total registrados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{totalRetazos}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {totalFiltered} según filtros
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Disponibles
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{retazosDisponibles}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Listos para reutilizar
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Reutilizados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{retazosReutilizados}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Aprovechados en producción
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Descartados
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{retazosDescartados}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              No aprovechables
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Total registrados" value={totalRetazos.toString()} description={`${totalFiltered} según filtros`} tone="info" />
+        <KpiCard title="Disponibles" value={retazosDisponibles.toString()} description="Listos para reutilizar" tone="success" />
+        <KpiCard title="Reutilizados" value={retazosReutilizados.toString()} description="Aprovechados en producción" tone="info" />
+        <KpiCard title="Descartados" value={retazosDescartados.toString()} description="No aprovechables" tone="warning" />
       </section>
 
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
-          <div className="space-y-2">
-            <label
-              htmlFor="estado"
-              className="text-sm font-medium text-slate-700"
-            >
-              Estado
-            </label>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos</option>
+                <option value="disponible">Disponible</option>
+                <option value="reutilizado">Reutilizado</option>
+                <option value="descartado">Descartado</option>
+              </NativeSelect>
+            </div>
 
-            <select
-              id="estado"
-              name="estado"
-              defaultValue={estado}
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            >
-              <option value="">Todos</option>
-              <option value="disponible">Disponible</option>
-              <option value="reutilizado">Reutilizado</option>
-              <option value="descartado">Descartado</option>
-            </select>
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">Material</Label>
+              <NativeSelect id="material" name="material" defaultValue={material}>
+                <option value="">Todos</option>
+                {materials.map((item) => (
+                  <option key={item.id_material} value={item.id_material}>
+                    {item.nombre_material} · {item.categoria}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
 
-          <div className="space-y-2">
-            <label
-              htmlFor="material"
-              className="text-sm font-medium text-slate-700"
-            >
-              Material
-            </label>
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input
+                id="q"
+                name="q"
+                type="search"
+                defaultValue={query}
+                placeholder="Código, medida, ubicación u orden"
+              />
+            </div>
 
-            <select
-              id="material"
-              name="material"
-              defaultValue={material}
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            >
-              <option value="">Todos</option>
+            <div className="flex items-end gap-2">
+              <Button type="submit">Filtrar</Button>
+              {hasFilters ? (
+                <Button variant="outline" asChild>
+                  <Link href="/dashboard/waste-scrap/reusable-scraps">
+                    Limpiar
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
-              {materials.map((item) => (
-                <option key={item.id_material} value={item.id_material}>
-                  {item.nombre_material} · {item.categoria}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="q" className="text-sm font-medium text-slate-700">
-              Buscar
-            </label>
-
-            <input
-              id="q"
-              name="q"
-              type="search"
-              defaultValue={query}
-              placeholder="Código, medida, ubicación u orden"
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Listado de retazos</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          {retazos.length === 0 ? (
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron retazos con los filtros seleccionados."
             />
-          </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Material</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Medida</TableHead>
+                  <TableHead>Ubicación</TableHead>
+                  <TableHead>Orden</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Acción</TableHead>
+                </TableRow>
+              </TableHeader>
 
-          <div className="flex items-end gap-2">
-            <button
-              type="submit"
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Filtrar
-            </button>
-
-            {hasFilters ? (
-              <Link
-                href="/dashboard/waste-scrap/reusable-scraps"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-              >
-                Limpiar
-              </Link>
-            ) : null}
-          </div>
-        </form>
-      </section>
-
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">Listado de retazos</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {totalFiltered} registro(s) encontrado(s).
-          </p>
-        </div>
-
-        {retazos.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            No se encontraron retazos con los filtros seleccionados.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
-                <tr>
-                  <th className="px-5 py-3">Código</th>
-                  <th className="px-5 py-3">Material</th>
-                  <th className="px-5 py-3">Cantidad</th>
-                  <th className="px-5 py-3">Medida</th>
-                  <th className="px-5 py-3">Ubicación</th>
-                  <th className="px-5 py-3">Orden</th>
-                  <th className="px-5 py-3">Estado</th>
-                  <th className="px-5 py-3">Fecha</th>
-                  <th className="px-5 py-3">Acción</th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y">
+              <TableBody>
                 {retazos.map((item) => (
-                  <tr key={item.id_retazo} className="align-top">
-                    <td className="px-5 py-4 font-mono text-xs text-slate-600">
+                  <TableRow key={item.id_retazo} className="align-top">
+                    <TableCell className="font-mono text-xs">
                       {item.id_retazo}
-                    </td>
+                    </TableCell>
 
-                    <td className="px-5 py-4">
+                    <TableCell>
                       <p className="font-medium">
                         {item.material.nombre_material}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-muted-foreground">
                         {item.tipo_material}
                       </p>
-                    </td>
+                    </TableCell>
 
-                    <td className="px-5 py-4">
+                    <TableCell>
                       {formatNumber(item.cantidad)} {item.unidad_medida}
-                    </td>
+                    </TableCell>
 
-                    <td className="px-5 py-4">
-                      {item.medida_aproximada ?? "-"}
-                    </td>
+                    <TableCell>{item.medida_aproximada ?? "-"}</TableCell>
 
-                    <td className="px-5 py-4">{item.ubicacion ?? "-"}</td>
+                    <TableCell>{item.ubicacion ?? "-"}</TableCell>
 
-                    <td className="px-5 py-4">
+                    <TableCell>
                       {item.orden_trabajo ? (
                         <div>
                           <p className="font-mono text-xs">
                             {item.orden_trabajo.id_orden_trabajo}
                           </p>
-                          <p className="mt-1 text-xs text-slate-500">
+                          <p className="mt-1 text-xs text-muted-foreground">
                             {item.orden_trabajo.producto.nombre_producto}
                           </p>
                         </div>
                       ) : (
                         "-"
                       )}
-                    </td>
+                    </TableCell>
 
-                    <td className="px-5 py-4">
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                          item.estado,
-                        )}`}
-                      >
+                    <TableCell>
+                      <Badge variant={getStatusBadgeVariant(item.estado)}>
                         {item.estado}
-                      </span>
-                    </td>
+                      </Badge>
+                    </TableCell>
 
-                    <td className="px-5 py-4">
-                      {formatDate(item.fecha_registro)}
-                    </td>
+                    <TableCell>{formatDate(item.fecha_registro)}</TableCell>
 
-                    <td className="px-5 py-4">
+                    <TableCell>
                       {item.estado === "disponible" ? (
                         <div className="flex flex-col gap-2">
                           <form action={updateReusableScrapStatusAction}>
                             <input type="hidden" name="id_retazo" value={item.id_retazo} />
                             <input type="hidden" name="estado" value="reutilizado" />
-                    
-                            <button
-                              type="submit"
-                              className="text-sm font-medium text-blue-700 hover:text-blue-900"
-                            >
+                            <Button type="submit" variant="link" size="sm" className="h-auto p-0">
                               Reutilizar →
-                            </button>
+                            </Button>
                           </form>
-                    
+
                           <form action={updateReusableScrapStatusAction}>
                             <input type="hidden" name="id_retazo" value={item.id_retazo} />
                             <input type="hidden" name="estado" value="descartado" />
-                    
-                            <button
-                              type="submit"
-                              className="text-sm font-medium text-red-700 hover:text-red-900"
-                            >
+                            <Button type="submit" variant="link" size="sm" className="h-auto p-0 text-destructive">
                               Descartar →
-                            </button>
+                            </Button>
                           </form>
                         </div>
                       ) : (
-                        <span className="text-sm text-slate-400">Sin acción</span>
+                        <span className="text-sm text-muted-foreground">Sin acción</span>
                       )}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </main>
   );
 }

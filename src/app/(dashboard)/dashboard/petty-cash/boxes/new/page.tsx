@@ -1,11 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -29,45 +33,31 @@ export default async function NewPettyCashBoxPage() {
           { label: "Cajas", href: navigationHrefs.pettyCashBoxes },
           { label: "Nueva caja" },
         ])}
-        actions={
-          <>
-            <Badge variant="secondary">Fase 7.2</Badge>
-            <Badge>Solo ADMIN</Badge>
-          </>
-        }
+        actions={<Badge>Solo ADMIN</Badge>}
       />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">
-              Datos de apertura
-            </CardTitle>
+            <CardTitle className="text-base">Datos de apertura</CardTitle>
           </CardHeader>
 
           <CardContent>
             <form action={createPettyCashBoxAction} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="nombre_caja" className="text-sm font-medium">
-                  Nombre de la caja
-                </label>
-
-                <input
+                <Label htmlFor="nombre_caja">Nombre de la caja</Label>
+                <Input
                   id="nombre_caja"
                   name="nombre_caja"
                   type="text"
                   required
                   placeholder="Ejemplo: Caja chica principal"
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="saldo_inicial" className="text-sm font-medium">
-                  Saldo inicial
-                </label>
-
-                <input
+                <Label htmlFor="saldo_inicial">Saldo inicial</Label>
+                <Input
                   id="saldo_inicial"
                   name="saldo_inicial"
                   type="number"
@@ -75,70 +65,45 @@ export default async function NewPettyCashBoxPage() {
                   step="0.01"
                   required
                   placeholder="Ejemplo: 200.00"
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="fecha_apertura"
-                  className="text-sm font-medium"
-                >
-                  Fecha de apertura
-                </label>
-
-                <input
+                <Label htmlFor="fecha_apertura">Fecha de apertura</Label>
+                <Input
                   id="fecha_apertura"
                   name="fecha_apertura"
                   type="date"
                   required
                   defaultValue={today}
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="responsable" className="text-sm font-medium">
-                  Responsable
-                </label>
-
-                <input
+                <Label htmlFor="responsable">Responsable</Label>
+                <Input
                   id="responsable"
                   name="responsable"
                   type="text"
                   placeholder="Ejemplo: Administrador"
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="observaciones" className="text-sm font-medium">
-                  Observaciones
-                </label>
-
-                <textarea
+                <Label htmlFor="observaciones">Observaciones</Label>
+                <Textarea
                   id="observaciones"
                   name="observaciones"
                   rows={4}
                   placeholder="Observaciones sobre la apertura de caja."
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row">
-                <button
-                  type="submit"
-                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Abrir caja chica
-                </button>
-
-                <Link
-                  href="/dashboard/petty-cash/boxes"
-                  className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                >
-                  Ver listado
-                </Link>
+                <Button type="submit">Abrir caja chica</Button>
+                <Button variant="outline" asChild>
+                  <Link href="/dashboard/petty-cash/boxes">Ver listado</Link>
+                </Button>
               </div>
             </form>
           </CardContent>
@@ -146,24 +111,23 @@ export default async function NewPettyCashBoxPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              Recomendación
-            </CardTitle>
+            <CardTitle className="text-base">Recomendación</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              Usa una caja principal para los gastos menores diarios del taller.
+              Usa una caja principal para los gastos menores diarios del
+              taller.
             </p>
 
             <p>
-              El saldo inicial será también el saldo actual al momento de crear
-              la caja.
+              El saldo inicial será también el saldo actual al momento de
+              crear la caja.
             </p>
 
             <p>
-              Más adelante, los ingresos y egresos modificarán automáticamente
-              el saldo actual.
+              Más adelante, los ingresos y egresos modificarán
+              automáticamente el saldo actual.
             </p>
           </CardContent>
         </Card>

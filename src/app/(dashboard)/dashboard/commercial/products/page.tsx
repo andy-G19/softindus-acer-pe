@@ -3,6 +3,20 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -149,164 +163,158 @@ export default async function ProductsPage({
         ])}
         actions={
           <>
-          <Link
-            href="/dashboard/commercial/product-categories"
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            Categorías
-          </Link>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/commercial/product-categories">
+                Categorías
+              </Link>
+            </Button>
 
-          {canManageProduct ? (
-            <Link
-              href="/dashboard/commercial/products/new"
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-            >
-              Nuevo producto
-            </Link>
-          ) : null}
+            {canManageProduct ? (
+              <Button asChild>
+                <Link href="/dashboard/commercial/products/new">
+                  Nuevo producto
+                </Link>
+              </Button>
+            ) : null}
           </>
         }
       />
 
       <form
         action="/dashboard/commercial/products"
-        className="grid gap-3 rounded-lg border p-4 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))_auto_auto]"
+        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))_auto_auto]"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar producto..."
-          className="rounded-md border px-3 py-2 text-sm"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input
+            id="q"
+            name="q"
+            defaultValue={q}
+            placeholder="Buscar producto..."
+          />
+        </div>
 
-        <select
-          name="category"
-          defaultValue={category}
-          className="rounded-md border px-3 py-2 text-sm"
-        >
-          <option value="">Todas las categorías</option>
-          {categories.map((item) => (
-            <option key={item.slug} value={item.slug}>
-              {item.nombre}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="category">Categoría</Label>
+          <NativeSelect id="category" name="category" defaultValue={category}>
+            <option value="">Todas las categorías</option>
+            {categories.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {item.nombre}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="unit"
-          defaultValue={unit}
-          className="rounded-md border px-3 py-2 text-sm"
-        >
-          <option value="">Todas las unidades</option>
-          {units.map((item) => (
-            <option key={item.unidad_medida} value={item.unidad_medida}>
-              {item.unidad_medida}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="unit">Unidad</Label>
+          <NativeSelect id="unit" name="unit" defaultValue={unit}>
+            <option value="">Todas las unidades</option>
+            {units.map((item) => (
+              <option key={item.unidad_medida} value={item.unidad_medida}>
+                {item.unidad_medida}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-md border px-3 py-2 text-sm"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activo</option>
-          <option value="inactive">Inactivo</option>
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </NativeSelect>
+        </div>
 
-        <button
-          type="submit"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
-          Filtrar
-        </button>
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Filtrar
+          </Button>
+        </div>
 
-        <Link
-          href="/dashboard/commercial/products"
-          className="rounded-md border px-4 py-2 text-center text-sm font-medium"
-        >
-          Limpiar filtros
-        </Link>
+        <div className="flex items-end">
+          <Button variant="outline" className="w-full" asChild>
+            <Link href="/dashboard/commercial/products">Limpiar filtros</Link>
+          </Button>
+        </div>
       </form>
 
-      <div className="overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left">Código</th>
-              <th className="px-4 py-3 text-left">Producto</th>
-              <th className="px-4 py-3 text-left">Categoría</th>
-              <th className="px-4 py-3 text-left">Unidad</th>
-              <th className="px-4 py-3 text-left">Precio referencial</th>
-              <th className="px-4 py-3 text-left">Estado</th>
-              <th className="px-4 py-3 text-left">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Producto</TableHead>
+            <TableHead>Categoría</TableHead>
+            <TableHead>Unidad</TableHead>
+            <TableHead>Precio referencial</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id_producto} className="border-t">
-                <td className="px-4 py-3">{product.id_producto}</td>
-                <td className="px-4 py-3 font-medium">
-                  {product.nombre_producto}
-                </td>
-                <td className="px-4 py-3">
-                  {categoryLabels.get(product.categoria) ?? product.categoria}
-                </td>
-                <td className="px-4 py-3">{product.unidad_medida}</td>
-                <td className="px-4 py-3">
-                  {formatMoney(product.precio_referencial)}
-                </td>
-                <td className="px-4 py-3">
+        <TableBody>
+          {products.map((product) => (
+            <TableRow key={product.id_producto}>
+              <TableCell>{product.id_producto}</TableCell>
+              <TableCell className="font-medium">
+                {product.nombre_producto}
+              </TableCell>
+              <TableCell>
+                {categoryLabels.get(product.categoria) ?? product.categoria}
+              </TableCell>
+              <TableCell>{product.unidad_medida}</TableCell>
+              <TableCell>
+                {formatMoney(product.precio_referencial)}
+              </TableCell>
+              <TableCell>
+                <Badge variant={product.estado ? "success" : "outline"}>
                   {product.estado ? "Activo" : "Inactivo"}
-                </td>
-                <td className="px-4 py-3">
-                  {canManageProduct ? (
-                    <div className="flex flex-wrap items-center gap-2">
+                </Badge>
+              </TableCell>
+              <TableCell>
+                {canManageProduct ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button variant="outline" size="sm" asChild>
                       <Link
                         href={`/dashboard/commercial/products/${product.id_producto}/edit`}
-                        className="rounded-md border px-3 py-1.5 text-xs font-medium"
                       >
                         Editar
                       </Link>
+                    </Button>
 
-                      <form action={toggleProductStatusAction}>
-                        <input
-                          type="hidden"
-                          name="id_producto"
-                          value={product.id_producto}
-                        />
-                        <button
-                          type="submit"
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium"
-                        >
-                          {product.estado ? "Inactivar" : "Activar"}
-                        </button>
-                      </form>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-muted-foreground">
-                      Solo lectura
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
+                    <form action={toggleProductStatusAction}>
+                      <input
+                        type="hidden"
+                        name="id_producto"
+                        value={product.id_producto}
+                      />
+                      <Button type="submit" variant="outline" size="sm">
+                        {product.estado ? "Inactivar" : "Activar"}
+                      </Button>
+                    </form>
+                  </div>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    Solo lectura
+                  </span>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {products.length === 0 && (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-6 text-center text-muted-foreground"
-                >
-                  Todavía no hay productos registrados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+          {products.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={7} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay productos registrados."
+                />
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </main>
   );
 }

@@ -1,6 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { RecipeVersionForm } from "@/modules/production/recipes/components/recipe-version-form";
 
 type NewRecipeVersionPageProps = {
@@ -93,40 +96,46 @@ export default async function NewRecipeVersionPage({
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Recetas tecnicas - Versiones
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Nueva version de receta
-        </h1>
-
-        <p className="mt-2 text-slate-600">
-          Receta: <span className="font-medium">{recipe.nombre_receta}</span> -
-          Producto:{" "}
-          <span className="font-medium">{recipe.producto.nombre_producto}</span>
-        </p>
-      </section>
+      <PageHeader
+        title="Nueva versión de receta"
+        description={`Receta: ${recipe.nombre_receta} · Producto: ${recipe.producto.nombre_producto}`}
+        backHref={backHref}
+        backLabel="Volver a versiones"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Nueva versión" },
+        ])}
+      />
 
       {recipe.estado !== "activa" ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no esta activa. Activala antes de crear una nueva version.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta receta no está activa. Actívala antes de crear una nueva
+            versión.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {materials.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          No hay materiales activos para registrar el detalle de la version.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            No hay materiales activos para registrar el detalle de la
+            versión.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {latestVersion ? (
-        <section className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-          Se cargaron como base los materiales de la version{" "}
-          <span className="font-medium">{latestVersion.numero_version}</span>.
-          Puedes ajustarlos antes de guardar la nueva version vigente.
-        </section>
+        <Alert variant="info">
+          <AlertDescription>
+            Se cargaron como base los materiales de la versión{" "}
+            <span className="font-medium text-foreground">
+              {latestVersion.numero_version}
+            </span>
+            . Puedes ajustarlos antes de guardar la nueva versión vigente.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <RecipeVersionForm

@@ -1,7 +1,22 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { materialRequirementCalculationSchema } from "@/schemas/production/material-requirement.schema";
 
 type MaterialRequirementsPageProps = {
@@ -38,14 +53,6 @@ function formatMoney(value: unknown) {
 
 function calculateRequiredWithWaste(baseQuantity: number, wastePercentage: number) {
   return baseQuantity * (1 + wastePercentage / 100);
-}
-
-function getStockStatusClass(hasEnoughStock: boolean) {
-  if (hasEnoughStock) {
-    return "bg-emerald-50 text-emerald-700";
-  }
-
-  return "bg-red-50 text-red-700";
 }
 
 export default async function MaterialRequirementsPage({
@@ -157,248 +164,183 @@ export default async function MaterialRequirementsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Recetas técnicas · Cálculo de materiales
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Cálculo de materiales requeridos
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Receta:{" "}
-            <span className="font-medium">
-              {version.receta_tecnica.nombre_receta}
-            </span>{" "}
-            · Versión:{" "}
-            <span className="font-medium">{version.numero_version}</span> ·
-            Producto:{" "}
-            <span className="font-medium">
-              {version.receta_tecnica.producto.nombre_producto}
-            </span>
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        title="Cálculo de materiales requeridos"
+        description={`Receta: ${version.receta_tecnica.nombre_receta} · Versión: ${version.numero_version} · Producto: ${version.receta_tecnica.producto.nombre_producto}`}
+        backHref={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
+        backLabel="Volver al detalle"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Cálculo de materiales" },
+        ])}
+      />
 
       {hasInvalidQuantity ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-          La cantidad ingresada no es válida. Se está mostrando el cálculo para
-          una unidad.
-        </section>
+        <Alert variant="destructive">
+          <AlertDescription>
+            La cantidad ingresada no es válida. Se está mostrando el cálculo
+            para una unidad.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {version.estado !== "vigente" ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta versión no está vigente. El cálculo se muestra solo como
-          referencia.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta versión no está vigente. El cálculo se muestra solo como
+            referencia.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {version.receta_tecnica.estado !== "activa" ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no está activa. El cálculo se muestra solo como
-          referencia.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta receta no está activa. El cálculo se muestra solo como
+            referencia.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="rounded-xl border bg-white p-6 shadow-sm">
+      <section className="rounded-xl border border-border/80 bg-card p-6 shadow-sm">
         <form className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              Cantidad a fabricar *
-            </label>
-
-            <input
+            <Label htmlFor="quantity">Cantidad a fabricar *</Label>
+            <Input
+              id="quantity"
               name="quantity"
               type="number"
               min="0.01"
               step="0.01"
               defaultValue={quantityToProduce}
-              className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
             />
-
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               El sistema multiplicará los materiales de la receta por esta
               cantidad.
             </p>
           </div>
 
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Calcular
-          </button>
+          <Button type="submit">Calcular</Button>
         </form>
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Cantidad a fabricar</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatDecimal(quantityToProduce)}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales evaluados</p>
-          <p className="mt-2 text-3xl font-bold">
-            {calculationRows.length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Con stock suficiente</p>
-          <p className="mt-2 text-3xl font-bold">
-            {availableMaterials.length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Costo estimado total</p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatMoney(totalEstimatedCost)}
-          </p>
-        </div>
+        <KpiCard title="Cantidad a fabricar" value={formatDecimal(quantityToProduce)} description="Unidades objetivo." tone="info" />
+        <KpiCard title="Materiales evaluados" value={calculationRows.length.toString()} description="Del detalle de receta." tone="info" />
+        <KpiCard title="Con stock suficiente" value={availableMaterials.length.toString()} description="Listos para producir." tone="success" />
+        <KpiCard title="Costo estimado total" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" />
       </section>
 
       {criticalMaterials.length > 0 ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-          Hay {criticalMaterials.length} material(es) sin stock suficiente para
-          esta producción. Revisa la columna de faltante antes de crear una orden
-          de trabajo.
-        </section>
+        <Alert variant="destructive">
+          <AlertDescription>
+            Hay {criticalMaterials.length} material(es) sin stock suficiente
+            para esta producción. Revisa la columna de faltante antes de
+            crear una orden de trabajo.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       {version.detalle_receta.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta versión de receta no tiene materiales registrados. Primero agrega
-          materiales al detalle de receta.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta versión de receta no tiene materiales registrados. Primero
+            agrega materiales al detalle de receta.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Tipo</th>
-              <th className="px-4 py-3 font-semibold">Cant. por unidad</th>
-              <th className="px-4 py-3 font-semibold">Requerido base</th>
-              <th className="px-4 py-3 font-semibold">Merma</th>
-              <th className="px-4 py-3 font-semibold">Requerido total</th>
-              <th className="px-4 py-3 font-semibold">Stock disponible</th>
-              <th className="px-4 py-3 font-semibold">Faltante</th>
-              <th className="px-4 py-3 font-semibold">Costo estimado</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Material</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Cant. por unidad</TableHead>
+            <TableHead>Requerido base</TableHead>
+            <TableHead>Merma</TableHead>
+            <TableHead>Requerido total</TableHead>
+            <TableHead>Stock disponible</TableHead>
+            <TableHead>Faltante</TableHead>
+            <TableHead>Costo estimado</TableHead>
+            <TableHead>Estado</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {calculationRows.map((row) => (
-              <tr key={row.id} className="border-t">
-                <td className="px-4 py-3">
-                  <div className="font-medium">{row.materialName}</div>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    Categoría: {row.materialCategory}
+        <TableBody>
+          {calculationRows.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell>
+                <div className="font-medium">{row.materialName}</div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Categoría: {row.materialCategory}
+                </p>
+                {row.observations ? (
+                  <p className="mt-1 max-w-xl text-xs text-muted-foreground">
+                    {row.observations}
                   </p>
+                ) : null}
+              </TableCell>
 
-                  {row.observations ? (
-                    <p className="mt-1 max-w-xl text-xs text-slate-500">
-                      {row.observations}
-                    </p>
-                  ) : null}
-                </td>
+              <TableCell className="capitalize">
+                {row.consumptionType}
+              </TableCell>
 
-                <td className="px-4 py-3 capitalize">
-                  {row.consumptionType}
-                </td>
+              <TableCell>
+                {formatDecimal(row.baseQuantityPerUnit)} {row.recipeUnit}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.baseQuantityPerUnit)} {row.recipeUnit}
-                </td>
+              <TableCell>
+                {formatDecimal(row.requiredWithoutWaste)} {row.recipeUnit}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.requiredWithoutWaste)} {row.recipeUnit}
-                </td>
+              <TableCell>{formatDecimal(row.wastePercentage)}%</TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.wastePercentage)}%
-                </td>
+              <TableCell className="font-medium">
+                {formatDecimal(row.requiredWithWaste)} {row.recipeUnit}
+              </TableCell>
 
-                <td className="px-4 py-3 font-medium">
-                  {formatDecimal(row.requiredWithWaste)} {row.recipeUnit}
-                </td>
+              <TableCell>
+                {formatDecimal(row.availableStock)} {row.materialUnit}
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Stock: {formatDecimal(row.currentStock)} · Reservado:{" "}
+                  {formatDecimal(row.reservedStock)}
+                </p>
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.availableStock)} {row.materialUnit}
-                  <p className="mt-1 text-xs text-slate-400">
-                    Stock: {formatDecimal(row.currentStock)} · Reservado:{" "}
-                    {formatDecimal(row.reservedStock)}
-                  </p>
-                </td>
+              <TableCell>
+                {formatDecimal(row.shortage)} {row.materialUnit}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDecimal(row.shortage)} {row.materialUnit}
-                </td>
+              <TableCell className="font-medium">
+                {formatMoney(row.estimatedCost)}
+              </TableCell>
 
-                <td className="px-4 py-3 font-medium">
-                  {formatMoney(row.estimatedCost)}
-                </td>
+              <TableCell>
+                <Badge variant={row.hasEnoughStock ? "success" : "destructive"}>
+                  {row.hasEnoughStock ? "Suficiente" : "Insuficiente"}
+                </Badge>
+              </TableCell>
+            </TableRow>
+          ))}
 
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${getStockStatusClass(
-                      row.hasEnoughStock,
-                    )}`}
-                  >
-                    {row.hasEnoughStock ? "Suficiente" : "Insuficiente"}
-                  </span>
-                </td>
-              </tr>
-            ))}
+          {calculationRows.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
+                No hay materiales para calcular.
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
 
-            {calculationRows.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-8 text-center text-slate-500">
-                  No hay materiales para calcular.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-        <p className="font-medium text-slate-900">
-          Interpretación del cálculo
-        </p>
-
-        <p className="mt-1">
-          El sistema usa el stock disponible, es decir, stock actual menos stock
-          reservado. Si la cantidad requerida total supera el stock disponible,
-          se marca como insuficiente y se muestra el faltante.
-        </p>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <Link
-          href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver al detalle de receta
-        </Link>
-
-        <Link
-          href="/dashboard/production/recipes"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a recetas técnicas
-        </Link>
-      </div>
+      <Alert variant="info">
+        <AlertDescription>
+          El sistema usa el stock disponible, es decir, stock actual menos
+          stock reservado. Si la cantidad requerida total supera el stock
+          disponible, se marca como insuficiente y se muestra el faltante.
+        </AlertDescription>
+      </Alert>
     </main>
   );
 }

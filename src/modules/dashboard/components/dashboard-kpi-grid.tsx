@@ -1,7 +1,6 @@
+import { KpiCard } from "@/components/ui/kpi-card";
 import { formatMoney } from "@/lib/formatters";
 import type { DashboardData } from "@/modules/dashboard/data";
-
-import { KpiCard } from "./kpi-card";
 
 type DashboardKpiGridProps = {
   dashboardData: DashboardData;

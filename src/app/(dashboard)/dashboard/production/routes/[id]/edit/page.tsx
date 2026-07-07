@@ -1,9 +1,15 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateFabricationRouteAction } from "@/modules/production/routes/actions";
+import Link from "next/link";
 
 type EditFabricationRoutePageProps = {
   params: Promise<{
@@ -73,42 +79,35 @@ export default async function EditFabricationRoutePage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
-      <section>
-        <p className="text-sm font-medium text-slate-500">
-          Produccion - Rutas de fabricacion
-        </p>
-
-        <h1 className="text-3xl font-bold tracking-tight">
-          Editar ruta de fabricacion
-        </h1>
-
-        <p className="text-slate-600">
-          Actualiza los datos generales de la ruta. Si ya tiene ordenes
-          asociadas, el producto queda protegido para conservar trazabilidad.
-        </p>
-      </section>
+      <PageHeader
+        title="Editar ruta de fabricación"
+        description="Actualiza los datos generales de la ruta. Si ya tiene órdenes asociadas, el producto queda protegido para conservar trazabilidad."
+        backHref={navigationHrefs.routes}
+        backLabel="Volver a rutas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Rutas", href: navigationHrefs.routes },
+          { label: "Editar ruta" },
+        ])}
+      />
 
       <form
         action={updateFabricationRouteAction}
-        className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
       >
         <input type="hidden" name="id_ruta" value={route.id_ruta} />
 
         {productLocked ? (
           <>
-            <input
-              type="hidden"
-              name="id_producto"
-              value={route.id_producto}
-            />
+            <input type="hidden" name="id_producto" value={route.id_producto} />
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Producto</label>
-              <div className="rounded-lg border bg-slate-50 px-3 py-2 text-sm text-slate-700">
+              <Label>Producto</Label>
+              <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
                 {route.producto.nombre_producto}
               </div>
-              <p className="text-xs text-slate-500">
-                Esta ruta tiene ordenes asociadas; el producto no se puede
+              <p className="text-xs text-muted-foreground">
+                Esta ruta tiene órdenes asociadas; el producto no se puede
                 cambiar desde datos maestros productivos.
               </p>
             </div>
@@ -126,43 +125,31 @@ export default async function EditFabricationRoutePage({
         )}
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Nombre de la ruta *</label>
-
-          <input
+          <Label>Nombre de la ruta *</Label>
+          <Input
             name="nombre_ruta"
             required
             maxLength={100}
             defaultValue={route.nombre_ruta}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Descripcion</label>
-
-          <textarea
+          <Label>Descripción</Label>
+          <Textarea
             name="descripcion"
             rows={4}
             maxLength={500}
             defaultValue={route.descripcion ?? ""}
-            className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Link
-            href="/dashboard/production/routes"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Volver a rutas
-          </Link>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Link href="/dashboard/production/routes">Volver a rutas</Link>
+          </Button>
 
-          <button
-            type="submit"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Guardar cambios
-          </button>
+          <Button type="submit">Guardar cambios</Button>
         </div>
       </form>
     </main>

@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import type { SupplierMaterialFormState } from "@/modules/inventory/supplier-materials/actions";
 
 type Option = {
@@ -73,7 +78,10 @@ export function SupplierMaterialForm({
   const hasOptions = suppliers.length > 0 && materials.length > 0;
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form
+      action={formAction}
+      className="space-y-4 rounded-xl border border-border/80 bg-card p-6"
+    >
       {defaultValues?.id_proveedor_material ? (
         <input
           type="hidden"
@@ -83,33 +91,29 @@ export function SupplierMaterialForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       {!hasOptions ? (
-        <div className="rounded-md border border-dashed px-4 py-3 text-sm text-muted-foreground">
-          Deben existir proveedores y materiales activos para crear asociaciones.
-        </div>
+        <Alert variant="warning">
+          <AlertDescription>
+            Deben existir proveedores y materiales activos para crear
+            asociaciones.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="id_proveedor" className="text-sm font-medium">
-            Proveedor
-          </label>
-          <select
+          <Label htmlFor="id_proveedor">Proveedor</Label>
+          <NativeSelect
             id="id_proveedor"
             name="id_proveedor"
             defaultValue={getValue(defaultValues, "id_proveedor")}
             disabled={suppliers.length === 0}
             required
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="">Selecciona un proveedor</option>
             {suppliers.map((supplier) => (
@@ -117,21 +121,18 @@ export function SupplierMaterialForm({
                 {supplier.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.id_proveedor} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="id_material" className="text-sm font-medium">
-            Material
-          </label>
-          <select
+          <Label htmlFor="id_material">Material</Label>
+          <NativeSelect
             id="id_material"
             name="id_material"
             defaultValue={getValue(defaultValues, "id_material")}
             disabled={materials.length === 0}
             required
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             <option value="">Selecciona un material</option>
             {materials.map((material) => (
@@ -139,38 +140,32 @@ export function SupplierMaterialForm({
                 {material.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.id_material} />
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="unidad_medida" className="text-sm font-medium">
-            Unidad de medida
-          </label>
-          <input
+          <Label htmlFor="unidad_medida">Unidad de medida</Label>
+          <Input
             id="unidad_medida"
             name="unidad_medida"
             defaultValue={getValue(defaultValues, "unidad_medida")}
             required
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.unidad_medida} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="precio_referencial" className="text-sm font-medium">
-            Precio referencial
-          </label>
-          <input
+          <Label htmlFor="precio_referencial">Precio referencial</Label>
+          <Input
             id="precio_referencial"
             name="precio_referencial"
             type="number"
             min="0"
             step="0.01"
             defaultValue={getValue(defaultValues, "precio_referencial")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.precio_referencial} />
         </div>
@@ -178,60 +173,44 @@ export function SupplierMaterialForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label
-            htmlFor="tiempo_entrega_dias"
-            className="text-sm font-medium"
-          >
-            Tiempo de entrega (dias)
-          </label>
-          <input
+          <Label htmlFor="tiempo_entrega_dias">Tiempo de entrega (dias)</Label>
+          <Input
             id="tiempo_entrega_dias"
             name="tiempo_entrega_dias"
             type="number"
             min="0"
             step="1"
             defaultValue={getValue(defaultValues, "tiempo_entrega_dias")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           />
           <FieldError messages={state.fieldErrors?.tiempo_entrega_dias} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="disponibilidad" className="text-sm font-medium">
-            Disponibilidad
-          </label>
-          <select
+          <Label htmlFor="disponibilidad">Disponibilidad</Label>
+          <NativeSelect
             id="disponibilidad"
             name="disponibilidad"
             defaultValue={getValue(defaultValues, "disponibilidad")}
-            className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
           >
             {availabilityOptions.map((option) => (
               <option key={option.value || "empty"} value={option.value}>
                 {option.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.disponibilidad} />
         </div>
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          disabled={isPending || !hasOptions}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending || !hasOptions}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
 
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : null}
       </div>
     </form>

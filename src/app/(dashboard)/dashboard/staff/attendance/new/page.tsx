@@ -1,15 +1,22 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createAttendanceAction } from "@/modules/staff/attendance/actions";
 
@@ -40,27 +47,18 @@ export default async function NewAttendancePage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Personal, asistencia y pagos · Nueva asistencia
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar asistencia diaria
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra la asistencia de un operario indicando fecha, hora de
-            ingreso, hora de salida, tardanza, falta y observaciones.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">Fase 8.3</Badge>
-          <Badge>ADMIN / Maestro de taller</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar asistencia diaria"
+        description="Registra la asistencia de un operario indicando fecha, hora de ingreso, hora de salida, tardanza, falta y observaciones."
+        backHref={navigationHrefs.attendance}
+        backLabel="Volver al listado"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Personal", href: navigationHrefs.staff },
+          { label: "Asistencia", href: navigationHrefs.attendance },
+          { label: "Nueva asistencia" },
+        ])}
+        actions={<Badge>ADMIN / Maestro de taller</Badge>}
+      />
 
       <section className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -72,23 +70,15 @@ export default async function NewAttendancePage() {
 
           <CardContent>
             {operators.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay operarios activos disponibles.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Primero registra o activa operarios para poder controlar su
-                  asistencia.
-                </p>
-
-                <Link
-                  href="/dashboard/staff/operators"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Ir a operarios
-                </Link>
-              </div>
+              <EmptyState
+                label="No hay operarios activos disponibles."
+                description="Primero registra o activa operarios para poder controlar su asistencia."
+                action={
+                  <Button asChild>
+                    <Link href="/dashboard/staff/operators">Ir a operarios</Link>
+                  </Button>
+                }
+              />
             ) : (
               <form action={createAttendanceAction} className="space-y-4">
                 <div className="space-y-2">
@@ -104,55 +94,29 @@ export default async function NewAttendancePage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
-                    <label htmlFor="fecha" className="text-sm font-medium">
-                      Fecha
-                    </label>
-
-                    <input
+                    <Label htmlFor="fecha">Fecha</Label>
+                    <Input
                       id="fecha"
                       name="fecha"
                       type="date"
                       required
                       defaultValue={today}
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="hora_ingreso"
-                      className="text-sm font-medium"
-                    >
-                      Hora de ingreso
-                    </label>
-
-                    <input
-                      id="hora_ingreso"
-                      name="hora_ingreso"
-                      type="time"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                    />
+                    <Label htmlFor="hora_ingreso">Hora de ingreso</Label>
+                    <Input id="hora_ingreso" name="hora_ingreso" type="time" />
                   </div>
 
                   <div className="space-y-2">
-                    <label
-                      htmlFor="hora_salida"
-                      className="text-sm font-medium"
-                    >
-                      Hora de salida
-                    </label>
-
-                    <input
-                      id="hora_salida"
-                      name="hora_salida"
-                      type="time"
-                      className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                    />
+                    <Label htmlFor="hora_salida">Hora de salida</Label>
+                    <Input id="hora_salida" name="hora_salida" type="time" />
                   </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                  <label className="flex items-start gap-3 rounded-lg border p-3 text-sm">
+                  <label className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
                     <input
                       name="tardanza"
                       type="checkbox"
@@ -170,7 +134,7 @@ export default async function NewAttendancePage() {
                     </span>
                   </label>
 
-                  <label className="flex items-start gap-3 rounded-lg border p-3 text-sm">
+                  <label className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-3 text-sm">
                     <input name="falta" type="checkbox" className="mt-1" />
 
                     <span>
@@ -186,33 +150,20 @@ export default async function NewAttendancePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="observaciones" className="text-sm font-medium">
-                    Observaciones
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Textarea
                     id="observaciones"
                     name="observaciones"
                     rows={4}
                     placeholder="Ejemplo: Llegó tarde por transporte, permiso, salida anticipada, etc."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="submit"
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                  >
-                    Registrar asistencia
-                  </button>
-
-                  <Link
-                    href="/dashboard/staff/attendance"
-                    className="rounded-md border px-4 py-2 text-center text-sm font-medium transition hover:bg-muted"
-                  >
-                    Ver listado
-                  </Link>
+                  <Button type="submit">Registrar asistencia</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard/staff/attendance">Ver listado</Link>
+                  </Button>
                 </div>
               </form>
             )}

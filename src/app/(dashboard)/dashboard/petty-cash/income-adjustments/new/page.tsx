@@ -1,15 +1,24 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
 import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
+import Link from "next/link";
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -53,10 +62,10 @@ function getMovementLabel(type: string, concept: string) {
 
 function getMovementBadgeVariant(type: string, concept: string) {
   if (type === "ingreso" || concept.startsWith("Ajuste positivo")) {
-    return "default";
+    return "success" as const;
   }
 
-  return "secondary";
+  return "secondary" as const;
 }
 
 export default async function NewPettyCashIncomeAdjustmentPage() {
@@ -106,73 +115,22 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Caja chica y finanzas · Ingresos y ajustes
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar ingresos menores y ajustes
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra ingresos menores del taller o ajustes de caja chica para
-            corregir diferencias de saldo, manteniendo trazabilidad de fecha,
-            responsable, concepto, monto y observaciones.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/petty-cash"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          <Badge variant="secondary">Fase 7.5</Badge>
-        </div>
-      </section>
+      <PageHeader
+        title="Registrar ingresos menores y ajustes"
+        description="Registra ingresos menores del taller o ajustes de caja chica para corregir diferencias de saldo, manteniendo trazabilidad de fecha, responsable, concepto, monto y observaciones."
+        backHref={navigationHrefs.pettyCash}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Caja chica", href: navigationHrefs.pettyCash },
+          { label: "Ingresos y ajustes" },
+        ])}
+        actions={<Badge>Solo ADMIN</Badge>}
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cajas abiertas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{openBoxes.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Disponibles para ingresos y ajustes.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Saldo disponible</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(totalOpenBalance)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Suma de cajas abiertas.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ajustes recientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{latestAdjustments.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ajustes dentro de los últimos movimientos consultados.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Disponibles para ingresos y ajustes." tone="info" />
+        <KpiCard title="Saldo disponible" value={formatMoney(totalOpenBalance)} description="Suma de cajas abiertas." tone="info" />
+        <KpiCard title="Ajustes recientes" value={latestAdjustments.length.toString()} description="Dentro de los últimos movimientos consultados." tone="warning" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
@@ -185,64 +143,41 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
 
           <CardContent>
             {openBoxes.length === 0 ? (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <p className="text-sm font-medium">
-                  No hay cajas abiertas.
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Debes abrir una caja chica antes de registrar ingresos o
-                  ajustes.
-                </p>
-
-                <Link
-                  href="/dashboard/petty-cash/boxes/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Abrir caja chica
-                </Link>
-              </div>
+              <EmptyState
+                label="No hay cajas abiertas."
+                description="Debes abrir una caja chica antes de registrar ingresos o ajustes."
+                action={
+                  <Button asChild>
+                    <Link href="/dashboard/petty-cash/boxes/new">
+                      Abrir caja chica
+                    </Link>
+                  </Button>
+                }
+              />
             ) : (
               <form
                 action={createPettyCashIncomeAdjustmentAction}
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <label htmlFor="id_caja_chica" className="text-sm font-medium">
-                    Caja chica
-                  </label>
-
-                  <select
-                    id="id_caja_chica"
-                    name="id_caja_chica"
-                    required
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                  >
+                  <Label htmlFor="id_caja_chica">Caja chica</Label>
+                  <NativeSelect id="id_caja_chica" name="id_caja_chica" required>
                     <option value="">Selecciona una caja</option>
-
                     {openBoxes.map((box) => (
-                      <option
-                        key={box.id_caja_chica}
-                        value={box.id_caja_chica}
-                      >
-                        {box.nombre_caja} · Saldo:{" "}
-                        {formatMoney(box.saldo_actual)}
+                      <option key={box.id_caja_chica} value={box.id_caja_chica}>
+                        {box.nombre_caja} · Saldo: {formatMoney(box.saldo_actual)}
                       </option>
                     ))}
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="tipo_operacion" className="text-sm font-medium">
-                    Tipo de operación
-                  </label>
-
-                  <select
+                  <Label htmlFor="tipo_operacion">Tipo de operación</Label>
+                  <NativeSelect
                     id="tipo_operacion"
                     name="tipo_operacion"
                     required
                     defaultValue="ingreso"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   >
                     <option value="ingreso">
                       Ingreso menor — aumenta saldo
@@ -253,30 +188,23 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                     <option value="ajuste_disminucion">
                       Ajuste negativo — disminuye saldo
                     </option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="concepto" className="text-sm font-medium">
-                    Concepto
-                  </label>
-
-                  <input
+                  <Label htmlFor="concepto">Concepto</Label>
+                  <Input
                     id="concepto"
                     name="concepto"
                     type="text"
                     required
                     placeholder="Ejemplo: Devolución de vuelto no usado"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="monto" className="text-sm font-medium">
-                    Monto
-                  </label>
-
-                  <input
+                  <Label htmlFor="monto">Monto</Label>
+                  <Input
                     id="monto"
                     name="monto"
                     type="number"
@@ -284,76 +212,51 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                     step="0.01"
                     required
                     placeholder="Ejemplo: 20.00"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label
-                    htmlFor="fecha_movimiento"
-                    className="text-sm font-medium"
-                  >
-                    Fecha del movimiento
-                  </label>
-
-                  <input
+                  <Label htmlFor="fecha_movimiento">Fecha del movimiento</Label>
+                  <Input
                     id="fecha_movimiento"
                     name="fecha_movimiento"
                     type="date"
                     required
                     defaultValue={today}
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="comprobante" className="text-sm font-medium">
-                    Comprobante o referencia
-                  </label>
-
-                  <input
+                  <Label htmlFor="comprobante">Comprobante o referencia</Label>
+                  <Input
                     id="comprobante"
                     name="comprobante"
                     type="text"
                     placeholder="Ejemplo: Ref. interna AJ-001"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="responsable" className="text-sm font-medium">
-                    Responsable
-                  </label>
-
-                  <input
+                  <Label htmlFor="responsable">Responsable</Label>
+                  <Input
                     id="responsable"
                     name="responsable"
                     type="text"
                     placeholder="Ejemplo: Administrador"
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="observaciones" className="text-sm font-medium">
-                    Observaciones
-                  </label>
-
-                  <textarea
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Textarea
                     id="observaciones"
                     name="observaciones"
                     rows={4}
                     placeholder="Detalle adicional del ingreso o ajuste."
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Registrar movimiento
-                </button>
+                <Button type="submit">Registrar movimiento</Button>
               </form>
             )}
           </CardContent>
@@ -368,16 +271,14 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
 
           <CardContent>
             {latestMovements.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aún no hay ingresos ni ajustes registrados.
-              </p>
+              <EmptyState label="Aún no hay ingresos ni ajustes registrados." />
             ) : (
               <div className="space-y-3">
-                <div className="rounded-lg border p-3">
+                <div className="rounded-lg border border-border/80 bg-secondary/40 p-3">
                   <p className="text-xs text-muted-foreground">
                     Ingresos recientes consultados
                   </p>
-                  <p className="text-lg font-bold">
+                  <p className="text-lg font-bold text-foreground">
                     {formatMoney(totalLatestIncome)}
                   </p>
                 </div>
@@ -385,18 +286,16 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                 {latestMovements.map((movement) => (
                   <div
                     key={movement.id_movimiento_caja}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-sm font-medium">
+                        <p className="text-sm font-medium text-foreground">
                           {movement.concepto}
                         </p>
-
                         <p className="mt-1 text-xs text-muted-foreground">
                           {movement.caja_chica.nombre_caja}
                         </p>
-
                         <p className="mt-1 text-xs text-muted-foreground">
                           {formatDate(movement.fecha_movimiento)}
                         </p>
@@ -415,7 +314,7 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                       </Badge>
                     </div>
 
-                    <p className="mt-2 text-sm font-medium">
+                    <p className="mt-2 text-sm font-medium text-foreground">
                       {formatMoney(movement.monto)}
                     </p>
                   </div>

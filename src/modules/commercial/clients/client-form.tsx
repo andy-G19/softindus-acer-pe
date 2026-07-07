@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { showError } from "@/lib/notifications";
 import type { ClientFormState } from "@/modules/commercial/clients/actions";
 
@@ -85,7 +91,10 @@ export function ClientForm({
   }, [state.error]);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border p-6">
+    <form
+      action={formAction}
+      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
+    >
       {defaultValues?.id_cliente ? (
         <input
           type="hidden"
@@ -95,23 +104,16 @@ export function ClientForm({
       ) : null}
 
       {state.error ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {state.error}
-        </div>
+        <Alert variant="destructive" role="alert" aria-live="polite">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="tipo_cliente" className="text-sm font-medium">
-          Tipo de cliente
-        </label>
-        <select
+        <Label htmlFor="tipo_cliente">Tipo de cliente</Label>
+        <NativeSelect
           id="tipo_cliente"
           name="tipo_cliente"
-          className="w-full rounded-md border px-3 py-2"
           defaultValue={getValue(defaultValues, "tipo_cliente") || "cliente_final"}
           required
         >
@@ -120,18 +122,15 @@ export function ClientForm({
               {option.label}
             </option>
           ))}
-        </select>
+        </NativeSelect>
         <FieldError messages={state.fieldErrors?.tipo_cliente} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="nombre_razon_social" className="text-sm font-medium">
-          Nombre o razón social
-        </label>
-        <input
+        <Label htmlFor="nombre_razon_social">Nombre o razón social</Label>
+        <Input
           id="nombre_razon_social"
           name="nombre_razon_social"
-          className="w-full rounded-md border px-3 py-2"
           defaultValue={getValue(defaultValues, "nombre_razon_social")}
           required
         />
@@ -140,13 +139,10 @@ export function ClientForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="tipo_documento" className="text-sm font-medium">
-            Tipo de documento
-          </label>
-          <select
+          <Label htmlFor="tipo_documento">Tipo de documento</Label>
+          <NativeSelect
             id="tipo_documento"
             name="tipo_documento"
-            className="w-full rounded-md border px-3 py-2"
             defaultValue={getValue(defaultValues, "tipo_documento")}
           >
             {documentTypeOptions.map((option) => (
@@ -154,18 +150,15 @@ export function ClientForm({
                 {option.label}
               </option>
             ))}
-          </select>
+          </NativeSelect>
           <FieldError messages={state.fieldErrors?.tipo_documento} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="numero_documento" className="text-sm font-medium">
-            Número de documento
-          </label>
-          <input
+          <Label htmlFor="numero_documento">Número de documento</Label>
+          <Input
             id="numero_documento"
             name="numero_documento"
-            className="w-full rounded-md border px-3 py-2"
             defaultValue={getValue(defaultValues, "numero_documento")}
           />
           <FieldError messages={state.fieldErrors?.numero_documento} />
@@ -174,27 +167,21 @@ export function ClientForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="telefono" className="text-sm font-medium">
-            Teléfono
-          </label>
-          <input
+          <Label htmlFor="telefono">Teléfono</Label>
+          <Input
             id="telefono"
             name="telefono"
-            className="w-full rounded-md border px-3 py-2"
             defaultValue={getValue(defaultValues, "telefono")}
           />
           <FieldError messages={state.fieldErrors?.telefono} />
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="correo" className="text-sm font-medium">
-            Correo
-          </label>
-          <input
+          <Label htmlFor="correo">Correo</Label>
+          <Input
             id="correo"
             type="email"
             name="correo"
-            className="w-full rounded-md border px-3 py-2"
             defaultValue={getValue(defaultValues, "correo")}
           />
           <FieldError messages={state.fieldErrors?.correo} />
@@ -202,60 +189,44 @@ export function ClientForm({
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="direccion" className="text-sm font-medium">
-          Dirección
-        </label>
-        <input
+        <Label htmlFor="direccion">Dirección</Label>
+        <Input
           id="direccion"
           name="direccion"
-          className="w-full rounded-md border px-3 py-2"
           defaultValue={getValue(defaultValues, "direccion")}
         />
         <FieldError messages={state.fieldErrors?.direccion} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="lugar_origen" className="text-sm font-medium">
-          Lugar de origen
-        </label>
-        <input
+        <Label htmlFor="lugar_origen">Lugar de origen</Label>
+        <Input
           id="lugar_origen"
           name="lugar_origen"
-          className="w-full rounded-md border px-3 py-2"
           defaultValue={getValue(defaultValues, "lugar_origen")}
         />
         <FieldError messages={state.fieldErrors?.lugar_origen} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="observaciones" className="text-sm font-medium">
-          Observaciones
-        </label>
-        <textarea
+        <Label htmlFor="observaciones">Observaciones</Label>
+        <Textarea
           id="observaciones"
           name="observaciones"
-          className="w-full rounded-md border px-3 py-2"
           defaultValue={getValue(defaultValues, "observaciones")}
         />
         <FieldError messages={state.fieldErrors?.observaciones} />
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : submitLabel}
-        </button>
+        </Button>
 
         {showCancelAction ? (
-          <Link
-            href={cancelHref}
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            {cancelLabel}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href={cancelHref}>{cancelLabel}</Link>
+          </Button>
         ) : null}
       </div>
     </form>

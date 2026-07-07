@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatDecimal, formatMoney } from "@/lib/formatters";
 import type { DashboardData } from "@/modules/dashboard/data";
-
-import { EmptyState } from "./empty-state";
 
 type DashboardRecentSummaryProps = {
   dashboardData: DashboardData;

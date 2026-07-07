@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
@@ -50,10 +51,12 @@ export default async function MaterialCategoriesPage() {
       />
 
       {!canManage ? (
-        <div className="rounded-md border px-4 py-3 text-sm text-slate-600">
-          Tu usuario puede consultar categorías, pero solo ADMIN puede crearlas
-          o modificarlas.
-        </div>
+        <Alert variant="info">
+          <AlertDescription>
+            Tu usuario puede consultar categorías, pero solo ADMIN puede
+            crearlas o modificarlas.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
       <InventoryCatalogManager

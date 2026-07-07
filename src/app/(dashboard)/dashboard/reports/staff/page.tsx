@@ -1,11 +1,25 @@
 ﻿import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -45,28 +59,6 @@ function formatDate(value: Date | null | undefined) {
     month: "2-digit",
     year: "numeric",
   }).format(value);
-}
-
-function SummaryCard({
-  title,
-  value,
-  description,
-}: {
-  title: string;
-  value: string | number;
-  description: string;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function StaffReportPage({ searchParams }: PageProps) {
@@ -186,12 +178,16 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
         ])}
         actions={
           <>
-            <Link href={buildReportExportHref("staff", exportParams)} className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-              Exportar Excel
-            </Link>
-            <Link href={buildReportExportHref("staff", exportParams, "pdf")} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-              Exportar PDF
-            </Link>
+            <Button variant="outline" asChild>
+              <Link href={buildReportExportHref("staff", exportParams)}>
+                Exportar Excel
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href={buildReportExportHref("staff", exportParams, "pdf")}>
+                Exportar PDF
+              </Link>
+            </Button>
           </>
         }
       />
@@ -199,95 +195,123 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
       <Card>
         <CardContent className="pt-6">
           <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-            <input name="q" defaultValue={q} placeholder="Buscar operario" className="rounded-md border px-3 py-2 text-sm" />
-            <select name="operario" defaultValue={operario} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todos los operarios</option>
-              {operators.map((operator) => (
-                <option key={operator.id_operario} value={operator.id_operario}>
-                  {operator.apellidos}, {operator.nombres}
-                </option>
-              ))}
-            </select>
-            <select name="modalidad" defaultValue={modalidad} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todas las modalidades</option>
-              <option value="semanal">Semanal</option>
-              <option value="quincenal">Quincenal</option>
-              <option value="mensual">Mensual</option>
-            </select>
-            <select name="estado" defaultValue={estado} className="rounded-md border px-3 py-2 text-sm">
-              <option value="">Todos los estados</option>
-              <option value="pendiente">Pendiente</option>
-              <option value="pagado">Pagado</option>
-              <option value="anulada">Anulada</option>
-            </select>
-            <input name="from" type="date" defaultValue={from} className="rounded-md border px-3 py-2 text-sm" />
-            <input name="to" type="date" defaultValue={to} className="rounded-md border px-3 py-2 text-sm" />
-            <div className="flex gap-2">
-              <button type="submit" className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-                Filtrar
-              </button>
-              <Link href="/dashboard/reports/staff" className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted">
-                Limpiar
-              </Link>
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar operario" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="operario">Operario</Label>
+              <NativeSelect id="operario" name="operario" defaultValue={operario}>
+                <option value="">Todos los operarios</option>
+                {operators.map((operator) => (
+                  <option key={operator.id_operario} value={operator.id_operario}>
+                    {operator.apellidos}, {operator.nombres}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="modalidad">Modalidad</Label>
+              <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
+                <option value="">Todas las modalidades</option>
+                <option value="semanal">Semanal</option>
+                <option value="quincenal">Quincenal</option>
+                <option value="mensual">Mensual</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="pagado">Pagado</option>
+                <option value="anulada">Anulada</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input id="from" name="from" type="date" defaultValue={from} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input id="to" name="to" type="date" defaultValue={to} />
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit">Filtrar</Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/reports/staff">Limpiar</Link>
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <SummaryCard title="Operarios activos" value={operators.length} description="Operarios habilitados." />
-        <SummaryCard title="Asistencias" value={attendanceCount} description="Registros en el periodo." />
-        <SummaryCard title="Faltas" value={absenceCount} description="Ausencias registradas." />
-        <SummaryCard title="Tardanzas" value={latenessCount} description="Marcaciones tardias." />
-        <SummaryCard title="Planillas" value={payrolls.length} description={`Pendientes: ${totals.pending}`} />
-        <SummaryCard title="Pagado" value={formatMoney(totals.paid)} description={`Neto: ${formatMoney(totals.net)}`} />
+        <KpiCard title="Operarios activos" value={operators.length.toString()} description="Operarios habilitados." tone="info" />
+        <KpiCard title="Asistencias" value={attendanceCount.toString()} description="Registros en el periodo." tone="info" />
+        <KpiCard title="Faltas" value={absenceCount.toString()} description="Ausencias registradas." tone={absenceCount > 0 ? "warning" : "info"} />
+        <KpiCard title="Tardanzas" value={latenessCount.toString()} description="Marcaciones tardias." tone={latenessCount > 0 ? "warning" : "info"} />
+        <KpiCard title="Planillas" value={payrolls.length.toString()} description={`Pendientes: ${totals.pending}`} tone={totals.pending > 0 ? "warning" : "info"} />
+        <KpiCard title="Pagado" value={formatMoney(totals.paid)} description={`Neto: ${formatMoney(totals.net)}`} tone="success" />
       </section>
 
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Planillas listadas</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0">
           {payrolls.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No se encontraron planillas con los filtros aplicados.
-            </p>
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron planillas con los filtros aplicados."
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Planilla</th>
-                    <th className="py-2 pr-3">Operario</th>
-                    <th className="py-2 pr-3">Periodo</th>
-                    <th className="py-2 pr-3">Modalidad</th>
-                    <th className="py-2 pr-3 text-right">Neto</th>
-                    <th className="py-2 pr-3 text-right">Pagado</th>
-                    <th className="py-2 text-right">Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {payrolls.map((payroll) => {
-                    const paid = payroll.historial_pago_operario.reduce(
-                      (sum, payment) => sum + toNumber(payment.monto_pagado),
-                      0,
-                    );
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Planilla</TableHead>
+                  <TableHead>Operario</TableHead>
+                  <TableHead>Periodo</TableHead>
+                  <TableHead>Modalidad</TableHead>
+                  <TableHead className="text-right">Neto</TableHead>
+                  <TableHead className="text-right">Pagado</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {payrolls.map((payroll) => {
+                  const paid = payroll.historial_pago_operario.reduce(
+                    (sum, payment) => sum + toNumber(payment.monto_pagado),
+                    0,
+                  );
 
-                    return (
-                      <tr key={payroll.id_planilla} className="border-b">
-                        <td className="py-2 pr-3 font-mono text-xs">{payroll.id_planilla}</td>
-                        <td className="py-2 pr-3">{payroll.operario.apellidos}, {payroll.operario.nombres}</td>
-                        <td className="py-2 pr-3">{formatDate(payroll.periodo_inicio)} - {formatDate(payroll.periodo_fin)}</td>
-                        <td className="py-2 pr-3">{payroll.modalidad_pago}</td>
-                        <td className="py-2 pr-3 text-right">{formatMoney(payroll.monto_neto)}</td>
-                        <td className="py-2 pr-3 text-right">{formatMoney(paid)}</td>
-                        <td className="py-2 text-right">{payroll.estado_pago}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                  return (
+                    <TableRow key={payroll.id_planilla}>
+                      <TableCell className="font-mono text-xs">
+                        {payroll.id_planilla}
+                      </TableCell>
+                      <TableCell>
+                        {payroll.operario.apellidos}, {payroll.operario.nombres}
+                      </TableCell>
+                      <TableCell>
+                        {formatDate(payroll.periodo_inicio)} -{" "}
+                        {formatDate(payroll.periodo_fin)}
+                      </TableCell>
+                      <TableCell>{payroll.modalidad_pago}</TableCell>
+                      <TableCell className="text-right">
+                        {formatMoney(payroll.monto_neto)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {formatMoney(paid)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {payroll.estado_pago}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

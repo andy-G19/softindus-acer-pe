@@ -3,6 +3,20 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import {
@@ -186,117 +200,106 @@ export default async function MaterialsPage({
         ])}
         actions={
           <>
-          <Link
-            href="/dashboard/inventory/material-categories"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-          >
-            Categorías
-          </Link>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/inventory/material-categories">
+                Categorías
+              </Link>
+            </Button>
 
-          {isAdmin ? (
-            <Link
-              href="/dashboard/inventory/materials/new"
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Nuevo material
-            </Link>
-          ) : null}
+            {isAdmin ? (
+              <Button asChild>
+                <Link href="/dashboard/inventory/materials/new">
+                  Nuevo material
+                </Link>
+              </Button>
+            ) : null}
           </>
         }
       />
 
       <form
         action="/dashboard/inventory/materials"
-        className="grid gap-3 rounded-xl border bg-white p-4 shadow-sm md:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))_auto_auto]"
+        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))_auto_auto]"
       >
-        <input
-          name="q"
-          defaultValue={q}
-          placeholder="Buscar material..."
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="q">Buscar</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Buscar material..." />
+        </div>
 
-        <select
-          name="category"
-          defaultValue={category}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las categorías</option>
-          {categories.map((item) => (
-            <option key={item.slug} value={item.slug}>
-              {item.nombre}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="category">Categoría</Label>
+          <NativeSelect id="category" name="category" defaultValue={category}>
+            <option value="">Todas las categorías</option>
+            {categories.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {item.nombre}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="unit"
-          defaultValue={unit}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todas las unidades</option>
-          {units.map((item) => (
-            <option key={item.unidad_medida} value={item.unidad_medida}>
-              {item.unidad_medida}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="unit">Unidad</Label>
+          <NativeSelect id="unit" name="unit" defaultValue={unit}>
+            <option value="">Todas las unidades</option>
+            {units.map((item) => (
+              <option key={item.unidad_medida} value={item.unidad_medida}>
+                {item.unidad_medida}
+              </option>
+            ))}
+          </NativeSelect>
+        </div>
 
-        <select
-          name="status"
-          defaultValue={status}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todos los estados</option>
-          <option value="active">Activo</option>
-          <option value="inactive">Inactivo</option>
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <NativeSelect id="status" name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </NativeSelect>
+        </div>
 
-        <select
-          name="stock"
-          defaultValue={stock}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-        >
-          <option value="">Todo el stock</option>
-          <option value="critical">Críticos</option>
-          <option value="ok">No críticos</option>
-        </select>
+        <div className="space-y-2">
+          <Label htmlFor="stock">Stock</Label>
+          <NativeSelect id="stock" name="stock" defaultValue={stock}>
+            <option value="">Todo el stock</option>
+            <option value="critical">Críticos</option>
+            <option value="ok">No críticos</option>
+          </NativeSelect>
+        </div>
 
-        <button
-          type="submit"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Filtrar
-        </button>
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Filtrar
+          </Button>
+        </div>
 
-        <Link
-          href="/dashboard/inventory/materials"
-          className="rounded-lg border px-4 py-2 text-center text-sm font-medium hover:bg-slate-50"
-        >
-          Limpiar filtros
-        </Link>
+        <div className="flex items-end">
+          <Button variant="outline" className="w-full" asChild>
+            <Link href="/dashboard/inventory/materials">Limpiar filtros</Link>
+          </Button>
+        </div>
       </form>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Categoría</th>
-              <th className="px-4 py-3 font-semibold">Unidad</th>
-              <th className="px-4 py-3 font-semibold">Stock actual</th>
-              <th className="px-4 py-3 font-semibold">Reservado</th>
-              <th className="px-4 py-3 font-semibold">Disponible</th>
-              <th className="px-4 py-3 font-semibold">Stock mínimo</th>
-              <th className="px-4 py-3 font-semibold">Costo actual</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Material</TableHead>
+            <TableHead>Categoría</TableHead>
+            <TableHead>Unidad</TableHead>
+            <TableHead>Stock actual</TableHead>
+            <TableHead>Reservado</TableHead>
+            <TableHead>Disponible</TableHead>
+            <TableHead>Stock mínimo</TableHead>
+            <TableHead>Costo actual</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {materials.map((material) => {
+        <TableBody>
+          {materials.map((material) => {
               const stockActual = Number(material.stock_actual.toString());
               const stockReservado = Number(material.stock_reservado.toString());
               const stockMinimo = Number(material.stock_minimo.toString());
@@ -305,56 +308,53 @@ export default async function MaterialsPage({
                 stockMinimo > 0 && stockDisponible <= stockMinimo;
 
               return (
-                <tr key={material.id_material} className="border-t">
-                  <td className="px-4 py-3 font-mono text-xs">
+                <TableRow key={material.id_material}>
+                  <TableCell className="text-xs">
                     {material.id_material}
-                  </td>
-                  <td className="px-4 py-3 font-medium">
+                  </TableCell>
+                  <TableCell className="font-medium">
                     {material.nombre_material}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     {categoryLabels.get(material.categoria) ??
                       material.categoria}
-                  </td>
-                  <td className="px-4 py-3">{material.unidad_medida}</td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>{material.unidad_medida}</TableCell>
+                  <TableCell>
                     {formatDecimal(material.stock_actual)}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     {formatDecimal(material.stock_reservado)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={
-                        isLowStock
-                          ? "rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700"
-                          : "rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700"
-                      }
-                    >
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={isLowStock ? "destructive" : "success"}>
                       {stockDisponible.toFixed(2)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     {formatDecimal(material.stock_minimo)}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     {formatMoney(material.costo_unitario_actual)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {material.estado ? "Activo" : "Inactivo"}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={material.estado ? "success" : "outline"}>
+                      {material.estado ? "Activo" : "Inactivo"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     {isAdmin ? (
                       <div className="flex flex-wrap items-center gap-2">
-                        <Link
-                          href={withReturnTo(
-                            `${navigationHrefs.materials}/${material.id_material}/edit`,
-                            returnTo,
-                          )}
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium"
-                        >
-                          Editar
-                        </Link>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link
+                            href={withReturnTo(
+                              `${navigationHrefs.materials}/${material.id_material}/edit`,
+                              returnTo,
+                            )}
+                          >
+                            Editar
+                          </Link>
+                        </Button>
 
                         <form action={toggleMaterialStatusAction}>
                           <input
@@ -362,34 +362,33 @@ export default async function MaterialsPage({
                             name="id_material"
                             value={material.id_material}
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md border px-3 py-1.5 text-xs font-medium"
-                          >
+                          <Button type="submit" variant="outline" size="sm">
                             {material.estado ? "Inactivar" : "Activar"}
-                          </button>
+                          </Button>
                         </form>
                       </div>
                     ) : (
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-muted-foreground">
                         Solo lectura
                       </span>
                     )}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               );
             })}
 
             {materials.length === 0 ? (
-              <tr>
-                <td colSpan={11} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay materiales registrados.
-                </td>
-              </tr>
+              <TableRow>
+                <TableCell colSpan={11} className="p-0">
+                  <EmptyState
+                    className="border-0"
+                    label="Todavía no hay materiales registrados."
+                  />
+                </TableCell>
+              </TableRow>
             ) : null}
-          </tbody>
-        </table>
-      </section>
+          </TableBody>
+      </Table>
     </main>
   );
 }

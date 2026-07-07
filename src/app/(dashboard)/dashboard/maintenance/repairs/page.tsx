@@ -2,14 +2,30 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -61,11 +77,11 @@ function getRepairStatusLabel(status: string) {
 function getRepairStatusBadgeVariant(status: string) {
   const variants: Record<
     string,
-    "default" | "secondary" | "destructive" | "outline"
+    "warning" | "secondary" | "destructive" | "success"
   > = {
-    programada: "secondary",
-    ejecutada: "default",
-    observada: "outline",
+    programada: "warning",
+    ejecutada: "success",
+    observada: "secondary",
     anulada: "destructive",
   };
 
@@ -175,163 +191,90 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Dashboard · Mantenimiento de maquinaria · Reparaciones
-          </p>
+      <PageHeader
+        title="Listado de reparaciones"
+        description="Consulta las reparaciones registradas por falla, máquina, técnico, mano de obra, repuestos utilizados y costo total."
+        backHref={navigationHrefs.maintenance}
+        backLabel="Volver al módulo"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mantenimiento", href: navigationHrefs.maintenance },
+          { label: "Reparaciones" },
+        ])}
+        actions={
+          canManageRepairs ? (
+            <Button asChild>
+              <Link href="/dashboard/maintenance/repairs/new">
+                Registrar reparación
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Listado de reparaciones
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Consulta las reparaciones registradas por falla, máquina, técnico,
-            mano de obra, repuestos utilizados y costo total.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/dashboard/maintenance"
-            className="rounded-md border px-4 py-2 text-sm font-medium transition hover:bg-muted"
-          >
-            Volver al módulo
-          </Link>
-
-          {canManageRepairs ? (
-            <Link
-              href="/dashboard/maintenance/repairs/new"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Registrar reparación
-            </Link>
-          ) : null}
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar reparacion, falla o tecnico"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="machine"
-            defaultValue={machine}
-            placeholder="Maquina"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="failure"
-            defaultValue={failure}
-            placeholder="Falla"
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <select
-            name="status"
-            defaultValue={status}
-            className="rounded-md border px-3 py-2 text-sm"
-          >
-            <option value="">Todos los estados</option>
-            <option value="programada">Programada</option>
-            <option value="ejecutada">Ejecutada</option>
-            <option value="observada">Observada</option>
-            <option value="anulada">Anulada</option>
-          </select>
-          <input
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <input
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-            className="rounded-md border px-3 py-2 text-sm"
-          />
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Filtrar
-            </button>
-            <Link
-              href="/dashboard/maintenance/repairs"
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Limpiar filtros
-            </Link>
-          </div>
-        </form>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input id="q" name="q" defaultValue={q} placeholder="Buscar reparacion, falla o tecnico" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="machine">Máquina</Label>
+              <Input id="machine" name="machine" defaultValue={machine} placeholder="Maquina" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="failure">Falla</Label>
+              <Input id="failure" name="failure" defaultValue={failure} placeholder="Falla" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Estado</Label>
+              <NativeSelect id="status" name="status" defaultValue={status}>
+                <option value="">Todos los estados</option>
+                <option value="programada">Programada</option>
+                <option value="ejecutada">Ejecutada</option>
+                <option value="observada">Observada</option>
+                <option value="anulada">Anulada</option>
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="from">Desde</Label>
+              <Input
+                id="from"
+                name="from"
+                type="date"
+                defaultValue={parseStringParam(params, "from")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="to">Hasta</Label>
+              <Input
+                id="to"
+                name="to"
+                type="date"
+                defaultValue={parseStringParam(params, "to")}
+              />
+            </div>
+            <div className="flex items-end gap-2">
+              <Button type="submit" className="flex-1">
+                Filtrar
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/maintenance/repairs">Limpiar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Reparaciones</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{repairs.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total histórico.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Programadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{scheduledRepairs.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Observadas: {observedRepairs.length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Ejecutadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{executedRepairs.length}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Anuladas: {cancelledRepairs.length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Costo total</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatMoney(totalCost)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Mano de obra + repuestos.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Promedio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatMoney(repairs.length > 0 ? totalCost / repairs.length : 0)}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Costo promedio por reparación.
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Total histórico." tone="info" />
+        <KpiCard title="Programadas" value={scheduledRepairs.length.toString()} description={`Observadas: ${observedRepairs.length}`} tone="warning" />
+        <KpiCard title="Ejecutadas" value={executedRepairs.length.toString()} description={`Anuladas: ${cancelledRepairs.length}`} tone="success" />
+        <KpiCard title="Costo total" value={formatMoney(totalCost)} description="Mano de obra + repuestos." tone="info" />
+        <KpiCard title="Promedio" value={formatMoney(repairs.length > 0 ? totalCost / repairs.length : 0)} description="Costo promedio por reparación." tone="info" />
       </section>
 
       <Card>
@@ -339,160 +282,143 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
           <CardTitle className="text-base">Reparaciones registradas</CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-0">
           {repairs.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-6 text-center">
-              <p className="text-sm font-medium">
-                Aún no hay reparaciones registradas.
-              </p>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registra una reparación para calcular mano de obra, repuestos y
-                costo total de mantenimiento.
-              </p>
-
-              {canManageRepairs ? (
-                <Link
-                  href="/dashboard/maintenance/repairs/new"
-                  className="mt-4 inline-flex rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
-                >
-                  Registrar primera reparación
-                </Link>
-              ) : null}
-            </div>
+            <EmptyState
+              className="mx-6 border-0"
+              label="Aún no hay reparaciones registradas."
+              description="Registra una reparación para calcular mano de obra, repuestos y costo total de mantenimiento."
+              action={
+                canManageRepairs ? (
+                  <Button asChild>
+                    <Link href="/dashboard/maintenance/repairs/new">
+                      Registrar primera reparación
+                    </Link>
+                  </Button>
+                ) : undefined
+              }
+            />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-2 pr-3">Código</th>
-                    <th className="py-2 pr-3">Máquina / Falla</th>
-                    <th className="py-2 pr-3">Fecha</th>
-                    <th className="py-2 pr-3">Técnico</th>
-                    <th className="py-2 pr-3 text-right">Mano de obra</th>
-                    <th className="py-2 pr-3 text-right">Repuestos</th>
-                    <th className="py-2 pr-3 text-right">Costo total</th>
-                    <th className="py-2 pr-3 text-right">Estado</th>
-                    {canManageRepairs ? (
-                      <th className="py-2 text-right">Cambiar estado</th>
-                    ) : null}
-                  </tr>
-                </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Máquina / Falla</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Técnico</TableHead>
+                  <TableHead className="text-right">Mano de obra</TableHead>
+                  <TableHead className="text-right">Repuestos</TableHead>
+                  <TableHead className="text-right">Costo total</TableHead>
+                  <TableHead className="text-right">Estado</TableHead>
+                  {canManageRepairs ? (
+                    <TableHead className="text-right">Cambiar estado</TableHead>
+                  ) : null}
+                </TableRow>
+              </TableHeader>
 
-                <tbody>
-                  {repairs.map((repair) => {
-                    const sparePartsTotal =
-                      repair.detalle_repuesto_reparacion.reduce(
-                        (total, detail) => total + toNumber(detail.subtotal),
-                        0,
-                      );
-
-                    return (
-                      <tr
-                        key={repair.id_reparacion}
-                        className="border-b align-top"
-                      >
-                        <td className="py-2 pr-3 font-mono text-xs">
-                          {repair.id_reparacion}
-                        </td>
-
-                        <td className="py-2 pr-3 font-medium">
-                          {repair.falla_maquina.maquina.nombre}
-                          <p className="max-w-md text-xs font-normal text-muted-foreground">
-                            Falla: {repair.falla_maquina.descripcion}
-                          </p>
-
-                          {repair.detalle_repuesto_reparacion.length > 0 ? (
-                            <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                              {repair.detalle_repuesto_reparacion.map(
-                                (detail) => (
-                                  <p key={detail.id_detalle_repuesto}>
-                                    {detail.repuesto.nombre_repuesto} ×{" "}
-                                    {detail.cantidad.toString()} ={" "}
-                                    {formatMoney(detail.subtotal)}
-                                  </p>
-                                ),
-                              )}
-                            </div>
-                          ) : null}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {formatDate(repair.fecha_reparacion)}
-                        </td>
-
-                        <td className="py-2 pr-3">
-                          {repair.tecnico_proveedor ?? "-"}
-                        </td>
-
-                        <td className="py-2 pr-3 text-right">
-                          {formatMoney(repair.mano_obra)}
-                        </td>
-
-                        <td className="py-2 pr-3 text-right">
-                          {formatMoney(sparePartsTotal)}
-                        </td>
-
-                        <td className="py-2 pr-3 text-right font-medium">
-                          {formatMoney(repair.costo_total)}
-                        </td>
-
-                        <td className="py-2 pr-3 text-right">
-                          <Badge
-                            variant={getRepairStatusBadgeVariant(
-                              repair.estado_reparacion,
-                            )}
-                          >
-                            {getRepairStatusLabel(repair.estado_reparacion)}
-                          </Badge>
-                        </td>
-
-                        {canManageRepairs ? (
-                          <td className="py-2 text-right">
-                            {["ejecutada", "anulada"].includes(
-                              repair.estado_reparacion,
-                            ) ? (
-                              <span className="text-xs text-muted-foreground">
-                                Sin accion
-                              </span>
-                            ) : (
-                              <form
-                                action={updateRepairStatusAction}
-                                className="flex justify-end gap-2"
-                              >
-                                <input
-                                  type="hidden"
-                                  name="id_reparacion"
-                                  value={repair.id_reparacion}
-                                />
-
-                                <select
-                                  name="estado_reparacion"
-                                  defaultValue={repair.estado_reparacion}
-                                  className="rounded-md border px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-slate-300"
-                                >
-                                  <option value="programada">Programada</option>
-                                  <option value="ejecutada">Ejecutada</option>
-                                  <option value="observada">Observada</option>
-                                  <option value="anulada">Anulada</option>
-                                </select>
-
-                                <button
-                                  type="submit"
-                                  className="rounded-md border px-3 py-1 text-xs font-medium transition hover:bg-muted"
-                                >
-                                  Guardar
-                                </button>
-                              </form>
-                            )}
-                          </td>
-                        ) : null}
-                      </tr>
+              <TableBody>
+                {repairs.map((repair) => {
+                  const sparePartsTotal =
+                    repair.detalle_repuesto_reparacion.reduce(
+                      (total, detail) => total + toNumber(detail.subtotal),
+                      0,
                     );
-                  })}
-                </tbody>
-              </table>
-            </div>
+
+                  return (
+                    <TableRow key={repair.id_reparacion} className="align-top">
+                      <TableCell className="font-mono text-xs">
+                        {repair.id_reparacion}
+                      </TableCell>
+
+                      <TableCell className="font-medium">
+                        {repair.falla_maquina.maquina.nombre}
+                        <p className="max-w-md text-xs font-normal text-muted-foreground">
+                          Falla: {repair.falla_maquina.descripcion}
+                        </p>
+
+                        {repair.detalle_repuesto_reparacion.length > 0 ? (
+                          <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+                            {repair.detalle_repuesto_reparacion.map(
+                              (detail) => (
+                                <p key={detail.id_detalle_repuesto}>
+                                  {detail.repuesto.nombre_repuesto} ×{" "}
+                                  {detail.cantidad.toString()} ={" "}
+                                  {formatMoney(detail.subtotal)}
+                                </p>
+                              ),
+                            )}
+                          </div>
+                        ) : null}
+                      </TableCell>
+
+                      <TableCell>{formatDate(repair.fecha_reparacion)}</TableCell>
+
+                      <TableCell>{repair.tecnico_proveedor ?? "-"}</TableCell>
+
+                      <TableCell className="text-right">
+                        {formatMoney(repair.mano_obra)}
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        {formatMoney(sparePartsTotal)}
+                      </TableCell>
+
+                      <TableCell className="text-right font-medium">
+                        {formatMoney(repair.costo_total)}
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={getRepairStatusBadgeVariant(
+                            repair.estado_reparacion,
+                          )}
+                        >
+                          {getRepairStatusLabel(repair.estado_reparacion)}
+                        </Badge>
+                      </TableCell>
+
+                      {canManageRepairs ? (
+                        <TableCell className="text-right">
+                          {["ejecutada", "anulada"].includes(
+                            repair.estado_reparacion,
+                          ) ? (
+                            <span className="text-xs text-muted-foreground">
+                              Sin accion
+                            </span>
+                          ) : (
+                            <form
+                              action={updateRepairStatusAction}
+                              className="flex justify-end gap-2"
+                            >
+                              <input
+                                type="hidden"
+                                name="id_reparacion"
+                                value={repair.id_reparacion}
+                              />
+
+                              <NativeSelect
+                                name="estado_reparacion"
+                                defaultValue={repair.estado_reparacion}
+                                className="h-8 text-xs"
+                              >
+                                <option value="programada">Programada</option>
+                                <option value="ejecutada">Ejecutada</option>
+                                <option value="observada">Observada</option>
+                                <option value="anulada">Anulada</option>
+                              </NativeSelect>
+
+                              <Button type="submit" variant="outline" size="sm">
+                                Guardar
+                              </Button>
+                            </form>
+                          )}
+                        </TableCell>
+                      ) : null}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>

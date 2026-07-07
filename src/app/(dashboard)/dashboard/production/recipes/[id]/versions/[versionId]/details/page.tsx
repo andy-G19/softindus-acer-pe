@@ -1,7 +1,21 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import Link from "next/link";
 
 type RecipeDetailsPageProps = {
   params: Promise<{
@@ -96,227 +110,178 @@ export default async function RecipeDetailsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Producción · Recetas técnicas · Materiales requeridos
-          </p>
+      <PageHeader
+        title="Detalle de receta"
+        description={`Receta: ${version.receta_tecnica.nombre_receta} · Versión: ${version.numero_version} · Producto: ${version.receta_tecnica.producto.nombre_producto}`}
+        backHref={`/dashboard/production/recipes/${version.id_receta}/versions`}
+        backLabel="Volver a versiones"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Materiales requeridos" },
+        ])}
+        actions={
+          <>
+            <Button variant="outline" asChild>
+              <Link
+                href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/requirements`}
+              >
+                Calcular materiales
+              </Link>
+            </Button>
 
-          <h1 className="text-3xl font-bold tracking-tight">
-            Detalle de receta
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Receta:{" "}
-            <span className="font-medium">
-              {version.receta_tecnica.nombre_receta}
-            </span>{" "}
-            · Versión:{" "}
-            <span className="font-medium">{version.numero_version}</span> ·
-            Producto:{" "}
-            <span className="font-medium">
-              {version.receta_tecnica.producto.nombre_producto}
-            </span>
-          </p>
-        </div>
-
-       <div className="flex flex-col gap-2 sm:flex-row">
-          <Link
-            href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/requirements`}
-            className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Calcular materiales
-          </Link>
-
-          {version.estado === "vigente" &&
-          version._count.orden_trabajo === 0 ? (
-            <Link
-              href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/new`}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Agregar material
-            </Link>
-          ) : null}
-        </div>
-
-      </section>
+            {version.estado === "vigente" &&
+            version._count.orden_trabajo === 0 ? (
+              <Button asChild>
+                <Link
+                  href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/new`}
+                >
+                  Agregar material
+                </Link>
+              </Button>
+            ) : null}
+          </>
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materiales registrados</p>
-          <p className="mt-2 text-3xl font-bold">
-            {version.detalle_receta.length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Materia prima</p>
-          <p className="mt-2 text-3xl font-bold">
-            {
-              version.detalle_receta.filter(
-                (detail) => detail.tipo_consumo === "materia_prima",
-              ).length
-            }
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Consumibles</p>
-          <p className="mt-2 text-3xl font-bold">
-            {
-              version.detalle_receta.filter(
-                (detail) => detail.tipo_consumo === "consumible",
-              ).length
-            }
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Costo estimado por unidad
-          </p>
-          <p className="mt-2 text-3xl font-bold">
-            {formatMoney(estimatedUnitCost)}
-          </p>
-        </div>
+        <KpiCard title="Materiales registrados" value={version.detalle_receta.length.toString()} description="Total en esta versión." tone="info" />
+        <KpiCard
+          title="Materia prima"
+          value={version.detalle_receta
+            .filter((detail) => detail.tipo_consumo === "materia_prima")
+            .length.toString()}
+          description="Tipo de consumo principal."
+          tone="info"
+        />
+        <KpiCard
+          title="Consumibles"
+          value={version.detalle_receta
+            .filter((detail) => detail.tipo_consumo === "consumible")
+            .length.toString()}
+          description="Tipo de consumo secundario."
+          tone="info"
+        />
+        <KpiCard title="Costo estimado por unidad" value={formatMoney(estimatedUnitCost)} description="Con merma incluida." tone="warning" />
       </section>
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Código</th>
-              <th className="px-4 py-3 font-semibold">Material</th>
-              <th className="px-4 py-3 font-semibold">Tipo consumo</th>
-              <th className="px-4 py-3 font-semibold">Cantidad base</th>
-              <th className="px-4 py-3 font-semibold">Merma</th>
-              <th className="px-4 py-3 font-semibold">Cant. con merma</th>
-              <th className="px-4 py-3 font-semibold">Costo unitario</th>
-              <th className="px-4 py-3 font-semibold">Costo estimado</th>
-              <th className="px-4 py-3 font-semibold">Stock actual</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Material</TableHead>
+            <TableHead>Tipo consumo</TableHead>
+            <TableHead>Cantidad base</TableHead>
+            <TableHead>Merma</TableHead>
+            <TableHead>Cant. con merma</TableHead>
+            <TableHead>Costo unitario</TableHead>
+            <TableHead>Costo estimado</TableHead>
+            <TableHead>Stock actual</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {version.detalle_receta.map((detail) => {
-              const requiredWithWaste = calculateRequiredWithWaste(
-                detail.cantidad_requerida,
-                detail.merma_estimada_porcentaje,
-              );
+        <TableBody>
+          {version.detalle_receta.map((detail) => {
+            const requiredWithWaste = calculateRequiredWithWaste(
+              detail.cantidad_requerida,
+              detail.merma_estimada_porcentaje,
+            );
 
-              const unitCost = Number(
-                detail.material.costo_unitario_actual.toString(),
-              );
+            const unitCost = Number(
+              detail.material.costo_unitario_actual.toString(),
+            );
 
-              const estimatedCost = requiredWithWaste * unitCost;
+            const estimatedCost = requiredWithWaste * unitCost;
 
-              return (
-                <tr key={detail.id_detalle_receta} className="border-t">
-                  <td className="px-4 py-3 font-mono text-xs">
-                    {detail.id_detalle_receta}
-                  </td>
+            return (
+              <TableRow key={detail.id_detalle_receta}>
+                <TableCell className="text-xs">
+                  {detail.id_detalle_receta}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    <div className="font-medium">
-                      {detail.material.nombre_material}
-                    </div>
+                <TableCell>
+                  <div className="font-medium">
+                    {detail.material.nombre_material}
+                  </div>
 
-                    <p className="mt-1 text-xs text-slate-500">
-                      Categoría: {detail.material.categoria}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Categoría: {detail.material.categoria}
+                  </p>
+
+                  {detail.observaciones ? (
+                    <p className="mt-1 max-w-xl text-xs text-muted-foreground">
+                      {detail.observaciones}
                     </p>
+                  ) : null}
+                </TableCell>
 
-                    {detail.observaciones ? (
-                      <p className="mt-1 max-w-xl text-xs text-slate-500">
-                        {detail.observaciones}
-                      </p>
-                    ) : null}
-                  </td>
+                <TableCell className="capitalize">
+                  {detail.tipo_consumo}
+                </TableCell>
 
-                  <td className="px-4 py-3 capitalize">
-                    {detail.tipo_consumo}
-                  </td>
+                <TableCell>
+                  {formatDecimal(detail.cantidad_requerida)}{" "}
+                  {detail.unidad_medida}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {formatDecimal(detail.cantidad_requerida)}{" "}
-                    {detail.unidad_medida}
-                  </td>
+                <TableCell>
+                  {detail.merma_estimada_porcentaje
+                    ? `${formatDecimal(detail.merma_estimada_porcentaje)}%`
+                    : "0.00%"}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {detail.merma_estimada_porcentaje
-                      ? `${formatDecimal(
-                          detail.merma_estimada_porcentaje,
-                        )}%`
-                      : "0.00%"}
-                  </td>
+                <TableCell>
+                  {requiredWithWaste.toFixed(2)} {detail.unidad_medida}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {requiredWithWaste.toFixed(2)} {detail.unidad_medida}
-                  </td>
+                <TableCell>
+                  {formatMoney(detail.material.costo_unitario_actual)}
+                </TableCell>
 
-                  <td className="px-4 py-3">
-                    {formatMoney(detail.material.costo_unitario_actual)}
-                  </td>
+                <TableCell className="font-medium">
+                  {formatMoney(estimatedCost)}
+                </TableCell>
 
-                  <td className="px-4 py-3 font-medium">
-                    {formatMoney(estimatedCost)}
-                  </td>
+                <TableCell>
+                  {formatDecimal(detail.material.stock_actual)}{" "}
+                  {detail.material.unidad_medida}
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
-                  <td className="px-4 py-3">
-                    {formatDecimal(detail.material.stock_actual)}{" "}
-                    {detail.material.unidad_medida}
-                  </td>
-                </tr>
-              );
-            })}
+          {version.detalle_receta.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={9} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay materiales registrados para esta versión de receta."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
 
-            {version.detalle_receta.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
-                  Todavía no hay materiales registrados para esta versión de
-                  receta.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="rounded-xl border bg-slate-50 p-5 text-sm text-slate-600">
-        <p className="font-medium text-slate-900">
-          Nota sobre el cálculo mostrado
-        </p>
-
-        <p className="mt-1">
-          El costo estimado por unidad se calcula usando la cantidad requerida,
-          la merma estimada y el costo unitario actual del material. En la
-          siguiente fase multiplicaremos estos valores por la cantidad a fabricar
-          y validaremos stock suficiente.
-        </p>
-      </div>
+      <Alert variant="info">
+        <AlertDescription>
+          El costo estimado por unidad se calcula usando la cantidad
+          requerida, la merma estimada y el costo unitario actual del
+          material. Al generar una orden de trabajo, estos valores se
+          multiplican por la cantidad a fabricar y se valida el stock
+          disponible.
+        </AlertDescription>
+      </Alert>
 
       {version._count.orden_trabajo > 0 ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta versión ya fue usada por órdenes de trabajo. Sus materiales se
-          conservan como historial y no deben modificarse; crea una nueva
-          versión para futuros cambios.
-        </div>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta versión ya fue usada por órdenes de trabajo. Sus materiales
+            se conservan como historial y no deben modificarse; crea una
+            nueva versión para futuros cambios.
+          </AlertDescription>
+        </Alert>
       ) : null}
-
-      <div className="flex items-center justify-between">
-        <Link
-          href={`/dashboard/production/recipes/${version.id_receta}/versions`}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          ← Volver a versión
-        </Link>
-
-        <Link
-          href="/dashboard/production/recipes"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a recetas técnicas
-        </Link>
-      </div>
     </main>
   );
 }

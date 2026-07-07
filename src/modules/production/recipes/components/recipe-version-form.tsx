@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { SearchableSelect } from "@/components/forms/searchable-select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 import { createRecipeVersionAction } from "@/modules/production/recipe-versions/actions";
 
 type MaterialOption = {
@@ -145,66 +151,70 @@ export function RecipeVersionForm({
     <form
       action={createRecipeVersionAction}
       onSubmit={validateBeforeSubmit}
-      className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+      className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
     >
       <input type="hidden" name="id_receta" value={idReceta} />
 
       {validationMessage ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {validationMessage}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{validationMessage}</AlertDescription>
+        </Alert>
       ) : null}
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Motivo o descripción</label>
-
-        <textarea
+        <Label>Motivo o descripción</Label>
+        <Textarea
           name="motivo_cambio"
           rows={4}
           maxLength={700}
           defaultValue="Nueva versión de receta técnica."
           placeholder="Ej. Ajuste de materiales por cambio de proveedor o mejora de proceso."
           disabled={!canCreateVersion}
-          className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
         />
       </div>
 
-      <section className="space-y-4 rounded-lg border p-4">
+      <section className="space-y-4 rounded-lg border border-border/80 p-4">
         <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <div>
             <h2 className="font-semibold">Materiales de la versión</h2>
-            <p className="text-sm text-slate-500">
-              La nueva versión quedará vigente y reemplazará la versión vigente
-              anterior.
+            <p className="text-sm text-muted-foreground">
+              La nueva versión quedará vigente y reemplazará la versión
+              vigente anterior.
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={addDetail}
             disabled={!canCreateVersion}
-            className="rounded-lg border px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Agregar material
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-4">
           {details.map((detail, index) => (
-            <div key={detail.key} className="rounded-lg border p-4">
+            <div
+              key={detail.key}
+              className="rounded-lg border border-border/80 p-4"
+            >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-sm font-semibold">
                   Material {index + 1}
                 </h3>
 
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => removeDetail(detail.key)}
                   disabled={details.length === 1}
-                  className="text-sm font-medium text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="text-destructive hover:text-destructive"
                 >
                   Quitar
-                </button>
+                </Button>
               </div>
 
               <div className="grid gap-4 md:grid-cols-[1.4fr_0.7fr_0.8fr_0.7fr]">
@@ -223,8 +233,8 @@ export function RecipeVersionForm({
                 />
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Cantidad *</label>
-                  <input
+                  <Label>Cantidad *</Label>
+                  <Input
                     name="cantidad_requerida"
                     type="number"
                     min="0.01"
@@ -239,13 +249,12 @@ export function RecipeVersionForm({
                         event.target.value,
                       )
                     }
-                    className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Tipo *</label>
-                  <select
+                  <Label>Tipo *</Label>
+                  <NativeSelect
                     name="tipo_consumo"
                     required
                     value={detail.tipo_consumo}
@@ -257,17 +266,16 @@ export function RecipeVersionForm({
                         event.target.value,
                       )
                     }
-                    className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                   >
                     <option value="materia_prima">Materia prima</option>
                     <option value="consumible">Consumible</option>
                     <option value="auxiliar">Auxiliar</option>
-                  </select>
+                  </NativeSelect>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Merma %</label>
-                  <input
+                  <Label>Merma %</Label>
+                  <Input
                     name="merma_estimada_porcentaje"
                     type="number"
                     min="0"
@@ -282,14 +290,13 @@ export function RecipeVersionForm({
                         event.target.value,
                       )
                     }
-                    className="h-9 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                   />
                 </div>
               </div>
 
               <div className="mt-4 space-y-2">
-                <label className="text-sm font-medium">Observaciones</label>
-                <input
+                <Label>Observaciones</Label>
+                <Input
                   name="observaciones_detalle"
                   value={detail.observaciones}
                   disabled={!canCreateVersion}
@@ -301,7 +308,6 @@ export function RecipeVersionForm({
                     )
                   }
                   placeholder="Observación opcional del material."
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 disabled:bg-slate-100"
                 />
               </div>
             </div>
@@ -310,20 +316,13 @@ export function RecipeVersionForm({
       </section>
 
       <div className="flex items-center justify-between pt-4">
-        <Link
-          href={backHref}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Cancelar
-        </Link>
+        <Button variant="link" className="h-auto p-0" asChild>
+          <Link href={backHref}>Cancelar</Link>
+        </Button>
 
-        <button
-          type="submit"
-          disabled={!canCreateVersion}
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-        >
+        <Button type="submit" disabled={!canCreateVersion}>
           Crear versión vigente
-        </button>
+        </Button>
       </div>
     </form>
   );

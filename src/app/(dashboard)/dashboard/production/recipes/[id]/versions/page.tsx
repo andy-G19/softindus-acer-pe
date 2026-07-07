@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { PageHeader } from "@/components/navigation/page-header";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   setCurrentRecipeVersionAction,
   voidRecipeVersionAction,
@@ -37,20 +52,20 @@ function formatDecimal(value: unknown) {
   return Number(value.toString()).toFixed(2);
 }
 
-function getVersionStatusClass(status: string) {
+function getVersionBadgeVariant(status: string) {
   if (status === "vigente") {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "reemplazada") {
-    return "bg-amber-50 text-amber-700";
+    return "warning" as const;
   }
 
   if (status === "anulada") {
-    return "bg-red-50 text-red-700";
+    return "destructive" as const;
   }
 
-  return "bg-slate-100 text-slate-600";
+  return "outline" as const;
 }
 
 export default async function RecipeVersionsPage({
@@ -112,240 +127,191 @@ export default async function RecipeVersionsPage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Produccion - Recetas tecnicas - Versiones
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Versiones de receta
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Receta: <span className="font-medium">{recipe.nombre_receta}</span>{" "}
-            - Producto:{" "}
-            <span className="font-medium">
-              {recipe.producto.nombre_producto}
-            </span>
-          </p>
-
-          {recipe.descripcion ? (
-            <p className="mt-1 max-w-3xl text-sm text-slate-500">
-              {recipe.descripcion}
-            </p>
-          ) : null}
-        </div>
-
-        {recipe.estado === "activa" ? (
-          <Link
-            href={`/dashboard/production/recipes/${recipe.id_receta}/versions/new`}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-          >
-            Nueva version
-          </Link>
-        ) : null}
-      </section>
+      <PageHeader
+        title="Versiones de receta"
+        description={`Receta: ${recipe.nombre_receta} · Producto: ${recipe.producto.nombre_producto}${recipe.descripcion ? ` · ${recipe.descripcion}` : ""}`}
+        backHref={navigationHrefs.recipes}
+        backLabel="Volver a recetas"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Producción", href: navigationHrefs.production },
+          { label: "Recetas", href: navigationHrefs.recipes },
+          { label: "Versiones" },
+        ])}
+        actions={
+          recipe.estado === "activa" ? (
+            <Button asChild>
+              <Link
+                href={`/dashboard/production/recipes/${recipe.id_receta}/versions/new`}
+              >
+                Nueva versión
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Estado de receta</p>
-          <p className="mt-2 text-2xl font-bold capitalize">{recipe.estado}</p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Version vigente</p>
-          <p className="mt-2 text-2xl font-bold">
-            {currentVersion?.numero_version ?? "Sin version"}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Historial</p>
-          <p className="mt-2 text-2xl font-bold">
-            {recipe.version_receta.length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Ordenes asociadas</p>
-          <p className="mt-2 text-2xl font-bold">{totalOrders}</p>
-        </div>
+        <KpiCard title="Estado de receta" value={recipe.estado} description="Estado maestro de la receta." tone={recipe.estado === "activa" ? "success" : "warning"} />
+        <KpiCard title="Versión vigente" value={currentVersion?.numero_version ?? "Sin versión"} description="Versión usada actualmente." tone="info" />
+        <KpiCard title="Historial" value={recipe.version_receta.length.toString()} description="Versiones registradas." tone="info" />
+        <KpiCard title="Órdenes asociadas" value={totalOrders.toString()} description="Usando alguna versión." tone="info" />
       </section>
 
       {!currentVersion ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          Esta receta no tiene una version vigente. Crea una nueva version o
-          marca como vigente una version valida del historial.
-        </section>
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta receta no tiene una versión vigente. Crea una nueva versión o
+            marca como vigente una versión válida del historial.
+          </AlertDescription>
+        </Alert>
       ) : null}
 
-      <section className="overflow-hidden rounded-xl border bg-white shadow-sm">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Codigo</th>
-              <th className="px-4 py-3 font-semibold">Version</th>
-              <th className="px-4 py-3 font-semibold">Fecha</th>
-              <th className="px-4 py-3 font-semibold">Motivo</th>
-              <th className="px-4 py-3 font-semibold">Aprobado por</th>
-              <th className="px-4 py-3 font-semibold">Materiales</th>
-              <th className="px-4 py-3 font-semibold">Ordenes</th>
-              <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3 font-semibold">Acciones</th>
-            </tr>
-          </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Código</TableHead>
+            <TableHead>Versión</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead>Motivo</TableHead>
+            <TableHead>Aprobado por</TableHead>
+            <TableHead>Materiales</TableHead>
+            <TableHead>Órdenes</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {recipe.version_receta.map((version) => (
-              <tr key={version.id_version_receta} className="border-t align-top">
-                <td className="px-4 py-3 font-mono text-xs">
-                  {version.id_version_receta}
-                </td>
+        <TableBody>
+          {recipe.version_receta.map((version) => (
+            <TableRow key={version.id_version_receta} className="align-top">
+              <TableCell className="text-xs">
+                {version.id_version_receta}
+              </TableCell>
 
-                <td className="px-4 py-3 font-medium">
-                  {version.numero_version}
-                </td>
+              <TableCell className="font-medium">
+                {version.numero_version}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  {formatDate(version.fecha_version)}
-                </td>
+              <TableCell>{formatDate(version.fecha_version)}</TableCell>
 
-                <td className="px-4 py-3">
-                  {version.motivo_cambio ?? "-"}
-                </td>
+              <TableCell>{version.motivo_cambio ?? "-"}</TableCell>
 
-                <td className="px-4 py-3">
-                  {version.usuario ? (
-                    <>
-                      {version.usuario.nombres} {version.usuario.apellidos}
-                    </>
-                  ) : (
-                    "-"
-                  )}
-                </td>
+              <TableCell>
+                {version.usuario ? (
+                  <>
+                    {version.usuario.nombres} {version.usuario.apellidos}
+                  </>
+                ) : (
+                  "-"
+                )}
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  <p className="font-medium">
-                    {version._count.detalle_receta} material(es)
-                  </p>
-                  <div className="mt-2 space-y-1 text-xs text-slate-500">
-                    {version.detalle_receta.slice(0, 3).map((detail) => (
-                      <p key={detail.id_detalle_receta}>
-                        {detail.material.nombre_material} -{" "}
-                        {formatDecimal(detail.cantidad_requerida)}{" "}
-                        {detail.unidad_medida}
-                      </p>
-                    ))}
-                    {version.detalle_receta.length > 3 ? (
-                      <p>
-                        +{version.detalle_receta.length - 3} material(es) mas
-                      </p>
-                    ) : null}
-                  </div>
-                </td>
+              <TableCell>
+                <p className="font-medium">
+                  {version._count.detalle_receta} material(es)
+                </p>
+                <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+                  {version.detalle_receta.slice(0, 3).map((detail) => (
+                    <p key={detail.id_detalle_receta}>
+                      {detail.material.nombre_material} -{" "}
+                      {formatDecimal(detail.cantidad_requerida)}{" "}
+                      {detail.unidad_medida}
+                    </p>
+                  ))}
+                  {version.detalle_receta.length > 3 ? (
+                    <p>
+                      +{version.detalle_receta.length - 3} material(es) más
+                    </p>
+                  ) : null}
+                </div>
+              </TableCell>
 
-                <td className="px-4 py-3">{version._count.orden_trabajo}</td>
+              <TableCell>{version._count.orden_trabajo}</TableCell>
 
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${getVersionStatusClass(
-                      version.estado,
-                    )}`}
-                  >
-                    {version.estado}
-                  </span>
-                </td>
+              <TableCell>
+                <Badge variant={getVersionBadgeVariant(version.estado)}>
+                  {version.estado}
+                </Badge>
+              </TableCell>
 
-                <td className="px-4 py-3">
-                  <div className="flex flex-col items-start gap-2">
+              <TableCell>
+                <div className="flex flex-col items-start gap-2">
+                  <Button variant="link" className="h-auto p-0" asChild>
                     <Link
                       href={`/dashboard/production/recipes/${recipe.id_receta}/versions/${version.id_version_receta}/details`}
-                      className="text-sm font-medium text-slate-600 hover:text-slate-950"
                     >
                       Ver materiales
                     </Link>
+                  </Button>
 
-                    {version.estado !== "vigente" &&
-                    version.estado !== "anulada" ? (
-                      <form action={setCurrentRecipeVersionAction}>
-                        <input
-                          type="hidden"
-                          name="id_receta"
-                          value={recipe.id_receta}
-                        />
-                        <input
-                          type="hidden"
-                          name="id_version_receta"
-                          value={version.id_version_receta}
-                        />
-                        <button
-                          type="submit"
-                          className="text-sm font-medium text-emerald-700 hover:text-emerald-900"
-                        >
-                          Marcar vigente
-                        </button>
-                      </form>
-                    ) : null}
+                  {version.estado !== "vigente" &&
+                  version.estado !== "anulada" ? (
+                    <form action={setCurrentRecipeVersionAction}>
+                      <input
+                        type="hidden"
+                        name="id_receta"
+                        value={recipe.id_receta}
+                      />
+                      <input
+                        type="hidden"
+                        name="id_version_receta"
+                        value={version.id_version_receta}
+                      />
+                      <Button
+                        type="submit"
+                        variant="link"
+                        className="h-auto p-0 text-chart-3 hover:text-chart-3"
+                      >
+                        Marcar vigente
+                      </Button>
+                    </form>
+                  ) : null}
 
-                    {version.estado !== "anulada" &&
-                    version._count.orden_trabajo === 0 ? (
-                      <form action={voidRecipeVersionAction}>
-                        <input
-                          type="hidden"
-                          name="id_receta"
-                          value={recipe.id_receta}
-                        />
-                        <input
-                          type="hidden"
-                          name="id_version_receta"
-                          value={version.id_version_receta}
-                        />
-                        <button
-                          type="submit"
-                          className="text-sm font-medium text-red-600 hover:text-red-800"
-                        >
-                          Anular
-                        </button>
-                      </form>
-                    ) : null}
+                  {version.estado !== "anulada" &&
+                  version._count.orden_trabajo === 0 ? (
+                    <form action={voidRecipeVersionAction}>
+                      <input
+                        type="hidden"
+                        name="id_receta"
+                        value={recipe.id_receta}
+                      />
+                      <input
+                        type="hidden"
+                        name="id_version_receta"
+                        value={version.id_version_receta}
+                      />
+                      <Button
+                        type="submit"
+                        variant="link"
+                        className="h-auto p-0 text-destructive hover:text-destructive"
+                      >
+                        Anular
+                      </Button>
+                    </form>
+                  ) : null}
 
-                    {version._count.orden_trabajo > 0 ? (
-                      <span className="text-xs text-slate-500">
-                        Usada en ordenes
-                      </span>
-                    ) : null}
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  {version._count.orden_trabajo > 0 ? (
+                    <span className="text-xs text-muted-foreground">
+                      Usada en órdenes
+                    </span>
+                  ) : null}
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
 
-            {recipe.version_receta.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
-                  Todavia no hay versiones registradas para esta receta.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="flex items-center justify-between">
-        <Link
-          href="/dashboard/production/recipes"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a recetas tecnicas
-        </Link>
-
-        <Link
-          href="/dashboard/production"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
-        >
-          Volver a produccion
-        </Link>
-      </div>
+          {recipe.version_receta.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={9} className="p-0">
+                <EmptyState
+                  className="border-0"
+                  label="Todavía no hay versiones registradas para esta receta."
+                />
+              </TableCell>
+            </TableRow>
+          ) : null}
+        </TableBody>
+      </Table>
     </main>
   );
 }

@@ -1,10 +1,12 @@
-﻿import Link from "next/link";
-import {
+﻿import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -212,63 +214,10 @@ export default async function MaintenanceDashboardPage() {
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Máquinas registradas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totalMachines}</p>
-            <p className="text-xs text-muted-foreground">
-              Total de equipos críticos registrados.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Máquinas operativas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{operationalMachines}</p>
-            <p className="text-xs text-muted-foreground">
-              No operativas o inactivas: {inactiveMachines}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Fallas abiertas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{openFailures}</p>
-            <p className="text-xs text-muted-foreground">
-              Fallas registradas este mes: {failuresThisMonth}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">
-              Preventivos pendientes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {pendingPreventiveMaintenance}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Vencidos: {overduePreventiveMaintenance}
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Máquinas registradas" value={totalMachines.toString()} description="Total de equipos críticos registrados." tone="info" />
+        <KpiCard title="Máquinas operativas" value={operationalMachines.toString()} description={`No operativas o inactivas: ${inactiveMachines}`} tone="success" />
+        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description={`Fallas registradas este mes: ${failuresThisMonth}`} tone={openFailures > 0 ? "warning" : "info"} />
+        <KpiCard title="Preventivos pendientes" value={pendingPreventiveMaintenance.toString()} description={`Vencidos: ${overduePreventiveMaintenance}`} tone={overduePreventiveMaintenance > 0 ? "warning" : "info"} />
       </div>
 
       <Card>
@@ -286,33 +235,14 @@ export default async function MaintenanceDashboardPage() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {sections.map((section) => {
-          const content = (
-            <Card className="h-full transition hover:bg-muted/50">
-              <CardHeader>
-                <CardTitle className="text-base">{section.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {section.description}
-                </p>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  {section.phase} | Acceso: {section.access}
-                </p>
-              </CardContent>
-            </Card>
-          );
-      
-          if (section.href) {
-            return (
-              <Link key={section.title} href={section.href}>
-                {content}
-              </Link>
-            );
-          }
-      
-          return <div key={section.title}>{content}</div>;
-        })}
+        {sections.map((section) => (
+          <ModuleAccessCard
+            key={section.title}
+            title={section.title}
+            description={`${section.description} Acceso: ${section.access}.`}
+            href={section.href ?? "#"}
+          />
+        ))}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -322,14 +252,15 @@ export default async function MaintenanceDashboardPage() {
           </CardHeader>
           <CardContent>
             {latestFailures.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Todavía no hay fallas registradas.
-              </p>
+              <EmptyState label="Todavía no hay fallas registradas." />
             ) : (
               <div className="space-y-3">
                 {latestFailures.map((failure) => (
-                  <div key={failure.id_falla} className="rounded-lg border p-3">
-                    <p className="font-medium">{failure.maquina.nombre}</p>
+                  <div
+                    key={failure.id_falla}
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
+                  >
+                    <p className="font-medium text-foreground">{failure.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
                       Fecha: {formatDate(failure.fecha_falla)} | Estado:{" "}
                       {failure.estado_atencion}
@@ -352,17 +283,15 @@ export default async function MaintenanceDashboardPage() {
           </CardHeader>
           <CardContent>
             {upcomingPreventiveMaintenance.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Todavía no hay mantenimientos preventivos programados.
-              </p>
+              <EmptyState label="Todavía no hay mantenimientos preventivos programados." />
             ) : (
               <div className="space-y-3">
                 {upcomingPreventiveMaintenance.map((maintenance) => (
                   <div
                     key={maintenance.id_mantenimiento}
-                    className="rounded-lg border p-3"
+                    className="rounded-lg border border-border/80 bg-secondary/40 p-3"
                   >
-                    <p className="font-medium">{maintenance.maquina.nombre}</p>
+                    <p className="font-medium text-foreground">{maintenance.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
                       Fecha programada:{" "}
                       {formatDate(maintenance.fecha_programada)} | Estado:{" "}
