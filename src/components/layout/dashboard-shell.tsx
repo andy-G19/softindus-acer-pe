@@ -1,8 +1,10 @@
 import Image from "next/image";
 import type { Session } from "next-auth";
+import { Suspense } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { DashboardNav } from "@/components/layout/dashboard-nav";
+import { NotificationQueryBridge } from "@/components/notifications/notification-query-bridge";
 import { SessionIdleGuard } from "@/modules/auth/components/session-idle-guard";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { getMenuForRole, getRoleLabel } from "@/lib/permissions";
@@ -18,6 +20,9 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   return (
     <div className="industrial-dark dark min-h-screen bg-[#0f1011] text-foreground">
       <SessionIdleGuard />
+      <Suspense fallback={null}>
+        <NotificationQueryBridge />
+      </Suspense>
 
       <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
         <div className="heat-bar" aria-hidden="true" />

@@ -15,6 +15,8 @@ export type ClientFormState = {
 };
 
 const CLIENTS_PATH = "/dashboard/commercial/clients";
+const CLIENT_CREATED_PATH = `${CLIENTS_PATH}?toast=client-created`;
+const CLIENT_UPDATED_PATH = `${CLIENTS_PATH}?toast=client-updated`;
 const ALLOWED_CLIENT_ROLES = ["ADMIN", "SELLER"];
 const initialErrorState: ClientFormState = { error: "" };
 
@@ -175,7 +177,7 @@ export async function createClientAction(
   });
 
   revalidatePath(CLIENTS_PATH);
-  redirect(CLIENTS_PATH);
+  redirect(CLIENT_CREATED_PATH);
 
   return initialErrorState;
 }
@@ -284,7 +286,7 @@ export async function updateClientAction(
   });
 
   revalidatePath(CLIENTS_PATH);
-  redirect(CLIENTS_PATH);
+  redirect(CLIENT_UPDATED_PATH);
 
   return initialErrorState;
 }

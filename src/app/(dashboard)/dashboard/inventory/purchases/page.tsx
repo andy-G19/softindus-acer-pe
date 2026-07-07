@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -307,12 +308,15 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
                             name="id_compra"
                             value={purchase.id_compra}
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
+                          <ConfirmDeleteButton
+                            title="¿Anular compra?"
+                            description="Esta acción marcará la compra como anulada. Verifique antes de continuar."
+                            confirmText="Confirmar anulación"
+                            entityName="compra"
+                            className="hover:bg-destructive/20"
                           >
                             Anular
-                          </button>
+                          </ConfirmDeleteButton>
                         </form>
                       ) : null}
                     </div>

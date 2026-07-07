@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -379,12 +380,15 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                             name="id_pedido"
                             value={order.id_pedido}
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
+                          <ConfirmDeleteButton
+                            title="¿Cancelar pedido?"
+                            description="Esta acción cambiará el estado del pedido y no debe ejecutarse sin verificación previa."
+                            confirmText="Confirmar cancelación"
+                            entityName="pedido"
+                            className="hover:bg-destructive/20"
                           >
                             Cancelar
-                          </button>
+                          </ConfirmDeleteButton>
                         </form>
                       ) : null}
                     </div>

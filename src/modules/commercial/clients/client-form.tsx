@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
+import { showError } from "@/lib/notifications";
 import type { ClientFormState } from "@/modules/commercial/clients/actions";
 
 type ClientFormValues = {
@@ -73,6 +74,15 @@ export function ClientForm({
   showCancelAction = true,
 }: ClientFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      showError(
+        "No se pudo completar la operación",
+        "Revise los datos ingresados e inténtelo nuevamente.",
+      );
+    }
+  }, [state.error]);
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border p-6">

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
@@ -218,12 +219,15 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                           name="id_comprobante"
                           value={receipt.id_comprobante}
                         />
-                        <button
-                          type="submit"
-                          className="rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
+                        <ConfirmDeleteButton
+                          title="¿Anular comprobante?"
+                          description="Esta acción marcará el comprobante como anulado. Verifique antes de continuar."
+                          confirmText="Confirmar anulación"
+                          entityName="comprobante"
+                          className="hover:bg-destructive/20"
                         >
                           Anular
-                        </button>
+                        </ConfirmDeleteButton>
                       </form>
                     ) : null}
                   </div>

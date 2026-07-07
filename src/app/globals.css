@@ -260,6 +260,192 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
   }
 
+  .login-field-input {
+    height: 2.75rem;
+    border-color: rgb(255 255 255 / 0.1);
+    background-color: rgb(255 255 255 / 0.05);
+    color: var(--foreground);
+  }
+
+  .login-field-input::placeholder {
+    color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+  }
+
+  .login-field-input:hover {
+    border-color: rgb(255 255 255 / 0.2);
+  }
+
+  .login-field-input:focus-visible {
+    border-color: var(--primary);
+    background-color: rgb(255 255 255 / 0.05);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+
+  .login-password-toggle:focus-visible {
+    color: var(--foreground);
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  .Toastify__toast {
+    min-height: 72px;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, var(--card), var(--popover));
+    color: var(--foreground);
+    box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  }
+
+  .Toastify__toast-body {
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.25rem 0.125rem;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  .Toastify__toast-icon {
+    margin-top: 0.125rem;
+  }
+
+  .Toastify__close-button {
+    color: var(--muted-foreground);
+    opacity: 0.85;
+    transition: color 150ms ease;
+  }
+
+  .Toastify__close-button:hover {
+    color: var(--foreground);
+    opacity: 1;
+  }
+
+  .Toastify__progress-bar,
+  .toast-industrial-progress {
+    background: var(--primary);
+  }
+
+  .toast-industrial-success {
+    border-color: color-mix(in srgb, var(--accent-forge) 32%, transparent);
+  }
+
+  .toast-industrial-error {
+    border-color: color-mix(in srgb, var(--destructive) 35%, transparent);
+  }
+
+  .toast-industrial-warning {
+    border-color: color-mix(in srgb, var(--accent-ember) 34%, transparent);
+  }
+
+  .toast-industrial-info {
+    border-color: color-mix(in srgb, var(--accent-steel) 34%, transparent);
+  }
+
+  .toast-industrial-progress-success {
+    background: var(--accent-forge);
+  }
+
+  .toast-industrial-progress-error {
+    background: var(--destructive);
+  }
+
+  .toast-industrial-progress-warning {
+    background: var(--accent-ember);
+  }
+
+  .toast-industrial-progress-info {
+    background: var(--accent-steel);
+  }
+
+  .swal2-popup,
+  .swal2-industrial-popup {
+    border: 1px solid var(--border);
+    border-radius: 0.875rem;
+    background: linear-gradient(180deg, var(--card), var(--popover));
+    color: var(--foreground);
+    box-shadow: 0 34px 90px -34px rgba(0, 0, 0, 0.85);
+  }
+
+  .swal2-title,
+  .swal2-industrial-title {
+    color: var(--foreground);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .swal2-html-container,
+  .swal2-industrial-html {
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .swal2-confirm,
+  .swal2-industrial-confirm {
+    border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent);
+    border-radius: 0.5rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--primary) 86%, white 14%),
+      var(--primary)
+    );
+    color: var(--primary-foreground);
+    padding: 0.625rem 1rem;
+    font-weight: 650;
+    box-shadow: 0 14px 28px -16px color-mix(in srgb, var(--primary) 70%, transparent);
+  }
+
+  .swal2-industrial-confirm-destructive {
+    border-color: color-mix(in srgb, var(--destructive) 46%, transparent);
+    background: color-mix(in srgb, var(--destructive) 88%, black 12%);
+    color: #fff1f2;
+    box-shadow: 0 14px 28px -16px color-mix(in srgb, var(--destructive) 70%, transparent);
+  }
+
+  .swal2-cancel,
+  .swal2-industrial-cancel {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--secondary);
+    color: var(--foreground);
+    padding: 0.625rem 1rem;
+    font-weight: 600;
+  }
+
+  .swal2-confirm:focus-visible,
+  .swal2-cancel:focus-visible,
+  .swal2-industrial-confirm:focus-visible,
+  .swal2-industrial-cancel:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  .swal2-icon,
+  .swal2-industrial-icon {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .swal2-icon.swal2-error {
+    border-color: var(--destructive);
+    color: var(--destructive);
+  }
+
+  .swal2-icon.swal2-success {
+    border-color: var(--accent-forge);
+    color: var(--accent-forge);
+  }
+
+  .swal2-icon.swal2-info {
+    border-color: var(--accent-steel);
+    color: var(--accent-steel);
+  }
+
+  .swal2-icon.swal2-warning {
+    border-color: var(--accent-ember);
+    color: var(--accent-ember);
+  }
+
   .badge-state-success {
     border-color: color-mix(in srgb, var(--accent-forge) 32%, transparent);
     background-color: color-mix(in srgb, var(--accent-forge) 14%, transparent);

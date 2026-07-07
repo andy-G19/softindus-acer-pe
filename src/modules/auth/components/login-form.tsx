@@ -132,7 +132,7 @@ export function LoginForm() {
 
   return (
     <Card
-      className="relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-white/10 py-0 text-card-foreground shadow-2xl"
+      className="relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl"
       style={{
         background: "linear-gradient(180deg, #15181d, #1c2027)",
         boxShadow:
@@ -149,19 +149,19 @@ export function LoginForm() {
               <p className="truncate text-sm font-semibold text-foreground">
                 Aceros Perú
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Sistema de gestión
               </p>
             </div>
           </div>
 
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(245,158,11,0.7)]" />
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             Acceso seguro
           </span>
         </div>
 
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">
           Panel administrativo
         </p>
         <h1 className="text-2xl font-semibold tracking-normal text-foreground">
@@ -172,7 +172,7 @@ export function LoginForm() {
           El acceso queda registrado por motivos de seguridad.
         </p>
 
-        <div className="my-6 h-px bg-white/10" />
+        <div className="my-6 h-px bg-border" />
 
         <form action={formAction} className="space-y-5">
           {state.error ? (
@@ -201,7 +201,7 @@ export function LoginForm() {
                 placeholder="Ingrese su correo electrónico"
                 autoComplete="email"
                 required
-                className="h-11 border-white/10 bg-white/[0.03] pl-10 pr-3 text-foreground placeholder:text-muted-foreground/70 hover:border-white/20 focus-visible:border-primary focus-visible:bg-white/[0.045] focus-visible:ring-primary/20"
+                className="login-field-input pl-10 pr-3"
               />
             </div>
           </div>
@@ -221,14 +221,14 @@ export function LoginForm() {
                 placeholder="Ingrese su contraseña"
                 autoComplete="current-password"
                 required
-                className="h-11 border-white/10 bg-white/[0.03] pl-10 pr-11 text-foreground placeholder:text-muted-foreground/70 hover:border-white/20 focus-visible:border-primary focus-visible:bg-white/[0.045] focus-visible:ring-primary/20"
+                className="login-field-input pl-10 pr-11"
               />
               <button
                 type="button"
                 aria-label={
                   showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                 }
-                className="absolute right-2 top-1/2 inline-flex -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="login-password-toggle absolute right-2 top-1/2 inline-flex -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground"
                 onClick={() => setShowPassword((current) => !current)}
               >
                 <EyeIcon hidden={showPassword} />
@@ -238,7 +238,7 @@ export function LoginForm() {
 
           <Button
             type="submit"
-            className="mt-1 h-11 w-full gap-2 bg-primary text-primary-foreground shadow-[0_8px_20px_-8px_rgba(245,158,11,0.5)] transition hover:bg-[#ffab3d] active:translate-y-px focus-visible:ring-primary/45"
+            className="mt-1 h-11 w-full gap-2 bg-primary text-primary-foreground shadow-md transition active:translate-y-px focus-visible:ring-primary/45"
             disabled={isPending}
           >
             {isPending ? "Ingresando..." : "Ingresar"}

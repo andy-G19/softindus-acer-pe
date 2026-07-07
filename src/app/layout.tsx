@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Geist, JetBrains_Mono, Oswald } from "next/font/google";
+import { NotificationProvider } from "@/components/notifications/notification-provider";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -36,7 +37,10 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <NotificationProvider />
+        {children}
+      </body>
     </html>
   );
 }
