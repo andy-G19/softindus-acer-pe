@@ -16,6 +16,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={dashboardData.activeWorkOrders.toString()}
           description="Pendientes, en proceso o pausadas."
           href="/dashboard/production/work-orders"
+          tone="info"
         />
       ) : null}
 
@@ -25,6 +26,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={dashboardData.pendingOrders.toString()}
           description="Registrados, aprobados o en producción."
           href="/dashboard/commercial/orders"
+          tone="warning"
         />
       ) : null}
 
@@ -34,6 +36,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={dashboardData.criticalMaterials.length.toString()}
           description="Materiales activos bajo mínimo."
           href="/dashboard/inventory/materials"
+          tone="success"
         />
       ) : null}
 
@@ -43,6 +46,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={formatMoney(dashboardData.receivables)}
           description="Saldo vigente o aceptado pendiente."
           href="/dashboard/commercial/quotes"
+          tone="warning"
         />
       ) : null}
 
@@ -52,6 +56,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={formatMoney(dashboardData.pettyCashBalance)}
           description="Suma de cajas abiertas."
           href="/dashboard/petty-cash"
+          tone="info"
         />
       ) : null}
 
@@ -61,6 +66,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={formatMoney(dashboardData.estimatedProfit)}
           description="Suma registrada en rentabilidad."
           href="/dashboard/costs"
+          tone="info"
         />
       ) : null}
 
@@ -70,6 +76,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={dashboardData.pendingPurchases.toString()}
           description="Compras con pago pendiente o parcial."
           href="/dashboard/inventory/purchases"
+          tone="warning"
         />
       ) : null}
 
@@ -79,6 +86,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           value={dashboardData.activeFailures.toString()}
           description="Fallas sin cierre operativo."
           href="/dashboard/maintenance/failures"
+          tone="success"
         />
       ) : null}
     </div>

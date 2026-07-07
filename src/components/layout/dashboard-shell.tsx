@@ -36,8 +36,8 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
                   Industrias Aceros Perú
                 </h1>
                 <Badge
-                  variant="secondary"
-                  className="border border-primary/30 bg-primary/10 text-[11px] text-primary"
+                  variant="success"
+                  className="text-[10.5px]"
                 >
                   Sistema activo
                 </Badge>
@@ -55,8 +55,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
               </p>
               <div className="mt-1 flex sm:justify-end">
                 <Badge
-                  variant="secondary"
-                  className="border border-border/80 bg-secondary text-secondary-foreground"
+                  className="text-[10.5px]"
                 >
                   {getRoleLabel(session.user.role)}
                 </Badge>

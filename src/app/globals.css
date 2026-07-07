@@ -179,6 +179,19 @@
     animation: temper 6s ease-in-out infinite;
   }
 
+  .tempered-rail {
+    width: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(
+      180deg,
+      var(--accent-steel) 0%,
+      var(--primary) 55%,
+      var(--accent-ember) 100%
+    );
+    background-size: 200% 200%;
+    animation: temper 6s ease-in-out infinite;
+  }
+
   .login-ember {
     position: absolute;
     bottom: -10px;
@@ -223,6 +236,7 @@
   @media (prefers-reduced-motion: reduce) {
     .heat-bar,
     .login-heat-bar,
+    .tempered-rail,
     .login-ember {
       animation: none;
     }
@@ -247,27 +261,53 @@
   }
 
   .badge-state-success {
-    border-color: color-mix(in srgb, var(--accent-forge) 45%, transparent);
+    border-color: color-mix(in srgb, var(--accent-forge) 32%, transparent);
     background-color: color-mix(in srgb, var(--accent-forge) 14%, transparent);
-    color: color-mix(in srgb, var(--accent-forge) 78%, white 22%);
+    color: color-mix(in srgb, var(--accent-forge) 78%, var(--foreground) 22%);
   }
 
   .badge-state-info {
-    border-color: color-mix(in srgb, var(--accent-steel) 48%, transparent);
-    background-color: color-mix(in srgb, var(--accent-steel) 16%, transparent);
-    color: color-mix(in srgb, var(--accent-steel) 70%, white 30%);
+    border-color: color-mix(in srgb, var(--accent-steel) 32%, transparent);
+    background-color: color-mix(in srgb, var(--accent-steel) 14%, transparent);
+    color: color-mix(in srgb, var(--accent-steel) 72%, var(--foreground) 28%);
   }
 
   .badge-state-active {
-    border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+    border-color: color-mix(in srgb, var(--primary) 32%, transparent);
     background-color: color-mix(in srgb, var(--primary) 14%, transparent);
-    color: color-mix(in srgb, var(--primary) 82%, white 18%);
+    color: color-mix(in srgb, var(--primary) 82%, var(--foreground) 18%);
+  }
+
+  .badge-state-warning {
+    border-color: color-mix(in srgb, var(--accent-ember) 32%, transparent);
+    background-color: color-mix(in srgb, var(--accent-ember) 14%, transparent);
+    color: color-mix(in srgb, var(--accent-ember) 78%, var(--foreground) 22%);
   }
 
   .badge-state-danger {
-    border-color: color-mix(in srgb, var(--destructive) 45%, transparent);
+    border-color: color-mix(in srgb, var(--destructive) 32%, transparent);
     background-color: color-mix(in srgb, var(--destructive) 14%, transparent);
-    color: color-mix(in srgb, var(--destructive) 70%, white 30%);
+    color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
+  }
+
+  .sidebar-nav-link {
+    color: color-mix(in srgb, var(--foreground) 68%, transparent);
+  }
+
+  .sidebar-nav-link:hover {
+    background-color: color-mix(in srgb, var(--card) 92%, white 3%);
+    color: var(--foreground);
+  }
+
+  .sidebar-nav-link-active {
+    border-left-color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+  }
+
+  .sidebar-nav-link-active:hover {
+    background-color: color-mix(in srgb, var(--primary) 16%, transparent);
+    color: var(--primary);
   }
 
   .industrial-dark .bg-white {

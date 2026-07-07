@@ -84,9 +84,8 @@ export function DashboardNav({ menuItems }: DashboardNavProps) {
             href={item.href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "flex min-w-max items-center gap-2 rounded-lg border border-transparent border-l-2 border-l-transparent px-3 py-2 text-sm font-medium text-sidebar-foreground/75 transition hover:border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:border-sidebar-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 md:min-w-0",
-              isActive &&
-                "border-primary/30 border-l-primary bg-primary/10 text-primary shadow-[0_10px_24px_rgba(242,148,31,0.12)] hover:border-primary/40 hover:border-l-primary hover:bg-primary/20 hover:text-primary"
+              "sidebar-nav-link flex min-w-max items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 md:min-w-0",
+              isActive && "sidebar-nav-link-active"
             )}
           >
             <Icon className="size-4 shrink-0" aria-hidden="true" />

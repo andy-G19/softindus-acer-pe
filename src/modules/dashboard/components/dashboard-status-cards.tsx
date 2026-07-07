@@ -11,9 +11,9 @@ type DashboardStatusCardsProps = {
 export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
   return (
     <section>
-      <Card className="rounded-xl border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)]">
+      <Card className="rounded-xl border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)] [--card-spacing:20px]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-foreground">
+          <CardTitle className="font-heading text-[19px] font-semibold leading-tight text-foreground">
             Sesión actual
           </CardTitle>
         </CardHeader>
@@ -30,7 +30,7 @@ export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
 
           <div className="min-w-0">
             <p className="text-xs font-medium text-muted-foreground">Correo</p>
-            <p className="truncate text-sm text-foreground">
+            <p className="truncate font-mono text-sm text-foreground">
               {session.user.email}
             </p>
           </div>
@@ -46,7 +46,7 @@ export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
             <span className="text-xs font-medium text-muted-foreground">
               Estado
             </span>
-            <Badge variant="secondary">
+            <Badge variant="success">
               {getUserStatusLabel(session.user.status)}
             </Badge>
           </div>
