@@ -1,10 +1,25 @@
 ﻿import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -48,16 +63,16 @@ function formatDate(value: Date | null | undefined) {
   }).format(value);
 }
 
-function getStatusClass(status: string) {
+function getStatusBadgeVariant(status: string) {
   if (["acumulada", "disponible"].includes(status)) {
-    return "bg-emerald-50 text-emerald-700";
+    return "success" as const;
   }
 
   if (status === "vendida") {
-    return "bg-blue-50 text-blue-700";
+    return "info" as const;
   }
 
-  return "bg-slate-100 text-slate-700";
+  return "secondary" as const;
 }
 
 export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
@@ -192,287 +207,184 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
         ])}
         actions={
           <>
-            <Link
-              href={`${navigationHrefs.scraps}/new`}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Registrar chatarra
-            </Link>
+            <Button asChild>
+              <Link href={`${navigationHrefs.scraps}/new`}>
+                Registrar chatarra
+              </Link>
+            </Button>
 
             {canRegisterSale ? (
-              <Link
-                href={`${navigationHrefs.scrapSales}/new`}
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-              >
-                Registrar venta
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href={`${navigationHrefs.scrapSales}/new`}>
+                  Registrar venta
+                </Link>
+              </Button>
             ) : null}
           </>
         }
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Total registros
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{totalScraps}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              {totalFiltered} según filtros
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Acumulada
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{chatarraAcumulada}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Pendiente de venta
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Vendida
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">{chatarraVendida}</p>
-            <p className="mt-1 text-xs text-slate-500">
-              Ya generó ingreso menor
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm text-slate-500">
-              Peso filtrado
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-3xl font-bold">
-              {formatNumber(filteredTotals._sum.peso_kg)} kg
-            </p>
-            <p className="mt-1 text-xs text-slate-500">
-              Cantidad: {formatNumber(filteredTotals._sum.cantidad)}
-            </p>
-          </CardContent>
-        </Card>
+        <KpiCard title="Total registros" value={totalScraps.toString()} description={`${totalFiltered} según filtros`} tone="info" />
+        <KpiCard title="Acumulada" value={chatarraAcumulada.toString()} description="Pendiente de venta" tone="warning" />
+        <KpiCard title="Vendida" value={chatarraVendida.toString()} description="Ya generó ingreso menor" tone="success" />
+        <KpiCard title="Peso filtrado" value={`${formatNumber(filteredTotals._sum.peso_kg)} kg`} description={`Cantidad: ${formatNumber(filteredTotals._sum.cantidad)}`} tone="info" />
       </section>
 
-      <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
-          <div className="space-y-2">
-            <label
-              htmlFor="estado"
-              className="text-sm font-medium text-slate-700"
-            >
-              Estado
-            </label>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-4 md:grid-cols-[1fr_1fr_1.2fr_auto]">
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos</option>
+                <option value="acumulada">Acumulada</option>
+                <option value="disponible">Disponible</option>
+                <option value="vendida">Vendida</option>
+              </NativeSelect>
+            </div>
 
-            <select
-              id="estado"
-              name="estado"
-              defaultValue={estado}
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            >
-              <option value="">Todos</option>
-              <option value="acumulada">Acumulada</option>
-              <option value="disponible">Disponible</option>
-              <option value="vendida">Vendida</option>
-            </select>
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">Material</Label>
+              <NativeSelect id="material" name="material" defaultValue={material}>
+                <option value="">Todos</option>
+                {materials.map((item) => (
+                  <option key={item.id_material} value={item.id_material}>
+                    {item.nombre_material} | {item.categoria}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
 
-          <div className="space-y-2">
-            <label
-              htmlFor="material"
-              className="text-sm font-medium text-slate-700"
-            >
-              Material
-            </label>
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input
+                id="q"
+                name="q"
+                type="search"
+                defaultValue={query}
+                placeholder="Código, tipo u observación"
+              />
+            </div>
 
-            <select
-              id="material"
-              name="material"
-              defaultValue={material}
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-            >
-              <option value="">Todos</option>
+            <div className="flex items-end gap-2">
+              <Button type="submit">Filtrar</Button>
+              {hasFilters ? (
+                <Button variant="outline" asChild>
+                  <Link href="/dashboard/waste-scrap/scraps">Limpiar</Link>
+                </Button>
+              ) : null}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
-              {materials.map((item) => (
-                <option key={item.id_material} value={item.id_material}>
-                  {item.nombre_material} | {item.categoria}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="q" className="text-sm font-medium text-slate-700">
-              Buscar
-            </label>
-
-            <input
-              id="q"
-              name="q"
-              type="search"
-              defaultValue={query}
-              placeholder="Código, tipo u observación"
-              className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Listado de chatarra</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          {scraps.length === 0 ? (
+            <EmptyState
+              className="mx-6 border-0"
+              label="No se encontraron registros de chatarra con los filtros seleccionados."
             />
-          </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Código</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Material origen</TableHead>
+                  <TableHead>Peso</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Observación</TableHead>
+                  <TableHead>Acción</TableHead>
+                </TableRow>
+              </TableHeader>
 
-          <div className="flex items-end gap-2">
-            <button
-              type="submit"
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Filtrar
-            </button>
-
-            {hasFilters ? (
-              <Link
-                href="/dashboard/waste-scrap/scraps"
-                className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-              >
-                Limpiar
-              </Link>
-            ) : null}
-          </div>
-        </form>
-      </section>
-
-      <section className="rounded-xl border bg-white shadow-sm">
-        <div className="border-b p-5">
-          <h2 className="text-lg font-semibold">Listado de chatarra</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {totalFiltered} registro(s) encontrado(s).
-          </p>
-        </div>
-
-        {scraps.length === 0 ? (
-          <div className="p-5 text-sm text-slate-500">
-            No se encontraron registros de chatarra con los filtros
-            seleccionados.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
-                <tr>
-                  <th className="px-5 py-3">Código</th>
-                  <th className="px-5 py-3">Tipo</th>
-                  <th className="px-5 py-3">Material origen</th>
-                  <th className="px-5 py-3">Peso</th>
-                  <th className="px-5 py-3">Cantidad</th>
-                  <th className="px-5 py-3">Estado</th>
-                  <th className="px-5 py-3">Fecha</th>
-                  <th className="px-5 py-3">Observación</th>
-                  <th className="px-5 py-3">Acción</th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y">
+              <TableBody>
                 {scraps.map((item) => {
                   const latestSale = item.venta_chatarra[0];
 
                   return (
-                    <tr key={item.id_chatarra} className="align-top">
-                      <td className="px-5 py-4 font-mono text-xs text-slate-600">
+                    <TableRow key={item.id_chatarra} className="align-top">
+                      <TableCell className="font-mono text-xs">
                         {item.id_chatarra}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4 font-medium">
+                      <TableCell className="font-medium">
                         {item.tipo_material}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4">
+                      <TableCell>
                         {item.material ? (
                           <div>
                             <p className="font-medium">
                               {item.material.nombre_material}
                             </p>
-                            <p className="mt-1 text-xs text-slate-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                               {item.material.categoria}
                             </p>
                           </div>
                         ) : (
                           "No identificado"
                         )}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4">
+                      <TableCell>
                         {item.peso_kg
                           ? `${formatNumber(item.peso_kg)} kg`
                           : "-"}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4">
+                      <TableCell>
                         {item.cantidad ? formatNumber(item.cantidad) : "-"}
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4">
+                      <TableCell>
                         <div className="space-y-1">
-                          <span
-                            className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusClass(
-                              item.estado,
-                            )}`}
-                          >
+                          <Badge variant={getStatusBadgeVariant(item.estado)}>
                             {item.estado}
-                          </span>
+                          </Badge>
 
                           {latestSale ? (
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-muted-foreground">
                               Vendida el {formatDate(latestSale.fecha_venta)}
                             </p>
                           ) : null}
                         </div>
-                      </td>
+                      </TableCell>
 
-                      <td className="px-5 py-4">
-                        {formatDate(item.fecha_registro)}
-                      </td>
+                      <TableCell>{formatDate(item.fecha_registro)}</TableCell>
 
-                      <td className="px-5 py-4 text-slate-600">
-                        {item.observaciones ?? "-"}
-                      </td>
+                      <TableCell>{item.observaciones ?? "-"}</TableCell>
 
-                      <td className="px-5 py-4">
-                      {canRegisterSale && item.estado !== "vendida" ? (
-                        <Link
-                          href={`/dashboard/waste-scrap/scrap-sales/new?id_chatarra=${item.id_chatarra}`}
-                          className="text-sm font-medium text-slate-700 hover:text-slate-950"
-                        >
-                          Vender
-                        </Link>
-                      ) : (
-                        <span className="text-sm text-slate-400">-</span>
-                      )}
-                      </td>
-
-                    </tr>
+                      <TableCell>
+                        {canRegisterSale && item.estado !== "vendida" ? (
+                          <Link
+                            href={`/dashboard/waste-scrap/scrap-sales/new?id_chatarra=${item.id_chatarra}`}
+                            className="text-sm font-medium text-primary hover:underline"
+                          >
+                            Vender
+                          </Link>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </main>
   );
 }

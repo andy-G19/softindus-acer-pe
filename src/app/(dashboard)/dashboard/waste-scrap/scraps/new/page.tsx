@@ -1,10 +1,14 @@
 ﻿import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
@@ -69,101 +73,70 @@ export default async function NewScrapPage() {
                   emptyMessage="No hay materiales activos disponibles."
                 />
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Selecciona el material si se conoce el origen. Si la chatarra
                   está mezclada, puedes dejarlo como no identificado.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="tipo_material"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Tipo de material *
-                </label>
-
-                <input
+                <Label htmlFor="tipo_material">Tipo de material *</Label>
+                <Input
                   id="tipo_material"
                   name="tipo_material"
                   type="text"
                   required
                   placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
-
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Este campo ayuda a clasificar la chatarra cuando se venda o se
                   consulte el historial.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="peso_kg"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Peso en kg
-                </label>
-
-                <input
+                <Label htmlFor="peso_kg">Peso en kg</Label>
+                <Input
                   id="peso_kg"
                   name="peso_kg"
                   type="number"
                   min="0.01"
                   step="0.01"
                   placeholder="Ejemplo: 12.50"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
-
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Recomendado cuando la chatarra se controla por peso.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="cantidad"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Cantidad aproximada
-                </label>
-
-                <input
+                <Label htmlFor="cantidad">Cantidad aproximada</Label>
+                <Input
                   id="cantidad"
                   name="cantidad"
                   type="number"
                   min="0.01"
                   step="0.01"
                   placeholder="Ejemplo: 3"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
-
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Útil cuando se registra por bolsas, piezas, baldes o grupos.
                 </p>
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label
-                  htmlFor="observaciones"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Observaciones
-                </label>
-
-                <textarea
+                <Label htmlFor="observaciones">Observaciones</Label>
+                <Textarea
                   id="observaciones"
                   name="observaciones"
                   rows={4}
                   placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
             </div>
 
-            <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-              <p className="font-medium text-slate-800">
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+              <p className="font-medium text-foreground">
                 Estado inicial de la chatarra
               </p>
               <p className="mt-1">
@@ -175,19 +148,11 @@ export default async function NewScrapPage() {
             </div>
 
             <div className="flex flex-col-reverse gap-3 md:flex-row md:justify-end">
-              <Link
-                href="/dashboard/waste-scrap"
-                className="rounded-lg border px-4 py-2 text-center text-sm font-medium hover:bg-slate-50"
-              >
-                Cancelar
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/waste-scrap">Cancelar</Link>
+              </Button>
 
-              <button
-                type="submit"
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-              >
-                Guardar chatarra
-              </button>
+              <Button type="submit">Guardar chatarra</Button>
             </div>
           </form>
         </CardContent>

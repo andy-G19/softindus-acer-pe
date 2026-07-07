@@ -1,12 +1,20 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createScrapSaleAction } from "@/modules/waste-scrap/scrap-sales/actions";
 
@@ -82,39 +90,23 @@ export default async function NewScrapSalePage({
 
   return (
     <main className="space-y-6">
-      <section className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Mermas y chatarra | Venta de chatarra
-          </p>
-
-          <h1 className="text-3xl font-bold tracking-tight">
-            Registrar venta de chatarra
-          </h1>
-
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Registra el ingreso obtenido por vender chatarra acumulada. Si
-            seleccionas una caja chica abierta, el sistema también generará un
-            movimiento de caja de tipo ingreso.
-          </p>
-        </div>
-
-        <Link
-          href="/dashboard/waste-scrap/scraps"
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        >
-          Volver a chatarra
-        </Link>
-      </section>
+      <PageHeader
+        title="Registrar venta de chatarra"
+        description="Registra el ingreso obtenido por vender chatarra acumulada. Si seleccionas una caja chica abierta, el sistema también generará un movimiento de caja de tipo ingreso."
+        backHref={navigationHrefs.scraps}
+        backLabel="Volver a chatarra"
+        breadcrumbs={dashboardBreadcrumbs([
+          { label: "Mermas y chatarra", href: navigationHrefs.wasteScrap },
+          { label: "Chatarra", href: navigationHrefs.scraps },
+          { label: "Nueva venta" },
+        ])}
+      />
 
       {scraps.length === 0 ? (
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-          <p className="font-semibold">No hay chatarra disponible para venta.</p>
-          <p className="mt-1">
-            Primero registra chatarra generada o verifica que no esté marcada
-            como vendida.
-          </p>
-        </section>
+        <EmptyState
+          label="No hay chatarra disponible para venta."
+          description="Primero registra chatarra generada o verifica que no esté marcada como vendida."
+        />
       ) : null}
 
       <Card>
@@ -126,19 +118,12 @@ export default async function NewScrapSalePage({
           <form action={createScrapSaleAction} className="space-y-5">
             <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2 md:col-span-2">
-                <label
-                  htmlFor="id_chatarra"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Chatarra a vender *
-                </label>
-
-                <select
+                <Label htmlFor="id_chatarra">Chatarra a vender *</Label>
+                <NativeSelect
                   id="id_chatarra"
                   name="id_chatarra"
                   required
                   defaultValue={selectedScrapId}
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 >
                   <option value="" disabled>
                     Selecciona un registro de chatarra
@@ -151,16 +136,16 @@ export default async function NewScrapSalePage({
                       Cantidad: {item.cantidad ? item.cantidad.toString() : "-"}
                     </option>
                   ))}
-                </select>
+                </NativeSelect>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Solo se muestran registros con estado acumulada o disponible.
                 </p>
               </div>
 
               {selectedScrap ? (
-                <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600 md:col-span-2">
-                  <p className="font-medium text-slate-800">
+                <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground md:col-span-2">
+                  <p className="font-medium text-foreground">
                     Chatarra seleccionada
                   </p>
                   <p className="mt-1">
@@ -186,32 +171,19 @@ export default async function NewScrapSalePage({
               ) : null}
 
               <div className="space-y-2">
-                <label
-                  htmlFor="fecha_venta"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Fecha de venta *
-                </label>
-
-                <input
+                <Label htmlFor="fecha_venta">Fecha de venta *</Label>
+                <Input
                   id="fecha_venta"
                   name="fecha_venta"
                   type="date"
                   required
                   defaultValue={formatDateInput(new Date())}
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="monto_recibido"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Monto recibido *
-                </label>
-
-                <input
+                <Label htmlFor="monto_recibido">Monto recibido *</Label>
+                <Input
                   id="monto_recibido"
                   name="monto_recibido"
                   type="number"
@@ -219,19 +191,12 @@ export default async function NewScrapSalePage({
                   step="0.01"
                   required
                   placeholder="Ejemplo: 80.00"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="peso_vendido_kg"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Peso vendido en kg
-                </label>
-
-                <input
+                <Label htmlFor="peso_vendido_kg">Peso vendido en kg</Label>
+                <Input
                   id="peso_vendido_kg"
                   name="peso_vendido_kg"
                   type="number"
@@ -239,23 +204,15 @@ export default async function NewScrapSalePage({
                   step="0.01"
                   defaultValue={selectedScrap?.peso_kg?.toString() ?? ""}
                   placeholder="Ejemplo: 15.00"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
-
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Si lo dejas vacío, se usará el peso registrado en la chatarra.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="cantidad_vendida"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Cantidad vendida
-                </label>
-
-                <input
+                <Label htmlFor="cantidad_vendida">Cantidad vendida</Label>
+                <Input
                   id="cantidad_vendida"
                   name="cantidad_vendida"
                   type="number"
@@ -263,28 +220,17 @@ export default async function NewScrapSalePage({
                   step="0.01"
                   defaultValue={selectedScrap?.cantidad?.toString() ?? ""}
                   placeholder="Ejemplo: 3"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
-
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Útil si la venta se controla por bolsa, piezas o lote.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="id_caja_chica"
-                  className="text-sm font-medium text-slate-700"
-                >
+                <Label htmlFor="id_caja_chica">
                   Registrar ingreso en caja chica
-                </label>
-
-                <select
-                  id="id_caja_chica"
-                  name="id_caja_chica"
-                  defaultValue=""
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
-                >
+                </Label>
+                <NativeSelect id="id_caja_chica" name="id_caja_chica" defaultValue="">
                   <option value="">No registrar en caja chica</option>
 
                   {cashBoxes.map((box) => (
@@ -293,51 +239,36 @@ export default async function NewScrapSalePage({
                       {formatNumber(box.saldo_actual)}
                     </option>
                   ))}
-                </select>
-
-                <p className="text-xs text-slate-500">
+                </NativeSelect>
+                <p className="text-xs text-muted-foreground">
                   Opcional. Si seleccionas una caja, se generará un movimiento
                   de ingreso.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="destino_dinero"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Destino del dinero
-                </label>
-
-                <input
+                <Label htmlFor="destino_dinero">Destino del dinero</Label>
+                <Input
                   id="destino_dinero"
                   name="destino_dinero"
                   type="text"
                   placeholder="Ejemplo: compra de discos de corte"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label
-                  htmlFor="observaciones"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Observaciones
-                </label>
-
-                <textarea
+                <Label htmlFor="observaciones">Observaciones</Label>
+                <Textarea
                   id="observaciones"
                   name="observaciones"
                   rows={4}
                   placeholder="Ejemplo: venta realizada a reciclador local"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
             </div>
 
-            <div className="rounded-lg border bg-slate-50 p-4 text-sm text-slate-600">
-              <p className="font-medium text-slate-800">
+            <div className="rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm text-muted-foreground">
+              <p className="font-medium text-foreground">
                 Efecto de la operación
               </p>
               <p className="mt-1">
@@ -349,20 +280,13 @@ export default async function NewScrapSalePage({
             </div>
 
             <div className="flex flex-col-reverse gap-3 md:flex-row md:justify-end">
-              <Link
-                href="/dashboard/waste-scrap/scraps"
-                className="rounded-lg border px-4 py-2 text-center text-sm font-medium hover:bg-slate-50"
-              >
-                Cancelar
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/waste-scrap/scraps">Cancelar</Link>
+              </Button>
 
-              <button
-                type="submit"
-                disabled={scraps.length === 0}
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
+              <Button type="submit" disabled={scraps.length === 0}>
                 Registrar venta
-              </button>
+              </Button>
             </div>
           </form>
         </CardContent>
