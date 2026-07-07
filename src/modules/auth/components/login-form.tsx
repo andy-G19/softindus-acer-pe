@@ -26,39 +26,64 @@ export function LoginForm() {
   );
 
   return (
-    <Card className="w-full max-w-md border-border/80 bg-card shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
-      <CardHeader className="border-b border-border/70 pb-4">
-        <div className="mb-2 h-0.5 w-14 rounded-full bg-primary" />
-        <CardTitle className="text-xl font-semibold text-foreground">
-          Iniciar sesión
-        </CardTitle>
-        <CardDescription className="leading-relaxed">
-          Accede al Sistema de Gestión Integral de Industrias Aceros Perú.
-        </CardDescription>
+    <Card className="w-full max-w-md rounded-xl border border-border bg-card shadow-[0_24px_80px_rgba(0,0,0,0.52)]">
+      <CardHeader className="space-y-4 border-b border-border/70 pb-5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="h-0.5 w-14 rounded-full bg-primary" />
+          <span className="rounded-full border border-primary/25 bg-primary/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
+            Acceso seguro
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Industrias Aceros Perú
+          </p>
+          <CardTitle className="text-2xl font-semibold tracking-normal text-foreground">
+            Acceso al sistema
+          </CardTitle>
+          <CardDescription className="text-sm leading-relaxed">
+            Sistema de Gestión Integral
+          </CardDescription>
+        </div>
+
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Ingrese sus credenciales para acceder al panel administrativo interno.
+        </p>
       </CardHeader>
 
       <CardContent className="pt-1">
         <form action={formAction} className="space-y-5">
           {state.error ? (
-            <Alert variant="destructive">
-              <AlertDescription>{state.error}</AlertDescription>
+            <Alert
+              variant="destructive"
+              className="border-red-400/30 bg-red-950/30 text-red-200"
+            >
+              <AlertDescription className="text-red-200/90">
+                {state.error}
+              </AlertDescription>
             </Alert>
           ) : null}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Correo electrónico</Label>
+            <Label htmlFor="email" className="text-sm font-medium">
+              Correo electrónico
+            </Label>
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="admin@acerosperu.com"
+              placeholder="Ingrese su correo electrónico"
               autoComplete="email"
               required
+              className="h-10 border-border bg-input/80 px-3 text-foreground placeholder:text-muted-foreground/75 focus-visible:border-primary focus-visible:ring-primary/35"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Contraseña</Label>
+            <Label htmlFor="password" className="text-sm font-medium">
+              Contraseña
+            </Label>
             <Input
               id="password"
               name="password"
@@ -66,10 +91,15 @@ export function LoginForm() {
               placeholder="Ingrese su contraseña"
               autoComplete="current-password"
               required
+              className="h-10 border-border bg-input/80 px-3 text-foreground placeholder:text-muted-foreground/75 focus-visible:border-primary focus-visible:ring-primary/35"
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="h-10 w-full bg-primary text-primary-foreground shadow-sm hover:bg-[#d97706] focus-visible:ring-primary/45"
+            disabled={isPending}
+          >
             {isPending ? "Ingresando..." : "Ingresar"}
           </Button>
         </form>
