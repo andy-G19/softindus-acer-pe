@@ -12,34 +12,64 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="industrial-dark dark relative min-h-screen overflow-hidden bg-[#0f1011] px-4 py-8 text-foreground sm:px-6">
+    <main className="industrial-dark dark login-industrial-bg relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 text-foreground">
       <Image
         src="/images/login-image.webp"
         alt=""
         fill
         priority
         sizes="100vw"
-        className="absolute inset-0 z-0 scale-100 object-cover opacity-100 blur-[1.5px] saturate-125"
+        className="absolute inset-0 z-0 scale-105 object-cover opacity-65 blur-[1px] saturate-125"
       />
-      <div className="absolute inset-0 z-10 bg-[#07101f]/45" />
-      <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,rgba(2,6,23,0.68)_0%,rgba(15,16,17,0.24)_48%,rgba(245,158,11,0.12)_100%)]" />
+      <div className="absolute inset-0 z-0 bg-[#0a0b0d]/45" aria-hidden="true" />
       <div
-        className="absolute inset-0 z-20"
-        style={{
-          background:
-            "radial-gradient(circle at center, rgba(15, 16, 17, 0.72) 0%, rgba(15, 16, 17, 0.44) 30%, rgba(15, 16, 17, 0.08) 62%, transparent 100%)",
-        }}
+        className="login-brushed-metal absolute inset-0 z-0"
+        aria-hidden="true"
       />
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(15,16,17,0.62)_0%,rgba(15,16,17,0.34)_34%,transparent_68%)]"
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <span
+          className="login-ember"
+          style={{ left: "8%", animationDuration: "8s", animationDelay: "0s" }}
+        />
+        <span
+          className="login-ember"
+          style={{
+            left: "22%",
+            animationDuration: "10s",
+            animationDelay: "1.5s",
+          }}
+        />
+        <span
+          className="login-ember"
+          style={{
+            left: "63%",
+            animationDuration: "11s",
+            animationDelay: "2.2s",
+          }}
+        />
+        <span
+          className="login-ember"
+          style={{
+            left: "78%",
+            animationDuration: "8.5s",
+            animationDelay: "3s",
+          }}
+        />
+        <span
+          className="login-ember"
+          style={{
+            left: "90%",
+            animationDuration: "7s",
+            animationDelay: "0.8s",
+          }}
+        />
+      </div>
 
-      <section className="relative z-30 flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6">
-        <LoginForm />
-
-        <p className="max-w-md text-center text-xs leading-relaxed text-zinc-400">
-          © 2026 Industrias Aceros Perú. Sistema interno de gestión.
-          <br />
-          Acceso restringido a personal autorizado.
-        </p>
-      </section>
+      <LoginForm />
     </main>
   );
 }

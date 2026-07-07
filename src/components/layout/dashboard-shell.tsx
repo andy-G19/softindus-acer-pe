@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Session } from "next-auth";
 
 import { Badge } from "@/components/ui/badge";
@@ -19,22 +20,32 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
       <SessionIdleGuard />
 
       <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
+        <div className="heat-bar" aria-hidden="true" />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <div className="min-w-0 space-y-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-bold text-foreground">
-                Industrias Aceros Perú
-              </h1>
-              <Badge
-                variant="secondary"
-                className="border border-primary/30 bg-primary/10 text-[11px] text-primary"
-              >
-                Sistema activo
-              </Badge>
+          <div className="flex min-w-0 items-center gap-3">
+            <Image
+              src="/images/logo-aceros-peru.png"
+              alt="Logo de Industrias Aceros Perú"
+              width={44}
+              height={44}
+              className="h-11 w-11 shrink-0 object-contain"
+            />
+            <div className="min-w-0 space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="font-heading text-xl font-bold text-foreground">
+                  Industrias Aceros Perú
+                </h1>
+                <Badge
+                  variant="secondary"
+                  className="border border-primary/30 bg-primary/10 text-[11px] text-primary"
+                >
+                  Sistema activo
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Sistema de Gestión Integral
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Sistema de Gestión Integral
-            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 sm:justify-end">

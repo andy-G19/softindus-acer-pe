@@ -3,21 +3,21 @@ type StatusBadgeProps = {
 };
 
 const statusStyles: Record<string, string> = {
-  registrado: "border-blue-300/30 bg-blue-400/10 text-blue-200",
-  aprobado: "border-blue-300/30 bg-blue-400/10 text-blue-200",
-  vigente: "border-blue-300/30 bg-blue-400/10 text-blue-200",
-  aceptada: "border-blue-300/30 bg-blue-400/10 text-blue-200",
-  pagada: "border-green-300/30 bg-green-400/10 text-green-200",
-  emitido: "border-green-300/30 bg-green-400/10 text-green-200",
-  entregado: "border-green-300/30 bg-green-400/10 text-green-200",
-  pendiente: "border-primary/35 bg-primary/10 text-primary",
-  parcial: "border-primary/35 bg-primary/10 text-primary",
-  anulada: "border-red-300/30 bg-red-400/10 text-red-200",
-  anulado: "border-red-300/30 bg-red-400/10 text-red-200",
-  cancelado: "border-red-300/30 bg-red-400/10 text-red-200",
-  "sin-proforma": "border-primary/35 bg-primary/10 text-primary",
-  "sin-comprobante": "border-primary/35 bg-primary/10 text-primary",
-  "en-produccion": "border-primary/35 bg-primary/10 text-primary",
+  registrado: "badge-state-info",
+  aprobado: "badge-state-info",
+  vigente: "badge-state-info",
+  aceptada: "badge-state-info",
+  pagada: "badge-state-success",
+  emitido: "badge-state-success",
+  entregado: "badge-state-success",
+  pendiente: "badge-state-active",
+  parcial: "badge-state-active",
+  anulada: "badge-state-danger",
+  anulado: "badge-state-danger",
+  cancelado: "badge-state-danger",
+  "sin-proforma": "badge-state-active",
+  "sin-comprobante": "badge-state-active",
+  "en-produccion": "badge-state-active",
 };
 
 const statusLabels: Record<string, string> = {
@@ -60,7 +60,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`rounded-full border px-2 py-1 text-xs font-medium ${style}`}
+      className={`rounded-full border px-2 py-1 font-mono text-xs font-medium ${style}`}
     >
       {label}
     </span>

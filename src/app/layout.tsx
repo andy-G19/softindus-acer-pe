@@ -1,9 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist } from "next/font/google";
+import { Geist, JetBrains_Mono, Oswald } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-oswald",
+});
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   title: "Industrias Aceros Perú",
@@ -18,10 +28,15 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={cn("font-sans", geist.variable)}
+      className={cn(
+        "font-sans",
+        geist.variable,
+        oswald.variable,
+        jetBrainsMono.variable,
+      )}
       suppressHydrationWarning
-      >
-    <body suppressHydrationWarning>{children}</body>
+    >
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

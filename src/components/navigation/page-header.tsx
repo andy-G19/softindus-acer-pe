@@ -31,7 +31,7 @@ export function PageHeader({
 
       <div className="flex min-w-0 flex-col justify-between gap-5 md:flex-row md:items-start">
         <div className="min-w-0 flex-1 space-y-2 border-l-2 border-primary/70 pl-4">
-          <h1 className="break-words text-3xl font-semibold leading-tight text-foreground md:text-[2rem]">
+          <h1 className="font-heading break-words text-3xl font-semibold leading-tight text-foreground md:text-[2rem]">
             {title}
           </h1>
           {description ? (
