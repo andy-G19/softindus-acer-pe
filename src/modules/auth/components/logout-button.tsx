@@ -1,3 +1,5 @@
+import { LogOut } from "lucide-react";
+
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +14,8 @@ export function LogoutButton() {
         });
       }}
     >
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant="destructive">
+        <LogOut />
         Cerrar sesión
       </Button>
     </form>
