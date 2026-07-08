@@ -135,5 +135,5 @@ export async function createReusableScrapAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/waste-scrap");
 
-  redirect("/dashboard/waste-scrap");
+  redirect("/dashboard/waste-scrap?toast=reusable-scrap-created");
 }

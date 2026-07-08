@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -287,9 +288,14 @@ export default async function OperatorTasksPage() {
                             value={task.id_tarea_operario}
                           />
 
-                          <Button type="submit" variant="outline" size="sm">
+                          <ConfirmDeleteButton
+                            title="¿Anular tarea?"
+                            description="Esta acción anulará la tarea del operador y no se puede deshacer."
+                            confirmText="Confirmar anulación"
+                            entityName="tarea"
+                          >
                             Anular
-                          </Button>
+                          </ConfirmDeleteButton>
                         </form>
                       )}
                     </TableCell>

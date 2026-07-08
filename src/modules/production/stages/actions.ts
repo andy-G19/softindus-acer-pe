@@ -129,7 +129,7 @@ export async function createRouteStageAction(formData: FormData) {
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${data.id_ruta}/stages`);
 
-  redirect(`/dashboard/production/routes/${data.id_ruta}/stages`);
+  redirect(`/dashboard/production/routes/${data.id_ruta}/stages?toast=route-stage-created`);
 }
 
 export async function updateRouteStageAction(formData: FormData) {
@@ -240,7 +240,7 @@ export async function updateRouteStageAction(formData: FormData) {
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${data.id_ruta}/stages`);
 
-  redirect(`/dashboard/production/routes/${data.id_ruta}/stages`);
+  redirect(`/dashboard/production/routes/${data.id_ruta}/stages?toast=route-stage-updated`);
 }
 
 export async function toggleRouteStageStatusAction(formData: FormData) {
@@ -299,5 +299,7 @@ export async function toggleRouteStageStatusAction(formData: FormData) {
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${stage.id_ruta}/stages`);
 
-  redirect(`/dashboard/production/routes/${stage.id_ruta}/stages`);
+  redirect(
+    `/dashboard/production/routes/${stage.id_ruta}/stages?toast=${nextStatus ? "route-stage-activated" : "route-stage-deactivated"}`,
+  );
 }

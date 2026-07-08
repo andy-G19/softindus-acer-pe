@@ -35,6 +35,8 @@ export function ConfirmDeleteButton({
       return;
     }
 
+    const form = event.currentTarget.form;
+
     const confirmed =
       title || description || confirmText || cancelText
         ? await showConfirm({
@@ -56,7 +58,7 @@ export function ConfirmDeleteButton({
       return;
     }
 
-    event.currentTarget.form?.requestSubmit();
+    form?.requestSubmit();
   }
 
   return (

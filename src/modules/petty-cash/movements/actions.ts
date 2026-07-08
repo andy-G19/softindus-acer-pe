@@ -124,5 +124,5 @@ export async function annulPettyCashMovementAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash/monthly-summary");
   revalidatePath("/dashboard/petty-cash/boxes");
 
-  redirect("/dashboard/petty-cash/movements");
+  redirect("/dashboard/petty-cash/movements?toast=petty-cash-movement-annulled");
 }

@@ -272,5 +272,7 @@ export async function toggleSupplierTypeStatusAction(formData: FormData) {
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
   revalidatePath(SUPPLIER_TYPES_PATH);
-  redirect(SUPPLIER_TYPES_PATH);
+  redirect(
+    `${SUPPLIER_TYPES_PATH}?toast=${nextStatus ? "supplier-type-activated" : "supplier-type-deactivated"}`,
+  );
 }

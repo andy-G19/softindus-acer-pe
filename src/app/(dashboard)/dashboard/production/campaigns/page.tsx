@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -425,13 +426,15 @@ export default async function ProductionCampaignsPage({
                           value={campaign.id_campania}
                         />
                         <input type="hidden" name="estado" value="anulada" />
-                        <Button
-                          type="submit"
-                          variant="link"
-                          className="h-auto justify-start p-0 text-destructive hover:text-destructive"
+                        <ConfirmDeleteButton
+                          title="¿Anular campaña?"
+                          description="Esta acción anulará la campaña de producción y no se puede deshacer."
+                          confirmText="Confirmar anulación"
+                          entityName="campaña"
+                          className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
                         >
                           Anular
-                        </Button>
+                        </ConfirmDeleteButton>
                       </form>
                     ) : null}
                   </div>

@@ -50,5 +50,5 @@ export async function attendStockAlertAction(formData: FormData) {
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/alerts");
 
-  redirect("/dashboard/inventory/alerts");
+  redirect("/dashboard/inventory/alerts?toast=stock-alert-attended");
 }

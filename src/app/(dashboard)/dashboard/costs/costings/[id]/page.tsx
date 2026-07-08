@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
@@ -704,13 +705,15 @@ export default async function CostingDetailPage({
                               name="id_costo_indirecto"
                               value={item.id_costo_indirecto}
                             />
-                            <Button
-                              type="submit"
-                              variant="link"
-                              className="h-auto p-0 text-destructive hover:text-destructive"
+                            <ConfirmDeleteButton
+                              title="¿Anular costo indirecto?"
+                              description="Esta acción anulará el costo indirecto y no se puede deshacer."
+                              confirmText="Confirmar anulación"
+                              entityName="costo indirecto"
+                              className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
                             >
                               Anular
-                            </Button>
+                            </ConfirmDeleteButton>
                           </form>
                         )}
                       </TableCell>

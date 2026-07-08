@@ -26,7 +26,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
 
       <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
         <div className="heat-bar" aria-hidden="true" />
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="flex w-full flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <Image
               src="/images/logo-aceros-peru.png"

@@ -111,7 +111,7 @@ export async function createFabricationRouteAction(formData: FormData) {
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
 
-  redirect("/dashboard/production/routes");
+  redirect("/dashboard/production/routes?toast=route-created");
 }
 
 export async function updateFabricationRouteAction(formData: FormData) {
@@ -218,7 +218,7 @@ export async function updateFabricationRouteAction(formData: FormData) {
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${idRuta}/stages`);
 
-  redirect("/dashboard/production/routes");
+  redirect("/dashboard/production/routes?toast=route-updated");
 }
 
 export async function toggleFabricationRouteStatusAction(formData: FormData) {
@@ -277,5 +277,7 @@ export async function toggleFabricationRouteStatusAction(formData: FormData) {
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${idRuta}/stages`);
 
-  redirect("/dashboard/production/routes");
+  redirect(
+    `/dashboard/production/routes?toast=${nextStatus ? "route-activated" : "route-deactivated"}`,
+  );
 }

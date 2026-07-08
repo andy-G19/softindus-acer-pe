@@ -136,7 +136,7 @@ export async function createExpenseCategoryAction(
   revalidatePath("/dashboard/petty-cash");
   revalidatePath(EXPENSE_CATEGORIES_PATH);
 
-  redirect(EXPENSE_CATEGORIES_PATH);
+  redirect(`${EXPENSE_CATEGORIES_PATH}?toast=expense-category-created`);
 }
 
 export async function updateExpenseCategoryAction(
@@ -212,7 +212,7 @@ export async function updateExpenseCategoryAction(
   revalidatePath("/dashboard/petty-cash");
   revalidatePath(EXPENSE_CATEGORIES_PATH);
 
-  redirect(EXPENSE_CATEGORIES_PATH);
+  redirect(`${EXPENSE_CATEGORIES_PATH}?toast=expense-category-updated`);
 }
 
 export async function toggleExpenseCategoryStatusAction(formData: FormData) {
@@ -261,5 +261,7 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash");
   revalidatePath(EXPENSE_CATEGORIES_PATH);
 
-  redirect(EXPENSE_CATEGORIES_PATH);
+  redirect(
+    `${EXPENSE_CATEGORIES_PATH}?toast=${nextStatus ? "expense-category-activated" : "expense-category-deactivated"}`,
+  );
 }

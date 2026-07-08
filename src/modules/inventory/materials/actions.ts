@@ -245,7 +245,7 @@ export async function createMaterialAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(MATERIALS_PATH);
+  redirect(`${MATERIALS_PATH}?toast=material-created`);
 
   return initialState;
 }
@@ -353,7 +353,7 @@ export async function updateMaterialAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(MATERIALS_PATH);
+  redirect(`${MATERIALS_PATH}?toast=material-updated`);
 
   return initialState;
 }
@@ -404,5 +404,7 @@ export async function toggleMaterialStatusAction(formData: FormData) {
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(MATERIALS_PATH);
+  redirect(
+    `${MATERIALS_PATH}?toast=${nextStatus ? "material-activated" : "material-deactivated"}`,
+  );
 }

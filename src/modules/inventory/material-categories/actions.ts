@@ -285,5 +285,7 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
   revalidatePath(MATERIAL_CATEGORIES_PATH);
-  redirect(MATERIAL_CATEGORIES_PATH);
+  redirect(
+    `${MATERIAL_CATEGORIES_PATH}?toast=${nextStatus ? "material-category-activated" : "material-category-deactivated"}`,
+  );
 }

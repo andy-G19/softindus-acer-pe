@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -140,9 +140,14 @@ export default async function PurchaseDetailPage({
           canAnnul ? (
             <form action={annulPurchaseAction}>
               <input type="hidden" name="id_compra" value={purchase.id_compra} />
-              <Button type="submit" variant="outline">
+              <ConfirmDeleteButton
+                title="¿Anular compra?"
+                description="Esta acción anulará la compra y no se puede deshacer."
+                confirmText="Confirmar anulación"
+                entityName="compra"
+              >
                 Anular compra
-              </Button>
+              </ConfirmDeleteButton>
             </form>
           ) : null
         }

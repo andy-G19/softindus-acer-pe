@@ -244,7 +244,9 @@ export async function generateWorkOrderProgressAction(formData: FormData) {
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}/progress`);
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}/progress`);
+  redirect(
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress?toast=work-order-progress-generated`,
+  );
 }
 
 export async function updateWorkOrderProgressAction(formData: FormData) {
@@ -342,7 +344,9 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
     `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`,
   );
 
-  redirect(`/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`);
+  redirect(
+    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress?toast=work-order-progress-updated`,
+  );
 }
 
 export async function reassignWorkOrderProgressAction(formData: FormData) {
@@ -471,6 +475,8 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
     `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress/${advance.id_avance}/reassign`,
   );
 
-  redirect(`/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`);
+  redirect(
+    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress?toast=work-order-progress-reassigned`,
+  );
 }
 

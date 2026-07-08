@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -17,11 +17,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { showError, showSuccess } from "@/lib/notifications";
 
 type CatalogFormState = {
   error: string;
   fieldErrors?: Partial<Record<string, string[]>>;
 };
+
+function useToastOnSubmit(
+  state: CatalogFormState,
+  isPending: boolean,
+  successMessage: string,
+) {
+  const wasPending = useRef(false);
+
+  useEffect(() => {
+    if (wasPending.current && !isPending) {
+      if (state.error) {
+        showError(
+          "No se pudo completar la operación",
+          "Revise los datos ingresados e inténtelo nuevamente.",
+        );
+      } else {
+        showSuccess(successMessage);
+      }
+    }
+
+    wasPending.current = isPending;
+  }, [isPending, state.error, successMessage]);
+}
 
 type CatalogItem = {
   id: string;
@@ -69,6 +93,8 @@ function CreateCatalogForm({
   title: string;
 }) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+
+  useToastOnSubmit(state, isPending, "Registro creado correctamente");
 
   return (
     <form
@@ -136,6 +162,8 @@ function CatalogRow({
     updateAction,
     initialState,
   );
+
+  useToastOnSubmit(state, isPending, "Registro actualizado correctamente");
 
   return (
     <TableRow className="align-top">

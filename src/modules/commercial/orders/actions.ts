@@ -265,7 +265,7 @@ export async function createOrderAction(
   });
 
   revalidatePath(ORDERS_PATH);
-  redirect(ORDERS_PATH);
+  redirect(`${ORDERS_PATH}?toast=order-created`);
 }
 
 export async function updateOrderAction(
@@ -384,7 +384,7 @@ export async function updateOrderAction(
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
-  redirect(ORDERS_PATH);
+  redirect(`${ORDERS_PATH}?toast=order-updated`);
 }
 
 export async function cancelOrderAction(formData: FormData) {
@@ -420,5 +420,5 @@ export async function cancelOrderAction(formData: FormData) {
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
-  redirect(ORDERS_PATH);
+  redirect(`${ORDERS_PATH}?toast=order-cancelled`);
 }

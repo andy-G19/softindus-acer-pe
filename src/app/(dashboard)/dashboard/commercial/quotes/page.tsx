@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -358,9 +359,14 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                             name="id_proforma"
                             value={quote.id_proforma}
                           />
-                          <Button type="submit" variant="outline" size="sm">
+                          <ConfirmDeleteButton
+                            title="¿Anular proforma?"
+                            description="Esta acción anulará la proforma y no se puede deshacer."
+                            confirmText="Confirmar anulación"
+                            entityName="proforma"
+                          >
                             Anular
-                          </Button>
+                          </ConfirmDeleteButton>
                         </form>
                       ) : null}
                     </div>

@@ -96,5 +96,5 @@ export async function createPettyCashBoxAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash");
   revalidatePath("/dashboard/petty-cash/boxes");
 
-  redirect("/dashboard/petty-cash/boxes");
+  redirect("/dashboard/petty-cash/boxes?toast=petty-cash-box-created");
 }

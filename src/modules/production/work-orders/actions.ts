@@ -333,7 +333,7 @@ export async function createWorkOrderAction(formData: FormData) {
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-created`);
 }
 
 export async function consumeWorkOrderMaterialsAction(formData: FormData) {
@@ -631,7 +631,9 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+  redirect(
+    `/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-materials-consumed`,
+  );
 }
 
 export async function annulWorkOrderAction(formData: FormData) {
@@ -708,7 +710,7 @@ export async function annulWorkOrderAction(formData: FormData) {
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect("/dashboard/production/work-orders");
+  redirect("/dashboard/production/work-orders?toast=work-order-annulled");
 }
 
 export async function finishWorkOrderAction(formData: FormData) {
@@ -791,5 +793,5 @@ export async function finishWorkOrderAction(formData: FormData) {
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
-  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
+  redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-finished`);
 }

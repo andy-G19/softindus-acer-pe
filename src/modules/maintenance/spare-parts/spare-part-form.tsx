@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
+import { showError } from "@/lib/notifications";
 import type { SparePartFormState } from "@/modules/maintenance/spare-parts/actions";
 
 type ProviderOption = {
@@ -59,6 +60,15 @@ export function SparePartForm({
   submitLabel,
 }: SparePartFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      showError(
+        "No se pudo completar la operación",
+        "Revise los datos ingresados e inténtelo nuevamente.",
+      );
+    }
+  }, [state.error]);
 
   return (
     <form action={formAction} className="space-y-4">

@@ -110,5 +110,5 @@ export async function createScrapAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/waste-scrap");
 
-  redirect("/dashboard/waste-scrap");
+  redirect("/dashboard/waste-scrap?toast=scrap-created");
 }

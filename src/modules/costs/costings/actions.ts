@@ -202,7 +202,7 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
   revalidateCostingPaths(idCosteo);
   revalidatePath("/dashboard/production/work-orders");
 
-  redirect(`/dashboard/costs/costings/${idCosteo}`);
+  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-created`);
 }
 
 export async function updateLaborCostAction(formData: FormData) {
@@ -266,7 +266,7 @@ export async function updateLaborCostAction(formData: FormData) {
 
   revalidateCostingPaths(data.id_costeo);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}`);
+  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=costing-updated`);
 }
 
 export async function recalculateCostingAction(formData: FormData) {
@@ -313,5 +313,5 @@ export async function recalculateCostingAction(formData: FormData) {
 
   revalidateCostingPaths(idCosteo);
 
-  redirect(`/dashboard/costs/costings/${idCosteo}`);
+  redirect(`/dashboard/costs/costings/${idCosteo}?toast=costing-recalculated`);
 }

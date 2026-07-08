@@ -130,5 +130,5 @@ export async function createPaymentAction(formData: FormData) {
   revalidatePath(`/dashboard/commercial/quotes/${id_proforma}`);
   revalidatePath("/dashboard/commercial/orders");
 
-  redirect(`/dashboard/commercial/quotes/${id_proforma}`);
+  redirect(`/dashboard/commercial/quotes/${id_proforma}?toast=payment-registered`);
 }

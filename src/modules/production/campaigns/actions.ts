@@ -91,7 +91,7 @@ export async function createProductionCampaignAction(formData: FormData) {
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath("/dashboard/production/work-orders/new");
 
-  redirect(`/dashboard/production/campaigns/${idCampania}`);
+  redirect(`/dashboard/production/campaigns/${idCampania}?toast=campaign-created`);
 }
 
 export async function addCampaignDetailAction(formData: FormData) {
@@ -204,7 +204,9 @@ export async function addCampaignDetailAction(formData: FormData) {
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${campaign.id_campania}`);
 
-  redirect(`/dashboard/production/campaigns/${campaign.id_campania}`);
+  redirect(
+    `/dashboard/production/campaigns/${campaign.id_campania}?toast=campaign-detail-created`,
+  );
 }
 
 export async function updateProductionCampaignAction(formData: FormData) {
@@ -282,7 +284,7 @@ export async function updateProductionCampaignAction(formData: FormData) {
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
 
-  redirect(`/dashboard/production/campaigns/${idCampania}`);
+  redirect(`/dashboard/production/campaigns/${idCampania}?toast=campaign-updated`);
 }
 
 export async function changeProductionCampaignStatusAction(formData: FormData) {
@@ -357,5 +359,5 @@ export async function changeProductionCampaignStatusAction(formData: FormData) {
   revalidatePath("/dashboard/production/campaigns");
   revalidatePath(`/dashboard/production/campaigns/${idCampania}`);
 
-  redirect("/dashboard/production/campaigns");
+  redirect(`/dashboard/production/campaigns?toast=campaign-status-${nextStatus}`);
 }

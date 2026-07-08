@@ -201,7 +201,7 @@ export async function createSupplierAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(SUPPLIERS_PATH);
+  redirect(`${SUPPLIERS_PATH}?toast=supplier-created`);
 
   return initialState;
 }
@@ -318,7 +318,7 @@ export async function updateSupplierAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(SUPPLIERS_PATH);
+  redirect(`${SUPPLIERS_PATH}?toast=supplier-updated`);
 
   return initialState;
 }
@@ -369,5 +369,7 @@ export async function toggleSupplierStatusAction(formData: FormData) {
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(SUPPLIERS_PATH);
+  redirect(
+    `${SUPPLIERS_PATH}?toast=${nextStatus ? "supplier-activated" : "supplier-deactivated"}`,
+  );
 }

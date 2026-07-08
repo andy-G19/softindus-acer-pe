@@ -141,6 +141,6 @@ export async function createRecipeDetailAction(formData: FormData) {
   );
 
   redirect(
-    `/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`,
+    `/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details?toast=recipe-detail-updated`,
   );
 }

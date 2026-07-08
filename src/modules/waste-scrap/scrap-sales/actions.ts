@@ -251,5 +251,5 @@ export async function createScrapSaleAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash/monthly-summary");
   revalidatePath("/dashboard/petty-cash/monthly-summary");
 
-  redirect("/dashboard/waste-scrap/scraps");
+  redirect("/dashboard/waste-scrap/scraps?toast=scrap-sale-created");
 }

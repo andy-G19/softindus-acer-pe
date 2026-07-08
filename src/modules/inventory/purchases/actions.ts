@@ -293,7 +293,7 @@ export async function createPurchaseAction(formData: FormData) {
   revalidatePath("/dashboard/inventory/materials");
   revalidatePath("/dashboard/inventory/purchases");
 
-  redirect("/dashboard/inventory/purchases");
+  redirect("/dashboard/inventory/purchases?toast=purchase-created");
 }
 
 export async function annulPurchaseAction(formData: FormData) {
@@ -450,5 +450,5 @@ export async function annulPurchaseAction(formData: FormData) {
   revalidatePath("/dashboard/inventory/purchases");
   revalidatePath(`/dashboard/inventory/purchases/${purchaseId}`);
 
-  redirect("/dashboard/inventory/purchases");
+  redirect("/dashboard/inventory/purchases?toast=purchase-annulled");
 }

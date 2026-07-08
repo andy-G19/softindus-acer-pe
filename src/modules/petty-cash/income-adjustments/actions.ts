@@ -202,5 +202,5 @@ export async function createPettyCashIncomeAdjustmentAction(formData: FormData) 
   revalidatePath("/dashboard/petty-cash/movements");
   revalidatePath("/dashboard/petty-cash/monthly-summary");
 
-  redirect("/dashboard/petty-cash");
+  redirect("/dashboard/petty-cash?toast=petty-cash-income-registered");
 }

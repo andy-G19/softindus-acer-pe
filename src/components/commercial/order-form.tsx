@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { showError } from "@/lib/notifications";
 import {
   createOrderAction,
   type OrderFormState,
@@ -80,6 +81,16 @@ export function OrderForm({
   submitLabel = "Guardar pedido",
 }: OrderFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      showError(
+        "No se pudo completar la operación",
+        "Revise los datos ingresados e inténtelo nuevamente.",
+      );
+    }
+  }, [state.error]);
+
   const initialItems = defaultValues?.items?.length
     ? defaultValues.items.map((item, index) => ({
         key: `row-${index + 1}`,

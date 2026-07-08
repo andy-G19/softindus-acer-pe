@@ -117,7 +117,7 @@ export async function createIndirectCostAction(formData: FormData) {
 
   revalidateCostingPaths(data.id_costeo);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}`);
+  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=indirect-cost-created`);
 }
 
 export async function annulIndirectCostAction(formData: FormData) {
@@ -196,5 +196,5 @@ export async function annulIndirectCostAction(formData: FormData) {
 
   revalidateCostingPaths(idCosteo);
 
-  redirect(`/dashboard/costs/costings/${idCosteo}`);
+  redirect(`/dashboard/costs/costings/${idCosteo}?toast=indirect-cost-annulled`);
 }

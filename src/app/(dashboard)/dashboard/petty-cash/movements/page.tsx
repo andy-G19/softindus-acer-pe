@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -448,9 +449,14 @@ export default async function PettyCashMovementsPage({
                             name="id_movimiento_caja"
                             value={movement.id_movimiento_caja}
                           />
-                          <Button type="submit" variant="outline" size="sm">
+                          <ConfirmDeleteButton
+                            title="¿Anular movimiento de caja?"
+                            description="Esta acción anulará el movimiento de caja chica y no se puede deshacer."
+                            confirmText="Confirmar anulación"
+                            entityName="movimiento"
+                          >
                             Anular
-                          </Button>
+                          </ConfirmDeleteButton>
                         </form>
                       )}
                     </TableCell>

@@ -234,7 +234,7 @@ export async function createSupplierMaterialAction(
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(SUPPLIER_MATERIALS_PATH);
+  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-created`);
 }
 
 export async function updateSupplierMaterialAction(
@@ -329,7 +329,7 @@ export async function updateSupplierMaterialAction(
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(SUPPLIER_MATERIALS_PATH);
+  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-updated`);
 }
 
 export async function toggleSupplierMaterialStatusAction(formData: FormData) {
@@ -387,5 +387,7 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(SUPPLIER_MATERIALS_PATH);
+  redirect(
+    `${SUPPLIER_MATERIALS_PATH}?toast=${nextStatus ? "supplier-material-activated" : "supplier-material-deactivated"}`,
+  );
 }

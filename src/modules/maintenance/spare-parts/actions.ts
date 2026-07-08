@@ -168,7 +168,7 @@ export async function createSparePartAction(
   revalidatePath("/dashboard/maintenance");
   revalidatePath(SPARE_PARTS_PATH);
 
-  redirect(SPARE_PARTS_PATH);
+  redirect(`${SPARE_PARTS_PATH}?toast=spare-part-created`);
 }
 
 export async function updateSparePartAction(
@@ -254,7 +254,7 @@ export async function updateSparePartAction(
   revalidatePath("/dashboard/maintenance");
   revalidatePath(SPARE_PARTS_PATH);
 
-  redirect(SPARE_PARTS_PATH);
+  redirect(`${SPARE_PARTS_PATH}?toast=spare-part-updated`);
 }
 
 export async function updateSparePartStatusAction(formData: FormData) {
@@ -304,7 +304,9 @@ export async function updateSparePartStatusAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance");
   revalidatePath(SPARE_PARTS_PATH);
 
-  redirect(SPARE_PARTS_PATH);
+  redirect(
+    `${SPARE_PARTS_PATH}?toast=${data.estado ? "spare-part-activated" : "spare-part-deactivated"}`,
+  );
 }
 
 export async function toggleSparePartStatusAction(formData: FormData) {

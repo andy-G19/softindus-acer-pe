@@ -135,7 +135,7 @@ export async function createReceiptAction(formData: FormData) {
   revalidatePath("/dashboard/commercial/orders");
   revalidatePath("/dashboard/commercial/receipts");
 
-  redirect(`/dashboard/commercial/quotes/${id_proforma}`);
+  redirect(`/dashboard/commercial/quotes/${id_proforma}?toast=receipt-created`);
 }
 
 export async function annulReceiptAction(formData: FormData) {
@@ -177,5 +177,5 @@ export async function annulReceiptAction(formData: FormData) {
   revalidatePath("/dashboard/commercial/quotes");
   revalidatePath(`/dashboard/commercial/quotes/${receipt.id_proforma}`);
 
-  redirect("/dashboard/commercial/receipts");
+  redirect("/dashboard/commercial/receipts?toast=receipt-annulled");
 }

@@ -176,5 +176,5 @@ export async function createPettyCashExpenseAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash/movements");
   revalidatePath("/dashboard/petty-cash/monthly-summary");
 
-  redirect("/dashboard/petty-cash");
+  redirect("/dashboard/petty-cash?toast=petty-cash-expense-registered");
 }

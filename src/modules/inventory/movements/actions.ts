@@ -165,5 +165,5 @@ export async function createInventoryOutputAction(
   revalidatePath("/dashboard/inventory/materials");
   revalidatePath("/dashboard/inventory/outputs");
 
-  redirect("/dashboard/inventory/outputs");
+  redirect("/dashboard/inventory/outputs?toast=inventory-movement-created");
 }

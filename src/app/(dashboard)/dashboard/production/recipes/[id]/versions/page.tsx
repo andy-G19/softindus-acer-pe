@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
 import {
@@ -280,13 +281,15 @@ export default async function RecipeVersionsPage({
                         name="id_version_receta"
                         value={version.id_version_receta}
                       />
-                      <Button
-                        type="submit"
-                        variant="link"
-                        className="h-auto p-0 text-destructive hover:text-destructive"
+                      <ConfirmDeleteButton
+                        title="¿Anular versión de receta?"
+                        description="Esta acción anulará la versión de la receta y no se puede deshacer."
+                        confirmText="Confirmar anulación"
+                        entityName="versión de receta"
+                        className="rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent"
                       >
                         Anular
-                      </Button>
+                      </ConfirmDeleteButton>
                     </form>
                   ) : null}
 

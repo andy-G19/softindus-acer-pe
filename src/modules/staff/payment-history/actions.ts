@@ -161,5 +161,5 @@ export async function registerOperatorPaymentAction(formData: FormData) {
   revalidatePath("/dashboard/staff/payrolls");
   revalidatePath("/dashboard/staff/payment-history");
 
-  redirect("/dashboard/staff/payment-history");
+  redirect("/dashboard/staff/payment-history?toast=operator-payment-registered");
 }

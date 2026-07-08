@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { showError } from "@/lib/notifications";
 import type { MaterialFormState } from "@/modules/inventory/materials/actions";
 
 type MaterialCategoryOption = {
@@ -71,6 +72,15 @@ export function MaterialForm({
 }: MaterialFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasCategories = categories.length > 0;
+
+  useEffect(() => {
+    if (state.error) {
+      showError(
+        "No se pudo completar la operación",
+        "Revise los datos ingresados e inténtelo nuevamente.",
+      );
+    }
+  }, [state.error]);
 
   return (
     <form

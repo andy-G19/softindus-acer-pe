@@ -156,5 +156,5 @@ export async function createSupplierPaymentAction(formData: FormData) {
   revalidatePath("/dashboard/inventory/purchases");
   revalidatePath(`/dashboard/inventory/purchases/${data.id_compra}`);
 
-  redirect(`/dashboard/inventory/purchases/${data.id_compra}`);
+  redirect(`/dashboard/inventory/purchases/${data.id_compra}?toast=supplier-payment-registered`);
 }

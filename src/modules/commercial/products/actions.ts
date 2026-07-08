@@ -197,7 +197,7 @@ export async function createProductAction(
   });
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(PRODUCTS_PATH);
+  redirect(`${PRODUCTS_PATH}?toast=product-created`);
 
   return initialProductState;
 }
@@ -302,7 +302,7 @@ export async function updateProductAction(
   });
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(PRODUCTS_PATH);
+  redirect(`${PRODUCTS_PATH}?toast=product-updated`);
 
   return initialProductState;
 }
@@ -352,7 +352,9 @@ export async function toggleProductStatusAction(formData: FormData) {
   });
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(PRODUCTS_PATH);
+  redirect(
+    `${PRODUCTS_PATH}?toast=${nextStatus ? "product-activated" : "product-deactivated"}`,
+  );
 }
 
 export async function createProductCategoryAction(
@@ -618,5 +620,7 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
 
   revalidatePath(PRODUCT_CATEGORIES_PATH);
   revalidatePath(PRODUCTS_PATH);
-  redirect(PRODUCT_CATEGORIES_PATH);
+  redirect(
+    `${PRODUCT_CATEGORIES_PATH}?toast=${nextStatus ? "product-category-activated" : "product-category-deactivated"}`,
+  );
 }

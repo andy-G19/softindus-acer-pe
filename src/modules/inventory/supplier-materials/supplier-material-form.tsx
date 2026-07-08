@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { showError } from "@/lib/notifications";
 import type { SupplierMaterialFormState } from "@/modules/inventory/supplier-materials/actions";
 
 type Option = {
@@ -76,6 +77,15 @@ export function SupplierMaterialForm({
 }: SupplierMaterialFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const hasOptions = suppliers.length > 0 && materials.length > 0;
+
+  useEffect(() => {
+    if (state.error) {
+      showError(
+        "No se pudo completar la operación",
+        "Revise los datos ingresados e inténtelo nuevamente.",
+      );
+    }
+  }, [state.error]);
 
   return (
     <form

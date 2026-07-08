@@ -277,7 +277,7 @@ export async function createRepairAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance/failures");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/repairs");
+  redirect("/dashboard/maintenance/repairs?toast=repair-created");
 }
 
 export async function updateRepairStatusAction(formData: FormData) {
@@ -400,5 +400,5 @@ export async function updateRepairStatusAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance/failures");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/repairs");
+  redirect("/dashboard/maintenance/repairs?toast=repair-updated");
 }

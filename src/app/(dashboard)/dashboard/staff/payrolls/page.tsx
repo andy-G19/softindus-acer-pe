@@ -3,6 +3,7 @@ import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import {
   Card,
   CardContent,
@@ -409,9 +410,14 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
                             value={payroll.id_planilla}
                           />
 
-                          <Button type="submit" variant="outline" size="sm">
+                          <ConfirmDeleteButton
+                            title="¿Anular planilla?"
+                            description="Esta acción anulará la planilla y no se puede deshacer. Verifique antes de continuar."
+                            confirmText="Confirmar anulación"
+                            entityName="planilla"
+                          >
                             Anular
-                          </Button>
+                          </ConfirmDeleteButton>
                         </form>
                       )}
                     </TableCell>

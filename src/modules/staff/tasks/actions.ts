@@ -167,7 +167,7 @@ export async function createOperatorTaskAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/tasks");
 
-  redirect("/dashboard/staff/tasks");
+  redirect("/dashboard/staff/tasks?toast=operator-task-created");
 }
 
 export async function cancelOperatorTaskAction(formData: FormData) {
@@ -226,5 +226,5 @@ export async function cancelOperatorTaskAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/tasks");
 
-  redirect("/dashboard/staff/tasks");
+  redirect("/dashboard/staff/tasks?toast=operator-task-annulled");
 }

@@ -115,5 +115,5 @@ export async function createMarginAction(formData: FormData) {
   revalidatePath("/dashboard/costs/costings");
   revalidatePath(`/dashboard/costs/costings/${data.id_costeo}`);
 
-  redirect(`/dashboard/costs/costings/${data.id_costeo}`);
+  redirect(`/dashboard/costs/costings/${data.id_costeo}?toast=margin-created`);
 }

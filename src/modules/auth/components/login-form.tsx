@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { loginAction } from "@/modules/auth/actions/login.action";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { showError } from "@/lib/notifications";
 
 const initialState = {
   error: "",
@@ -129,6 +130,12 @@ export function LoginForm() {
     initialState,
   );
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (state.error) {
+      showError("No se pudo iniciar sesión", state.error);
+    }
+  }, [state.error]);
 
   return (
     <Card

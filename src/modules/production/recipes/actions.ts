@@ -97,7 +97,7 @@ export async function createTechnicalRecipeAction(formData: FormData) {
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/recipes");
 
-  redirect("/dashboard/production/recipes");
+  redirect("/dashboard/production/recipes?toast=recipe-created");
 }
 
 export async function toggleTechnicalRecipeStatusAction(formData: FormData) {
@@ -155,5 +155,7 @@ export async function toggleTechnicalRecipeStatusAction(formData: FormData) {
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/recipes");
 
-  redirect("/dashboard/production/recipes");
+  redirect(
+    `/dashboard/production/recipes?toast=${nextStatus === "activa" ? "recipe-activated" : "recipe-deactivated"}`,
+  );
 }

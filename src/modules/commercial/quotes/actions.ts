@@ -140,7 +140,7 @@ export async function createQuoteAction(formData: FormData) {
   revalidatePath(QUOTES_PATH);
   revalidatePath("/dashboard/commercial/orders");
 
-  redirect(QUOTES_PATH);
+  redirect(`${QUOTES_PATH}?toast=quote-created`);
 }
 
 export async function annulQuoteAction(formData: FormData) {
@@ -201,5 +201,5 @@ export async function annulQuoteAction(formData: FormData) {
   revalidatePath(`${QUOTES_PATH}/${quoteId}`);
   revalidatePath("/dashboard/commercial/orders");
 
-  redirect(QUOTES_PATH);
+  redirect(`${QUOTES_PATH}?toast=quote-annulled`);
 }

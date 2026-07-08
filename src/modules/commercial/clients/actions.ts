@@ -341,5 +341,7 @@ export async function toggleClientStatusAction(formData: FormData) {
   });
 
   revalidatePath(CLIENTS_PATH);
-  redirect(CLIENTS_PATH);
+  redirect(
+    `${CLIENTS_PATH}?toast=${nextStatus ? "client-activated" : "client-deactivated"}`,
+  );
 }

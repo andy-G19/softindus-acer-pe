@@ -160,5 +160,5 @@ export async function createAttendanceAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/attendance");
 
-  redirect("/dashboard/staff/attendance");
+  redirect("/dashboard/staff/attendance?toast=attendance-created");
 }

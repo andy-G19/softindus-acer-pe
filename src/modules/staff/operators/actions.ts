@@ -150,7 +150,7 @@ export async function createOperatorAction(
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(OPERATORS_PATH);
+  redirect(`${OPERATORS_PATH}?toast=operator-created`);
 }
 
 export async function updateOperatorAction(
@@ -233,7 +233,7 @@ export async function updateOperatorAction(
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(OPERATORS_PATH);
+  redirect(`${OPERATORS_PATH}?toast=operator-updated`);
 }
 
 export async function toggleOperatorStatusAction(formData: FormData) {
@@ -283,5 +283,7 @@ export async function toggleOperatorStatusAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath(OPERATORS_PATH);
 
-  redirect(OPERATORS_PATH);
+  redirect(
+    `${OPERATORS_PATH}?toast=${nextStatus === "activo" ? "operator-activated" : "operator-deactivated"}`,
+  );
 }

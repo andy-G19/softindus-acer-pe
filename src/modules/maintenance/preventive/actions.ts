@@ -119,7 +119,7 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance/preventive");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/preventive");
+  redirect("/dashboard/maintenance/preventive?toast=preventive-maintenance-created");
 }
 
 export async function updatePreventiveMaintenanceStatusAction(
@@ -195,5 +195,5 @@ export async function updatePreventiveMaintenanceStatusAction(
   revalidatePath("/dashboard/maintenance/preventive");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/preventive");
+  redirect("/dashboard/maintenance/preventive?toast=preventive-maintenance-updated");
 }

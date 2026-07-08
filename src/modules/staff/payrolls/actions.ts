@@ -202,7 +202,7 @@ export async function generatePayrollAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/payrolls");
 
-  redirect("/dashboard/staff/payrolls");
+  redirect("/dashboard/staff/payrolls?toast=payroll-created");
 }
 
 export async function cancelPayrollAction(formData: FormData) {
@@ -274,5 +274,5 @@ export async function cancelPayrollAction(formData: FormData) {
   revalidatePath("/dashboard/staff");
   revalidatePath("/dashboard/staff/payrolls");
 
-  redirect("/dashboard/staff/payrolls");
+  redirect("/dashboard/staff/payrolls?toast=payroll-annulled");
 }

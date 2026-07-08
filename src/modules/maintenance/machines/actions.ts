@@ -176,7 +176,7 @@ export async function createMachineAction(
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(MACHINES_PATH);
+  redirect(`${MACHINES_PATH}?toast=machine-created`);
 }
 
 export async function updateMachineAction(
@@ -263,7 +263,7 @@ export async function updateMachineAction(
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(MACHINES_PATH);
+  redirect(`${MACHINES_PATH}?toast=machine-updated`);
 }
 
 export async function updateMachineStatusAction(formData: FormData) {
@@ -312,7 +312,7 @@ export async function updateMachineStatusAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(MACHINES_PATH);
+  redirect(`${MACHINES_PATH}?toast=machine-status-updated`);
 }
 
 export async function toggleMachineStatusAction(formData: FormData) {
@@ -361,5 +361,7 @@ export async function toggleMachineStatusAction(formData: FormData) {
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(MACHINES_PATH);
+  redirect(
+    `${MACHINES_PATH}?toast=${nextStatus === "operativa" ? "machine-activated" : "machine-deactivated"}`,
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,11 +16,35 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { EmptyState } from "@/components/ui/empty-state";
+import { showError, showSuccess } from "@/lib/notifications";
 import {
   createProductCategoryAction,
   updateProductCategoryAction,
   type ProductCategoryFormState,
 } from "@/modules/commercial/products/actions";
+
+function useToastOnSubmit(
+  state: ProductCategoryFormState,
+  isPending: boolean,
+  successMessage: string,
+) {
+  const wasPending = useRef(false);
+
+  useEffect(() => {
+    if (wasPending.current && !isPending) {
+      if (state.error) {
+        showError(
+          "No se pudo completar la operación",
+          "Revise los datos ingresados e inténtelo nuevamente.",
+        );
+      } else {
+        showSuccess(successMessage);
+      }
+    }
+
+    wasPending.current = isPending;
+  }, [isPending, state.error, successMessage]);
+}
 
 type ProductCategory = {
   id_categoria_producto: string;
@@ -53,6 +77,8 @@ function CategoryCreateForm({ canManage }: { canManage: boolean }) {
     createProductCategoryAction,
     initialState,
   );
+
+  useToastOnSubmit(state, isPending, "Categoría creada correctamente");
 
   return (
     <form
@@ -113,6 +139,8 @@ function CategoryRow({
     updateProductCategoryAction,
     initialState,
   );
+
+  useToastOnSubmit(state, isPending, "Categoría actualizada correctamente");
 
   return (
     <TableRow className="align-top">

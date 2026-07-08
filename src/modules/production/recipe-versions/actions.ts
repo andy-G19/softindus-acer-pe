@@ -248,7 +248,7 @@ export async function createRecipeVersionAction(formData: FormData) {
     `/dashboard/production/recipes/${data.id_receta}/versions/${idVersionReceta}/details`,
   );
 
-  redirect(`/dashboard/production/recipes/${data.id_receta}/versions`);
+  redirect(`/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-created`);
 }
 
 export async function setCurrentRecipeVersionAction(formData: FormData) {
@@ -331,7 +331,9 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
 
   revalidateRecipePaths(data.id_receta);
 
-  redirect(`/dashboard/production/recipes/${data.id_receta}/versions`);
+  redirect(
+    `/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-set-current`,
+  );
 }
 
 export async function voidRecipeVersionAction(formData: FormData) {
@@ -460,5 +462,7 @@ export async function voidRecipeVersionAction(formData: FormData) {
 
   revalidateRecipePaths(data.id_receta);
 
-  redirect(`/dashboard/production/recipes/${data.id_receta}/versions`);
+  redirect(
+    `/dashboard/production/recipes/${data.id_receta}/versions?toast=recipe-version-annulled`,
+  );
 }

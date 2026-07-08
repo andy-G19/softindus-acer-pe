@@ -5,7 +5,7 @@ import { PaymentForm } from "@/components/commercial/payment-form";
 import { auth } from "@/auth";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
-import { Button } from "@/components/ui/button";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
@@ -134,9 +134,14 @@ export default async function QuoteDetailPage({
                     name="id_proforma"
                     value={quote.id_proforma}
                   />
-                  <Button type="submit" variant="outline">
+                  <ConfirmDeleteButton
+                    title="¿Anular proforma?"
+                    description="Esta acción anulará la proforma y no se puede deshacer."
+                    confirmText="Confirmar anulación"
+                    entityName="proforma"
+                  >
                     Anular
-                  </Button>
+                  </ConfirmDeleteButton>
                 </form>
               ) : null}
             </>
