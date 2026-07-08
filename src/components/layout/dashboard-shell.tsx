@@ -72,7 +72,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="grid w-full gap-6 px-4 py-6 sm:px-6 lg:px-8 md:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="min-w-0">
           <div className="rounded-xl border border-sidebar-border/80 bg-sidebar p-3 shadow-[0_18px_45px_rgba(0,0,0,0.22)] md:sticky md:top-24">
             <div className="px-2 pb-3">
@@ -84,7 +84,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
           </div>
         </aside>
 
-        <main className="min-w-0 pb-8">{children}</main>
+        <main className="min-w-0 w-full pb-8">{children}</main>
       </div>
     </div>
   );
