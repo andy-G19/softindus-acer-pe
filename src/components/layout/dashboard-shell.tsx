@@ -29,11 +29,12 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         <div className="flex w-full flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <Image
-              src="/images/logo-aceros-peru.png"
+              src="/images/logo-160.png"
               alt="Logo de Industrias Aceros Perú"
               width={44}
               height={44}
-              className="h-11 w-11 shrink-0 object-contain"
+              className="h-11 w-11 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+              priority
             />
             <div className="min-w-0 space-y-1">
               <div className="flex flex-wrap items-center gap-2">

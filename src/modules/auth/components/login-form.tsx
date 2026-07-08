@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useActionState, useEffect, useState } from "react";
 
 import { loginAction } from "@/modules/auth/actions/login.action";
@@ -13,35 +14,6 @@ import { showError } from "@/lib/notifications";
 const initialState = {
   error: "",
 };
-
-function APMonogram() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-10 w-10 shrink-0"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="40" height="40" rx="9" fill="#1c2027" />
-      <path
-        d="M8 28L14 12H18L24 28H20.5L19.2 24.5H12.8L11.5 28H8Z"
-        fill="#4a6fa5"
-      />
-      <path d="M13.8 21.5H18.2L16 15.5L13.8 21.5Z" fill="#15181d" />
-      <path
-        d="M23 28V12H30C32.7 12 34.5 13.6 34.5 16.3C34.5 19 32.7 20.6 30 20.6H26.4V28H23ZM26.4 17.8H29.6C30.7 17.8 31.3 17.2 31.3 16.3C31.3 15.4 30.7 14.8 29.6 14.8H26.4V17.8Z"
-        fill="#f59e0b"
-      />
-      <path
-        d="M17 30C15 32 12 32 10 30"
-        stroke="#4f9142"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 function MailIcon() {
   return (
@@ -151,7 +123,14 @@ export function LoginForm() {
       <div className="px-6 py-7 sm:px-9 sm:py-9">
         <div className="mb-7 flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            <APMonogram />
+            <Image
+              src="/images/logo-160.png"
+              alt="Logo de Aceros Perú"
+              width={80}
+              height={80}
+              className="h-10 w-10 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+              priority
+            />
             <div className="min-w-0 leading-tight">
               <p className="truncate text-sm font-semibold text-foreground">
                 Aceros Perú
