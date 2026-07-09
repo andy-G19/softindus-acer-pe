@@ -5,9 +5,18 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { auth } from "@/auth";
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { buildNextId } from "@/lib/ids";
+
+type MaterialLockRow = {
+  id_material: string;
+  nombre_material: string;
+  stock_actual: Prisma.Decimal;
+  stock_reservado: Prisma.Decimal;
+  estado: boolean;
+};
 
 export type InventoryOutputFormState = {
   error: string;
@@ -39,6 +48,15 @@ async function requireOutputPermission() {
   return session;
 }
 
+class InventoryOutputValidationError extends Error {
+  field: "id_material" | "cantidad";
+
+  constructor(field: "id_material" | "cantidad", message: string) {
+    super(message);
+    this.field = field;
+  }
+}
+
 export async function createInventoryOutputAction(
   _prevState: InventoryOutputFormState,
   formData: FormData,
@@ -59,26 +77,6 @@ export async function createInventoryOutputAction(
   }
 
   const data = parsed.data;
-  const material = await prisma.material.findUnique({
-    where: {
-      id_material: data.id_material,
-    },
-    select: {
-      nombre_material: true,
-      stock_actual: true,
-      stock_reservado: true,
-      estado: true,
-    },
-  });
-
-  if (!material || !material.estado) {
-    return {
-      error: "El material seleccionado no existe o esta inactivo.",
-      fieldErrors: {
-        id_material: ["El material seleccionado no existe o esta inactivo."],
-      },
-    };
-  }
 
   if (data.id_orden_trabajo) {
     const workOrder = await prisma.orden_trabajo.findUnique({
@@ -100,19 +98,6 @@ export async function createInventoryOutputAction(
     }
   }
 
-  const stockActual = Number(material.stock_actual.toString());
-  const stockReservado = Number(material.stock_reservado.toString());
-  const stockDisponible = stockActual - stockReservado;
-
-  if (data.cantidad > stockDisponible) {
-    return {
-      error: "No hay stock suficiente para registrar la salida.",
-      fieldErrors: {
-        cantidad: ["No hay stock suficiente para registrar la salida."],
-      },
-    };
-  }
-
   const lastMovement = await prisma.movimiento_inventario.findFirst({
     orderBy: {
       id_movimiento: "desc",
@@ -123,43 +108,83 @@ export async function createInventoryOutputAction(
   });
 
   const idMovimiento = buildNextId("MVI", lastMovement?.id_movimiento);
-  const stockResultante = stockActual - data.cantidad;
+  const cantidad = new Prisma.Decimal(data.cantidad);
 
-  await prisma.$transaction(async (tx) => {
-    await tx.material.update({
-      where: {
-        id_material: data.id_material,
-      },
-      data: {
-        stock_actual: stockResultante,
-      },
-    });
+  try {
+    await prisma.$transaction(async (tx) => {
+      const rows = await tx.$queryRaw<MaterialLockRow[]>(Prisma.sql`
+        SELECT id_material, nombre_material, stock_actual, stock_reservado, estado
+        FROM aceros.material
+        WHERE id_material = ${data.id_material}
+        FOR UPDATE
+      `);
 
-    await tx.movimiento_inventario.create({
-      data: {
-        id_movimiento: idMovimiento,
-        id_material: data.id_material,
-        id_orden_trabajo: data.id_orden_trabajo || null,
-        tipo_movimiento: "salida",
-        cantidad: data.cantidad,
-        stock_anterior: stockActual,
-        stock_resultante: stockResultante,
-        motivo: data.motivo,
-        id_usuario_responsable: session.user.id,
-      },
-    });
+      const material = rows[0];
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "movimiento_inventario",
-      id_registro_afectado: idMovimiento,
-      accion: "crear",
-      detalle: data.id_orden_trabajo
-        ? `Salida de inventario registrada para orden: ${data.id_orden_trabajo}`
-        : `Salida de inventario registrada: ${material.nombre_material}`,
-      tx,
+      if (!material || !material.estado) {
+        throw new InventoryOutputValidationError(
+          "id_material",
+          "El material seleccionado no existe o esta inactivo.",
+        );
+      }
+
+      const stockDisponible = material.stock_actual.minus(material.stock_reservado);
+
+      if (cantidad.greaterThan(stockDisponible)) {
+        throw new InventoryOutputValidationError(
+          "cantidad",
+          "No hay stock suficiente para registrar la salida.",
+        );
+      }
+
+      const stockResultante = material.stock_actual.minus(cantidad);
+
+      await tx.material.update({
+        where: {
+          id_material: data.id_material,
+        },
+        data: {
+          stock_actual: stockResultante,
+        },
+      });
+
+      await tx.movimiento_inventario.create({
+        data: {
+          id_movimiento: idMovimiento,
+          id_material: data.id_material,
+          id_orden_trabajo: data.id_orden_trabajo || null,
+          tipo_movimiento: "salida",
+          cantidad: data.cantidad,
+          stock_anterior: material.stock_actual,
+          stock_resultante: stockResultante,
+          motivo: data.motivo,
+          id_usuario_responsable: session.user.id,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "movimiento_inventario",
+        id_registro_afectado: idMovimiento,
+        accion: "crear",
+        detalle: data.id_orden_trabajo
+          ? `Salida de inventario registrada para orden: ${data.id_orden_trabajo}`
+          : `Salida de inventario registrada: ${material.nombre_material}`,
+        tx,
+      });
     });
-  });
+  } catch (error) {
+    if (error instanceof InventoryOutputValidationError) {
+      return {
+        error: error.message,
+        fieldErrors: {
+          [error.field]: [error.message],
+        },
+      };
+    }
+
+    throw error;
+  }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/materials");
