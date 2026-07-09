@@ -7,8 +7,8 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 
 type MaterialLockRow = {
   id_material: string;
@@ -98,20 +98,15 @@ export async function createInventoryOutputAction(
     }
   }
 
-  const lastMovement = await prisma.movimiento_inventario.findFirst({
-    orderBy: {
-      id_movimiento: "desc",
-    },
-    select: {
-      id_movimiento: true,
-    },
-  });
-
-  const idMovimiento = buildNextId("MVI", lastMovement?.id_movimiento);
   const cantidad = new Prisma.Decimal(data.cantidad);
 
   try {
     await prisma.$transaction(async (tx) => {
+      const idMovimiento = await getNextCorrelativeId(tx, {
+        codigoEntidad: "movimiento_inventario",
+        prefijo: "MVI",
+      });
+
       const rows = await tx.$queryRaw<MaterialLockRow[]>(Prisma.sql`
         SELECT id_material, nombre_material, stock_actual, stock_reservado, estado
         FROM aceros.material

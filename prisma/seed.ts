@@ -174,6 +174,19 @@ const supplierTypes = [
   },
 ];
 
+const correlatives = [
+  {
+    codigo_entidad: "movimiento_inventario",
+    prefijo: "MVI",
+    descripcion: "Correlativo transaccional para movimiento_inventario (prefijo MVI).",
+  },
+  {
+    codigo_entidad: "bitacora_operacion",
+    prefijo: "BIT",
+    descripcion: "Correlativo transaccional para bitacora_operacion (prefijo BIT).",
+  },
+];
+
 async function main() {
   console.log("Iniciando seed oficial de Aceros Perú...");
 
@@ -280,6 +293,23 @@ async function main() {
     });
 
     console.log(`Tipo de proveedor creado/actualizado: ${supplierType.nombre}`);
+  }
+
+  console.log("Creando correlativos base del sistema...");
+
+  for (const correlative of correlatives) {
+    await prisma.correlativo_sistema.upsert({
+      where: {
+        codigo_entidad: correlative.codigo_entidad,
+      },
+      update: {
+        prefijo: correlative.prefijo,
+        descripcion: correlative.descripcion,
+      },
+      create: correlative,
+    });
+
+    console.log(`Correlativo creado/actualizado: ${correlative.codigo_entidad}`);
   }
 
   console.log("Seed oficial completado correctamente.");

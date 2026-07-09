@@ -1,9 +1,8 @@
 import "server-only";
 
+import { Prisma } from "@/generated/prisma/client";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
-
-type AuditClient = Pick<typeof prisma, "bitacora_operacion">;
 
 type RegisterAuditLogInput = {
   userId: string;
@@ -12,22 +11,17 @@ type RegisterAuditLogInput = {
   accion: string;
   detalle?: string | null;
   ip_origen?: string | null;
-  tx?: AuditClient;
+  tx?: Prisma.TransactionClient;
 };
 
-async function createAuditLog(data: RegisterAuditLogInput) {
-  const client = data.tx ?? prisma;
-
-  const lastAuditLog = await client.bitacora_operacion.findFirst({
-    orderBy: {
-      id_bitacora: "desc",
-    },
-    select: {
-      id_bitacora: true,
-    },
+async function createAuditLog(
+  client: Prisma.TransactionClient,
+  data: RegisterAuditLogInput,
+) {
+  const id_bitacora = await getNextCorrelativeId(client, {
+    codigoEntidad: "bitacora_operacion",
+    prefijo: "BIT",
   });
-
-  const id_bitacora = buildNextId("BIT", lastAuditLog?.id_bitacora);
 
   await client.bitacora_operacion.create({
     data: {
@@ -44,12 +38,12 @@ async function createAuditLog(data: RegisterAuditLogInput) {
 
 export async function registerAuditLog(data: RegisterAuditLogInput) {
   if (data.tx) {
-    await createAuditLog(data);
+    await createAuditLog(data.tx, data);
     return;
   }
 
   try {
-    await createAuditLog(data);
+    await prisma.$transaction((tx) => createAuditLog(tx, data));
   } catch (error) {
     console.error("No se pudo registrar la bitacora de operacion.", error);
   }
