@@ -7,26 +7,37 @@ const protectedRoutePrefix = "/dashboard";
 const authRoutes = ["/login"];
 
 export const proxy = auth((request) => {
-  const isLoggedIn = Boolean(request.auth?.user);
+  // request.auth ya viene revalidado contra base de datos: los callbacks
+  // jwt/session de src/auth.ts corren tambien para esta peticion, asi que
+  // un usuario inactivo, eliminado o con rol cambiado llega aqui con
+  // user.id/user.role vacios y user.status distinto de "activo".
+  const sessionUser = request.auth?.user;
+  const isSessionValid =
+    Boolean(sessionUser?.id) && sessionUser?.status === "activo";
   const { pathname } = request.nextUrl;
 
   const isProtectedRoute = pathname.startsWith(protectedRoutePrefix);
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
-  if (!isLoggedIn && isProtectedRoute) {
+  if (!isSessionValid && isProtectedRoute) {
     const loginUrl = new URL("/login", request.nextUrl);
+
+    if (sessionUser) {
+      // Habia una cookie de sesion, pero quedo invalidada al revalidarla.
+      loginUrl.searchParams.set("reason", "session-invalid");
+    }
 
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isLoggedIn && isAuthRoute) {
+  if (isSessionValid && isAuthRoute) {
     const dashboardUrl = new URL("/dashboard", request.nextUrl);
 
     return NextResponse.redirect(dashboardUrl);
   }
 
-  if (isLoggedIn && isProtectedRoute) {
-    const role = request.auth?.user?.role;
+  if (isSessionValid && isProtectedRoute) {
+    const role = sessionUser?.role;
 
     const hasAccess = role ? canAccessDashboardRoute(role, pathname) : false;
 

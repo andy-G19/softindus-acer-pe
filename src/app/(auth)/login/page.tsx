@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { getActiveUserSession } from "@/lib/authz";
 import { LoginForm } from "@/modules/auth/components/login-form";
 
 export default async function LoginPage() {
-  const session = await auth();
+  const session = await getActiveUserSession();
 
-  if (session?.user) {
+  if (session) {
     redirect("/dashboard");
   }
 

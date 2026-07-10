@@ -34,7 +34,7 @@ export function SessionIdleGuard() {
 
         signedOutRef.current = true;
         void signOut({
-          callbackUrl: "/logináreason=idle",
+          callbackUrl: "/login?reason=idle",
         });
       }, IDLE_TIMEOUT_MS);
     }

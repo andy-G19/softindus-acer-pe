@@ -112,9 +112,57 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        // Inicio de sesion: el usuario ya viene fresco desde authorize().
         token.id = user.id;
         token.role = user.role;
         token.status = user.status;
+
+        return token;
+      }
+
+      if (!token.id) {
+        return token;
+      }
+
+      // Revalidacion contra base de datos en cada obtencion de sesion:
+      // un usuario desactivado, eliminado o con rol cambiado no debe
+      // conservar los permisos que tenia al momento de iniciar sesion.
+      try {
+        const dbUser = await prisma.usuario.findUnique({
+          where: {
+            id_usuario: token.id as string,
+          },
+          select: {
+            estado: true,
+            rol: {
+              select: {
+                nombre_rol: true,
+              },
+            },
+          },
+        });
+
+        if (!dbUser || dbUser.estado !== "activo") {
+          token.id = undefined;
+          token.role = undefined;
+          token.status = "inactivo";
+
+          return token;
+        }
+
+        token.role = dbUser.rol.nombre_rol;
+        token.status = dbUser.estado;
+      } catch (error) {
+        console.error(
+          "No se pudo revalidar la sesion del usuario contra la base de datos.",
+          error,
+        );
+
+        // Ante un error de base de datos, no se conceden permisos: se
+        // invalida la sesion en vez de conservar el estado antiguo del token.
+        token.id = undefined;
+        token.role = undefined;
+        token.status = "inactivo";
       }
 
       return token;
@@ -122,9 +170,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-        session.user.status = token.status as string;
+        session.user.id = (token.id as string | undefined) ?? "";
+        session.user.role = (token.role as string | undefined) ?? "";
+        session.user.status = (token.status as string | undefined) ?? "inactivo";
       }
 
       return session;
