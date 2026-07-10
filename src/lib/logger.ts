@@ -76,7 +76,10 @@ function sanitizeValue(
   return value;
 }
 
-function sanitizeMeta(
+// Exportada solo para tests unitarios (src/lib/logger.test.ts): el
+// comportamiento publico del logger sigue siendo unicamente el objeto
+// `logger` de abajo.
+export function sanitizeMeta(
   meta: Record<string, unknown> | undefined,
 ): Record<string, unknown> | undefined {
   if (!meta) {

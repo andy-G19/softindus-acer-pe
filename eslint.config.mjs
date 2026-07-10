@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reporte generado por `npm run test:coverage` (Bloque 7): no es codigo
+    // fuente, no debe lintearse.
+    "coverage/**",
   ]),
 ]);
 

@@ -1,11 +1,13 @@
 import "server-only";
 
-import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { hashLoginValue } from "@/lib/auth/login-normalize";
+
+export { normalizeLoginEmail, hashLoginValue } from "@/lib/auth/login-normalize";
 
 export const LOGIN_WINDOW_MINUTES = 15;
 export const LOGIN_EMAIL_MAX_FAILURES = 5;
@@ -34,14 +36,6 @@ export type LoginClientContext = {
   ipHash: string | null;
   userAgentHash: string | null;
 };
-
-export function normalizeLoginEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
-
-export function hashLoginValue(value: string): string {
-  return createHash("sha256").update(value).digest("hex");
-}
 
 /**
  * Lee IP y user-agent de los headers de la peticion actual y devuelve solo

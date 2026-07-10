@@ -1,6 +1,7 @@
 import "server-only";
 
 import { Prisma } from "@/generated/prisma/client";
+import { formatCorrelativeId } from "@/lib/correlatives-format";
 
 type CorrelativeRow = {
   codigo_entidad: string;
@@ -12,10 +13,6 @@ type CorrelativeParams = {
   codigoEntidad: string;
   prefijo: string;
 };
-
-function formatCorrelativeId(prefijo: string, numero: number) {
-  return `${prefijo}${String(numero).padStart(8, "0")}`;
-}
 
 async function lockCorrelative(
   tx: Prisma.TransactionClient,
