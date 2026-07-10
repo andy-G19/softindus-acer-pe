@@ -5,24 +5,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { operatorPaymentSchema } from "@/schemas/staff/operator-payment.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -105,25 +90,16 @@ export async function registerOperatorPaymentAction(formData: FormData) {
     );
   }
 
-  const lastPayment = await prisma.historial_pago_operario.findFirst({
-    orderBy: {
-      id_historial_pago: "desc",
-    },
-    select: {
-      id_historial_pago: true,
-    },
-  });
-
-  const idHistorialPago = buildSequentialId(
-    lastPayment?.id_historial_pago,
-    "HPO",
-  );
-
   const periodo = `${formatPeriodDate(payroll.periodo_inicio)} a ${formatPeriodDate(
     payroll.periodo_fin,
   )}`;
 
   await prisma.$transaction(async (tx) => {
+    const idHistorialPago = await getNextCorrelativeId(tx, {
+      codigoEntidad: "historial_pago_operario",
+      prefijo: "HPO",
+    });
+
     await tx.historial_pago_operario.create({
       data: {
         id_historial_pago: idHistorialPago,

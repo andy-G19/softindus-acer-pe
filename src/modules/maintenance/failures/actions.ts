@@ -5,28 +5,13 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   failureSchema,
   failureStatusSchema,
 } from "@/schemas/maintenance/failure.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireMaintenanceRole(role: string | undefined) {
   if (role !== APP_ROLES.ADMIN && role !== APP_ROLES.WORKSHOP_MASTER) {
@@ -81,38 +66,34 @@ export async function createFailureAction(formData: FormData) {
     throw new Error("No se puede registrar una falla sobre una maquina inactiva.");
   }
 
-  const lastFailure = await prisma.falla_maquina.findFirst({
-    orderBy: {
-      id_falla: "desc",
-    },
-    select: {
-      id_falla: true,
-      estado_atencion: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idFalla = await getNextCorrelativeId(tx, {
+      codigoEntidad: "falla_maquina",
+      prefijo: "FAL",
+    });
 
-  const idFalla = buildSequentialId(lastFailure?.id_falla, "FAL");
+    await tx.falla_maquina.create({
+      data: {
+        id_falla: idFalla,
+        id_maquina: data.id_maquina,
+        id_usuario_registro: session.user.id,
+        fecha_falla: data.fecha_falla,
+        descripcion: data.descripcion,
+        responsable_registro: data.responsable_registro || null,
+        estado_atencion: data.estado_atencion,
+        tiempo_perdido_horas: data.tiempo_perdido_horas,
+        impacto_produccion: data.impacto_produccion || null,
+      },
+    });
 
-  await prisma.falla_maquina.create({
-    data: {
-      id_falla: idFalla,
-      id_maquina: data.id_maquina,
-      id_usuario_registro: session.user.id,
-      fecha_falla: data.fecha_falla,
-      descripcion: data.descripcion,
-      responsable_registro: data.responsable_registro || null,
-      estado_atencion: data.estado_atencion,
-      tiempo_perdido_horas: data.tiempo_perdido_horas,
-      impacto_produccion: data.impacto_produccion || null,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "falla_maquina",
-    id_registro_afectado: idFalla,
-    accion: "crear",
-    detalle: `Falla registrada para la maquina ${data.id_maquina}.`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "falla_maquina",
+      id_registro_afectado: idFalla,
+      accion: "crear",
+      detalle: `Falla registrada para la maquina ${data.id_maquina}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/maintenance");

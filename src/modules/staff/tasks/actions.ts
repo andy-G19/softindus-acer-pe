@@ -5,24 +5,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { operatorTaskSchema } from "@/schemas/staff/operator-task.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireStaffManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -121,21 +106,12 @@ export async function createOperatorTaskAction(formData: FormData) {
     }
   }
 
-  const lastTask = await prisma.tarea_operario.findFirst({
-    orderBy: {
-      id_tarea_operario: "desc",
-    },
-    select: {
-      id_tarea_operario: true,
-    },
-  });
-
-  const idTareaOperario = buildSequentialId(
-    lastTask?.id_tarea_operario,
-    "TAR",
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idTareaOperario = await getNextCorrelativeId(tx, {
+      codigoEntidad: "tarea_operario",
+      prefijo: "TAR",
+    });
+
     await tx.tarea_operario.create({
       data: {
         id_tarea_operario: idTareaOperario,

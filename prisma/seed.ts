@@ -360,6 +360,61 @@ const correlatives = [
     prefijo: "MCA",
     descripcion: "Correlativo transaccional para movimiento_caja (prefijo MCA).",
   },
+  {
+    codigo_entidad: "operario",
+    prefijo: "OPE",
+    descripcion: "Correlativo transaccional para operario (prefijo OPE).",
+  },
+  {
+    codigo_entidad: "asistencia",
+    prefijo: "ASI",
+    descripcion: "Correlativo transaccional para asistencia (prefijo ASI).",
+  },
+  {
+    codigo_entidad: "planilla_pago",
+    prefijo: "PLA",
+    descripcion: "Correlativo transaccional para planilla_pago (prefijo PLA).",
+  },
+  {
+    codigo_entidad: "historial_pago_operario",
+    prefijo: "HPO",
+    descripcion: "Correlativo transaccional para historial_pago_operario (prefijo HPO).",
+  },
+  {
+    codigo_entidad: "tarea_operario",
+    prefijo: "TAR",
+    descripcion: "Correlativo transaccional para tarea_operario (prefijo TAR).",
+  },
+  {
+    codigo_entidad: "maquina",
+    prefijo: "MAQ",
+    descripcion: "Correlativo transaccional para maquina (prefijo MAQ).",
+  },
+  {
+    codigo_entidad: "falla_maquina",
+    prefijo: "FAL",
+    descripcion: "Correlativo transaccional para falla_maquina (prefijo FAL).",
+  },
+  {
+    codigo_entidad: "mantenimiento_preventivo",
+    prefijo: "MTP",
+    descripcion: "Correlativo transaccional para mantenimiento_preventivo (prefijo MTP).",
+  },
+  {
+    codigo_entidad: "reparacion",
+    prefijo: "RPA",
+    descripcion: "Correlativo transaccional para reparacion (prefijo RPA).",
+  },
+  {
+    codigo_entidad: "detalle_repuesto_reparacion",
+    prefijo: "DRP",
+    descripcion: "Correlativo transaccional para detalle_repuesto_reparacion (prefijo DRP).",
+  },
+  {
+    codigo_entidad: "repuesto",
+    prefijo: "REP",
+    descripcion: "Correlativo transaccional para repuesto (prefijo REP).",
+  },
 ];
 
 async function main() {

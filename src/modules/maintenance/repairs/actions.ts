@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -12,22 +13,6 @@ import {
   repairSparePartSchema,
   repairStatusSchema,
 } from "@/schemas/maintenance/repair.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== APP_ROLES.ADMIN) {
@@ -168,27 +153,12 @@ export async function createRepairAction(formData: FormData) {
 
   const totalCost = laborCost + sparePartsTotal;
 
-  const lastRepair = await prisma.reparacion.findFirst({
-    orderBy: {
-      id_reparacion: "desc",
-    },
-    select: {
-      id_reparacion: true,
-    },
-  });
-
-  const lastRepairDetail = await prisma.detalle_repuesto_reparacion.findFirst({
-    orderBy: {
-      id_detalle_repuesto: "desc",
-    },
-    select: {
-      id_detalle_repuesto: true,
-    },
-  });
-
-  const idReparacion = buildSequentialId(lastRepair?.id_reparacion, "RPA");
-
   await prisma.$transaction(async (tx) => {
+    const idReparacion = await getNextCorrelativeId(tx, {
+      codigoEntidad: "reparacion",
+      prefijo: "RPA",
+    });
+
     await tx.reparacion.create({
       data: {
         id_reparacion: idReparacion,
@@ -202,14 +172,16 @@ export async function createRepairAction(formData: FormData) {
       },
     });
 
-    let nextDetailId = lastRepairDetail?.id_detalle_repuesto ?? null;
+    const detailIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "detalle_repuesto_reparacion",
+      prefijo: "DRP",
+      cantidad: sparePartDetails.length,
+    });
 
-    for (const detail of sparePartDetails) {
-      nextDetailId = buildSequentialId(nextDetailId, "DRP");
-
+    for (const [index, detail] of sparePartDetails.entries()) {
       await tx.detalle_repuesto_reparacion.create({
         data: {
-          id_detalle_repuesto: nextDetailId,
+          id_detalle_repuesto: detailIds[index],
           id_reparacion: idReparacion,
           id_repuesto: detail.id_repuesto,
           cantidad: detail.cantidad,

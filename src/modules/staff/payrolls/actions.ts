@@ -5,24 +5,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { payrollSchema } from "@/schemas/staff/payroll.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -153,38 +138,37 @@ export async function generatePayrollAction(formData: FormData) {
 
   const netAmount = grossAmount - discounts;
 
-  const lastPayroll = await prisma.planilla_pago.findFirst({
-    orderBy: {
-      id_planilla: "desc",
-    },
-    select: {
-      id_planilla: true,
-    },
-  });
+  let idPlanilla = "";
 
-  const idPlanilla = buildSequentialId(lastPayroll?.id_planilla, "PLA");
+  await prisma.$transaction(async (tx) => {
+    idPlanilla = await getNextCorrelativeId(tx, {
+      codigoEntidad: "planilla_pago",
+      prefijo: "PLA",
+    });
 
-  await prisma.planilla_pago.create({
-    data: {
-      id_planilla: idPlanilla,
-      id_operario: data.id_operario,
-      id_usuario_genera: session.user.id,
-      periodo_inicio: data.periodo_inicio,
-      periodo_fin: data.periodo_fin,
-      modalidad_pago: operator.modalidad_pago,
-      monto_bruto: grossAmount.toFixed(2),
-      descuentos: discounts.toFixed(2),
-      monto_neto: netAmount.toFixed(2),
-      estado_pago: "pendiente",
-    },
-  });
+    await tx.planilla_pago.create({
+      data: {
+        id_planilla: idPlanilla,
+        id_operario: data.id_operario,
+        id_usuario_genera: session.user.id,
+        periodo_inicio: data.periodo_inicio,
+        periodo_fin: data.periodo_fin,
+        modalidad_pago: operator.modalidad_pago,
+        monto_bruto: grossAmount.toFixed(2),
+        descuentos: discounts.toFixed(2),
+        monto_neto: netAmount.toFixed(2),
+        estado_pago: "pendiente",
+      },
+    });
 
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "planilla_pago",
-    id_registro_afectado: idPlanilla,
-    accion: "crear",
-    detalle: `Planilla generada para el operario ${data.id_operario}.`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "planilla_pago",
+      id_registro_afectado: idPlanilla,
+      accion: "crear",
+      detalle: `Planilla generada para el operario ${data.id_operario}.`,
+      tx,
+    });
   });
 
   console.log("Planilla generada", {

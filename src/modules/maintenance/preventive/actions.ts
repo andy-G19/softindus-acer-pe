@@ -5,28 +5,13 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   preventiveMaintenanceSchema,
   preventiveMaintenanceStatusSchema,
 } from "@/schemas/maintenance/preventive-maintenance.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== APP_ROLES.ADMIN) {
@@ -75,21 +60,12 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
     throw new Error("La máquina seleccionada no existe.");
   }
 
-  const lastMaintenance = await prisma.mantenimiento_preventivo.findFirst({
-    orderBy: {
-      id_mantenimiento: "desc",
-    },
-    select: {
-      id_mantenimiento: true,
-    },
-  });
-
-  const idMantenimiento = buildSequentialId(
-    lastMaintenance?.id_mantenimiento,
-    "MTP",
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idMantenimiento = await getNextCorrelativeId(tx, {
+      codigoEntidad: "mantenimiento_preventivo",
+      prefijo: "MTP",
+    });
+
     await tx.mantenimiento_preventivo.create({
       data: {
         id_mantenimiento: idMantenimiento,

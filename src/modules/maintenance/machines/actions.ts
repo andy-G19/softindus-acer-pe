@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   machineSchema,
@@ -136,36 +136,33 @@ export async function createMachineAction(
     };
   }
 
-  const lastMachine = await prisma.maquina.findFirst({
-    orderBy: {
-      id_maquina: "desc",
-    },
-    select: {
-      id_maquina: true,
-    },
-  });
-
-  const idMaquina = buildNextId("MAQ", lastMachine?.id_maquina);
-
   try {
-    await prisma.maquina.create({
-      data: {
-        id_maquina: idMaquina,
-        nombre: data.nombre,
-        tipo: data.tipo,
-        codigo_interno: data.codigo_interno || null,
-        ubicacion: data.ubicacion || null,
-        estado: data.estado,
-        observaciones: data.observaciones || null,
-      },
-    });
+    await prisma.$transaction(async (tx) => {
+      const idMaquina = await getNextCorrelativeId(tx, {
+        codigoEntidad: "maquina",
+        prefijo: "MAQ",
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "maquina",
-      id_registro_afectado: idMaquina,
-      accion: "crear",
-      detalle: `Maquina creada: ${data.nombre}`,
+      await tx.maquina.create({
+        data: {
+          id_maquina: idMaquina,
+          nombre: data.nombre,
+          tipo: data.tipo,
+          codigo_interno: data.codigo_interno || null,
+          ubicacion: data.ubicacion || null,
+          estado: data.estado,
+          observaciones: data.observaciones || null,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "maquina",
+        id_registro_afectado: idMaquina,
+        accion: "crear",
+        detalle: `Maquina creada: ${data.nombre}`,
+        tx,
+      });
     });
   } catch (error) {
     return {

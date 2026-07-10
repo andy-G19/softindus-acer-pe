@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { APP_ROLES } from "@/lib/permissions";
 import { operatorSchema } from "@/schemas/staff/operator.schema";
 
@@ -111,40 +111,37 @@ export async function createOperatorAction(
     };
   }
 
-  const lastOperator = await prisma.operario.findFirst({
-    orderBy: {
-      id_operario: "desc",
-    },
-    select: {
-      id_operario: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idOperario = await getNextCorrelativeId(tx, {
+      codigoEntidad: "operario",
+      prefijo: "OPE",
+    });
 
-  const idOperario = buildNextId("OPE", lastOperator?.id_operario);
+    await tx.operario.create({
+      data: {
+        id_operario: idOperario,
+        nombres: data.nombres,
+        apellidos: data.apellidos,
+        cargo: data.cargo || null,
+        especialidad: data.especialidad || null,
+        telefono: data.telefono || null,
+        direccion: data.direccion || null,
+        modalidad_pago: data.modalidad_pago,
+        tarifa: data.tarifa,
+        fecha_ingreso: data.fecha_ingreso,
+        estado: data.estado,
+        observaciones: data.observaciones || null,
+      },
+    });
 
-  await prisma.operario.create({
-    data: {
-      id_operario: idOperario,
-      nombres: data.nombres,
-      apellidos: data.apellidos,
-      cargo: data.cargo || null,
-      especialidad: data.especialidad || null,
-      telefono: data.telefono || null,
-      direccion: data.direccion || null,
-      modalidad_pago: data.modalidad_pago,
-      tarifa: data.tarifa,
-      fecha_ingreso: data.fecha_ingreso,
-      estado: data.estado,
-      observaciones: data.observaciones || null,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "operario",
-    id_registro_afectado: idOperario,
-    accion: "crear",
-    detalle: `Operario creado: ${data.nombres} ${data.apellidos}`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "operario",
+      id_registro_afectado: idOperario,
+      accion: "crear",
+      detalle: `Operario creado: ${data.nombres} ${data.apellidos}`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/staff");

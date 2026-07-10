@@ -5,24 +5,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { attendanceSchema } from "@/schemas/staff/attendance.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireStaffManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -115,46 +100,40 @@ export async function createAttendanceAction(formData: FormData) {
     );
   }
 
-  const lastAttendance = await prisma.asistencia.findFirst({
-    orderBy: {
-      id_asistencia: "desc",
-    },
-    select: {
-      id_asistencia: true,
-    },
-  });
-
-  const idAsistencia = buildSequentialId(
-    lastAttendance?.id_asistencia,
-    "ASI",
-  );
-
   const workedHours = data.falta
     ? null
     : calculateWorkedHours(data.hora_ingreso, data.hora_salida);
 
-  await prisma.asistencia.create({
-    data: {
-      id_asistencia: idAsistencia,
-      id_operario: data.id_operario,
-      id_usuario_registro: session.user.id,
-      fecha: data.fecha,
-      hora_ingreso: timeStringToDate(data.hora_ingreso),
-      hora_salida: timeStringToDate(data.hora_salida),
-      tardanza: data.falta ? false : data.tardanza,
-      falta: data.falta,
-      horas_trabajadas:
-        workedHours === null ? null : workedHours.toFixed(2),
-      observaciones: data.observaciones || null,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idAsistencia = await getNextCorrelativeId(tx, {
+      codigoEntidad: "asistencia",
+      prefijo: "ASI",
+    });
 
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "asistencia",
-    id_registro_afectado: idAsistencia,
-    accion: "crear",
-    detalle: `Asistencia registrada para el operario ${data.id_operario}.`,
+    await tx.asistencia.create({
+      data: {
+        id_asistencia: idAsistencia,
+        id_operario: data.id_operario,
+        id_usuario_registro: session.user.id,
+        fecha: data.fecha,
+        hora_ingreso: timeStringToDate(data.hora_ingreso),
+        hora_salida: timeStringToDate(data.hora_salida),
+        tardanza: data.falta ? false : data.tardanza,
+        falta: data.falta,
+        horas_trabajadas:
+          workedHours === null ? null : workedHours.toFixed(2),
+        observaciones: data.observaciones || null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "asistencia",
+      id_registro_afectado: idAsistencia,
+      accion: "crear",
+      detalle: `Asistencia registrada para el operario ${data.id_operario}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/staff");

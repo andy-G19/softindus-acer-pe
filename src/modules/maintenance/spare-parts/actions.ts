@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   sparePartSchema,
@@ -131,35 +131,32 @@ export async function createSparePartAction(
     };
   }
 
-  const lastSparePart = await prisma.repuesto.findFirst({
-    orderBy: {
-      id_repuesto: "desc",
-    },
-    select: {
-      id_repuesto: true,
-    },
-  });
-
-  const idRepuesto = buildNextId("REP", lastSparePart?.id_repuesto);
-
   try {
-    await prisma.repuesto.create({
-      data: {
-        id_repuesto: idRepuesto,
-        id_proveedor: data.id_proveedor || null,
-        nombre_repuesto: data.nombre_repuesto,
-        descripcion: data.descripcion || null,
-        costo_unitario: data.costo_unitario,
-        estado: data.estado,
-      },
-    });
+    await prisma.$transaction(async (tx) => {
+      const idRepuesto = await getNextCorrelativeId(tx, {
+        codigoEntidad: "repuesto",
+        prefijo: "REP",
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "repuesto",
-      id_registro_afectado: idRepuesto,
-      accion: "crear",
-      detalle: `Repuesto creado: ${data.nombre_repuesto}`,
+      await tx.repuesto.create({
+        data: {
+          id_repuesto: idRepuesto,
+          id_proveedor: data.id_proveedor || null,
+          nombre_repuesto: data.nombre_repuesto,
+          descripcion: data.descripcion || null,
+          costo_unitario: data.costo_unitario,
+          estado: data.estado,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "repuesto",
+        id_registro_afectado: idRepuesto,
+        accion: "crear",
+        detalle: `Repuesto creado: ${data.nombre_repuesto}`,
+        tx,
+      });
     });
   } catch (error) {
     return { error: getPrismaErrorMessage(error) };
