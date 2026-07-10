@@ -19,6 +19,10 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Industrias Aceros Perú",
   description: "Sistema de Gestión Integral para Industrias Aceros Perú",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
