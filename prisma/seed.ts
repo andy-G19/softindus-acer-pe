@@ -176,6 +176,11 @@ const supplierTypes = [
 
 const correlatives = [
   {
+    codigo_entidad: "usuario",
+    prefijo: "USU",
+    descripcion: "Correlativo transaccional para usuario (prefijo USU).",
+  },
+  {
     codigo_entidad: "movimiento_inventario",
     prefijo: "MVI",
     descripcion: "Correlativo transaccional para movimiento_inventario (prefijo MVI).",

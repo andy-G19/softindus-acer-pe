@@ -142,6 +142,17 @@ const toastMessages: Record<string, ToastDefinition> = {
   "attendance-created": { type: "success", message: "Asistencia registrada correctamente" },
   "operator-payment-registered": { type: "success", message: "Pago a operario registrado correctamente" },
 
+  // Usuarios
+  "user-created": { type: "success", message: "Usuario creado correctamente" },
+  "user-updated": { type: "success", message: "Usuario actualizado correctamente" },
+  "user-activated": { type: "success", message: "Usuario activado" },
+  "user-deactivated": { type: "warning", message: "Usuario desactivado" },
+  "user-password-reset": { type: "success", message: "Contraseña reiniciada correctamente" },
+  "user-self-deactivate-blocked": {
+    type: "error",
+    message: "No puedes desactivar tu propio usuario",
+  },
+
   // Caja chica
   "petty-cash-movement-annulled": { type: "warning", message: "Movimiento de caja anulado" },
   "petty-cash-income-registered": { type: "success", message: "Ingreso de caja registrado correctamente" },

@@ -102,6 +102,7 @@ export function withReturnTo(href: string, returnTo?: string) {
 export const navigationHrefs = {
   dashboard: "/dashboard",
   audit: "/dashboard/audit",
+  users: "/dashboard/users",
 
   commercial: "/dashboard/commercial",
   clients: "/dashboard/commercial/clients",
