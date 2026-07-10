@@ -4,6 +4,13 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/db";
 import { loginSchema } from "@/modules/auth/auth.schema";
+import {
+  assertLoginAllowed,
+  getLoginClientContext,
+  normalizeLoginEmail,
+  recordLoginAttempt,
+  runDummyPasswordCompare,
+} from "@/lib/auth/login-rate-limit";
 
 export const SESSION_MAX_AGE_SECONDS = 8 * 60 * 60;
 export const SESSION_UPDATE_AGE_SECONDS = 5 * 60;
@@ -62,10 +69,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         const { email, password } = parsedCredentials.data;
+        const correoNormalizado = normalizeLoginEmail(email);
+        const { ipHash, userAgentHash } = await getLoginClientContext();
+
+        // Rate limit por correo/IP antes de tocar la base de usuarios: un
+        // correo o IP con demasiados fallos recientes no debe ni siquiera
+        // llegar a comparar contraseña.
+        const allowedResult = await assertLoginAllowed(
+          correoNormalizado,
+          ipHash,
+        );
+
+        if (!allowedResult.allowed) {
+          // Se ejecuta un bcrypt.compare dummy para que el bloqueo por rate
+          // limit tarde lo mismo que un intento normal.
+          await runDummyPasswordCompare(password);
+          await recordLoginAttempt({
+            correoNormalizado,
+            ipHash,
+            userAgentHash,
+            resultado: "bloqueado",
+            motivo: allowedResult.motivo,
+          });
+
+          return null;
+        }
 
         const user = await prisma.usuario.findUnique({
           where: {
-            correo: email,
+            correo: correoNormalizado,
           },
           include: {
             rol: true,
@@ -73,21 +105,59 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user) {
+          // Usuario inexistente: se compara contra un hash dummy para que el
+          // tiempo de respuesta sea equivalente al de una contraseña
+          // incorrecta y no permita enumerar correos por timing.
+          await runDummyPasswordCompare(password);
+          await recordLoginAttempt({
+            correoNormalizado,
+            ipHash,
+            userAgentHash,
+            resultado: "fallido",
+            motivo: "usuario_inexistente",
+          });
+
           return null;
         }
 
-        if (user.estado !== "activo") {
-          return null;
-        }
-
+        // La comparacion siempre corre contra el hash real, sin importar si
+        // el usuario esta activo: el estado se evalua recien despues, para
+        // no filtrar por timing si una cuenta esta inactiva.
         const passwordIsValid = await bcrypt.compare(
           password,
           user.clave_hash,
         );
 
         if (!passwordIsValid) {
+          await recordLoginAttempt({
+            correoNormalizado,
+            ipHash,
+            userAgentHash,
+            resultado: "fallido",
+            motivo: "contrasena_incorrecta",
+          });
+
           return null;
         }
+
+        if (user.estado !== "activo") {
+          await recordLoginAttempt({
+            correoNormalizado,
+            ipHash,
+            userAgentHash,
+            resultado: "fallido",
+            motivo: "usuario_inactivo",
+          });
+
+          return null;
+        }
+
+        await recordLoginAttempt({
+          correoNormalizado,
+          ipHash,
+          userAgentHash,
+          resultado: "exitoso",
+        });
 
         await prisma.usuario.update({
           where: {

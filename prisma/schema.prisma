@@ -1152,6 +1152,22 @@ model retazo_reutilizable {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model login_attempt {
+  id_login_attempt   BigInt   @id @default(autoincrement())
+  correo_normalizado String   @db.VarChar(180)
+  ip_hash            String?  @db.VarChar(64)
+  user_agent_hash    String?  @db.VarChar(64)
+  resultado          String   @db.VarChar(30)
+  motivo             String?  @db.VarChar(80)
+  fecha_intento      DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([correo_normalizado, fecha_intento], map: "idx_login_attempt_correo_fecha")
+  @@index([ip_hash, fecha_intento], map: "idx_login_attempt_ip_fecha")
+  @@index([resultado, fecha_intento], map: "idx_login_attempt_resultado_fecha")
+  @@index([fecha_intento], map: "idx_login_attempt_fecha")
+  @@schema("aceros")
+}
+
 model rol {
   id_rol      String    @id @db.Char(11)
   nombre_rol  String    @unique @db.VarChar(50)
