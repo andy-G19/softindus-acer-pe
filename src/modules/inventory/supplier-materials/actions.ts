@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
@@ -33,17 +33,7 @@ type SupplierMaterialValidationResult =
 const SUPPLIER_MATERIALS_PATH = "/dashboard/inventory/supplier-materials";
 
 async function requireAdmin() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN"]);
 }
 
 function getSupplierMaterialFormData(formData: FormData) {

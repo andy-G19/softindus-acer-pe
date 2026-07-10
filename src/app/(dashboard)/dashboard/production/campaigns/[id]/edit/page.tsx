@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -18,12 +18,6 @@ type EditProductionCampaignPageProps = {
   }>;
 };
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function formatDateInput(value: Date | null | undefined) {
   if (!value) {
     return "";
@@ -35,13 +29,7 @@ function formatDateInput(value: Date | null | undefined) {
 export default async function EditProductionCampaignPage({
   params,
 }: EditProductionCampaignPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id } = await params;
 

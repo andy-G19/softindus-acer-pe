@@ -1,5 +1,5 @@
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -21,12 +21,6 @@ type ReassignWorkOrderProgressPageProps = {
   }>;
 };
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function formatDateTime(value: Date | null | undefined) {
   if (!value) {
     return "-";
@@ -41,13 +35,7 @@ function formatDateTime(value: Date | null | undefined) {
 export default async function ReassignWorkOrderProgressPage({
   params,
 }: ReassignWorkOrderProgressPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id, advanceId } = await params;
 

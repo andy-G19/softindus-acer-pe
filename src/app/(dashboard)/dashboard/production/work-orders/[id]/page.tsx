@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -30,12 +30,6 @@ type WorkOrderDetailPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -91,13 +85,7 @@ export default async function WorkOrderDetailPage({
   params,
   searchParams,
 }: WorkOrderDetailPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};

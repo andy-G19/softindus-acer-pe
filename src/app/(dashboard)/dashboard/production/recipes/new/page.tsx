@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -12,20 +11,8 @@ import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createTechnicalRecipeAction } from "@/modules/production/recipes/actions";
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export default async function NewTechnicalRecipePage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const products = await prisma.producto.findMany({
     where: {

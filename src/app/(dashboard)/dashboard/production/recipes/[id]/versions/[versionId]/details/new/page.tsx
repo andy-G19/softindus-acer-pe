@@ -1,5 +1,5 @@
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -20,12 +20,6 @@ type NewRecipeDetailPageProps = {
   }>;
 };
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
     return "0.00";
@@ -45,13 +39,7 @@ function formatMoney(value: unknown) {
 export default async function NewRecipeDetailPage({
   params,
 }: NewRecipeDetailPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id, versionId } = await params;
 

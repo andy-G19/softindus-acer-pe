@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -50,15 +50,7 @@ export default async function PurchaseDetailPage({
   params,
   searchParams,
 }: PurchaseDetailPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN"]);
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};

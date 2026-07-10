@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,12 +23,6 @@ import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/
 type FabricationRoutesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
@@ -59,13 +52,7 @@ function getStatusFilter(status: string) {
 export default async function FabricationRoutesPage({
   searchParams,
 }: FabricationRoutesPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
   const q = getSearchParam(params, "q");

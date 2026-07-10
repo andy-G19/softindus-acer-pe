@@ -2,26 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { routeStageSchema } from "@/schemas/production/route-stage.schema";
 
-function requireProductionManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export async function createRouteStageAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = routeStageSchema.safeParse({
     id_ruta: formData.get("id_ruta"),
@@ -112,13 +100,7 @@ export async function createRouteStageAction(formData: FormData) {
 }
 
 export async function updateRouteStageAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idEtapaRuta = String(formData.get("id_etapa_ruta") ?? "");
 
@@ -223,13 +205,7 @@ export async function updateRouteStageAction(formData: FormData) {
 }
 
 export async function toggleRouteStageStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idEtapaRuta = String(formData.get("id_etapa_ruta") ?? "");
 

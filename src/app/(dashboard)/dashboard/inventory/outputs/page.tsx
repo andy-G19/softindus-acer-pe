@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
@@ -41,15 +40,7 @@ function formatDate(value: Date | string | null) {
 export default async function InventoryOutputsPage({
   searchParams,
 }: OutputsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
   const q = parseStringParam(params, "q");

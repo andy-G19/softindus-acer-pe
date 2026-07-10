@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireApiRole, type Role } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toApiErrorResponse } from "@/lib/errors";
@@ -1330,24 +1330,17 @@ async function buildReport(report: string, searchParams: URLSearchParams): Promi
 }
 
 export async function GET(request: Request, context: RouteContext) {
-  const session = await auth();
-
-  if (!session?.user) {
-    return new Response("No autorizado.", {
-      status: 401,
-    });
-  }
-
   const { report } = await context.params;
   const url = new URL(request.url);
 
-  const allowedRoles = REPORT_ALLOWED_ROLES[report] ?? [];
+  const allowedRoles = (REPORT_ALLOWED_ROLES[report] ?? []) as Role[];
+  const authResult = await requireApiRole(allowedRoles);
 
-  if (!allowedRoles.includes(session.user.role)) {
-    return new Response("Acceso denegado.", {
-      status: 403,
-    });
+  if (!authResult.ok) {
+    return authResult.response;
   }
+
+  const { session } = authResult;
 
   try {
     const exportReport = await buildReport(report, url.searchParams);

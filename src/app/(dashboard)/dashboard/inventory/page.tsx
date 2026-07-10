@@ -1,25 +1,12 @@
-import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/navigation/page-header";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 
-function assertCanViewInventory(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export default async function InventoryPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  assertCanViewInventory(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const [materialsCount, suppliersCount, activeAlertsCount, movementsCount] =
     await Promise.all([

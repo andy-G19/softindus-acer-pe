@@ -1,6 +1,6 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import {
@@ -25,15 +25,7 @@ export default async function EditClientPage({
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
 
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "SELLER"]);
 
   const client = await prisma.cliente.findUnique({
     where: {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleSupplierMaterialStatusAction } from "@/modules/inventory/supplier-materials/actions";
@@ -72,15 +71,7 @@ function getAvailabilityLabel(value: string | null) {
 export default async function SupplierMaterialsPage({
   searchParams,
 }: SupplierMaterialsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN"]);
 
   const params = (await searchParams) ?? {};
   const supplier = getSearchParam(params, "supplier");

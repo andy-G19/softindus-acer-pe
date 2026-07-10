@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -8,15 +7,7 @@ import { createSupplierAction } from "@/modules/inventory/suppliers/actions";
 import { SupplierForm } from "@/modules/inventory/suppliers/supplier-form";
 
 export default async function NewSupplierPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN"]);
 
   const supplierTypes = await prisma.tipo_proveedor_catalogo.findMany({
     where: {

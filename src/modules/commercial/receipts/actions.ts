@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { receiptSchema } from "@/schemas/commercial/receipt.schema";
@@ -16,17 +16,7 @@ function emptyToNull(value: FormDataEntryValue | null) {
 }
 
 async function requireCommercialPermission() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN", "SELLER"]);
 }
 
 export async function createReceiptAction(formData: FormData) {

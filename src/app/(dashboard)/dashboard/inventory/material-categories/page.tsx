@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
@@ -13,15 +12,7 @@ import {
 import { InventoryCatalogManager } from "@/modules/inventory/components/inventory-catalog-manager";
 
 export default async function MaterialCategoriesPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const categories = await prisma.categoria_material.findMany({
     orderBy: [

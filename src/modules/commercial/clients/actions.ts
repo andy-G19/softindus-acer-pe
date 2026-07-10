@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getAuthorizedSession, type Role } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { clientSchema } from "@/schemas/commercial/client.schema";
@@ -17,7 +17,7 @@ export type ClientFormState = {
 const CLIENTS_PATH = "/dashboard/commercial/clients";
 const CLIENT_CREATED_PATH = `${CLIENTS_PATH}?toast=client-created`;
 const CLIENT_UPDATED_PATH = `${CLIENTS_PATH}?toast=client-updated`;
-const ALLOWED_CLIENT_ROLES = ["ADMIN", "SELLER"];
+const ALLOWED_CLIENT_ROLES: Role[] = ["ADMIN", "SELLER"];
 const initialErrorState: ClientFormState = { error: "" };
 
 function emptyToNull(value: FormDataEntryValue | null) {
@@ -26,17 +26,7 @@ function emptyToNull(value: FormDataEntryValue | null) {
 }
 
 async function requireCommercialClientPermission() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return null;
-  }
-
-  if (!ALLOWED_CLIENT_ROLES.includes(session.user.role ?? "")) {
-    return null;
-  }
-
-  return session;
+  return getAuthorizedSession(ALLOWED_CLIENT_ROLES);
 }
 
 function getClientFormData(formData: FormData) {

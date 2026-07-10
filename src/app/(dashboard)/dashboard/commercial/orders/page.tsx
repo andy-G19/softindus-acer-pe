@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -19,7 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import {
   createReturnToHref,
@@ -56,15 +55,7 @@ function formatDate(value: Date | string | null) {
 }
 
 export default async function OrdersPage({ searchParams }: OrdersPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
   const q = parseStringParam(params, "q");

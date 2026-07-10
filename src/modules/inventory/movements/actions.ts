@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 
@@ -35,17 +35,7 @@ const outputSchema = z.object({
 });
 
 async function requireOutputPermission() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
 class InventoryOutputValidationError extends Error {

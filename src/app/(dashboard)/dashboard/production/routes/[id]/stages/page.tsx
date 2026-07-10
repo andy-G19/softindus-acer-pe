@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,12 +28,6 @@ type RouteStagesPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function formatHours(value: unknown) {
   if (value === null || value === undefined) {
@@ -84,13 +78,7 @@ export default async function RouteStagesPage({
   params,
   searchParams,
 }: RouteStagesPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};

@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -47,15 +47,7 @@ export default async function OrderDetailPage({
   params,
   searchParams,
 }: OrderDetailPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "SELLER"]);
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};

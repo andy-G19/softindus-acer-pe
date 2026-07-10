@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -8,15 +7,7 @@ import { createProductAction } from "@/modules/commercial/products/actions";
 import { ProductForm } from "@/modules/commercial/products/product-form";
 
 export default async function NewProductPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN"]);
 
   const categories = await prisma.categoria_producto.findMany({
     where: {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -18,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import {
   createReturnToHref,
@@ -55,15 +54,7 @@ function formatDate(value: Date | string | null) {
 }
 
 export default async function PurchasesPage({ searchParams }: PurchasesPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN"]);
 
   const params = (await searchParams) ?? {};
   const q = parseStringParam(params, "q");

@@ -1,5 +1,5 @@
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { notFound } from "next/navigation";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -29,12 +29,6 @@ type MaterialRequirementsPageProps = {
   }>;
 };
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
     return 0;
@@ -59,13 +53,7 @@ export default async function MaterialRequirementsPage({
   params,
   searchParams,
 }: MaterialRequirementsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id, versionId } = await params;
   const resolvedSearchParams = await searchParams;

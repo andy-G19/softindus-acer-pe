@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,15 +61,7 @@ function getStatusFilter(status: string) {
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  const session = await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
   const q = getSearchParam(params, "q");

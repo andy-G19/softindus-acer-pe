@@ -2,20 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import {
   reassignWorkOrderProgressSchema,
   updateWorkOrderProgressSchema,
 } from "@/schemas/production/work-order-progress.schema";
-
-function requireProductionManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function normalizeProgressPercentage(
   estadoEtapa: string,
@@ -130,13 +124,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
 }
 
 export async function generateWorkOrderProgressAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "");
 
@@ -227,13 +215,7 @@ export async function generateWorkOrderProgressAction(formData: FormData) {
 }
 
 export async function updateWorkOrderProgressAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = updateWorkOrderProgressSchema.safeParse({
     id_avance: formData.get("id_avance"),
@@ -327,13 +309,7 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
 }
 
 export async function reassignWorkOrderProgressAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = reassignWorkOrderProgressSchema.safeParse({
     id_avance: formData.get("id_avance"),

@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -8,15 +7,7 @@ import { createInventoryOutputAction } from "@/modules/inventory/movements/actio
 import { InventoryOutputForm } from "@/modules/inventory/movements/inventory-output-form";
 
 export default async function NewInventoryOutputPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const [materials, workOrders] = await Promise.all([
     prisma.material.findMany({

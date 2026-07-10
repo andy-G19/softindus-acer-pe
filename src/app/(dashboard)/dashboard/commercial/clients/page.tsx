@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -46,15 +45,7 @@ function getSearchParam(
 }
 
 export default async function ClientsPage({ searchParams }: ClientsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "SELLER"]);
 
   const params = (await searchParams) ?? {};
   const client = getSearchParam(params, "client");

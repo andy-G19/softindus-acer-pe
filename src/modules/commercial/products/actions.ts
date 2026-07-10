@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
@@ -42,17 +42,7 @@ function slugify(value: string) {
 }
 
 async function requireAdminProductPermission() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN"]);
 }
 
 function getProductFormData(formData: FormData) {

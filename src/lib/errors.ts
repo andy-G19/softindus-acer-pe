@@ -5,6 +5,7 @@ import { logger } from "@/lib/logger";
 export type AppErrorCode =
   | "VALIDATION_ERROR"
   | "UNAUTHORIZED"
+  | "FORBIDDEN"
   | "NOT_FOUND"
   | "CONFLICT"
   | "RATE_LIMITED"
@@ -50,6 +51,16 @@ export class AuthorizationError extends AppError {
   constructor(message = "No tiene autorización para realizar esta acción.", cause?: unknown) {
     super(message, { code: "UNAUTHORIZED", statusCode: 401, isOperational: true, cause });
     this.name = "AuthorizationError";
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(
+    message = "No tiene permisos suficientes para realizar esta acción.",
+    cause?: unknown,
+  ) {
+    super(message, { code: "FORBIDDEN", statusCode: 403, isOperational: true, cause });
+    this.name = "ForbiddenError";
   }
 }
 

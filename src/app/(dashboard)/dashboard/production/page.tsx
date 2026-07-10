@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -10,12 +9,6 @@ import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import Link from "next/link";
 import { CheckCircle2, Circle } from "lucide-react";
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function getModuleHealthMessage(data: {
   activeProducts: number;
@@ -53,13 +46,7 @@ function getModuleHealthMessage(data: {
 }
 
 export default async function ProductionDashboardPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const [
     totalOrders,

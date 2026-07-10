@@ -1,16 +1,9 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { WorkOrderForm } from "@/modules/production/work-orders/components/work-order-form";
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function getTodayInputValue() {
   return new Date().toISOString().slice(0, 10);
@@ -25,13 +18,7 @@ function toDecimalString(value: unknown) {
 }
 
 export default async function NewWorkOrderPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const [products, routes, versions, orderDetails, campaigns] =
     await Promise.all([

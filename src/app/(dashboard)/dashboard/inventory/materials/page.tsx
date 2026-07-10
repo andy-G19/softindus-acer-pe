@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,12 +46,6 @@ function formatDecimal(value: unknown) {
   return Number(value.toString()).toFixed(2);
 }
 
-function assertCanViewInventory(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
   key: string,
@@ -81,13 +74,7 @@ function getStatusFilter(status: string) {
 export default async function MaterialsPage({
   searchParams,
 }: MaterialsPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  assertCanViewInventory(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
   const q = getSearchParam(params, "q");

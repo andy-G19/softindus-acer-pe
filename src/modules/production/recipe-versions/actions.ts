@@ -2,20 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import {
   recipeVersionSchema,
   recipeVersionStatusSchema,
 } from "@/schemas/production/recipe-version.schema";
-
-function requireProductionManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function getFormDataValues(formData: FormData, name: string) {
   return formData.getAll(name).map((value) => String(value).trim());
@@ -44,13 +38,7 @@ function revalidateRecipePaths(idReceta: string) {
 }
 
 export async function createRecipeVersionAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const materialIds = getFormDataValues(formData, "id_material");
   const quantities = getFormDataValues(formData, "cantidad_requerida");
@@ -235,13 +223,7 @@ export async function createRecipeVersionAction(formData: FormData) {
 }
 
 export async function setCurrentRecipeVersionAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = recipeVersionStatusSchema.safeParse({
     id_receta: formData.get("id_receta"),
@@ -320,13 +302,7 @@ export async function setCurrentRecipeVersionAction(formData: FormData) {
 }
 
 export async function voidRecipeVersionAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = recipeVersionStatusSchema.safeParse({
     id_receta: formData.get("id_receta"),

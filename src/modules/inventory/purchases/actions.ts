@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
@@ -12,20 +12,8 @@ function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
 }
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export async function createPurchaseAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireRole(["ADMIN"]);
 
   const materialIds = formData.getAll("id_material").map(String);
   const quantities = formData.getAll("cantidad").map(String);
@@ -236,13 +224,7 @@ export async function createPurchaseAction(formData: FormData) {
 }
 
 export async function annulPurchaseAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireRole(["ADMIN"]);
 
   const purchaseId = formData.get("id_compra")?.toString().trim();
 

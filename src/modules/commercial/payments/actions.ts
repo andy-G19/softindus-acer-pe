@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { paymentSchema } from "@/schemas/commercial/payment.schema";
@@ -16,15 +16,7 @@ function emptyToNull(value: FormDataEntryValue | null) {
 }
 
 export async function createPaymentAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  const session = await requireRole(["ADMIN", "SELLER"]);
 
   const rawData = {
     id_proforma: formData.get("id_proforma")?.toString(),

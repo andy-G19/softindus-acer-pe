@@ -1,8 +1,8 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { ReceiptForm } from "@/components/commercial/receipt-form";
 import { PaymentForm } from "@/components/commercial/payment-form";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -52,15 +52,7 @@ export default async function QuoteDetailPage({
 }: QuoteDetailPageProps) {
   const { id } = await params;
 
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+  await requireRole(["ADMIN", "SELLER"]);
 
   const quote = await prisma.proforma.findUnique({
     where: {

@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import {
@@ -12,12 +12,6 @@ import {
 } from "@/schemas/production/campaign.schema";
 
 const CLOSED_CAMPAIGN_STATES = ["finalizada", "anulada"];
-
-function requireProductionManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function parseDate(value: string) {
   return new Date(`${value}T00:00:00`);
@@ -28,13 +22,7 @@ function parseNullableDate(value: string | null) {
 }
 
 export async function createProductionCampaignAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = productionCampaignSchema.safeParse({
     nombre_campania: formData.get("nombre_campania"),
@@ -91,13 +79,7 @@ export async function createProductionCampaignAction(formData: FormData) {
 }
 
 export async function addCampaignDetailAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = campaignDetailSchema.safeParse({
     id_campania: formData.get("id_campania"),
@@ -198,13 +180,7 @@ export async function addCampaignDetailAction(formData: FormData) {
 }
 
 export async function updateProductionCampaignAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idCampania = String(formData.get("id_campania") ?? "");
 
@@ -276,13 +252,7 @@ export async function updateProductionCampaignAction(formData: FormData) {
 }
 
 export async function changeProductionCampaignStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idCampania = String(formData.get("id_campania") ?? "");
   const nextStatus = String(formData.get("estado") ?? "");

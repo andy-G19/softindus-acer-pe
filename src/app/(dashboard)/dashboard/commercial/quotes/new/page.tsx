@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { QuoteForm } from "@/components/commercial/quote-form";
 import { PageHeader } from "@/components/navigation/page-header";
 import { prisma } from "@/lib/db";
@@ -16,15 +15,7 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const defaultOrderId = resolvedSearchParams.orderId;
 
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  if (!["ADMIN", "SELLER"].includes(session.user.role ?? "")) {
-    redirect("/dashboard/access-denied");
-}
+  await requireRole(["ADMIN", "SELLER"]);
 
   const orders = await prisma.pedido.findMany({
     where: {

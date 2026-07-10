@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { supplierPaymentSchema } from "@/schemas/inventory/supplier-payment.schema";
@@ -12,20 +12,8 @@ function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
 }
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export async function createSupplierPaymentAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireRole(["ADMIN"]);
 
   const parsed = supplierPaymentSchema.safeParse({
     id_compra: formData.get("id_compra"),

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,24 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createProductionCampaignAction } from "@/modules/production/campaigns/actions";
 
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 function getTodayInputValue() {
   return new Date().toISOString().slice(0, 10);
 }
 
 export default async function NewProductionCampaignPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">

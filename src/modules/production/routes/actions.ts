@@ -2,26 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { fabricationRouteSchema } from "@/schemas/production/route.schema";
 
-function requireProductionManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
-
 export async function createFabricationRouteAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const parsed = fabricationRouteSchema.safeParse({
     id_producto: formData.get("id_producto"),
@@ -94,13 +82,7 @@ export async function createFabricationRouteAction(formData: FormData) {
 }
 
 export async function updateFabricationRouteAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idRuta = String(formData.get("id_ruta") ?? "");
 
@@ -201,13 +183,7 @@ export async function updateFabricationRouteAction(formData: FormData) {
 }
 
 export async function toggleFabricationRouteStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionManager(session.user.role);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const idRuta = String(formData.get("id_ruta") ?? "");
 

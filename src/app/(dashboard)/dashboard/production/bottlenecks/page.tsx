@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -42,12 +41,6 @@ type StageSummary = {
 type ProductionBottlenecksPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function requireProductionAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
-}
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -134,13 +127,7 @@ function parseDate(value: string, endOfDay = false) {
 export default async function ProductionBottlenecksPage({
   searchParams,
 }: ProductionBottlenecksPageProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireProductionAccess(session.user.role);
+  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const params = (await searchParams) ?? {};
   const product = getSearchParam(params, "product");
