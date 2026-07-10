@@ -33,7 +33,7 @@ export function PageHeader({
         <div className="flex min-w-0 flex-1 gap-4">
           <div className="tempered-rail mt-1 self-stretch" aria-hidden="true" />
           <div className="min-w-0 flex-1 space-y-2">
-            <h1 className="font-heading break-words text-3xl font-semibold leading-tight text-foreground md:text-[2rem]">
+            <h1 className="font-heading break-all text-3xl font-semibold leading-tight text-foreground md:text-[2rem]">
               {title}
             </h1>
             {description ? (
