@@ -5,6 +5,11 @@ type PdfValue = string | number | boolean | Date | null | undefined;
 type PdfReportData = {
   title: string;
   subtitle?: string;
+  /**
+   * Nota corta mostrada bajo el subtitulo, por ejemplo para avisar que el
+   * reporte se truncó por límite de seguridad. Se dibuja en cada página.
+   */
+  note?: string;
   headers: string[];
   rows: PdfValue[][];
 };
@@ -136,6 +141,17 @@ export async function buildPdfBuffer(data: PdfReportData) {
         30,
         68,
       );
+
+      if (data.note) {
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(8)
+          .fillColor("#b45309")
+          .text(truncateText(data.note, 140), 30, 80, {
+            width: tableWidth,
+          })
+          .fillColor("black");
+      }
 
       drawTableHeader({
         doc,

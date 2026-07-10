@@ -728,6 +728,12 @@ export default async function ReportsDashboardPage() {
           <p className="text-sm text-muted-foreground">
             Consulta reportes administrativos filtrables según cada área del sistema.
           </p>
+          <p className="text-xs text-muted-foreground">
+            Las exportaciones tienen un límite de seguridad por formato: el
+            PDF muestra hasta 80 registros por página (con aviso si el
+            reporte fue más grande) y el Excel exporta hasta 5000 filas.
+            Use los filtros de cada reporte para acotar el resultado.
+          </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

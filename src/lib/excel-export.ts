@@ -4,6 +4,12 @@ export type ExcelValue = string | number | boolean | Date | null | undefined;
 
 type ExcelReportData = {
   title: string;
+  /**
+   * Linea informativa opcional bajo el titulo: fecha de generacion, filtros
+   * aplicados, total exportado y limite aplicado. Se agrega como una fila
+   * extra simple (no una hoja separada) para no complicar el archivo.
+   */
+  metadata?: string;
   headers: string[];
   rows: ExcelValue[][];
 };
@@ -37,8 +43,11 @@ export async function buildExcelBuffer(data: ExcelReportData) {
   workbook.created = new Date();
   workbook.modified = new Date();
 
+  const metadataRowCount = data.metadata ? 1 : 0;
+  const headerRowNumber = 2 + metadataRowCount;
+
   const worksheet = workbook.addWorksheet("Reporte", {
-    views: [{ state: "frozen", ySplit: 2 }],
+    views: [{ state: "frozen", ySplit: headerRowNumber }],
   });
 
   worksheet.addRow([data.title]);
@@ -52,6 +61,22 @@ export async function buildExcelBuffer(data: ExcelReportData) {
   titleCell.alignment = {
     vertical: "middle",
   };
+
+  if (data.metadata) {
+    worksheet.addRow([data.metadata]);
+    worksheet.mergeCells(2, 1, 2, Math.max(data.headers.length, 1));
+
+    const metadataCell = worksheet.getCell(2, 1);
+    metadataCell.font = {
+      italic: true,
+      size: 9,
+      color: { argb: "FF6B7280" },
+    };
+    metadataCell.alignment = {
+      vertical: "middle",
+      wrapText: true,
+    };
+  }
 
   const headerRow = worksheet.addRow(data.headers);
 
@@ -90,7 +115,7 @@ export async function buildExcelBuffer(data: ExcelReportData) {
   });
 
   worksheet.eachRow((row, rowNumber) => {
-    if (rowNumber <= 2) {
+    if (rowNumber <= headerRowNumber) {
       return;
     }
 

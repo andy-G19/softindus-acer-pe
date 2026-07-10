@@ -1,11 +1,32 @@
 import { registerAuditLog } from "@/lib/audit";
-import { requireApiRole, type Role } from "@/lib/authz";
+import { requireApiAuth, type Role } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toApiErrorResponse } from "@/lib/errors";
+import {
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+  toApiErrorResponse,
+} from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
-import { APP_ROLES } from "@/lib/permissions";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
+import {
+  DEFAULT_PDF_DISPLAY_ROWS,
+  MAX_EXCEL_EXPORT_ROWS,
+  sanitizeExportFilename,
+  type ExportFormat,
+} from "@/lib/reports/export-limits";
+import {
+  normalizeReportTextParam,
+  parseExportFormat,
+  parseExportLimit,
+  parseReportKey,
+  validateDateRange,
+} from "@/lib/reports/report-filters";
+import {
+  getReportDefinition,
+  getReportLabel,
+} from "@/lib/reports/report-registry";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -26,32 +47,8 @@ type ExportReport = {
   rows: CsvValue[][];
 };
 
-const REPORT_MODULE_LABELS: Record<string, string> = {
-  production: "Reporte de producción",
-  inventory: "Reporte de inventario",
-  "sales-collections": "Reporte de ventas y cobranzas",
-  "suppliers-purchases": "Reporte de proveedores y compras",
-  financial: "Reporte financiero",
-  maintenance: "Reporte de mantenimiento",
-  profitability: "Reporte de costos y rentabilidad",
-  staff: "Reporte de personal y planillas",
-  audit: "Reporte de auditoria",
-};
-
-const REPORT_ALLOWED_ROLES: Record<string, string[]> = {
-  production: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
-  inventory: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
-  "sales-collections": [APP_ROLES.ADMIN, APP_ROLES.SELLER],
-  "suppliers-purchases": [APP_ROLES.ADMIN],
-  financial: [APP_ROLES.ADMIN],
-  maintenance: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
-  profitability: [APP_ROLES.ADMIN],
-  staff: [APP_ROLES.ADMIN],
-  audit: [APP_ROLES.ADMIN],
-};
-
 function getParam(searchParams: URLSearchParams, key: string) {
-  return searchParams.get(key)?.trim() ?? "";
+  return normalizeReportTextParam(searchParams.get(key));
 }
 
 function parseDateInput(value: string) {
@@ -148,10 +145,17 @@ async function registerExportLog(data: {
   filename: string;
   fileFormat: "excel" | "pdf";
   searchParams: URLSearchParams;
+  totalExported: number;
 }) {
+  // Filtros resumidos para auditoria: nunca incluye fileFormat/limit (ruido)
+  // ni puede contener datos sensibles, ya que estos parametros son siempre
+  // filtros de negocio (fechas, estado, ids), nunca credenciales.
   const paramsObject = Object.fromEntries(data.searchParams.entries());
 
   delete paramsObject.fileFormat;
+  delete paramsObject.limit;
+
+  const label = getReportLabel(data.report);
 
   await prisma.$transaction(async (tx) => {
     const id_exportacion = await getNextCorrelativeId(tx, {
@@ -163,7 +167,7 @@ async function registerExportLog(data: {
       data: {
         id_exportacion,
         id_usuario: data.userId,
-        modulo_origen: REPORT_MODULE_LABELS[data.report] ?? data.report,
+        modulo_origen: label,
         formato: data.fileFormat,
         parametros: JSON.stringify(paramsObject),
         estado: "generada",
@@ -176,9 +180,7 @@ async function registerExportLog(data: {
       entidad_afectada: "exportacion_datos",
       id_registro_afectado: id_exportacion,
       accion: "crear",
-      detalle: `Reporte exportado: ${
-        REPORT_MODULE_LABELS[data.report] ?? data.report
-      } (${data.fileFormat}).`,
+      detalle: `Reporte exportado: ${label} (${data.fileFormat}). Registros: ${data.totalExported}.`,
       tx,
     });
   });
@@ -200,7 +202,10 @@ function getPaymentTotalByType(
   }, 0);
 }
 
-async function buildProductionCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildProductionCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
   const productId = getParam(searchParams, "productId");
@@ -225,7 +230,9 @@ async function buildProductionCsv(searchParams: URLSearchParams): Promise<Export
     orderBy: [
       { fecha_inicio: "desc" },
       { fecha_registro: "desc" },
+      { id_orden_trabajo: "desc" },
     ],
+    take: limit,
     include: {
       producto: true,
       cliente: true,
@@ -287,7 +294,10 @@ async function buildProductionCsv(searchParams: URLSearchParams): Promise<Export
   };
 }
 
-async function buildInventoryCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildInventoryCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
   const materialId = getParam(searchParams, "materialId");
@@ -311,9 +321,8 @@ async function buildInventoryCsv(searchParams: URLSearchParams): Promise<ExportR
           }
         : {}),
     },
-    orderBy: {
-      fecha_movimiento: "desc",
-    },
+    orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento: "desc" }],
+    take: limit,
     include: {
       material: true,
       usuario: true,
@@ -373,6 +382,7 @@ async function buildInventoryCsv(searchParams: URLSearchParams): Promise<ExportR
 
 async function buildSalesCollectionsCsv(
   searchParams: URLSearchParams,
+  limit: number,
 ): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
@@ -418,9 +428,8 @@ async function buildSalesCollectionsCsv(
           }
         : {}),
     },
-    orderBy: {
-      fecha_pedido: "desc",
-    },
+    orderBy: [{ fecha_pedido: "desc" }, { id_pedido: "desc" }],
+    take: limit,
     include: {
       cliente: true,
       proforma: {
@@ -536,6 +545,7 @@ async function buildSalesCollectionsCsv(
 
 async function buildSuppliersPurchasesCsv(
   searchParams: URLSearchParams,
+  limit: number,
 ): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
@@ -579,9 +589,8 @@ async function buildSuppliersPurchasesCsv(
           }
         : {}),
     },
-    orderBy: {
-      fecha_compra: "desc",
-    },
+    orderBy: [{ fecha_compra: "desc" }, { id_compra: "desc" }],
+    take: limit,
     include: {
       proveedor: true,
       usuario: true,
@@ -674,7 +683,10 @@ async function buildSuppliersPurchasesCsv(
   };
 }
 
-async function buildFinancialCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildFinancialCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
   const cashBoxId = getParam(searchParams, "cashBoxId");
@@ -724,9 +736,8 @@ async function buildFinancialCsv(searchParams: URLSearchParams): Promise<ExportR
             }
           : {}),
       },
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
+      orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento_caja: "desc" }],
+      take: limit,
       include: {
         caja_chica: true,
         categoria_gasto: true,
@@ -797,6 +808,11 @@ async function buildFinancialCsv(searchParams: URLSearchParams): Promise<ExportR
         },
         ...(dateRange ? { fecha_compra: dateRange } : {}),
       },
+      orderBy: [{ fecha_compra: "desc" }, { id_compra: "desc" }],
+      // No son las filas exportadas (son insumo de un total agregado en
+      // memoria), pero igual se acota: evita cargar todas las compras
+      // pendientes de pago sin limite si la tabla crece mucho.
+      take: limit,
       include: {
         proveedor: true,
         pago_proveedor: true,
@@ -871,7 +887,10 @@ async function buildFinancialCsv(searchParams: URLSearchParams): Promise<ExportR
   };
 }
 
-async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildMaintenanceCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom");
   const dateTo = getParam(searchParams, "dateTo");
   const machineId = getParam(searchParams, "machineId");
@@ -930,9 +949,11 @@ async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<Expor
             }
           : {}),
       },
-      orderBy: {
-        fecha_falla: "desc",
-      },
+      orderBy: [{ fecha_falla: "desc" }, { id_falla: "desc" }],
+      // La lista final combina fallas + preventivos: se acota cada consulta
+      // al limite completo (el total combinado se vuelve a recortar al
+      // armar el reporte final).
+      take: limit,
       include: {
         maquina: true,
         usuario: true,
@@ -954,9 +975,8 @@ async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<Expor
         ...(machineId ? { id_maquina: machineId } : {}),
         ...(preventiveStatus ? { estado: preventiveStatus } : {}),
       },
-      orderBy: {
-        fecha_programada: "asc",
-      },
+      orderBy: [{ fecha_programada: "asc" }, { id_mantenimiento: "desc" }],
+      take: limit,
       include: {
         maquina: true,
         usuario: true,
@@ -1030,6 +1050,7 @@ async function buildMaintenanceCsv(searchParams: URLSearchParams): Promise<Expor
 
 async function buildProfitabilityCsv(
   searchParams: URLSearchParams,
+  limit: number,
 ): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
   const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
@@ -1077,10 +1098,8 @@ async function buildProfitabilityCsv(
         ? { rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } }
         : {}),
     },
-    orderBy: {
-      fecha_costeo: "desc",
-    },
-    take: 300,
+    orderBy: [{ fecha_costeo: "desc" }, { id_costeo: "desc" }],
+    take: limit,
     include: {
       pedido: {
         include: {
@@ -1160,7 +1179,10 @@ async function buildProfitabilityCsv(
   };
 }
 
-async function buildStaffCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildStaffCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
   const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
   const operatorId = getParam(searchParams, "operatorId") || getParam(searchParams, "operario");
@@ -1186,10 +1208,8 @@ async function buildStaffCsv(searchParams: URLSearchParams): Promise<ExportRepor
           }
         : {}),
     },
-    orderBy: {
-      fecha_generacion: "desc",
-    },
-    take: 300,
+    orderBy: [{ fecha_generacion: "desc" }, { id_planilla: "desc" }],
+    take: limit,
     include: {
       operario: true,
       historial_pago_operario: true,
@@ -1235,7 +1255,10 @@ async function buildStaffCsv(searchParams: URLSearchParams): Promise<ExportRepor
   };
 }
 
-async function buildAuditCsv(searchParams: URLSearchParams): Promise<ExportReport> {
+async function buildAuditCsv(
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport> {
   const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
   const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
   const userId = getParam(searchParams, "userId") || getParam(searchParams, "usuario");
@@ -1261,10 +1284,8 @@ async function buildAuditCsv(searchParams: URLSearchParams): Promise<ExportRepor
           }
         : {}),
     },
-    orderBy: {
-      fecha_hora: "desc",
-    },
-    take: 500,
+    orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
+    take: limit,
     include: {
       usuario: true,
     },
@@ -1295,46 +1316,74 @@ async function buildAuditCsv(searchParams: URLSearchParams): Promise<ExportRepor
   };
 }
 
-async function buildReport(report: string, searchParams: URLSearchParams): Promise<ExportReport | null> {
+async function buildReport(
+  report: string,
+  searchParams: URLSearchParams,
+  limit: number,
+): Promise<ExportReport | null> {
   switch (report) {
     case "production":
-      return buildProductionCsv(searchParams);
+      return buildProductionCsv(searchParams, limit);
 
     case "inventory":
-      return buildInventoryCsv(searchParams);
+      return buildInventoryCsv(searchParams, limit);
 
     case "sales-collections":
-      return buildSalesCollectionsCsv(searchParams);
+      return buildSalesCollectionsCsv(searchParams, limit);
 
     case "suppliers-purchases":
-      return buildSuppliersPurchasesCsv(searchParams);
+      return buildSuppliersPurchasesCsv(searchParams, limit);
 
     case "financial":
-      return buildFinancialCsv(searchParams);
+      return buildFinancialCsv(searchParams, limit);
 
     case "maintenance":
-      return buildMaintenanceCsv(searchParams);
+      return buildMaintenanceCsv(searchParams, limit);
 
     case "profitability":
-      return buildProfitabilityCsv(searchParams);
+      return buildProfitabilityCsv(searchParams, limit);
 
     case "staff":
-      return buildStaffCsv(searchParams);
+      return buildStaffCsv(searchParams, limit);
 
     case "audit":
-      return buildAuditCsv(searchParams);
+      return buildAuditCsv(searchParams, limit);
 
     default:
       return null;
   }
 }
 
+/** Lee dateFrom/dateTo o su alias from/to (usado por profitability/staff/audit). */
+function extractReportDateRange(searchParams: URLSearchParams) {
+  const fromRaw = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
+  const toRaw = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
+
+  return {
+    from: parseDateInput(fromRaw),
+    to: parseDateInput(toRaw),
+  };
+}
+
+function buildFiltersSummary(searchParams: URLSearchParams) {
+  const entries = Array.from(searchParams.entries()).filter(
+    ([key]) => key !== "fileFormat" && key !== "limit",
+  );
+
+  if (entries.length === 0) {
+    return "Sin filtros aplicados";
+  }
+
+  return entries.map(([key, value]) => `${key}=${value}`).join(", ");
+}
+
 export async function GET(request: Request, context: RouteContext) {
-  const { report } = await context.params;
+  const { report: reportParam } = await context.params;
   const url = new URL(request.url);
 
-  const allowedRoles = (REPORT_ALLOWED_ROLES[report] ?? []) as Role[];
-  const authResult = await requireApiRole(allowedRoles);
+  // 1) Autenticacion primero, sin importar si el reporte existe: nunca se
+  // debe revelar la lista de reportes validos a una peticion sin sesion.
+  const authResult = await requireApiAuth();
 
   if (!authResult.ok) {
     return authResult.response;
@@ -1342,53 +1391,122 @@ export async function GET(request: Request, context: RouteContext) {
 
   const { session } = authResult;
 
+  // 2) El reporte debe existir en el registro central antes de ejecutar
+  // cualquier consulta o revisar permisos especificos.
+  const reportResult = parseReportKey(reportParam);
+
+  if (!reportResult.ok) {
+    return toApiErrorResponse(new NotFoundError(reportResult.error), {
+      report: reportParam,
+      userId: session.user.id,
+    });
+  }
+
+  const report = reportResult.value;
+  const definition = getReportDefinition(report);
+
+  // 3) Rol permitido para este reporte especifico.
+  if (!definition || !definition.allowedRoles.includes(session.user.role as Role)) {
+    return toApiErrorResponse(new ForbiddenError(), {
+      report,
+      userId: session.user.id,
+      role: session.user.role,
+    });
+  }
+
+  // 4) Formato valido.
+  const formatResult = parseExportFormat(url.searchParams.get("fileFormat"));
+
+  if (!formatResult.ok) {
+    return toApiErrorResponse(new ValidationError(formatResult.error), {
+      report,
+      userId: session.user.id,
+    });
+  }
+
+  const fileFormat: ExportFormat = formatResult.value;
+
+  // 5) Rango de fechas valido (si se envio).
+  const { from, to } = extractReportDateRange(url.searchParams);
+  const dateRangeResult = validateDateRange(from, to);
+
+  if (!dateRangeResult.ok) {
+    return toApiErrorResponse(new ValidationError(dateRangeResult.error), {
+      report,
+      userId: session.user.id,
+    });
+  }
+
+  // 6) Limite seguro de filas segun formato (nunca ilimitado).
+  const limit = parseExportLimit(url.searchParams.get("limit"), fileFormat);
+
   try {
-    const exportReport = await buildReport(report, url.searchParams);
+    const exportReport = await buildReport(report, url.searchParams, limit);
 
     if (!exportReport) {
-      return new Response("Reporte no encontrado.", {
-        status: 404,
-      });
+      return toApiErrorResponse(
+        new NotFoundError(`Reporte no encontrado: "${report}".`),
+        { report, userId: session.user.id },
+      );
     }
 
-    const fileFormat =
-      url.searchParams.get("fileFormat") === "pdf" ? "pdf" : "excel";
+    // Recorte defensivo final: algunos reportes combinan mas de una consulta
+    // (ej. financiero = resumen + movimientos, mantenimiento = fallas +
+    // preventivos), asi que el total podria superar levemente `limit`.
+    const boundedRows = exportReport.rows.slice(0, MAX_EXCEL_EXPORT_ROWS);
+    const totalAvailable = boundedRows.length;
+    const filtersSummary = buildFiltersSummary(url.searchParams);
 
     if (fileFormat === "pdf") {
+      const pdfRows = boundedRows.slice(0, DEFAULT_PDF_DISPLAY_ROWS);
+      const truncated = totalAvailable > pdfRows.length;
+      const pdfFilename = sanitizeExportFilename(exportReport.pdfFilename);
+
       await registerExportLog({
         userId: session.user.id,
         report,
-        filename: exportReport.pdfFilename,
+        filename: pdfFilename,
         fileFormat: "pdf",
         searchParams: url.searchParams,
+        totalExported: pdfRows.length,
       });
 
       const pdfBuffer = await buildPdfBuffer({
         title: exportReport.title,
         subtitle: "Sistema de Gestion Integral - Industrias Aceros Peru",
+        note: truncated
+          ? `Reporte limitado a ${pdfRows.length} de ${totalAvailable} registros por seguridad.`
+          : undefined,
         headers: exportReport.headers,
-        rows: exportReport.rows.slice(0, 80),
+        rows: pdfRows,
       });
 
-      return pdfResponse(pdfBuffer, exportReport.pdfFilename);
+      return pdfResponse(pdfBuffer, pdfFilename);
     }
+
+    const excelFilename = sanitizeExportFilename(exportReport.filename);
 
     await registerExportLog({
       userId: session.user.id,
       report,
-      filename: exportReport.filename,
+      filename: excelFilename,
       fileFormat: "excel",
       searchParams: url.searchParams,
+      totalExported: boundedRows.length,
     });
 
     const excelBuffer = await buildExcelBuffer({
       title: exportReport.title,
+      metadata: `Generado: ${new Date().toLocaleString("es-PE")} | Filtros: ${filtersSummary} | Total exportado: ${boundedRows.length} | Límite aplicado: ${limit}`,
       headers: exportReport.headers,
-      rows: exportReport.rows,
+      rows: boundedRows,
     });
 
-    return excelResponse(excelBuffer, exportReport.filename);
+    return excelResponse(excelBuffer, excelFilename);
   } catch (error) {
-    return toApiErrorResponse(error, { report, userId: session.user.id });
+    // toApiErrorResponse ya registra el error via logger (warn si es un
+    // AppError operacional, error si no) y nunca expone el detalle real,
+    // stack trace ni datos de conexion al cliente.
+    return toApiErrorResponse(error, { report, fileFormat, userId: session.user.id });
   }
 }
