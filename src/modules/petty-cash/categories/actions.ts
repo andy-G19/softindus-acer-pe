@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { expenseCategorySchema } from "@/schemas/petty-cash/expense-category.schema";
 
 export type ExpenseCategoryFormState = {
@@ -98,36 +98,30 @@ export async function createExpenseCategoryAction(
     };
   }
 
-  const lastCategory = await prisma.categoria_gasto.findFirst({
-    orderBy: {
-      id_categoria_gasto: "desc",
-    },
-    select: {
-      id_categoria_gasto: true,
-    },
-  });
-
-  const idCategoriaGasto = buildNextId(
-    "CGA",
-    lastCategory?.id_categoria_gasto,
-  );
-
   try {
-    await prisma.categoria_gasto.create({
-      data: {
-        id_categoria_gasto: idCategoriaGasto,
-        nombre_categoria: categoryName,
-        descripcion: data.descripcion || null,
-        estado: data.estado === "true",
-      },
-    });
+    await prisma.$transaction(async (tx) => {
+      const idCategoriaGasto = await getNextCorrelativeId(tx, {
+        codigoEntidad: "categoria_gasto",
+        prefijo: "CGA",
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "categoria_gasto",
-      id_registro_afectado: idCategoriaGasto,
-      accion: "crear",
-      detalle: `Categoria de gasto creada: ${categoryName}`,
+      await tx.categoria_gasto.create({
+        data: {
+          id_categoria_gasto: idCategoriaGasto,
+          nombre_categoria: categoryName,
+          descripcion: data.descripcion || null,
+          estado: data.estado === "true",
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "categoria_gasto",
+        id_registro_afectado: idCategoriaGasto,
+        accion: "crear",
+        detalle: `Categoria de gasto creada: ${categoryName}`,
+        tx,
+      });
     });
   } catch (error) {
     return { error: getPrismaErrorMessage(error) };

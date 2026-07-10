@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { pettyCashExpenseSchema } from "@/schemas/petty-cash/petty-cash-expense.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -116,21 +101,12 @@ export async function createPettyCashExpenseAction(formData: FormData) {
     throw new Error("No se puede usar una categoría de gasto inactiva.");
   }
 
-  const lastMovement = await prisma.movimiento_caja.findFirst({
-    orderBy: {
-      id_movimiento_caja: "desc",
-    },
-    select: {
-      id_movimiento_caja: true,
-    },
-  });
-
-  const idMovimientoCaja = buildSequentialId(
-    lastMovement?.id_movimiento_caja,
-    "MCA",
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idMovimientoCaja = await getNextCorrelativeId(tx, {
+      codigoEntidad: "movimiento_caja",
+      prefijo: "MCA",
+    });
+
     await tx.movimiento_caja.create({
       data: {
         id_movimiento_caja: idMovimientoCaja,

@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { profitabilitySchema } from "@/schemas/costs/profitability.schema";
 
 function requireAdmin(role: string | undefined) {
@@ -94,21 +94,12 @@ export async function createProfitabilityAction(formData: FormData) {
   const expectedMargin = toNumber(latestMargin.porcentaje_margen);
   const lowMarginAlert = realMargin < expectedMargin;
 
-  const lastProfitability = await prisma.rentabilidad.findFirst({
-    orderBy: {
-      id_rentabilidad: "desc",
-    },
-    select: {
-      id_rentabilidad: true,
-    },
-  });
-
-  const idRentabilidad = buildNextId(
-    "REN",
-    lastProfitability?.id_rentabilidad,
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idRentabilidad = await getNextCorrelativeId(tx, {
+      codigoEntidad: "rentabilidad",
+      prefijo: "REN",
+    });
+
     // Se crea histórico: el modelo permite múltiples cálculos por costeo.
     await tx.rentabilidad.create({
       data: {

@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
 import { recalculateCostingTotals } from "@/lib/costing";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
 
 function requireAdmin(role: string | undefined) {
@@ -62,20 +62,6 @@ export async function createIndirectCostAction(formData: FormData) {
 
   const data = parsedData.data;
 
-  const lastIndirectCost = await prisma.costo_indirecto.findFirst({
-    orderBy: {
-      id_costo_indirecto: "desc",
-    },
-    select: {
-      id_costo_indirecto: true,
-    },
-  });
-
-  const idCostoIndirecto = buildNextId(
-    "CIN",
-    lastIndirectCost?.id_costo_indirecto,
-  );
-
   await prisma.$transaction(async (tx) => {
     const costing = await tx.costeo.findUnique({
       where: {
@@ -89,6 +75,11 @@ export async function createIndirectCostAction(formData: FormData) {
     if (!costing) {
       throw new Error("El costeo seleccionado no existe.");
     }
+
+    const idCostoIndirecto = await getNextCorrelativeId(tx, {
+      codigoEntidad: "costo_indirecto",
+      prefijo: "CIN",
+    });
 
     await tx.costo_indirecto.create({
       data: {

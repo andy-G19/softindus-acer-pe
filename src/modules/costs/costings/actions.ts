@@ -8,8 +8,8 @@ import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
 } from "@/lib/costing";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
 function requireAdmin(role: string | undefined) {
@@ -159,18 +159,14 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
     materialCost + consumableCost + laborCost + indirectCostTotal;
   const unitCost = totalCost / quantityToProduce;
 
-  const lastCosting = await prisma.costeo.findFirst({
-    orderBy: {
-      id_costeo: "desc",
-    },
-    select: {
-      id_costeo: true,
-    },
-  });
-
-  const idCosteo = buildNextId("COS", lastCosting?.id_costeo);
+  let idCosteo = "";
 
   await prisma.$transaction(async (tx) => {
+    idCosteo = await getNextCorrelativeId(tx, {
+      codigoEntidad: "costeo",
+      prefijo: "COS",
+    });
+
     await tx.costeo.create({
       data: {
         id_costeo: idCosteo,

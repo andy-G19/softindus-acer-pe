@@ -325,6 +325,41 @@ const correlatives = [
     prefijo: "REA",
     descripcion: "Correlativo transaccional para reasignacion_tarea (prefijo REA).",
   },
+  {
+    codigo_entidad: "costeo",
+    prefijo: "COS",
+    descripcion: "Correlativo transaccional para costeo (prefijo COS).",
+  },
+  {
+    codigo_entidad: "costo_indirecto",
+    prefijo: "CIN",
+    descripcion: "Correlativo transaccional para costo_indirecto (prefijo CIN).",
+  },
+  {
+    codigo_entidad: "margen_ganancia",
+    prefijo: "MGN",
+    descripcion: "Correlativo transaccional para margen_ganancia (prefijo MGN).",
+  },
+  {
+    codigo_entidad: "rentabilidad",
+    prefijo: "REN",
+    descripcion: "Correlativo transaccional para rentabilidad (prefijo REN).",
+  },
+  {
+    codigo_entidad: "caja_chica",
+    prefijo: "CAJ",
+    descripcion: "Correlativo transaccional para caja_chica (prefijo CAJ).",
+  },
+  {
+    codigo_entidad: "categoria_gasto",
+    prefijo: "CGA",
+    descripcion: "Correlativo transaccional para categoria_gasto (prefijo CGA).",
+  },
+  {
+    codigo_entidad: "movimiento_caja",
+    prefijo: "MCA",
+    descripcion: "Correlativo transaccional para movimiento_caja (prefijo MCA).",
+  },
 ];
 
 async function main() {

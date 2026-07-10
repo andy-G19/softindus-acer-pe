@@ -3,24 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { pettyCashBoxSchema } from "@/schemas/petty-cash/petty-cash-box.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -69,28 +54,24 @@ export async function createPettyCashBoxAction(formData: FormData) {
     throw new Error("Ya existe una caja chica con ese nombre.");
   }
 
-  const lastBox = await prisma.caja_chica.findFirst({
-    orderBy: {
-      id_caja_chica: "desc",
-    },
-    select: {
-      id_caja_chica: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idCajaChica = await getNextCorrelativeId(tx, {
+      codigoEntidad: "caja_chica",
+      prefijo: "CAJ",
+    });
 
-  const idCajaChica = buildSequentialId(lastBox?.id_caja_chica, "CAJ");
-
-  await prisma.caja_chica.create({
-    data: {
-      id_caja_chica: idCajaChica,
-      nombre_caja: boxName,
-      saldo_inicial: data.saldo_inicial,
-      saldo_actual: data.saldo_inicial,
-      fecha_apertura: data.fecha_apertura,
-      estado: "abierta",
-      responsable: data.responsable || null,
-      observaciones: data.observaciones || null,
-    },
+    await tx.caja_chica.create({
+      data: {
+        id_caja_chica: idCajaChica,
+        nombre_caja: boxName,
+        saldo_inicial: data.saldo_inicial,
+        saldo_actual: data.saldo_inicial,
+        fecha_apertura: data.fecha_apertura,
+        estado: "abierta",
+        responsable: data.responsable || null,
+        observaciones: data.observaciones || null,
+      },
+    });
   });
 
   revalidatePath("/dashboard/petty-cash");

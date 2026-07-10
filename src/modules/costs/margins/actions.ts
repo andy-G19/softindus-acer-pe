@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { marginSchema } from "@/schemas/costs/margin.schema";
 
 function requireAdmin(role: string | undefined) {
@@ -79,35 +79,32 @@ export async function createMarginAction(formData: FormData) {
     );
   }
 
-  const lastMargin = await prisma.margen_ganancia.findFirst({
-    orderBy: {
-      id_margen: "desc",
-    },
-    select: {
-      id_margen: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idMargen = await getNextCorrelativeId(tx, {
+      codigoEntidad: "margen_ganancia",
+      prefijo: "MGN",
+    });
 
-  const idMargen = buildNextId("MGN", lastMargin?.id_margen);
+    await tx.margen_ganancia.create({
+      data: {
+        id_margen: idMargen,
+        id_costeo: data.id_costeo,
+        id_usuario_aplica: session.user.id,
+        porcentaje_margen: data.porcentaje_margen,
+        precio_sugerido: suggestedPrice,
+        precio_final: finalPrice,
+        motivo_ajuste: data.motivo_ajuste,
+      },
+    });
 
-  await prisma.margen_ganancia.create({
-    data: {
-      id_margen: idMargen,
-      id_costeo: data.id_costeo,
-      id_usuario_aplica: session.user.id,
-      porcentaje_margen: data.porcentaje_margen,
-      precio_sugerido: suggestedPrice,
-      precio_final: finalPrice,
-      motivo_ajuste: data.motivo_ajuste,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "margen_ganancia",
-    id_registro_afectado: idMargen,
-    accion: "crear",
-    detalle: `Margen aplicado al costeo ${data.id_costeo}.`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "margen_ganancia",
+      id_registro_afectado: idMargen,
+      accion: "crear",
+      detalle: `Margen aplicado al costeo ${data.id_costeo}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard");
