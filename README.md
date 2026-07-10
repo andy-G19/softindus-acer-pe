@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema de Gestión Integral — Industrias Aceros Perú
 
-## Getting Started
+ERP web interno para taller metalúrgico. Cubre gestión comercial (clientes,
+productos, pedidos, proformas, pagos, comprobantes), inventario, producción,
+mermas y chatarra, costos y rentabilidad, caja chica, personal,
+mantenimiento, reportes/exportaciones y auditoría de operaciones.
 
-First, run the development server:
+Es un sistema **interno**, no público: no está pensado para indexación en
+buscadores ni para acceso anónimo (ver [Seguridad implementada](#seguridad-implementada)).
+
+## Stack técnico
+
+- [Next.js](https://nextjs.org) (App Router)
+- TypeScript
+- React
+- Tailwind CSS
+- [shadcn/ui](https://ui.shadcn.com)
+- [Auth.js / NextAuth v5](https://authjs.dev)
+- [Prisma](https://www.prisma.io)
+- PostgreSQL / [Supabase](https://supabase.com)
+- [Vercel](https://vercel.com) (hosting)
+- [Vitest](https://vitest.dev) (tests)
+- GitHub Actions (CI)
+
+## Roles
+
+- `ADMIN` — acceso total al sistema.
+- `SELLER` — módulo comercial.
+- `WORKSHOP_MASTER` — inventario, producción, mantenimiento y personal.
+
+Los permisos por ruta se definen en `src/lib/permissions.ts` y se aplican en
+dos capas: el guard de rutas (`src/proxy.ts`) y el chequeo en código de cada
+página/Server Action (`src/lib/authz.ts`).
+
+## Módulos principales
+
+- Seguridad y usuarios
+- Comercial (clientes, productos, pedidos, proformas, pagos, comprobantes)
+- Inventario (materiales, proveedores, compras, movimientos, alertas de stock)
+- Producción (recetas, rutas de fabricación, campañas, órdenes de trabajo, avances)
+- Mermas y chatarra
+- Costos y rentabilidad
+- Caja chica
+- Personal (operarios, asistencia, tareas, planillas)
+- Mantenimiento (máquinas, fallas, reparaciones, mantenimiento preventivo)
+- Dashboard y reportes (exportación a PDF/Excel)
+- Auditoría (bitácora de operaciones)
+
+## Variables de entorno
+
+Ver [.env.example](.env.example) para la referencia completa (sin valores
+reales). Validadas centralmente en `src/lib/env.ts`, que hace fallar el
+arranque de la app si falta alguna obligatoria.
+
+| Variable | Obligatoria | Descripción |
+|---|---|---|
+| `DATABASE_URL` | Sí | Cadena de conexión PostgreSQL (Supabase). La app no arranca sin ella. |
+| `DIRECT_URL` | No | Conexión directa a Supabase, reservada para migraciones/mantenimiento. Hoy no la consume el código de la app. |
+| `AUTH_SECRET` | Sí | Secreto de Auth.js v5. Generar con `npx auth secret`. |
+| `AUTH_URL` | No | URL pública del sitio. En Vercel puede resolverse automáticamente. |
+| `AUTH_TRUST_HOST` | No | `"true"` o `"1"` para que Auth.js confíe en el host del request (útil en Vercel). |
+| `NODE_ENV` | No | La define Next.js automáticamente (`development` en `next dev`, `production` en build/start). |
+
+No existen variables `NEXT_PUBLIC_*` en el proyecto: no hay secretos ni
+configuración expuesta al cliente.
+
+## Comandos
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev            # Servidor de desarrollo
+npm run build           # Build de producción
+npm run start            # Servidor de producción (tras build)
+npm run lint             # ESLint
+npm run test              # Vitest (una sola corrida)
+npm run db:validate       # Valida prisma/schema.prisma
+npm run db:generate       # Regenera el cliente de Prisma (src/generated/prisma)
+npm run db:migrate        # Crea y aplica una migración (prisma migrate dev)
+npm run db:seed           # Ejecuta prisma/seed.ts
+npm run db:studio         # Abre Prisma Studio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`postinstall` ejecuta `prisma generate` automáticamente. No hay un runner de
+tests E2E configurado (ver [Riesgos pendientes](docs/fase-12-estabilizacion-tecnica.md)).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Flujo de trabajo local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Instalar dependencias: `npm install`
+2. Copiar `.env.example` a `.env` y completar los valores reales (nunca
+   commitear `.env`)
+3. Generar el cliente de Prisma: `npm run db:generate`
+4. Validar el schema: `npm run db:validate`
+5. Ejecutar el seed inicial: `npm run db:seed`
+6. Levantar el servidor de desarrollo: `npm run dev`
 
-## Learn More
+## Flujo de despliegue (Vercel + Supabase)
 
-To learn more about Next.js, take a look at the following resources:
+1. Supabase actúa como base de datos PostgreSQL (schema `aceros`).
+2. Vercel aloja la aplicación Next.js.
+3. Configurar en Vercel las variables de entorno de producción
+   (`DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`/`AUTH_TRUST_HOST` según
+   corresponda).
+4. Build: `npm run build`.
+5. Migraciones en producción: `npx prisma migrate deploy` (no usar
+   `migrate dev` contra una base de datos productiva).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Ver el checklist completo en
+[docs/checklist-despliegue-vercel-supabase.md](docs/checklist-despliegue-vercel-supabase.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Seguridad implementada
 
-## Deploy on Vercel
+- Sesión revalidada contra la base de datos en cada request (usuario/rol
+  actual, no solo el JWT).
+- Usuarios inactivos bloqueados automáticamente, incluso con un JWT válido.
+- Rate limit y bloqueo temporal de login, con protección anti timing-attack.
+- IDs con correlativos transaccionales (`SELECT ... FOR UPDATE` sobre
+  `correlativo_sistema`), sin colisiones bajo concurrencia.
+- Guards centralizados para Server Actions y rutas API
+  (`src/lib/authz.ts`).
+- Logger centralizado que redacta claves sensibles (`src/lib/logger.ts`).
+- Manejo de errores centralizado que nunca filtra detalles internos al
+  cliente (`src/lib/errors.ts`).
+- Security headers HTTP (`X-Content-Type-Options`, `X-Frame-Options`,
+  `Referrer-Policy`, `Permissions-Policy`, HSTS en producción, CSP en modo
+  Report-Only) — `src/lib/security-headers.ts` + `next.config.ts`.
+- `robots.txt` con `Disallow: /` y metadata `noindex, nofollow`: sistema
+  interno, no indexable.
+- CI en GitHub Actions ejecuta lint, validación de schema, tests y build en
+  cada push/PR a `main`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Pruebas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Unitarias con Vitest (`npm run test`), incluidas en CI.
+- CI en `.github/workflows/ci.yml`: `db:generate` → `db:validate` → `lint`
+  → `test` → `build`.
+- Checklists manuales en `docs/`:
+  [pruebas de seguridad](docs/pruebas-seguridad.md),
+  [pruebas integrales por rol](docs/checklist-pruebas-integrales.md).
+
+## Estado actual
+
+La **Fase 12 de estabilización técnica** fue completada: concurrencia de
+inventario, IDs seguros, sesión revalidada, rate limit de login,
+env/logger/errores centralizados, guards centralizados, tests + CI, gestión
+de usuarios, paginación, reportes/exportaciones con límites seguros,
+hardening HTTP para Vercel, y cierre técnico con auditoría y documentación
+final. Detalle completo en
+[docs/fase-12-estabilizacion-tecnica.md](docs/fase-12-estabilizacion-tecnica.md).

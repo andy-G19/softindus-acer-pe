@@ -1,11 +1,14 @@
 import { KpiCard } from "@/components/ui/kpi-card";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 export default async function CommercialPage() {
+  await requireRole(["ADMIN", "SELLER"]);
+
   const [
     activeClients,
     activeProducts,
