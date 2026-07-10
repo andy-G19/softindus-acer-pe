@@ -4,19 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { supplierPaymentSchema } from "@/schemas/inventory/supplier-payment.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
@@ -103,21 +93,12 @@ export async function createSupplierPaymentAction(formData: FormData) {
     newPaymentStatus = "parcial";
   }
 
-  const lastPayment = await prisma.pago_proveedor.findFirst({
-    orderBy: {
-      id_pago_proveedor: "desc",
-    },
-    select: {
-      id_pago_proveedor: true,
-    },
-  });
-
-  const idPagoProveedor = buildSequentialId(
-    lastPayment?.id_pago_proveedor,
-    "PPR",
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idPagoProveedor = await getNextCorrelativeId(tx, {
+      codigoEntidad: "pago_proveedor",
+      prefijo: "PPR",
+    });
+
     await tx.pago_proveedor.create({
       data: {
         id_pago_proveedor: idPagoProveedor,

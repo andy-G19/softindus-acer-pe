@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { inventoryCatalogSchema } from "@/schemas/inventory/catalog.schema";
 
 export type InventoryCatalogFormState = {
@@ -87,29 +87,31 @@ export async function createMaterialCategoryAction(
     };
   }
 
-  const lastCategory = await prisma.categoria_material.findFirst({
-    orderBy: {
-      id_categoria_material: "desc",
-    },
-    select: {
-      id_categoria_material: true,
-    },
-  });
-
-  const idCategoriaMaterial = buildNextId(
-    "CMA",
-    lastCategory?.id_categoria_material,
-  );
-
   try {
-    await prisma.categoria_material.create({
-      data: {
-        id_categoria_material: idCategoriaMaterial,
-        nombre: data.nombre,
-        slug: data.slug,
-        descripcion: emptyToNull(formData.get("descripcion")),
-        estado: true,
-      },
+    await prisma.$transaction(async (tx) => {
+      const idCategoriaMaterial = await getNextCorrelativeId(tx, {
+        codigoEntidad: "categoria_material",
+        prefijo: "CMA",
+      });
+
+      await tx.categoria_material.create({
+        data: {
+          id_categoria_material: idCategoriaMaterial,
+          nombre: data.nombre,
+          slug: data.slug,
+          descripcion: emptyToNull(formData.get("descripcion")),
+          estado: true,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "categoria_material",
+        id_registro_afectado: idCategoriaMaterial,
+        accion: "crear",
+        detalle: `Categoría de material creada: ${data.nombre}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getUniqueErrorMessage(
@@ -126,14 +128,6 @@ export async function createMaterialCategoryAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "categoria_material",
-    id_registro_afectado: idCategoriaMaterial,
-    accion: "crear",
-    detalle: `Categoría de material creada: ${data.nombre}`,
-  });
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);

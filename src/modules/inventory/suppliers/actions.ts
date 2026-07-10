@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { supplierSchema } from "@/schemas/inventory/supplier.schema";
 
 export type SupplierFormState = {
@@ -148,33 +148,38 @@ export async function createSupplierAction(
     };
   }
 
-  const lastSupplier = await prisma.proveedor.findFirst({
-    orderBy: {
-      id_proveedor: "desc",
-    },
-    select: {
-      id_proveedor: true,
-    },
-  });
-
-  const idProveedor = buildNextId("PVE", lastSupplier?.id_proveedor);
-
   try {
-    await prisma.proveedor.create({
-      data: {
-        id_proveedor: idProveedor,
-        razon_social: data.razon_social,
-        tipo_documento: data.tipo_documento ?? null,
-        numero_documento: data.numero_documento ?? null,
-        telefono: toNullable(data.telefono),
-        correo: toNullable(data.correo),
-        direccion: toNullable(data.direccion),
-        contacto_principal: toNullable(data.contacto_principal),
-        tipo_proveedor: data.tipo_proveedor,
-        condicion_pago: data.condicion_pago ?? null,
-        estado: true,
-        observaciones: toNullable(data.observaciones),
-      },
+    await prisma.$transaction(async (tx) => {
+      const idProveedor = await getNextCorrelativeId(tx, {
+        codigoEntidad: "proveedor",
+        prefijo: "PVE",
+      });
+
+      await tx.proveedor.create({
+        data: {
+          id_proveedor: idProveedor,
+          razon_social: data.razon_social,
+          tipo_documento: data.tipo_documento ?? null,
+          numero_documento: data.numero_documento ?? null,
+          telefono: toNullable(data.telefono),
+          correo: toNullable(data.correo),
+          direccion: toNullable(data.direccion),
+          contacto_principal: toNullable(data.contacto_principal),
+          tipo_proveedor: data.tipo_proveedor,
+          condicion_pago: data.condicion_pago ?? null,
+          estado: true,
+          observaciones: toNullable(data.observaciones),
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "proveedor",
+        id_registro_afectado: idProveedor,
+        accion: "crear",
+        detalle: `Proveedor creado: ${data.razon_social}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getPrismaUniqueErrorMessage(
@@ -190,14 +195,6 @@ export async function createSupplierAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "proveedor",
-    id_registro_afectado: idProveedor,
-    accion: "crear",
-    detalle: `Proveedor creado: ${data.razon_social}`,
-  });
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);

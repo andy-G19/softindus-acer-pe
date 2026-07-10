@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
 export type SupplierMaterialFormState = {
@@ -186,44 +186,38 @@ export async function createSupplierMaterialAction(
     };
   }
 
-  const lastRelation = await prisma.proveedor_material.findFirst({
-    orderBy: {
-      id_proveedor_material: "desc",
-    },
-    select: {
-      id_proveedor_material: true,
-    },
-  });
-
-  const idProveedorMaterial = buildNextId(
-    "PVM",
-    lastRelation?.id_proveedor_material,
-  );
-
   try {
-    await prisma.proveedor_material.create({
-      data: {
-        id_proveedor_material: idProveedorMaterial,
-        id_proveedor: data.id_proveedor,
-        id_material: data.id_material,
-        precio_referencial: data.precio_referencial ?? null,
-        unidad_medida: data.unidad_medida,
-        tiempo_entrega_dias:
-          data.tiempo_entrega_dias === undefined
-            ? null
-            : Math.trunc(data.tiempo_entrega_dias),
-        disponibilidad: data.disponibilidad ?? null,
-        estado: true,
-        fecha_actualizacion: new Date(),
-      },
-    });
+    await prisma.$transaction(async (tx) => {
+      const idProveedorMaterial = await getNextCorrelativeId(tx, {
+        codigoEntidad: "proveedor_material",
+        prefijo: "PVM",
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "proveedor_material",
-      id_registro_afectado: idProveedorMaterial,
-      accion: "crear",
-      detalle: `Proveedor-material creado: ${validation.supplier.razon_social} - ${validation.material.nombre_material}`,
+      await tx.proveedor_material.create({
+        data: {
+          id_proveedor_material: idProveedorMaterial,
+          id_proveedor: data.id_proveedor,
+          id_material: data.id_material,
+          precio_referencial: data.precio_referencial ?? null,
+          unidad_medida: data.unidad_medida,
+          tiempo_entrega_dias:
+            data.tiempo_entrega_dias === undefined
+              ? null
+              : Math.trunc(data.tiempo_entrega_dias),
+          disponibilidad: data.disponibilidad ?? null,
+          estado: true,
+          fecha_actualizacion: new Date(),
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "proveedor_material",
+        id_registro_afectado: idProveedorMaterial,
+        accion: "crear",
+        detalle: `Proveedor-material creado: ${validation.supplier.razon_social} - ${validation.material.nombre_material}`,
+        tx,
+      });
     });
   } catch (error) {
     return {

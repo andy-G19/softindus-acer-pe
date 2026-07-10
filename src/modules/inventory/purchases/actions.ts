@@ -4,33 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
-
-function buildSequentialIds(
-  lastId: string | null | undefined,
-  prefix: string,
-  quantity: number,
-) {
-  const startNumber = lastId ? Number(lastId.replace(prefix, "")) : 0;
-
-  return Array.from({ length: quantity }, (_, index) => {
-    const nextNumber = startNumber + index + 1;
-
-    return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-  });
-}
 
 function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
@@ -122,68 +98,31 @@ export async function createPurchaseAction(formData: FormData) {
   const igv = data.igv ?? 0;
   const montoTotal = subtotal + igv;
 
-  const [
-    lastPurchase,
-    lastPurchaseDetail,
-    lastMovement,
-    lastPriceHistory,
-  ] = await Promise.all([
-    prisma.compra.findFirst({
-      orderBy: {
-        id_compra: "desc",
-      },
-      select: {
-        id_compra: true,
-      },
-    }),
-    prisma.detalle_compra.findFirst({
-      orderBy: {
-        id_detalle_compra: "desc",
-      },
-      select: {
-        id_detalle_compra: true,
-      },
-    }),
-    prisma.movimiento_inventario.findFirst({
-      orderBy: {
-        id_movimiento: "desc",
-      },
-      select: {
-        id_movimiento: true,
-      },
-    }),
-    prisma.historial_precio_proveedor.findFirst({
-      orderBy: {
-        id_historial_precio: "desc",
-      },
-      select: {
-        id_historial_precio: true,
-      },
-    }),
-  ]);
-
-  const idCompra = buildSequentialId(lastPurchase?.id_compra, "COM");
-  const detailIds = buildSequentialIds(
-    lastPurchaseDetail?.id_detalle_compra,
-    "DCO",
-    data.items.length,
-  );
-  const movementIds = buildSequentialIds(
-    lastMovement?.id_movimiento,
-    "MVI",
-    data.items.length,
-  );
-  const historyIds = buildSequentialIds(
-    lastPriceHistory?.id_historial_precio,
-    "HPP",
-    data.items.length,
-  );
-
   const materialById = new Map(
     materials.map((material) => [material.id_material, material]),
   );
 
   await prisma.$transaction(async (tx) => {
+    const idCompra = await getNextCorrelativeId(tx, {
+      codigoEntidad: "compra",
+      prefijo: "COM",
+    });
+    const detailIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "detalle_compra",
+      prefijo: "DCO",
+      cantidad: data.items.length,
+    });
+    const movementIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "movimiento_inventario",
+      prefijo: "MVI",
+      cantidad: data.items.length,
+    });
+    const historyIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "historial_precio_proveedor",
+      prefijo: "HPP",
+      cantidad: data.items.length,
+    });
+
     await tx.compra.create({
       data: {
         id_compra: idCompra,
@@ -341,27 +280,17 @@ export async function annulPurchaseAction(formData: FormData) {
     (movement) => movement.id_material,
   );
 
-  const [materials, lastMovement] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        id_material: {
-          in: materialIds,
-        },
+  const materials = await prisma.material.findMany({
+    where: {
+      id_material: {
+        in: materialIds,
       },
-      select: {
-        id_material: true,
-        stock_actual: true,
-      },
-    }),
-    prisma.movimiento_inventario.findFirst({
-      orderBy: {
-        id_movimiento: "desc",
-      },
-      select: {
-        id_movimiento: true,
-      },
-    }),
-  ]);
+    },
+    select: {
+      id_material: true,
+      stock_actual: true,
+    },
+  });
 
   const materialById = new Map(
     materials.map((material) => [material.id_material, material]),
@@ -383,13 +312,13 @@ export async function annulPurchaseAction(formData: FormData) {
     redirect(`/dashboard/inventory/purchases/${purchaseId}`);
   }
 
-  const reversalIds = buildSequentialIds(
-    lastMovement?.id_movimiento,
-    "MVI",
-    purchase.movimiento_inventario.length,
-  );
-
   await prisma.$transaction(async (tx) => {
+    const reversalIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "movimiento_inventario",
+      prefijo: "MVI",
+      cantidad: purchase.movimiento_inventario.length,
+    });
+
     for (const [index, movement] of purchase.movimiento_inventario.entries()) {
       const material = materialById.get(movement.id_material);
 

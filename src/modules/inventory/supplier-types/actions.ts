@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { inventoryCatalogSchema } from "@/schemas/inventory/catalog.schema";
 
 export type InventoryCatalogFormState = {
@@ -87,26 +87,31 @@ export async function createSupplierTypeAction(
     };
   }
 
-  const lastType = await prisma.tipo_proveedor_catalogo.findFirst({
-    orderBy: {
-      id_tipo_proveedor: "desc",
-    },
-    select: {
-      id_tipo_proveedor: true,
-    },
-  });
-
-  const idTipoProveedor = buildNextId("TPR", lastType?.id_tipo_proveedor);
-
   try {
-    await prisma.tipo_proveedor_catalogo.create({
-      data: {
-        id_tipo_proveedor: idTipoProveedor,
-        nombre: data.nombre,
-        slug: data.slug,
-        descripcion: emptyToNull(formData.get("descripcion")),
-        estado: true,
-      },
+    await prisma.$transaction(async (tx) => {
+      const idTipoProveedor = await getNextCorrelativeId(tx, {
+        codigoEntidad: "tipo_proveedor_catalogo",
+        prefijo: "TPR",
+      });
+
+      await tx.tipo_proveedor_catalogo.create({
+        data: {
+          id_tipo_proveedor: idTipoProveedor,
+          nombre: data.nombre,
+          slug: data.slug,
+          descripcion: emptyToNull(formData.get("descripcion")),
+          estado: true,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "tipo_proveedor_catalogo",
+        id_registro_afectado: idTipoProveedor,
+        accion: "crear",
+        detalle: `Tipo de proveedor creado: ${data.nombre}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getUniqueErrorMessage(
@@ -122,14 +127,6 @@ export async function createSupplierTypeAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "tipo_proveedor_catalogo",
-    id_registro_afectado: idTipoProveedor,
-    accion: "crear",
-    detalle: `Tipo de proveedor creado: ${data.nombre}`,
-  });
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);

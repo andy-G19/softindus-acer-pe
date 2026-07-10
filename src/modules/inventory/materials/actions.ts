@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import {
   materialSchema,
   materialUpdateSchema,
@@ -141,42 +141,17 @@ export async function createMaterialAction(
     };
   }
 
-  const [lastMaterial, lastMovement, lastAlert] = await Promise.all([
-    prisma.material.findFirst({
-      orderBy: {
-        id_material: "desc",
-      },
-      select: {
-        id_material: true,
-      },
-    }),
-    prisma.movimiento_inventario.findFirst({
-      orderBy: {
-        id_movimiento: "desc",
-      },
-      select: {
-        id_movimiento: true,
-      },
-    }),
-    prisma.alerta_stock.findFirst({
-      orderBy: {
-        id_alerta: "desc",
-      },
-      select: {
-        id_alerta: true,
-      },
-    }),
-  ]);
-
-  const idMaterial = buildNextId("MAT", lastMaterial?.id_material);
-  const idMovimiento = buildNextId("MVI", lastMovement?.id_movimiento);
-  const idAlerta = buildNextId("ALE", lastAlert?.id_alerta);
   const shouldCreateInitialMovement = data.stock_actual > 0;
   const shouldCreateStockAlert =
     data.stock_minimo > 0 && data.stock_actual <= data.stock_minimo;
 
   try {
     await prisma.$transaction(async (tx) => {
+      const idMaterial = await getNextCorrelativeId(tx, {
+        codigoEntidad: "material",
+        prefijo: "MAT",
+      });
+
       await tx.material.create({
         data: {
           id_material: idMaterial,
@@ -192,6 +167,11 @@ export async function createMaterialAction(
       });
 
       if (shouldCreateInitialMovement) {
+        const idMovimiento = await getNextCorrelativeId(tx, {
+          codigoEntidad: "movimiento_inventario",
+          prefijo: "MVI",
+        });
+
         await tx.movimiento_inventario.create({
           data: {
             id_movimiento: idMovimiento,
@@ -207,6 +187,11 @@ export async function createMaterialAction(
       }
 
       if (shouldCreateStockAlert) {
+        const idAlerta = await getNextCorrelativeId(tx, {
+          codigoEntidad: "alerta_stock",
+          prefijo: "ALE",
+        });
+
         await tx.alerta_stock.create({
           data: {
             id_alerta: idAlerta,

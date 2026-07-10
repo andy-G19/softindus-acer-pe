@@ -225,6 +225,56 @@ const correlatives = [
     prefijo: "CMP",
     descripcion: "Correlativo transaccional para comprobante_venta (prefijo CMP).",
   },
+  {
+    codigo_entidad: "material",
+    prefijo: "MAT",
+    descripcion: "Correlativo transaccional para material (prefijo MAT).",
+  },
+  {
+    codigo_entidad: "categoria_material",
+    prefijo: "CMA",
+    descripcion: "Correlativo transaccional para categoria_material (prefijo CMA).",
+  },
+  {
+    codigo_entidad: "proveedor",
+    prefijo: "PVE",
+    descripcion: "Correlativo transaccional para proveedor (prefijo PVE).",
+  },
+  {
+    codigo_entidad: "tipo_proveedor_catalogo",
+    prefijo: "TPR",
+    descripcion: "Correlativo transaccional para tipo_proveedor_catalogo (prefijo TPR).",
+  },
+  {
+    codigo_entidad: "proveedor_material",
+    prefijo: "PVM",
+    descripcion: "Correlativo transaccional para proveedor_material (prefijo PVM).",
+  },
+  {
+    codigo_entidad: "compra",
+    prefijo: "COM",
+    descripcion: "Correlativo transaccional para compra (prefijo COM).",
+  },
+  {
+    codigo_entidad: "detalle_compra",
+    prefijo: "DCO",
+    descripcion: "Correlativo transaccional para detalle_compra (prefijo DCO).",
+  },
+  {
+    codigo_entidad: "historial_precio_proveedor",
+    prefijo: "HPP",
+    descripcion: "Correlativo transaccional para historial_precio_proveedor (prefijo HPP).",
+  },
+  {
+    codigo_entidad: "pago_proveedor",
+    prefijo: "PPR",
+    descripcion: "Correlativo transaccional para pago_proveedor (prefijo PPR).",
+  },
+  {
+    codigo_entidad: "alerta_stock",
+    prefijo: "ALE",
+    descripcion: "Correlativo transaccional para alerta_stock (prefijo ALE).",
+  },
 ];
 
 async function main() {
