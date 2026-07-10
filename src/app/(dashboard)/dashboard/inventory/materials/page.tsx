@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -24,6 +25,7 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleMaterialStatusAction } from "@/modules/inventory/materials/actions";
 
 type MaterialsPageProps = {
@@ -125,14 +127,54 @@ export default async function MaterialsPage({
 
   const where: Prisma.materialWhereInput =
     filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [materialsResult, categories, units] = await Promise.all([
-    prisma.material.findMany({
-      where,
-      orderBy: {
-        fecha_registro: "desc",
-      },
-    }),
+  function isCriticalStock(material: {
+    stock_actual: unknown;
+    stock_reservado: unknown;
+    stock_minimo: unknown;
+  }) {
+    const stockActual = Number(String(material.stock_actual));
+    const stockReservado = Number(String(material.stock_reservado));
+    const stockMinimo = Number(String(material.stock_minimo));
+    const stockDisponible = stockActual - stockReservado;
+
+    return stockMinimo > 0 && stockDisponible <= stockMinimo;
+  }
+
+  const [materialsQuery, categories, units] = await Promise.all([
+    // El filtro "stock" compara stock_actual - stock_reservado contra
+    // stock_minimo (tres columnas entre si): Prisma no puede expresar eso en
+    // un `where`. Cuando ese filtro esta activo, se resuelve y se pagina en
+    // memoria sobre el conjunto ya acotado por el resto de filtros (q,
+    // categoria, unidad, estado); en el caso normal (sin filtro de stock) la
+    // paginacion es 100% a nivel de base de datos con skip/take/count.
+    stock === "critical" || stock === "ok"
+      ? prisma.material
+          .findMany({
+            where,
+            orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
+          })
+          .then((allMatching) => {
+            const filtered = allMatching.filter((material) => {
+              const isCritical = isCriticalStock(material);
+              return stock === "critical" ? isCritical : !isCritical;
+            });
+
+            return {
+              materials: filtered.slice(skip, skip + take),
+              totalItems: filtered.length,
+            };
+          })
+      : Promise.all([
+          prisma.material.findMany({
+            where,
+            orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
+            skip,
+            take,
+          }),
+          prisma.material.count({ where }),
+        ]).then(([materials, totalItems]) => ({ materials, totalItems })),
     prisma.categoria_material.findMany({
       orderBy: {
         nombre: "asc",
@@ -153,24 +195,8 @@ export default async function MaterialsPage({
     }),
   ]);
 
-  const materials = materialsResult.filter((material) => {
-    const stockActual = Number(material.stock_actual.toString());
-    const stockReservado = Number(material.stock_reservado.toString());
-    const stockMinimo = Number(material.stock_minimo.toString());
-    const stockDisponible = stockActual - stockReservado;
-    const isCritical = stockMinimo > 0 && stockDisponible <= stockMinimo;
-
-    if (stock === "critical") {
-      return isCritical;
-    }
-
-    if (stock === "ok") {
-      return !isCritical;
-    }
-
-    return true;
-  });
-
+  const { materials, totalItems } = materialsQuery;
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
   const isAdmin = session.user.role === "ADMIN";
   const categoryLabels = new Map(
     categories.map((item) => [item.slug, item.nombre]),
@@ -376,6 +402,13 @@ export default async function MaterialsPage({
             ) : null}
           </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.materials}
+        searchParams={params}
+        itemLabel="materiales"
+      />
     </main>
   );
 }

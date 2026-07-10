@@ -1,16 +1,18 @@
 export type SearchParamsRecord = Record<string, string | string[] | undefined>;
 
+// Limite defensivo para parametros de texto libre (busqueda, filtros): evita
+// que un query string absurdamente largo llegue a construir un WHERE de
+// Prisma con un `contains` gigante.
+const MAX_TEXT_PARAM_LENGTH = 200;
+
 export function parseStringParam(
   params: SearchParamsRecord,
   key: string,
 ) {
   const value = params[key];
+  const single = Array.isArray(value) ? value[0] : value;
 
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? "";
-  }
-
-  return value?.trim() ?? "";
+  return single?.trim().slice(0, MAX_TEXT_PARAM_LENGTH) ?? "";
 }
 
 export function parseDateParam(

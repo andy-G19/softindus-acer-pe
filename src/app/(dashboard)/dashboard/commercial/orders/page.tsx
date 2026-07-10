@@ -3,6 +3,7 @@ import Link from "next/link";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -26,6 +27,7 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -125,13 +127,14 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
 
   const where: Prisma.pedidoWhereInput =
     filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [orders, clients, products] = await Promise.all([
+  const [orders, totalItems, clients, products] = await Promise.all([
     prisma.pedido.findMany({
       where,
-      orderBy: {
-        fecha_pedido: "desc",
-      },
+      orderBy: [{ fecha_pedido: "desc" }, { id_pedido: "desc" }],
+      skip,
+      take,
       include: {
         cliente: true,
         comprobante_venta: {
@@ -163,6 +166,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         },
       },
     }),
+    prisma.pedido.count({ where }),
     prisma.cliente.findMany({
       orderBy: {
         nombre_razon_social: "asc",
@@ -182,6 +186,8 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
       },
     }),
   ]);
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <main className="space-y-6">
@@ -405,6 +411,13 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
             )}
           </TableBody>
         </Table>
+
+        <PaginationControls
+          meta={meta}
+          basePath={navigationHrefs.orders}
+          searchParams={params}
+          itemLabel="pedidos"
+        />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -25,6 +26,7 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   annulWorkOrderAction,
   finishWorkOrderAction,
@@ -226,10 +228,22 @@ export default async function WorkOrdersPage({
 
   const where: Prisma.orden_trabajoWhereInput =
     filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [workOrders, products, clients, campaigns] = await Promise.all([
+  const [
+    workOrders,
+    totalItems,
+    totalActive,
+    totalPending,
+    totalFinished,
+    products,
+    clients,
+    campaigns,
+  ] = await Promise.all([
     prisma.orden_trabajo.findMany({
       where,
+      skip,
+      take,
       include: {
         producto: true,
         cliente: true,
@@ -260,7 +274,22 @@ export default async function WorkOrdersPage({
         {
           fecha_registro: "desc",
         },
+        {
+          id_orden_trabajo: "desc",
+        },
       ],
+    }),
+    prisma.orden_trabajo.count({ where }),
+    prisma.orden_trabajo.count({
+      where: {
+        AND: [where, { estado: { in: ["pendiente", "en_proceso", "pausada"] } }],
+      },
+    }),
+    prisma.orden_trabajo.count({
+      where: { AND: [where, { estado: "pendiente" }] },
+    }),
+    prisma.orden_trabajo.count({
+      where: { AND: [where, { estado: "finalizada" }] },
     }),
     prisma.producto.findMany({
       where: {
@@ -302,17 +331,7 @@ export default async function WorkOrdersPage({
     }),
   ]);
 
-  const activeOrders = workOrders.filter((order) =>
-    ["pendiente", "en_proceso", "pausada"].includes(order.estado),
-  );
-
-  const pendingOrders = workOrders.filter(
-    (order) => order.estado === "pendiente",
-  );
-
-  const finishedOrders = workOrders.filter(
-    (order) => order.estado === "finalizada",
-  );
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <main className="space-y-6">
@@ -335,10 +354,10 @@ export default async function WorkOrdersPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Órdenes registradas" value={workOrders.length.toString()} description="Total histórico." tone="info" />
-        <KpiCard title="Órdenes activas" value={activeOrders.length.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
-        <KpiCard title="Pendientes" value={pendingOrders.length.toString()} description="Sin iniciar todavía." tone="info" />
-        <KpiCard title="Finalizadas" value={finishedOrders.length.toString()} description="Órdenes completadas." tone="success" />
+        <KpiCard title="Órdenes registradas" value={totalItems.toString()} description="Total según filtros aplicados." tone="info" />
+        <KpiCard title="Órdenes activas" value={totalActive.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
+        <KpiCard title="Pendientes" value={totalPending.toString()} description="Sin iniciar todavía." tone="info" />
+        <KpiCard title="Finalizadas" value={totalFinished.toString()} description="Órdenes completadas." tone="success" />
       </section>
 
       <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
@@ -609,6 +628,13 @@ export default async function WorkOrdersPage({
           ) : null}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.workOrders}
+        searchParams={params}
+        itemLabel="órdenes"
+      />
     </main>
   );
 }

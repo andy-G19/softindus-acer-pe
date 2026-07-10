@@ -3,6 +3,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { PaginationControls } from "@/components/pagination-controls";
 import {
   Card,
   CardContent,
@@ -26,6 +27,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { prisma } from "@/lib/db";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
 
@@ -37,6 +39,8 @@ type PettyCashMovementsPageProps = {
     desde?: string;
     hasta?: string;
     q?: string;
+    page?: string;
+    pageSize?: string;
   }>;
 };
 
@@ -182,7 +186,18 @@ export default async function PettyCashMovementsPage({
     ];
   }
 
-  const [cashBoxes, categories, movements, totalMatches] = await Promise.all([
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+
+  const [
+    cashBoxes,
+    categories,
+    movements,
+    totalMatches,
+    incomeSum,
+    expenseSum,
+    positiveAdjustmentSum,
+    negativeAdjustmentSum,
+  ] = await Promise.all([
     prisma.caja_chica.findMany({
       orderBy: {
         nombre_caja: "asc",
@@ -205,7 +220,8 @@ export default async function PettyCashMovementsPage({
           id_movimiento_caja: "desc",
         },
       ],
-      take: 100,
+      skip,
+      take,
       include: {
         caja_chica: true,
         categoria_gasto: true,
@@ -216,41 +232,46 @@ export default async function PettyCashMovementsPage({
     prisma.movimiento_caja.count({
       where,
     }),
+
+    // Los totales de las KPI se calculan con aggregate sobre TODO el
+    // conjunto filtrado (no solo la pagina actual), para que sigan siendo
+    // correctos ahora que la tabla esta paginada.
+    prisma.movimiento_caja.aggregate({
+      where: { AND: [where, { tipo_movimiento: "ingreso" }] },
+      _sum: { monto: true },
+    }),
+    prisma.movimiento_caja.aggregate({
+      where: { AND: [where, { tipo_movimiento: "egreso" }] },
+      _sum: { monto: true },
+    }),
+    prisma.movimiento_caja.aggregate({
+      where: {
+        AND: [
+          where,
+          { tipo_movimiento: "ajuste" },
+          { concepto: { startsWith: "Ajuste positivo" } },
+        ],
+      },
+      _sum: { monto: true },
+    }),
+    prisma.movimiento_caja.aggregate({
+      where: {
+        AND: [
+          where,
+          { tipo_movimiento: "ajuste" },
+          { concepto: { startsWith: "Ajuste negativo" } },
+        ],
+      },
+      _sum: { monto: true },
+    }),
   ]);
 
-  const totalIncome = movements
-    .filter((movement) => movement.tipo_movimiento === "ingreso")
-    .reduce((total, movement) => {
-      return total + toNumber(movement.monto);
-    }, 0);
+  const meta = getPaginationMeta({ totalItems: totalMatches, page, pageSize });
 
-  const totalExpenses = movements
-    .filter((movement) => movement.tipo_movimiento === "egreso")
-    .reduce((total, movement) => {
-      return total + toNumber(movement.monto);
-    }, 0);
-
-  const totalPositiveAdjustments = movements
-    .filter((movement) => {
-      return (
-        movement.tipo_movimiento === "ajuste" &&
-        movement.concepto.startsWith("Ajuste positivo")
-      );
-    })
-    .reduce((total, movement) => {
-      return total + toNumber(movement.monto);
-    }, 0);
-
-  const totalNegativeAdjustments = movements
-    .filter((movement) => {
-      return (
-        movement.tipo_movimiento === "ajuste" &&
-        movement.concepto.startsWith("Ajuste negativo")
-      );
-    })
-    .reduce((total, movement) => {
-      return total + toNumber(movement.monto);
-    }, 0);
+  const totalIncome = toNumber(incomeSum._sum.monto);
+  const totalExpenses = toNumber(expenseSum._sum.monto);
+  const totalPositiveAdjustments = toNumber(positiveAdjustmentSum._sum.monto);
+  const totalNegativeAdjustments = toNumber(negativeAdjustmentSum._sum.monto);
 
   const netResult =
     totalIncome +
@@ -272,9 +293,9 @@ export default async function PettyCashMovementsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <KpiCard title="Movimientos encontrados" value={totalMatches.toString()} description="Se muestran hasta 100 registros." tone="info" />
-        <KpiCard title="Ingresos mostrados" value={formatMoney(totalIncome)} description="Total de ingresos en la vista actual." tone="success" />
-        <KpiCard title="Egresos mostrados" value={formatMoney(totalExpenses)} description="Total de egresos en la vista actual." tone="warning" />
+        <KpiCard title="Movimientos encontrados" value={totalMatches.toString()} description="Total según filtros aplicados." tone="info" />
+        <KpiCard title="Ingresos mostrados" value={formatMoney(totalIncome)} description="Total de ingresos según filtros aplicados." tone="success" />
+        <KpiCard title="Egresos mostrados" value={formatMoney(totalExpenses)} description="Total de egresos según filtros aplicados." tone="warning" />
         <KpiCard title="Ajustes netos" value={formatMoney(totalPositiveAdjustments - totalNegativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" />
         <KpiCard title="Resultado neto" value={formatMoney(netResult)} description="Ingresos y ajustes positivos menos egresos y ajustes negativos." tone="info" />
       </section>
@@ -467,6 +488,13 @@ export default async function PettyCashMovementsPage({
           )}
         </CardContent>
       </Card>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.pettyCashMovements}
+        searchParams={params as Record<string, string | string[] | undefined>}
+        itemLabel="movimientos"
+      />
     </main>
   );
 }

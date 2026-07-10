@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -25,6 +26,7 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   buildDateRangeFilter,
   parseDateParam,
@@ -109,12 +111,16 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
     filters.push({ fecha_compra: dateRange });
   }
 
-  const [purchases, suppliers, materials] = await Promise.all([
+  const where: Prisma.compraWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
+
+  const [purchases, totalItems, suppliers, materials] = await Promise.all([
     prisma.compra.findMany({
-      where: filters.length > 0 ? { AND: filters } : {},
-      orderBy: {
-        fecha_registro: "desc",
-      },
+      where,
+      orderBy: [{ fecha_registro: "desc" }, { id_compra: "desc" }],
+      skip,
+      take,
       include: {
         proveedor: true,
         pago_proveedor: {
@@ -129,6 +135,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
         },
       },
     }),
+    prisma.compra.count({ where }),
     prisma.proveedor.findMany({
       orderBy: {
         razon_social: "asc",
@@ -148,6 +155,8 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
       },
     }),
   ]);
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <main className="space-y-6">
@@ -347,6 +356,13 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
           ) : null}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.purchases}
+        searchParams={params}
+        itemLabel="compras"
+      />
     </main>
   );
 }

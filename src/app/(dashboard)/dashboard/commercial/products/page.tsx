@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -19,6 +20,7 @@ import {
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
 
 type ProductsPageProps = {
@@ -110,14 +112,16 @@ export default async function ProductsPage({
 
   const where: Prisma.productoWhereInput =
     filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [products, categories, units] = await Promise.all([
+  const [products, totalItems, categories, units] = await Promise.all([
     prisma.producto.findMany({
       where,
-      orderBy: {
-        fecha_registro: "desc",
-      },
+      orderBy: [{ fecha_registro: "desc" }, { id_producto: "desc" }],
+      skip,
+      take,
     }),
+    prisma.producto.count({ where }),
     prisma.categoria_producto.findMany({
       orderBy: {
         nombre: "asc",
@@ -138,6 +142,7 @@ export default async function ProductsPage({
     }),
   ]);
 
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
   const canManageProduct = session.user.role === "ADMIN";
   const categoryLabels = new Map(
     categories.map((item) => [item.slug, item.nombre]),
@@ -306,6 +311,13 @@ export default async function ProductsPage({
           )}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath="/dashboard/commercial/products"
+        searchParams={params}
+        itemLabel="productos"
+      />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
+import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -20,18 +24,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
   APP_ROLES,
   getRoleLabel,
   getUserStatusLabel,
 } from "@/lib/permissions";
+import { parseStringParam, type SearchParamsRecord } from "@/lib/search-params";
 import {
   activateUserAction,
   deactivateUserAction,
 } from "@/modules/users/actions";
+
+const ROLE_OPTIONS = [
+  APP_ROLES.ADMIN,
+  APP_ROLES.SELLER,
+  APP_ROLES.WORKSHOP_MASTER,
+];
+
+type UsersPageProps = {
+  searchParams?: Promise<SearchParamsRecord>;
+};
 
 function formatDate(value: Date | null) {
   if (!value) {
@@ -44,32 +61,69 @@ function formatDate(value: Date | null) {
   }).format(value);
 }
 
-export default async function UsersPage() {
+export default async function UsersPage({ searchParams }: UsersPageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
-  const users = await prisma.usuario.findMany({
-    orderBy: {
-      fecha_registro: "desc",
-    },
-    select: {
-      id_usuario: true,
-      nombres: true,
-      apellidos: true,
-      usuario: true,
-      correo: true,
-      estado: true,
-      ultimo_acceso: true,
-      fecha_registro: true,
-      rol: {
-        select: {
-          nombre_rol: true,
-        },
-      },
-    },
-  });
+  const params = (await searchParams) ?? {};
+  const q = parseStringParam(params, "q");
+  const rol = parseStringParam(params, "rol");
+  const estado = parseStringParam(params, "estado");
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const activeUsers = users.filter((user) => user.estado === "activo");
-  const inactiveUsers = users.filter((user) => user.estado === "inactivo");
+  const filters: Prisma.usuarioWhereInput[] = [];
+
+  if (q) {
+    filters.push({
+      OR: [
+        { nombres: { contains: q, mode: "insensitive" } },
+        { apellidos: { contains: q, mode: "insensitive" } },
+        { usuario: { contains: q, mode: "insensitive" } },
+        { correo: { contains: q, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  if (rol) {
+    filters.push({ rol: { nombre_rol: rol } });
+  }
+
+  if (estado === "activo" || estado === "inactivo") {
+    filters.push({ estado });
+  }
+
+  const where: Prisma.usuarioWhereInput =
+    filters.length > 0 ? { AND: filters } : {};
+
+  const [users, totalItems, totalUsers, totalActive, totalInactive] =
+    await Promise.all([
+      prisma.usuario.findMany({
+        where,
+        orderBy: [{ fecha_registro: "desc" }, { id_usuario: "desc" }],
+        skip,
+        take,
+        select: {
+          id_usuario: true,
+          nombres: true,
+          apellidos: true,
+          usuario: true,
+          correo: true,
+          estado: true,
+          ultimo_acceso: true,
+          fecha_registro: true,
+          rol: {
+            select: {
+              nombre_rol: true,
+            },
+          },
+        },
+      }),
+      prisma.usuario.count({ where }),
+      prisma.usuario.count(),
+      prisma.usuario.count({ where: { estado: "activo" } }),
+      prisma.usuario.count({ where: { estado: "inactivo" } }),
+    ]);
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
     <main className="space-y-6">
@@ -87,23 +141,75 @@ export default async function UsersPage() {
       <section className="grid gap-4 md:grid-cols-3">
         <KpiCard
           title="Usuarios registrados"
-          value={users.length.toString()}
+          value={totalUsers.toString()}
           description="Total de cuentas en el sistema."
           tone="info"
         />
         <KpiCard
           title="Activos"
-          value={activeUsers.length.toString()}
+          value={totalActive.toString()}
           description="Pueden iniciar sesión."
           tone="success"
         />
         <KpiCard
           title="Inactivos"
-          value={inactiveUsers.length.toString()}
+          value={totalInactive.toString()}
           description="Sin acceso al sistema."
           tone="warning"
         />
       </section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            action={navigationHrefs.users}
+            className="grid gap-3 md:grid-cols-4"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="q">Buscar</Label>
+              <Input
+                id="q"
+                name="q"
+                defaultValue={q}
+                placeholder="Nombre, usuario o correo"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="rol">Rol</Label>
+              <NativeSelect id="rol" name="rol" defaultValue={rol}>
+                <option value="">Todos los roles</option>
+                {ROLE_OPTIONS.map((role) => (
+                  <option key={role} value={role}>
+                    {getRoleLabel(role)}
+                  </option>
+                ))}
+              </NativeSelect>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <NativeSelect id="estado" name="estado" defaultValue={estado}>
+                <option value="">Todos los estados</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </NativeSelect>
+            </div>
+
+            <div className="flex items-end gap-2">
+              <Button type="submit" className="flex-1">
+                Filtrar
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={navigationHrefs.users}>Limpiar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -114,7 +220,7 @@ export default async function UsersPage() {
           {users.length === 0 ? (
             <EmptyState
               className="mx-6 border-0"
-              label="Todavía no hay usuarios registrados."
+              label="No se encontraron usuarios con los filtros aplicados."
             />
           ) : (
             <Table>
@@ -219,6 +325,15 @@ export default async function UsersPage() {
               </TableBody>
             </Table>
           )}
+
+          <div className="px-6">
+            <PaginationControls
+              meta={meta}
+              basePath={navigationHrefs.users}
+              searchParams={params}
+              itemLabel="usuarios"
+            />
+          </div>
         </CardContent>
       </Card>
     </main>

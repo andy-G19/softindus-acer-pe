@@ -21,9 +21,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
-import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -97,8 +99,17 @@ export default async function AuditPage({ searchParams }: PageProps) {
 
   const where: Prisma.bitacora_operacionWhereInput =
     filters.length > 0 ? { AND: filters } : {};
+  const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [users, actions, entities, logs, totalLogs] = await Promise.all([
+  const [
+    users,
+    actions,
+    entities,
+    logs,
+    totalLogs,
+    distinctUsers,
+    distinctEntities,
+  ] = await Promise.all([
     prisma.usuario.findMany({
       orderBy: [{ apellidos: "asc" }, { nombres: "asc" }],
       select: {
@@ -127,16 +138,30 @@ export default async function AuditPage({ searchParams }: PageProps) {
     }),
     prisma.bitacora_operacion.findMany({
       where,
-      orderBy: {
-        fecha_hora: "desc",
-      },
-      take: 150,
+      orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
+      skip,
+      take,
       include: {
         usuario: true,
       },
     }),
     prisma.bitacora_operacion.count({ where }),
+    // Usuarios/entidades distintos dentro de TODO el conjunto filtrado (no
+    // solo la pagina actual), para que las KPI sigan siendo correctas ahora
+    // que la tabla esta paginada.
+    prisma.bitacora_operacion.findMany({
+      where,
+      distinct: ["id_usuario"],
+      select: { id_usuario: true },
+    }),
+    prisma.bitacora_operacion.findMany({
+      where,
+      distinct: ["entidad_afectada"],
+      select: { entidad_afectada: true },
+    }),
   ]);
+
+  const meta = getPaginationMeta({ totalItems: totalLogs, page, pageSize });
 
   const exportParams = {
     q,
@@ -229,8 +254,8 @@ export default async function AuditPage({ searchParams }: PageProps) {
 
       <section className="grid gap-4 md:grid-cols-3">
         <KpiCard title="Operaciones" value={totalLogs.toString()} description="Coincidencias segun filtros." tone="info" />
-        <KpiCard title="Usuarios" value={new Set(logs.map((log) => log.id_usuario)).size.toString()} description="Usuarios en la vista actual." tone="info" />
-        <KpiCard title="Entidades" value={new Set(logs.map((log) => log.entidad_afectada)).size.toString()} description="Entidades afectadas." tone="info" />
+        <KpiCard title="Usuarios" value={distinctUsers.length.toString()} description="Usuarios distintos según filtros." tone="info" />
+        <KpiCard title="Entidades" value={distinctEntities.length.toString()} description="Entidades afectadas según filtros." tone="info" />
       </section>
 
       <Card>
@@ -279,6 +304,13 @@ export default async function AuditPage({ searchParams }: PageProps) {
           )}
         </CardContent>
       </Card>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.audit}
+        searchParams={params}
+        itemLabel="operaciones"
+      />
     </main>
   );
 }

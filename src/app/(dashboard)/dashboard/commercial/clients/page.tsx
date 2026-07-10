@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
+import { PaginationControls } from "@/components/pagination-controls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -24,6 +25,7 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -54,6 +56,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   const status = getSearchParam(params, "status");
   const origin = getSearchParam(params, "origin");
   const returnTo = createReturnToHref(navigationHrefs.clients, params);
+  const { page, pageSize, skip, take } = getPaginationParams(params);
   const filters: Prisma.clienteWhereInput[] = [];
 
   if (client) {
@@ -91,7 +94,10 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
     });
   }
 
-  const [clientOptions, clients] = await Promise.all([
+  const where: Prisma.clienteWhereInput | undefined =
+    filters.length > 0 ? { AND: filters } : undefined;
+
+  const [clientOptions, clients, totalItems] = await Promise.all([
     prisma.cliente.findMany({
       orderBy: {
         nombre_razon_social: "asc",
@@ -106,12 +112,15 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
       },
     }),
     prisma.cliente.findMany({
-      where: filters.length > 0 ? { AND: filters } : undefined,
-      orderBy: {
-        fecha_registro: "desc",
-      },
+      where,
+      orderBy: [{ fecha_registro: "desc" }, { id_cliente: "desc" }],
+      skip,
+      take,
     }),
+    prisma.cliente.count({ where }),
   ]);
+
+  const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   const clientItems = clientOptions.map((item) => ({
     id: item.id_cliente,
@@ -214,7 +223,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
       </form>
 
       <p className="text-sm text-muted-foreground">
-        Resultados encontrados: {clients.length}
+        Resultados encontrados: {totalItems}
       </p>
 
       <Table>
@@ -284,6 +293,13 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
           )}
         </TableBody>
       </Table>
+
+      <PaginationControls
+        meta={meta}
+        basePath={navigationHrefs.clients}
+        searchParams={params}
+        itemLabel="clientes"
+      />
     </main>
   );
 }
