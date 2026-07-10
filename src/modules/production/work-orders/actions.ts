@@ -4,25 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextIds } from "@/lib/ids";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -262,21 +246,14 @@ export async function createWorkOrderAction(formData: FormData) {
     }
   }
 
-  const lastWorkOrder = await prisma.orden_trabajo.findFirst({
-    orderBy: {
-      id_orden_trabajo: "desc",
-    },
-    select: {
-      id_orden_trabajo: true,
-    },
-  });
-
-  const idOrdenTrabajo = buildSequentialId(
-    lastWorkOrder?.id_orden_trabajo,
-    "OTR",
-  );
+  let idOrdenTrabajo = "";
 
   await prisma.$transaction(async (tx) => {
+    idOrdenTrabajo = await getNextCorrelativeId(tx, {
+      codigoEntidad: "orden_trabajo",
+      prefijo: "OTR",
+    });
+
     await tx.orden_trabajo.create({
       data: {
         id_orden_trabajo: idOrdenTrabajo,
@@ -463,25 +440,9 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
     return consumption.stockResultante <= consumption.stockMinimo;
   });
 
-  const [lastMovement, lastAlert, activeAlerts] = await Promise.all([
-    prisma.movimiento_inventario.findFirst({
-      orderBy: {
-        id_movimiento: "desc",
-      },
-      select: {
-        id_movimiento: true,
-      },
-    }),
-    prisma.alerta_stock.findFirst({
-      orderBy: {
-        id_alerta: "desc",
-      },
-      select: {
-        id_alerta: true,
-      },
-    }),
+  const activeAlerts =
     criticalConsumptions.length > 0
-      ? prisma.alerta_stock.findMany({
+      ? await prisma.alerta_stock.findMany({
           where: {
             id_material: {
               in: criticalConsumptions.map(
@@ -495,14 +456,7 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
             id_material: true,
           },
         })
-      : Promise.resolve([]),
-  ]);
-
-  const movementIds = buildNextIds(
-    "MVI",
-    lastMovement?.id_movimiento,
-    consumptions.length,
-  );
+      : [];
 
   const activeAlertByMaterial = new Map(
     activeAlerts.map((alert) => [alert.id_material, alert.id_alerta]),
@@ -512,20 +466,24 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
     (consumption) => !activeAlertByMaterial.has(consumption.idMaterial),
   );
 
-  const alertIds = buildNextIds(
-    "ALE",
-    lastAlert?.id_alerta,
-    criticalConsumptionsWithoutAlert.length,
-  );
-
-  const alertIdByMaterial = new Map(
-    criticalConsumptionsWithoutAlert.map((consumption, index) => [
-      consumption.idMaterial,
-      alertIds[index],
-    ]),
-  );
-
   await prisma.$transaction(async (tx) => {
+    const movementIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "movimiento_inventario",
+      prefijo: "MVI",
+      cantidad: consumptions.length,
+    });
+    const alertIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "alerta_stock",
+      prefijo: "ALE",
+      cantidad: criticalConsumptionsWithoutAlert.length,
+    });
+    const alertIdByMaterial = new Map(
+      criticalConsumptionsWithoutAlert.map((consumption, index) => [
+        consumption.idMaterial,
+        alertIds[index],
+      ]),
+    );
+
     const consumptionInsideTransaction = await tx.movimiento_inventario.count({
       where: {
         id_orden_trabajo: idOrdenTrabajo,

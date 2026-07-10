@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import {
   reassignWorkOrderProgressSchema,
   updateWorkOrderProgressSchema,
@@ -15,26 +15,6 @@ function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
     redirect("/dashboard/access-denied");
   }
-}
-
-function buildSequentialId(
-  lastId: string | null | undefined,
-  prefix: string,
-  offset = 1,
-) {
-  if (!lastId) {
-    return `${prefix}${String(offset).padStart(8, "0")}`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}${String(offset).padStart(8, "0")}`;
-  }
-
-  const nextNumber = currentNumber + offset;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
 }
 
 function normalizeProgressPercentage(
@@ -207,19 +187,16 @@ export async function generateWorkOrderProgressAction(formData: FormData) {
     throw new Error("Esta orden ya tiene avances generados.");
   }
 
-  const lastAdvance = await prisma.avance_orden.findFirst({
-    orderBy: {
-      id_avance: "desc",
-    },
-    select: {
-      id_avance: true,
-    },
-  });
-
   await prisma.$transaction(async (tx) => {
+    const advanceIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "avance_orden",
+      prefijo: "AVN",
+      cantidad: workOrder.ruta_fabricacion!.etapa_ruta.length,
+    });
+
     await tx.avance_orden.createMany({
       data: workOrder.ruta_fabricacion!.etapa_ruta.map((stage, index) => ({
-        id_avance: buildSequentialId(lastAdvance?.id_avance, "AVN", index + 1),
+        id_avance: advanceIds[index],
         id_orden_trabajo: workOrder.id_orden_trabajo,
         id_etapa_ruta: stage.id_etapa_ruta,
         estado_etapa: "pendiente",
@@ -370,7 +347,7 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const [advance, newOperator, lastReassignment] = await Promise.all([
+  const [advance, newOperator] = await Promise.all([
     prisma.avance_orden.findUnique({
       where: {
         id_avance: data.id_avance,
@@ -391,15 +368,6 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
         id_operario: true,
         nombres: true,
         apellidos: true,
-      },
-    }),
-
-    prisma.reasignacion_tarea.findFirst({
-      orderBy: {
-        id_reasignacion: "desc",
-      },
-      select: {
-        id_reasignacion: true,
       },
     }),
   ]);
@@ -425,13 +393,14 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
     throw new Error("El nuevo operario debe ser distinto al operario actual.");
   }
 
-  const idReasignacion = buildNextId(
-    "REA",
-    lastReassignment?.id_reasignacion,
-  );
   const reassignmentDate = new Date();
 
   await prisma.$transaction(async (tx) => {
+    const idReasignacion = await getNextCorrelativeId(tx, {
+      codigoEntidad: "reasignacion_tarea",
+      prefijo: "REA",
+    });
+
     await tx.reasignacion_tarea.create({
       data: {
         id_reasignacion: idReasignacion,

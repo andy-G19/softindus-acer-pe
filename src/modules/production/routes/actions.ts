@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { fabricationRouteSchema } from "@/schemas/production/route.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -76,18 +61,12 @@ export async function createFabricationRouteAction(formData: FormData) {
     throw new Error("Ya existe una ruta con ese nombre para este producto.");
   }
 
-  const lastRoute = await prisma.ruta_fabricacion.findFirst({
-    orderBy: {
-      id_ruta: "desc",
-    },
-    select: {
-      id_ruta: true,
-    },
-  });
-
-  const idRuta = buildSequentialId(lastRoute?.id_ruta, "RUT");
-
   await prisma.$transaction(async (tx) => {
+    const idRuta = await getNextCorrelativeId(tx, {
+      codigoEntidad: "ruta_fabricacion",
+      prefijo: "RUT",
+    });
+
     await tx.ruta_fabricacion.create({
       data: {
         id_ruta: idRuta,

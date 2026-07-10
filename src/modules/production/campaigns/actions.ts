@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import {
   campaignDetailSchema,
   productionCampaignSchema,
@@ -52,18 +52,14 @@ export async function createProductionCampaignAction(formData: FormData) {
   const fechaInicio = parseDate(data.fecha_inicio);
   const fechaFin = parseNullableDate(data.fecha_fin);
 
-  const lastCampaign = await prisma.campania_produccion.findFirst({
-    orderBy: {
-      id_campania: "desc",
-    },
-    select: {
-      id_campania: true,
-    },
-  });
-
-  const idCampania = buildNextId("CAM", lastCampaign?.id_campania);
+  let idCampania = "";
 
   await prisma.$transaction(async (tx) => {
+    idCampania = await getNextCorrelativeId(tx, {
+      codigoEntidad: "campania_produccion",
+      prefijo: "CAM",
+    });
+
     await tx.campania_produccion.create({
       data: {
         id_campania: idCampania,
@@ -116,7 +112,7 @@ export async function addCampaignDetailAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const [campaign, product, duplicatedDetail, lastDetail] = await Promise.all([
+  const [campaign, product, duplicatedDetail] = await Promise.all([
     prisma.campania_produccion.findUnique({
       where: {
         id_campania: data.id_campania,
@@ -146,14 +142,6 @@ export async function addCampaignDetailAction(formData: FormData) {
         id_campania_detalle: true,
       },
     }),
-    prisma.campania_detalle.findFirst({
-      orderBy: {
-        id_campania_detalle: "desc",
-      },
-      select: {
-        id_campania_detalle: true,
-      },
-    }),
   ]);
 
   if (!campaign) {
@@ -172,12 +160,12 @@ export async function addCampaignDetailAction(formData: FormData) {
     throw new Error("Ese producto ya esta registrado en la campania.");
   }
 
-  const idCampaniaDetalle = buildNextId(
-    "CPD",
-    lastDetail?.id_campania_detalle,
-  );
-
   await prisma.$transaction(async (tx) => {
+    const idCampaniaDetalle = await getNextCorrelativeId(tx, {
+      codigoEntidad: "campania_detalle",
+      prefijo: "CPD",
+    });
+
     await tx.campania_detalle.create({
       data: {
         id_campania_detalle: idCampaniaDetalle,

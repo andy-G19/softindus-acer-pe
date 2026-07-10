@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId, buildNextIds } from "@/lib/ids";
 import {
   recipeVersionSchema,
   recipeVersionStatusSchema,
@@ -161,36 +161,19 @@ export async function createRecipeVersionAction(formData: FormData) {
     throw new Error("Ya existe una versión con ese número para esta receta.");
   }
 
-  const [lastVersionId, lastDetail] = await Promise.all([
-    prisma.version_receta.findFirst({
-      orderBy: {
-        id_version_receta: "desc",
-      },
-      select: {
-        id_version_receta: true,
-      },
-    }),
-    prisma.detalle_receta.findFirst({
-      orderBy: {
-        id_detalle_receta: "desc",
-      },
-      select: {
-        id_detalle_receta: true,
-      },
-    }),
-  ]);
-
-  const idVersionReceta = buildNextId(
-    "VER",
-    lastVersionId?.id_version_receta,
-  );
-  const detailIds = buildNextIds(
-    "DRE",
-    lastDetail?.id_detalle_receta,
-    data.detalles.length,
-  );
+  let idVersionReceta = "";
 
   await prisma.$transaction(async (tx) => {
+    idVersionReceta = await getNextCorrelativeId(tx, {
+      codigoEntidad: "version_receta",
+      prefijo: "VER",
+    });
+    const detailIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "detalle_receta",
+      prefijo: "DRE",
+      cantidad: data.detalles.length,
+    });
+
     await tx.version_receta.updateMany({
       where: {
         id_receta: data.id_receta,

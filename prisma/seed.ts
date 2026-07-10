@@ -275,6 +275,56 @@ const correlatives = [
     prefijo: "ALE",
     descripcion: "Correlativo transaccional para alerta_stock (prefijo ALE).",
   },
+  {
+    codigo_entidad: "ruta_fabricacion",
+    prefijo: "RUT",
+    descripcion: "Correlativo transaccional para ruta_fabricacion (prefijo RUT).",
+  },
+  {
+    codigo_entidad: "etapa_ruta",
+    prefijo: "ETA",
+    descripcion: "Correlativo transaccional para etapa_ruta (prefijo ETA).",
+  },
+  {
+    codigo_entidad: "receta_tecnica",
+    prefijo: "REC",
+    descripcion: "Correlativo transaccional para receta_tecnica (prefijo REC).",
+  },
+  {
+    codigo_entidad: "version_receta",
+    prefijo: "VER",
+    descripcion: "Correlativo transaccional para version_receta (prefijo VER).",
+  },
+  {
+    codigo_entidad: "detalle_receta",
+    prefijo: "DRE",
+    descripcion: "Correlativo transaccional para detalle_receta (prefijo DRE).",
+  },
+  {
+    codigo_entidad: "orden_trabajo",
+    prefijo: "OTR",
+    descripcion: "Correlativo transaccional para orden_trabajo (prefijo OTR).",
+  },
+  {
+    codigo_entidad: "avance_orden",
+    prefijo: "AVN",
+    descripcion: "Correlativo transaccional para avance_orden (prefijo AVN).",
+  },
+  {
+    codigo_entidad: "campania_produccion",
+    prefijo: "CAM",
+    descripcion: "Correlativo transaccional para campania_produccion (prefijo CAM).",
+  },
+  {
+    codigo_entidad: "campania_detalle",
+    prefijo: "CPD",
+    descripcion: "Correlativo transaccional para campania_detalle (prefijo CPD).",
+  },
+  {
+    codigo_entidad: "reasignacion_tarea",
+    prefijo: "REA",
+    descripcion: "Correlativo transaccional para reasignacion_tarea (prefijo REA).",
+  },
 ];
 
 async function main() {

@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { recipeDetailSchema } from "@/schemas/production/recipe-detail.schema";
 
 function requireProductionManager(role: string | undefined) {
@@ -95,18 +95,12 @@ export async function createRecipeDetailAction(formData: FormData) {
     throw new Error("Este material ya está registrado en esta versión de receta.");
   }
 
-  const lastDetail = await prisma.detalle_receta.findFirst({
-    orderBy: {
-      id_detalle_receta: "desc",
-    },
-    select: {
-      id_detalle_receta: true,
-    },
-  });
-
-  const idDetalleReceta = buildNextId("DRE", lastDetail?.id_detalle_receta);
-
   await prisma.$transaction(async (tx) => {
+    const idDetalleReceta = await getNextCorrelativeId(tx, {
+      codigoEntidad: "detalle_receta",
+      prefijo: "DRE",
+    });
+
     await tx.detalle_receta.create({
       data: {
         id_detalle_receta: idDetalleReceta,

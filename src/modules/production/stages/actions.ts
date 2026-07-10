@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { routeStageSchema } from "@/schemas/production/route-stage.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireProductionManager(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -90,18 +75,12 @@ export async function createRouteStageAction(formData: FormData) {
     throw new Error("Ya existe una etapa con ese número de orden en esta ruta.");
   }
 
-  const lastStage = await prisma.etapa_ruta.findFirst({
-    orderBy: {
-      id_etapa_ruta: "desc",
-    },
-    select: {
-      id_etapa_ruta: true,
-    },
-  });
-
-  const idEtapaRuta = buildSequentialId(lastStage?.id_etapa_ruta, "ETA");
-
   await prisma.$transaction(async (tx) => {
+    const idEtapaRuta = await getNextCorrelativeId(tx, {
+      codigoEntidad: "etapa_ruta",
+      prefijo: "ETA",
+    });
+
     await tx.etapa_ruta.create({
       data: {
         id_etapa_ruta: idEtapaRuta,

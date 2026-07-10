@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { technicalRecipeSchema } from "@/schemas/production/recipe.schema";
 
 function requireProductionManager(role: string | undefined) {
@@ -61,18 +61,12 @@ export async function createTechnicalRecipeAction(formData: FormData) {
     throw new Error("Ya existe una receta con ese nombre para este producto.");
   }
 
-  const lastRecipe = await prisma.receta_tecnica.findFirst({
-    orderBy: {
-      id_receta: "desc",
-    },
-    select: {
-      id_receta: true,
-    },
-  });
-
-  const idReceta = buildNextId("REC", lastRecipe?.id_receta);
-
   await prisma.$transaction(async (tx) => {
+    const idReceta = await getNextCorrelativeId(tx, {
+      codigoEntidad: "receta_tecnica",
+      prefijo: "REC",
+    });
+
     await tx.receta_tecnica.create({
       data: {
         id_receta: idReceta,
