@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { quoteSchema } from "@/schemas/commercial/quote.schema";
 
 const QUOTES_PATH = "/dashboard/commercial/quotes";
@@ -102,39 +102,36 @@ export async function createQuoteAction(formData: FormData) {
 
   const saldo = montoTotal - adelantoInicial;
 
-  const lastQuote = await prisma.proforma.findFirst({
-    orderBy: {
-      id_proforma: "desc",
-    },
-    select: {
-      id_proforma: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const id_proforma = await getNextCorrelativeId(tx, {
+      codigoEntidad: "proforma",
+      prefijo: "PRF",
+    });
+    const numero_proforma = id_proforma.replace("PRF", "PF-");
 
-  const id_proforma = buildNextId("PRF", lastQuote?.id_proforma);
-  const numero_proforma = id_proforma.replace("PRF", "PF-");
+    await tx.proforma.create({
+      data: {
+        id_proforma,
+        id_pedido: parsed.data.id_pedido,
+        numero_proforma,
+        fecha_emision: new Date(),
+        monto_total: montoTotal,
+        adelanto_inicial: adelantoInicial > 0 ? adelantoInicial : null,
+        saldo,
+        estado: "vigente",
+        validez_dias: parsed.data.validez_dias ?? null,
+        observaciones: emptyToNull(formData.get("observaciones")),
+      },
+    });
 
-  await prisma.proforma.create({
-    data: {
-      id_proforma,
-      id_pedido: parsed.data.id_pedido,
-      numero_proforma,
-      fecha_emision: new Date(),
-      monto_total: montoTotal,
-      adelanto_inicial: adelantoInicial > 0 ? adelantoInicial : null,
-      saldo,
-      estado: "vigente",
-      validez_dias: parsed.data.validez_dias ?? null,
-      observaciones: emptyToNull(formData.get("observaciones")),
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "proforma",
-    id_registro_afectado: id_proforma,
-    accion: "crear",
-    detalle: `Proforma creada para el pedido ${parsed.data.id_pedido}.`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "proforma",
+      id_registro_afectado: id_proforma,
+      accion: "crear",
+      detalle: `Proforma creada para el pedido ${parsed.data.id_pedido}.`,
+      tx,
+    });
   });
 
   revalidatePath(QUOTES_PATH);

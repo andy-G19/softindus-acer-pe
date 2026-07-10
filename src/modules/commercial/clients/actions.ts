@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { clientSchema } from "@/schemas/commercial/client.schema";
 
 export type ClientFormState = {
@@ -126,32 +126,39 @@ export async function createClientAction(
     };
   }
 
-  const lastClient = await prisma.cliente.findFirst({
-    orderBy: {
-      id_cliente: "desc",
-    },
-    select: {
-      id_cliente: true,
-    },
-  });
-
-  const id_cliente = buildNextId("CLI", lastClient?.id_cliente);
+  let id_cliente = "";
 
   try {
-    await prisma.cliente.create({
-      data: {
-        id_cliente,
-        tipo_cliente: parsed.data.tipo_cliente,
-        nombre_razon_social: parsed.data.nombre_razon_social,
-        tipo_documento: emptyToNull(formData.get("tipo_documento")),
-        numero_documento: numeroDocumento,
-        telefono: emptyToNull(formData.get("telefono")),
-        correo: emptyToNull(formData.get("correo")),
-        direccion: emptyToNull(formData.get("direccion")),
-        lugar_origen: emptyToNull(formData.get("lugar_origen")),
-        observaciones: emptyToNull(formData.get("observaciones")),
-        estado: true,
-      },
+    await prisma.$transaction(async (tx) => {
+      id_cliente = await getNextCorrelativeId(tx, {
+        codigoEntidad: "cliente",
+        prefijo: "CLI",
+      });
+
+      await tx.cliente.create({
+        data: {
+          id_cliente,
+          tipo_cliente: parsed.data.tipo_cliente,
+          nombre_razon_social: parsed.data.nombre_razon_social,
+          tipo_documento: emptyToNull(formData.get("tipo_documento")),
+          numero_documento: numeroDocumento,
+          telefono: emptyToNull(formData.get("telefono")),
+          correo: emptyToNull(formData.get("correo")),
+          direccion: emptyToNull(formData.get("direccion")),
+          lugar_origen: emptyToNull(formData.get("lugar_origen")),
+          observaciones: emptyToNull(formData.get("observaciones")),
+          estado: true,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "cliente",
+        id_registro_afectado: id_cliente,
+        accion: "crear",
+        detalle: `Cliente creado: ${parsed.data.nombre_razon_social}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getPrismaUniqueErrorMessage(
@@ -167,14 +174,6 @@ export async function createClientAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "cliente",
-    id_registro_afectado: id_cliente,
-    accion: "crear",
-    detalle: `Cliente creado: ${parsed.data.nombre_razon_social}`,
-  });
 
   revalidatePath(CLIENTS_PATH);
   redirect(CLIENT_CREATED_PATH);

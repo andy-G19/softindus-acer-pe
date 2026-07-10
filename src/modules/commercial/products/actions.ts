@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
@@ -150,28 +150,35 @@ export async function createProductAction(
     };
   }
 
-  const lastProduct = await prisma.producto.findFirst({
-    orderBy: {
-      id_producto: "desc",
-    },
-    select: {
-      id_producto: true,
-    },
-  });
-
-  const idProducto = buildNextId("PRO", lastProduct?.id_producto);
+  let idProducto = "";
 
   try {
-    await prisma.producto.create({
-      data: {
-        id_producto: idProducto,
-        nombre_producto: parsed.data.nombre_producto,
-        categoria: parsed.data.categoria,
-        descripcion: emptyToNull(formData.get("descripcion")),
-        unidad_medida: parsed.data.unidad_medida,
-        precio_referencial: parsed.data.precio_referencial ?? null,
-        estado: true,
-      },
+    await prisma.$transaction(async (tx) => {
+      idProducto = await getNextCorrelativeId(tx, {
+        codigoEntidad: "producto",
+        prefijo: "PRO",
+      });
+
+      await tx.producto.create({
+        data: {
+          id_producto: idProducto,
+          nombre_producto: parsed.data.nombre_producto,
+          categoria: parsed.data.categoria,
+          descripcion: emptyToNull(formData.get("descripcion")),
+          unidad_medida: parsed.data.unidad_medida,
+          precio_referencial: parsed.data.precio_referencial ?? null,
+          estado: true,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "producto",
+        id_registro_afectado: idProducto,
+        accion: "crear",
+        detalle: `Producto creado: ${parsed.data.nombre_producto}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getPrismaUniqueErrorMessage(
@@ -187,14 +194,6 @@ export async function createProductAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "producto",
-    id_registro_afectado: idProducto,
-    accion: "crear",
-    detalle: `Producto creado: ${parsed.data.nombre_producto}`,
-  });
 
   revalidatePath(PRODUCTS_PATH);
   redirect(`${PRODUCTS_PATH}?toast=product-created`);
@@ -404,29 +403,33 @@ export async function createProductCategoryAction(
     };
   }
 
-  const lastCategory = await prisma.categoria_producto.findFirst({
-    orderBy: {
-      id_categoria_producto: "desc",
-    },
-    select: {
-      id_categoria_producto: true,
-    },
-  });
-
-  const idCategoriaProducto = buildNextId(
-    "CPR",
-    lastCategory?.id_categoria_producto,
-  );
+  let idCategoriaProducto = "";
 
   try {
-    await prisma.categoria_producto.create({
-      data: {
-        id_categoria_producto: idCategoriaProducto,
-        nombre: categoryName,
-        slug,
-        descripcion: emptyToNull(formData.get("descripcion")),
-        estado: true,
-      },
+    await prisma.$transaction(async (tx) => {
+      idCategoriaProducto = await getNextCorrelativeId(tx, {
+        codigoEntidad: "categoria_producto",
+        prefijo: "CPR",
+      });
+
+      await tx.categoria_producto.create({
+        data: {
+          id_categoria_producto: idCategoriaProducto,
+          nombre: categoryName,
+          slug,
+          descripcion: emptyToNull(formData.get("descripcion")),
+          estado: true,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "categoria_producto",
+        id_registro_afectado: idCategoriaProducto,
+        accion: "crear",
+        detalle: `Categoría creada: ${categoryName}`,
+        tx,
+      });
     });
   } catch (error) {
     const errorMessage = getPrismaUniqueErrorMessage(
@@ -442,14 +445,6 @@ export async function createProductCategoryAction(
           : undefined,
     };
   }
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "categoria_producto",
-    id_registro_afectado: idCategoriaProducto,
-    accion: "crear",
-    detalle: `Categoría creada: ${categoryName}`,
-  });
 
   revalidatePath(PRODUCT_CATEGORIES_PATH);
   revalidatePath(PRODUCTS_PATH);

@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { paymentSchema } from "@/schemas/commercial/payment.schema";
 
 function emptyToNull(value: FormDataEntryValue | null) {
@@ -80,16 +80,10 @@ export async function createPaymentAction(formData: FormData) {
     const nuevoSaldo = Number((saldoActual - monto_pagado).toFixed(2));
     const nuevoEstado = nuevoSaldo === 0 ? "pagada" : "aceptada";
 
-    const lastPayment = await tx.pago_cliente.findFirst({
-      orderBy: {
-        id_pago_cliente: "desc",
-      },
-      select: {
-        id_pago_cliente: true,
-      },
+    const id_pago_cliente = await getNextCorrelativeId(tx, {
+      codigoEntidad: "pago_cliente",
+      prefijo: "PCL",
     });
-
-    const id_pago_cliente = buildNextId("PCL", lastPayment?.id_pago_cliente);
 
     await tx.pago_cliente.create({
       data: {

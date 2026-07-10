@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId } from "@/lib/ids";
 import { receiptSchema } from "@/schemas/commercial/receipt.schema";
 
 function emptyToNull(value: FormDataEntryValue | null) {
@@ -97,37 +97,34 @@ export async function createReceiptAction(formData: FormData) {
     throw new Error("Ya existe un comprobante con ese número.");
   }
 
-  const lastReceipt = await prisma.comprobante_venta.findFirst({
-    orderBy: {
-      id_comprobante: "desc",
-    },
-    select: {
-      id_comprobante: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const id_comprobante = await getNextCorrelativeId(tx, {
+      codigoEntidad: "comprobante_venta",
+      prefijo: "CMP",
+    });
 
-  const id_comprobante = buildNextId("CMP", lastReceipt?.id_comprobante);
+    await tx.comprobante_venta.create({
+      data: {
+        id_comprobante,
+        id_pedido: quote.id_pedido,
+        id_proforma: quote.id_proforma,
+        tipo_comprobante,
+        numero_comprobante,
+        fecha_emision: new Date(),
+        monto_total,
+        estado: "emitido",
+        observaciones: emptyToNull(formData.get("observaciones")),
+      },
+    });
 
-  await prisma.comprobante_venta.create({
-    data: {
-      id_comprobante,
-      id_pedido: quote.id_pedido,
-      id_proforma: quote.id_proforma,
-      tipo_comprobante,
-      numero_comprobante,
-      fecha_emision: new Date(),
-      monto_total,
-      estado: "emitido",
-      observaciones: emptyToNull(formData.get("observaciones")),
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "comprobante_venta",
-    id_registro_afectado: id_comprobante,
-    accion: "crear",
-    detalle: `Comprobante registrado: ${numero_comprobante}`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "comprobante_venta",
+      id_registro_afectado: id_comprobante,
+      accion: "crear",
+      detalle: `Comprobante registrado: ${numero_comprobante}`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard/commercial/quotes");

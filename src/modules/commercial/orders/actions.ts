@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { buildNextId, buildNextIds } from "@/lib/ids";
 import { orderSchema } from "@/schemas/commercial/order.schema";
 
 export type OrderFormState = {
@@ -200,33 +200,17 @@ export async function createOrderAction(
     return total + item.cantidad * item.precio_unitario;
   }, 0);
 
-  const [lastOrder, lastOrderDetail] = await Promise.all([
-    prisma.pedido.findFirst({
-      orderBy: {
-        id_pedido: "desc",
-      },
-      select: {
-        id_pedido: true,
-      },
-    }),
-    prisma.detalle_pedido.findFirst({
-      orderBy: {
-        id_detalle_pedido: "desc",
-      },
-      select: {
-        id_detalle_pedido: true,
-      },
-    }),
-  ]);
-
-  const id_pedido = buildNextId("PED", lastOrder?.id_pedido);
-  const detailIds = buildNextIds(
-    "DPE",
-    lastOrderDetail?.id_detalle_pedido,
-    parsed.data.items.length,
-  );
-
   await prisma.$transaction(async (tx) => {
+    const id_pedido = await getNextCorrelativeId(tx, {
+      codigoEntidad: "pedido",
+      prefijo: "PED",
+    });
+    const detailIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "detalle_pedido",
+      prefijo: "DPE",
+      cantidad: parsed.data.items.length,
+    });
+
     await tx.pedido.create({
       data: {
         id_pedido,
@@ -324,26 +308,17 @@ export async function updateOrderAction(
     return total + item.cantidad * item.precio_unitario;
   }, 0);
 
-  const lastOrderDetail = await prisma.detalle_pedido.findFirst({
-    orderBy: {
-      id_detalle_pedido: "desc",
-    },
-    select: {
-      id_detalle_pedido: true,
-    },
-  });
-
-  const detailIds = buildNextIds(
-    "DPE",
-    lastOrderDetail?.id_detalle_pedido,
-    parsed.data.items.length,
-  );
-
   await prisma.$transaction(async (tx) => {
     await tx.detalle_pedido.deleteMany({
       where: {
         id_pedido: orderId,
       },
+    });
+
+    const detailIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "detalle_pedido",
+      prefijo: "DPE",
+      cantidad: parsed.data.items.length,
     });
 
     await tx.pedido.update({

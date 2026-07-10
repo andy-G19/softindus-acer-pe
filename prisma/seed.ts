@@ -185,6 +185,46 @@ const correlatives = [
     prefijo: "BIT",
     descripcion: "Correlativo transaccional para bitacora_operacion (prefijo BIT).",
   },
+  {
+    codigo_entidad: "cliente",
+    prefijo: "CLI",
+    descripcion: "Correlativo transaccional para cliente (prefijo CLI).",
+  },
+  {
+    codigo_entidad: "producto",
+    prefijo: "PRO",
+    descripcion: "Correlativo transaccional para producto (prefijo PRO).",
+  },
+  {
+    codigo_entidad: "categoria_producto",
+    prefijo: "CPR",
+    descripcion: "Correlativo transaccional para categoria_producto (prefijo CPR).",
+  },
+  {
+    codigo_entidad: "pedido",
+    prefijo: "PED",
+    descripcion: "Correlativo transaccional para pedido (prefijo PED).",
+  },
+  {
+    codigo_entidad: "detalle_pedido",
+    prefijo: "DPE",
+    descripcion: "Correlativo transaccional para detalle_pedido (prefijo DPE).",
+  },
+  {
+    codigo_entidad: "proforma",
+    prefijo: "PRF",
+    descripcion: "Correlativo transaccional para proforma (prefijo PRF).",
+  },
+  {
+    codigo_entidad: "pago_cliente",
+    prefijo: "PCL",
+    descripcion: "Correlativo transaccional para pago_cliente (prefijo PCL).",
+  },
+  {
+    codigo_entidad: "comprobante_venta",
+    prefijo: "CMP",
+    descripcion: "Correlativo transaccional para comprobante_venta (prefijo CMP).",
+  },
 ];
 
 async function main() {
