@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { toApiErrorResponse } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
@@ -1348,49 +1349,53 @@ export async function GET(request: Request, context: RouteContext) {
     });
   }
 
-  const exportReport = await buildReport(report, url.searchParams);
+  try {
+    const exportReport = await buildReport(report, url.searchParams);
 
-  if (!exportReport) {
-    return new Response("Reporte no encontrado.", {
-      status: 404,
-    });
-  }
+    if (!exportReport) {
+      return new Response("Reporte no encontrado.", {
+        status: 404,
+      });
+    }
 
-  const fileFormat =
-    url.searchParams.get("fileFormat") === "pdf" ? "pdf" : "excel";
+    const fileFormat =
+      url.searchParams.get("fileFormat") === "pdf" ? "pdf" : "excel";
 
-  if (fileFormat === "pdf") {
+    if (fileFormat === "pdf") {
+      await registerExportLog({
+        userId: session.user.id,
+        report,
+        filename: exportReport.pdfFilename,
+        fileFormat: "pdf",
+        searchParams: url.searchParams,
+      });
+
+      const pdfBuffer = await buildPdfBuffer({
+        title: exportReport.title,
+        subtitle: "Sistema de Gestion Integral - Industrias Aceros Peru",
+        headers: exportReport.headers,
+        rows: exportReport.rows.slice(0, 80),
+      });
+
+      return pdfResponse(pdfBuffer, exportReport.pdfFilename);
+    }
+
     await registerExportLog({
       userId: session.user.id,
       report,
-      filename: exportReport.pdfFilename,
-      fileFormat: "pdf",
+      filename: exportReport.filename,
+      fileFormat: "excel",
       searchParams: url.searchParams,
     });
 
-    const pdfBuffer = await buildPdfBuffer({
+    const excelBuffer = await buildExcelBuffer({
       title: exportReport.title,
-      subtitle: "Sistema de Gestion Integral - Industrias Aceros Peru",
       headers: exportReport.headers,
-      rows: exportReport.rows.slice(0, 80),
+      rows: exportReport.rows,
     });
 
-    return pdfResponse(pdfBuffer, exportReport.pdfFilename);
+    return excelResponse(excelBuffer, exportReport.filename);
+  } catch (error) {
+    return toApiErrorResponse(error, { report, userId: session.user.id });
   }
-
-  await registerExportLog({
-    userId: session.user.id,
-    report,
-    filename: exportReport.filename,
-    fileFormat: "excel",
-    searchParams: url.searchParams,
-  });
-
-  const excelBuffer = await buildExcelBuffer({
-    title: exportReport.title,
-    headers: exportReport.headers,
-    rows: exportReport.rows,
-  });
-
-  return excelResponse(excelBuffer, exportReport.filename);
 }

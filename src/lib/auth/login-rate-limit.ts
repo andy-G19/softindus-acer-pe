@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export const LOGIN_WINDOW_MINUTES = 15;
 export const LOGIN_EMAIL_MAX_FAILURES = 5;
@@ -60,9 +61,9 @@ export async function getLoginClientContext(): Promise<LoginClientContext> {
       userAgentHash: userAgent ? hashLoginValue(userAgent) : null,
     };
   } catch (error) {
-    console.error(
+    logger.error(
       "No se pudo leer el contexto de la peticion de login (IP/user-agent).",
-      error,
+      { error },
     );
 
     return { ipHash: null, userAgentHash: null };
@@ -123,7 +124,10 @@ export async function assertLoginAllowed(
 
     return { allowed: true };
   } catch (error) {
-    console.error("No se pudo verificar el rate limit de login.", error);
+    logger.error("No se pudo verificar el rate limit de login.", {
+      error,
+      correoNormalizado,
+    });
 
     return { allowed: false, motivo: "rate_limit_correo" };
   }
@@ -155,7 +159,11 @@ export async function recordLoginAttempt(
       },
     });
   } catch (error) {
-    console.error("No se pudo registrar el intento de login.", error);
+    logger.error("No se pudo registrar el intento de login.", {
+      error,
+      correoNormalizado: input.correoNormalizado,
+      resultado: input.resultado,
+    });
   }
 
   void cleanupOldLoginAttempts();
@@ -170,7 +178,7 @@ export async function runDummyPasswordCompare(password: string): Promise<void> {
   try {
     await bcrypt.compare(password, DUMMY_PASSWORD_HASH);
   } catch (error) {
-    console.error("No se pudo ejecutar la comparacion dummy de login.", error);
+    logger.error("No se pudo ejecutar la comparacion dummy de login.", { error });
   }
 }
 
@@ -195,6 +203,6 @@ async function cleanupOldLoginAttempts(): Promise<void> {
       },
     });
   } catch (error) {
-    console.error("No se pudo limpiar intentos de login antiguos.", error);
+    logger.error("No se pudo limpiar intentos de login antiguos.", { error });
   }
 }

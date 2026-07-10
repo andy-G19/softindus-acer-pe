@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { loginSchema } from "@/modules/auth/auth.schema";
 import {
   assertLoginAllowed,
@@ -11,6 +12,12 @@ import {
   recordLoginAttempt,
   runDummyPasswordCompare,
 } from "@/lib/auth/login-rate-limit";
+
+// AUTH_SECRET/AUTH_URL/AUTH_TRUST_HOST se validan y documentan en
+// src/lib/env.ts (importado transitivamente via @/lib/db), pero
+// deliberadamente no se pasan aqui de forma explicita: Auth.js v5 ya las
+// lee directamente de process.env por convencion propia, y fijarlas a mano
+// podria alterar como resuelve el host de confianza en produccion (Vercel).
 
 export const SESSION_MAX_AGE_SECONDS = 8 * 60 * 60;
 export const SESSION_UPDATE_AGE_SECONDS = 5 * 60;
@@ -223,9 +230,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.role = dbUser.rol.nombre_rol;
         token.status = dbUser.estado;
       } catch (error) {
-        console.error(
+        logger.error(
           "No se pudo revalidar la sesion del usuario contra la base de datos.",
-          error,
+          { error },
         );
 
         // Ante un error de base de datos, no se conceden permisos: se

@@ -3,6 +3,7 @@ import "server-only";
 import { Prisma } from "@/generated/prisma/client";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 type RegisterAuditLogInput = {
   userId: string;
@@ -45,6 +46,10 @@ export async function registerAuditLog(data: RegisterAuditLogInput) {
   try {
     await prisma.$transaction((tx) => createAuditLog(tx, data));
   } catch (error) {
-    console.error("No se pudo registrar la bitacora de operacion.", error);
+    logger.error("No se pudo registrar la bitacora de operacion.", {
+      error,
+      entidad_afectada: data.entidad_afectada,
+      accion: data.accion,
+    });
   }
 }

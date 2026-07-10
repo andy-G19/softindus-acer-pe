@@ -9,6 +9,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
+    // El Prisma CLI carga este archivo fuera de Next.js (sin pasar por
+    // src/lib/env.ts), asi que necesita leer process.env directamente.
     url: process.env["DATABASE_URL"],
   },
 });
