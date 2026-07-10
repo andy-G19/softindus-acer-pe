@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
-import { buildNextId } from "@/lib/ids";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -148,41 +148,38 @@ async function registerExportLog(data: {
   fileFormat: "excel" | "pdf";
   searchParams: URLSearchParams;
 }) {
-  const lastExport = await prisma.exportacion_datos.findFirst({
-    orderBy: {
-      id_exportacion: "desc",
-    },
-    select: {
-      id_exportacion: true,
-    },
-  });
-
-  const id_exportacion = buildNextId("EXP", lastExport?.id_exportacion);
-
   const paramsObject = Object.fromEntries(data.searchParams.entries());
 
   delete paramsObject.fileFormat;
 
-  await prisma.exportacion_datos.create({
-    data: {
-      id_exportacion,
-      id_usuario: data.userId,
-      modulo_origen: REPORT_MODULE_LABELS[data.report] ?? data.report,
-      formato: data.fileFormat,
-      parametros: JSON.stringify(paramsObject),
-      estado: "generada",
-      ruta_archivo: data.filename,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const id_exportacion = await getNextCorrelativeId(tx, {
+      codigoEntidad: "exportacion_datos",
+      prefijo: "EXP",
+    });
 
-  await registerAuditLog({
-    userId: data.userId,
-    entidad_afectada: "exportacion_datos",
-    id_registro_afectado: id_exportacion,
-    accion: "crear",
-    detalle: `Reporte exportado: ${
-      REPORT_MODULE_LABELS[data.report] ?? data.report
-    } (${data.fileFormat}).`,
+    await tx.exportacion_datos.create({
+      data: {
+        id_exportacion,
+        id_usuario: data.userId,
+        modulo_origen: REPORT_MODULE_LABELS[data.report] ?? data.report,
+        formato: data.fileFormat,
+        parametros: JSON.stringify(paramsObject),
+        estado: "generada",
+        ruta_archivo: data.filename,
+      },
+    });
+
+    await registerAuditLog({
+      userId: data.userId,
+      entidad_afectada: "exportacion_datos",
+      id_registro_afectado: id_exportacion,
+      accion: "crear",
+      detalle: `Reporte exportado: ${
+        REPORT_MODULE_LABELS[data.report] ?? data.report
+      } (${data.fileFormat}).`,
+      tx,
+    });
   });
 }
 

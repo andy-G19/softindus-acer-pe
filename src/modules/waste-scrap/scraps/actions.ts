@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { scrapSchema } from "@/schemas/waste-scrap/scrap.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireWasteScrapAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -76,35 +61,32 @@ export async function createScrapAction(formData: FormData) {
     }
   }
 
-  const lastScrap = await prisma.chatarra.findFirst({
-    orderBy: {
-      id_chatarra: "desc",
-    },
-    select: {
-      id_chatarra: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idChatarra = await getNextCorrelativeId(tx, {
+      codigoEntidad: "chatarra",
+      prefijo: "CHA",
+    });
 
-  const idChatarra = buildSequentialId(lastScrap?.id_chatarra, "CHA");
+    await tx.chatarra.create({
+      data: {
+        id_chatarra: idChatarra,
+        id_material: data.id_material,
+        tipo_material: data.tipo_material,
+        peso_kg: data.peso_kg ?? null,
+        cantidad: data.cantidad ?? null,
+        estado: "acumulada",
+        observaciones: data.observaciones,
+      },
+    });
 
-  await prisma.chatarra.create({
-    data: {
-      id_chatarra: idChatarra,
-      id_material: data.id_material,
-      tipo_material: data.tipo_material,
-      peso_kg: data.peso_kg ?? null,
-      cantidad: data.cantidad ?? null,
-      estado: "acumulada",
-      observaciones: data.observaciones,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "chatarra",
-    id_registro_afectado: idChatarra,
-    accion: "crear",
-    detalle: `Chatarra registrada: ${data.tipo_material}`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "chatarra",
+      id_registro_afectado: idChatarra,
+      accion: "crear",
+      detalle: `Chatarra registrada: ${data.tipo_material}`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard");

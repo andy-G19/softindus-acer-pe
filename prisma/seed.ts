@@ -415,6 +415,26 @@ const correlatives = [
     prefijo: "REP",
     descripcion: "Correlativo transaccional para repuesto (prefijo REP).",
   },
+  {
+    codigo_entidad: "chatarra",
+    prefijo: "CHA",
+    descripcion: "Correlativo transaccional para chatarra (prefijo CHA).",
+  },
+  {
+    codigo_entidad: "retazo_reutilizable",
+    prefijo: "RET",
+    descripcion: "Correlativo transaccional para retazo_reutilizable (prefijo RET).",
+  },
+  {
+    codigo_entidad: "venta_chatarra",
+    prefijo: "VCH",
+    descripcion: "Correlativo transaccional para venta_chatarra (prefijo VCH).",
+  },
+  {
+    codigo_entidad: "exportacion_datos",
+    prefijo: "EXP",
+    descripcion: "Correlativo transaccional para exportacion_datos (prefijo EXP).",
+  },
 ];
 
 async function main() {

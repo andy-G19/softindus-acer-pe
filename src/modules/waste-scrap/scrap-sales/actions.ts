@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireAdmin(role: string | undefined) {
   if (role !== "ADMIN") {
@@ -136,38 +121,21 @@ export async function createScrapSaleAction(formData: FormData) {
     }
   }
 
-  const [lastSale, lastCashMovement] = await Promise.all([
-    prisma.venta_chatarra.findFirst({
-      orderBy: {
-        id_venta_chatarra: "desc",
-      },
-      select: {
-        id_venta_chatarra: true,
-      },
-    }),
-
-    prisma.movimiento_caja.findFirst({
-      orderBy: {
-        id_movimiento_caja: "desc",
-      },
-      select: {
-        id_movimiento_caja: true,
-      },
-    }),
-  ]);
-
-  const idVentaChatarra = buildSequentialId(
-    lastSale?.id_venta_chatarra,
-    "VCH",
-  );
-
-  const idMovimientoCaja = data.id_caja_chica
-    ? buildSequentialId(lastCashMovement?.id_movimiento_caja, "MCA")
-    : null;
-
   const fechaVenta = new Date(`${data.fecha_venta}T00:00:00`);
 
   await prisma.$transaction(async (tx) => {
+    const idVentaChatarra = await getNextCorrelativeId(tx, {
+      codigoEntidad: "venta_chatarra",
+      prefijo: "VCH",
+    });
+
+    const idMovimientoCaja = data.id_caja_chica
+      ? await getNextCorrelativeId(tx, {
+          codigoEntidad: "movimiento_caja",
+          prefijo: "MCA",
+        })
+      : null;
+
     if (data.id_caja_chica && idMovimientoCaja) {
       await tx.movimiento_caja.create({
         data: {

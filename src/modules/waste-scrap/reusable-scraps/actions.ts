@@ -4,24 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { reusableScrapSchema } from "@/schemas/waste-scrap/reusable-scrap.schema";
-
-function buildSequentialId(lastId: string | null | undefined, prefix: string) {
-  if (!lastId) {
-    return `${prefix}00000001`;
-  }
-
-  const currentNumber = Number(lastId.replace(prefix, ""));
-
-  if (Number.isNaN(currentNumber)) {
-    return `${prefix}00000001`;
-  }
-
-  const nextNumber = currentNumber + 1;
-
-  return `${prefix}${String(nextNumber).padStart(8, "0")}`;
-}
 
 function requireWasteScrapAccess(role: string | undefined) {
   if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
@@ -98,38 +83,35 @@ export async function createReusableScrapAction(formData: FormData) {
     }
   }
 
-  const lastReusableScrap = await prisma.retazo_reutilizable.findFirst({
-    orderBy: {
-      id_retazo: "desc",
-    },
-    select: {
-      id_retazo: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const idRetazo = await getNextCorrelativeId(tx, {
+      codigoEntidad: "retazo_reutilizable",
+      prefijo: "RET",
+    });
 
-  const idRetazo = buildSequentialId(lastReusableScrap?.id_retazo, "RET");
+    await tx.retazo_reutilizable.create({
+      data: {
+        id_retazo: idRetazo,
+        id_material: data.id_material,
+        id_orden_trabajo: data.id_orden_trabajo,
+        tipo_material: material.categoria,
+        medida_aproximada: data.medida_aproximada,
+        cantidad: data.cantidad,
+        unidad_medida: data.unidad_medida,
+        ubicacion: data.ubicacion,
+        estado: "disponible",
+        id_usuario_registro: session.user.id,
+      },
+    });
 
-  await prisma.retazo_reutilizable.create({
-    data: {
-      id_retazo: idRetazo,
-      id_material: data.id_material,
-      id_orden_trabajo: data.id_orden_trabajo,
-      tipo_material: material.categoria,
-      medida_aproximada: data.medida_aproximada,
-      cantidad: data.cantidad,
-      unidad_medida: data.unidad_medida,
-      ubicacion: data.ubicacion,
-      estado: "disponible",
-      id_usuario_registro: session.user.id,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "retazo_reutilizable",
-    id_registro_afectado: idRetazo,
-    accion: "crear",
-    detalle: `Retazo reutilizable creado para el material ${data.id_material}.`,
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "retazo_reutilizable",
+      id_registro_afectado: idRetazo,
+      accion: "crear",
+      detalle: `Retazo reutilizable creado para el material ${data.id_material}.`,
+      tx,
+    });
   });
 
   revalidatePath("/dashboard");
