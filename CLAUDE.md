@@ -4,6 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+
 ## What this is
 
 Spanish-language internal ERP for **Aceros Perú** (a steel fabrication workshop): commercial (clients/quotes/orders/payments), inventory, production, costing, petty cash, maintenance, staff, and reporting. Domain code — Prisma models, columns, enums, UI copy, toast keys — is in **Spanish** (`cliente`, `bitacora_operacion`, `estado`). Keep new domain code Spanish to match; framework/glue code is English.
@@ -54,7 +55,7 @@ Follow the shape in [src/modules/commercial/clients/actions.ts](src/modules/comm
 2. `schema.safeParse(rawData)` → on failure return `{ error, fieldErrors: parsed.error.flatten().fieldErrors }`.
 3. Business validation (e.g. duplicate document), then generate id with `buildNextId`, then `prisma.<model>.create/update`.
 4. `registerAuditLog({ userId, entidad_afectada, id_registro_afectado, accion, detalle })` — from [src/lib/audit.ts](src/lib/audit.ts); writes to `bitacora_operacion`, swallows its own errors, and accepts a `tx` client to run inside a transaction.
-5. `revalidatePath(...)` then `redirect(\`${path}?toast=<key>\`)`. Toasts are surfaced via the `?toast=` search param and rendered client-side.
+5. `revalidatePath(...)` then `redirect(\`${path}?toast=<key></key>\`)`. Toasts are surfaced via the `?toast=` search param and rendered client-side.
 
 Actions used with `useActionState` take `(prevState, formData)` and return a typed `FormState`.
 

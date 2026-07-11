@@ -90,7 +90,39 @@ tests E2E configurado (ver [Riesgos pendientes](docs/fase-12-estabilizacion-tecn
 3. Generar el cliente de Prisma: `npm run db:generate`
 4. Validar el schema: `npm run db:validate`
 5. Ejecutar el seed inicial: `npm run db:seed`
-6. Levantar el servidor de desarrollo: `npm run dev`
+6. Crear el primer administrador (ver [Bootstrap del primer administrador](#bootstrap-del-primer-administrador))
+7. Levantar el servidor de desarrollo: `npm run dev`
+
+## Bootstrap del primer administrador
+
+`prisma/seed.ts` **no crea usuarios**: solo siembra roles y catálogos
+estructurales. La creación del primer usuario `ADMIN` es un paso manual y
+excepcional, separado a propósito para no dejar contraseñas conocidas en el
+repositorio ni reiniciarlas accidentalmente en cada `npm run db:seed`.
+
+1. Verifique primero cuál es la `DATABASE_URL` activa en su entorno (sin
+   imprimirla) para confirmar que apunta a la base correcta antes de
+   continuar.
+2. Configure temporalmente las variables `BOOTSTRAP_ADMIN_*` (ver
+   `.env.example`), incluyendo `BOOTSTRAP_ADMIN_CONFIRM="CREATE_INITIAL_ADMIN"`
+   como confirmación explícita.
+3. Ejecute:
+
+   ```bash
+   npm run bootstrap:admin
+   ```
+
+4. El script aborta sin modificar nada si ya existe cualquier usuario con rol
+   `ADMIN` (activo, inactivo o bloqueado), o si el correo/usuario solicitado
+   ya está en uso.
+5. Al terminar, elimine las variables `BOOTSTRAP_ADMIN_*` del entorno: no
+   deben quedar configuradas de forma permanente.
+6. Los usuarios `SELLER` y `WORKSHOP_MASTER` (y cualquier `ADMIN` adicional)
+   se crean después desde el módulo administrativo **Usuarios** de la propia
+   aplicación, ya autenticado como `ADMIN`.
+
+Este comando es exclusivamente manual: nunca debe integrarse en el build de
+Vercel, en `postinstall` ni en ningún pipeline de despliegue o CI.
 
 ## Flujo de despliegue (Vercel + Supabase)
 

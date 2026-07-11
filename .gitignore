@@ -50,8 +50,10 @@ next-env.d.ts
 
 /src/generated/prisma
 
-/docs
-/CLAUDE.md
+
+CLAUDE.md
 /.claude
 /.agents
 /.codex
+AGENTS.md
+/docs

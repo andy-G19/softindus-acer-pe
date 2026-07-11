@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
+    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
     "db:studio": "prisma studio",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
