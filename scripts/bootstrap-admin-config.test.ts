@@ -16,10 +16,10 @@ function buildSyntheticPassword(length: number): string {
 
 const VALID_ENV = {
   BOOTSTRAP_ADMIN_CONFIRM: "CREATE_INITIAL_ADMIN",
-  BOOTSTRAP_ADMIN_NAMES: "Ana",
-  BOOTSTRAP_ADMIN_SURNAMES: "Torres",
-  BOOTSTRAP_ADMIN_USERNAME: "atorres",
-  BOOTSTRAP_ADMIN_EMAIL: "ana.torres@acerosperu.com",
+  BOOTSTRAP_ADMIN_NAMES: "Anderson",
+  BOOTSTRAP_ADMIN_SURNAMES: "Godoy",
+  BOOTSTRAP_ADMIN_USERNAME: "AndyG",
+  BOOTSTRAP_ADMIN_EMAIL: "andy.godoy@acerosperu.com",
   BOOTSTRAP_ADMIN_PASSWORD: buildSyntheticPassword(16),
 };
 
