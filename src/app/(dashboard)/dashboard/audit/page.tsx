@@ -24,6 +24,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
@@ -38,20 +39,6 @@ import {
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatDateTime(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(value);
-}
 
 export default async function AuditPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);

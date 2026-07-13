@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -38,17 +39,6 @@ function toNumber(value: unknown) {
 
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDateTime(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(value);
 }
 
 function getStageBadgeVariant(status: string) {

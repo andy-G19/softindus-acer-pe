@@ -17,7 +17,25 @@ export function formatDate(value: Date | string | null | undefined) {
     return "-";
   }
 
-  return new Intl.DateTimeFormat("es-PE").format(new Date(value));
+  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
+    new Date(value),
+  );
+}
+
+export function formatDateTime(
+  value: Date | string | null | undefined,
+  opts?: Intl.DateTimeFormatOptions,
+) {
+  if (!value) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("es-PE", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "America/Lima",
+    ...opts,
+  }).format(new Date(value));
 }
 
 export function formatDecimal(value: unknown, decimals = 2) {

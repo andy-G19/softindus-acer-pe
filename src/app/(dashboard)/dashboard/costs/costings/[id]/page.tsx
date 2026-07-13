@@ -24,6 +24,7 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import {
   createIndirectCostAction,
   annulIndirectCostAction,
@@ -64,6 +65,7 @@ function formatDate(value: Date | null | undefined) {
 
   return new Intl.DateTimeFormat("es-PE", {
     dateStyle: "medium",
+    timeZone: "UTC",
   }).format(value);
 }
 
@@ -76,6 +78,7 @@ function formatShortDate(value: Date | null | undefined) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    timeZone: "UTC",
   }).format(value);
 }
 
@@ -848,7 +851,7 @@ export default async function CostingDetailPage({
                 <TableBody>
                   {costing.margen_ganancia.map((item) => (
                     <TableRow key={item.id_margen}>
-                      <TableCell>{formatShortDate(item.fecha_aplicacion)}</TableCell>
+                      <TableCell>{formatDateTime(item.fecha_aplicacion)}</TableCell>
                       <TableCell>{formatPercent(item.porcentaje_margen)}</TableCell>
                       <TableCell>{formatMoney(item.precio_sugerido)}</TableCell>
                       <TableCell>
@@ -995,7 +998,7 @@ export default async function CostingDetailPage({
                 <TableBody>
                   {costing.rentabilidad.map((item) => (
                     <TableRow key={item.id_rentabilidad}>
-                      <TableCell>{formatShortDate(item.fecha_calculo)}</TableCell>
+                      <TableCell>{formatDateTime(item.fecha_calculo)}</TableCell>
                       <TableCell>{formatMoney(item.ingreso_estimado)}</TableCell>
                       <TableCell>{formatMoney(item.costo_total)}</TableCell>
                       <TableCell>{formatMoney(item.utilidad_estimada)}</TableCell>

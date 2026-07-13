@@ -22,6 +22,7 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 
@@ -90,20 +91,6 @@ function parseDateInputAsNextDay(value: string) {
   }
 
   return new Date(year, month - 1, day + 1);
-}
-
-function formatDateTime(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(value);
 }
 
 function getFormatLabel(format: string) {
