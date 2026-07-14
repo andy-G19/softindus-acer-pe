@@ -10,6 +10,7 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { reassignWorkOrderProgressAction } from "@/modules/production/work-order-progress/actions";
 import Link from "next/link";
@@ -20,17 +21,6 @@ type ReassignWorkOrderProgressPageProps = {
     advanceId: string;
   }>;
 };
-
-function formatDateTime(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(value);
-}
 
 export default async function ReassignWorkOrderProgressPage({
   params,

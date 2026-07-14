@@ -27,6 +27,7 @@ import {
 import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
@@ -49,17 +50,6 @@ const ROLE_OPTIONS = [
 type UsersPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatDate(value: Date | null) {
-  if (!value) {
-    return "Sin registro";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(value);
-}
 
 export default async function UsersPage({ searchParams }: UsersPageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
@@ -269,8 +259,12 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                           {getUserStatusLabel(user.estado)}
                         </Badge>
                       </TableCell>
-                      <TableCell>{formatDate(user.ultimo_acceso)}</TableCell>
-                      <TableCell>{formatDate(user.fecha_registro)}</TableCell>
+                      <TableCell>
+                        {user.ultimo_acceso
+                          ? formatDateTime(user.ultimo_acceso)
+                          : "Sin registro"}
+                      </TableCell>
+                      <TableCell>{formatDateTime(user.fecha_registro)}</TableCell>
                       <TableCell>
                         <div className="flex flex-wrap justify-end gap-2">
                           <Button variant="outline" size="sm" asChild>

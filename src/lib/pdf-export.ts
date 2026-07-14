@@ -1,5 +1,7 @@
 import PDFDocument from "pdfkit";
 
+import { formatDateTime } from "@/lib/formatters";
+
 type PdfValue = string | number | boolean | Date | null | undefined;
 
 type PdfReportData = {
@@ -131,13 +133,7 @@ export async function buildPdfBuffer(data: PdfReportData) {
       );
 
       doc.fontSize(8).text(
-        `Generado: ${new Intl.DateTimeFormat("es-PE", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }).format(new Date())}`,
+        `Generado: ${formatDateTime(new Date())}`,
         30,
         68,
       );

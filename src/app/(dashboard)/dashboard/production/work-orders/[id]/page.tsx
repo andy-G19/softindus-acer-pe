@@ -54,6 +54,7 @@ function formatDate(value: Date | null | undefined) {
 
   return new Intl.DateTimeFormat("es-PE", {
     dateStyle: "medium",
+    timeZone: "UTC",
   }).format(value);
 }
 

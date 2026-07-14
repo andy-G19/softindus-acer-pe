@@ -9,6 +9,7 @@ import {
   toApiErrorResponse,
 } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
+import { formatDateTime } from "@/lib/formatters";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import {
   DEFAULT_PDF_DISPLAY_ROWS,
@@ -118,20 +119,6 @@ function formatDate(value: Date | null | undefined) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  }).format(value);
-}
-
-function formatDateTime(value: Date | null | undefined) {
-  if (!value) {
-    return "";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
   }).format(value);
 }
 
