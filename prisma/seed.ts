@@ -172,6 +172,7 @@ const correlatives = [
   {
     codigo_entidad: "categoria_producto",
     prefijo: "CPR",
+    ultimo_numero: productCategories.length,
     descripcion: "Correlativo transaccional para categoria_producto (prefijo CPR).",
   },
   {
@@ -207,6 +208,7 @@ const correlatives = [
   {
     codigo_entidad: "categoria_material",
     prefijo: "CMA",
+    ultimo_numero: materialCategories.length,
     descripcion: "Correlativo transaccional para categoria_material (prefijo CMA).",
   },
   {
@@ -217,6 +219,7 @@ const correlatives = [
   {
     codigo_entidad: "tipo_proveedor_catalogo",
     prefijo: "TPR",
+    ultimo_numero: supplierTypes.length,
     descripcion: "Correlativo transaccional para tipo_proveedor_catalogo (prefijo TPR).",
   },
   {
