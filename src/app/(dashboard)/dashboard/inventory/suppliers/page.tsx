@@ -2,6 +2,11 @@ import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
+import {
+  RowActions,
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -274,26 +279,18 @@ export default async function SuppliersPage({
                 </Badge>
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" asChild>
-                    <Link
-                      href={`/dashboard/inventory/suppliers/${supplier.id_proveedor}/edit`}
-                    >
-                      Editar
-                    </Link>
-                  </Button>
+                <RowActions>
+                  <RowEditLink
+                    href={`/dashboard/inventory/suppliers/${supplier.id_proveedor}/edit`}
+                  />
 
-                  <form action={toggleSupplierStatusAction}>
-                    <input
-                      type="hidden"
-                      name="id_proveedor"
-                      value={supplier.id_proveedor}
-                    />
-                    <Button type="submit" variant="outline" size="sm">
-                      {supplier.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
-                </div>
+                  <RowToggleStatusButton
+                    action={toggleSupplierStatusAction}
+                    hiddenFieldName="id_proveedor"
+                    hiddenFieldValue={supplier.id_proveedor}
+                    isActive={supplier.estado}
+                  />
+                </RowActions>
               </TableCell>
             </TableRow>
           ))}

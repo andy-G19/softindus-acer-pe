@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+import {
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -267,23 +271,15 @@ export default async function SparePartsPage({
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link
-                            href={`/dashboard/maintenance/spare-parts/${sparePart.id_repuesto}/edit`}
-                          >
-                            Editar
-                          </Link>
-                        </Button>
-                        <form action={toggleSparePartStatusAction}>
-                          <input
-                            type="hidden"
-                            name="id_repuesto"
-                            value={sparePart.id_repuesto}
-                          />
-                          <Button type="submit" variant="outline" size="sm">
-                            {sparePart.estado ? "Inactivar" : "Activar"}
-                          </Button>
-                        </form>
+                        <RowEditLink
+                          href={`/dashboard/maintenance/spare-parts/${sparePart.id_repuesto}/edit`}
+                        />
+                        <RowToggleStatusButton
+                          action={toggleSparePartStatusAction}
+                          hiddenFieldName="id_repuesto"
+                          hiddenFieldValue={sparePart.id_repuesto}
+                          isActive={sparePart.estado}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

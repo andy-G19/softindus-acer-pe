@@ -3,6 +3,11 @@ import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
+import {
+  RowActions,
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -270,26 +275,18 @@ export default async function ProductsPage({
               </TableCell>
               <TableCell>
                 {canManageProduct ? (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <Link
-                        href={`/dashboard/commercial/products/${product.id_producto}/edit`}
-                      >
-                        Editar
-                      </Link>
-                    </Button>
+                  <RowActions>
+                    <RowEditLink
+                      href={`/dashboard/commercial/products/${product.id_producto}/edit`}
+                    />
 
-                    <form action={toggleProductStatusAction}>
-                      <input
-                        type="hidden"
-                        name="id_producto"
-                        value={product.id_producto}
-                      />
-                      <Button type="submit" variant="outline" size="sm">
-                        {product.estado ? "Inactivar" : "Activar"}
-                      </Button>
-                    </form>
-                  </div>
+                    <RowToggleStatusButton
+                      action={toggleProductStatusAction}
+                      hiddenFieldName="id_producto"
+                      hiddenFieldValue={product.id_producto}
+                      isActive={product.estado}
+                    />
+                  </RowActions>
                 ) : (
                   <span className="text-xs text-muted-foreground">
                     Solo lectura

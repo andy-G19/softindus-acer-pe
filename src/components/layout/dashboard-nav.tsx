@@ -65,41 +65,72 @@ function isRouteActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function DashboardNav({ menuItems }: DashboardNavProps) {
+type NavLinksProps = {
+  menuItems: DashboardNavItem[];
+  pathname: string;
+  collapsible?: boolean;
+};
+
+function NavLinks({ menuItems, pathname, collapsible = false }: NavLinksProps) {
+  return (
+    <>
+      {menuItems.map((item) => {
+        const isActive = isRouteActive(pathname, item.href);
+        const Icon = navIconsByHref[item.href] ?? Circle;
+        const label = navLabelsByHref[item.href] ?? item.title;
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={isActive ? "page" : undefined}
+            className={cn(
+              "sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35",
+              collapsible
+                ? "justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start"
+                : "min-w-max",
+              isActive && "sidebar-nav-link-active",
+            )}
+          >
+            <Icon className="size-4 shrink-0" aria-hidden="true" />
+            <span
+              className={cn(
+                "truncate",
+                collapsible &&
+                  "hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline",
+              )}
+            >
+              {label}
+            </span>
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
+export function MobileDashboardNav({ menuItems }: DashboardNavProps) {
   const pathname = usePathname();
 
   return (
     <div className="relative">
-      <nav
-        aria-label="Navegación principal"
-        className="flex gap-2 overflow-x-auto pb-1 md:flex-col md:overflow-visible md:pb-0"
-      >
-        {menuItems.map((item) => {
-          const isActive = isRouteActive(pathname, item.href);
-          const Icon = navIconsByHref[item.href] ?? Circle;
-          const label = navLabelsByHref[item.href] ?? item.title;
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive ? "page" : undefined}
-              className={cn(
-                "sidebar-nav-link flex min-w-max items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 md:min-w-0",
-                isActive && "sidebar-nav-link-active"
-              )}
-            >
-              <Icon className="size-4 shrink-0" aria-hidden="true" />
-              <span className="truncate">{label}</span>
-            </Link>
-          );
-        })}
+      <nav aria-label="Navegación principal" className="flex gap-2 overflow-x-auto pb-1">
+        <NavLinks menuItems={menuItems} pathname={pathname} />
       </nav>
-
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-sidebar to-transparent md:hidden"
+        className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-sidebar to-transparent"
       />
     </div>
+  );
+}
+
+export function DesktopSidebarNav({ menuItems }: DashboardNavProps) {
+  const pathname = usePathname();
+
+  return (
+    <nav aria-label="Navegación principal" className="flex flex-col gap-1 px-2">
+      <NavLinks menuItems={menuItems} pathname={pathname} collapsible />
+    </nav>
   );
 }

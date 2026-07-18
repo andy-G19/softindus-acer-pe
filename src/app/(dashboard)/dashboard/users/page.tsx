@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
+import { RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -267,13 +268,9 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                       <TableCell>{formatDateTime(user.fecha_registro)}</TableCell>
                       <TableCell>
                         <div className="flex flex-wrap justify-end gap-2">
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={`${navigationHrefs.users}/${user.id_usuario}/edit`}
-                            >
-                              Editar
-                            </Link>
-                          </Button>
+                          <RowEditLink
+                            href={`${navigationHrefs.users}/${user.id_usuario}/edit`}
+                          />
 
                           <Button variant="outline" size="sm" asChild>
                             <Link

@@ -3,11 +3,16 @@ import type { Session } from "next-auth";
 import { Suspense } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { DashboardNav } from "@/components/layout/dashboard-nav";
+import {
+  DesktopSidebarNav,
+  MobileDashboardNav,
+} from "@/components/layout/dashboard-nav";
+import { TopProgressBar } from "@/components/layout/top-progress-bar";
 import { NotificationQueryBridge } from "@/components/notifications/notification-query-bridge";
 import { SessionIdleGuard } from "@/modules/auth/components/session-idle-guard";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { getMenuForRole, getRoleLabel } from "@/lib/permissions";
+import { cn } from "@/lib/utils";
 
 type DashboardShellProps = {
   session: Session;
@@ -25,7 +30,9 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
       </Suspense>
 
       <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
-        <div className="heat-bar" aria-hidden="true" />
+        <Suspense fallback={<div className="heat-bar" aria-hidden="true" />}>
+          <TopProgressBar />
+        </Suspense>
         <div className="flex w-full flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <Image
@@ -41,10 +48,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
                 <h1 className="font-heading text-xl font-bold text-foreground">
                   Industrias Aceros Perú
                 </h1>
-                <Badge
-                  variant="success"
-                  className="text-[10.5px]"
-                >
+                <Badge variant="success" className="text-[10.5px]">
                   Sistema activo
                 </Badge>
               </div>
@@ -60,9 +64,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
                 {session.user.name}
               </p>
               <div className="mt-1 flex sm:justify-end">
-                <Badge
-                  className="text-[10.5px]"
-                >
+                <Badge className="text-[10.5px]">
                   {getRoleLabel(session.user.role)}
                 </Badge>
               </div>
@@ -73,17 +75,40 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         </div>
       </header>
 
-      <div className="grid w-full gap-6 px-4 py-6 sm:px-6 lg:px-8 md:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
-        <aside className="min-w-0">
-          <div className="rounded-xl border border-sidebar-border/80 bg-sidebar p-3 shadow-[0_18px_45px_rgba(0,0,0,0.22)] md:sticky md:top-24">
-            <div className="px-2 pb-3">
-              <p className="text-xs font-semibold uppercase text-muted-foreground">
-                Navegación
-              </p>
-            </div>
-            <DashboardNav menuItems={menuItems} />
+      <aside
+        className={cn(
+          "group/sidebar hidden md:block",
+          "md:fixed md:inset-y-0 md:left-0 md:z-30",
+          "md:w-[76px] md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar",
+          "md:transition-[width] md:duration-200 md:ease-out",
+          "md:hover:w-64 md:hover:overflow-visible md:hover:shadow-[8px_0_32px_rgba(0,0,0,0.45)]",
+          "md:focus-within:w-64 md:focus-within:overflow-visible",
+        )}
+      >
+        <div className="h-full overflow-y-auto pt-24">
+          <div className="px-3 pb-3">
+            <p
+              className={cn(
+                "text-xs font-semibold uppercase text-muted-foreground",
+                "hidden md:group-hover/sidebar:block md:group-focus-within/sidebar:block",
+              )}
+            >
+              Navegación
+            </p>
           </div>
-        </aside>
+          <DesktopSidebarNav menuItems={menuItems} />
+        </div>
+      </aside>
+
+      <div className="py-6 pl-4 pr-4 sm:pr-6 lg:pr-8 md:pl-[108px]">
+        <div className="mb-6 md:hidden">
+          <p className="mb-2 px-1 text-xs font-semibold uppercase text-muted-foreground">
+            Navegación
+          </p>
+          <div className="rounded-xl border border-sidebar-border/80 bg-sidebar p-2">
+            <MobileDashboardNav menuItems={menuItems} />
+          </div>
+        </div>
 
         <main className="min-w-0 w-full pb-8">{children}</main>
       </div>

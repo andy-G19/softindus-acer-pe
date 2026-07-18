@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import { PageHeader } from "@/components/navigation/page-header";
+import {
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -273,23 +277,15 @@ export default async function SupplierMaterialsPage({
               </TableCell>
               <TableCell>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" size="sm" asChild>
-                    <Link
-                      href={`/dashboard/inventory/supplier-materials/${relation.id_proveedor_material}/edit`}
-                    >
-                      Editar
-                    </Link>
-                  </Button>
-                  <form action={toggleSupplierMaterialStatusAction}>
-                    <input
-                      type="hidden"
-                      name="id_proveedor_material"
-                      value={relation.id_proveedor_material}
-                    />
-                    <Button type="submit" variant="outline" size="sm">
-                      {relation.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
+                  <RowEditLink
+                    href={`/dashboard/inventory/supplier-materials/${relation.id_proveedor_material}/edit`}
+                  />
+                  <RowToggleStatusButton
+                    action={toggleSupplierMaterialStatusAction}
+                    hiddenFieldName="id_proveedor_material"
+                    hiddenFieldValue={relation.id_proveedor_material}
+                    isActive={relation.estado}
+                  />
                 </div>
               </TableCell>
             </TableRow>

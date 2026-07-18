@@ -4,6 +4,11 @@ import { requireRole } from "@/lib/authz";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
+import {
+  RowActions,
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -254,29 +259,21 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
                 </Badge>
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" asChild>
-                    <Link
-                      href={withReturnTo(
-                        `${navigationHrefs.clients}/${clientItem.id_cliente}/edit`,
-                        returnTo,
-                      )}
-                    >
-                      Editar
-                    </Link>
-                  </Button>
+                <RowActions>
+                  <RowEditLink
+                    href={withReturnTo(
+                      `${navigationHrefs.clients}/${clientItem.id_cliente}/edit`,
+                      returnTo,
+                    )}
+                  />
 
-                  <form action={toggleClientStatusAction}>
-                    <input
-                      type="hidden"
-                      name="id_cliente"
-                      value={clientItem.id_cliente}
-                    />
-                    <Button type="submit" variant="outline" size="sm">
-                      {clientItem.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
-                </div>
+                  <RowToggleStatusButton
+                    action={toggleClientStatusAction}
+                    hiddenFieldName="id_cliente"
+                    hiddenFieldValue={clientItem.id_cliente}
+                    isActive={clientItem.estado}
+                  />
+                </RowActions>
               </TableCell>
             </TableRow>
           ))}
