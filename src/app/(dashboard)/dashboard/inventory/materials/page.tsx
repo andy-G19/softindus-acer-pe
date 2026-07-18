@@ -3,6 +3,11 @@ import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
+import {
+  RowActions,
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -357,29 +362,21 @@ export default async function MaterialsPage({
                   </TableCell>
                   <TableCell>
                     {isAdmin ? (
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link
-                            href={withReturnTo(
-                              `${navigationHrefs.materials}/${material.id_material}/edit`,
-                              returnTo,
-                            )}
-                          >
-                            Editar
-                          </Link>
-                        </Button>
+                      <RowActions>
+                        <RowEditLink
+                          href={withReturnTo(
+                            `${navigationHrefs.materials}/${material.id_material}/edit`,
+                            returnTo,
+                          )}
+                        />
 
-                        <form action={toggleMaterialStatusAction}>
-                          <input
-                            type="hidden"
-                            name="id_material"
-                            value={material.id_material}
-                          />
-                          <Button type="submit" variant="outline" size="sm">
-                            {material.estado ? "Inactivar" : "Activar"}
-                          </Button>
-                        </form>
-                      </div>
+                        <RowToggleStatusButton
+                          action={toggleMaterialStatusAction}
+                          hiddenFieldName="id_material"
+                          hiddenFieldValue={material.id_material}
+                          isActive={material.estado}
+                        />
+                      </RowActions>
                     ) : (
                       <span className="text-xs text-muted-foreground">
                         Solo lectura

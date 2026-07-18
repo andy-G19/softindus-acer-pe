@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+import {
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -202,23 +206,15 @@ export default async function ExpenseCategoriesPage({
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link
-                            href={`/dashboard/petty-cash/categories/${category.id_categoria_gasto}/edit`}
-                          >
-                            Editar
-                          </Link>
-                        </Button>
-                        <form action={toggleExpenseCategoryStatusAction}>
-                          <input
-                            type="hidden"
-                            name="id_categoria_gasto"
-                            value={category.id_categoria_gasto}
-                          />
-                          <Button type="submit" variant="outline" size="sm">
-                            {category.estado ? "Inactivar" : "Activar"}
-                          </Button>
-                        </form>
+                        <RowEditLink
+                          href={`/dashboard/petty-cash/categories/${category.id_categoria_gasto}/edit`}
+                        />
+                        <RowToggleStatusButton
+                          action={toggleExpenseCategoryStatusAction}
+                          hiddenFieldName="id_categoria_gasto"
+                          hiddenFieldValue={category.id_categoria_gasto}
+                          isActive={category.estado}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

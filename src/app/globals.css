@@ -179,6 +179,26 @@
     animation: temper 6s ease-in-out infinite;
   }
 
+  .nav-progress-track {
+    height: 3px;
+    overflow: hidden;
+  }
+
+  .nav-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent-forge);
+    box-shadow: 0 0 8px 1px color-mix(in srgb, var(--accent-forge) 55%, transparent);
+    opacity: 0;
+    transition:
+      width 250ms ease-out,
+      opacity 150ms ease-out;
+  }
+
+  .nav-progress-fill[data-active="true"] {
+    opacity: 1;
+  }
+
   .tempered-rail {
     width: 3px;
     border-radius: 9999px;

@@ -1,5 +1,9 @@
 ﻿import Link from "next/link";
 
+import {
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -376,25 +380,15 @@ export default async function OperatorsPage({
                     {canManageOperators ? (
                       <TableCell>
                         <div className="flex justify-end gap-2">
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={`/dashboard/staff/operators/${operator.id_operario}/edit`}
-                            >
-                              Editar
-                            </Link>
-                          </Button>
-                          <form action={toggleOperatorStatusAction}>
-                            <input
-                              type="hidden"
-                              name="id_operario"
-                              value={operator.id_operario}
-                            />
-                            <Button type="submit" variant="outline" size="sm">
-                              {operator.estado === "activo"
-                                ? "Inactivar"
-                                : "Activar"}
-                            </Button>
-                          </form>
+                          <RowEditLink
+                            href={`/dashboard/staff/operators/${operator.id_operario}/edit`}
+                          />
+                          <RowToggleStatusButton
+                            action={toggleOperatorStatusAction}
+                            hiddenFieldName="id_operario"
+                            hiddenFieldValue={operator.id_operario}
+                            isActive={operator.estado === "activo"}
+                          />
                         </div>
                       </TableCell>
                     ) : null}

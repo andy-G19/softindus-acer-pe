@@ -1,5 +1,9 @@
 ﻿import Link from "next/link";
 
+import {
+  RowEditLink,
+  RowToggleStatusButton,
+} from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -343,28 +347,18 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
                     {canManageMachines ? (
                       <TableCell>
                         <div className="flex justify-end gap-2">
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              href={withReturnTo(
-                                `${navigationHrefs.machines}/${machine.id_maquina}/edit`,
-                                returnTo,
-                              )}
-                            >
-                              Editar
-                            </Link>
-                          </Button>
-                          <form action={toggleMachineStatusAction}>
-                            <input
-                              type="hidden"
-                              name="id_maquina"
-                              value={machine.id_maquina}
-                            />
-                            <Button type="submit" variant="outline" size="sm">
-                              {machine.estado === "inactiva"
-                                ? "Activar"
-                                : "Inactivar"}
-                            </Button>
-                          </form>
+                          <RowEditLink
+                            href={withReturnTo(
+                              `${navigationHrefs.machines}/${machine.id_maquina}/edit`,
+                              returnTo,
+                            )}
+                          />
+                          <RowToggleStatusButton
+                            action={toggleMachineStatusAction}
+                            hiddenFieldName="id_maquina"
+                            hiddenFieldValue={machine.id_maquina}
+                            isActive={machine.estado !== "inactiva"}
+                          />
                         </div>
                       </TableCell>
                     ) : null}
