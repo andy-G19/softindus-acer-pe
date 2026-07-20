@@ -1,3 +1,10 @@
+import {
+  CircleDollarSign,
+  Landmark,
+  Scale,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -450,18 +457,18 @@ export default async function MonthlyFinancialSummaryPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Ventas cobradas" value={formatMoney(totalCollectedSales)} description={`${collectedPayments._count.id_pago_cliente} pagos de cliente en el mes.`} tone="success" />
-        <KpiCard title="Saldos pendientes" value={formatMoney(totalPendingBalances)} description={`${pendingBalances._count.id_proforma} proformas con saldo pendiente.`} tone="warning" />
-        <KpiCard title="Costos de producción" value={formatMoney(totalProductionCost)} description={`${productionCosts._count.id_costeo} costeos registrados en el mes.`} tone="warning" />
-        <KpiCard title="Utilidad estimada" value={formatMoney(estimatedProfit)} description={`Margen promedio: ${formatPercent(profitability._avg.margen_real)}`} tone="info" />
+        <KpiCard title="Ventas cobradas" value={formatMoney(totalCollectedSales)} description={`${collectedPayments._count.id_pago_cliente} pagos de cliente en el mes.`} tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Saldos pendientes" value={formatMoney(totalPendingBalances)} description={`${pendingBalances._count.id_proforma} proformas con saldo pendiente.`} tone="warning" icon={Landmark} />
+        <KpiCard title="Costos de producción" value={formatMoney(totalProductionCost)} description={`${productionCosts._count.id_costeo} costeos registrados en el mes.`} tone="warning" icon={CircleDollarSign} />
+        <KpiCard title="Utilidad estimada" value={formatMoney(estimatedProfit)} description={`Margen promedio: ${formatPercent(profitability._avg.margen_real)}`} tone="info" icon={TrendingUp} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <KpiCard title="Ingresos caja chica" value={formatMoney(cashIncome)} description="Ingresos menores del mes." tone="success" />
-        <KpiCard title="Egresos caja chica" value={formatMoney(cashExpenses)} description="Gastos menores del mes." tone="warning" />
-        <KpiCard title="Ajustes netos" value={formatMoney(positiveAdjustments - negativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" />
-        <KpiCard title="Resultado caja chica" value={formatMoney(cashNetResult)} description="Ingresos + ajustes - egresos." tone="info" />
-        <KpiCard title="Saldo abierto actual" value={formatMoney(openCashBalance)} description="Suma de cajas abiertas." tone="info" />
+        <KpiCard title="Ingresos caja chica" value={formatMoney(cashIncome)} description="Ingresos menores del mes." tone="success" icon={TrendingUp} />
+        <KpiCard title="Egresos caja chica" value={formatMoney(cashExpenses)} description="Gastos menores del mes." tone="warning" icon={TrendingDown} />
+        <KpiCard title="Ajustes netos" value={formatMoney(positiveAdjustments - negativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" icon={Scale} />
+        <KpiCard title="Resultado caja chica" value={formatMoney(cashNetResult)} description="Ingresos + ajustes - egresos." tone="info" icon={Scale} />
+        <KpiCard title="Saldo abierto actual" value={formatMoney(openCashBalance)} description="Suma de cajas abiertas." tone="info" icon={Landmark} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">

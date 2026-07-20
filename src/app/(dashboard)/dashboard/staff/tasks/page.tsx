@@ -1,3 +1,9 @@
+import {
+  CalendarCheck,
+  CalendarClock,
+  ClipboardList,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -184,10 +190,10 @@ export default async function OperatorTasksPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Tareas registradas" value={totalTasks.toString()} description="Historial general de tareas." tone="info" />
-        <KpiCard title="Tareas de hoy" value={tasksToday.toString()} description="Actividades registradas para la fecha actual." tone="info" />
-        <KpiCard title="Tareas del mes" value={tasksThisMonth.toString()} description="Registros del periodo actual." tone="info" />
-        <KpiCard title="Horas registradas" value={formatHours(totalHours)} description={`Terminadas históricas: ${finishedTasks}`} tone="success" />
+        <KpiCard title="Tareas registradas" value={totalTasks.toString()} description="Historial general de tareas." tone="info" icon={ClipboardList} />
+        <KpiCard title="Tareas de hoy" value={tasksToday.toString()} description="Actividades registradas para la fecha actual." tone="info" icon={CalendarCheck} />
+        <KpiCard title="Tareas del mes" value={tasksThisMonth.toString()} description="Registros del periodo actual." tone="info" icon={CalendarClock} />
+        <KpiCard title="Horas registradas" value={formatHours(totalHours)} description={`Terminadas históricas: ${finishedTasks}`} tone="success" icon={Clock} />
       </section>
 
       <Card>

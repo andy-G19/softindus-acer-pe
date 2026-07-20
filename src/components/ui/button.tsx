@@ -1,3 +1,12 @@
+/**
+ * Ubicación destino: src/components/ui/button.tsx (reemplaza el archivo actual)
+ *
+ * Único cambio: se agrega la variante "clear" (usa los tokens nuevos
+ * --accent-cyan / --accent-cyan-hover / --accent-cyan-active de globals.css).
+ * El tamaño (44px, padding, radius 12px) NO se mete en esta variante —
+ * se pasa como className en cada call site, porque es un tamaño
+ * específico de este botón, no un size reutilizable del sistema.
+ */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -20,6 +29,8 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        clear:
+          "bg-[var(--accent-cyan)] text-[#04252b] hover:bg-[var(--accent-cyan-hover)] active:bg-[var(--accent-cyan-active)]",
       },
       size: {
         default:

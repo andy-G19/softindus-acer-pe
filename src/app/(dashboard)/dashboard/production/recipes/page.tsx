@@ -1,3 +1,4 @@
+import { CheckCircle2, FlaskConical, XCircle } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -211,17 +212,17 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         </div>
 
         <div className="flex items-end">
-          <Button variant="outline" className="w-full" asChild>
+          <Button variant="clear" className="w-full" asChild>
             <Link href="/dashboard/production/recipes">Limpiar filtros</Link>
           </Button>
         </div>
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Recetas registradas" value={recipes.length.toString()} description="Total en el sistema." tone="info" />
-        <KpiCard title="Recetas activas" value={activeRecipes.length.toString()} description="Disponibles para uso." tone="success" />
-        <KpiCard title="Con versión vigente" value={recipesWithCurrentVersion.length.toString()} description="Listas para producir." tone="success" />
-        <KpiCard title="Sin versión vigente" value={recipesWithoutCurrentVersion.toString()} description="Requieren atención." tone="warning" />
+        <KpiCard title="Recetas registradas" value={recipes.length.toString()} description="Total en el sistema." tone="info" icon={FlaskConical} />
+        <KpiCard title="Recetas activas" value={activeRecipes.length.toString()} description="Disponibles para uso." tone="success" icon={FlaskConical} />
+        <KpiCard title="Con versión vigente" value={recipesWithCurrentVersion.length.toString()} description="Listas para producir." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Sin versión vigente" value={recipesWithoutCurrentVersion.toString()} description="Requieren atención." tone="warning" icon={XCircle} />
       </section>
 
       <Table>

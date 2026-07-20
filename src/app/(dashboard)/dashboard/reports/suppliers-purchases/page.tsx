@@ -1,4 +1,12 @@
-﻿import Link from "next/link";
+﻿import {
+  Calculator,
+  CircleDollarSign,
+  ClipboardList,
+  Landmark,
+  Package,
+  Truck,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -443,14 +451,14 @@ export default async function SuppliersPurchasesReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Compras encontradas" value={totalPurchases.toString()} description="Compras según los filtros aplicados." tone="info" />
-        <KpiCard title="Monto comprado" value={formatMoney(totalPurchaseAmount)} description="Suma total de compras encontradas." tone="info" />
-        <KpiCard title="Monto pagado" value={formatMoney(totalPaidAmount)} description="Pagos registrados a proveedores." tone="success" />
-        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description="Monto estimado aún pendiente de pago." tone={totalPendingBalance > 0 ? "warning" : "info"} />
-        <KpiCard title="Compras pendientes" value={pendingPurchases.toString()} description={`Parciales: ${partialPurchases}. Pagadas: ${paidPurchases}.`} tone={pendingPurchases > 0 ? "warning" : "info"} />
-        <KpiCard title="Proveedores" value={uniqueSuppliers.toString()} description="Proveedores presentes en el reporte." tone="info" />
-        <KpiCard title="Materiales distintos" value={uniqueMaterials.toString()} description="Materiales comprados en el periodo filtrado." tone="info" />
-        <KpiCard title="Cantidad comprada" value={formatQuantity(totalPurchasedQuantity)} description="Suma general de cantidades compradas." tone="info" />
+        <KpiCard title="Compras encontradas" value={totalPurchases.toString()} description="Compras según los filtros aplicados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Monto comprado" value={formatMoney(totalPurchaseAmount)} description="Suma total de compras encontradas." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Monto pagado" value={formatMoney(totalPaidAmount)} description="Pagos registrados a proveedores." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description="Monto estimado aún pendiente de pago." tone={totalPendingBalance > 0 ? "warning" : "info"} icon={Landmark} />
+        <KpiCard title="Compras pendientes" value={pendingPurchases.toString()} description={`Parciales: ${partialPurchases}. Pagadas: ${paidPurchases}.`} tone={pendingPurchases > 0 ? "warning" : "info"} icon={Truck} />
+        <KpiCard title="Proveedores" value={uniqueSuppliers.toString()} description="Proveedores presentes en el reporte." tone="info" icon={Truck} />
+        <KpiCard title="Materiales distintos" value={uniqueMaterials.toString()} description="Materiales comprados en el periodo filtrado." tone="info" icon={Package} />
+        <KpiCard title="Cantidad comprada" value={formatQuantity(totalPurchasedQuantity)} description="Suma general de cantidades compradas." tone="info" icon={Calculator} />
       </section>
 
       <Card>

@@ -40,7 +40,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
               alt="Logo de Industrias Aceros Perú"
               width={44}
               height={44}
-              className="h-11 w-11 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+              className="size-11 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
               priority
             />
             <div className="min-w-0 space-y-1">
@@ -79,7 +79,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         className={cn(
           "group/sidebar hidden md:block",
           "md:fixed md:inset-y-0 md:left-0 md:z-30",
-          "md:w-[76px] md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar",
+          "md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar",
           "md:transition-[width] md:duration-200 md:ease-out",
           "md:hover:w-64 md:hover:overflow-visible md:hover:shadow-[8px_0_32px_rgba(0,0,0,0.45)]",
           "md:focus-within:w-64 md:focus-within:overflow-visible",
@@ -100,7 +100,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
         </div>
       </aside>
 
-      <div className="py-6 pl-4 pr-4 sm:pr-6 lg:pr-8 md:pl-[108px]">
+      <div className="px-4 py-6 sm:pr-6 lg:pr-8 md:pl-27">
         <div className="mb-6 md:hidden">
           <p className="mb-2 px-1 text-xs font-semibold uppercase text-muted-foreground">
             Navegación

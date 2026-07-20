@@ -1,3 +1,10 @@
+import {
+  AlertTriangle,
+  CalendarClock,
+  CircleDollarSign,
+  Clock,
+  Wrench,
+} from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -296,11 +303,11 @@ export default async function MaintenanceRecurrencesPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <KpiCard title="Fallas totales" value={totalFailures.toString()} description={`Este mes: ${monthlyFailures}`} tone="info" />
-        <KpiCard title="Fallas abiertas" value={pendingFailuresCount.toString()} description="Pendientes o en atención." tone={pendingFailuresCount > 0 ? "warning" : "info"} />
-        <KpiCard title="Horas perdidas" value={formatHours(totalLostHours)} description="Acumuladas por fallas." tone="warning" />
-        <KpiCard title="Costo acumulado" value={formatMoney(totalRepairCost)} description={`Este mes: ${formatMoney(monthlyRepairCost._sum.costo_total)}`} tone="info" />
-        <KpiCard title="Preventivos vencidos" value={overduePreventiveCount.toString()} description="Requieren atención." tone={overduePreventiveCount > 0 ? "warning" : "info"} />
+        <KpiCard title="Fallas totales" value={totalFailures.toString()} description={`Este mes: ${monthlyFailures}`} tone="info" icon={AlertTriangle} />
+        <KpiCard title="Fallas abiertas" value={pendingFailuresCount.toString()} description="Pendientes o en atención." tone={pendingFailuresCount > 0 ? "warning" : "info"} icon={AlertTriangle} />
+        <KpiCard title="Horas perdidas" value={formatHours(totalLostHours)} description="Acumuladas por fallas." tone="warning" icon={Clock} />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalRepairCost)} description={`Este mes: ${formatMoney(monthlyRepairCost._sum.costo_total)}`} tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Preventivos vencidos" value={overduePreventiveCount.toString()} description="Requieren atención." tone={overduePreventiveCount > 0 ? "warning" : "info"} icon={CalendarClock} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
@@ -482,8 +489,8 @@ export default async function MaintenanceRecurrencesPage() {
       </Card>
 
       <section className="grid gap-4 lg:grid-cols-3">
-        <KpiCard title="Máquinas críticas" value={criticalMachines.length.toString()} description="Riesgo alto por fallas, horas perdidas o costo acumulado." tone="warning" />
-        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.length.toString()} description="Máquinas con 3 o más fallas registradas." tone="warning" />
+        <KpiCard title="Máquinas críticas" value={criticalMachines.length.toString()} description="Riesgo alto por fallas, horas perdidas o costo acumulado." tone="warning" icon={Wrench} />
+        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.length.toString()} description="Máquinas con 3 o más fallas registradas." tone="warning" icon={Wrench} />
         <Card>
           <CardHeader>
             <CardTitle className="text-base">

@@ -1,3 +1,14 @@
+import {
+  AlertTriangle,
+  ClipboardList,
+  Landmark,
+  ShoppingCart,
+  TrendingUp,
+  Truck,
+  WalletCards,
+  Wrench,
+} from "lucide-react";
+
 import { KpiCard } from "@/components/ui/kpi-card";
 import { formatMoney } from "@/lib/formatters";
 import type { DashboardData } from "@/modules/dashboard/data";
@@ -16,6 +27,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Pendientes, en proceso o pausadas."
           href="/dashboard/production/work-orders"
           tone="info"
+          icon={ClipboardList}
         />
       ) : null}
 
@@ -26,6 +38,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Registrados, aprobados o en producción."
           href="/dashboard/commercial/orders"
           tone="warning"
+          icon={ShoppingCart}
         />
       ) : null}
 
@@ -36,6 +49,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Materiales activos bajo mínimo."
           href="/dashboard/inventory/materials"
           tone="success"
+          icon={AlertTriangle}
         />
       ) : null}
 
@@ -46,6 +60,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Saldo vigente o aceptado pendiente."
           href="/dashboard/commercial/quotes"
           tone="warning"
+          icon={Landmark}
         />
       ) : null}
 
@@ -56,6 +71,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Suma de cajas abiertas."
           href="/dashboard/petty-cash"
           tone="info"
+          icon={WalletCards}
         />
       ) : null}
 
@@ -66,6 +82,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Suma registrada en rentabilidad."
           href="/dashboard/costs"
           tone="info"
+          icon={TrendingUp}
         />
       ) : null}
 
@@ -76,6 +93,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Compras con pago pendiente o parcial."
           href="/dashboard/inventory/purchases"
           tone="warning"
+          icon={Truck}
         />
       ) : null}
 
@@ -86,6 +104,7 @@ export function DashboardKpiGrid({ dashboardData }: DashboardKpiGridProps) {
           description="Fallas sin cierre operativo."
           href="/dashboard/maintenance/failures"
           tone="success"
+          icon={Wrench}
         />
       ) : null}
     </div>

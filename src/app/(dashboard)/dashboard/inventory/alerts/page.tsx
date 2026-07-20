@@ -1,3 +1,5 @@
+import { AlertTriangle, Package } from "lucide-react";
+
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -96,12 +98,14 @@ export default async function InventoryAlertsPage() {
           value={materials.length.toString()}
           description="Materiales disponibles para uso."
           tone="info"
+          icon={Package}
         />
         <KpiCard
           title="Materiales críticos"
           value={criticalMaterials.length.toString()}
           description="Bajo el stock mínimo definido."
           tone="warning"
+          icon={AlertTriangle}
         />
         <KpiCard
           title="Alertas activas"
@@ -110,6 +114,7 @@ export default async function InventoryAlertsPage() {
             .length.toString()}
           description="Alertas generadas sin atender."
           tone="warning"
+          icon={AlertTriangle}
         />
       </section>
 

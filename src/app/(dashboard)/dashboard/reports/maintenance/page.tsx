@@ -1,4 +1,15 @@
-﻿import Link from "next/link";
+﻿import {
+  AlertTriangle,
+  CalendarClock,
+  CheckCircle2,
+  CircleDollarSign,
+  Clock,
+  Cog,
+  Hammer,
+  Users,
+  Wrench,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -581,18 +592,18 @@ export default async function MaintenanceReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Fallas registradas" value={totalFailures.toString()} description="Fallas encontradas según los filtros aplicados." tone="info" />
-        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description="Fallas pendientes o en atención." tone={openFailures > 0 ? "warning" : "info"} />
-        <KpiCard title="Fallas reparadas" value={repairedFailures.toString()} description="Fallas marcadas como reparadas." tone="success" />
-        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Horas perdidas por fallas registradas." tone="warning" />
-        <KpiCard title="Costo reparación" value={formatMoney(totalRepairCost)} description="Costo total de reparaciones filtradas." tone="info" />
-        <KpiCard title="Mano de obra" value={formatMoney(totalLaborCost)} description="Costo de mano de obra en reparaciones." tone="info" />
-        <KpiCard title="Costo repuestos" value={formatMoney(totalSparePartCost)} description="Subtotal de repuestos usados." tone="info" />
-        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.toString()} description="Máquinas con dos o más fallas en el reporte." tone={recurrentMachines > 0 ? "warning" : "info"} />
-        <KpiCard title="Preventivos pendientes" value={pendingPreventives.toString()} description={`Preventivos vencidos: ${overduePreventives}.`} tone={overduePreventives > 0 ? "warning" : "info"} />
-        <KpiCard title="Preventivos realizados" value={completedPreventives.toString()} description="Mantenimientos preventivos completados." tone="success" />
-        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Reparaciones encontradas en el periodo." tone="info" />
-        <KpiCard title="Máquinas afectadas" value={machineRecurrences.length.toString()} description="Máquinas con al menos una falla en el reporte." tone="info" />
+        <KpiCard title="Fallas registradas" value={totalFailures.toString()} description="Fallas encontradas según los filtros aplicados." tone="info" icon={AlertTriangle} />
+        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description="Fallas pendientes o en atención." tone={openFailures > 0 ? "warning" : "info"} icon={AlertTriangle} />
+        <KpiCard title="Fallas reparadas" value={repairedFailures.toString()} description="Fallas marcadas como reparadas." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Horas perdidas por fallas registradas." tone="warning" icon={Clock} />
+        <KpiCard title="Costo reparación" value={formatMoney(totalRepairCost)} description="Costo total de reparaciones filtradas." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Mano de obra" value={formatMoney(totalLaborCost)} description="Costo de mano de obra en reparaciones." tone="info" icon={Users} />
+        <KpiCard title="Costo repuestos" value={formatMoney(totalSparePartCost)} description="Subtotal de repuestos usados." tone="info" icon={Cog} />
+        <KpiCard title="Máquinas reincidentes" value={recurrentMachines.toString()} description="Máquinas con dos o más fallas en el reporte." tone={recurrentMachines > 0 ? "warning" : "info"} icon={Wrench} />
+        <KpiCard title="Preventivos pendientes" value={pendingPreventives.toString()} description={`Preventivos vencidos: ${overduePreventives}.`} tone={overduePreventives > 0 ? "warning" : "info"} icon={CalendarClock} />
+        <KpiCard title="Preventivos realizados" value={completedPreventives.toString()} description="Mantenimientos preventivos completados." tone="success" icon={CalendarClock} />
+        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Reparaciones encontradas en el periodo." tone="info" icon={Hammer} />
+        <KpiCard title="Máquinas afectadas" value={machineRecurrences.length.toString()} description="Máquinas con al menos una falla en el reporte." tone="info" icon={Wrench} />
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">

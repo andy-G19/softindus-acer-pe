@@ -1,3 +1,4 @@
+import { CalendarCheck, CalendarClock, CircleDollarSign, Route } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
@@ -262,10 +263,10 @@ export default async function WorkOrderDetailPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Origen" value={origin} description="Origen de la orden." tone="info" />
-        <KpiCard title="Inicio" value={formatDate(workOrder.fecha_inicio)} description="Fecha de inicio." tone="info" />
-        <KpiCard title="Entrega estimada" value={formatDate(workOrder.fecha_entrega_estimada)} description="Compromiso de entrega." tone="info" />
-        <KpiCard title="Costo material estimado" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" />
+        <KpiCard title="Origen" value={origin} description="Origen de la orden." tone="info" icon={Route} />
+        <KpiCard title="Inicio" value={formatDate(workOrder.fecha_inicio)} description="Fecha de inicio." tone="info" icon={CalendarCheck} />
+        <KpiCard title="Entrega estimada" value={formatDate(workOrder.fecha_entrega_estimada)} description="Compromiso de entrega." tone="info" icon={CalendarClock} />
+        <KpiCard title="Costo material estimado" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">

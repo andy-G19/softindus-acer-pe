@@ -1,3 +1,9 @@
+import {
+  CheckCircle2,
+  ClipboardList,
+  Recycle,
+  XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -230,10 +236,10 @@ export default async function ReusableScrapsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Total registrados" value={totalRetazos.toString()} description={`${totalFiltered} según filtros`} tone="info" />
-        <KpiCard title="Disponibles" value={retazosDisponibles.toString()} description="Listos para reutilizar" tone="success" />
-        <KpiCard title="Reutilizados" value={retazosReutilizados.toString()} description="Aprovechados en producción" tone="info" />
-        <KpiCard title="Descartados" value={retazosDescartados.toString()} description="No aprovechables" tone="warning" />
+        <KpiCard title="Total registrados" value={totalRetazos.toString()} description={`${totalFiltered} según filtros`} tone="info" icon={ClipboardList} />
+        <KpiCard title="Disponibles" value={retazosDisponibles.toString()} description="Listos para reutilizar" tone="success" icon={CheckCircle2} />
+        <KpiCard title="Reutilizados" value={retazosReutilizados.toString()} description="Aprovechados en producción" tone="info" icon={Recycle} />
+        <KpiCard title="Descartados" value={retazosDescartados.toString()} description="No aprovechables" tone="warning" icon={XCircle} />
       </section>
 
       <Card>

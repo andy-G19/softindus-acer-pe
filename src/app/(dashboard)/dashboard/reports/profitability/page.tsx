@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { CircleDollarSign, ClipboardList, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -227,7 +228,7 @@ export default async function ProfitabilityReportPage({
             </div>
             <div className="flex items-end gap-2">
               <Button type="submit">Filtrar</Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/reports/profitability">Limpiar</Link>
               </Button>
             </div>
@@ -236,11 +237,11 @@ export default async function ProfitabilityReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <KpiCard title="Costeos" value={costings.length.toString()} description="Registros listados." tone="info" />
-        <KpiCard title="Costo total" value={formatMoney(totals.cost)} description="Costo acumulado." tone="info" />
-        <KpiCard title="Ingreso" value={formatMoney(totals.income)} description="Ingreso estimado." tone="info" />
-        <KpiCard title="Utilidad" value={formatMoney(totals.profit)} description="Utilidad estimada." tone={totals.profit >= 0 ? "success" : "warning"} />
-        <KpiCard title="Margen promedio" value={formatPercent(marginAverage)} description={`Alertas: ${totals.lowMargin}`} tone={totals.lowMargin > 0 ? "warning" : "success"} />
+        <KpiCard title="Costeos" value={costings.length.toString()} description="Registros listados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Costo total" value={formatMoney(totals.cost)} description="Costo acumulado." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Ingreso" value={formatMoney(totals.income)} description="Ingreso estimado." tone="info" icon={TrendingUp} />
+        <KpiCard title="Utilidad" value={formatMoney(totals.profit)} description="Utilidad estimada." tone={totals.profit >= 0 ? "success" : "warning"} icon={TrendingUp} />
+        <KpiCard title="Margen promedio" value={formatPercent(marginAverage)} description={`Alertas: ${totals.lowMargin}`} tone={totals.lowMargin > 0 ? "warning" : "success"} icon={TrendingUp} />
       </section>
 
       <Card>

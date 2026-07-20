@@ -1,3 +1,20 @@
+/**
+ * Ubicación destino: src/app/(dashboard)/dashboard/petty-cash/page.tsx
+ * (reemplaza el archivo actual)
+ */
+import {
+  Archive,
+  ArrowLeftRight,
+  CalendarRange,
+  FolderOpen,
+  FolderPlus,
+  Scale,
+  Tags,
+  TrendingDown,
+  TrendingUp,
+  WalletCards,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -177,37 +194,57 @@ export default async function PettyCashDashboardPage() {
     {
       title: "Listado de cajas chicas",
       href: "/dashboard/petty-cash/boxes",
-      description: "Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.",
+      description:
+        "Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.",
+      icon: WalletCards,
+      tone: "chart-1" as const,
     },
     {
       title: "Abrir caja chica",
       href: "/dashboard/petty-cash/boxes/new",
       description: "Registrar una nueva caja con saldo inicial y responsable.",
+      icon: FolderPlus,
+      tone: "chart-2" as const,
     },
     {
       title: "Registrar egreso",
       href: "/dashboard/petty-cash/expenses/new",
-      description: "Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.",
+      description:
+        "Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.",
+      icon: TrendingDown,
+      tone: "chart-3" as const,
     },
     {
       title: "Registrar ingreso o ajuste",
       href: "/dashboard/petty-cash/income-adjustments/new",
-      description: "Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.",
+      description:
+        "Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.",
+      icon: TrendingUp,
+      tone: "chart-4" as const,
     },
     {
       title: "Movimientos de caja",
       href: "/dashboard/petty-cash/movements",
-      description: "Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.",
+      description:
+        "Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.",
+      icon: ArrowLeftRight,
+      tone: "chart-5" as const,
     },
     {
       title: "Resumen mensual",
       href: "/dashboard/petty-cash/monthly-summary",
-      description: "Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.",
+      description:
+        "Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.",
+      icon: CalendarRange,
+      tone: "chart-1" as const,
     },
     {
       title: "Categorías de gasto",
       href: "/dashboard/petty-cash/categories",
-      description: "Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.",
+      description:
+        "Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.",
+      icon: Tags,
+      tone: "chart-2" as const,
     },
   ];
 
@@ -220,17 +257,17 @@ export default async function PettyCashDashboardPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Saldo actual abierto" value={formatMoney(totalCurrentBalance)} description="Suma de saldos de cajas abiertas." tone="info" />
-        <KpiCard title="Ingresos del mes" value={formatMoney(totalMonthlyIncome)} description="Incluye ingresos menores y ventas de chatarra vinculadas." tone="success" />
-        <KpiCard title="Egresos del mes" value={formatMoney(totalMonthlyExpenses)} description="Gastos menores registrados en caja chica." tone="warning" />
-        <KpiCard title="Resultado mensual" value={formatMoney(monthlyResult)} description="Ingresos menos egresos del mes actual." tone="info" />
+        <KpiCard title="Saldo actual abierto" value={formatMoney(totalCurrentBalance)} description="Suma de saldos de cajas abiertas." tone="info" icon={WalletCards} />
+        <KpiCard title="Ingresos del mes" value={formatMoney(totalMonthlyIncome)} description="Incluye ingresos menores y ventas de chatarra vinculadas." tone="success" icon={TrendingUp} />
+        <KpiCard title="Egresos del mes" value={formatMoney(totalMonthlyExpenses)} description="Gastos menores registrados en caja chica." tone="warning" icon={TrendingDown} />
+        <KpiCard title="Resultado mensual" value={formatMoney(monthlyResult)} description="Ingresos menos egresos del mes actual." tone="info" icon={Scale} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Cajas abiertas" value={openBoxes.toString()} description="Total de cajas chicas actualmente abiertas." tone="info" />
-        <KpiCard title="Cajas registradas" value={totalBoxes.toString()} description="Historial total de cajas creadas." tone="info" />
-        <KpiCard title="Categorías activas" value={activeCategories.toString()} description="Disponibles para clasificar egresos." tone="info" />
-        <KpiCard title="Movimientos del mes" value={monthlyMovements.toString()} description="Ingresos, egresos y ajustes registrados este mes." tone="info" />
+        <KpiCard title="Cajas abiertas" value={openBoxes.toString()} description="Total de cajas chicas actualmente abiertas." tone="info" icon={FolderOpen} />
+        <KpiCard title="Cajas registradas" value={totalBoxes.toString()} description="Historial total de cajas creadas." tone="info" icon={Archive} />
+        <KpiCard title="Categorías activas" value={activeCategories.toString()} description="Disponibles para clasificar egresos." tone="info" icon={Tags} />
+        <KpiCard title="Movimientos del mes" value={monthlyMovements.toString()} description="Ingresos, egresos y ajustes registrados este mes." tone="info" icon={ArrowLeftRight} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
@@ -326,9 +363,12 @@ export default async function PettyCashDashboardPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {modules.map((module) => (
+        {modules.map((module, i) => (
           <ModuleAccessCard
             key={module.href}
+            index={i + 1}
+            tone={module.tone}
+            icon={module.icon}
             title={module.title}
             description={module.description}
             href={module.href}

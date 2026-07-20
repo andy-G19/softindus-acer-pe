@@ -1,4 +1,17 @@
-﻿import { Badge } from "@/components/ui/badge";
+/**
+ * Ubicación destino: src/app/(dashboard)/dashboard/staff/page.tsx
+ * (reemplaza el archivo actual)
+ */
+import {
+  CalendarCheck,
+  FileSpreadsheet,
+  ListChecks,
+  Receipt,
+  UserRoundCheck,
+  Users,
+} from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -161,30 +174,40 @@ export default async function StaffDashboardPage() {
       description: "Registrar y consultar trabajadores del taller.",
       href: "/dashboard/staff/operators",
       roles: "ADMIN",
+      icon: UserRoundCheck,
+      tone: "chart-1" as const,
     },
     {
       title: "Asistencia diaria",
       description: "Registrar ingreso, salida, tardanza o falta.",
       href: "/dashboard/staff/attendance",
       roles: "ADMIN",
+      icon: CalendarCheck,
+      tone: "chart-2" as const,
     },
     {
       title: "Tareas diarias",
       description: "Registrar actividades realizadas por operario.",
       href: "/dashboard/staff/tasks",
       roles: "ADMIN / Maestro de taller",
+      icon: ListChecks,
+      tone: "chart-3" as const,
     },
     {
       title: "Planillas",
       description: "Generar pagos según asistencia y modalidad.",
       href: "/dashboard/staff/payrolls",
       roles: "ADMIN",
+      icon: FileSpreadsheet,
+      tone: "chart-4" as const,
     },
     {
       title: "Historial de pagos",
       description: "Consultar pagos realizados a operarios.",
       href: "/dashboard/staff/payment-history",
       roles: "ADMIN",
+      icon: Receipt,
+      tone: "chart-5" as const,
     },
   ];
 
@@ -202,31 +225,38 @@ export default async function StaffDashboardPage() {
           value={totalOperators.toString()}
           description="Total de trabajadores registrados."
           tone="info"
+          icon={Users}
         />
         <KpiCard
           title="Operarios activos"
           value={activeOperators.toString()}
           description={`Inactivos o retirados: ${inactiveOperators}`}
           tone="success"
+          icon={UserRoundCheck}
         />
         <KpiCard
           title="Asistencias de hoy"
           value={attendanceToday.toString()}
           description={`Faltas registradas hoy: ${absencesToday}`}
           tone={absencesToday > 0 ? "warning" : "info"}
+          icon={CalendarCheck}
         />
         <KpiCard
           title="Planillas pendientes"
           value={pendingPayrolls.toString()}
           description={`Tareas registradas este mes: ${tasksThisMonth}`}
           tone={pendingPayrolls > 0 ? "warning" : "info"}
+          icon={FileSpreadsheet}
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {quickLinks.map((link) => (
+        {quickLinks.map((link, i) => (
           <ModuleAccessCard
             key={link.href}
+            index={i + 1}
+            tone={link.tone}
+            icon={link.icon}
             title={link.title}
             description={`${link.description} Acceso: ${link.roles}.`}
             href={link.href}
@@ -313,4 +343,3 @@ export default async function StaffDashboardPage() {
     </div>
   );
 }
-

@@ -1,3 +1,4 @@
+import { Activity, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
@@ -405,10 +406,10 @@ export default async function ProductionBottlenecksPage({
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Avances en proceso" value={rows.length.toString()} description="Etapas activas monitoreadas." tone="info" />
-        <KpiCard title="Atrasados" value={delayedRows.length.toString()} description="Superan el tiempo estimado." tone="warning" />
-        <KpiCard title="En riesgo" value={riskRows.length.toString()} description="Cerca de vencer." tone="warning" />
-        <KpiCard title="Etapas saturadas" value={saturatedStages.length.toString()} description="Más de una orden simultánea." tone="warning" />
+        <KpiCard title="Avances en proceso" value={rows.length.toString()} description="Etapas activas monitoreadas." tone="info" icon={Activity} />
+        <KpiCard title="Atrasados" value={delayedRows.length.toString()} description="Superan el tiempo estimado." tone="warning" icon={AlertTriangle} />
+        <KpiCard title="En riesgo" value={riskRows.length.toString()} description="Cerca de vencer." tone="warning" icon={AlertTriangle} />
+        <KpiCard title="Etapas saturadas" value={saturatedStages.length.toString()} description="Más de una orden simultánea." tone="warning" icon={AlertTriangle} />
       </section>
 
       <Table>

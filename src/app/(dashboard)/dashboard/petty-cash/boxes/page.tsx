@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { Archive, FolderOpen, Landmark, XCircle } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -109,10 +110,10 @@ export default async function PettyCashBoxesPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Cajas registradas" value={boxes.length.toString()} description="Total histórico de cajas chicas." tone="info" />
-        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Cajas disponibles para nuevos movimientos." tone="success" />
-        <KpiCard title="Cajas cerradas" value={closedBoxes.length.toString()} description="Cajas que ya no deberían recibir movimientos." tone="info" />
-        <KpiCard title="Saldo abierto" value={formatMoney(totalCurrentBalance)} description="Suma actual de cajas abiertas." tone="info" />
+        <KpiCard title="Cajas registradas" value={boxes.length.toString()} description="Total histórico de cajas chicas." tone="info" icon={Archive} />
+        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Cajas disponibles para nuevos movimientos." tone="success" icon={FolderOpen} />
+        <KpiCard title="Cajas cerradas" value={closedBoxes.length.toString()} description="Cajas que ya no deberían recibir movimientos." tone="info" icon={XCircle} />
+        <KpiCard title="Saldo abierto" value={formatMoney(totalCurrentBalance)} description="Suma actual de cajas abiertas." tone="info" icon={Landmark} />
       </section>
 
       <Card>

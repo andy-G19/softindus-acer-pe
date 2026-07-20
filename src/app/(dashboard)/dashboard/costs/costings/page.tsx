@@ -1,3 +1,9 @@
+import {
+  AlertTriangle,
+  ClipboardList,
+  CircleDollarSign,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -289,17 +295,17 @@ export default async function CostingsPage({
         </div>
         <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/costs/costings">Limpiar filtros</Link>
           </Button>
         </div>
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Costeos listados" value={totalCostings.toString()} description="Últimos 50 registros." tone="info" />
-        <KpiCard title="Costo acumulado" value={formatMoney(accumulatedCost)} description="Suma de costos totales." tone="info" />
-        <KpiCard title="Utilidad acumulada" value={formatMoney(accumulatedProfit)} description="Según rentabilidades calculadas." tone="success" />
-        <KpiCard title="Alertas de bajo margen" value={lowMarginCount.toString()} description="Rentabilidad crítica." tone="warning" />
+        <KpiCard title="Costeos listados" value={totalCostings.toString()} description="Últimos 50 registros." tone="info" icon={ClipboardList} />
+        <KpiCard title="Costo acumulado" value={formatMoney(accumulatedCost)} description="Suma de costos totales." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Utilidad acumulada" value={formatMoney(accumulatedProfit)} description="Según rentabilidades calculadas." tone="success" icon={TrendingUp} />
+        <KpiCard title="Alertas de bajo margen" value={lowMarginCount.toString()} description="Rentabilidad crítica." tone="warning" icon={AlertTriangle} />
       </section>
 
       <Table>

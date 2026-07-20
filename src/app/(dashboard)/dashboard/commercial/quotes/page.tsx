@@ -268,7 +268,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
         </div>
         <div className="flex items-end gap-2 md:col-span-6">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/commercial/quotes">Limpiar filtros</Link>
           </Button>
         </div>

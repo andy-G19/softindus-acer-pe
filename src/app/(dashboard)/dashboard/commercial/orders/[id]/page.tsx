@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { CircleDollarSign, User } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
@@ -107,12 +108,14 @@ export default async function OrderDetailPage({
           title="Cliente"
           value={order.cliente.nombre_razon_social}
           description="Cliente asociado al pedido."
+          icon={User}
         />
         <KpiCard
           title="Monto estimado"
           value={formatMoney(order.monto_estimado)}
           description="Suma referencial del detalle del pedido."
           tone="warning"
+          icon={CircleDollarSign}
         />
         <div className="rounded-xl border border-border/80 bg-card p-5">
           <p className="font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">

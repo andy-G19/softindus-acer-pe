@@ -1,4 +1,11 @@
-﻿import Link from "next/link";
+﻿import {
+  ClipboardList,
+  FileSpreadsheet,
+  FileText,
+  LayoutGrid,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -336,12 +343,12 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <KpiCard title="Exportaciones" value={totalExports.toString()} description="Registros encontrados según filtros." tone="info" />
-        <KpiCard title="Excel" value={excelExports.toString()} description="Exportaciones registradas como Excel." tone="info" />
-        <KpiCard title="PDF" value={pdfExports.toString()} description="Exportaciones PDF registradas." tone="info" />
-        <KpiCard title="Generadas" value={generatedExports.toString()} description="Exportaciones completadas correctamente." tone="success" />
-        <KpiCard title="Usuarios" value={uniqueUsers.toString()} description="Usuarios que exportaron reportes." tone="info" />
-        <KpiCard title="Módulos" value={uniqueModules.toString()} description="Tipos de reporte exportados." tone="info" />
+        <KpiCard title="Exportaciones" value={totalExports.toString()} description="Registros encontrados según filtros." tone="info" icon={ClipboardList} />
+        <KpiCard title="Excel" value={excelExports.toString()} description="Exportaciones registradas como Excel." tone="info" icon={FileSpreadsheet} />
+        <KpiCard title="PDF" value={pdfExports.toString()} description="Exportaciones PDF registradas." tone="info" icon={FileText} />
+        <KpiCard title="Generadas" value={generatedExports.toString()} description="Exportaciones completadas correctamente." tone="success" icon={ClipboardList} />
+        <KpiCard title="Usuarios" value={uniqueUsers.toString()} description="Usuarios que exportaron reportes." tone="info" icon={Users} />
+        <KpiCard title="Módulos" value={uniqueModules.toString()} description="Tipos de reporte exportados." tone="info" icon={LayoutGrid} />
       </section>
 
       <Card>

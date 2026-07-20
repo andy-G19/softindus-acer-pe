@@ -173,7 +173,7 @@ export default async function InventoryOutputsPage({
         </div>
         <div className="flex items-end gap-2 md:col-span-5">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/inventory/outputs">Limpiar filtros</Link>
           </Button>
         </div>

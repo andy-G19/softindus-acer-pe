@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { CheckCircle2, Users, XCircle } from "lucide-react";
+import Link from "next/link";
 
 import {
   RowEditLink,
@@ -228,9 +229,9 @@ export default async function OperatorsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Operarios registrados" value={operators.length.toString()} description="Total de operarios en el sistema." tone="info" />
-        <KpiCard title="Activos" value={activeOperators.length.toString()} description="Disponibles para asignación." tone="success" />
-        <KpiCard title="Inactivos" value={inactiveOperators.length.toString()} description="Retirados o suspendidos." tone="warning" />
+        <KpiCard title="Operarios registrados" value={operators.length.toString()} description="Total de operarios en el sistema." tone="info" icon={Users} />
+        <KpiCard title="Activos" value={activeOperators.length.toString()} description="Disponibles para asignación." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Inactivos" value={inactiveOperators.length.toString()} description="Retirados o suspendidos." tone="warning" icon={XCircle} />
       </section>
 
       <Card>
@@ -304,7 +305,7 @@ export default async function OperatorsPage({
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/staff/operators">Limpiar</Link>
               </Button>
             </div>

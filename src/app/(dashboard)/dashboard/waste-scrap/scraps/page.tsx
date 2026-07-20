@@ -1,4 +1,10 @@
-﻿import Link from "next/link";
+﻿import {
+  CircleDollarSign,
+  ClipboardList,
+  Recycle,
+  Scale,
+} from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -225,10 +231,10 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Total registros" value={totalScraps.toString()} description={`${totalFiltered} según filtros`} tone="info" />
-        <KpiCard title="Acumulada" value={chatarraAcumulada.toString()} description="Pendiente de venta" tone="warning" />
-        <KpiCard title="Vendida" value={chatarraVendida.toString()} description="Ya generó ingreso menor" tone="success" />
-        <KpiCard title="Peso filtrado" value={`${formatNumber(filteredTotals._sum.peso_kg)} kg`} description={`Cantidad: ${formatNumber(filteredTotals._sum.cantidad)}`} tone="info" />
+        <KpiCard title="Total registros" value={totalScraps.toString()} description={`${totalFiltered} según filtros`} tone="info" icon={ClipboardList} />
+        <KpiCard title="Acumulada" value={chatarraAcumulada.toString()} description="Pendiente de venta" tone="warning" icon={Recycle} />
+        <KpiCard title="Vendida" value={chatarraVendida.toString()} description="Ya generó ingreso menor" tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Peso filtrado" value={`${formatNumber(filteredTotals._sum.peso_kg)} kg`} description={`Cantidad: ${formatNumber(filteredTotals._sum.cantidad)}`} tone="info" icon={Scale} />
       </section>
 
       <Card>
@@ -273,7 +279,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
             <div className="flex items-end gap-2">
               <Button type="submit">Filtrar</Button>
               {hasFilters ? (
-                <Button variant="outline" asChild>
+                <Button variant="clear" asChild>
                   <Link href="/dashboard/waste-scrap/scraps">Limpiar</Link>
                 </Button>
               ) : null}

@@ -1,3 +1,4 @@
+import { Calculator, CheckCircle2, CircleDollarSign, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -214,10 +215,10 @@ export default async function MaterialRequirementsPage({
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Cantidad a fabricar" value={formatDecimal(quantityToProduce)} description="Unidades objetivo." tone="info" />
-        <KpiCard title="Materiales evaluados" value={calculationRows.length.toString()} description="Del detalle de receta." tone="info" />
-        <KpiCard title="Con stock suficiente" value={availableMaterials.length.toString()} description="Listos para producir." tone="success" />
-        <KpiCard title="Costo estimado total" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" />
+        <KpiCard title="Cantidad a fabricar" value={formatDecimal(quantityToProduce)} description="Unidades objetivo." tone="info" icon={Calculator} />
+        <KpiCard title="Materiales evaluados" value={calculationRows.length.toString()} description="Del detalle de receta." tone="info" icon={Package} />
+        <KpiCard title="Con stock suficiente" value={availableMaterials.length.toString()} description="Listos para producir." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Costo estimado total" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" icon={CircleDollarSign} />
       </section>
 
       {criticalMaterials.length > 0 ? (

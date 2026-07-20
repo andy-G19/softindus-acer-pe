@@ -1,3 +1,4 @@
+import { Ban, CheckCircle2, Clock, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -301,7 +302,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
             </div>
             <div className="flex items-end gap-2 md:col-span-3 xl:col-span-7">
               <Button type="submit">Filtrar</Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/staff/payrolls">Limpiar filtros</Link>
               </Button>
             </div>
@@ -310,10 +311,10 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" />
-        <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} />
-        <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Se marcarán en la siguiente subfase." tone="success" />
-        <KpiCard title="Anuladas" value={canceledPayrolls.toString()} description="Registros descartados." tone="info" />
+        <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" icon={FileSpreadsheet} />
+        <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} icon={Clock} />
+        <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Se marcarán en la siguiente subfase." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Anuladas" value={canceledPayrolls.toString()} description="Registros descartados." tone="info" icon={Ban} />
       </section>
 
       <Card>

@@ -1,4 +1,11 @@
-﻿import Link from "next/link";
+﻿import {
+  Activity,
+  AlertTriangle,
+  Calculator,
+  CheckCircle2,
+  ClipboardList,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -356,11 +363,11 @@ export default async function ProductionReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <KpiCard title="Órdenes encontradas" value={totalOrders.toString()} description="Cantidad de Órdenes según los filtros aplicados." tone="info" />
-        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="info" />
-        <KpiCard title="Órdenes finalizadas" value={finishedOrders.toString()} description="Órdenes marcadas como finalizadas." tone="success" />
-        <KpiCard title="Órdenes retrasadas" value={delayedOrders.toString()} description="Órdenes activas con fecha estimada vencida." tone={delayedOrders > 0 ? "warning" : "info"} />
-        <KpiCard title="Cantidad total" value={formatQuantity(totalQuantity)} description="Suma de cantidades planificadas a fabricar." tone="info" />
+        <KpiCard title="Órdenes encontradas" value={totalOrders.toString()} description="Cantidad de Órdenes según los filtros aplicados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="info" icon={Activity} />
+        <KpiCard title="Órdenes finalizadas" value={finishedOrders.toString()} description="Órdenes marcadas como finalizadas." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Órdenes retrasadas" value={delayedOrders.toString()} description="Órdenes activas con fecha estimada vencida." tone={delayedOrders > 0 ? "warning" : "info"} icon={AlertTriangle} />
+        <KpiCard title="Cantidad total" value={formatQuantity(totalQuantity)} description="Suma de cantidades planificadas a fabricar." tone="info" icon={Calculator} />
       </section>
 
       <Card>

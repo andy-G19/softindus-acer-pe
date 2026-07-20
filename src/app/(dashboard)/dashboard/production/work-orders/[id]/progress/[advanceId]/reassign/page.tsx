@@ -1,3 +1,4 @@
+import { Layers, UserRoundCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { SearchableSelect } from "@/components/forms/searchable-select";
@@ -109,6 +110,7 @@ export default async function ReassignWorkOrderProgressPage({
           title="Etapa"
           value={`${advance.etapa_ruta.orden_secuencia}. ${advance.etapa_ruta.nombre_etapa}`}
           description="Etapa del avance."
+          icon={Layers}
         />
         <KpiCard
           title="Operario actual"
@@ -118,6 +120,7 @@ export default async function ReassignWorkOrderProgressPage({
               : "Sin operario asignado"
           }
           description="Antes de la reasignación."
+          icon={UserRoundCheck}
         />
       </section>
 

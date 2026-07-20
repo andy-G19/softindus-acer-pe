@@ -1,3 +1,4 @@
+import { Ban, ClipboardList, Clock, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -188,10 +189,10 @@ export default async function CostingWorkOrdersPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Órdenes pendientes" value={workOrdersWithoutCosting.length.toString()} description="Con receta y sin costeo." tone="warning" />
-        <KpiCard title="Total de órdenes" value={totalWorkOrders.toString()} description="Incluye activas y anuladas." tone="info" />
-        <KpiCard title="Sin receta técnica" value={workOrdersWithoutRecipe.toString()} description="Deben completarse en producción." tone="warning" />
-        <KpiCard title="Ya costeadas / anuladas" value={`${workOrdersAlreadyCosted} / ${anulledWorkOrders}`} description="No aparecen como pendientes." tone="info" />
+        <KpiCard title="Órdenes pendientes" value={workOrdersWithoutCosting.length.toString()} description="Con receta y sin costeo." tone="warning" icon={Clock} />
+        <KpiCard title="Total de órdenes" value={totalWorkOrders.toString()} description="Incluye activas y anuladas." tone="info" icon={ClipboardList} />
+        <KpiCard title="Sin receta técnica" value={workOrdersWithoutRecipe.toString()} description="Deben completarse en producción." tone="warning" icon={FlaskConical} />
+        <KpiCard title="Ya costeadas / anuladas" value={`${workOrdersAlreadyCosted} / ${anulledWorkOrders}`} description="No aparecen como pendientes." tone="info" icon={Ban} />
       </section>
 
       {workOrdersWithoutCosting.length === 0 ? (

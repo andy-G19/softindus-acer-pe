@@ -1,3 +1,4 @@
+import { FolderOpen, Landmark, Tags } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -90,9 +91,9 @@ export default async function NewPettyCashExpensePage() {
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Disponibles para registrar egresos." tone="info" />
-        <KpiCard title="Saldo disponible" value={formatMoney(totalOpenBalance)} description="Suma de saldos actuales de cajas abiertas." tone="info" />
-        <KpiCard title="Categorías activas" value={activeCategories.length.toString()} description="Disponibles para clasificar gastos." tone="info" />
+        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Disponibles para registrar egresos." tone="info" icon={FolderOpen} />
+        <KpiCard title="Saldo disponible" value={formatMoney(totalOpenBalance)} description="Suma de saldos actuales de cajas abiertas." tone="info" icon={Landmark} />
+        <KpiCard title="Categorías activas" value={activeCategories.length.toString()} description="Disponibles para clasificar gastos." tone="info" icon={Tags} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">

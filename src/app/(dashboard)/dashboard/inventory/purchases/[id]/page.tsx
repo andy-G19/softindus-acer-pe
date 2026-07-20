@@ -1,3 +1,4 @@
+import { CircleDollarSign, Landmark, Truck } from "lucide-react";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -150,24 +151,28 @@ export default async function PurchaseDetailPage({
           title="Proveedor"
           value={supplier?.razon_social ?? purchase.id_proveedor}
           description="Proveedor de la compra."
+          icon={Truck}
         />
         <KpiCard
           title="Total compra"
           value={formatMoney(purchase.monto_total)}
           description="Monto total registrado."
           tone="info"
+          icon={CircleDollarSign}
         />
         <KpiCard
           title="Pagado"
           value={`S/ ${totalPaid.toFixed(2)}`}
           description="Suma de pagos registrados."
           tone="success"
+          icon={CircleDollarSign}
         />
         <KpiCard
           title="Saldo pendiente"
           value={`S/ ${saldoPendiente.toFixed(2)}`}
           description="Monto restante por pagar."
           tone="warning"
+          icon={Landmark}
         />
       </section>
 

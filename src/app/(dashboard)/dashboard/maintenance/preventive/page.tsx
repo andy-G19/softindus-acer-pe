@@ -1,3 +1,4 @@
+import { Ban, CalendarClock, CheckCircle2, Clock } from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -260,7 +261,7 @@ export default async function PreventiveMaintenancePage({
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/maintenance/preventive">Limpiar</Link>
               </Button>
             </div>
@@ -269,10 +270,10 @@ export default async function PreventiveMaintenancePage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Preventivos registrados" value={maintenances.length.toString()} description="Total histórico de programaciones." tone="info" />
-        <KpiCard title="Pendientes" value={pendingMaintenances.length.toString()} description={`Vencidos: ${overdueMaintenances.length}`} tone={overdueMaintenances.length > 0 ? "warning" : "info"} />
-        <KpiCard title="Realizados" value={completedMaintenances.length.toString()} description="Cumplidos según registro." tone="success" />
-        <KpiCard title="Anulados" value={cancelledMaintenances.length.toString()} description="Programaciones canceladas." tone="info" />
+        <KpiCard title="Preventivos registrados" value={maintenances.length.toString()} description="Total histórico de programaciones." tone="info" icon={CalendarClock} />
+        <KpiCard title="Pendientes" value={pendingMaintenances.length.toString()} description={`Vencidos: ${overdueMaintenances.length}`} tone={overdueMaintenances.length > 0 ? "warning" : "info"} icon={Clock} />
+        <KpiCard title="Realizados" value={completedMaintenances.length.toString()} description="Cumplidos según registro." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Anulados" value={cancelledMaintenances.length.toString()} description="Programaciones canceladas." tone="info" icon={Ban} />
       </section>
 
       <Card>
