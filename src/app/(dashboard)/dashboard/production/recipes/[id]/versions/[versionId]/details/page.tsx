@@ -1,3 +1,4 @@
+import { CircleDollarSign, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -133,7 +134,7 @@ export default async function RecipeDetailsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Materiales registrados" value={version.detalle_receta.length.toString()} description="Total en esta versión." tone="info" />
+        <KpiCard title="Materiales registrados" value={version.detalle_receta.length.toString()} description="Total en esta versión." tone="info" icon={Package} />
         <KpiCard
           title="Materia prima"
           value={version.detalle_receta
@@ -141,6 +142,7 @@ export default async function RecipeDetailsPage({
             .length.toString()}
           description="Tipo de consumo principal."
           tone="info"
+          icon={Package}
         />
         <KpiCard
           title="Consumibles"
@@ -149,8 +151,9 @@ export default async function RecipeDetailsPage({
             .length.toString()}
           description="Tipo de consumo secundario."
           tone="info"
+          icon={Package}
         />
-        <KpiCard title="Costo estimado por unidad" value={formatMoney(estimatedUnitCost)} description="Con merma incluida." tone="warning" />
+        <KpiCard title="Costo estimado por unidad" value={formatMoney(estimatedUnitCost)} description="Con merma incluida." tone="warning" icon={CircleDollarSign} />
       </section>
 
       <Table>

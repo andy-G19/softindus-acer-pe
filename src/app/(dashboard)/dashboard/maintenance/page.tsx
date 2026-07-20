@@ -1,4 +1,19 @@
-﻿import {
+/**
+ * Ubicación destino: src/app/(dashboard)/dashboard/maintenance/page.tsx
+ * (reemplaza el archivo actual)
+ */
+import type { LucideIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  CalendarClock,
+  CheckCircle2,
+  Cog,
+  Hammer,
+  RefreshCcw,
+  Wrench,
+} from "lucide-react";
+
+import {
   Card,
   CardContent,
   CardHeader,
@@ -6,7 +21,10 @@
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { ModuleAccessCard } from "@/components/ui/module-access-card";
+import {
+  ModuleAccessCard,
+  type ModuleCardTone,
+} from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
@@ -47,6 +65,8 @@ type MaintenanceSection = {
   phase: string;
   access: string;
   href?: string;
+  icon: LucideIcon;
+  tone: ModuleCardTone;
 };
 
 export default async function MaintenanceDashboardPage() {
@@ -162,6 +182,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.2",
       access: "ADMIN",
       href: "/dashboard/maintenance/machines",
+      icon: Wrench,
+      tone: "chart-1",
     },
     {
       title: "Fallas",
@@ -170,6 +192,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.3",
       access: "ADMIN / Maestro de taller",
       href: "/dashboard/maintenance/failures",
+      icon: AlertTriangle,
+      tone: "chart-2",
     },
     {
       title: "Repuestos",
@@ -178,6 +202,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.4",
       access: "ADMIN",
       href: "/dashboard/maintenance/spare-parts",
+      icon: Cog,
+      tone: "chart-3",
     },
     {
       title: "Reparaciones",
@@ -186,6 +212,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.5",
       access: "ADMIN",
       href: "/dashboard/maintenance/repairs",
+      icon: Hammer,
+      tone: "chart-4",
     },
     {
       title: "Preventivos",
@@ -194,6 +222,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.6",
       access: "ADMIN",
       href: "/dashboard/maintenance/preventive",
+      icon: CalendarClock,
+      tone: "chart-5",
     },
     {
       title: "Reincidencias",
@@ -202,6 +232,8 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.7",
       access: "ADMIN",
       href: "/dashboard/maintenance/recurrences",
+      icon: RefreshCcw,
+      tone: "chart-1",
     },
   ];
 
@@ -214,10 +246,10 @@ export default async function MaintenanceDashboardPage() {
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Máquinas registradas" value={totalMachines.toString()} description="Total de equipos críticos registrados." tone="info" />
-        <KpiCard title="Máquinas operativas" value={operationalMachines.toString()} description={`No operativas o inactivas: ${inactiveMachines}`} tone="success" />
-        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description={`Fallas registradas este mes: ${failuresThisMonth}`} tone={openFailures > 0 ? "warning" : "info"} />
-        <KpiCard title="Preventivos pendientes" value={pendingPreventiveMaintenance.toString()} description={`Vencidos: ${overduePreventiveMaintenance}`} tone={overduePreventiveMaintenance > 0 ? "warning" : "info"} />
+        <KpiCard title="Máquinas registradas" value={totalMachines.toString()} description="Total de equipos críticos registrados." tone="info" icon={Wrench} />
+        <KpiCard title="Máquinas operativas" value={operationalMachines.toString()} description={`No operativas o inactivas: ${inactiveMachines}`} tone="success" icon={CheckCircle2} />
+        <KpiCard title="Fallas abiertas" value={openFailures.toString()} description={`Fallas registradas este mes: ${failuresThisMonth}`} tone={openFailures > 0 ? "warning" : "info"} icon={AlertTriangle} />
+        <KpiCard title="Preventivos pendientes" value={pendingPreventiveMaintenance.toString()} description={`Vencidos: ${overduePreventiveMaintenance}`} tone={overduePreventiveMaintenance > 0 ? "warning" : "info"} icon={CalendarClock} />
       </div>
 
       <Card>
@@ -235,9 +267,12 @@ export default async function MaintenanceDashboardPage() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {sections.map((section) => (
+        {sections.map((section, i) => (
           <ModuleAccessCard
             key={section.title}
+            index={i + 1}
+            tone={section.tone}
+            icon={section.icon}
             title={section.title}
             description={`${section.description} Acceso: ${section.access}.`}
             href={section.href ?? "#"}
@@ -311,4 +346,3 @@ export default async function MaintenanceDashboardPage() {
     </div>
   );
 }
-

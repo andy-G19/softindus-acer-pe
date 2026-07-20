@@ -1,3 +1,23 @@
+/**
+ * Ubicación destino: src/modules/dashboard/components/dashboard-module-grid.tsx
+ * (reemplaza el archivo actual)
+ *
+ * Íconos reutilizados 1:1 de src/components/layout/dashboard-nav.tsx (navIconsByHref)
+ * para que el sidebar y estas tarjetas usen exactamente el mismo ícono por módulo.
+ * Tonos: se ciclan chart-1..chart-5 (ya definidos en globals.css), no colores nuevos.
+ */
+import {
+  BarChart3,
+  Calculator,
+  Factory,
+  Package,
+  Recycle,
+  ShoppingCart,
+  UserRoundCheck,
+  WalletCards,
+  Wrench,
+} from "lucide-react";
+
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
 
 type DashboardModuleGridProps = {
@@ -37,6 +57,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {canAccessCommercial ? (
         <ModuleAccessCard
+          index={1}
+          tone="chart-1"
+          icon={ShoppingCart}
           title="Módulo comercial"
           description="Clientes, productos, pedidos, proformas, pagos y comprobantes."
           href="/dashboard/commercial"
@@ -45,6 +68,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessInventory ? (
         <ModuleAccessCard
+          index={2}
+          tone="chart-2"
+          icon={Package}
           title="Inventario y proveedores"
           description="Control de materiales, stock, proveedores, compras y abastecimiento."
           href="/dashboard/inventory"
@@ -53,6 +79,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessProduction ? (
         <ModuleAccessCard
+          index={3}
+          tone="chart-3"
+          icon={Factory}
           title="Producción y recetas técnicas"
           description="Órdenes de trabajo, rutas de fabricación, etapas, avances y recetas técnicas."
           href="/dashboard/production"
@@ -61,6 +90,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessWasteScrap ? (
         <ModuleAccessCard
+          index={4}
+          tone="chart-4"
+          icon={Recycle}
           title="Mermas y chatarra"
           description="Registro de retazos reutilizables, chatarra generada, ventas de chatarra y destino del dinero."
           href="/dashboard/waste-scrap"
@@ -69,6 +101,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessCosts ? (
         <ModuleAccessCard
+          index={5}
+          tone="chart-5"
+          icon={Calculator}
           title="Costos y rentabilidad"
           description="Costeo de producción, costos indirectos, márgenes, precios sugeridos y utilidad estimada."
           href="/dashboard/costs"
@@ -77,6 +112,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessPettyCash ? (
         <ModuleAccessCard
+          index={6}
+          tone="chart-1"
+          icon={WalletCards}
           title="Caja chica y finanzas"
           description="Control de caja chica, ingresos menores, egresos, categorías de gasto y resumen financiero mensual."
           href="/dashboard/petty-cash"
@@ -85,6 +123,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessStaff ? (
         <ModuleAccessCard
+          index={7}
+          tone="chart-2"
+          icon={UserRoundCheck}
           title="Personal, asistencia y pagos"
           description="Operarios, asistencia diaria, tareas, planillas e historial de pagos."
           href="/dashboard/staff"
@@ -93,6 +134,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessMaintenance ? (
         <ModuleAccessCard
+          index={8}
+          tone="chart-3"
+          icon={Wrench}
           title="Mantenimiento de maquinaria"
           description="Máquinas, fallas, repuestos, reparaciones, preventivos y reincidencias."
           href="/dashboard/maintenance"
@@ -101,6 +145,9 @@ export function DashboardModuleGrid({ role }: DashboardModuleGridProps) {
 
       {canAccessReports ? (
         <ModuleAccessCard
+          index={9}
+          tone="chart-4"
+          icon={BarChart3}
           title={reportsTitle}
           description={reportsDescription}
           href={reportsHref}

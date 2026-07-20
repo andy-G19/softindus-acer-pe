@@ -1,3 +1,4 @@
+import { Activity, CheckCircle2, Clock, Layers } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
@@ -212,11 +213,11 @@ export default async function WorkOrderProgressPage({
       />
 
       <section className="grid gap-4 md:grid-cols-5">
-        <KpiCard title="Etapas generadas" value={totalStages.toString()} description="Total de la ruta." tone="info" />
-        <KpiCard title="En proceso" value={inProgressStages.toString()} description="Con avance activo." tone="info" />
-        <KpiCard title="Pausadas" value={pausedStages.toString()} description="Requieren atención." tone="warning" />
-        <KpiCard title="Terminadas" value={finishedStages.toString()} description="Etapas completadas." tone="success" />
-        <KpiCard title="Avance general" value={`${averageProgress.toFixed(2)}%`} description="Promedio de todas las etapas." tone="info" />
+        <KpiCard title="Etapas generadas" value={totalStages.toString()} description="Total de la ruta." tone="info" icon={Layers} />
+        <KpiCard title="En proceso" value={inProgressStages.toString()} description="Con avance activo." tone="info" icon={Activity} />
+        <KpiCard title="Pausadas" value={pausedStages.toString()} description="Requieren atención." tone="warning" icon={Clock} />
+        <KpiCard title="Terminadas" value={finishedStages.toString()} description="Etapas completadas." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Avance general" value={`${averageProgress.toFixed(2)}%`} description="Promedio de todas las etapas." tone="info" icon={Layers} />
       </section>
 
       {sortedAdvances.length === 0 ? (

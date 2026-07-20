@@ -1,4 +1,10 @@
-﻿import Link from "next/link";
+﻿import {
+  Activity,
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -129,11 +135,11 @@ export default async function FailuresPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <KpiCard title="Fallas registradas" value={failures.length.toString()} description="Total histórico de fallas." tone="info" />
-        <KpiCard title="Pendientes" value={pendingFailures.length.toString()} description="Aún no atendidas." tone={pendingFailures.length > 0 ? "warning" : "info"} />
-        <KpiCard title="En atención" value={inAttentionFailures.length.toString()} description="Requieren seguimiento." tone="info" />
-        <KpiCard title="Reparadas" value={repairedFailures.length.toString()} description={`Anuladas: ${cancelledFailures.length}`} tone="success" />
-        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Acumulado por fallas." tone="warning" />
+        <KpiCard title="Fallas registradas" value={failures.length.toString()} description="Total histórico de fallas." tone="info" icon={AlertTriangle} />
+        <KpiCard title="Pendientes" value={pendingFailures.length.toString()} description="Aún no atendidas." tone={pendingFailures.length > 0 ? "warning" : "info"} icon={Clock} />
+        <KpiCard title="En atención" value={inAttentionFailures.length.toString()} description="Requieren seguimiento." tone="info" icon={Activity} />
+        <KpiCard title="Reparadas" value={repairedFailures.length.toString()} description={`Anuladas: ${cancelledFailures.length}`} tone="success" icon={CheckCircle2} />
+        <KpiCard title="Tiempo perdido" value={formatHours(totalLostHours)} description="Acumulado por fallas." tone="warning" icon={Clock} />
       </section>
 
       <Card>

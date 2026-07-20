@@ -1,4 +1,11 @@
-﻿import Link from "next/link";
+﻿import {
+  CheckCircle2,
+  CircleDollarSign,
+  ClipboardList,
+  Landmark,
+  Receipt,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -477,14 +484,14 @@ export default async function SalesCollectionsReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Pedidos encontrados" value={totalOrders.toString()} description="Pedidos según los filtros aplicados." tone="info" />
-        <KpiCard title="Monto estimado" value={formatMoney(estimatedAmount)} description="Suma del monto estimado de pedidos." tone="info" />
-        <KpiCard title="Monto proformado" value={formatMoney(totalQuoted)} description="Suma de proformas emitidas." tone="info" />
-        <KpiCard title="Total cobrado" value={formatMoney(totalPaid)} description="Adelantos iniciales, adelantos, amortizaciones y cancelaciones." tone="success" />
-        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description={`Pedidos con saldo: ${pendingBalanceOrders}.`} tone={totalPendingBalance > 0 ? "warning" : "info"} />
-        <KpiCard title="Pedidos pagados" value={paidOrders.toString()} description="Pedidos con proforma sin saldo pendiente." tone="success" />
-        <KpiCard title="Adelantos" value={formatMoney(totalInitialAdvances + totalAdvancePayments)} description="Adelantos iniciales y pagos tipo adelanto." tone="info" />
-        <KpiCard title="Amortizaciones" value={formatMoney(totalAmortizations)} description={`Cancelaciones: ${formatMoney(totalCancellations)}.`} tone="info" />
+        <KpiCard title="Pedidos encontrados" value={totalOrders.toString()} description="Pedidos según los filtros aplicados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Monto estimado" value={formatMoney(estimatedAmount)} description="Suma del monto estimado de pedidos." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Monto proformado" value={formatMoney(totalQuoted)} description="Suma de proformas emitidas." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Total cobrado" value={formatMoney(totalPaid)} description="Adelantos iniciales, adelantos, amortizaciones y cancelaciones." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Saldo pendiente" value={formatMoney(totalPendingBalance)} description={`Pedidos con saldo: ${pendingBalanceOrders}.`} tone={totalPendingBalance > 0 ? "warning" : "info"} icon={Landmark} />
+        <KpiCard title="Pedidos pagados" value={paidOrders.toString()} description="Pedidos con proforma sin saldo pendiente." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Adelantos" value={formatMoney(totalInitialAdvances + totalAdvancePayments)} description="Adelantos iniciales y pagos tipo adelanto." tone="info" icon={Receipt} />
+        <KpiCard title="Amortizaciones" value={formatMoney(totalAmortizations)} description={`Cancelaciones: ${formatMoney(totalCancellations)}.`} tone="info" icon={Receipt} />
       </section>
 
       <Card>

@@ -1,3 +1,4 @@
+import { UserRoundCheck, UserX, Users } from "lucide-react";
 import Link from "next/link";
 
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
@@ -135,18 +136,21 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
           value={totalUsers.toString()}
           description="Total de cuentas en el sistema."
           tone="info"
+          icon={Users}
         />
         <KpiCard
           title="Activos"
           value={totalActive.toString()}
           description="Pueden iniciar sesión."
           tone="success"
+          icon={UserRoundCheck}
         />
         <KpiCard
           title="Inactivos"
           value={totalInactive.toString()}
           description="Sin acceso al sistema."
           tone="warning"
+          icon={UserX}
         />
       </section>
 
@@ -194,7 +198,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href={navigationHrefs.users}>Limpiar</Link>
               </Button>
             </div>

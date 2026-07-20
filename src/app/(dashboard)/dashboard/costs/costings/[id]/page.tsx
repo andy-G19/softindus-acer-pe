@@ -1,3 +1,4 @@
+import { CircleDollarSign, Users } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -291,11 +292,11 @@ export default async function CostingDetailPage({
       />
 
       <section className="grid gap-4 md:grid-cols-5">
-        <KpiCard title="Costo materiales" value={formatMoney(costing.costo_materiales)} description="Materia prima." tone="info" />
-        <KpiCard title="Costo consumibles" value={formatMoney(costing.costo_consumibles)} description="Insumos secundarios." tone="info" />
-        <KpiCard title="Mano de obra" value={formatMoney(costing.costo_mano_obra)} description="Estimada u operativa." tone="info" />
-        <KpiCard title="Costo indirecto total" value={formatMoney(costing.costo_indirecto_total)} description="Gastos indirectos." tone="warning" />
-        <KpiCard title="Costo total" value={formatMoney(costing.costo_total)} description={`Unitario: ${formatMoney(costing.costo_unitario)}`} tone="warning" />
+        <KpiCard title="Costo materiales" value={formatMoney(costing.costo_materiales)} description="Materia prima." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Costo consumibles" value={formatMoney(costing.costo_consumibles)} description="Insumos secundarios." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Mano de obra" value={formatMoney(costing.costo_mano_obra)} description="Estimada u operativa." tone="info" icon={Users} />
+        <KpiCard title="Costo indirecto total" value={formatMoney(costing.costo_indirecto_total)} description="Gastos indirectos." tone="warning" icon={CircleDollarSign} />
+        <KpiCard title="Costo total" value={formatMoney(costing.costo_total)} description={`Unitario: ${formatMoney(costing.costo_unitario)}`} tone="warning" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">

@@ -1,3 +1,10 @@
+/**
+ * Ubicación destino: src/app/(dashboard)/dashboard/production/page.tsx
+ * (reemplaza el archivo actual)
+ *
+ * Único cambio: el array `modules` gana icon/tone, y el .map() les pasa
+ * icon/tone/index al <ModuleAccessCard>. Todo lo demás queda idéntico.
+ */
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -8,7 +15,18 @@ import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import Link from "next/link";
-import { CheckCircle2, Circle } from "lucide-react";
+import {
+  Activity,
+  CheckCircle2,
+  Circle,
+  ClipboardList,
+  Factory,
+  FlaskConical,
+  Gauge,
+  Layers,
+  Route,
+  Tag,
+} from "lucide-react";
 
 function getModuleHealthMessage(data: {
   activeProducts: number;
@@ -187,26 +205,36 @@ export default async function ProductionDashboardPage() {
       title: "Rutas de fabricación",
       href: "/dashboard/production/routes",
       description: "Define rutas por producto y estructura el proceso productivo.",
+      icon: Route,
+      tone: "chart-1" as const,
     },
     {
       title: "Recetas técnicas",
       href: "/dashboard/production/recipes",
       description: "Administra recetas, versiones y materiales requeridos por producto.",
+      icon: FlaskConical,
+      tone: "chart-2" as const,
     },
     {
       title: "Órdenes de trabajo",
       href: "/dashboard/production/work-orders",
       description: "Crea órdenes, revisa materiales y controla avances por etapa.",
+      icon: ClipboardList,
+      tone: "chart-3" as const,
     },
     {
       title: "Campañas",
       href: "/dashboard/production/campaigns",
       description: "Planifica lotes de producción y vincúlalos con órdenes de trabajo.",
+      icon: Layers,
+      tone: "chart-4" as const,
     },
     {
       title: "Cuellos de botella",
       href: "/dashboard/production/bottlenecks",
       description: "Detecta etapas en proceso atrasadas, en riesgo o saturadas.",
+      icon: Gauge,
+      tone: "chart-5" as const,
     },
   ];
 
@@ -235,23 +263,26 @@ export default async function ProductionDashboardPage() {
       </Alert>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Órdenes registradas" value={totalOrders.toString()} description="Total histórico." tone="info" />
-        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
-        <KpiCard title="En proceso" value={inProcessOrders.toString()} description="Con avance operativo actual." tone="info" />
-        <KpiCard title="Finalizadas" value={finishedOrders.toString()} description="Órdenes completadas." tone="success" />
+        <KpiCard title="Órdenes registradas" value={totalOrders.toString()} description="Total histórico." tone="info" icon={ClipboardList} />
+        <KpiCard title="Órdenes activas" value={activeOrders.toString()} description="Pendientes, en proceso o pausadas." tone="warning" icon={Activity} />
+        <KpiCard title="En proceso" value={inProcessOrders.toString()} description="Con avance operativo actual." tone="info" icon={Factory} />
+        <KpiCard title="Finalizadas" value={finishedOrders.toString()} description="Órdenes completadas." tone="success" icon={CheckCircle2} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Productos activos" value={activeProducts.toString()} description="Disponibles para producción." tone="info" />
-        <KpiCard title="Rutas activas" value={activeRoutes.toString()} description="Rutas de fabricación habilitadas." tone="info" />
-        <KpiCard title="Etapas activas" value={activeStages.toString()} description="Etapas dentro de rutas activas." tone="info" />
-        <KpiCard title="Materiales en recetas" value={recipeDetails.toString()} description="Registrados en versión vigente." tone="info" />
+        <KpiCard title="Productos activos" value={activeProducts.toString()} description="Disponibles para producción." tone="info" icon={Tag} />
+        <KpiCard title="Rutas activas" value={activeRoutes.toString()} description="Rutas de fabricación habilitadas." tone="info" icon={Route} />
+        <KpiCard title="Etapas activas" value={activeStages.toString()} description="Etapas dentro de rutas activas." tone="info" icon={Layers} />
+        <KpiCard title="Materiales en recetas" value={recipeDetails.toString()} description="Registrados en versión vigente." tone="info" icon={FlaskConical} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {modules.map((module) => (
+        {modules.map((module, i) => (
           <ModuleAccessCard
             key={module.href}
+            index={i + 1}
+            tone={module.tone}
+            icon={module.icon}
             title={module.title}
             description={module.description}
             href={module.href}

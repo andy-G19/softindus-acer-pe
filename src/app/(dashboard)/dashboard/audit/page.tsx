@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { Database, ScrollText, Users } from "lucide-react";
+import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -231,7 +232,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
             </div>
             <div className="flex items-end gap-2">
               <Button type="submit">Filtrar</Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/audit">Limpiar</Link>
               </Button>
             </div>
@@ -240,9 +241,9 @@ export default async function AuditPage({ searchParams }: PageProps) {
       </Card>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Operaciones" value={totalLogs.toString()} description="Coincidencias segun filtros." tone="info" />
-        <KpiCard title="Usuarios" value={distinctUsers.length.toString()} description="Usuarios distintos según filtros." tone="info" />
-        <KpiCard title="Entidades" value={distinctEntities.length.toString()} description="Entidades afectadas según filtros." tone="info" />
+        <KpiCard title="Operaciones" value={totalLogs.toString()} description="Coincidencias segun filtros." tone="info" icon={ScrollText} />
+        <KpiCard title="Usuarios" value={distinctUsers.length.toString()} description="Usuarios distintos según filtros." tone="info" icon={Users} />
+        <KpiCard title="Entidades" value={distinctEntities.length.toString()} description="Entidades afectadas según filtros." tone="info" icon={Database} />
       </section>
 
       <Card>

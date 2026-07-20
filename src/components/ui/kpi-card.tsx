@@ -1,4 +1,14 @@
+/**
+ * Ubicación destino: src/components/ui/kpi-card.tsx (reemplaza el archivo actual)
+ *
+ * Único cambio: nuevo prop opcional `icon`. Reutiliza la variable CSS
+ * --kpi-tone que ya existía (la misma que colorea la barra superior y el
+ * valor grande) para el fondo/color del ícono — no se agregó ningún
+ * token nuevo. Las páginas que no pasen `icon` siguen viéndose igual
+ * que antes (sin badge).
+ */
 import type { CSSProperties } from "react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -15,6 +25,7 @@ type KpiCardProps = {
   description: string;
   href?: string;
   tone?: "success" | "warning" | "info";
+  icon?: LucideIcon;
 };
 
 const kpiToneVariables = {
@@ -29,6 +40,7 @@ export function KpiCard({
   description,
   href,
   tone = "info",
+  icon: Icon,
 }: KpiCardProps) {
   const content = (
     <Card
@@ -44,9 +56,23 @@ export function KpiCard({
       )}
     >
       <CardHeader className="pb-1">
-        <CardTitle className="font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">
-          {title}
-        </CardTitle>
+        <div className="flex items-center gap-2">
+          {Icon ? (
+            <span
+              className="flex size-7 shrink-0 items-center justify-center rounded-lg"
+              style={{
+                backgroundColor:
+                  "color-mix(in srgb, var(--kpi-tone) 18%, transparent)",
+                color: "var(--kpi-tone)",
+              }}
+            >
+              <Icon className="size-4" aria-hidden="true" />
+            </span>
+          ) : null}
+          <CardTitle className="font-mono text-[11px] font-medium uppercase tracking-[0.07em] text-muted-foreground">
+            {title}
+          </CardTitle>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-2">

@@ -1,3 +1,4 @@
+import { Calculator, CalendarClock, Layers } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -280,17 +281,17 @@ export default async function ProductionCampaignsPage({
 
         <div className="flex items-end gap-2 md:col-span-4">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/production/campaigns">Limpiar filtros</Link>
           </Button>
         </div>
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Campañas registradas" value={campaigns.length.toString()} description="Total histórico." tone="info" />
-        <KpiCard title="Planificadas o activas" value={activeCampaigns.length.toString()} description="En ejecución o por iniciar." tone="warning" />
-        <KpiCard title="Objetivo total" value={totalTarget.toFixed(2)} description="Suma de cantidades objetivo." tone="info" />
-        <KpiCard title="Producido total" value={totalProduced.toFixed(2)} description="Suma de cantidades producidas." tone="success" />
+        <KpiCard title="Campañas registradas" value={campaigns.length.toString()} description="Total histórico." tone="info" icon={Layers} />
+        <KpiCard title="Planificadas o activas" value={activeCampaigns.length.toString()} description="En ejecución o por iniciar." tone="warning" icon={CalendarClock} />
+        <KpiCard title="Objetivo total" value={totalTarget.toFixed(2)} description="Suma de cantidades objetivo." tone="info" icon={Calculator} />
+        <KpiCard title="Producido total" value={totalProduced.toFixed(2)} description="Suma de cantidades producidas." tone="success" icon={Calculator} />
       </section>
 
       <Table>

@@ -1,4 +1,11 @@
-﻿import Link from "next/link";
+﻿import {
+  ClipboardList,
+  Package,
+  Scale,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -357,12 +364,12 @@ export default async function InventoryReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <KpiCard title="Movimientos" value={totalMovements.toString()} description="Total de movimientos encontrados." tone="info" />
-        <KpiCard title="Entradas" value={totalEntries.toString()} description={`Cantidad ingresada: ${formatQuantity(entryQuantity)}.`} tone="success" />
-        <KpiCard title="Salidas" value={totalOutputs.toString()} description={`Cantidad retirada: ${formatQuantity(outputQuantity)}.`} tone="warning" />
-        <KpiCard title="Ajustes" value={totalAdjustments.toString()} description="Movimientos correctivos de inventario." tone="info" />
-        <KpiCard title="Reservas" value={totalReserved.toString()} description={`Cantidad reservada: ${formatQuantity(reservedQuantity)}.`} tone="info" />
-        <KpiCard title="Balance cantidad" value={formatQuantity(entryQuantity - outputQuantity)} description="Entradas menos salidas del reporte." tone="info" />
+        <KpiCard title="Movimientos" value={totalMovements.toString()} description="Total de movimientos encontrados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Entradas" value={totalEntries.toString()} description={`Cantidad ingresada: ${formatQuantity(entryQuantity)}.`} tone="success" icon={TrendingUp} />
+        <KpiCard title="Salidas" value={totalOutputs.toString()} description={`Cantidad retirada: ${formatQuantity(outputQuantity)}.`} tone="warning" icon={TrendingDown} />
+        <KpiCard title="Ajustes" value={totalAdjustments.toString()} description="Movimientos correctivos de inventario." tone="info" icon={Scale} />
+        <KpiCard title="Reservas" value={totalReserved.toString()} description={`Cantidad reservada: ${formatQuantity(reservedQuantity)}.`} tone="info" icon={Package} />
+        <KpiCard title="Balance cantidad" value={formatQuantity(entryQuantity - outputQuantity)} description="Entradas menos salidas del reporte." tone="info" icon={Scale} />
       </section>
 
       <Card>

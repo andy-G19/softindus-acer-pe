@@ -1,3 +1,4 @@
+import { ClipboardList, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
@@ -141,10 +142,10 @@ export default async function RecipeVersionsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Estado de receta" value={recipe.estado} description="Estado maestro de la receta." tone={recipe.estado === "activa" ? "success" : "warning"} />
-        <KpiCard title="Versión vigente" value={currentVersion?.numero_version ?? "Sin versión"} description="Versión usada actualmente." tone="info" />
-        <KpiCard title="Historial" value={recipe.version_receta.length.toString()} description="Versiones registradas." tone="info" />
-        <KpiCard title="Órdenes asociadas" value={totalOrders.toString()} description="Usando alguna versión." tone="info" />
+        <KpiCard title="Estado de receta" value={recipe.estado} description="Estado maestro de la receta." tone={recipe.estado === "activa" ? "success" : "warning"} icon={FlaskConical} />
+        <KpiCard title="Versión vigente" value={currentVersion?.numero_version ?? "Sin versión"} description="Versión usada actualmente." tone="info" icon={FlaskConical} />
+        <KpiCard title="Historial" value={recipe.version_receta.length.toString()} description="Versiones registradas." tone="info" icon={FlaskConical} />
+        <KpiCard title="Órdenes asociadas" value={totalOrders.toString()} description="Usando alguna versión." tone="info" icon={ClipboardList} />
       </section>
 
       {!currentVersion ? (

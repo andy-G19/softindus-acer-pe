@@ -221,7 +221,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         <div className="flex flex-wrap items-end gap-2 md:col-span-3 xl:col-span-5">
           <Button type="submit">Filtrar</Button>
 
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/commercial/clients">Limpiar filtros</Link>
           </Button>
         </div>

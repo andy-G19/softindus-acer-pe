@@ -1,4 +1,12 @@
-﻿import Link from "next/link";
+﻿import {
+  CalendarCheck,
+  CircleDollarSign,
+  Clock,
+  FileSpreadsheet,
+  UserRoundCheck,
+  UserX,
+} from "lucide-react";
+import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -238,7 +246,7 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
             </div>
             <div className="flex items-end gap-2">
               <Button type="submit">Filtrar</Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/reports/staff">Limpiar</Link>
               </Button>
             </div>
@@ -247,12 +255,12 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <KpiCard title="Operarios activos" value={operators.length.toString()} description="Operarios habilitados." tone="info" />
-        <KpiCard title="Asistencias" value={attendanceCount.toString()} description="Registros en el periodo." tone="info" />
-        <KpiCard title="Faltas" value={absenceCount.toString()} description="Ausencias registradas." tone={absenceCount > 0 ? "warning" : "info"} />
-        <KpiCard title="Tardanzas" value={latenessCount.toString()} description="Marcaciones tardias." tone={latenessCount > 0 ? "warning" : "info"} />
-        <KpiCard title="Planillas" value={payrolls.length.toString()} description={`Pendientes: ${totals.pending}`} tone={totals.pending > 0 ? "warning" : "info"} />
-        <KpiCard title="Pagado" value={formatMoney(totals.paid)} description={`Neto: ${formatMoney(totals.net)}`} tone="success" />
+        <KpiCard title="Operarios activos" value={operators.length.toString()} description="Operarios habilitados." tone="info" icon={UserRoundCheck} />
+        <KpiCard title="Asistencias" value={attendanceCount.toString()} description="Registros en el periodo." tone="info" icon={CalendarCheck} />
+        <KpiCard title="Faltas" value={absenceCount.toString()} description="Ausencias registradas." tone={absenceCount > 0 ? "warning" : "info"} icon={UserX} />
+        <KpiCard title="Tardanzas" value={latenessCount.toString()} description="Marcaciones tardias." tone={latenessCount > 0 ? "warning" : "info"} icon={Clock} />
+        <KpiCard title="Planillas" value={payrolls.length.toString()} description={`Pendientes: ${totals.pending}`} tone={totals.pending > 0 ? "warning" : "info"} icon={FileSpreadsheet} />
+        <KpiCard title="Pagado" value={formatMoney(totals.paid)} description={`Neto: ${formatMoney(totals.net)}`} tone="success" icon={CircleDollarSign} />
       </section>
 
       <Card>

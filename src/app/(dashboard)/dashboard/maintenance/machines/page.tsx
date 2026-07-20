@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { CheckCircle2, Wrench, XCircle } from "lucide-react";
+import Link from "next/link";
 
 import {
   RowEditLink,
@@ -221,9 +222,9 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Maquinas registradas" value={machines.length.toString()} description="Total de equipos registrados." tone="info" />
-        <KpiCard title="Operativas" value={operationalMachines.length.toString()} description="Disponibles para producción." tone="success" />
-        <KpiCard title="Inactivas" value={inactiveMachines.length.toString()} description="Fuera de operación." tone="warning" />
+        <KpiCard title="Maquinas registradas" value={machines.length.toString()} description="Total de equipos registrados." tone="info" icon={Wrench} />
+        <KpiCard title="Operativas" value={operationalMachines.length.toString()} description="Disponibles para producción." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Inactivas" value={inactiveMachines.length.toString()} description="Fuera de operación." tone="warning" icon={XCircle} />
       </section>
 
       <Card>
@@ -277,7 +278,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/maintenance/machines">Limpiar</Link>
               </Button>
             </div>

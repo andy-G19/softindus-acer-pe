@@ -1,3 +1,4 @@
+import { CheckCircle2, Tags, XCircle } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -125,9 +126,9 @@ export default async function ExpenseCategoriesPage({
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Categorías registradas" value={categories.length.toString()} description="Total histórico." tone="info" />
-        <KpiCard title="Activas" value={activeCategories.length.toString()} description="Disponibles para clasificar egresos." tone="success" />
-        <KpiCard title="Inactivas" value={inactiveCategories.length.toString()} description="Ya no disponibles." tone="warning" />
+        <KpiCard title="Categorías registradas" value={categories.length.toString()} description="Total histórico." tone="info" icon={Tags} />
+        <KpiCard title="Activas" value={activeCategories.length.toString()} description="Disponibles para clasificar egresos." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Inactivas" value={inactiveCategories.length.toString()} description="Ya no disponibles." tone="warning" icon={XCircle} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
@@ -171,7 +172,7 @@ export default async function ExpenseCategoriesPage({
                 <Button type="submit" className="flex-1">
                   Filtrar
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="clear" asChild>
                   <Link href="/dashboard/petty-cash/categories">Limpiar</Link>
                 </Button>
               </div>

@@ -1,3 +1,4 @@
+import { ClipboardList, Scale, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 import { Badge } from "@/components/ui/badge";
@@ -293,11 +294,11 @@ export default async function PettyCashMovementsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <KpiCard title="Movimientos encontrados" value={totalMatches.toString()} description="Total según filtros aplicados." tone="info" />
-        <KpiCard title="Ingresos mostrados" value={formatMoney(totalIncome)} description="Total de ingresos según filtros aplicados." tone="success" />
-        <KpiCard title="Egresos mostrados" value={formatMoney(totalExpenses)} description="Total de egresos según filtros aplicados." tone="warning" />
-        <KpiCard title="Ajustes netos" value={formatMoney(totalPositiveAdjustments - totalNegativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" />
-        <KpiCard title="Resultado neto" value={formatMoney(netResult)} description="Ingresos y ajustes positivos menos egresos y ajustes negativos." tone="info" />
+        <KpiCard title="Movimientos encontrados" value={totalMatches.toString()} description="Total según filtros aplicados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Ingresos mostrados" value={formatMoney(totalIncome)} description="Total de ingresos según filtros aplicados." tone="success" icon={TrendingUp} />
+        <KpiCard title="Egresos mostrados" value={formatMoney(totalExpenses)} description="Total de egresos según filtros aplicados." tone="warning" icon={TrendingDown} />
+        <KpiCard title="Ajustes netos" value={formatMoney(totalPositiveAdjustments - totalNegativeAdjustments)} description="Ajustes positivos menos negativos." tone="info" icon={Scale} />
+        <KpiCard title="Resultado neto" value={formatMoney(netResult)} description="Ingresos y ajustes positivos menos egresos y ajustes negativos." tone="info" icon={Scale} />
       </section>
 
       <Card>

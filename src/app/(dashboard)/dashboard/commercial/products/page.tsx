@@ -235,7 +235,7 @@ export default async function ProductsPage({
         </div>
 
         <div className="flex items-end">
-          <Button variant="outline" className="w-full" asChild>
+          <Button variant="clear" className="w-full" asChild>
             <Link href="/dashboard/commercial/products">Limpiar filtros</Link>
           </Button>
         </div>

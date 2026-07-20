@@ -1,3 +1,4 @@
+import { CheckCircle2, Cog, XCircle } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -171,9 +172,9 @@ export default async function SparePartsPage({
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Repuestos registrados" value={spareParts.length.toString()} description="Total en catálogo." tone="info" />
-        <KpiCard title="Activos" value={activeSpareParts.length.toString()} description="Disponibles para uso." tone="success" />
-        <KpiCard title="Inactivos" value={inactiveSpareParts.length.toString()} description="Fuera de catálogo." tone="warning" />
+        <KpiCard title="Repuestos registrados" value={spareParts.length.toString()} description="Total en catálogo." tone="info" icon={Cog} />
+        <KpiCard title="Activos" value={activeSpareParts.length.toString()} description="Disponibles para uso." tone="success" icon={CheckCircle2} />
+        <KpiCard title="Inactivos" value={inactiveSpareParts.length.toString()} description="Fuera de catálogo." tone="warning" icon={XCircle} />
       </section>
 
       <Card>
@@ -212,7 +213,7 @@ export default async function SparePartsPage({
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/maintenance/spare-parts">Limpiar</Link>
               </Button>
             </div>

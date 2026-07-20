@@ -1,3 +1,4 @@
+import { Clock, Layers, Wrench } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
@@ -210,20 +211,22 @@ export default async function RouteStagesPage({
       </form>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Etapas registradas" value={route.etapa_ruta.length.toString()} description="Total en esta ruta." tone="info" />
+        <KpiCard title="Etapas registradas" value={route.etapa_ruta.length.toString()} description="Total en esta ruta." tone="info" icon={Layers} />
         <KpiCard
           title="Etapas activas"
           value={route.etapa_ruta.filter((stage) => stage.estado).length.toString()}
           description="Disponibles para producción."
           tone="success"
+          icon={Layers}
         />
         <KpiCard
           title="Requieren máquina"
           value={route.etapa_ruta.filter((stage) => stage.requiere_maquina).length.toString()}
           description="Dependen de equipo crítico."
           tone="warning"
+          icon={Wrench}
         />
-        <KpiCard title="Tiempo estimado total" value={`${totalEstimatedHours.toFixed(2)} h`} description="Suma de etapas activas." tone="info" />
+        <KpiCard title="Tiempo estimado total" value={`${totalEstimatedHours.toFixed(2)} h`} description="Suma de etapas activas." tone="info" icon={Clock} />
       </section>
 
       <Table>

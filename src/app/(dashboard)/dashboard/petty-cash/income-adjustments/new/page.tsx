@@ -1,3 +1,5 @@
+import { FolderOpen, Landmark, Scale } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -128,9 +130,9 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Disponibles para ingresos y ajustes." tone="info" />
-        <KpiCard title="Saldo disponible" value={formatMoney(totalOpenBalance)} description="Suma de cajas abiertas." tone="info" />
-        <KpiCard title="Ajustes recientes" value={latestAdjustments.length.toString()} description="Dentro de los últimos movimientos consultados." tone="warning" />
+        <KpiCard title="Cajas abiertas" value={openBoxes.length.toString()} description="Disponibles para ingresos y ajustes." tone="info" icon={FolderOpen} />
+        <KpiCard title="Saldo disponible" value={formatMoney(totalOpenBalance)} description="Suma de cajas abiertas." tone="info" icon={Landmark} />
+        <KpiCard title="Ajustes recientes" value={latestAdjustments.length.toString()} description="Dentro de los últimos movimientos consultados." tone="warning" icon={Scale} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">

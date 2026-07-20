@@ -1,3 +1,4 @@
+import { CircleDollarSign, ClipboardList } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -152,10 +153,10 @@ export default async function PaymentHistoryPage() {
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Pagos registrados" value={totalPayments.toString()} description="Total histórico de pagos." tone="info" />
-        <KpiCard title="Pagos del mes" value={paymentsThisMonth.toString()} description="Registros del periodo actual." tone="info" />
-        <KpiCard title="Total pagado" value={formatMoney(totalPaidAmount._sum.monto_pagado)} description="Acumulado histórico." tone="success" />
-        <KpiCard title="Pagado este mes" value={formatMoney(monthlyPaidAmount._sum.monto_pagado)} description="Total mensual registrado." tone="success" />
+        <KpiCard title="Pagos registrados" value={totalPayments.toString()} description="Total histórico de pagos." tone="info" icon={ClipboardList} />
+        <KpiCard title="Pagos del mes" value={paymentsThisMonth.toString()} description="Registros del periodo actual." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Total pagado" value={formatMoney(totalPaidAmount._sum.monto_pagado)} description="Acumulado histórico." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Pagado este mes" value={formatMoney(monthlyPaidAmount._sum.monto_pagado)} description="Total mensual registrado." tone="success" icon={CircleDollarSign} />
       </section>
 
       <Card>

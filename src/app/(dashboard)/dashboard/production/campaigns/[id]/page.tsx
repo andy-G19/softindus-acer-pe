@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Calculator, Clock, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -135,10 +136,10 @@ export default async function ProductionCampaignDetailPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Productos" value={campaign.campania_detalle.length.toString()} description="Productos en la campaña." tone="info" />
-        <KpiCard title="Cantidad objetivo" value={formatDecimal(totalTarget)} description="Meta total planificada." tone="info" />
-        <KpiCard title="Cantidad producida" value={formatDecimal(totalProduced)} description="Avance real registrado." tone="success" />
-        <KpiCard title="Pendiente estimado" value={formatDecimal(pendingProduction)} description="Restante por producir." tone="warning" />
+        <KpiCard title="Productos" value={campaign.campania_detalle.length.toString()} description="Productos en la campaña." tone="info" icon={Tag} />
+        <KpiCard title="Cantidad objetivo" value={formatDecimal(totalTarget)} description="Meta total planificada." tone="info" icon={Calculator} />
+        <KpiCard title="Cantidad producida" value={formatDecimal(totalProduced)} description="Avance real registrado." tone="success" icon={Calculator} />
+        <KpiCard title="Pendiente estimado" value={formatDecimal(pendingProduction)} description="Restante por producir." tone="warning" icon={Clock} />
       </section>
 
       <Card>

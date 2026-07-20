@@ -1,3 +1,4 @@
+import { Activity, CheckCircle2, ClipboardList, Clock } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
@@ -355,10 +356,10 @@ export default async function WorkOrdersPage({
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Órdenes registradas" value={totalItems.toString()} description="Total según filtros aplicados." tone="info" />
-        <KpiCard title="Órdenes activas" value={totalActive.toString()} description="Pendientes, en proceso o pausadas." tone="warning" />
-        <KpiCard title="Pendientes" value={totalPending.toString()} description="Sin iniciar todavía." tone="info" />
-        <KpiCard title="Finalizadas" value={totalFinished.toString()} description="Órdenes completadas." tone="success" />
+        <KpiCard title="Órdenes registradas" value={totalItems.toString()} description="Total según filtros aplicados." tone="info" icon={ClipboardList} />
+        <KpiCard title="Órdenes activas" value={totalActive.toString()} description="Pendientes, en proceso o pausadas." tone="warning" icon={Activity} />
+        <KpiCard title="Pendientes" value={totalPending.toString()} description="Sin iniciar todavía." tone="info" icon={Clock} />
+        <KpiCard title="Finalizadas" value={totalFinished.toString()} description="Órdenes completadas." tone="success" icon={CheckCircle2} />
       </section>
 
       <form className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">

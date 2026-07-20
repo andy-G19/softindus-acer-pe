@@ -1,3 +1,10 @@
+import {
+  Calculator,
+  CalendarClock,
+  CheckCircle2,
+  CircleDollarSign,
+  Hammer,
+} from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -261,7 +268,7 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/maintenance/repairs">Limpiar</Link>
               </Button>
             </div>
@@ -270,11 +277,11 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Total histórico." tone="info" />
-        <KpiCard title="Programadas" value={scheduledRepairs.length.toString()} description={`Observadas: ${observedRepairs.length}`} tone="warning" />
-        <KpiCard title="Ejecutadas" value={executedRepairs.length.toString()} description={`Anuladas: ${cancelledRepairs.length}`} tone="success" />
-        <KpiCard title="Costo total" value={formatMoney(totalCost)} description="Mano de obra + repuestos." tone="info" />
-        <KpiCard title="Promedio" value={formatMoney(repairs.length > 0 ? totalCost / repairs.length : 0)} description="Costo promedio por reparación." tone="info" />
+        <KpiCard title="Reparaciones" value={repairs.length.toString()} description="Total histórico." tone="info" icon={Hammer} />
+        <KpiCard title="Programadas" value={scheduledRepairs.length.toString()} description={`Observadas: ${observedRepairs.length}`} tone="warning" icon={CalendarClock} />
+        <KpiCard title="Ejecutadas" value={executedRepairs.length.toString()} description={`Anuladas: ${cancelledRepairs.length}`} tone="success" icon={CheckCircle2} />
+        <KpiCard title="Costo total" value={formatMoney(totalCost)} description="Mano de obra + repuestos." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Promedio" value={formatMoney(repairs.length > 0 ? totalCost / repairs.length : 0)} description="Costo promedio por reparación." tone="info" icon={Calculator} />
       </section>
 
       <Card>

@@ -1,4 +1,35 @@
-﻿import {
+/**
+ * Ubicación destino: src/app/(dashboard)/dashboard/reports/page.tsx
+ * (reemplaza el archivo actual)
+ *
+ * Único cambio de fondo: la grilla final de "Reportes por módulo" pasa de
+ * 10 <ModuleAccessCard> repetidas a un array `reportModules.map(...)`,
+ * igual que en el resto de páginas — más fácil de mantener y de asignar
+ * ícono/tono a cada una.
+ */
+import type { LucideIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  Calculator,
+  CircleDollarSign,
+  ClipboardList,
+  Download,
+  Factory,
+  Hammer,
+  Landmark,
+  Package,
+  Receipt,
+  ScrollText,
+  ShoppingCart,
+  TrendingDown,
+  TrendingUp,
+  Truck,
+  UserRoundCheck,
+  WalletCards,
+  Wrench,
+} from "lucide-react";
+
+import {
   Card,
   CardContent,
   CardHeader,
@@ -6,7 +37,10 @@
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { ModuleAccessCard } from "@/components/ui/module-access-card";
+import {
+  ModuleAccessCard,
+  type ModuleCardTone,
+} from "@/components/ui/module-access-card";
 import {
   Table,
   TableBody,
@@ -30,6 +64,96 @@ const PENDING_ORDER_STATES = [
 const OPEN_FAILURE_STATES = ["pendiente", "en_atencion"];
 const ACTIVE_PROFORMA_STATES = ["vigente", "aceptada"];
 const PENDING_PAYMENT_STATES = ["pendiente", "parcial"];
+
+type ReportModule = {
+  title: string;
+  description: string;
+  href: string;
+  icon: LucideIcon;
+  tone: ModuleCardTone;
+};
+
+const reportModules: ReportModule[] = [
+  {
+    title: "Reporte de producción",
+    description:
+      "Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.",
+    href: "/dashboard/reports/production",
+    icon: Factory,
+    tone: "chart-1",
+  },
+  {
+    title: "Reporte de inventario",
+    description:
+      "Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.",
+    href: "/dashboard/reports/inventory",
+    icon: Package,
+    tone: "chart-2",
+  },
+  {
+    title: "Reporte de ventas y cobranzas",
+    description:
+      "Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.",
+    href: "/dashboard/reports/sales-collections",
+    icon: ShoppingCart,
+    tone: "chart-3",
+  },
+  {
+    title: "Reporte de proveedores y compras",
+    description:
+      "Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.",
+    href: "/dashboard/reports/suppliers-purchases",
+    icon: Truck,
+    tone: "chart-4",
+  },
+  {
+    title: "Reporte financiero",
+    description:
+      "Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.",
+    href: "/dashboard/reports/financial",
+    icon: Landmark,
+    tone: "chart-5",
+  },
+  {
+    title: "Reporte de mantenimiento",
+    description:
+      "Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.",
+    href: "/dashboard/reports/maintenance",
+    icon: Wrench,
+    tone: "chart-1",
+  },
+  {
+    title: "Reporte de costos y rentabilidad",
+    description:
+      "Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.",
+    href: "/dashboard/reports/profitability",
+    icon: Calculator,
+    tone: "chart-2",
+  },
+  {
+    title: "Reporte de personal y planillas",
+    description:
+      "Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.",
+    href: "/dashboard/reports/staff",
+    icon: UserRoundCheck,
+    tone: "chart-3",
+  },
+  {
+    title: "Historial de exportaciones",
+    description:
+      "Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.",
+    href: "/dashboard/reports/export-history",
+    icon: Download,
+    tone: "chart-4",
+  },
+  {
+    title: "Bitacora de auditoria",
+    description: "Operaciones criticas por usuario, accion, entidad afectada y fecha.",
+    href: "/dashboard/audit",
+    icon: ScrollText,
+    tone: "chart-5",
+  },
+];
 
 function toNumber(value: unknown) {
   if (value === null || value === undefined) {
@@ -419,6 +543,7 @@ export default async function ReportsDashboardPage() {
           description={`Retrasadas: ${overdueWorkOrders}. Finalizadas este mes: ${finishedWorkOrdersThisMonth}.`}
           href="/dashboard/production/work-orders"
           tone={overdueWorkOrders > 0 ? "warning" : "info"}
+          icon={ClipboardList}
         />
 
         <KpiCard
@@ -427,6 +552,7 @@ export default async function ReportsDashboardPage() {
           description="Pedidos registrados, aprobados o en producción."
           href="/dashboard/commercial/orders"
           tone="info"
+          icon={ShoppingCart}
         />
 
         <KpiCard
@@ -435,6 +561,7 @@ export default async function ReportsDashboardPage() {
           description={`Alertas activas de stock: ${activeStockAlerts}.`}
           href="/dashboard/inventory/materials"
           tone={criticalStockMaterials.length > 0 ? "warning" : "info"}
+          icon={AlertTriangle}
         />
 
         <KpiCard
@@ -443,6 +570,7 @@ export default async function ReportsDashboardPage() {
           description={`Proformas con saldo pendiente: ${pendingReceivablesCount}.`}
           href="/dashboard/commercial/payments"
           tone="info"
+          icon={Landmark}
         />
 
         <KpiCard
@@ -451,6 +579,7 @@ export default async function ReportsDashboardPage() {
           description="Pagos de clientes registrados durante el mes."
           href="/dashboard/commercial/payments"
           tone="success"
+          icon={TrendingUp}
         />
 
         <KpiCard
@@ -461,6 +590,7 @@ export default async function ReportsDashboardPage() {
           )}.`}
           href="/dashboard/commercial/receipts"
           tone="info"
+          icon={Receipt}
         />
 
         <KpiCard
@@ -471,6 +601,7 @@ export default async function ReportsDashboardPage() {
           )}.`}
           href="/dashboard/petty-cash"
           tone="info"
+          icon={WalletCards}
         />
 
         <KpiCard
@@ -479,6 +610,7 @@ export default async function ReportsDashboardPage() {
           description={`Alertas de bajo margen: ${lowMarginAlerts}.`}
           href="/dashboard/costs"
           tone={lowMarginAlerts > 0 ? "warning" : "success"}
+          icon={CircleDollarSign}
         />
 
         <KpiCard
@@ -487,6 +619,7 @@ export default async function ReportsDashboardPage() {
           description={`Preventivos vencidos: ${overduePreventiveMaintenance}.`}
           href="/dashboard/maintenance"
           tone={openMachineFailures > 0 ? "warning" : "info"}
+          icon={Wrench}
         />
 
         <KpiCard
@@ -495,6 +628,7 @@ export default async function ReportsDashboardPage() {
           description="Costo total de reparaciones registradas este mes."
           href="/dashboard/maintenance/repairs"
           tone="info"
+          icon={Hammer}
         />
 
         <KpiCard
@@ -505,6 +639,7 @@ export default async function ReportsDashboardPage() {
           )}.`}
           href="/dashboard/inventory/purchases"
           tone={pendingSupplierPurchases > 0 ? "warning" : "info"}
+          icon={Truck}
         />
 
         <KpiCard
@@ -515,6 +650,7 @@ export default async function ReportsDashboardPage() {
           )}.`}
           href="/dashboard/petty-cash/movements"
           tone="info"
+          icon={TrendingDown}
         />
       </section>
 
@@ -737,56 +873,17 @@ export default async function ReportsDashboardPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <ModuleAccessCard
-            title="Reporte de producción"
-            description="Órdenes de trabajo filtradas por fecha, producto, estado y código de orden."
-            href="/dashboard/reports/production"
-          />
-          <ModuleAccessCard
-            title="Reporte de inventario"
-            description="Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada."
-            href="/dashboard/reports/inventory"
-          />
-          <ModuleAccessCard
-            title="Reporte de ventas y cobranzas"
-            description="Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza."
-            href="/dashboard/reports/sales-collections"
-          />
-          <ModuleAccessCard
-            title="Reporte de proveedores y compras"
-            description="Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes."
-            href="/dashboard/reports/suppliers-purchases"
-          />
-          <ModuleAccessCard
-            title="Reporte financiero"
-            description="Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar."
-            href="/dashboard/reports/financial"
-          />
-          <ModuleAccessCard
-            title="Reporte de mantenimiento"
-            description="Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias."
-            href="/dashboard/reports/maintenance"
-          />
-          <ModuleAccessCard
-            title="Reporte de costos y rentabilidad"
-            description="Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad."
-            href="/dashboard/reports/profitability"
-          />
-          <ModuleAccessCard
-            title="Reporte de personal y planillas"
-            description="Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario."
-            href="/dashboard/reports/staff"
-          />
-          <ModuleAccessCard
-            title="Historial de exportaciones"
-            description="Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha."
-            href="/dashboard/reports/export-history"
-          />
-          <ModuleAccessCard
-            title="Bitacora de auditoria"
-            description="Operaciones criticas por usuario, accion, entidad afectada y fecha."
-            href="/dashboard/audit"
-          />
+          {reportModules.map((report, i) => (
+            <ModuleAccessCard
+              key={report.href}
+              index={i + 1}
+              tone={report.tone}
+              icon={report.icon}
+              title={report.title}
+              description={report.description}
+              href={report.href}
+            />
+          ))}
         </div>
       </section>
 
@@ -801,5 +898,3 @@ export default async function ReportsDashboardPage() {
     </div>
   );
 }
-
-

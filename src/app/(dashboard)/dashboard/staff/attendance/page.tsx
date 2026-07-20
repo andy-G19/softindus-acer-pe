@@ -1,3 +1,4 @@
+import { CalendarCheck, ClipboardList, Clock, UserX } from "lucide-react";
 import Link from "next/link";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -309,7 +310,7 @@ export default async function AttendancePage({
               <Button type="submit" className="flex-1">
                 Filtrar
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="clear" asChild>
                 <Link href="/dashboard/staff/attendance">Limpiar</Link>
               </Button>
             </div>
@@ -318,10 +319,10 @@ export default async function AttendancePage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Registros totales" value={totalAttendance.toString()} description="Historial general de asistencia." tone="info" />
-        <KpiCard title="Asistencias de hoy" value={attendanceToday.toString()} description="Registros creados para la fecha actual." tone="info" />
-        <KpiCard title="Faltas de hoy" value={absencesToday.toString()} description="Operarios marcados como ausentes." tone={absencesToday > 0 ? "warning" : "info"} />
-        <KpiCard title="Tardanzas de hoy" value={latenessToday.toString()} description="Registros marcados con tardanza." tone={latenessToday > 0 ? "warning" : "info"} />
+        <KpiCard title="Registros totales" value={totalAttendance.toString()} description="Historial general de asistencia." tone="info" icon={ClipboardList} />
+        <KpiCard title="Asistencias de hoy" value={attendanceToday.toString()} description="Registros creados para la fecha actual." tone="info" icon={CalendarCheck} />
+        <KpiCard title="Faltas de hoy" value={absencesToday.toString()} description="Operarios marcados como ausentes." tone={absencesToday > 0 ? "warning" : "info"} icon={UserX} />
+        <KpiCard title="Tardanzas de hoy" value={latenessToday.toString()} description="Registros marcados con tardanza." tone={latenessToday > 0 ? "warning" : "info"} icon={Clock} />
       </section>
 
       <Card>

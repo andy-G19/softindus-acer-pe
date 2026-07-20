@@ -1,4 +1,12 @@
-﻿import Link from "next/link";
+﻿import {
+  CircleDollarSign,
+  Landmark,
+  Scale,
+  TrendingDown,
+  TrendingUp,
+  Truck,
+} from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -508,18 +516,18 @@ export default async function FinancialReportPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Saldo caja chica" value={formatMoney(totalOpenCashBalance)} description="Saldo actual acumulado de cajas abiertas." tone="info" />
-        <KpiCard title="Ingresos caja chica" value={formatMoney(totalCashIncome)} description="Ingresos menores según filtros aplicados." tone="success" />
-        <KpiCard title="Egresos caja chica" value={formatMoney(totalCashExpense)} description="Gastos menores registrados según filtros." tone="warning" />
-        <KpiCard title="Movimiento neto" value={formatMoney(cashNetMovement)} description="Ingresos menos egresos de caja chica." tone="info" />
-        <KpiCard title="Cobrado a clientes" value={formatMoney(totalCollectedPayments)} description="Pagos de clientes registrados en el periodo." tone="success" />
-        <KpiCard title="Cuentas por cobrar" value={formatMoney(totalReceivables)} description="Saldo pendiente de proformas activas." tone="info" />
-        <KpiCard title="Compras por pagar" value={formatMoney(totalSupplierPendingBalance)} description={`Compras pendientes o parciales: ${supplierPendingRows.length}.`} tone={supplierPendingRows.length > 0 ? "warning" : "info"} />
-        <KpiCard title="Resultado estimado" value={formatMoney(financialEstimatedResult)} description="Cobros + ingresos caja - egresos - costos." tone="info" />
-        <KpiCard title="Costo producción" value={formatMoney(totalProductionCost)} description="Costos de producción registrados en costeo." tone="info" />
-        <KpiCard title="Utilidad estimada" value={formatMoney(totalEstimatedProfit)} description={`Alertas de bajo margen: ${lowMarginAlerts}.`} tone={lowMarginAlerts > 0 ? "warning" : "success"} />
-        <KpiCard title="Ingreso estimado" value={formatMoney(totalEstimatedIncome)} description="Ingreso estimado registrado en rentabilidad." tone="info" />
-        <KpiCard title="Costo estimado" value={formatMoney(totalEstimatedCost)} description="Costo total usado en cálculo de rentabilidad." tone="info" />
+        <KpiCard title="Saldo caja chica" value={formatMoney(totalOpenCashBalance)} description="Saldo actual acumulado de cajas abiertas." tone="info" icon={Landmark} />
+        <KpiCard title="Ingresos caja chica" value={formatMoney(totalCashIncome)} description="Ingresos menores según filtros aplicados." tone="success" icon={TrendingUp} />
+        <KpiCard title="Egresos caja chica" value={formatMoney(totalCashExpense)} description="Gastos menores registrados según filtros." tone="warning" icon={TrendingDown} />
+        <KpiCard title="Movimiento neto" value={formatMoney(cashNetMovement)} description="Ingresos menos egresos de caja chica." tone="info" icon={Scale} />
+        <KpiCard title="Cobrado a clientes" value={formatMoney(totalCollectedPayments)} description="Pagos de clientes registrados en el periodo." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Cuentas por cobrar" value={formatMoney(totalReceivables)} description="Saldo pendiente de proformas activas." tone="info" icon={Landmark} />
+        <KpiCard title="Compras por pagar" value={formatMoney(totalSupplierPendingBalance)} description={`Compras pendientes o parciales: ${supplierPendingRows.length}.`} tone={supplierPendingRows.length > 0 ? "warning" : "info"} icon={Truck} />
+        <KpiCard title="Resultado estimado" value={formatMoney(financialEstimatedResult)} description="Cobros + ingresos caja - egresos - costos." tone="info" icon={Scale} />
+        <KpiCard title="Costo producción" value={formatMoney(totalProductionCost)} description="Costos de producción registrados en costeo." tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Utilidad estimada" value={formatMoney(totalEstimatedProfit)} description={`Alertas de bajo margen: ${lowMarginAlerts}.`} tone={lowMarginAlerts > 0 ? "warning" : "success"} icon={TrendingUp} />
+        <KpiCard title="Ingreso estimado" value={formatMoney(totalEstimatedIncome)} description="Ingreso estimado registrado en rentabilidad." tone="info" icon={TrendingUp} />
+        <KpiCard title="Costo estimado" value={formatMoney(totalEstimatedCost)} description="Costo total usado en cálculo de rentabilidad." tone="info" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">

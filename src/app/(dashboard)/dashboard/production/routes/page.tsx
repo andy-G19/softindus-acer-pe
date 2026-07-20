@@ -195,7 +195,7 @@ export default async function FabricationRoutesPage({
         </div>
 
         <div className="flex items-end">
-          <Button variant="outline" className="w-full" asChild>
+          <Button variant="clear" className="w-full" asChild>
             <Link href="/dashboard/production/routes">Limpiar filtros</Link>
           </Button>
         </div>

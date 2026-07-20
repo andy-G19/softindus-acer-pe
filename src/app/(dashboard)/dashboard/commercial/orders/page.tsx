@@ -266,7 +266,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         </div>
         <div className="flex items-end gap-2 md:col-span-6">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/commercial/orders">Limpiar filtros</Link>
           </Button>
         </div>

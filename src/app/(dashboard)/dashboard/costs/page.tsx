@@ -1,3 +1,13 @@
+import {
+  AlertTriangle,
+  Calculator,
+  CircleDollarSign,
+  ClipboardList,
+  Clock,
+  FileX,
+  Receipt,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import {
   Card,
@@ -257,17 +267,17 @@ export default async function CostsDashboardPage() {
       </Alert>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Costeos registrados" value={totalCostings.toString()} description={`${costingsThisMonth} generados este mes`} tone="info" />
-        <KpiCard title="Costo acumulado" value={formatMoney(totalCostAmount._sum.costo_total)} description={`Promedio: ${formatMoney(averageCost)}`} tone="info" />
-        <KpiCard title="Costos indirectos" value={formatMoney(totalIndirectCosts._sum.monto)} description="Gastos agregados a costeos." tone="warning" />
-        <KpiCard title="Alertas de bajo margen" value={lowMarginAlerts.toString()} description="Rentabilidades críticas." tone="warning" />
+        <KpiCard title="Costeos registrados" value={totalCostings.toString()} description={`${costingsThisMonth} generados este mes`} tone="info" icon={Calculator} />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalCostAmount._sum.costo_total)} description={`Promedio: ${formatMoney(averageCost)}`} tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Costos indirectos" value={formatMoney(totalIndirectCosts._sum.monto)} description="Gastos agregados a costeos." tone="warning" icon={Receipt} />
+        <KpiCard title="Alertas de bajo margen" value={lowMarginAlerts.toString()} description="Rentabilidades críticas." tone="warning" icon={AlertTriangle} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <KpiCard title="Órdenes activas" value={workOrdersTotal.toString()} description="No anuladas." tone="info" />
-        <KpiCard title="Órdenes sin receta" value={workOrdersWithoutRecipe.toString()} description="No pueden costearse aún." tone="warning" />
-        <KpiCard title="Órdenes pendientes de costeo" value={workOrdersWithoutCosting.toString()} description="Con receta y sin costeo." tone="warning" />
-        <KpiCard title="Rentabilidades calculadas" value={profitabilityCalculations.toString()} description="Márgenes reales evaluados." tone="success" />
+        <KpiCard title="Órdenes activas" value={workOrdersTotal.toString()} description="No anuladas." tone="info" icon={ClipboardList} />
+        <KpiCard title="Órdenes sin receta" value={workOrdersWithoutRecipe.toString()} description="No pueden costearse aún." tone="warning" icon={FileX} />
+        <KpiCard title="Órdenes pendientes de costeo" value={workOrdersWithoutCosting.toString()} description="Con receta y sin costeo." tone="warning" icon={Clock} />
+        <KpiCard title="Rentabilidades calculadas" value={profitabilityCalculations.toString()} description="Márgenes reales evaluados." tone="success" icon={TrendingUp} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">

@@ -165,7 +165,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
         </div>
         <div className="flex items-end gap-2 md:col-span-5">
           <Button type="submit">Filtrar</Button>
-          <Button variant="outline" asChild>
+          <Button variant="clear" asChild>
             <Link href="/dashboard/commercial/receipts">Limpiar filtros</Link>
           </Button>
         </div>

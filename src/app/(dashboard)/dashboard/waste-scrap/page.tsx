@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { Boxes, CircleDollarSign, Recycle, Scissors } from "lucide-react";
+import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -243,10 +244,10 @@ export default async function WasteScrapDashboardPage() {
       </Alert>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Retazos registrados" value={totalRetazos.toString()} description={`${retazosDisponibles} disponibles`} tone="info" />
-        <KpiCard title="Retazos reutilizados" value={retazosReutilizados.toString()} description={`${retazosDescartados} descartados`} tone="success" />
-        <KpiCard title="Chatarra pendiente" value={chatarraAcumulada.toString()} description={`${chatarraVendida} registros vendidos`} tone="info" />
-        <KpiCard title="Ingresos por chatarra" value={formatMoney(totalIngresos)} description={`${ventasChatarra} venta(s) registradas`} tone="success" />
+        <KpiCard title="Retazos registrados" value={totalRetazos.toString()} description={`${retazosDisponibles} disponibles`} tone="info" icon={Scissors} />
+        <KpiCard title="Retazos reutilizados" value={retazosReutilizados.toString()} description={`${retazosDescartados} descartados`} tone="success" icon={Recycle} />
+        <KpiCard title="Chatarra pendiente" value={chatarraAcumulada.toString()} description={`${chatarraVendida} registros vendidos`} tone="info" icon={Boxes} />
+        <KpiCard title="Ingresos por chatarra" value={formatMoney(totalIngresos)} description={`${ventasChatarra} venta(s) registradas`} tone="success" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
