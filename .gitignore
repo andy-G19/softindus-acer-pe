@@ -52,8 +52,9 @@ next-env.d.ts
 
 
 CLAUDE.md
-/.claude
-/.agents
-/.codex
+/.claude/
+/.agents/
+/.codex/
+/.github/
 AGENTS.md
 /docs
