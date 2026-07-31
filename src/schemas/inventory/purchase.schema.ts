@@ -13,16 +13,10 @@ function optionalText(max: number) {
   );
 }
 
-function optionalNumber() {
+function checkbox() {
   return z.preprocess(
-    (value) => {
-      if (typeof value === "string" && value.trim() === "") {
-        return undefined;
-      }
-
-      return value;
-    },
-    z.coerce.number().min(0).optional(),
+    (value) => value === "on" || value === true || value === "true",
+    z.boolean(),
   );
 }
 
@@ -65,7 +59,9 @@ export const purchaseSchema = z.object({
 
   numero_comprobante: optionalText(30),
 
-  igv: optionalNumber(),
+  // El monto del IGV no se recibe del cliente: solo se recibe si aplica o no,
+  // y el server action lo calcula sobre el subtotal real de la compra.
+  aplica_igv: checkbox(),
 
   observaciones: optionalText(500),
 

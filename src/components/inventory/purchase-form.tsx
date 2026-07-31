@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Switch } from "@/components/ui/switch";
+import { IGV_RATE_LABEL, calculateIgv } from "@/lib/taxes";
 import { createPurchaseAction } from "@/modules/inventory/purchases/actions";
 
 type MaterialOption = {
@@ -46,6 +48,7 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
       observaciones: "",
     },
   ]);
+  const [appliesIgv, setAppliesIgv] = useState(false);
 
   const supplierItems = useMemo(() => {
     return suppliers.map((supplier) => ({
@@ -72,6 +75,9 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
       return acc + quantity * unitCost;
     }, 0);
   }, [items]);
+
+  const igvAmount = appliesIgv ? calculateIgv(total) : 0;
+  const totalWithIgv = total + igvAmount;
 
   function addItem() {
     setItems((currentItems) => {
@@ -154,7 +160,10 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
 
           <div className="space-y-2">
             <Label>Tipo comprobante</Label>
-            <NativeSelect name="tipo_comprobante">
+            <NativeSelect
+              name="tipo_comprobante"
+              onChange={(event) => setAppliesIgv(event.target.value === "factura")}
+            >
               <option value="">Sin comprobante</option>
               <option value="boleta">Boleta</option>
               <option value="factura">Factura</option>
@@ -171,14 +180,28 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <Label>IGV</Label>
-            <Input
-              name="igv"
-              type="number"
-              step="0.01"
-              min="0"
-              defaultValue="0"
-            />
+            <Label htmlFor="aplica_igv">IGV</Label>
+
+            <div className="flex h-8 items-center gap-3">
+              <Switch
+                id="aplica_igv"
+                name="aplica_igv"
+                checked={appliesIgv}
+                onCheckedChange={setAppliesIgv}
+                aria-label={`Aplicar IGV de ${IGV_RATE_LABEL} sobre el total de la compra`}
+              />
+
+              <span className="text-sm font-medium text-foreground">
+                {appliesIgv
+                  ? `Se aplica IGV (${IGV_RATE_LABEL})`
+                  : "Sin IGV"}
+              </span>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Se activa automáticamente al elegir factura. Puedes cambiarlo en
+              cualquier momento.
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -314,9 +337,25 @@ export function PurchaseForm({ suppliers, materials }: PurchaseFormProps) {
           })}
         </div>
 
-        <div className="rounded-lg bg-muted p-4 text-right">
-          <p className="text-sm text-muted-foreground">Subtotal calculado</p>
-          <p className="text-2xl font-bold">S/ {total.toFixed(2)}</p>
+        <div className="space-y-2 rounded-lg bg-muted p-4 text-right">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="text-muted-foreground">Subtotal calculado</span>
+            <span className="font-medium">S/ {total.toFixed(2)}</span>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="text-muted-foreground">
+              IGV {appliesIgv ? `(${IGV_RATE_LABEL})` : "(no aplica)"}
+            </span>
+            <span className="font-medium">S/ {igvAmount.toFixed(2)}</span>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 border-t border-border/80 pt-2">
+            <span className="font-semibold">Total de la compra</span>
+            <span className="text-2xl font-bold">
+              S/ {totalWithIgv.toFixed(2)}
+            </span>
+          </div>
         </div>
       </section>
 

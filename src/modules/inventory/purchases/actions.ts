@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { calculateIgv } from "@/lib/taxes";
 import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 
 function toNullable(value: string | undefined) {
@@ -34,7 +35,7 @@ export async function createPurchaseAction(formData: FormData) {
     fecha_compra: formData.get("fecha_compra"),
     tipo_comprobante: formData.get("tipo_comprobante"),
     numero_comprobante: formData.get("numero_comprobante"),
-    igv: formData.get("igv"),
+    aplica_igv: formData.get("aplica_igv"),
     observaciones: formData.get("observaciones"),
     items,
   });
@@ -83,8 +84,8 @@ export async function createPurchaseAction(formData: FormData) {
     return acc + item.cantidad * item.costo_unitario;
   }, 0);
 
-  const igv = data.igv ?? 0;
-  const montoTotal = subtotal + igv;
+  const igv = data.aplica_igv ? calculateIgv(subtotal) : 0;
+  const montoTotal = Number((subtotal + igv).toFixed(2));
 
   const materialById = new Map(
     materials.map((material) => [material.id_material, material]),
