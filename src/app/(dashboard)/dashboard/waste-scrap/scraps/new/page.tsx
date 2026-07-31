@@ -20,26 +20,52 @@ import { createScrapAction } from "@/modules/waste-scrap/scraps/actions";
 export default async function NewScrapPage() {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-  const materials = await prisma.material.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      nombre_material: "asc",
-    },
-    select: {
-      id_material: true,
-      nombre_material: true,
-      categoria: true,
-      unidad_medida: true,
-      stock_actual: true,
-    },
-  });
+  const [materials, workOrders] = await Promise.all([
+    prisma.material.findMany({
+      where: {
+        estado: true,
+      },
+      orderBy: {
+        nombre_material: "asc",
+      },
+      select: {
+        id_material: true,
+        nombre_material: true,
+        categoria: true,
+        unidad_medida: true,
+        stock_actual: true,
+      },
+    }),
+
+    prisma.orden_trabajo.findMany({
+      where: {
+        estado: {
+          not: "anulada",
+        },
+      },
+      orderBy: {
+        fecha_registro: "desc",
+      },
+      take: 50,
+      include: {
+        producto: true,
+        cliente: true,
+      },
+    }),
+  ]);
 
   const materialItems = materials.map((material) => ({
     id: material.id_material,
     label: material.nombre_material,
     description: `${material.categoria} - Stock: ${material.stock_actual.toString()} ${material.unidad_medida}`,
+  }));
+
+  const workOrderItems = workOrders.map((order) => ({
+    id: order.id_orden_trabajo,
+    label: `${order.id_orden_trabajo} - ${order.producto.nombre_producto}`,
+    description: order.cliente
+      ? `${order.estado} - ${order.cliente.nombre_razon_social}`
+      : order.estado,
   }));
 
   return (
@@ -76,6 +102,21 @@ export default async function NewScrapPage() {
                 <p className="text-xs text-muted-foreground">
                   Selecciona el material si se conoce el origen. Si la chatarra
                   está mezclada, puedes dejarlo como no identificado.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <SearchableSelect
+                  name="id_orden_trabajo"
+                  label="Orden de trabajo relacionada"
+                  placeholder="Buscar orden..."
+                  items={workOrderItems}
+                  emptyMessage="No hay órdenes de trabajo disponibles."
+                />
+
+                <p className="text-xs text-muted-foreground">
+                  Indica la orden que generó la chatarra. Déjalo vacío si
+                  proviene de limpieza de taller o de un origen no productivo.
                 </p>
               </div>
 

@@ -10,8 +10,8 @@ export const reusableScrapSchema = z.object({
   id_orden_trabajo: z
     .string()
     .trim()
-    .optional()
-    .transform((value) => (value && value.length > 0 ? value : null)),
+    .min(1, "Debe seleccionar la orden de trabajo que generó el retazo.")
+    .max(11, "El identificador de la orden no debe superar 11 caracteres."),
 
   medida_aproximada: z
     .string()

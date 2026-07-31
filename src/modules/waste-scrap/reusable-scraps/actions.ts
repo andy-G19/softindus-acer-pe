@@ -63,24 +63,22 @@ export async function createReusableScrapAction(formData: FormData) {
     throw new Error("No se puede registrar retazos de un material inactivo.");
   }
 
-  if (data.id_orden_trabajo) {
-    const workOrder = await prisma.orden_trabajo.findUnique({
-      where: {
-        id_orden_trabajo: data.id_orden_trabajo,
-      },
-      select: {
-        id_orden_trabajo: true,
-        estado: true,
-      },
-    });
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: {
+      id_orden_trabajo: data.id_orden_trabajo,
+    },
+    select: {
+      id_orden_trabajo: true,
+      estado: true,
+    },
+  });
 
-    if (!workOrder) {
-      throw new Error("La orden de trabajo seleccionada no existe.");
-    }
+  if (!workOrder) {
+    throw new Error("La orden de trabajo seleccionada no existe.");
+  }
 
-    if (workOrder.estado === "anulada") {
-      throw new Error("No se puede asociar un retazo a una orden anulada.");
-    }
+  if (workOrder.estado === "anulada") {
+    throw new Error("No se puede asociar un retazo a una orden anulada.");
   }
 
   await prisma.$transaction(async (tx) => {

@@ -24,6 +24,15 @@ export const scrapSchema = z
       .optional()
       .transform((value) => (value && value.length > 0 ? value : null)),
 
+    // Opcional: la chatarra tambien nace fuera de una orden (limpieza de
+    // taller, sobrantes de compra, desmontajes).
+    id_orden_trabajo: z
+      .string()
+      .trim()
+      .max(11, "El identificador de la orden no debe superar 11 caracteres.")
+      .optional()
+      .transform((value) => (value && value.length > 0 ? value : null)),
+
     tipo_material: z
       .string()
       .trim()
