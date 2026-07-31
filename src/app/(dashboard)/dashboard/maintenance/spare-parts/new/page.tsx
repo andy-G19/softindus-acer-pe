@@ -16,18 +16,33 @@ import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form
 export default async function NewSparePartPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const providers = await prisma.proveedor.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      razon_social: "asc",
-    },
-    select: {
-      id_proveedor: true,
-      razon_social: true,
-    },
-  });
+  const [providers, supplierTypes] = await Promise.all([
+    prisma.proveedor.findMany({
+      where: {
+        estado: true,
+      },
+      orderBy: {
+        razon_social: "asc",
+      },
+      select: {
+        id_proveedor: true,
+        razon_social: true,
+      },
+    }),
+
+    prisma.tipo_proveedor_catalogo.findMany({
+      where: {
+        estado: true,
+      },
+      orderBy: {
+        nombre: "asc",
+      },
+      select: {
+        slug: true,
+        nombre: true,
+      },
+    }),
+  ]);
 
   return (
     <main className="space-y-6">
@@ -55,6 +70,7 @@ export default async function NewSparePartPage() {
               id: provider.id_proveedor,
               label: provider.razon_social,
             }))}
+            supplierTypes={supplierTypes}
             defaultValues={{
               estado: "true",
             }}

@@ -66,3 +66,26 @@ export const supplierSchema = z.object({
 });
 
 export type SupplierInput = z.infer<typeof supplierSchema>;
+
+/**
+ * Alta rápida de proveedor desde otro formulario (por ejemplo, al registrar un
+ * repuesto). Solo pide lo mínimo que exige el modelo; el resto de datos se
+ * completa después desde el módulo Proveedores.
+ */
+export const quickSupplierSchema = z.object({
+  razon_social: z
+    .string()
+    .trim()
+    .min(2, "La razón social es obligatoria.")
+    .max(150, "La razón social no debe superar 150 caracteres."),
+
+  tipo_proveedor: z
+    .string()
+    .trim()
+    .min(1, "El tipo de proveedor es obligatorio.")
+    .max(80, "El tipo de proveedor no debe superar 80 caracteres."),
+
+  telefono: optionalText(20),
+});
+
+export type QuickSupplierInput = z.infer<typeof quickSupplierSchema>;
