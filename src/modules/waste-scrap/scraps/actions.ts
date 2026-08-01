@@ -25,6 +25,7 @@ export async function createScrapAction(formData: FormData) {
 
   const parsedData = scrapSchema.safeParse({
     id_material: formData.get("id_material"),
+    id_orden_trabajo: formData.get("id_orden_trabajo"),
     tipo_material: formData.get("tipo_material"),
     peso_kg: formData.get("peso_kg"),
     cantidad: formData.get("cantidad"),
@@ -61,6 +62,26 @@ export async function createScrapAction(formData: FormData) {
     }
   }
 
+  if (data.id_orden_trabajo) {
+    const workOrder = await prisma.orden_trabajo.findUnique({
+      where: {
+        id_orden_trabajo: data.id_orden_trabajo,
+      },
+      select: {
+        id_orden_trabajo: true,
+        estado: true,
+      },
+    });
+
+    if (!workOrder) {
+      throw new Error("La orden de trabajo seleccionada no existe.");
+    }
+
+    if (workOrder.estado === "anulada") {
+      throw new Error("No se puede asociar chatarra a una orden anulada.");
+    }
+  }
+
   await prisma.$transaction(async (tx) => {
     const idChatarra = await getNextCorrelativeId(tx, {
       codigoEntidad: "chatarra",
@@ -71,6 +92,7 @@ export async function createScrapAction(formData: FormData) {
       data: {
         id_chatarra: idChatarra,
         id_material: data.id_material,
+        id_orden_trabajo: data.id_orden_trabajo,
         tipo_material: data.tipo_material,
         peso_kg: data.peso_kg ?? null,
         cantidad: data.cantidad ?? null,

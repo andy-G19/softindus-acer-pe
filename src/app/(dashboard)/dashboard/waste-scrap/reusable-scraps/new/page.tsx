@@ -121,12 +121,13 @@ export default async function NewReusableScrapPage() {
                   label="Orden de trabajo relacionada"
                   placeholder="Buscar orden..."
                   items={workOrderItems}
+                  required
                   emptyMessage="No hay órdenes de trabajo disponibles."
                 />
 
                 <p className="text-xs text-muted-foreground">
-                  Usa este campo cuando el retazo provenga de una orden
-                  productiva identificable.
+                  Todo retazo debe quedar asociado a la orden de trabajo que lo
+                  generó.
                 </p>
               </div>
 

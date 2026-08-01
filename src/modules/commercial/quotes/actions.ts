@@ -27,6 +27,7 @@ export async function createQuoteAction(formData: FormData) {
   const rawData = {
     id_pedido: formData.get("id_pedido")?.toString(),
     adelanto_inicial: formData.get("adelanto_inicial"),
+    metodo_pago_adelanto: formData.get("metodo_pago_adelanto"),
     validez_dias: formData.get("validez_dias"),
     observaciones: formData.get("observaciones")?.toString() ?? "",
   };
@@ -90,7 +91,8 @@ export async function createQuoteAction(formData: FormData) {
     throw new Error("El adelanto inicial no puede ser mayor que el monto total.");
   }
 
-  const saldo = montoTotal - adelantoInicial;
+  const saldo = Number((montoTotal - adelantoInicial).toFixed(2));
+  const hasAdvance = adelantoInicial > 0;
 
   await prisma.$transaction(async (tx) => {
     const id_proforma = await getNextCorrelativeId(tx, {
@@ -98,17 +100,23 @@ export async function createQuoteAction(formData: FormData) {
       prefijo: "PRF",
     });
     const numero_proforma = id_proforma.replace("PRF", "PF-");
+    const fechaEmision = new Date();
+
+    // Sin adelanto la proforma nace vigente; con adelanto el cliente ya la
+    // aceptó y pagó algo, así que sigue los mismos estados que un pago normal
+    // (ver createPaymentAction).
+    const estado = !hasAdvance ? "vigente" : saldo <= 0 ? "pagada" : "aceptada";
 
     await tx.proforma.create({
       data: {
         id_proforma,
         id_pedido: parsed.data.id_pedido,
         numero_proforma,
-        fecha_emision: new Date(),
+        fecha_emision: fechaEmision,
         monto_total: montoTotal,
-        adelanto_inicial: adelantoInicial > 0 ? adelantoInicial : null,
+        adelanto_inicial: hasAdvance ? adelantoInicial : null,
         saldo,
-        estado: "vigente",
+        estado,
         validez_dias: parsed.data.validez_dias ?? null,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
@@ -122,6 +130,40 @@ export async function createQuoteAction(formData: FormData) {
       detalle: `Proforma creada para el pedido ${parsed.data.id_pedido}.`,
       tx,
     });
+
+    // El adelanto es dinero que ya entró: se registra como pago_cliente para
+    // que aparezca en el historial de pagos, quede en la trazabilidad y
+    // bloquee la anulación de una proforma ya cobrada.
+    if (hasAdvance) {
+      const id_pago_cliente = await getNextCorrelativeId(tx, {
+        codigoEntidad: "pago_cliente",
+        prefijo: "PCL",
+      });
+
+      await tx.pago_cliente.create({
+        data: {
+          id_pago_cliente,
+          id_proforma,
+          id_pedido: parsed.data.id_pedido,
+          id_usuario_registro: session.user.id,
+          fecha_pago: fechaEmision,
+          monto_pagado: adelantoInicial,
+          metodo_pago: parsed.data.metodo_pago_adelanto ?? "efectivo",
+          tipo_pago: saldo <= 0 ? "cancelacion" : "adelanto",
+          saldo_actual: saldo,
+          observaciones: "Adelanto inicial registrado al crear la proforma.",
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "pago_cliente",
+        id_registro_afectado: id_pago_cliente,
+        accion: "crear",
+        detalle: `Adelanto inicial registrado para la proforma ${id_proforma}.`,
+        tx,
+      });
+    }
   });
 
   revalidatePath(QUOTES_PATH);

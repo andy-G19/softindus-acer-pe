@@ -5,10 +5,13 @@ import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { supplierSchema } from "@/schemas/inventory/supplier.schema";
+import {
+  quickSupplierSchema,
+  supplierSchema,
+} from "@/schemas/inventory/supplier.schema";
 
 export type SupplierFormState = {
   error: string;
@@ -359,4 +362,118 @@ export async function toggleSupplierStatusAction(formData: FormData) {
   redirect(
     `${SUPPLIERS_PATH}?toast=${nextStatus ? "supplier-activated" : "supplier-deactivated"}`,
   );
+}
+
+export type QuickSupplierResult =
+  | { ok: true; supplier: { id: string; label: string } }
+  | { ok: false; error: string };
+
+/**
+ * Alta rápida de proveedor invocada desde otro formulario (hoy, el de
+ * repuestos). A diferencia del resto de acciones del módulo, no redirige ni
+ * usa useActionState: devuelve el proveedor creado para que el formulario que
+ * la llamó pueda seleccionarlo sin perder lo que el usuario ya había escrito.
+ */
+export async function createQuickSupplierAction(input: {
+  razon_social: string;
+  tipo_proveedor: string;
+  telefono?: string;
+}): Promise<QuickSupplierResult> {
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return { ok: false, error: "No tienes permisos para registrar proveedores." };
+  }
+
+  const parsed = quickSupplierSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Revisa los datos del proveedor.",
+    };
+  }
+
+  const data = parsed.data;
+
+  if (!(await validateSupplierType(data.tipo_proveedor, true))) {
+    return { ok: false, error: "Selecciona un tipo de proveedor activo." };
+  }
+
+  const existingSupplier = await prisma.proveedor.findFirst({
+    where: {
+      razon_social: {
+        equals: data.razon_social,
+        mode: "insensitive",
+      },
+    },
+    select: {
+      id_proveedor: true,
+      razon_social: true,
+      estado: true,
+    },
+  });
+
+  if (existingSupplier) {
+    if (!existingSupplier.estado) {
+      return {
+        ok: false,
+        error: `Ya existe un proveedor inactivo con esa razón social (${existingSupplier.id_proveedor}). Actívalo desde el módulo Proveedores.`,
+      };
+    }
+
+    // Ya existe y está activo: no se duplica, se devuelve el que hay para que
+    // el formulario lo seleccione.
+    return {
+      ok: true,
+      supplier: {
+        id: existingSupplier.id_proveedor,
+        label: existingSupplier.razon_social,
+      },
+    };
+  }
+
+  let idProveedor = "";
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      idProveedor = await getNextCorrelativeId(tx, {
+        codigoEntidad: "proveedor",
+        prefijo: "PVE",
+      });
+
+      await tx.proveedor.create({
+        data: {
+          id_proveedor: idProveedor,
+          razon_social: data.razon_social,
+          tipo_proveedor: data.tipo_proveedor,
+          telefono: toNullable(data.telefono),
+          estado: true,
+          observaciones: "Registrado desde el alta rápida de repuestos.",
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "proveedor",
+        id_registro_afectado: idProveedor,
+        accion: "crear",
+        detalle: `Proveedor creado (alta rápida): ${data.razon_social}`,
+        tx,
+      });
+    });
+  } catch {
+    return {
+      ok: false,
+      error: "No se pudo registrar el proveedor. Intenta nuevamente.",
+    };
+  }
+
+  revalidatePath(INVENTORY_PATH);
+  revalidatePath(SUPPLIERS_PATH);
+
+  return {
+    ok: true,
+    supplier: { id: idProveedor, label: data.razon_social },
+  };
 }

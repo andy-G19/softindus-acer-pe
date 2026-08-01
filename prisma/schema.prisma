@@ -213,19 +213,22 @@ model categoria_material {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model chatarra {
-  id_chatarra    String           @id @db.Char(11)
-  id_material    String?          @db.Char(11)
-  tipo_material  String           @db.VarChar(50)
-  peso_kg        Decimal?         @db.Decimal(10, 2)
-  cantidad       Decimal?         @db.Decimal(10, 2)
-  estado         String           @default("acumulada") @db.VarChar(30)
-  fecha_registro DateTime         @default(now()) @db.Timestamptz(6)
-  observaciones  String?
-  material       material?        @relation(fields: [id_material], references: [id_material], onDelete: Restrict, map: "fk_chatarra_material")
-  venta_chatarra venta_chatarra[]
+  id_chatarra      String           @id @db.Char(11)
+  id_material      String?          @db.Char(11)
+  id_orden_trabajo String?          @db.Char(11)
+  tipo_material    String           @db.VarChar(50)
+  peso_kg          Decimal?         @db.Decimal(10, 2)
+  cantidad         Decimal?         @db.Decimal(10, 2)
+  estado           String           @default("acumulada") @db.VarChar(30)
+  fecha_registro   DateTime         @default(now()) @db.Timestamptz(6)
+  observaciones    String?
+  material         material?        @relation(fields: [id_material], references: [id_material], onDelete: Restrict, map: "fk_chatarra_material")
+  orden_trabajo    orden_trabajo?   @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], onDelete: Restrict, map: "fk_chatarra_orden")
+  venta_chatarra   venta_chatarra[]
 
   @@index([estado], map: "idx_chatarra_estado")
   @@index([id_material], map: "idx_chatarra_material")
+  @@index([id_orden_trabajo], map: "idx_chatarra_orden")
   @@schema("aceros")
 }
 
@@ -786,6 +789,7 @@ model orden_trabajo {
   id_usuario_registro    String                  @db.Char(11)
   fecha_registro         DateTime                @default(now()) @db.Timestamptz(6)
   avance_orden           avance_orden[]
+  chatarra               chatarra[]
   costeo                 costeo[]
   movimiento_inventario  movimiento_inventario[]
   campania_produccion    campania_produccion?    @relation(fields: [id_campania], references: [id_campania], onDelete: Restrict, map: "fk_orden_campania")

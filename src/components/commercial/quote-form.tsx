@@ -72,6 +72,7 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
   const totalAmount = Number(selectedOrder?.monto_total ?? 0);
   const advance = Number(advanceAmount || 0);
   const balance = Math.max(totalAmount - advance, 0);
+  const hasAdvance = advance > 0;
 
   const canCreateQuote = orders.length > 0;
   const hasDefaultOrder = Boolean(defaultOrderId && selectedOrder);
@@ -181,7 +182,7 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-2">
           <Label>Adelanto inicial</Label>
           <Input
@@ -196,6 +197,27 @@ export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
           />
           <p className="text-xs text-muted-foreground">
             Opcional. Si no hay adelanto, déjalo vacío.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Método de pago del adelanto</Label>
+          <NativeSelect
+            name="metodo_pago_adelanto"
+            required={hasAdvance}
+            disabled={!canCreateQuote || !hasAdvance}
+          >
+            <option value="">Seleccione...</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="yape">Yape</option>
+            <option value="plin">Plin</option>
+            <option value="otro">Otro</option>
+          </NativeSelect>
+          <p className="text-xs text-muted-foreground">
+            {hasAdvance
+              ? "El adelanto se registra como pago y aparecerá en el historial."
+              : "Se habilita al ingresar un adelanto."}
           </p>
         </div>
 

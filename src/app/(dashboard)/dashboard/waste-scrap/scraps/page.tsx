@@ -164,6 +164,16 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
       },
       include: {
         material: true,
+        orden_trabajo: {
+          select: {
+            id_orden_trabajo: true,
+            producto: {
+              select: {
+                nombre_producto: true,
+              },
+            },
+          },
+        },
         venta_chatarra: {
           orderBy: {
             fecha_venta: "desc",
@@ -305,6 +315,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
                   <TableHead>Código</TableHead>
                   <TableHead>Tipo</TableHead>
                   <TableHead>Material origen</TableHead>
+                  <TableHead>Orden de trabajo</TableHead>
                   <TableHead>Peso</TableHead>
                   <TableHead>Cantidad</TableHead>
                   <TableHead>Estado</TableHead>
@@ -340,6 +351,21 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
                           </div>
                         ) : (
                           "No identificado"
+                        )}
+                      </TableCell>
+
+                      <TableCell>
+                        {item.orden_trabajo ? (
+                          <div>
+                            <p className="font-mono text-xs">
+                              {item.orden_trabajo.id_orden_trabajo}
+                            </p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {item.orden_trabajo.producto.nombre_producto}
+                            </p>
+                          </div>
+                        ) : (
+                          "-"
                         )}
                       </TableCell>
 

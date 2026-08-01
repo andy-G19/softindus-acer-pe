@@ -1,20 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 
+import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { showError } from "@/lib/notifications";
+import { showError, showSuccess } from "@/lib/notifications";
+import { createQuickSupplierAction } from "@/modules/inventory/suppliers/actions";
 import type { SparePartFormState } from "@/modules/maintenance/spare-parts/actions";
 
 type ProviderOption = {
   id: string;
   label: string;
+};
+
+type SupplierTypeOption = {
+  slug: string;
+  nombre: string;
 };
 
 type SparePartValues = {
@@ -32,6 +39,7 @@ type SparePartFormProps = {
     formData: FormData,
   ) => Promise<SparePartFormState>;
   providers: ProviderOption[];
+  supplierTypes: SupplierTypeOption[];
   defaultValues?: Partial<SparePartValues>;
   submitLabel: string;
 };
@@ -56,10 +64,25 @@ function FieldError({ messages }: { messages?: string[] }) {
 export function SparePartForm({
   action,
   providers,
+  supplierTypes,
   defaultValues,
   submitLabel,
 }: SparePartFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+
+  // La lista de proveedores es estado local porque el alta rápida puede
+  // agregarle uno nuevo sin recargar la página ni perder lo ya escrito.
+  const [providerOptions, setProviderOptions] = useState(providers);
+  const [selectedProvider, setSelectedProvider] = useState(
+    getValue(defaultValues, "id_proveedor"),
+  );
+  const [isCreatingProvider, setIsCreatingProvider] = useState(false);
+  const [newProviderName, setNewProviderName] = useState("");
+  const [newProviderType, setNewProviderType] = useState(
+    supplierTypes[0]?.slug ?? "",
+  );
+  const [newProviderPhone, setNewProviderPhone] = useState("");
+  const [isSavingProvider, startSavingProvider] = useTransition();
 
   useEffect(() => {
     if (state.error) {
@@ -69,6 +92,49 @@ export function SparePartForm({
       );
     }
   }, [state.error]);
+
+  function resetProviderDraft() {
+    setIsCreatingProvider(false);
+    setNewProviderName("");
+    setNewProviderPhone("");
+    setNewProviderType(supplierTypes[0]?.slug ?? "");
+  }
+
+  function saveNewProvider() {
+    startSavingProvider(async () => {
+      const result = await createQuickSupplierAction({
+        razon_social: newProviderName,
+        tipo_proveedor: newProviderType,
+        telefono: newProviderPhone,
+      });
+
+      if (!result.ok) {
+        showError("No se pudo registrar el proveedor", result.error);
+        return;
+      }
+
+      setProviderOptions((currentOptions) => {
+        const alreadyListed = currentOptions.some(
+          (option) => option.id === result.supplier.id,
+        );
+
+        if (alreadyListed) {
+          return currentOptions;
+        }
+
+        return [...currentOptions, result.supplier].sort((a, b) =>
+          a.label.localeCompare(b.label, "es"),
+        );
+      });
+
+      setSelectedProvider(result.supplier.id);
+      resetProviderDraft();
+      showSuccess(
+        "Proveedor registrado",
+        `${result.supplier.label} quedó seleccionado en el repuesto.`,
+      );
+    });
+  }
 
   return (
     <form action={formAction} className="space-y-4">
@@ -95,19 +161,99 @@ export function SparePartForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="id_proveedor">Proveedor</Label>
-          <NativeSelect
-            id="id_proveedor"
+          <SearchableSelect
             name="id_proveedor"
-            defaultValue={getValue(defaultValues, "id_proveedor")}
-          >
-            <option value="">Sin proveedor</option>
-            {providers.map((provider) => (
-              <option key={provider.id} value={provider.id}>
-                {provider.label}
-              </option>
-            ))}
-          </NativeSelect>
+            label="Proveedor"
+            placeholder="Buscar proveedor..."
+            items={providerOptions}
+            value={selectedProvider}
+            onValueChange={setSelectedProvider}
+            emptyMessage="No se encontró ese proveedor. Puedes registrarlo aquí mismo."
+          />
+
+          {isCreatingProvider ? (
+            <div className="space-y-3 rounded-lg border border-border/80 bg-card p-3">
+              <p className="text-sm font-medium text-foreground">
+                Nuevo proveedor
+              </p>
+
+              <div className="space-y-2">
+                <Label htmlFor="nuevo_proveedor_razon_social">
+                  Razón social
+                </Label>
+                <Input
+                  id="nuevo_proveedor_razon_social"
+                  value={newProviderName}
+                  onChange={(event) => setNewProviderName(event.target.value)}
+                  placeholder="Ej. Ferretería San Martín"
+                />
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="nuevo_proveedor_tipo">Tipo</Label>
+                  <NativeSelect
+                    id="nuevo_proveedor_tipo"
+                    value={newProviderType}
+                    onChange={(event) => setNewProviderType(event.target.value)}
+                  >
+                    {supplierTypes.map((supplierType) => (
+                      <option key={supplierType.slug} value={supplierType.slug}>
+                        {supplierType.nombre}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="nuevo_proveedor_telefono">
+                    Teléfono (opcional)
+                  </Label>
+                  <Input
+                    id="nuevo_proveedor_telefono"
+                    value={newProviderPhone}
+                    onChange={(event) => setNewProviderPhone(event.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={saveNewProvider}
+                  disabled={isSavingProvider || newProviderName.trim().length < 2}
+                >
+                  {isSavingProvider ? "Registrando..." : "Registrar y usar"}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={resetProviderDraft}
+                  disabled={isSavingProvider}
+                >
+                  Cancelar
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Solo se piden los datos mínimos. El resto se completa después
+                desde el módulo Proveedores.
+              </p>
+            </div>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsCreatingProvider(true)}
+              disabled={supplierTypes.length === 0}
+            >
+              Registrar proveedor nuevo
+            </Button>
+          )}
+
           <FieldError messages={state.fieldErrors?.id_proveedor} />
         </div>
 
