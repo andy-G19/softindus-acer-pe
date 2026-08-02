@@ -134,6 +134,14 @@ export default async function WorkOrderDetailPage({
       },
       avance_orden: true,
       movimiento_inventario: true,
+      requerimiento_orden_material: {
+        include: {
+          material: true,
+        },
+        orderBy: {
+          id_requerimiento: "asc",
+        },
+      },
     },
   });
 
@@ -141,48 +149,88 @@ export default async function WorkOrderDetailPage({
     notFound();
   }
 
-  const materialRows =
-    workOrder.version_receta?.detalle_receta.map((detail) => {
-      const quantityToProduce = toNumber(workOrder.cantidad);
-      const baseQuantityPerUnit = toNumber(detail.cantidad_requerida);
-      const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
+  const quantityToProduce = toNumber(workOrder.cantidad);
 
-      const requiredWithoutWaste = baseQuantityPerUnit * quantityToProduce;
-      // Redondeado antes de comparar contra el stock: sin esto, el ruido de coma flotante
-      // (50 * 1.1 = 55.00000000000001) reporta faltante cuando el stock alcanza justo.
-      const requiredWithWaste = roundQuantity(
-        applyWaste(requiredWithoutWaste, wastePercentage),
-      );
+  /**
+   * Las órdenes creadas desde la fase C traen su requerimiento congelado. Las anteriores
+   * no lo tienen, así que se recalcula desde la receta: sin ese fallback, todas las
+   * órdenes históricas mostrarían la tabla vacía.
+   */
+  const hasFrozenRequirement =
+    workOrder.requerimiento_orden_material.length > 0;
 
-      const currentStock = toNumber(detail.material.stock_actual);
-      const reservedStock = toNumber(detail.material.stock_reservado);
-      const availableStock = currentStock - reservedStock;
+  const materialRows = hasFrozenRequirement
+    ? workOrder.requerimiento_orden_material.map((requirement) => {
+        const baseQuantityPerUnit = toNumber(requirement.cantidad_por_unidad);
+        const wastePercentage = toNumber(
+          requirement.merma_estimada_porcentaje,
+        );
+        const requiredWithWaste = toNumber(requirement.cantidad_requerida);
 
-      const shortage = Math.max(requiredWithWaste - availableStock, 0);
-      const hasEnoughStock = availableStock >= requiredWithWaste;
+        const currentStock = toNumber(requirement.material.stock_actual);
+        const reservedStock = toNumber(requirement.material.stock_reservado);
+        const availableStock = currentStock - reservedStock;
 
-      const unitCost = toNumber(detail.material.costo_unitario_actual);
-      const estimatedCost = requiredWithWaste * unitCost;
+        // El costo es el congelado al crear la orden, no el actual: así el costo
+        // planificado no cambia cada vez que llega una compra nueva.
+        const unitCost = toNumber(requirement.costo_unitario_registrado);
 
-      return {
-        id: detail.id_detalle_receta,
-        materialName: detail.material.nombre_material,
-        materialCategory: detail.material.categoria,
-        unit: detail.unidad_medida,
-        materialUnit: detail.material.unidad_medida,
-        consumptionType: detail.tipo_consumo,
-        baseQuantityPerUnit,
-        requiredWithoutWaste,
-        wastePercentage,
-        requiredWithWaste,
-        currentStock,
-        reservedStock,
-        availableStock,
-        shortage,
-        hasEnoughStock,
-        estimatedCost,
-      };
-    }) ?? [];
+        return {
+          id: requirement.id_requerimiento,
+          materialName: requirement.material.nombre_material,
+          materialCategory: requirement.material.categoria,
+          unit: requirement.unidad_medida,
+          materialUnit: requirement.material.unidad_medida,
+          consumptionType: requirement.tipo_consumo,
+          baseQuantityPerUnit,
+          requiredWithoutWaste: baseQuantityPerUnit * quantityToProduce,
+          wastePercentage,
+          requiredWithWaste,
+          currentStock,
+          reservedStock,
+          availableStock,
+          shortage: Math.max(requiredWithWaste - availableStock, 0),
+          hasEnoughStock: availableStock >= requiredWithWaste,
+          estimatedCost: requiredWithWaste * unitCost,
+        };
+      })
+    : (workOrder.version_receta?.detalle_receta.map((detail) => {
+        const baseQuantityPerUnit = toNumber(detail.cantidad_requerida);
+        const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
+
+        const requiredWithoutWaste = baseQuantityPerUnit * quantityToProduce;
+        // Redondeado antes de comparar contra el stock: sin esto, el ruido de coma
+        // flotante (50 * 1.1 = 55.00000000000001) reporta faltante cuando el stock
+        // alcanza justo.
+        const requiredWithWaste = roundQuantity(
+          applyWaste(requiredWithoutWaste, wastePercentage),
+        );
+
+        const currentStock = toNumber(detail.material.stock_actual);
+        const reservedStock = toNumber(detail.material.stock_reservado);
+        const availableStock = currentStock - reservedStock;
+
+        const unitCost = toNumber(detail.material.costo_unitario_actual);
+
+        return {
+          id: detail.id_detalle_receta,
+          materialName: detail.material.nombre_material,
+          materialCategory: detail.material.categoria,
+          unit: detail.unidad_medida,
+          materialUnit: detail.material.unidad_medida,
+          consumptionType: detail.tipo_consumo,
+          baseQuantityPerUnit,
+          requiredWithoutWaste,
+          wastePercentage,
+          requiredWithWaste,
+          currentStock,
+          reservedStock,
+          availableStock,
+          shortage: Math.max(requiredWithWaste - availableStock, 0),
+          hasEnoughStock: availableStock >= requiredWithWaste,
+          estimatedCost: requiredWithWaste * unitCost,
+        };
+      }) ?? []);
 
   const totalEstimatedCost = materialRows.reduce(
     (total, row) => total + row.estimatedCost,
@@ -351,6 +399,23 @@ export default async function WorkOrderDetailPage({
           <CardTitle className="text-base">
             Materiales requeridos para la orden
           </CardTitle>
+
+          {hasFrozenRequirement ? (
+            <p className="text-sm text-muted-foreground">
+              Requerimiento congelado al crear la orden. Las cantidades y el
+              costo unitario no cambian aunque después se edite la receta o
+              varíe el precio del material.
+            </p>
+          ) : (
+            <Alert variant="warning">
+              <AlertDescription>
+                Orden anterior al congelado de requerimientos: las cantidades se
+                recalculan desde la receta vigente y el costo usa el precio
+                actual del material, así que pueden diferir de lo planificado el
+                día en que se creó.
+              </AlertDescription>
+            </Alert>
+          )}
         </CardHeader>
         <CardContent className="px-0">
           <Table>
