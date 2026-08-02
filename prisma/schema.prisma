@@ -691,6 +691,7 @@ model material {
   historial_precio_proveedor historial_precio_proveedor[]
   movimiento_inventario      movimiento_inventario[]
   proveedor_material         proveedor_material[]
+  requerimiento_orden_material requerimiento_orden_material[]
   retazo_reutilizable        retazo_reutilizable[]
 
   @@index([categoria], map: "idx_material_categoria")
@@ -812,6 +813,7 @@ model orden_trabajo {
   ruta_fabricacion       ruta_fabricacion?       @relation(fields: [id_ruta], references: [id_ruta], onDelete: Restrict, map: "fk_orden_ruta")
   usuario                usuario                 @relation(fields: [id_usuario_registro], references: [id_usuario], map: "fk_orden_usuario_registro")
   version_receta         version_receta?         @relation(fields: [id_version_receta], references: [id_version_receta], onDelete: Restrict, map: "fk_orden_version_receta")
+  requerimiento_orden_material requerimiento_orden_material[]
   retazo_reutilizable    retazo_reutilizable[]
   tarea_operario         tarea_operario[]
 
@@ -1140,6 +1142,38 @@ model repuesto {
   proveedor                   proveedor?                    @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: Restrict, map: "fk_repuesto_proveedor")
 
   @@index([id_proveedor], map: "idx_repuesto_proveedor")
+  @@schema("aceros")
+}
+
+/// Snapshot del requerimiento de materiales de una orden de trabajo, congelado al
+/// crearla, mas lo realmente movido contra ese plan.
+///
+/// La merma NO se guarda: es derivada (entregada - consumida - devuelta). Guardarla
+/// crearia un valor capaz de desviarse de sus propios sumandos.
+model requerimiento_orden_material {
+  id_requerimiento          String        @id @db.Char(11)
+  id_orden_trabajo          String        @db.Char(11)
+  id_material               String        @db.Char(11)
+  /// Copia de detalle_receta.cantidad_requerida: consumo para UNA unidad del producto.
+  cantidad_por_unidad       Decimal       @db.Decimal(10, 2)
+  merma_estimada_porcentaje Decimal?      @db.Decimal(5, 2)
+  unidad_medida             String        @db.VarChar(20)
+  tipo_consumo              String        @db.VarChar(30)
+  /// Costo del material al crear la orden. Es el unico dato irrecuperable del snapshot:
+  /// material.costo_unitario_actual cambia con cada compra y no existe historial que
+  /// permita reconstruirlo hacia atras.
+  costo_unitario_registrado Decimal       @db.Decimal(12, 2)
+  /// cantidad_por_unidad x cantidad de la orden x (1 + merma/100), congelada.
+  cantidad_requerida        Decimal       @db.Decimal(10, 2)
+  cantidad_entregada        Decimal       @default(0) @db.Decimal(10, 2)
+  cantidad_devuelta         Decimal       @default(0) @db.Decimal(10, 2)
+  cantidad_consumida        Decimal       @default(0) @db.Decimal(10, 2)
+  fecha_registro            DateTime      @default(now()) @db.Timestamptz(6)
+  material                  material      @relation(fields: [id_material], references: [id_material], onDelete: Restrict, map: "fk_requerimiento_material")
+  orden_trabajo             orden_trabajo @relation(fields: [id_orden_trabajo], references: [id_orden_trabajo], onDelete: Restrict, map: "fk_requerimiento_orden")
+
+  @@unique([id_orden_trabajo, id_material], map: "uq_requerimiento_orden_material")
+  @@index([id_material], map: "idx_requerimiento_material")
   @@schema("aceros")
 }
 

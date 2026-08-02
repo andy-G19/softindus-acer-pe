@@ -269,6 +269,12 @@ const correlatives = [
       "Correlativo transaccional para etapa_ruta_maquina (prefijo ERM).",
   },
   {
+    codigo_entidad: "requerimiento_orden_material",
+    prefijo: "ROM",
+    descripcion:
+      "Correlativo transaccional para requerimiento_orden_material (prefijo ROM).",
+  },
+  {
     codigo_entidad: "receta_tecnica",
     prefijo: "REC",
     descripcion: "Correlativo transaccional para receta_tecnica (prefijo REC).",
