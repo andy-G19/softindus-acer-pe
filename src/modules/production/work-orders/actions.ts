@@ -6,6 +6,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
 
 function parseDate(value: string) {
@@ -143,7 +144,21 @@ export async function createWorkOrderAction(formData: FormData) {
     },
     include: {
       receta_tecnica: true,
-      detalle_receta: true,
+      detalle_receta: {
+        // El material se incluye por su costo_unitario_actual: es el dato que se congela
+        // en el snapshot y no se puede reconstruir despues.
+        include: {
+          material: {
+            select: {
+              id_material: true,
+              costo_unitario_actual: true,
+            },
+          },
+        },
+        orderBy: {
+          id_detalle_receta: "asc",
+        },
+      },
     },
   });
 
@@ -284,12 +299,38 @@ export async function createWorkOrderAction(formData: FormData) {
       }
     }
 
+    // Snapshot del requerimiento: se congela dentro de la MISMA transaccion que crea la
+    // orden, para que no pueda existir una orden sin su requerimiento.
+    const requirementIds = await getNextCorrelativeIds(tx, {
+      codigoEntidad: "requerimiento_orden_material",
+      prefijo: "ROM",
+      cantidad: version.detalle_receta.length,
+    });
+
+    await tx.requerimiento_orden_material.createMany({
+      data: version.detalle_receta.map((detail, index) => ({
+        id_requerimiento: requirementIds[index],
+        id_orden_trabajo: idOrdenTrabajo,
+        id_material: detail.id_material,
+        cantidad_por_unidad: detail.cantidad_requerida,
+        merma_estimada_porcentaje: detail.merma_estimada_porcentaje,
+        unidad_medida: detail.unidad_medida,
+        tipo_consumo: detail.tipo_consumo,
+        costo_unitario_registrado: detail.material.costo_unitario_actual,
+        cantidad_requerida: calculateRequiredQuantityRounded({
+          quantityPerUnit: detail.cantidad_requerida,
+          wastePercentage: detail.merma_estimada_porcentaje,
+          orderQuantity: data.cantidad,
+        }),
+      })),
+    });
+
     await registerAuditLog({
       userId: session.user.id,
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: idOrdenTrabajo,
       accion: "crear",
-      detalle: `Orden de trabajo creada para el producto ${effectiveProductId}.`,
+      detalle: `Orden de trabajo creada para el producto ${effectiveProductId}. Requerimiento congelado: ${version.detalle_receta.length} material(es).`,
       tx,
     });
   });
