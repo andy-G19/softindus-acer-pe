@@ -469,7 +469,16 @@ model etapa_ruta {
   nombre_etapa          String               @db.VarChar(100)
   orden_secuencia       Int
   descripcion           String?
+  /// OBSOLETA: representaba horas de la etapa completa, no por unidad. Sustituida por
+  /// tiempo_operario_minutos_unidad. Se elimina en una migracion posterior, una vez
+  /// recapturados los tiempos de todas las etapas.
   tiempo_estimado_horas Decimal?             @db.Decimal(10, 2)
+  /// Minutos de trabajo del operario para producir UNA unidad en esta etapa.
+  tiempo_operario_minutos_unidad Decimal?    @db.Decimal(10, 2)
+  /// simultaneo | secuencial. Define como se combinan el tiempo de operario y el de
+  /// maquina para obtener la duracion de la etapa. Se ignora si la etapa no tiene
+  /// maquina asignada.
+  modo_tiempo           String               @default("simultaneo") @db.VarChar(20)
   requiere_maquina      Boolean              @default(false)
   estado                Boolean              @default(true)
   avance_orden          avance_orden[]
@@ -490,6 +499,10 @@ model etapa_ruta_maquina {
   id_etapa_ruta_maquina String     @id @db.Char(11)
   id_etapa_ruta         String     @db.Char(11)
   id_maquina            String     @db.Char(11)
+  /// Minutos de uso de ESTA maquina para producir UNA unidad en la etapa. El tiempo vive
+  /// en el par etapa-maquina (y no en etapa_ruta) para que soportar varias maquinas por
+  /// etapa en el futuro no requiera migracion.
+  tiempo_maquina_minutos_unidad Decimal? @db.Decimal(10, 2)
   observaciones         String?
   etapa_ruta            etapa_ruta @relation(fields: [id_etapa_ruta], references: [id_etapa_ruta], map: "fk_etapa_ruta_maquina_etapa")
   maquina               maquina    @relation(fields: [id_maquina], references: [id_maquina], map: "fk_etapa_ruta_maquina_maquina")
