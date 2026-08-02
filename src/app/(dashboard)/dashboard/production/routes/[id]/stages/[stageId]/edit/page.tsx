@@ -2,14 +2,10 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateRouteStageAction } from "@/modules/production/stages/actions";
-import Link from "next/link";
+import { StageForm } from "@/modules/production/stages/stage-form";
 
 type EditRouteStagePageProps = {
   params: Promise<{
@@ -44,6 +40,12 @@ export default async function EditRouteStagePage({
           producto: true,
         },
       },
+      etapa_ruta_maquina: {
+        select: {
+          id_maquina: true,
+          tiempo_maquina_minutos_unidad: true,
+        },
+      },
       _count: {
         select: {
           avance_orden: true,
@@ -56,6 +58,32 @@ export default async function EditRouteStagePage({
   if (!stage) {
     notFound();
   }
+
+  const assignment = stage.etapa_ruta_maquina[0];
+
+  // La máquina ya asignada se incluye aunque hoy esté dada de baja o inactiva: quitarla
+  // del selector haría que editar cualquier otro campo borrara la asignación en silencio.
+  const machines = await prisma.maquina.findMany({
+    where: {
+      OR: [
+        {
+          estado: {
+            notIn: ["dada_de_baja", "inactiva"],
+          },
+        },
+        ...(assignment ? [{ id_maquina: assignment.id_maquina }] : []),
+      ],
+    },
+    orderBy: {
+      nombre: "asc",
+    },
+    select: {
+      id_maquina: true,
+      nombre: true,
+      tipo: true,
+      estado: true,
+    },
+  });
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">
@@ -76,93 +104,44 @@ export default async function EditRouteStagePage({
         <Alert variant="warning">
           <AlertDescription>
             Esta etapa ya tiene trazabilidad operativa. Los cambios quedan
-            auditados; evita alterar su significado productivo si ya fue
-            usada.
+            auditados; evita alterar su significado productivo si ya fue usada.
           </AlertDescription>
         </Alert>
       ) : null}
 
-      <form
+      {stage.tiempo_estimado_horas !== null &&
+      stage.tiempo_operario_minutos_unidad === null ? (
+        <Alert variant="warning">
+          <AlertDescription>
+            Esta etapa tiene un tiempo antiguo de{" "}
+            {formatDecimalInput(stage.tiempo_estimado_horas)} horas registrado
+            para la etapa completa. Ese dato quedó obsoleto: captura los minutos
+            por unidad de operario y de máquina.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <StageForm
         action={updateRouteStageAction}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
-      >
-        <input type="hidden" name="id_ruta" value={stage.id_ruta} />
-        <input type="hidden" name="id_etapa_ruta" value={stage.id_etapa_ruta} />
-
-        <div className="space-y-2">
-          <Label>Nombre de la etapa *</Label>
-          <Input
-            name="nombre_etapa"
-            required
-            maxLength={100}
-            defaultValue={stage.nombre_etapa}
-          />
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label>Orden de ejecución *</Label>
-            <Input
-              name="orden_secuencia"
-              type="number"
-              min={1}
-              max={999}
-              required
-              defaultValue={stage.orden_secuencia}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Tiempo estimado en horas</Label>
-            <Input
-              name="tiempo_estimado_horas"
-              type="number"
-              min="0"
-              step="0.01"
-              defaultValue={formatDecimalInput(stage.tiempo_estimado_horas)}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Descripción técnica</Label>
-          <Textarea
-            name="descripcion"
-            rows={4}
-            maxLength={500}
-            defaultValue={stage.descripcion ?? ""}
-          />
-        </div>
-
-        <label className="flex items-start gap-3 rounded-lg border border-border/80 bg-secondary/40 p-4 text-sm">
-          <input
-            type="checkbox"
-            name="requiere_maquina"
-            defaultChecked={stage.requiere_maquina}
-            className="mt-1"
-          />
-
-          <span>
-            <span className="block font-medium text-foreground">
-              Esta etapa requiere máquina o equipo crítico
-            </span>
-
-            <span className="text-muted-foreground">
-              Se usará para identificar posibles cuellos de botella.
-            </span>
-          </span>
-        </label>
-
-        <div className="flex items-center justify-between pt-4">
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Link href={`/dashboard/production/routes/${stage.id_ruta}/stages`}>
-              Volver a etapas
-            </Link>
-          </Button>
-
-          <Button type="submit">Guardar cambios</Button>
-        </div>
-      </form>
+        routeId={stage.id_ruta}
+        machines={machines}
+        defaultValues={{
+          id_etapa_ruta: stage.id_etapa_ruta,
+          nombre_etapa: stage.nombre_etapa,
+          orden_secuencia: String(stage.orden_secuencia),
+          descripcion: stage.descripcion ?? "",
+          tiempo_operario_minutos_unidad: formatDecimalInput(
+            stage.tiempo_operario_minutos_unidad,
+          ),
+          id_maquina: assignment?.id_maquina ?? "",
+          tiempo_maquina_minutos_unidad: formatDecimalInput(
+            assignment?.tiempo_maquina_minutos_unidad,
+          ),
+          modo_tiempo: stage.modo_tiempo,
+          requiere_maquina: stage.requiere_maquina,
+        }}
+        submitLabel="Guardar cambios"
+      />
     </main>
   );
 }

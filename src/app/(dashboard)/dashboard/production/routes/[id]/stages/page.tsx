@@ -21,6 +21,10 @@ import {
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  STAGE_TIME_MODES,
+  getStageDurationPerUnit,
+} from "@/lib/production-times";
 import { toggleRouteStageStatusAction } from "@/modules/production/stages/actions";
 
 type RouteStagesPageProps = {
@@ -30,12 +34,12 @@ type RouteStagesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-function formatHours(value: unknown) {
+function formatMinutes(value: unknown) {
   if (value === null || value === undefined) {
     return "-";
   }
 
-  return `${Number(value.toString()).toFixed(2)} h`;
+  return `${Number(value.toString()).toFixed(2)} min`;
 }
 
 function getSearchParam(
@@ -120,6 +124,17 @@ export default async function RouteStagesPage({
       etapa_ruta: {
         where: stageFilters.length > 0 ? { AND: stageFilters } : undefined,
         include: {
+          etapa_ruta_maquina: {
+            select: {
+              tiempo_maquina_minutos_unidad: true,
+              maquina: {
+                select: {
+                  nombre: true,
+                  estado: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               avance_orden: true,
@@ -138,13 +153,27 @@ export default async function RouteStagesPage({
     notFound();
   }
 
-  const totalEstimatedHours = route.etapa_ruta.reduce((total, stage) => {
-    if (!stage.tiempo_estimado_horas) {
+  // Duración de una unidad recorriendo la ruta: suma de todas las etapas activas, donde
+  // cada etapa combina operario y máquina según su propio modo.
+  const totalMinutesPerUnit = route.etapa_ruta.reduce((total, stage) => {
+    if (!stage.estado) {
       return total;
     }
 
-    return total + Number(stage.tiempo_estimado_horas.toString());
+    return (
+      total +
+      getStageDurationPerUnit({
+        operatorMinutes: stage.tiempo_operario_minutos_unidad,
+        machineMinutes:
+          stage.etapa_ruta_maquina[0]?.tiempo_maquina_minutos_unidad ?? null,
+        mode: stage.modo_tiempo,
+      })
+    );
   }, 0);
+
+  const stagesPendingCapture = route.etapa_ruta.filter(
+    (stage) => stage.tiempo_operario_minutos_unidad === null,
+  ).length;
 
   return (
     <main className="space-y-6">
@@ -226,7 +255,17 @@ export default async function RouteStagesPage({
           tone="warning"
           icon={Wrench}
         />
-        <KpiCard title="Tiempo estimado total" value={`${totalEstimatedHours.toFixed(2)} h`} description="Suma de etapas activas." tone="info" icon={Clock} />
+        <KpiCard
+          title="Minutos por unidad"
+          value={`${totalMinutesPerUnit.toFixed(2)} min`}
+          description={
+            stagesPendingCapture > 0
+              ? `${stagesPendingCapture} etapa(s) sin tiempo capturado.`
+              : "Suma de etapas activas."
+          }
+          tone={stagesPendingCapture > 0 ? "warning" : "info"}
+          icon={Clock}
+        />
       </section>
 
       <Table>
@@ -234,8 +273,9 @@ export default async function RouteStagesPage({
           <TableRow>
             <TableHead>Orden</TableHead>
             <TableHead>Etapa</TableHead>
-            <TableHead>Tiempo estimado</TableHead>
+            <TableHead>Operario / unidad</TableHead>
             <TableHead>Máquina</TableHead>
+            <TableHead>Duración / unidad</TableHead>
             <TableHead>Avances</TableHead>
             <TableHead>Tareas</TableHead>
             <TableHead>Estado</TableHead>
@@ -260,12 +300,47 @@ export default async function RouteStagesPage({
                 ) : null}
               </TableCell>
 
-              <TableCell>{formatHours(stage.tiempo_estimado_horas)}</TableCell>
+              <TableCell>
+                {formatMinutes(stage.tiempo_operario_minutos_unidad)}
+              </TableCell>
 
               <TableCell>
-                <Badge variant={stage.requiere_maquina ? "warning" : "outline"}>
-                  {stage.requiere_maquina ? "Requiere" : "No requiere"}
-                </Badge>
+                {stage.etapa_ruta_maquina[0] ? (
+                  <div>
+                    <p className="font-medium">
+                      {stage.etapa_ruta_maquina[0].maquina.nombre}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {formatMinutes(
+                        stage.etapa_ruta_maquina[0].tiempo_maquina_minutos_unidad,
+                      )}{" "}
+                      ·{" "}
+                      {stage.modo_tiempo === STAGE_TIME_MODES.SECUENCIAL
+                        ? "secuencial"
+                        : "simultáneo"}
+                    </p>
+                  </div>
+                ) : (
+                  <Badge
+                    variant={stage.requiere_maquina ? "warning" : "outline"}
+                  >
+                    {stage.requiere_maquina
+                      ? "Requiere · sin asignar"
+                      : "No requiere"}
+                  </Badge>
+                )}
+              </TableCell>
+
+              <TableCell>
+                {formatMinutes(
+                  getStageDurationPerUnit({
+                    operatorMinutes: stage.tiempo_operario_minutos_unidad,
+                    machineMinutes:
+                      stage.etapa_ruta_maquina[0]
+                        ?.tiempo_maquina_minutos_unidad ?? null,
+                    mode: stage.modo_tiempo,
+                  }) || null,
+                )}
               </TableCell>
 
               <TableCell>{stage._count.avance_orden}</TableCell>

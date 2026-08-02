@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { getStageDurationForQuantity } from "@/lib/production-times";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -42,16 +43,6 @@ type StageSummary = {
 type ProductionBottlenecksPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  const numericValue = Number(value.toString());
-
-  return Number.isFinite(numericValue) ? numericValue : null;
-}
 
 function getElapsedHours(startDate: Date | null | undefined, now: Date) {
   if (!startDate) {
@@ -191,7 +182,15 @@ export default async function ProductionBottlenecksPage({
         AND: filters,
       },
       include: {
-        etapa_ruta: true,
+        etapa_ruta: {
+          include: {
+            etapa_ruta_maquina: {
+              select: {
+                tiempo_maquina_minutos_unidad: true,
+              },
+            },
+          },
+        },
         operario: true,
         orden_trabajo: {
           include: {
@@ -245,7 +244,18 @@ export default async function ProductionBottlenecksPage({
   const now = new Date();
 
   const rows = activeAdvances.map((advance) => {
-    const estimatedHours = toNumber(advance.etapa_ruta.tiempo_estimado_horas);
+    // El tiempo estimado ya no es un dato suelto de la etapa: se calcula desde los
+    // minutos por unidad (operario y máquina, según el modo) por la cantidad de la orden.
+    // Se convierte a horas porque el resto de esta pantalla razona en horas.
+    const estimatedHours =
+      getStageDurationForQuantity({
+        operatorMinutes: advance.etapa_ruta.tiempo_operario_minutos_unidad,
+        machineMinutes:
+          advance.etapa_ruta.etapa_ruta_maquina[0]
+            ?.tiempo_maquina_minutos_unidad ?? null,
+        mode: advance.etapa_ruta.modo_tiempo,
+        quantity: advance.orden_trabajo.cantidad,
+      }) / 60;
     const elapsedHours = getElapsedHours(advance.fecha_inicio_etapa, now);
     const alertStatus = getAlertStatus(estimatedHours, elapsedHours);
 
