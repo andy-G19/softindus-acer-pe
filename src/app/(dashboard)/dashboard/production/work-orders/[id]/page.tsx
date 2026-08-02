@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -57,10 +58,6 @@ function formatDate(value: Date | null | undefined) {
     dateStyle: "medium",
     timeZone: "UTC",
   }).format(value);
-}
-
-function calculateRequiredWithWaste(baseQuantity: number, wastePercentage: number) {
-  return baseQuantity * (1 + wastePercentage / 100);
 }
 
 function getOrderBadgeVariant(status: string) {
@@ -151,9 +148,10 @@ export default async function WorkOrderDetailPage({
       const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
 
       const requiredWithoutWaste = baseQuantityPerUnit * quantityToProduce;
-      const requiredWithWaste = calculateRequiredWithWaste(
-        requiredWithoutWaste,
-        wastePercentage,
+      // Redondeado antes de comparar contra el stock: sin esto, el ruido de coma flotante
+      // (50 * 1.1 = 55.00000000000001) reporta faltante cuando el stock alcanza justo.
+      const requiredWithWaste = roundQuantity(
+        applyWaste(requiredWithoutWaste, wastePercentage),
       );
 
       const currentStock = toNumber(detail.material.stock_actual);
