@@ -1,17 +1,11 @@
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
-import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createRecipeDetailAction } from "@/modules/production/recipe-details/actions";
-import Link from "next/link";
+import { RecipeDetailForm } from "@/modules/production/recipe-details/recipe-detail-form";
 
 type NewRecipeDetailPageProps = {
   params: Promise<{
@@ -106,6 +100,7 @@ export default async function NewRecipeDetailPage({
     )} ${material.unidad_medida} - ${formatMoney(
       material.costo_unitario_actual,
     )}`,
+    unidad_medida: material.unidad_medida,
   }));
 
   return (
@@ -157,104 +152,22 @@ export default async function NewRecipeDetailPage({
         </Alert>
       ) : null}
 
-      <form
+      <Alert variant="info">
+        <AlertDescription>
+          La cantidad registrada representa el consumo estimado para fabricar
+          <strong> una unidad</strong> del producto. Se multiplica por la
+          cantidad de la orden al calcular los materiales requeridos.
+        </AlertDescription>
+      </Alert>
+
+      <RecipeDetailForm
         action={createRecipeDetailAction}
-        className="space-y-5 rounded-xl border border-border/80 bg-card p-6 shadow-sm"
-      >
-        <input
-          type="hidden"
-          name="id_version_receta"
-          value={version.id_version_receta}
-        />
-
-        <div className="space-y-2">
-          <SearchableSelect
-            name="id_material"
-            label="Material o insumo"
-            placeholder="Buscar material..."
-            items={materialItems}
-            required
-            disabled={!canAddDetail}
-            emptyMessage="No hay materiales disponibles para esta receta."
-          />
-
-          <p className="text-xs text-muted-foreground">
-            La unidad de medida se tomará automáticamente desde el material
-            registrado en inventario.
-          </p>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label>Cantidad requerida por unidad *</Label>
-            <Input
-              name="cantidad_requerida"
-              type="number"
-              min="0.01"
-              step="0.01"
-              required
-              disabled={!canAddDetail}
-              placeholder="Ej. 1.20"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Merma estimada (%)</Label>
-            <Input
-              name="merma_estimada_porcentaje"
-              type="number"
-              min="0"
-              max="100"
-              step="0.01"
-              disabled={!canAddDetail}
-              placeholder="Ej. 5"
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Tipo de consumo *</Label>
-          <NativeSelect name="tipo_consumo" required disabled={!canAddDetail}>
-            <option value="">Seleccione el tipo</option>
-            <option value="materia_prima">Materia prima</option>
-            <option value="consumible">Consumible</option>
-            <option value="auxiliar">Auxiliar</option>
-          </NativeSelect>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Observaciones</Label>
-          <Textarea
-            name="observaciones"
-            rows={4}
-            maxLength={700}
-            disabled={!canAddDetail}
-            placeholder="Ej. Considerar margen adicional si la plancha viene con defectos o cortes irregulares."
-          />
-        </div>
-
-        <Alert variant="info">
-          <AlertDescription>
-            La cantidad registrada representa el consumo estimado para
-            fabricar una unidad del producto. Estos datos se usan luego para
-            calcular materiales requeridos según la cantidad a producir.
-          </AlertDescription>
-        </Alert>
-
-        <div className="flex items-center justify-between pt-4">
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Link
-              href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
-            >
-              Cancelar
-            </Link>
-          </Button>
-
-          <Button type="submit" disabled={!canAddDetail}>
-            Guardar material
-          </Button>
-        </div>
-      </form>
+        versionId={version.id_version_receta}
+        backHref={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details`}
+        materials={materialItems}
+        submitLabel="Guardar material"
+        disabled={!canAddDetail}
+      />
     </main>
   );
 }

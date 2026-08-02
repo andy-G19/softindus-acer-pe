@@ -2,6 +2,8 @@ import { CircleDollarSign, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
+import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
+import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -16,6 +18,8 @@ import {
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { applyWaste } from "@/lib/recipe-quantities";
+import { deleteRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 import Link from "next/link";
 
 type RecipeDetailsPageProps = {
@@ -41,11 +45,13 @@ function formatMoney(value: unknown) {
   return `S/ ${Number(value.toString()).toFixed(2)}`;
 }
 
-function calculateRequiredWithWaste(quantity: unknown, waste: unknown) {
-  const baseQuantity = Number(quantity?.toString() ?? 0);
-  const wastePercentage = Number(waste?.toString() ?? 0);
-
-  return baseQuantity * (1 + wastePercentage / 100);
+/**
+ * La unidad del detalle se copia del material al crearlo. Si alguien cambia después la
+ * unidad del material, la receta queda expresada en la unidad vieja y el cálculo deja de
+ * ser comparable con el inventario.
+ */
+function hasUnitDrift(detailUnit: string, materialUnit: string) {
+  return detailUnit.trim().toLowerCase() !== materialUnit.trim().toLowerCase();
 }
 
 export default async function RecipeDetailsPage({
@@ -87,7 +93,7 @@ export default async function RecipeDetailsPage({
   }
 
   const estimatedUnitCost = version.detalle_receta.reduce((total, detail) => {
-    const requiredWithWaste = calculateRequiredWithWaste(
+    const requiredWithWaste = applyWaste(
       detail.cantidad_requerida,
       detail.merma_estimada_porcentaje,
     );
@@ -96,6 +102,16 @@ export default async function RecipeDetailsPage({
 
     return total + requiredWithWaste * unitCost;
   }, 0);
+
+  // Solo se puede corregir mientras ninguna orden haya usado la versión.
+  const canEditDetails =
+    version.estado === "vigente" &&
+    version.receta_tecnica.estado === "activa" &&
+    version._count.orden_trabajo === 0;
+
+  const driftedDetails = version.detalle_receta.filter((detail) =>
+    hasUnitDrift(detail.unidad_medida, detail.material.unidad_medida),
+  );
 
   return (
     <main className="space-y-6">
@@ -168,12 +184,13 @@ export default async function RecipeDetailsPage({
             <TableHead>Costo unitario</TableHead>
             <TableHead>Costo estimado</TableHead>
             <TableHead>Stock actual</TableHead>
+            {canEditDetails ? <TableHead>Acciones</TableHead> : null}
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {version.detalle_receta.map((detail) => {
-            const requiredWithWaste = calculateRequiredWithWaste(
+            const requiredWithWaste = applyWaste(
               detail.cantidad_requerida,
               detail.merma_estimada_porcentaje,
             );
@@ -183,6 +200,10 @@ export default async function RecipeDetailsPage({
             );
 
             const estimatedCost = requiredWithWaste * unitCost;
+            const unitDrift = hasUnitDrift(
+              detail.unidad_medida,
+              detail.material.unidad_medida,
+            );
 
             return (
               <TableRow key={detail.id_detalle_receta}>
@@ -236,14 +257,46 @@ export default async function RecipeDetailsPage({
                 <TableCell>
                   {formatDecimal(detail.material.stock_actual)}{" "}
                   {detail.material.unidad_medida}
+                  {unitDrift ? (
+                    <p className="mt-1 text-xs text-destructive">
+                      La receta está en {detail.unidad_medida} y el material hoy
+                      se mide en {detail.material.unidad_medida}.
+                    </p>
+                  ) : null}
                 </TableCell>
+
+                {canEditDetails ? (
+                  <TableCell>
+                    <RowActions>
+                      <RowEditLink
+                        href={`/dashboard/production/recipes/${version.id_receta}/versions/${version.id_version_receta}/details/${detail.id_detalle_receta}/edit`}
+                      />
+
+                      <form action={deleteRecipeDetailAction}>
+                        <input
+                          type="hidden"
+                          name="id_detalle_receta"
+                          value={detail.id_detalle_receta}
+                        />
+                        <ConfirmDeleteButton
+                          title="¿Eliminar material de la receta?"
+                          description={`Se quitará ${detail.material.nombre_material} de esta versión.`}
+                          confirmText="Eliminar"
+                          entityName="material"
+                        >
+                          Eliminar
+                        </ConfirmDeleteButton>
+                      </form>
+                    </RowActions>
+                  </TableCell>
+                ) : null}
               </TableRow>
             );
           })}
 
           {version.detalle_receta.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={9} className="p-0">
+              <TableCell colSpan={canEditDetails ? 10 : 9} className="p-0">
                 <EmptyState
                   className="border-0"
                   label="Todavía no hay materiales registrados para esta versión de receta."
@@ -263,6 +316,21 @@ export default async function RecipeDetailsPage({
           disponible.
         </AlertDescription>
       </Alert>
+
+      {driftedDetails.length > 0 ? (
+        <Alert variant="warning">
+          <AlertDescription>
+            {driftedDetails.length === 1
+              ? "Un material de esta receta"
+              : `${driftedDetails.length} materiales de esta receta`}{" "}
+            está expresado en una unidad distinta a la que hoy tiene el material
+            en inventario. Eso ocurre cuando se cambia la unidad del material
+            después de escrita la receta: las cantidades dejan de ser
+            comparables con el stock. Corrige la receta o revierte la unidad del
+            material.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       {version._count.orden_trabajo > 0 ? (
         <Alert variant="warning">
