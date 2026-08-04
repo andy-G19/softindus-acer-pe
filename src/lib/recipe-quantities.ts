@@ -26,9 +26,18 @@ function toNonNegativeNumber(value: NumericInput) {
   return parsed;
 }
 
-/** Redondeo a 2 decimales, la precisión de las columnas Decimal(10, 2). */
+/**
+ * Redondeo a 2 decimales, la precisión de las columnas Decimal(10, 2).
+ *
+ * El `=== 0 ? 0` no es redundante: normaliza el cero negativo. Una resta como
+ * `12.36 - 12.3 - 0.06` da `-1.77e-15`, que al redondear produce `-0`, y `(-0).toFixed(2)`
+ * se muestra como `"-0.00"`. Sin esta normalización, una conciliación exacta aparecería
+ * en pantalla con una merma negativa.
+ */
 export function roundQuantity(value: number) {
-  return Number(value.toFixed(2));
+  const rounded = Number(value.toFixed(2));
+
+  return rounded === 0 ? 0 : rounded;
 }
 
 /**
