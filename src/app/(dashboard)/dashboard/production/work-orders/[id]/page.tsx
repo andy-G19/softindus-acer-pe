@@ -18,13 +18,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import {
+  calculatePendingDelivery,
+  summarizeMaterialLine,
+} from "@/lib/material-reconciliation";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
+import { CloseMaterialsForm } from "@/modules/production/work-orders/close-materials-form";
+import { MaterialMovementForm } from "@/modules/production/work-orders/material-movement-form";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
-import { consumeWorkOrderMaterialsAction } from "@/modules/production/work-orders/actions";
+import { deliverWorkOrderMaterialsAction } from "@/modules/production/work-orders/actions";
 
 type WorkOrderDetailPageProps = {
   params: Promise<{
@@ -241,14 +247,46 @@ export default async function WorkOrderDetailPage({
     (row) => !row.hasEnoughStock,
   );
 
-  const materialsConsumed = workOrder.movimiento_inventario.some((movement) => {
-    return movement.tipo_movimiento === "salida";
-  });
+  // Lo pendiente sale del requerimiento congelado, no de "existe alguna salida": desde que
+  // se admiten entregas adicionales, la sola existencia de un movimiento ya no significa
+  // que la orden esté servida.
+  const pendingDeliveryTotal = workOrder.requerimiento_orden_material.reduce(
+    (total, requirement) =>
+      total +
+      calculatePendingDelivery({
+        required: requirement.cantidad_requerida,
+        delivered: requirement.cantidad_entregada,
+      }),
+    0,
+  );
 
-  const canConsumeMaterials =
+  const hasDeliveries = workOrder.requerimiento_orden_material.some(
+    (requirement) => toNumber(requirement.cantidad_entregada) > 0,
+  );
+
+  const materialsClosed = Boolean(workOrder.fecha_cierre_materiales);
+
+  const reconciliationRows = workOrder.requerimiento_orden_material.map(
+    (requirement) => ({
+      idRequerimiento: requirement.id_requerimiento,
+      materialName: requirement.material.nombre_material,
+      unidad: requirement.unidad_medida,
+      stockActual: toNumber(requirement.material.stock_actual),
+      ...summarizeMaterialLine({
+        required: requirement.cantidad_requerida,
+        delivered: requirement.cantidad_entregada,
+        returned: requirement.cantidad_devuelta,
+        consumed: requirement.cantidad_consumida,
+      }),
+    }),
+  );
+
+  const canDeliverMaterials =
     ["ADMIN", "WORKSHOP_MASTER"].includes(session.user.role ?? "") &&
     !["anulada", "finalizada"].includes(workOrder.estado) &&
-    !materialsConsumed;
+    hasFrozenRequirement &&
+    !materialsClosed &&
+    pendingDeliveryTotal > 0;
   const backHref = getSafeReturnTo(
     queryParams.returnTo,
     navigationHrefs.workOrders,
@@ -277,19 +315,25 @@ export default async function WorkOrderDetailPage({
         ])}
         actions={
           <>
-            {materialsConsumed ? (
-              <Badge variant="success">Materiales consumidos</Badge>
+            {materialsClosed ? (
+              <Badge variant="success">Materiales cerrados</Badge>
+            ) : hasDeliveries && pendingDeliveryTotal === 0 ? (
+              <Badge variant="info">Materiales entregados</Badge>
             ) : null}
 
-            {canConsumeMaterials ? (
-              <form action={consumeWorkOrderMaterialsAction}>
+            {canDeliverMaterials ? (
+              <form action={deliverWorkOrderMaterialsAction}>
                 <input
                   type="hidden"
                   name="id_orden_trabajo"
                   value={workOrder.id_orden_trabajo}
                 />
 
-                <Button type="submit">Consumir materiales</Button>
+                <Button type="submit">
+                  {hasDeliveries
+                    ? "Entregar lo pendiente"
+                    : "Entregar materiales"}
+                </Button>
               </form>
             ) : null}
 
@@ -495,6 +539,126 @@ export default async function WorkOrderDetailPage({
           </Table>
         </CardContent>
       </Card>
+
+      {hasFrozenRequirement && !["anulada"].includes(workOrder.estado) ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              Conciliación de materiales
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Entregado = consumido + devuelto + merma. La merma no se captura:
+              sale por diferencia.
+            </p>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Material</TableHead>
+                    <TableHead>Requerido</TableHead>
+                    <TableHead>Entregado</TableHead>
+                    <TableHead>Pendiente</TableHead>
+                    <TableHead>Devuelto</TableHead>
+                    <TableHead>Consumido</TableHead>
+                    <TableHead>Merma</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {reconciliationRows.map((row) => (
+                    <TableRow key={row.idRequerimiento}>
+                      <TableCell>
+                        <span className="font-medium">{row.materialName}</span>
+                        {row.overDelivered ? (
+                          <Badge variant="warning" className="mt-1">
+                            Entregado por encima del plan
+                          </Badge>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        {row.required.toFixed(2)} {row.unidad}
+                      </TableCell>
+                      <TableCell>{row.delivered.toFixed(2)}</TableCell>
+                      <TableCell>
+                        {row.pendingDelivery > 0
+                          ? row.pendingDelivery.toFixed(2)
+                          : "-"}
+                      </TableCell>
+                      <TableCell>{row.returned.toFixed(2)}</TableCell>
+                      <TableCell>
+                        {materialsClosed ? row.consumed.toFixed(2) : "-"}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {materialsClosed ? row.waste.toFixed(2) : "-"}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {materialsClosed ? (
+              <Alert variant="success">
+                <AlertDescription>
+                  Materiales cerrados el{" "}
+                  {formatDate(workOrder.fecha_cierre_materiales)}. Unidades
+                  producidas:{" "}
+                  <strong>
+                    {formatDecimal(workOrder.cantidad_producida)}{" "}
+                    {workOrder.producto.unidad_medida}
+                  </strong>{" "}
+                  de {formatDecimal(workOrder.cantidad)} planificadas.
+                </AlertDescription>
+              </Alert>
+            ) : hasDeliveries ? (
+              <>
+                <div className="rounded-lg border border-border/80 p-4">
+                  <h3 className="mb-3 font-semibold">
+                    Entrega adicional o devolución
+                  </h3>
+                  <MaterialMovementForm
+                    idOrdenTrabajo={workOrder.id_orden_trabajo}
+                    options={reconciliationRows.map((row) => ({
+                      idRequerimiento: row.idRequerimiento,
+                      materialName: row.materialName,
+                      unidad: row.unidad,
+                      stockActual: row.stockActual,
+                      returnable: Number(
+                        (row.delivered - row.returned).toFixed(2),
+                      ),
+                    }))}
+                  />
+                </div>
+
+                <div className="rounded-lg border border-border/80 p-4">
+                  <h3 className="mb-3 font-semibold">Cerrar materiales</h3>
+                  <CloseMaterialsForm
+                    idOrdenTrabajo={workOrder.id_orden_trabajo}
+                    productUnit={workOrder.producto.unidad_medida}
+                    lines={reconciliationRows.map((row) => ({
+                      idRequerimiento: row.idRequerimiento,
+                      materialName: row.materialName,
+                      unidad: row.unidad,
+                      delivered: row.delivered,
+                      returned: row.returned,
+                    }))}
+                  />
+                </div>
+              </>
+            ) : (
+              <Alert variant="info">
+                <AlertDescription>
+                  Todavía no se entregó material a esta orden. La conciliación
+                  se habilita con la primera entrega.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      ) : null}
     </main>
   );
 }
