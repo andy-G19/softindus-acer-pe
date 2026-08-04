@@ -99,3 +99,29 @@ export const closeMaterialsSchema = z.object({
 });
 
 export type CloseMaterialsInput = z.infer<typeof closeMaterialsSchema>;
+
+/**
+ * Reapertura del cierre de materiales.
+ *
+ * Reabrir NO deshace ningun movimiento de almacen: el cierre solo escribe declaraciones
+ * (consumido, producido, fecha), mientras que lo que movio stock fueron las entregas y las
+ * devoluciones, que quedan intactas. Por eso la operacion es segura: permite volver a
+ * declarar sin revertir ninguna transaccion de inventario.
+ *
+ * El motivo es obligatorio porque reabrir habilita reescribir la merma declarada, que es
+ * justamente el numero que a nadie le conviene que quede alto.
+ */
+export const reopenMaterialsSchema = z.object({
+  id_orden_trabajo: z
+    .string()
+    .trim()
+    .min(1, "No se recibió la orden de trabajo."),
+
+  motivo: z
+    .string()
+    .trim()
+    .min(10, "Explica por qué se reabre el cierre (mínimo 10 caracteres).")
+    .max(300, "El motivo no debe superar 300 caracteres."),
+});
+
+export type ReopenMaterialsInput = z.infer<typeof reopenMaterialsSchema>;

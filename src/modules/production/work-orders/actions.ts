@@ -19,6 +19,7 @@ import {
   additionalDeliverySchema,
   closeMaterialsSchema,
   materialReturnSchema,
+  reopenMaterialsSchema,
 } from "@/schemas/production/work-order-materials.schema";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
 
@@ -817,6 +818,91 @@ export async function closeWorkOrderMaterialsAction(formData: FormData) {
 
   redirect(
     `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-closed`,
+  );
+}
+
+/**
+ * Reabre el cierre de materiales de una orden.
+ *
+ * Solo ADMIN: el maestro de taller concilia y cierra, el administrador corrige. La merma
+ * declarada vuelve a ser editable, asi que el permiso se separa a proposito de quien
+ * ejecuta la operacion diaria.
+ *
+ * Reabrir no toca el stock. El cierre solo escribio declaraciones; las entregas y
+ * devoluciones que si movieron almacen quedan intactas. Por eso esta operacion no necesita
+ * revertir ningun movimiento: unicamente limpia lo declarado para poder declararlo de
+ * nuevo.
+ */
+export async function reopenWorkOrderMaterialsAction(formData: FormData) {
+  const session = await requireRole(["ADMIN"]);
+
+  const parsed = reopenMaterialsSchema.safeParse({
+    id_orden_trabajo: formData.get("id_orden_trabajo"),
+    motivo: formData.get("motivo"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: { id_orden_trabajo: data.id_orden_trabajo },
+    select: {
+      id_orden_trabajo: true,
+      estado: true,
+      cantidad_producida: true,
+      fecha_cierre_materiales: true,
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (!workOrder.fecha_cierre_materiales) {
+    throw new Error("Los materiales de esta orden no estan cerrados.");
+  }
+
+  if (workOrder.estado === "anulada") {
+    throw new Error("No se puede reabrir el cierre de una orden anulada.");
+  }
+
+  const producidaAnterior = workOrder.cantidad_producida
+    ? Number(workOrder.cantidad_producida.toString()).toFixed(2)
+    : "sin declarar";
+
+  await prisma.$transaction(async (tx) => {
+    await tx.requerimiento_orden_material.updateMany({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      data: { cantidad_consumida: 0 },
+    });
+
+    await tx.orden_trabajo.update({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      data: {
+        fecha_cierre_materiales: null,
+        cantidad_producida: null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: data.id_orden_trabajo,
+      accion: "reabrir_materiales",
+      detalle: `Cierre de materiales reabierto. Produccion declarada antes de reabrir: ${producidaAnterior}. Motivo: ${data.motivo}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+
+  redirect(
+    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-reopened`,
   );
 }
 

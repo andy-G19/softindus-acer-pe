@@ -6,6 +6,8 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -30,7 +32,10 @@ import {
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
-import { deliverWorkOrderMaterialsAction } from "@/modules/production/work-orders/actions";
+import {
+  deliverWorkOrderMaterialsAction,
+  reopenWorkOrderMaterialsAction,
+} from "@/modules/production/work-orders/actions";
 
 type WorkOrderDetailPageProps = {
   params: Promise<{
@@ -265,6 +270,14 @@ export default async function WorkOrderDetailPage({
   );
 
   const materialsClosed = Boolean(workOrder.fecha_cierre_materiales);
+
+  // Solo ADMIN: el maestro de taller concilia y cierra, el administrador corrige. Reabrir
+  // habilita reescribir la merma declarada, así que el permiso se separa de la operación
+  // diaria a propósito.
+  const canReopenMaterials =
+    materialsClosed &&
+    session.user.role === "ADMIN" &&
+    workOrder.estado !== "anulada";
 
   const reconciliationRows = workOrder.requerimiento_orden_material.map(
     (requirement) => ({
@@ -601,18 +614,59 @@ export default async function WorkOrderDetailPage({
             </div>
 
             {materialsClosed ? (
-              <Alert variant="success">
-                <AlertDescription>
-                  Materiales cerrados el{" "}
-                  {formatDate(workOrder.fecha_cierre_materiales)}. Unidades
-                  producidas:{" "}
-                  <strong>
-                    {formatDecimal(workOrder.cantidad_producida)}{" "}
-                    {workOrder.producto.unidad_medida}
-                  </strong>{" "}
-                  de {formatDecimal(workOrder.cantidad)} planificadas.
-                </AlertDescription>
-              </Alert>
+              <>
+                <Alert variant="success">
+                  <AlertDescription>
+                    Materiales cerrados el{" "}
+                    {formatDate(workOrder.fecha_cierre_materiales)}. Unidades
+                    producidas:{" "}
+                    <strong>
+                      {formatDecimal(workOrder.cantidad_producida)}{" "}
+                      {workOrder.producto.unidad_medida}
+                    </strong>{" "}
+                    de {formatDecimal(workOrder.cantidad)} planificadas.
+                  </AlertDescription>
+                </Alert>
+
+                {canReopenMaterials ? (
+                  <form
+                    action={reopenWorkOrderMaterialsAction}
+                    className="space-y-3 rounded-lg border border-border/80 p-4"
+                  >
+                    <input
+                      type="hidden"
+                      name="id_orden_trabajo"
+                      value={workOrder.id_orden_trabajo}
+                    />
+
+                    <div>
+                      <h3 className="font-semibold">Reabrir el cierre</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Permite volver a declarar el consumo y las unidades
+                        producidas. No revierte ningún movimiento de almacén:
+                        las entregas y devoluciones quedan intactas. Queda
+                        registrado en la bitácora.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="motivo_reapertura">Motivo *</Label>
+                      <Textarea
+                        id="motivo_reapertura"
+                        name="motivo"
+                        rows={2}
+                        maxLength={300}
+                        required
+                        placeholder="Ej. el conteo de barras estaba mal, sobraron 2.5 en el almacén de planta."
+                      />
+                    </div>
+
+                    <Button type="submit" variant="outline">
+                      Reabrir cierre de materiales
+                    </Button>
+                  </form>
+                ) : null}
+              </>
             ) : hasDeliveries ? (
               <>
                 <div className="rounded-lg border border-border/80 p-4">

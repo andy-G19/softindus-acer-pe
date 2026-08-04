@@ -123,6 +123,7 @@ const toastMessages: Record<string, ToastDefinition> = {
   "work-order-additional-delivery": { type: "success", message: "Entrega adicional registrada" },
   "work-order-material-returned": { type: "success", message: "Devolución registrada" },
   "work-order-materials-closed": { type: "success", message: "Materiales cerrados" },
+  "work-order-materials-reopened": { type: "warning", message: "Cierre de materiales reabierto" },
   "work-order-progress-generated": { type: "success", message: "Avances de orden generados correctamente" },
   "work-order-progress-updated": { type: "success", message: "Avance de orden actualizado" },
   "work-order-progress-reassigned": { type: "success", message: "Tarea reasignada correctamente" },
