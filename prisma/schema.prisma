@@ -797,6 +797,13 @@ model orden_trabajo {
   fecha_inicio           DateTime                @db.Date
   fecha_entrega_estimada DateTime?               @db.Date
   fecha_entrega_real     DateTime?               @db.Date
+  /// Unidades realmente fabricadas, declaradas al cerrar los materiales de la orden.
+  /// Sin este dato no existe comparacion posible entre lo planificado y lo producido.
+  cantidad_producida     Decimal?                @db.Decimal(10, 2)
+  /// Marca el cierre de materiales. Nula mientras la conciliacion siga abierta.
+  /// No se usa cantidad_consumida > 0 para detectarlo: consumir cero es un cierre valido
+  /// (se entrego material y volvio entero al almacen).
+  fecha_cierre_materiales DateTime?              @db.Timestamptz(6)
   prioridad              String                  @default("media") @db.VarChar(20)
   estado                 String                  @default("pendiente") @db.VarChar(30)
   observaciones          String?
