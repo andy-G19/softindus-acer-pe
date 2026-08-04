@@ -91,6 +91,14 @@ describe("roundQuantity", () => {
     expect(roundQuantity(26.256)).toBe(26.26);
     expect(roundQuantity(1 / 3)).toBe(0.33);
   });
+
+  it("normaliza el cero negativo", () => {
+    // Sin esto, (-0).toFixed(2) se muestra como "-0.00": una conciliacion exacta
+    // apareceria en pantalla con merma negativa.
+    expect(Object.is(roundQuantity(12.36 - 12.3 - 0.06), 0)).toBe(true);
+    expect(Object.is(roundQuantity(-0), 0)).toBe(true);
+    expect(roundQuantity(-0).toFixed(2)).toBe("0.00");
+  });
 });
 
 describe("calculateRequiredQuantityRounded", () => {

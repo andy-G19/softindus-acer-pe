@@ -6,7 +6,21 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import {
+  calculatePendingDelivery,
+  validateClosure,
+} from "@/lib/material-reconciliation";
 import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
+import {
+  deliverMaterials,
+  returnMaterial,
+} from "@/modules/production/work-orders/material-delivery";
+import {
+  additionalDeliverySchema,
+  closeMaterialsSchema,
+  materialReturnSchema,
+  reopenMaterialsSchema,
+} from "@/schemas/production/work-order-materials.schema";
 import { workOrderSchema } from "@/schemas/production/work-order.schema";
 
 function parseDate(value: string) {
@@ -29,10 +43,6 @@ function toNumber(value: unknown) {
   const numericValue = Number(value.toString());
 
   return Number.isNaN(numericValue) ? 0 : numericValue;
-}
-
-function roundQuantity(value: number) {
-  return Number(value.toFixed(2));
 }
 
 export async function createWorkOrderAction(formData: FormData) {
@@ -342,33 +352,27 @@ export async function createWorkOrderAction(formData: FormData) {
   redirect(`/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-created`);
 }
 
-export async function consumeWorkOrderMaterialsAction(formData: FormData) {
+/**
+ * Entrega al taller todo lo que falta del requerimiento congelado.
+ *
+ * Lee del snapshot y no de la receta: la orden ya fijo su plan al crearse, y una edicion
+ * posterior de la receta no debe cambiar lo que se entrega.
+ */
+export async function deliverWorkOrderMaterialsAction(formData: FormData) {
   const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const idOrdenTrabajo = String(
-    formData.get("id_orden_trabajo") ?? "",
-  ).trim();
+  const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "").trim();
 
   if (!idOrdenTrabajo) {
     throw new Error("No se recibio la orden de trabajo.");
   }
 
   const workOrder = await prisma.orden_trabajo.findUnique({
-    where: {
-      id_orden_trabajo: idOrdenTrabajo,
-    },
+    where: { id_orden_trabajo: idOrdenTrabajo },
     include: {
-      version_receta: {
-        include: {
-          detalle_receta: {
-            include: {
-              material: true,
-            },
-            orderBy: {
-              id_detalle_receta: "asc",
-            },
-          },
-        },
+      requerimiento_orden_material: {
+        include: { material: true },
+        orderBy: { id_requerimiento: "asc" },
       },
     },
   });
@@ -379,241 +383,526 @@ export async function consumeWorkOrderMaterialsAction(formData: FormData) {
 
   if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
     throw new Error(
-      "No se puede consumir materiales de una orden anulada o finalizada.",
+      "No se puede entregar material a una orden anulada o finalizada.",
     );
   }
 
-  if (!workOrder.id_version_receta || !workOrder.version_receta) {
-    throw new Error("La orden de trabajo no tiene una receta tecnica asociada.");
-  }
-
-  if (workOrder.version_receta.detalle_receta.length === 0) {
-    throw new Error("La receta tecnica asociada no tiene materiales.");
-  }
-
-  const existingConsumption = await prisma.movimiento_inventario.count({
-    where: {
-      id_orden_trabajo: idOrdenTrabajo,
-      tipo_movimiento: "salida",
-    },
-  });
-
-  if (existingConsumption > 0) {
+  if (workOrder.fecha_cierre_materiales) {
     throw new Error(
-      "Los materiales de esta orden ya fueron consumidos. No se permite consumirlos nuevamente.",
+      "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
     );
   }
 
-  const orderQuantity = toNumber(workOrder.cantidad);
-
-  if (orderQuantity <= 0) {
-    throw new Error("La cantidad de la orden debe ser mayor que cero.");
+  if (workOrder.requerimiento_orden_material.length === 0) {
+    throw new Error(
+      "Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella.",
+    );
   }
 
-  const consumptions = workOrder.version_receta.detalle_receta.map((detail) => {
-    const requiredBase = toNumber(detail.cantidad_requerida) * orderQuantity;
-    const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
-    const requiredWithWaste = roundQuantity(
-      requiredBase * (1 + wastePercentage / 100),
+  const lines = workOrder.requerimiento_orden_material
+    .map((requirement) => {
+      const pending = calculatePendingDelivery({
+        required: requirement.cantidad_requerida,
+        delivered: requirement.cantidad_entregada,
+      });
+
+      return {
+        idRequerimiento: requirement.id_requerimiento,
+        idMaterial: requirement.id_material,
+        materialName: requirement.material.nombre_material,
+        materialIsActive: requirement.material.estado,
+        quantity: pending,
+        stockActual: toNumber(requirement.material.stock_actual),
+        stockMinimo: toNumber(requirement.material.stock_minimo),
+      };
+    })
+    .filter((line) => line.quantity > 0);
+
+  if (lines.length === 0) {
+    throw new Error(
+      "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
     );
-    const stockActual = toNumber(detail.material.stock_actual);
-    const stockMinimo = toNumber(detail.material.stock_minimo);
-    const stockResultante = roundQuantity(stockActual - requiredWithWaste);
+  }
 
-    return {
-      idMaterial: detail.id_material,
-      materialName: detail.material.nombre_material,
-      materialIsActive: detail.material.estado,
-      requiredWithWaste,
-      stockActual,
-      stockMinimo,
-      stockResultante,
-    };
-  });
-
-  const inactiveMaterials = consumptions.filter(
-    (consumption) => !consumption.materialIsActive,
-  );
+  const inactiveMaterials = lines.filter((line) => !line.materialIsActive);
 
   if (inactiveMaterials.length > 0) {
     throw new Error(
-      `No se puede consumir materiales inactivos: ${inactiveMaterials
-        .map((material) => material.materialName)
+      `No se puede entregar materiales inactivos: ${inactiveMaterials
+        .map((line) => line.materialName)
         .join(", ")}.`,
     );
   }
 
-  const insufficientMaterials = consumptions.filter((consumption) => {
-    return consumption.stockActual < consumption.requiredWithWaste;
-  });
+  const insufficient = lines.filter((line) => line.stockActual < line.quantity);
 
-  if (insufficientMaterials.length > 0) {
-    const detail = insufficientMaterials
-      .map((material) => {
-        return `${material.materialName} requiere ${material.requiredWithWaste.toFixed(
-          2,
-        )} y tiene ${material.stockActual.toFixed(2)}`;
-      })
+  if (insufficient.length > 0) {
+    const detail = insufficient
+      .map(
+        (line) =>
+          `${line.materialName} requiere ${line.quantity.toFixed(2)} y tiene ${line.stockActual.toFixed(2)}`,
+      )
       .join("; ");
 
-    throw new Error(`Stock insuficiente para consumir la orden: ${detail}.`);
+    throw new Error(`Stock insuficiente para entregar la orden: ${detail}.`);
   }
 
-  const criticalConsumptions = consumptions.filter((consumption) => {
-    return consumption.stockResultante <= consumption.stockMinimo;
-  });
-
-  const activeAlerts =
-    criticalConsumptions.length > 0
-      ? await prisma.alerta_stock.findMany({
-          where: {
-            id_material: {
-              in: criticalConsumptions.map(
-                (consumption) => consumption.idMaterial,
-              ),
-            },
-            estado_alerta: "activa",
-          },
-          select: {
-            id_alerta: true,
-            id_material: true,
-          },
-        })
-      : [];
-
-  const activeAlertByMaterial = new Map(
-    activeAlerts.map((alert) => [alert.id_material, alert.id_alerta]),
-  );
-
-  const criticalConsumptionsWithoutAlert = criticalConsumptions.filter(
-    (consumption) => !activeAlertByMaterial.has(consumption.idMaterial),
-  );
-
   await prisma.$transaction(async (tx) => {
-    const movementIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "movimiento_inventario",
-      prefijo: "MVI",
-      cantidad: consumptions.length,
+    await deliverMaterials(tx, {
+      idOrdenTrabajo,
+      idUsuario: session.user.id,
+      lines,
+      motivo: `Salida por entrega de materiales a la orden ${idOrdenTrabajo}`,
     });
-    const alertIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "alerta_stock",
-      prefijo: "ALE",
-      cantidad: criticalConsumptionsWithoutAlert.length,
-    });
-    const alertIdByMaterial = new Map(
-      criticalConsumptionsWithoutAlert.map((consumption, index) => [
-        consumption.idMaterial,
-        alertIds[index],
-      ]),
-    );
-
-    const consumptionInsideTransaction = await tx.movimiento_inventario.count({
-      where: {
-        id_orden_trabajo: idOrdenTrabajo,
-        tipo_movimiento: "salida",
-      },
-    });
-
-    if (consumptionInsideTransaction > 0) {
-      throw new Error(
-        "Los materiales de esta orden ya fueron consumidos. No se permite consumirlos nuevamente.",
-      );
-    }
-
-    for (const [index, consumption] of consumptions.entries()) {
-      const materialUpdate = await tx.material.updateMany({
-        where: {
-          id_material: consumption.idMaterial,
-          stock_actual: {
-            gte: consumption.requiredWithWaste,
-          },
-        },
-        data: {
-          stock_actual: {
-            decrement: consumption.requiredWithWaste,
-          },
-        },
-      });
-
-      if (materialUpdate.count !== 1) {
-        throw new Error(
-          `Stock insuficiente para ${consumption.materialName}. La operacion fue cancelada.`,
-        );
-      }
-
-      await tx.movimiento_inventario.create({
-        data: {
-          id_movimiento: movementIds[index],
-          id_material: consumption.idMaterial,
-          id_orden_trabajo: idOrdenTrabajo,
-          tipo_movimiento: "salida",
-          cantidad: consumption.requiredWithWaste,
-          stock_anterior: consumption.stockActual,
-          stock_resultante: consumption.stockResultante,
-          motivo: `Salida por consumo de orden de trabajo ${idOrdenTrabajo}`,
-          id_usuario_responsable: session.user.id,
-        },
-      });
-
-      if (consumption.stockResultante <= consumption.stockMinimo) {
-        const activeAlertId = activeAlertByMaterial.get(
-          consumption.idMaterial,
-        );
-
-        if (activeAlertId) {
-          await tx.alerta_stock.update({
-            where: {
-              id_alerta: activeAlertId,
-            },
-            data: {
-              stock_detectado: consumption.stockResultante,
-              stock_minimo: consumption.stockMinimo,
-              mensaje: `El material ${consumption.materialName} quedo en stock critico tras consumir la orden ${idOrdenTrabajo}.`,
-            },
-          });
-        } else {
-          const newAlertId = alertIdByMaterial.get(consumption.idMaterial);
-
-          if (!newAlertId) {
-            throw new Error(
-              `No se pudo generar la alerta de stock para ${consumption.materialName}.`,
-            );
-          }
-
-          await tx.alerta_stock.create({
-            data: {
-              id_alerta: newAlertId,
-              id_material: consumption.idMaterial,
-              stock_detectado: consumption.stockResultante,
-              stock_minimo: consumption.stockMinimo,
-              estado_alerta: "activa",
-              mensaje: `El material ${consumption.materialName} quedo en stock critico tras consumir la orden ${idOrdenTrabajo}.`,
-            },
-          });
-        }
-      }
-    }
 
     await registerAuditLog({
       userId: session.user.id,
       entidad_afectada: "orden_trabajo",
       id_registro_afectado: idOrdenTrabajo,
-      accion: "consumir_materiales",
-      detalle: `Consumo de materiales registrado para ${consumptions.length} material(es).`,
+      accion: "entregar_materiales",
+      detalle: `Materiales entregados a la orden ${idOrdenTrabajo}: ${lines.length} material(es).`,
       tx,
     });
   });
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/inventory");
-  revalidatePath("/dashboard/inventory/alerts");
-  revalidatePath("/dashboard/inventory/materials");
-  revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
   revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
 
   redirect(
-    `/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-materials-consumed`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}?toast=work-order-materials-delivered`,
+  );
+}
+
+/**
+ * Entrega extra de un material puntual, por encima de lo planificado.
+ *
+ * Existe porque en el taller se rompen piezas y hay que rehacerlas. La alternativa seria
+ * sacar el material por el modulo de inventario sin vinculo a la orden, y ahi la
+ * conciliacion de esa orden quedaria falseada para siempre.
+ *
+ * El motivo es obligatorio: una salida por encima del plan sin explicacion es exactamente
+ * el registro que nadie sabe interpretar tres meses despues.
+ */
+export async function deliverAdditionalMaterialAction(formData: FormData) {
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+
+  const parsed = additionalDeliverySchema.safeParse({
+    id_orden_trabajo: formData.get("id_orden_trabajo"),
+    id_requerimiento: formData.get("id_requerimiento"),
+    cantidad: formData.get("cantidad"),
+    motivo: formData.get("motivo"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const requirement = await prisma.requerimiento_orden_material.findUnique({
+    where: { id_requerimiento: data.id_requerimiento },
+    include: {
+      material: true,
+      orden_trabajo: {
+        select: {
+          id_orden_trabajo: true,
+          estado: true,
+          fecha_cierre_materiales: true,
+        },
+      },
+    },
+  });
+
+  if (!requirement) {
+    throw new Error("El material solicitado no pertenece a esta orden.");
+  }
+
+  if (requirement.orden_trabajo.id_orden_trabajo !== data.id_orden_trabajo) {
+    throw new Error("El material solicitado no pertenece a esta orden.");
+  }
+
+  if (
+    requirement.orden_trabajo.estado === "anulada" ||
+    requirement.orden_trabajo.estado === "finalizada"
+  ) {
+    throw new Error(
+      "No se puede entregar material a una orden anulada o finalizada.",
+    );
+  }
+
+  if (requirement.orden_trabajo.fecha_cierre_materiales) {
+    throw new Error("Los materiales de esta orden ya fueron cerrados.");
+  }
+
+  if (!requirement.material.estado) {
+    throw new Error(
+      `No se puede entregar ${requirement.material.nombre_material}: el material esta inactivo.`,
+    );
+  }
+
+  const stockActual = toNumber(requirement.material.stock_actual);
+
+  if (stockActual < data.cantidad) {
+    throw new Error(
+      `Stock insuficiente para ${requirement.material.nombre_material}: se piden ${data.cantidad.toFixed(2)} y hay ${stockActual.toFixed(2)}.`,
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await deliverMaterials(tx, {
+      idOrdenTrabajo: data.id_orden_trabajo,
+      idUsuario: session.user.id,
+      lines: [
+        {
+          idRequerimiento: requirement.id_requerimiento,
+          idMaterial: requirement.id_material,
+          materialName: requirement.material.nombre_material,
+          quantity: data.cantidad,
+          stockActual,
+          stockMinimo: toNumber(requirement.material.stock_minimo),
+        },
+      ],
+      motivo: `Entrega adicional a la orden ${data.id_orden_trabajo}: ${data.motivo}`,
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: data.id_orden_trabajo,
+      accion: "entrega_adicional",
+      detalle: `Entrega adicional de ${data.cantidad.toFixed(2)} ${requirement.unidad_medida} de ${requirement.material.nombre_material}. Motivo: ${data.motivo}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/inventory");
+  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+
+  redirect(
+    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-additional-delivery`,
+  );
+}
+
+/**
+ * Devuelve al almacen material entregado y no usado.
+ *
+ * No se puede devolver mas de lo entregado. Como el consumo todavia no se declaro cuando
+ * se devuelve, la unica cota posible en este momento es lo entregado menos lo ya devuelto.
+ */
+export async function returnWorkOrderMaterialAction(formData: FormData) {
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+
+  const parsed = materialReturnSchema.safeParse({
+    id_orden_trabajo: formData.get("id_orden_trabajo"),
+    id_requerimiento: formData.get("id_requerimiento"),
+    cantidad: formData.get("cantidad"),
+    motivo: formData.get("motivo") ?? "",
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const requirement = await prisma.requerimiento_orden_material.findUnique({
+    where: { id_requerimiento: data.id_requerimiento },
+    include: {
+      material: true,
+      orden_trabajo: {
+        select: {
+          id_orden_trabajo: true,
+          estado: true,
+          fecha_cierre_materiales: true,
+        },
+      },
+    },
+  });
+
+  if (!requirement || requirement.orden_trabajo.id_orden_trabajo !== data.id_orden_trabajo) {
+    throw new Error("El material indicado no pertenece a esta orden.");
+  }
+
+  if (requirement.orden_trabajo.estado === "anulada") {
+    throw new Error("No se puede devolver material de una orden anulada.");
+  }
+
+  if (requirement.orden_trabajo.fecha_cierre_materiales) {
+    throw new Error(
+      "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
+    );
+  }
+
+  const entregado = toNumber(requirement.cantidad_entregada);
+  const devuelto = toNumber(requirement.cantidad_devuelta);
+  const devolvible = Number((entregado - devuelto).toFixed(2));
+
+  if (devolvible <= 0) {
+    throw new Error(
+      `No queda material de ${requirement.material.nombre_material} por devolver: se entregaron ${entregado.toFixed(2)} y ya se devolvieron ${devuelto.toFixed(2)}.`,
+    );
+  }
+
+  if (data.cantidad > devolvible) {
+    throw new Error(
+      `No se puede devolver ${data.cantidad.toFixed(2)} de ${requirement.material.nombre_material}: solo quedan ${devolvible.toFixed(2)} sin devolver.`,
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await returnMaterial(tx, {
+      idOrdenTrabajo: data.id_orden_trabajo,
+      idUsuario: session.user.id,
+      idRequerimiento: requirement.id_requerimiento,
+      idMaterial: requirement.id_material,
+      materialName: requirement.material.nombre_material,
+      quantity: data.cantidad,
+      stockActual: toNumber(requirement.material.stock_actual),
+      stockMinimo: toNumber(requirement.material.stock_minimo),
+      motivo: data.motivo
+        ? `Devolucion de la orden ${data.id_orden_trabajo}: ${data.motivo}`
+        : `Devolucion de material no usado de la orden ${data.id_orden_trabajo}`,
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: data.id_orden_trabajo,
+      accion: "devolver_material",
+      detalle: `Devolucion de ${data.cantidad.toFixed(2)} ${requirement.unidad_medida} de ${requirement.material.nombre_material}.${data.motivo ? ` Motivo: ${data.motivo}` : ""}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/inventory");
+  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+
+  redirect(
+    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-material-returned`,
+  );
+}
+
+/**
+ * Cierra la conciliacion de materiales de la orden.
+ *
+ * Se declara lo consumido de cada material y las unidades producidas; la merma sale por
+ * diferencia. A partir del cierre no se puede mover mas material contra la orden.
+ *
+ * Es un paso separado de finalizar la orden a proposito: un problema de conteo de material
+ * no debe impedir cerrar una orden que ya se fabrico.
+ */
+export async function closeWorkOrderMaterialsAction(formData: FormData) {
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+
+  const idOrdenTrabajo = String(formData.get("id_orden_trabajo") ?? "").trim();
+  const requirementIds = formData.getAll("id_requerimiento").map(String);
+  const consumedValues = formData.getAll("cantidad_consumida").map(String);
+
+  const parsed = closeMaterialsSchema.safeParse({
+    id_orden_trabajo: idOrdenTrabajo,
+    cantidad_producida: formData.get("cantidad_producida"),
+    lineas: requirementIds.map((id, index) => ({
+      id_requerimiento: id,
+      cantidad_consumida: consumedValues[index] ?? "0",
+    })),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: { id_orden_trabajo: data.id_orden_trabajo },
+    include: {
+      requerimiento_orden_material: {
+        include: { material: { select: { nombre_material: true } } },
+        orderBy: { id_requerimiento: "asc" },
+      },
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (workOrder.estado === "anulada") {
+    throw new Error("No se puede cerrar materiales de una orden anulada.");
+  }
+
+  if (workOrder.fecha_cierre_materiales) {
+    throw new Error("Los materiales de esta orden ya fueron cerrados.");
+  }
+
+  if (workOrder.requerimiento_orden_material.length === 0) {
+    throw new Error("Esta orden no tiene requerimiento congelado que conciliar.");
+  }
+
+  const requirementById = new Map(
+    workOrder.requerimiento_orden_material.map((requirement) => [
+      requirement.id_requerimiento,
+      requirement,
+    ]),
+  );
+
+  if (data.lineas.length !== requirementById.size) {
+    throw new Error(
+      "El cierre debe declarar el consumo de todos los materiales de la orden.",
+    );
+  }
+
+  const closures = data.lineas.map((linea) => {
+    const requirement = requirementById.get(linea.id_requerimiento);
+
+    if (!requirement) {
+      throw new Error("Se recibio un material que no pertenece a esta orden.");
+    }
+
+    const validation = validateClosure(
+      {
+        delivered: requirement.cantidad_entregada,
+        consumed: linea.cantidad_consumida,
+        returned: requirement.cantidad_devuelta,
+      },
+      requirement.material.nombre_material,
+    );
+
+    if (!validation.ok) {
+      throw new Error(validation.error);
+    }
+
+    return {
+      idRequerimiento: requirement.id_requerimiento,
+      consumida: linea.cantidad_consumida,
+      merma: validation.waste,
+      materialName: requirement.material.nombre_material,
+    };
+  });
+
+  const mermaTotal = closures.reduce((total, closure) => total + closure.merma, 0);
+
+  await prisma.$transaction(async (tx) => {
+    for (const closure of closures) {
+      await tx.requerimiento_orden_material.update({
+        where: { id_requerimiento: closure.idRequerimiento },
+        data: { cantidad_consumida: closure.consumida },
+      });
+    }
+
+    await tx.orden_trabajo.update({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      data: {
+        cantidad_producida: data.cantidad_producida,
+        fecha_cierre_materiales: new Date(),
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: data.id_orden_trabajo,
+      accion: "cerrar_materiales",
+      detalle: `Materiales cerrados. Producido: ${data.cantidad_producida.toFixed(2)}. Merma total derivada: ${mermaTotal.toFixed(2)}.`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+
+  redirect(
+    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-closed`,
+  );
+}
+
+/**
+ * Reabre el cierre de materiales de una orden.
+ *
+ * Solo ADMIN: el maestro de taller concilia y cierra, el administrador corrige. La merma
+ * declarada vuelve a ser editable, asi que el permiso se separa a proposito de quien
+ * ejecuta la operacion diaria.
+ *
+ * Reabrir no toca el stock. El cierre solo escribio declaraciones; las entregas y
+ * devoluciones que si movieron almacen quedan intactas. Por eso esta operacion no necesita
+ * revertir ningun movimiento: unicamente limpia lo declarado para poder declararlo de
+ * nuevo.
+ */
+export async function reopenWorkOrderMaterialsAction(formData: FormData) {
+  const session = await requireRole(["ADMIN"]);
+
+  const parsed = reopenMaterialsSchema.safeParse({
+    id_orden_trabajo: formData.get("id_orden_trabajo"),
+    motivo: formData.get("motivo"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+  }
+
+  const data = parsed.data;
+
+  const workOrder = await prisma.orden_trabajo.findUnique({
+    where: { id_orden_trabajo: data.id_orden_trabajo },
+    select: {
+      id_orden_trabajo: true,
+      estado: true,
+      cantidad_producida: true,
+      fecha_cierre_materiales: true,
+    },
+  });
+
+  if (!workOrder) {
+    throw new Error("La orden de trabajo no existe.");
+  }
+
+  if (!workOrder.fecha_cierre_materiales) {
+    throw new Error("Los materiales de esta orden no estan cerrados.");
+  }
+
+  if (workOrder.estado === "anulada") {
+    throw new Error("No se puede reabrir el cierre de una orden anulada.");
+  }
+
+  const producidaAnterior = workOrder.cantidad_producida
+    ? Number(workOrder.cantidad_producida.toString()).toFixed(2)
+    : "sin declarar";
+
+  await prisma.$transaction(async (tx) => {
+    await tx.requerimiento_orden_material.updateMany({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      data: { cantidad_consumida: 0 },
+    });
+
+    await tx.orden_trabajo.update({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      data: {
+        fecha_cierre_materiales: null,
+        cantidad_producida: null,
+      },
+    });
+
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "orden_trabajo",
+      id_registro_afectado: data.id_orden_trabajo,
+      accion: "reabrir_materiales",
+      detalle: `Cierre de materiales reabierto. Produccion declarada antes de reabrir: ${producidaAnterior}. Motivo: ${data.motivo}`,
+      tx,
+    });
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/production/work-orders");
+  revalidatePath(`/dashboard/production/work-orders/${data.id_orden_trabajo}`);
+
+  redirect(
+    `/dashboard/production/work-orders/${data.id_orden_trabajo}?toast=work-order-materials-reopened`,
   );
 }
 
