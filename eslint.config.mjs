@@ -15,6 +15,14 @@ const eslintConfig = defineConfig([
     // Reporte generado por `npm run test:coverage` (Bloque 7): no es codigo
     // fuente, no debe lintearse.
     "coverage/**",
+    "src/generated/**",
+    "tmp/**",
+    "output/**",
+    "outputs/**",
+    ".agents/**",
+    ".claude/**",
+    ".codex/**",
+    ".codex-finalizer/**",
   ]),
 ]);
 

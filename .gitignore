@@ -51,11 +51,19 @@ next-env.d.ts
 /src/generated/prisma
 
 
-CLAUDE.md
-/.claude/
+# Instrucciones compartidas para agentes: se versionan CLAUDE.md, AGENTS.md
+# y los comandos del equipo. La configuracion personal y las skills locales no.
+/.claude/*
+!/.claude/commands/
 /.agents/
 /.codex/
-/.github/
-AGENTS.md
-/docs
+/.github/*
+!/.github/workflows/
+/.github/workflows/*
+!/.github/workflows/ci.yml
+/docs/*
+!/docs/refactoring/
 /output
+/tmp/
+/outputs
+/.codex-finalizer/

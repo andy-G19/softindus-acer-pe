@@ -71,6 +71,9 @@ npm run dev            # Servidor de desarrollo
 npm run build           # Build de producción
 npm run start            # Servidor de producción (tras build)
 npm run lint             # ESLint
+npm run typecheck        # Genera tipos de rutas y comprueba TypeScript
+npm run check            # Prisma, lint, tipos, tests y build con entorno ficticio
+npm run refactor:inventory # Actualiza el inventario estructural de refactorización
 npm run test              # Vitest (una sola corrida)
 npm run db:validate       # Valida prisma/schema.prisma
 npm run db:generate       # Regenera el cliente de Prisma (src/generated/prisma)
@@ -78,6 +81,18 @@ npm run db:migrate        # Crea y aplica una migración (prisma migrate dev)
 npm run db:seed           # Ejecuta prisma/seed.ts
 npm run db:studio         # Abre Prisma Studio
 ```
+
+Para validar una copia limpia: `npm ci` y después `npm run check`. El comando
+usa credenciales ficticias y una URL local de base de datos sin servicio;
+se detiene en el primer fallo y no ejecuta migraciones, seed ni bootstrap.
+Genera el cliente Prisma, tipos de rutas y build; no requiere configurar un
+`.env` real. La instalación y el build pueden necesitar red (dependencias y
+fuentes de `next/font/google`). Los comandos individuales conservan su
+comportamiento habitual y pueden usar el entorno local.
+
+El avance de la refactorización se registra en
+[docs/refactoring/SEGUIMIENTO.md](docs/refactoring/SEGUIMIENTO.md), junto al
+[inventario de rutas, formularios y acciones](docs/refactoring/INVENTARIO.md).
 
 `postinstall` ejecuta `prisma generate` automáticamente. No hay un runner de
 tests E2E configurado (ver [Riesgos pendientes](docs/fase-12-estabilizacion-tecnica.md)).
@@ -162,8 +177,8 @@ Ver el checklist completo en
 ## Pruebas
 
 - Unitarias con Vitest (`npm run test`), incluidas en CI.
-- CI en `.github/workflows/ci.yml`: `db:generate` → `db:validate` → `lint`
-  → `test` → `build`.
+- CI en `.github/workflows/ci.yml` ejecuta `npm run check`: `db:generate` →
+  `db:validate` → `lint` → `typecheck` → `test` → `build`.
 - Checklists manuales en `docs/`:
   [pruebas de seguridad](docs/pruebas-seguridad.md),
   [pruebas integrales por rol](docs/checklist-pruebas-integrales.md).
