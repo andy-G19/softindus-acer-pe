@@ -15,7 +15,8 @@ import {
 //
 // Las aserciones miran el estado final y el valor que quedaria guardado, no el
 // tipo de JavaScript (number o Decimal), para que sigan valiendo si cambia la
-// implementacion. Los tests "defecto:" documentan condiciones de carrera vigentes.
+// implementacion. Los tests de concurrencia inyectan la escritura de otra
+// solicitud entre la lectura previa y la transaccion, de forma determinista.
 //
 // Limite: una base en memoria no demuestra la atomicidad real de PostgreSQL bajo
 // concurrencia; eso requiere pruebas de integracion contra una base desechable.
@@ -42,7 +43,7 @@ const mocks = vi.hoisted(() => {
       $transaction: vi.fn(),
     },
     tx: {
-      compra: { create: vi.fn(), update: vi.fn() },
+      compra: { create: vi.fn(), updateMany: vi.fn() },
       detalle_compra: { create: vi.fn() },
       material: { update: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
@@ -362,22 +363,22 @@ beforeEach(() => {
     },
   );
 
-  mocks.tx.compra.update.mockImplementation(
+  mocks.tx.compra.updateMany.mockImplementation(
     async ({
       where,
       data,
     }: {
-      where: { id_compra: string };
+      where: { id_compra: string; estado_compra: { not: string } };
       data: { estado_compra: string; estado_pago: string };
     }) => {
       const row = db.compras.get(where.id_compra);
 
-      if (!row) {
-        throw new Error(`Compra ${where.id_compra} no encontrada.`);
+      if (!row || row.estado_compra === where.estado_compra.not) {
+        return { count: 0 };
       }
 
       Object.assign(row, data);
-      return row;
+      return { count: 1 };
     },
   );
 });
@@ -734,7 +735,25 @@ describe("annulPurchaseAction", () => {
     expect(kardexSummary()).toEqual([]);
   });
 
-  it("defecto: una anulacion concurrente de la misma compra revierte el stock dos veces", async () => {
+  it("anula con una condicion sobre el estado dentro de la transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(mocks.tx.compra.updateMany).toHaveBeenCalledWith({
+      where: {
+        id_compra: PURCHASE_ID,
+        estado_compra: { not: "anulada" },
+      },
+      data: {
+        estado_compra: "anulada",
+        estado_pago: "anulada",
+      },
+    });
+  });
+
+  it("una anulacion concurrente de la misma compra no revierte el stock dos veces", async () => {
     seedMaterial(PLANCHA, { stock: "15" });
     seedPurchase([[PLANCHA, "5"]]);
 
@@ -760,8 +779,9 @@ describe("annulPurchaseAction", () => {
 
     const url = await redirectOf(annulPurchaseAction(annulForm()));
 
-    expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-annulled`);
-    expect(stockOf(PLANCHA)).toBe("5.00");
+    // Misma respuesta que ante una compra ya anulada: el listado, sin toast.
+    expect(url).toBe(PURCHASES_PATH);
+    expect(stockOf(PLANCHA)).toBe("10.00");
     expect(kardexSummary()).toEqual([
       {
         tipo_movimiento: "salida",
@@ -770,13 +790,8 @@ describe("annulPurchaseAction", () => {
         stock_anterior: "15.00",
         stock_resultante: "10.00",
       },
-      {
-        tipo_movimiento: "salida",
-        id_material: PLANCHA,
-        cantidad: "5.00",
-        stock_anterior: "10.00",
-        stock_resultante: "5.00",
-      },
     ]);
+    expect(mocks.registerAuditLog).not.toHaveBeenCalled();
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });
 });

@@ -14,6 +14,8 @@ function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
 }
 
+class PurchaseAlreadyAnnulledError extends Error {}
+
 export async function createPurchaseAction(formData: FormData) {
   const session = await requireRole(["ADMIN"]);
 
@@ -310,67 +312,92 @@ export async function annulPurchaseAction(formData: FormData) {
     redirect(`/dashboard/inventory/purchases/${purchaseId}`);
   }
 
-  await prisma.$transaction(async (tx) => {
-    const reversalIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "movimiento_inventario",
-      prefijo: "MVI",
-      cantidad: purchase.movimiento_inventario.length,
-    });
+  let rejectionPath: string | null = null;
 
-    for (const [index, movement] of purchase.movimiento_inventario.entries()) {
-      const material = materialById.get(movement.id_material);
+  try {
+    await prisma.$transaction(async (tx) => {
+      const reversalIds = await getNextCorrelativeIds(tx, {
+        codigoEntidad: "movimiento_inventario",
+        prefijo: "MVI",
+        cantidad: purchase.movimiento_inventario.length,
+      });
 
-      if (!material) {
-        throw new Error("Material no encontrado durante la anulacion.");
+      // La condicion y la escritura van en la misma sentencia: si otra solicitud anulo
+      // la compra despues de la lectura previa, count es 0 y el stock no se revierte
+      // por segunda vez.
+      const annulment = await tx.compra.updateMany({
+        where: {
+          id_compra: purchaseId,
+          estado_compra: {
+            not: "anulada",
+          },
+        },
+        data: {
+          estado_compra: "anulada",
+          estado_pago: "anulada",
+        },
+      });
+
+      if (annulment.count !== 1) {
+        throw new PurchaseAlreadyAnnulledError();
       }
 
-      const stockAnterior = Number(material.stock_actual.toString());
-      const quantity = Number(movement.cantidad.toString());
-      const stockResultante = stockAnterior - quantity;
+      for (const [index, movement] of purchase.movimiento_inventario.entries()) {
+        const material = materialById.get(movement.id_material);
 
-      await tx.material.update({
-        where: {
-          id_material: movement.id_material,
-        },
-        data: {
-          stock_actual: stockResultante,
-        },
-      });
+        if (!material) {
+          throw new Error("Material no encontrado durante la anulacion.");
+        }
 
-      await tx.movimiento_inventario.create({
-        data: {
-          id_movimiento: reversalIds[index],
-          id_material: movement.id_material,
-          id_compra: purchaseId,
-          tipo_movimiento: "salida",
-          cantidad: quantity,
-          stock_anterior: stockAnterior,
-          stock_resultante: stockResultante,
-          motivo: `Reversion por anulacion de compra ${purchaseId}`,
-          id_usuario_responsable: session.user.id,
-        },
+        const stockAnterior = Number(material.stock_actual.toString());
+        const quantity = Number(movement.cantidad.toString());
+        const stockResultante = stockAnterior - quantity;
+
+        await tx.material.update({
+          where: {
+            id_material: movement.id_material,
+          },
+          data: {
+            stock_actual: stockResultante,
+          },
+        });
+
+        await tx.movimiento_inventario.create({
+          data: {
+            id_movimiento: reversalIds[index],
+            id_material: movement.id_material,
+            id_compra: purchaseId,
+            tipo_movimiento: "salida",
+            cantidad: quantity,
+            stock_anterior: stockAnterior,
+            stock_resultante: stockResultante,
+            motivo: `Reversion por anulacion de compra ${purchaseId}`,
+            id_usuario_responsable: session.user.id,
+          },
+        });
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "compra",
+        id_registro_afectado: purchaseId,
+        accion: "anular",
+        detalle: `Compra anulada con reversion de inventario: ${purchaseId}`,
+        tx,
       });
+    });
+  } catch (error) {
+    if (!(error instanceof PurchaseAlreadyAnnulledError)) {
+      throw error;
     }
 
-    await tx.compra.update({
-      where: {
-        id_compra: purchaseId,
-      },
-      data: {
-        estado_compra: "anulada",
-        estado_pago: "anulada",
-      },
-    });
+    rejectionPath = "/dashboard/inventory/purchases";
+  }
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "compra",
-      id_registro_afectado: purchaseId,
-      accion: "anular",
-      detalle: `Compra anulada con reversion de inventario: ${purchaseId}`,
-      tx,
-    });
-  });
+  // redirect lanza una excepcion: se llama fuera del try/catch.
+  if (rejectionPath) {
+    redirect(rejectionPath);
+  }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/materials");
