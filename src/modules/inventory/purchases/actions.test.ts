@@ -45,7 +45,7 @@ const mocks = vi.hoisted(() => {
     tx: {
       compra: { create: vi.fn(), updateMany: vi.fn() },
       detalle_compra: { create: vi.fn() },
-      material: { update: vi.fn() },
+      material: { update: vi.fn(), updateManyAndReturn: vi.fn() },
       alerta_stock: { updateMany: vi.fn() },
       movimiento_inventario: { create: vi.fn() },
       historial_precio_proveedor: { create: vi.fn() },
@@ -123,13 +123,17 @@ function toColumn(value: DecimalInput) {
   );
 }
 
-/** Escritura de Prisma sobre una columna numerica: valor directo o suma atomica. */
+/** Escritura de Prisma sobre una columna numerica: valor directo, suma o resta atomica. */
 function applyNumericUpdate(
   current: Prisma.Decimal,
-  value: DecimalInput | { increment: DecimalInput },
+  value: DecimalInput | { increment: DecimalInput } | { decrement: DecimalInput },
 ) {
   if (typeof value === "object" && "increment" in value) {
     return toColumn(current.plus(value.increment));
+  }
+
+  if (typeof value === "object" && "decrement" in value) {
+    return toColumn(current.minus(value.decrement));
   }
 
   return toColumn(value);
@@ -231,6 +235,20 @@ async function readMaterials({
     .map((row) => pick(row, select));
 }
 
+/** Si el callback lanza, se descartan sus escrituras, como hace PostgreSQL. */
+async function runTransaction(
+  callback: (tx: typeof mocks.tx) => Promise<unknown>,
+) {
+  const snapshot = cloneDb(db);
+
+  try {
+    return await callback(mocks.tx);
+  } catch (error) {
+    db = snapshot;
+    throw error;
+  }
+}
+
 async function readPurchase({ where }: { where: { id_compra: string } }) {
   const row = db.compras.get(where.id_compra);
 
@@ -315,19 +333,7 @@ beforeEach(() => {
   mocks.prisma.material.findMany.mockImplementation(readMaterials);
   mocks.prisma.compra.findUnique.mockImplementation(readPurchase);
 
-  // Si el callback lanza, se descartan sus escrituras, como hace PostgreSQL.
-  mocks.prisma.$transaction.mockImplementation(
-    async (callback: (tx: typeof mocks.tx) => Promise<unknown>) => {
-      const snapshot = cloneDb(db);
-
-      try {
-        return await callback(mocks.tx);
-      } catch (error) {
-        db = snapshot;
-        throw error;
-      }
-    },
-  );
+  mocks.prisma.$transaction.mockImplementation(runTransaction);
 
   mocks.tx.material.update.mockImplementation(
     async ({
@@ -353,6 +359,29 @@ beforeEach(() => {
       }
 
       return pick(row, select);
+    },
+  );
+
+  mocks.tx.material.updateManyAndReturn.mockImplementation(
+    async ({
+      where,
+      data,
+      select,
+    }: {
+      where: { id_material: string; stock_actual?: { gte: DecimalInput } };
+      data: { stock_actual: { decrement: DecimalInput } };
+      select?: MaterialSelect;
+    }) => {
+      const row = db.materiales.get(where.id_material);
+      const minimum = where.stock_actual?.gte;
+
+      if (!row || (minimum !== undefined && row.stock_actual.lessThan(minimum))) {
+        return [];
+      }
+
+      row.stock_actual = applyNumericUpdate(row.stock_actual, data.stock_actual);
+
+      return [pick(row, select)];
     },
   );
 
@@ -710,6 +739,81 @@ describe("annulPurchaseAction", () => {
       estado_pago: "pendiente",
     });
     expect(mocks.registerAuditLog).not.toHaveBeenCalled();
+  });
+
+  it("revierte con decrement condicionado a que el stock alcance, sin lectura previa", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(mocks.prisma.material.findMany).not.toHaveBeenCalled();
+    expect(mocks.tx.material.update).not.toHaveBeenCalled();
+    expect(mocks.tx.material.updateManyAndReturn).toHaveBeenCalledTimes(1);
+
+    const [{ where, data, select }] =
+      mocks.tx.material.updateManyAndReturn.mock.calls[0];
+
+    expect(where).toEqual({
+      id_material: PLANCHA,
+      stock_actual: { gte: expect.any(Prisma.Decimal) },
+    });
+    expect(where.stock_actual.gte.toFixed(2)).toBe("5.00");
+    expect(data).toEqual({
+      stock_actual: { decrement: expect.any(Prisma.Decimal) },
+    });
+    expect(data.stock_actual.decrement.toFixed(2)).toBe("5.00");
+    expect(select).toEqual({ stock_actual: true });
+  });
+
+  it("el kardex de la reversion parte del stock que devuelve la base", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
+      // Otra compra de 10 unidades confirma justo antes de esta transaccion.
+      materialRow(PLANCHA).stock_actual = toColumn("25");
+
+      return runTransaction(callback);
+    });
+
+    const url = await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(url).toBe(`${PURCHASES_PATH}?toast=purchase-annulled`);
+    expect(stockOf(PLANCHA)).toBe("20.00");
+    expect(kardexSummary()).toEqual([
+      {
+        tipo_movimiento: "salida",
+        id_material: PLANCHA,
+        cantidad: "5.00",
+        stock_anterior: "25.00",
+        stock_resultante: "20.00",
+      },
+    ]);
+  });
+
+  it("si una salida concurrente deja el stock corto, aborta la anulacion y vuelve al detalle", async () => {
+    seedMaterial(PLANCHA, { stock: "15" });
+    seedPurchase([[PLANCHA, "5"]]);
+
+    mocks.prisma.$transaction.mockImplementationOnce(async (callback) => {
+      // Una salida de 12 unidades confirma justo antes de esta transaccion.
+      materialRow(PLANCHA).stock_actual = toColumn("3");
+
+      return runTransaction(callback);
+    });
+
+    const url = await redirectOf(annulPurchaseAction(annulForm()));
+
+    expect(url).toBe(PURCHASE_DETAIL_PATH);
+    expect(stockOf(PLANCHA)).toBe("3.00");
+    expect(kardexSummary()).toEqual([]);
+    expect(purchaseState()).toEqual({
+      estado_compra: "confirmada",
+      estado_pago: "pendiente",
+    });
+    expect(mocks.registerAuditLog).not.toHaveBeenCalled();
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });
 
   it("vuelve al detalle sin revertir nada si la compra tiene pagos", async () => {

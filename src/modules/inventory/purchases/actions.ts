@@ -16,6 +16,8 @@ function toNullable(value: string | undefined) {
 
 class PurchaseAlreadyAnnulledError extends Error {}
 
+class InsufficientStockForAnnulmentError extends Error {}
+
 export async function createPurchaseAction(formData: FormData) {
   const session = await requireRole(["ADMIN"]);
 
@@ -276,42 +278,6 @@ export async function annulPurchaseAction(formData: FormData) {
     redirect(`/dashboard/inventory/purchases/${purchaseId}`);
   }
 
-  const materialIds = purchase.movimiento_inventario.map(
-    (movement) => movement.id_material,
-  );
-
-  const materials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: materialIds,
-      },
-    },
-    select: {
-      id_material: true,
-      stock_actual: true,
-    },
-  });
-
-  const materialById = new Map(
-    materials.map((material) => [material.id_material, material]),
-  );
-
-  const hasInsufficientStock = purchase.movimiento_inventario.some(
-    (movement) => {
-      const material = materialById.get(movement.id_material);
-
-      return (
-        !material ||
-        Number(material.stock_actual.toString()) <
-          Number(movement.cantidad.toString())
-      );
-    },
-  );
-
-  if (hasInsufficientStock) {
-    redirect(`/dashboard/inventory/purchases/${purchaseId}`);
-  }
-
   let rejectionPath: string | null = null;
 
   try {
@@ -343,24 +309,32 @@ export async function annulPurchaseAction(formData: FormData) {
       }
 
       for (const [index, movement] of purchase.movimiento_inventario.entries()) {
-        const material = materialById.get(movement.id_material);
-
-        if (!material) {
-          throw new Error("Material no encontrado durante la anulacion.");
-        }
-
-        const stockAnterior = Number(material.stock_actual.toString());
-        const quantity = Number(movement.cantidad.toString());
-        const stockResultante = stockAnterior - quantity;
-
-        await tx.material.update({
+        // La validacion de stock suficiente y la resta van en la misma sentencia: una
+        // salida que confirme en medio no puede dejar el stock por debajo de lo que se
+        // revierte. Si no alcanza, se aborta la anulacion completa.
+        const [updatedMaterial] = await tx.material.updateManyAndReturn({
           where: {
             id_material: movement.id_material,
+            stock_actual: {
+              gte: movement.cantidad,
+            },
           },
           data: {
-            stock_actual: stockResultante,
+            stock_actual: {
+              decrement: movement.cantidad,
+            },
+          },
+          select: {
+            stock_actual: true,
           },
         });
+
+        if (!updatedMaterial) {
+          throw new InsufficientStockForAnnulmentError();
+        }
+
+        const stockResultante = updatedMaterial.stock_actual;
+        const stockAnterior = stockResultante.plus(movement.cantidad);
 
         await tx.movimiento_inventario.create({
           data: {
@@ -368,7 +342,7 @@ export async function annulPurchaseAction(formData: FormData) {
             id_material: movement.id_material,
             id_compra: purchaseId,
             tipo_movimiento: "salida",
-            cantidad: quantity,
+            cantidad: movement.cantidad,
             stock_anterior: stockAnterior,
             stock_resultante: stockResultante,
             motivo: `Reversion por anulacion de compra ${purchaseId}`,
@@ -387,11 +361,13 @@ export async function annulPurchaseAction(formData: FormData) {
       });
     });
   } catch (error) {
-    if (!(error instanceof PurchaseAlreadyAnnulledError)) {
+    if (error instanceof PurchaseAlreadyAnnulledError) {
+      rejectionPath = "/dashboard/inventory/purchases";
+    } else if (error instanceof InsufficientStockForAnnulmentError) {
+      rejectionPath = `/dashboard/inventory/purchases/${purchaseId}`;
+    } else {
       throw error;
     }
-
-    rejectionPath = "/dashboard/inventory/purchases";
   }
 
   // redirect lanza una excepcion: se llama fuera del try/catch.
