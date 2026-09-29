@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
@@ -12,6 +13,10 @@ import { purchaseSchema } from "@/schemas/inventory/purchase.schema";
 function toNullable(value: string | undefined) {
   return value && value.trim() !== "" ? value.trim() : null;
 }
+
+class PurchaseAlreadyAnnulledError extends Error {}
+
+class InsufficientStockForAnnulmentError extends Error {}
 
 export async function createPurchaseAction(formData: FormData) {
   const session = await requireRole(["ADMIN"]);
@@ -136,8 +141,12 @@ export async function createPurchaseAction(formData: FormData) {
         throw new Error("Material no encontrado durante la transacción.");
       }
 
-      const stockAnterior = Number(material.stock_actual.toString());
-      const stockResultante = stockAnterior + item.cantidad;
+      // Se redondea como lo haria la columna Decimal(10, 2): asi el stock anterior que se
+      // deduce abajo (resultante - cantidad) coincide con el que habia en la base.
+      const cantidad = new Prisma.Decimal(item.cantidad).toDecimalPlaces(
+        2,
+        Prisma.Decimal.ROUND_HALF_UP,
+      );
       const itemSubtotal = item.cantidad * item.costo_unitario;
 
       await tx.detalle_compra.create({
@@ -153,19 +162,29 @@ export async function createPurchaseAction(formData: FormData) {
         },
       });
 
-      await tx.material.update({
+      // La suma la hace PostgreSQL sobre el valor vigente y la fila queda bloqueada hasta
+      // el commit. Leer el stock antes y escribir el total perderia las compras que
+      // confirmen en medio.
+      const updatedMaterial = await tx.material.update({
         where: {
           id_material: item.id_material,
         },
         data: {
-          stock_actual: stockResultante,
+          stock_actual: {
+            increment: cantidad,
+          },
           costo_unitario_actual: item.costo_unitario,
+        },
+        select: {
+          stock_actual: true,
+          stock_minimo: true,
         },
       });
 
-      const stockMinimo = Number(material.stock_minimo.toString());
+      const stockResultante = updatedMaterial.stock_actual;
+      const stockAnterior = stockResultante.minus(cantidad);
 
-      if (stockResultante > stockMinimo){
+      if (stockResultante.greaterThan(updatedMaterial.stock_minimo)) {
         await tx.alerta_stock.updateMany({
           where: {
             id_material: item.id_material,
@@ -185,7 +204,7 @@ export async function createPurchaseAction(formData: FormData) {
           id_material: item.id_material,
           id_compra: idCompra,
           tipo_movimiento: "entrada",
-          cantidad: item.cantidad,
+          cantidad,
           stock_anterior: stockAnterior,
           stock_resultante: stockResultante,
           motivo: "Entrada automática generada por compra confirmada",
@@ -259,103 +278,102 @@ export async function annulPurchaseAction(formData: FormData) {
     redirect(`/dashboard/inventory/purchases/${purchaseId}`);
   }
 
-  const materialIds = purchase.movimiento_inventario.map(
-    (movement) => movement.id_material,
-  );
+  let rejectionPath: string | null = null;
 
-  const materials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: materialIds,
-      },
-    },
-    select: {
-      id_material: true,
-      stock_actual: true,
-    },
-  });
+  try {
+    await prisma.$transaction(async (tx) => {
+      const reversalIds = await getNextCorrelativeIds(tx, {
+        codigoEntidad: "movimiento_inventario",
+        prefijo: "MVI",
+        cantidad: purchase.movimiento_inventario.length,
+      });
 
-  const materialById = new Map(
-    materials.map((material) => [material.id_material, material]),
-  );
+      // La condicion y la escritura van en la misma sentencia: si otra solicitud anulo
+      // la compra despues de la lectura previa, count es 0 y el stock no se revierte
+      // por segunda vez.
+      const annulment = await tx.compra.updateMany({
+        where: {
+          id_compra: purchaseId,
+          estado_compra: {
+            not: "anulada",
+          },
+        },
+        data: {
+          estado_compra: "anulada",
+          estado_pago: "anulada",
+        },
+      });
 
-  const hasInsufficientStock = purchase.movimiento_inventario.some(
-    (movement) => {
-      const material = materialById.get(movement.id_material);
-
-      return (
-        !material ||
-        Number(material.stock_actual.toString()) <
-          Number(movement.cantidad.toString())
-      );
-    },
-  );
-
-  if (hasInsufficientStock) {
-    redirect(`/dashboard/inventory/purchases/${purchaseId}`);
-  }
-
-  await prisma.$transaction(async (tx) => {
-    const reversalIds = await getNextCorrelativeIds(tx, {
-      codigoEntidad: "movimiento_inventario",
-      prefijo: "MVI",
-      cantidad: purchase.movimiento_inventario.length,
-    });
-
-    for (const [index, movement] of purchase.movimiento_inventario.entries()) {
-      const material = materialById.get(movement.id_material);
-
-      if (!material) {
-        throw new Error("Material no encontrado durante la anulacion.");
+      if (annulment.count !== 1) {
+        throw new PurchaseAlreadyAnnulledError();
       }
 
-      const stockAnterior = Number(material.stock_actual.toString());
-      const quantity = Number(movement.cantidad.toString());
-      const stockResultante = stockAnterior - quantity;
+      for (const [index, movement] of purchase.movimiento_inventario.entries()) {
+        // La validacion de stock suficiente y la resta van en la misma sentencia: una
+        // salida que confirme en medio no puede dejar el stock por debajo de lo que se
+        // revierte. Si no alcanza, se aborta la anulacion completa.
+        const [updatedMaterial] = await tx.material.updateManyAndReturn({
+          where: {
+            id_material: movement.id_material,
+            stock_actual: {
+              gte: movement.cantidad,
+            },
+          },
+          data: {
+            stock_actual: {
+              decrement: movement.cantidad,
+            },
+          },
+          select: {
+            stock_actual: true,
+          },
+        });
 
-      await tx.material.update({
-        where: {
-          id_material: movement.id_material,
-        },
-        data: {
-          stock_actual: stockResultante,
-        },
-      });
+        if (!updatedMaterial) {
+          throw new InsufficientStockForAnnulmentError();
+        }
 
-      await tx.movimiento_inventario.create({
-        data: {
-          id_movimiento: reversalIds[index],
-          id_material: movement.id_material,
-          id_compra: purchaseId,
-          tipo_movimiento: "salida",
-          cantidad: quantity,
-          stock_anterior: stockAnterior,
-          stock_resultante: stockResultante,
-          motivo: `Reversion por anulacion de compra ${purchaseId}`,
-          id_usuario_responsable: session.user.id,
-        },
+        const stockResultante = updatedMaterial.stock_actual;
+        const stockAnterior = stockResultante.plus(movement.cantidad);
+
+        await tx.movimiento_inventario.create({
+          data: {
+            id_movimiento: reversalIds[index],
+            id_material: movement.id_material,
+            id_compra: purchaseId,
+            tipo_movimiento: "salida",
+            cantidad: movement.cantidad,
+            stock_anterior: stockAnterior,
+            stock_resultante: stockResultante,
+            motivo: `Reversion por anulacion de compra ${purchaseId}`,
+            id_usuario_responsable: session.user.id,
+          },
+        });
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "compra",
+        id_registro_afectado: purchaseId,
+        accion: "anular",
+        detalle: `Compra anulada con reversion de inventario: ${purchaseId}`,
+        tx,
       });
+    });
+  } catch (error) {
+    if (error instanceof PurchaseAlreadyAnnulledError) {
+      rejectionPath = "/dashboard/inventory/purchases";
+    } else if (error instanceof InsufficientStockForAnnulmentError) {
+      rejectionPath = `/dashboard/inventory/purchases/${purchaseId}`;
+    } else {
+      throw error;
     }
+  }
 
-    await tx.compra.update({
-      where: {
-        id_compra: purchaseId,
-      },
-      data: {
-        estado_compra: "anulada",
-        estado_pago: "anulada",
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "compra",
-      id_registro_afectado: purchaseId,
-      accion: "anular",
-      detalle: `Compra anulada con reversion de inventario: ${purchaseId}`,
-      tx,
-    });
-  });
+  // redirect lanza una excepcion: se llama fuera del try/catch.
+  if (rejectionPath) {
+    redirect(rejectionPath);
+  }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath("/dashboard/inventory/materials");
