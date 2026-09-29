@@ -5,8 +5,7 @@ Cada entrega debe dejar el proyecto comprobable antes de comenzar la siguiente.
 
 ## Entrega 0 — Base técnica de validación
 
-Fecha: 2026-09-25. Estado: implementación y validación local terminadas.
-La ejecución remota de CI queda pendiente de publicar los cambios.
+Fecha: 2026-09-25. Estado: cerrada el 2026-09-28. Commits f8ab42b y 3dfe11c en staging; CI #19 en verde (2m 11s) y despliegue de staging de 3dfe11c en estado Ready, con login y navegación verificados.
 
 Cambios de esta entrega:
 
@@ -86,7 +85,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 
 | # | Pista | Entrega | Estado |
 |---|---|---|---|
-| 0 | Base | Validación, inventario, CI y configuración de Claude Code | Validada localmente; commit y CI remoto pendientes |
+| 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
 | 1 | Fix | Stock atómico en compras y anulación | Pendiente |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Pendiente |
 | 3 | A | Conversión y formatos compartidos | Pendiente |
