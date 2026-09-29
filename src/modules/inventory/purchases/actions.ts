@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
@@ -136,8 +137,12 @@ export async function createPurchaseAction(formData: FormData) {
         throw new Error("Material no encontrado durante la transacción.");
       }
 
-      const stockAnterior = Number(material.stock_actual.toString());
-      const stockResultante = stockAnterior + item.cantidad;
+      // Se redondea como lo haria la columna Decimal(10, 2): asi el stock anterior que se
+      // deduce abajo (resultante - cantidad) coincide con el que habia en la base.
+      const cantidad = new Prisma.Decimal(item.cantidad).toDecimalPlaces(
+        2,
+        Prisma.Decimal.ROUND_HALF_UP,
+      );
       const itemSubtotal = item.cantidad * item.costo_unitario;
 
       await tx.detalle_compra.create({
@@ -153,19 +158,29 @@ export async function createPurchaseAction(formData: FormData) {
         },
       });
 
-      await tx.material.update({
+      // La suma la hace PostgreSQL sobre el valor vigente y la fila queda bloqueada hasta
+      // el commit. Leer el stock antes y escribir el total perderia las compras que
+      // confirmen en medio.
+      const updatedMaterial = await tx.material.update({
         where: {
           id_material: item.id_material,
         },
         data: {
-          stock_actual: stockResultante,
+          stock_actual: {
+            increment: cantidad,
+          },
           costo_unitario_actual: item.costo_unitario,
+        },
+        select: {
+          stock_actual: true,
+          stock_minimo: true,
         },
       });
 
-      const stockMinimo = Number(material.stock_minimo.toString());
+      const stockResultante = updatedMaterial.stock_actual;
+      const stockAnterior = stockResultante.minus(cantidad);
 
-      if (stockResultante > stockMinimo){
+      if (stockResultante.greaterThan(updatedMaterial.stock_minimo)) {
         await tx.alerta_stock.updateMany({
           where: {
             id_material: item.id_material,
@@ -185,7 +200,7 @@ export async function createPurchaseAction(formData: FormData) {
           id_material: item.id_material,
           id_compra: idCompra,
           tipo_movimiento: "entrada",
-          cantidad: item.cantidad,
+          cantidad,
           stock_anterior: stockAnterior,
           stock_resultante: stockResultante,
           motivo: "Entrada automática generada por compra confirmada",

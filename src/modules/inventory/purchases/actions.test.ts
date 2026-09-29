@@ -122,6 +122,18 @@ function toColumn(value: DecimalInput) {
   );
 }
 
+/** Escritura de Prisma sobre una columna numerica: valor directo o suma atomica. */
+function applyNumericUpdate(
+  current: Prisma.Decimal,
+  value: DecimalInput | { increment: DecimalInput },
+) {
+  if (typeof value === "object" && "increment" in value) {
+    return toColumn(current.plus(value.increment));
+  }
+
+  return toColumn(value);
+}
+
 /** Valor que quedaria guardado en la columna, llegue como number o como Decimal. */
 function stored(value: unknown) {
   return toColumn(String(value)).toFixed(2);
@@ -324,7 +336,7 @@ beforeEach(() => {
     }: {
       where: { id_material: string };
       data: {
-        stock_actual?: DecimalInput;
+        stock_actual?: DecimalInput | { increment: DecimalInput };
         costo_unitario_actual?: DecimalInput;
       };
       select?: MaterialSelect;
@@ -332,7 +344,7 @@ beforeEach(() => {
       const row = materialRow(where.id_material);
 
       if (data.stock_actual !== undefined) {
-        row.stock_actual = toColumn(data.stock_actual);
+        row.stock_actual = applyNumericUpdate(row.stock_actual, data.stock_actual);
       }
 
       if (data.costo_unitario_actual !== undefined) {
@@ -540,7 +552,30 @@ describe("createPurchaseAction", () => {
     expect(stockOf(PLANCHA)).toBe("10.00");
   });
 
-  it("defecto: pierde una compra concurrente del mismo material (actualizacion perdida)", async () => {
+  it("suma el stock con increment atomico y un Decimal, dentro de la transaccion", async () => {
+    seedMaterial(PLANCHA, { stock: "10" });
+
+    await redirectOf(
+      createPurchaseAction(
+        purchaseForm([{ id_material: PLANCHA, cantidad: "5", costo_unitario: "12.50" }]),
+      ),
+    );
+
+    expect(mocks.prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(mocks.tx.material.update).toHaveBeenCalledTimes(1);
+
+    const [{ where, data, select }] = mocks.tx.material.update.mock.calls[0];
+
+    expect(where).toEqual({ id_material: PLANCHA });
+    expect(data).toEqual({
+      stock_actual: { increment: expect.any(Prisma.Decimal) },
+      costo_unitario_actual: 12.5,
+    });
+    expect(data.stock_actual.increment.toFixed(2)).toBe("5.00");
+    expect(select).toEqual({ stock_actual: true, stock_minimo: true });
+  });
+
+  it("no pierde una compra concurrente: el kardex parte del stock que devuelve la base", async () => {
     seedMaterial(PLANCHA, { stock: "10" });
 
     mocks.prisma.material.findMany.mockImplementationOnce(async (args) => {
@@ -558,14 +593,36 @@ describe("createPurchaseAction", () => {
       ),
     );
 
-    expect(stockOf(PLANCHA)).toBe("15.00");
+    expect(stockOf(PLANCHA)).toBe("25.00");
     expect(kardexSummary()).toEqual([
       {
         tipo_movimiento: "entrada",
         id_material: PLANCHA,
         cantidad: "5.00",
+        stock_anterior: "20.00",
+        stock_resultante: "25.00",
+      },
+    ]);
+  });
+
+  it("redondea la cantidad como la columna para que el kardex cuadre", async () => {
+    seedMaterial(PLANCHA, { stock: "10" });
+
+    await redirectOf(
+      createPurchaseAction(
+        purchaseForm([{ id_material: PLANCHA, cantidad: "1.005", costo_unitario: "10" }]),
+      ),
+    );
+
+    // Sin redondear, el stock anterior se deduciria como 11.01 - 1.005 = 10.005 -> 10.01.
+    expect(stockOf(PLANCHA)).toBe("11.01");
+    expect(kardexSummary()).toEqual([
+      {
+        tipo_movimiento: "entrada",
+        id_material: PLANCHA,
+        cantidad: "1.01",
         stock_anterior: "10.00",
-        stock_resultante: "15.00",
+        stock_resultante: "11.01",
       },
     ]);
   });
