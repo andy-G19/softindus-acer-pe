@@ -80,8 +80,9 @@ correspondientes. Nunca usar datos productivos para esas pruebas.
 
 ## Entrega 1 — Stock atómico en compras y anulación
 
-Fecha: 2026-09-29. Estado: implementada y publicada en staging. Pendientes la
-evidencia de CI y despliegue y la verificación funcional descrita abajo.
+Fecha: 2026-09-29. Estado: cerrada el 2026-09-29. Commits 6057852, 4d73750,
+93b1d4e, 2967564 y 817db53 en staging; CI #21 en verde (1m 54s) sobre 817db53 y
+despliegue de staging en estado Ready, con el guion de verificación completo.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -129,17 +130,33 @@ operaciones atómicas y cómo responde a intercalados concurrentes simulados, pe
 no la atomicidad real de PostgreSQL. Esa comprobación requiere pruebas de
 integración contra una base desechable (entrega 11).
 
-Verificación pendiente en staging, con usuario ADMIN y datos `PRUEBA E1`:
+Verificación en staging (2026-09-29). Pasos 1 a 6 con usuario ADMIN sobre
+`PRUEBA E1 PLANCHA` (MAT00000010) y `PRUEBA E1 TUBO` (MAT00000011); paso 7 con
+usuarios SELLER y WORKSHOP_MASTER:
 
-1. Material con stock 5 y mínimo 8: queda una alerta activa.
-2. Compra de 10 a S/ 12.50: stock 15.00, entrada 5.00 → 15.00 en el kárdex,
-   alerta atendida y costo unitario 12.50.
-3. Salida de 8 y anulación de esa compra: vuelve al detalle sin cambios.
-4. Compra de dos materiales con uno sin stock suficiente: al anular no se revierte
-   ninguno.
-5. Compra de 5 y anulación de la primera compra: stock 2.00 y salida 12.00 → 2.00.
-6. Anulación de la misma compra desde dos pestañas: una sola salida en el kárdex.
-7. SELLER y WORKSHOP_MASTER siguen sin acceso a compras.
+| # | Prueba | Resultado |
+|---|---|---|
+| 1 | Material con stock 5 y mínimo 7 | Alerta activa (stock 5.00, mínimo 7.00). |
+| 2 | Compra COM00000007 de 10 a S/ 12.47 | MVI00000026 de 5.00 a 15.00, alerta atendida y costo actual 12.47. |
+| 3 | Salida de 8 (MVI00000027, de 15.00 a 7.00) y anulación de COM00000007 | Vuelve al detalle sin toast; compra confirmada, stock 7.00 y sin reversión. |
+| 4 | Compra COM00000008 (plancha 5, tubo 4), salida de 3 de tubo y anulación | Vuelve al detalle; compra confirmada, plancha 12.00 y tubo 1.00 sin cambios, sin reversiones. |
+| 5 | Anulación de COM00000007 con stock 12 | Toast "Compra anulada"; MVI00000031 de 12.00 a 2.00; compra anulada. |
+| 6 | Anulación simultánea de COM00000009 desde dos pestañas | Una sola reversión (MVI00000033, de 3.00 a 1.00) y un solo registro de anulación en la bitácora. |
+| 7 | Acceso de SELLER y WORKSHOP_MASTER al listado y al detalle de compras | Acceso denegado en ambos roles. |
+
+Observaciones:
+
+- En los pasos 3 y 4 la transacción marca primero la compra como anulada y luego
+  falla la guarda de stock. Que la compra siga confirmada, sin reversiones ni
+  registro en la bitácora, confirma el rollback en PostgreSQL y el funcionamiento
+  de `updateManyAndReturn` con el adaptador `pg`. Los correlativos de movimientos
+  no presentan huecos.
+- En el paso 6 las dos solicitudes empezaron con 28 ms de diferencia y estuvieron
+  en curso a la vez durante unos 1,2 s, según los tiempos del navegador. Ambas
+  leyeron la compra antes de que la otra confirmara, por lo que la segunda se
+  detuvo en la guarda de estado dentro de la transacción. Es una inferencia por
+  los tiempos: la interfaz no distingue ese camino del de la lectura previa.
+- Los pasos 1 y 2 se ejecutaron con mínimo 7 y costo 12.47 en lugar de 8 y 12.50.
 
 Pendientes fuera de alcance:
 
@@ -155,6 +172,11 @@ Pendientes fuera de alcance:
 - La validación de proveedor y materiales activos sigue fuera de la transacción.
 - Los montos de la compra se calculan con `number` (entrega 3) y las acciones
   lanzan errores en lugar de devolver un resultado tipado (entrega 2).
+- Al rechazar una anulación, por pagos o por stock insuficiente, la acción vuelve
+  al detalle sin mensaje y el usuario no conoce el motivo. Es el comportamiento
+  previo, conservado a propósito; candidato para la pista B.
+- Datos de prueba en staging: COM00000008 queda confirmada con pago pendiente y
+  suma en el indicador de compras pendientes del dashboard.
 
 ## Secuencia de próximas entregas
 
@@ -164,7 +186,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | # | Pista | Entrega | Estado |
 |---|---|---|---|
 | 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
-| 1 | Fix | Stock atómico en compras y anulación | Implementada; verificación en staging pendiente |
+| 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Pendiente |
 | 3 | A | Conversión y formatos compartidos | Pendiente |
 | 4 | A | Consultas fuera de las páginas, por área | Pendiente |
