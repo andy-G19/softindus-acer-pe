@@ -3,16 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { operatorPaymentSchema } from "@/schemas/staff/operator-payment.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function toNumber(value: unknown) {
@@ -28,13 +26,7 @@ function formatPeriodDate(value: Date) {
 }
 
 export async function registerOperatorPaymentAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsed = operatorPaymentSchema.safeParse({
     id_planilla: formData.get("id_planilla"),

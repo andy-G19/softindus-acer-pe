@@ -3,11 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { APP_ROLES } from "@/lib/permissions";
 import { operatorSchema } from "@/schemas/staff/operator.schema";
 
 export type OperatorFormState = {
@@ -18,17 +17,7 @@ export type OperatorFormState = {
 const OPERATORS_PATH = "/dashboard/staff/operators";
 
 async function requireAdmin() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== APP_ROLES.ADMIN) {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN"]);
 }
 
 function getOperatorFormData(formData: FormData) {
