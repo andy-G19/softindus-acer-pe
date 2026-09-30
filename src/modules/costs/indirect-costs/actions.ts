@@ -2,17 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { recalculateCostingTotals } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function normalizeText(value: FormDataEntryValue | null) {
@@ -34,13 +32,7 @@ function revalidateCostingPaths(idCosteo?: string) {
 }
 
 export async function createIndirectCostAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsedData = indirectCostSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -112,13 +104,7 @@ export async function createIndirectCostAction(formData: FormData) {
 }
 
 export async function annulIndirectCostAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const idCostoIndirecto = normalizeText(formData.get("id_costo_indirecto"));
 

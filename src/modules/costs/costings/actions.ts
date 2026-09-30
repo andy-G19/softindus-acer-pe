@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
@@ -12,10 +12,8 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function toNumber(value: unknown) {
@@ -52,13 +50,7 @@ function revalidateCostingPaths(idCosteo?: string) {
 }
 
 export async function createCostingFromWorkOrderAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const idOrdenTrabajo = normalizeText(formData.get("id_orden_trabajo"));
 
@@ -202,13 +194,7 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
 }
 
 export async function updateLaborCostAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsedData = laborCostSchema.safeParse({
     id_costeo: formData.get("id_costeo"),
@@ -266,13 +252,7 @@ export async function updateLaborCostAction(formData: FormData) {
 }
 
 export async function recalculateCostingAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const idCosteo = normalizeText(formData.get("id_costeo"));
 
