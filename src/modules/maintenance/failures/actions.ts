@@ -3,30 +3,21 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { APP_ROLES } from "@/lib/permissions";
 import {
   failureSchema,
   failureStatusSchema,
 } from "@/schemas/maintenance/failure.schema";
 
-function requireMaintenanceRole(role: string | undefined) {
-  if (role !== APP_ROLES.ADMIN && role !== APP_ROLES.WORKSHOP_MASTER) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireMaintenanceRole() {
+  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
 export async function createFailureAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireMaintenanceRole(session.user.role);
+  const session = await requireMaintenanceRole();
 
   const parsed = failureSchema.safeParse({
     id_maquina: formData.get("id_maquina"),
@@ -104,13 +95,7 @@ export async function createFailureAction(formData: FormData) {
 }
 
 export async function updateFailureStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireMaintenanceRole(session.user.role);
+  const session = await requireMaintenanceRole();
 
   const parsed = failureStatusSchema.safeParse({
     id_falla: formData.get("id_falla"),
