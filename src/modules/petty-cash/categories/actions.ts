@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { expenseCategorySchema } from "@/schemas/petty-cash/expense-category.schema";
@@ -18,17 +18,7 @@ export type ExpenseCategoryFormState = {
 const EXPENSE_CATEGORIES_PATH = "/dashboard/petty-cash/categories";
 
 async function requireAdmin() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN"]);
 }
 
 function getCategoryFormData(formData: FormData) {

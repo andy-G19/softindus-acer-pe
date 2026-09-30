@@ -2,25 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { pettyCashBoxSchema } from "@/schemas/petty-cash/petty-cash-box.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 export async function createPettyCashBoxAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  await requireAdmin();
 
   const parsedData = pettyCashBoxSchema.safeParse({
     nombre_caja: formData.get("nombre_caja"),

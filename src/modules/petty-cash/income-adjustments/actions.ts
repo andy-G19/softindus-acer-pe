@@ -2,16 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { pettyCashIncomeAdjustmentSchema } from "@/schemas/petty-cash/petty-cash-income-adjustment.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function toNumber(value: unknown) {
@@ -51,13 +49,7 @@ function getMovementObservation(type: string, observation?: string) {
 }
 
 export async function createPettyCashIncomeAdjustmentAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsedData = pettyCashIncomeAdjustmentSchema.safeParse({
     id_caja_chica: formData.get("id_caja_chica"),
