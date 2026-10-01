@@ -180,8 +180,9 @@ Pendientes fuera de alcance:
 
 ## Entrega 2 — Contratos: resultado de acciones y autorización centralizada
 
-Fecha: 2026-09-30. Estado: implementada en staging, pendiente de publicar, de CI
-y de verificación funcional en staging. Commits 5c96d94 a 5de9193.
+Fecha: 2026-09-30. Estado: cerrada el 2026-10-01. Commits 5c96d94 a 5de9193 y
+35b1ae8 en staging; CI #25 en verde (2m 0s) sobre 35b1ae8 y despliegue de staging
+en estado Ready, con el guion de verificación completo.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -270,20 +271,23 @@ un fallo transitorio de red. Pruebas de mutación:
 el total de archivos analizados (357, por las pruebas nuevas desde la entrega 0)
 y tres números de línea de `inventory-catalog-manager.tsx`.
 
-Verificación en staging: pendiente. Guion propuesto, con datos de prueba
-`PRUEBA E2`:
+Verificación en staging, informada el 2026-10-01, con datos de prueba `PRUEBA E2`
+y un usuario de cada rol en sesiones separadas:
 
 | # | Rol | Prueba | Esperado | Resultado |
 |---|---|---|---|---|
-| 1 | ADMIN | Registrar un costo indirecto en un costeo y recalcularlo | Mismos toasts que antes | Pendiente |
-| 2 | ADMIN | Crear una máquina y registrar una falla sobre ella | Mismos toasts que antes | Pendiente |
-| 3 | ADMIN | Abrir una caja chica y registrar un egreso | Mismos toasts que antes | Pendiente |
-| 4 | ADMIN | Crear un operario y registrar su asistencia | Mismos toasts que antes | Pendiente |
-| 5 | ADMIN | Registrar chatarra y venderla en la caja de prueba | Mismos toasts que antes | Pendiente |
-| 6 | WORKSHOP_MASTER | Registrar falla, asistencia, tarea, chatarra y retazo, y cambiar el estado del retazo | Funciona como antes | Pendiente |
-| 7 | WORKSHOP_MASTER | Abrir por URL caja chica y costos | Acceso denegado | Pendiente |
-| 8 | SELLER | Abrir por URL mantenimiento, personal y mermas | Acceso denegado | Pendiente |
-| 9 | ADMIN | Guardar una categoría de material y un cliente con datos inválidos | Mismos mensajes de error en el formulario | Pendiente |
+| 1 | ADMIN | Registrar un costo indirecto en un costeo y recalcularlo | Mismos toasts que antes | Conforme |
+| 2 | ADMIN | Crear una máquina y registrar una falla sobre ella | Mismos toasts que antes | Conforme |
+| 3 | ADMIN | Abrir una caja chica y registrar un egreso | Mismos toasts que antes | Conforme |
+| 4 | ADMIN | Crear un operario y registrar su asistencia | Mismos toasts que antes | Conforme |
+| 5 | ADMIN | Registrar chatarra y venderla en la caja de prueba | Mismos toasts que antes | Conforme |
+| 6 | WORKSHOP_MASTER | Registrar falla, asistencia, tarea, chatarra y retazo, y cambiar el estado del retazo | Funciona como antes | Conforme |
+| 7 | WORKSHOP_MASTER | Abrir por URL caja chica y costos | Acceso denegado | Conforme |
+| 8 | SELLER | Abrir por URL mantenimiento, personal y mermas | Acceso denegado | Conforme |
+| 9 | ADMIN | Guardar una categoría de material y un cliente con datos inválidos | Mismos mensajes de error en el formulario | Conforme |
+
+Los registros `PRUEBA E2` creados por el guion quedan en staging como datos de
+prueba.
 
 Pendientes fuera de alcance:
 
@@ -309,7 +313,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 |---|---|---|---|
 | 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
-| 2 | A | Contratos: resultado de acciones y autorización centralizada | Implementada (pendiente CI y staging) |
+| 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Pendiente |
 | 4 | A | Consultas fuera de las páginas, por área | Pendiente |
 | 5 | A | Exportaciones por reporte | Pendiente |
