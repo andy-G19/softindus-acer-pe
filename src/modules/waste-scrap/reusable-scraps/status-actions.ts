@@ -2,24 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { reusableScrapStatusSchema } from "@/schemas/waste-scrap/reusable-scrap-status.schema";
 
-function requireWasteScrapAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireWasteScrapAccess() {
+  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
 export async function updateReusableScrapStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireWasteScrapAccess(session.user.role);
+  await requireWasteScrapAccess();
 
   const parsedData = reusableScrapStatusSchema.safeParse({
     id_retazo: formData.get("id_retazo"),

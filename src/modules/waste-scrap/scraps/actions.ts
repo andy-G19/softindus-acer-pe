@@ -2,26 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { scrapSchema } from "@/schemas/waste-scrap/scrap.schema";
 
-function requireWasteScrapAccess(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireWasteScrapAccess() {
+  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
 export async function createScrapAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireWasteScrapAccess(session.user.role);
+  const session = await requireWasteScrapAccess();
 
   const parsedData = scrapSchema.safeParse({
     id_material: formData.get("id_material"),
