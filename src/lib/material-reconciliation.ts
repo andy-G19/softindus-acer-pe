@@ -12,24 +12,9 @@
  * Función pura: sin Prisma y sin `server-only`, para poder probarla sin base de datos.
  */
 
+import type { NumericInput } from "@/lib/numbers";
+import { toNonNegativeNumber } from "@/lib/numbers";
 import { roundQuantity } from "@/lib/recipe-quantities";
-
-/** Los Decimal de Prisma llegan como objeto con `toString()`, no como número nativo. */
-type NumericInput = number | string | { toString(): string } | null | undefined;
-
-function toNonNegativeNumber(value: NumericInput) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  const parsed = typeof value === "number" ? value : Number(value.toString());
-
-  if (!Number.isFinite(parsed) || parsed < 0) {
-    return 0;
-  }
-
-  return parsed;
-}
 
 export type MaterialMovementTotals = {
   /** Total salido del almacén hacia producción. */
