@@ -32,7 +32,9 @@ function formatDate(value: Date | string | null) {
     return "-";
   }
 
-  return new Intl.DateTimeFormat("es-PE").format(new Date(value));
+  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
+    new Date(value),
+  );
 }
 
 export default async function InventoryAlertsPage() {
