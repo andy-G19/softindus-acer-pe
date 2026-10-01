@@ -3,17 +3,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // Pruebas de caracterizacion del control de acceso de las Server Actions de
 // costos, mantenimiento, caja chica, personal y mermas.
 //
-// La tabla MODULOS registra, por archivo, los roles que cada accion exige hoy.
+// La tabla MODULOS registra, por archivo, los roles que cada accion exige.
 // Se ejecutan las acciones reales: solo se reemplaza auth() de @/auth por una
 // sesion de prueba, redirect() por una senal que corta la ejecucion y Prisma
-// por un doble que registra cualquier acceso. Asi la misma tabla vale tanto si
-// la accion lee la sesion por su cuenta como si usa los helpers de
-// @/lib/authz, y demuestra que migrar entre ambas formas no cambia permisos.
+// por un doble que registra cualquier acceso. Se simula @/auth y no
+// @/lib/authz para ejercitar el control completo: la tabla se escribio antes
+// de que estas acciones dejaran de leer la sesion por su cuenta y demostro que
+// pasar a requireRole no cambio los permisos.
 //
 // Para cada accion se comprueba:
 // - sin sesion: redirige a /login;
 // - rol no permitido: redirige a acceso denegado;
-// - sesion invalidada (usuario desactivado): se deniega;
+// - sesion invalidada (usuario desactivado): redirige a /login con el motivo;
 // - rol permitido: supera el control de acceso.
 // Un rechazo nunca toca Prisma, la bitacora ni la cache.
 
@@ -87,8 +88,9 @@ const SOLO_ADMIN: Rol[] = ["ADMIN"];
 const ADMIN_Y_TALLER: Rol[] = ["ADMIN", "WORKSHOP_MASTER"];
 
 const LOGIN = "/login";
+const SESSION_INVALID = `${LOGIN}?reason=session-invalid`;
 const ACCESS_DENIED = "/dashboard/access-denied";
-const AUTH_REDIRECTS = [LOGIN, `${LOGIN}?reason=session-invalid`, ACCESS_DENIED];
+const AUTH_REDIRECTS = [LOGIN, SESSION_INVALID, ACCESS_DENIED];
 
 type ModuloDeAcciones = {
   ruta: string;
@@ -355,13 +357,11 @@ describe.each(MODULOS)("$ruta", (modulo) => {
       expectNoSideEffects();
     });
 
-    it("con la sesion invalidada deniega el acceso", async () => {
+    it("con la sesion invalidada redirige a /login con el motivo", async () => {
       mocks.auth.mockResolvedValue(INVALIDATED_SESSION);
       const action = await loadAction(modulo, name);
 
-      const { redirectedTo } = await run(action);
-
-      expect(AUTH_REDIRECTS).toContain(redirectedTo);
+      await expect(run(action)).resolves.toEqual({ redirectedTo: SESSION_INVALID });
       expectNoSideEffects();
     });
 

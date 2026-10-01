@@ -48,9 +48,11 @@ Roles are `ADMIN`, `SELLER`, `WORKSHOP_MASTER` (constants in [src/lib/permission
 1. **Route guard** — `proxy.ts` calls `canAccessDashboardRoute(role, pathname)`, matched against the `dashboardRoutes` table in `lib/permissions.ts`. **Adding a dashboard route requires adding an entry there**, or it 302s to `/dashboard/access-denied`. `showInMenu: false` hides a route from the sidebar while still granting access.
 2. **In-code checks** — the middleware guard is not enough. Every page (RSC), server action and API route re-checks, always through the helpers in [src/lib/authz.ts](src/lib/authz.ts):
    - **Pages (RSC):** `await requireRole([...])` — redirects to `/login` or `/dashboard/access-denied`.
+   - **Server actions that receive only `formData` and redirect:** `const session = await requireRole([...])`, usually through a local wrapper named after the requirement (`requireAdmin`, `requireStaffManager`, …). Reference: [src/modules/costs/margins/actions.ts](src/modules/costs/margins/actions.ts).
    - **Server actions used with `useActionState`:** `const session = await getAuthorizedSession([...])`; if it returns `null`, return an error `FormState` (do not throw, do not redirect). Reference: [src/modules/commercial/clients/actions.ts](src/modules/commercial/clients/actions.ts).
    - **API routes:** `requireApiRole([...])` → returns `{ ok, session | response }` (401/403).
-   - ⚠️ **Legacy pattern — do not copy:** ~23 action files still call `auth()` directly and compare `session.user.role` by hand (petty-cash, maintenance, staff, costs, waste-scrap). They skip the active-user revalidation and are being migrated to `getAuthorizedSession` in delivery 1 of the refactor.
+   - **Only `src/lib/authz.ts` and `src/proxy.ts` import `auth` from `@/auth`** — an ESLint `no-restricted-imports` rule enforces it (`signIn`, `signOut` and `handlers` stay allowed). Never read the session with `auth()` and compare `session.user.role` by hand: that skips the explicit active-user check and the rejection log.
+   - ⚠️ **Known deviation — do not "fix" it inside a refactor:** many `useActionState` actions (inventory catalogs, materials, suppliers, products, orders, users, production stages, machines, spare parts, expense categories, operators) still call `requireRole` and redirect on denial instead of returning an error `FormState`. Switching them changes what the user sees, so it belongs to track B.
 
 ## Feature anatomy
 

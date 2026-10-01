@@ -24,6 +24,28 @@ const eslintConfig = defineConfig([
     ".codex/**",
     ".codex-finalizer/**",
   ]),
+  // Autorizacion centralizada (entrega 2): la sesion se obtiene solo a traves
+  // de los helpers de src/lib/authz.ts, que revalidan el usuario activo y
+  // registran los rechazos. signIn, signOut y handlers siguen permitidos.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/auth.ts", "src/lib/authz.ts", "src/proxy.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@/auth",
+              importNames: ["auth"],
+              message:
+                "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;
