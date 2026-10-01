@@ -9,6 +9,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   createUserSchema,
@@ -16,10 +17,7 @@ import {
   updateUserSchema,
 } from "@/schemas/users/user.schema";
 
-export type UserFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type UserFormState = ActionErrorState;
 
 const USERS_PATH = "/dashboard/users";
 // Mismo costo usado en prisma/seed.ts y en src/auth.ts al validar login.

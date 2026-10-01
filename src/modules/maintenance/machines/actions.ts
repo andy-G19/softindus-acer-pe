@@ -8,15 +8,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import {
   machineSchema,
   machineStatusSchema,
 } from "@/schemas/maintenance/machine.schema";
 
-export type MachineFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type MachineFormState = ActionErrorState;
 
 const MACHINES_PATH = "/dashboard/maintenance/machines";
 

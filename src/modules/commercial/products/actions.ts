@@ -8,18 +8,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
-export type ProductFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type ProductFormState = ActionErrorState;
 
-export type ProductCategoryFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type ProductCategoryFormState = ActionErrorState;
 
 const PRODUCTS_PATH = "/dashboard/commercial/products";
 const PRODUCT_CATEGORIES_PATH = "/dashboard/commercial/product-categories";

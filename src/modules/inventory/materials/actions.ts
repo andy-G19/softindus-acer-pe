@@ -8,15 +8,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import {
   materialSchema,
   materialUpdateSchema,
 } from "@/schemas/inventory/material.schema";
 
-export type MaterialFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type MaterialFormState = ActionErrorState;
 
 const INVENTORY_PATH = "/dashboard/inventory";
 const MATERIALS_PATH = "/dashboard/inventory/materials";

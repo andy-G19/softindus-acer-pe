@@ -7,12 +7,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { operatorSchema } from "@/schemas/staff/operator.schema";
 
-export type OperatorFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type OperatorFormState = ActionErrorState;
 
 const OPERATORS_PATH = "/dashboard/staff/operators";
 

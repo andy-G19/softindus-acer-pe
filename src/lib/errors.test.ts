@@ -1,6 +1,7 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest";
 
 import {
+  type ActionErrorState,
   AppError,
   AuthorizationError,
   ConflictError,
@@ -111,6 +112,15 @@ describe("toActionError", () => {
     const state = toActionError(new Error("stack trace interno"));
 
     expect(state.error).toBe("Ocurrió un error inesperado. Intente nuevamente.");
+  });
+
+  it("conserva la forma de estado que consumen los formularios", () => {
+    // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
+    expectTypeOf<ActionErrorState>().toEqualTypeOf<{
+      error: string;
+      fieldErrors?: Partial<Record<string, string[]>>;
+    }>();
+    expectTypeOf(toActionError(new Error("x"))).toEqualTypeOf<ActionErrorState>();
   });
 });
 

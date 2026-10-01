@@ -8,15 +8,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import {
   sparePartSchema,
   sparePartStatusSchema,
 } from "@/schemas/maintenance/spare-part.schema";
 
-export type SparePartFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type SparePartFormState = ActionErrorState;
 
 const SPARE_PARTS_PATH = "/dashboard/maintenance/spare-parts";
 

@@ -8,12 +8,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { expenseCategorySchema } from "@/schemas/petty-cash/expense-category.schema";
 
-export type ExpenseCategoryFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type ExpenseCategoryFormState = ActionErrorState;
 
 const EXPENSE_CATEGORIES_PATH = "/dashboard/petty-cash/categories";
 

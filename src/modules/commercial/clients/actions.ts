@@ -7,12 +7,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, type Role } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { clientSchema } from "@/schemas/commercial/client.schema";
 
-export type ClientFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type ClientFormState = ActionErrorState;
 
 const CLIENTS_PATH = "/dashboard/commercial/clients";
 const CLIENT_CREATED_PATH = `${CLIENTS_PATH}?toast=client-created`;

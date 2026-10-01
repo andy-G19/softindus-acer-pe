@@ -8,15 +8,13 @@ import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import {
   quickSupplierSchema,
   supplierSchema,
 } from "@/schemas/inventory/supplier.schema";
 
-export type SupplierFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type SupplierFormState = ActionErrorState;
 
 const INVENTORY_PATH = "/dashboard/inventory";
 const SUPPLIERS_PATH = "/dashboard/inventory/suppliers";

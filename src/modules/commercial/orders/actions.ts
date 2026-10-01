@@ -7,12 +7,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { orderSchema } from "@/schemas/commercial/order.schema";
 
-export type OrderFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type OrderFormState = ActionErrorState;
 
 const ORDERS_PATH = "/dashboard/commercial/orders";
 
