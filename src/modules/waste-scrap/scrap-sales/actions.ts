@@ -2,16 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== "ADMIN") {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function toNumber(value: unknown) {
@@ -23,13 +21,7 @@ function toNumber(value: unknown) {
 }
 
 export async function createScrapSaleAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsedData = scrapSaleSchema.safeParse({
     id_chatarra: formData.get("id_chatarra"),

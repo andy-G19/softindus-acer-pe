@@ -3,30 +3,21 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { APP_ROLES } from "@/lib/permissions";
 import {
   preventiveMaintenanceSchema,
   preventiveMaintenanceStatusSchema,
 } from "@/schemas/maintenance/preventive-maintenance.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== APP_ROLES.ADMIN) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 export async function createPreventiveMaintenanceAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsed = preventiveMaintenanceSchema.safeParse({
     id_maquina: formData.get("id_maquina"),
@@ -101,13 +92,7 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
 export async function updatePreventiveMaintenanceStatusAction(
   formData: FormData,
 ) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsed = preventiveMaintenanceStatusSchema.safeParse({
     id_mantenimiento: formData.get("id_mantenimiento"),

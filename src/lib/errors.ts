@@ -132,8 +132,17 @@ function logCaughtError(error: unknown, context?: Record<string, unknown>) {
   logger.error("Error no controlado.", { error, ...context });
 }
 
+/** Errores por campo, con las claves de `flatten().fieldErrors` de Zod. */
+export type FieldErrors = Partial<Record<string, string[]>>;
+
+/**
+ * Estado que devuelven las Server Actions usadas con useActionState: un
+ * mensaje general (cadena vacia si no hay error) y, opcionalmente, los
+ * errores de cada campo. Es la forma que consumen hoy los formularios.
+ */
 export type ActionErrorState = {
   error: string;
+  fieldErrors?: FieldErrors;
 };
 
 /**

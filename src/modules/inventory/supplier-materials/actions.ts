@@ -8,12 +8,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
-export type SupplierMaterialFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type SupplierMaterialFormState = ActionErrorState;
 
 type SupplierMaterialValidationResult =
   | {

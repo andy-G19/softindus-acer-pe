@@ -6,13 +6,11 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { syncStageMachineAssignment } from "@/modules/production/stages/stage-machine";
 import { routeStageSchema } from "@/schemas/production/route-stage.schema";
 
-export type RouteStageFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type RouteStageFormState = ActionErrorState;
 
 /**
  * Una maquina dada de baja o inactiva no puede asignarse a una etapa nueva. Una en

@@ -3,16 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { attendanceSchema } from "@/schemas/staff/attendance.schema";
 
-function requireStaffManager(role: string | undefined) {
-  if (!["ADMIN", "WORKSHOP_MASTER"].includes(role ?? "")) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireStaffManager() {
+  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
 function timeStringToDate(value: string | null) {
@@ -45,13 +43,7 @@ function calculateWorkedHours(
 }
 
 export async function createAttendanceAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireStaffManager(session.user.role);
+  const session = await requireStaffManager();
 
   const parsed = attendanceSchema.safeParse({
     id_operario: formData.get("id_operario"),

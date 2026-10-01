@@ -6,12 +6,10 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 import { recipeDetailSchema } from "@/schemas/production/recipe-detail.schema";
 
-export type RecipeDetailFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type RecipeDetailFormState = ActionErrorState;
 
 type EditableVersion = {
   id_version_receta: string;

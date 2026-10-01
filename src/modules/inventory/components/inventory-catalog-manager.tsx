@@ -17,12 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import type { ActionErrorState } from "@/lib/errors";
 import { showError, showSuccess } from "@/lib/notifications";
 
-type CatalogFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+type CatalogFormState = ActionErrorState;
 
 function useToastOnSubmit(
   state: CatalogFormState,

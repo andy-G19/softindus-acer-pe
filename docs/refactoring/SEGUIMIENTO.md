@@ -178,6 +178,132 @@ Pendientes fuera de alcance:
 - Datos de prueba en staging: COM00000008 queda confirmada con pago pendiente y
   suma en el indicador de compras pendientes del dashboard.
 
+## Entrega 2 — Contratos: resultado de acciones y autorización centralizada
+
+Fecha: 2026-09-30. Estado: cerrada el 2026-10-01. Commits 5c96d94 a 5de9193 y
+35b1ae8 en staging; CI #25 en verde (2m 0s) sobre 35b1ae8 y despliegue de staging
+en estado Ready, con el guion de verificación completo.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 5c96d94 | test | 28 pruebas de caracterización de `lib/authz.ts`: destinos de `requireAuth` y `requireRole`, `null` de `getAuthorizedSession`, 401/403 de las rutas API y exigencia explícita de usuario activo. |
+| 2be83e5 | test | Tabla de acceso de las 41 acciones legacy (228 pruebas): sin sesión, rol no permitido, sesión invalidada y rol permitido. En verde sobre el código anterior a la migración. |
+| ed81156 | refactor | Costos: 4 archivos, 7 acciones. |
+| cba1ca2 | refactor | Mantenimiento: 5 archivos, 14 acciones. |
+| 09ad2cc | refactor | Caja chica: 5 archivos, 7 acciones. |
+| 47840da | refactor | Personal: 5 archivos, 9 acciones. |
+| bcd8a5c | refactor | Mermas y chatarra: 4 archivos, 4 acciones. |
+| 59a741e | chore | Regla de ESLint, tabla de acceso endurecida y CLAUDE.md actualizado. |
+| 5de9193 | refactor | Forma del estado de formulario unificada en `ActionErrorState`. |
+
+Autorización centralizada:
+
+- Las 41 Server Actions de costos, mantenimiento, caja chica, personal y mermas
+  dejan de llamar a `auth()` y de comparar el rol a mano. Cada archivo conserva un
+  helper local con el nombre del requisito (`requireAdmin`, `requireStaffManager`,
+  `requireMaintenanceRole`, `requireWasteScrapAccess`) que delega en `requireRole`
+  y devuelve la sesión validada.
+- Había dos patrones. 19 archivos leían la sesión en cada acción y validaban el
+  rol con un helper síncrono. Máquinas, repuestos, categorías de gasto y operarios
+  ya encapsulaban todo en un helper asíncrono: en ellos solo cambió su cuerpo.
+- La regla `no-restricted-imports` de `eslint.config.mjs` impide importar `auth`
+  de `@/auth` en `src`, salvo en `src/auth.ts`, `src/lib/authz.ts` y
+  `src/proxy.ts`. `signIn`, `signOut` y `handlers` siguen permitidos. Se comprobó
+  por entrada estándar con un import nombrado, un import de espacio de nombres y
+  una página de `src/app`. No detecta importaciones dinámicas ni rutas relativas;
+  el proyecto usa el alias `@/`.
+
+Cambio observable, declarado en cada commit de migración: una sesión invalidada
+que llegue a una de estas acciones redirige a `/login?reason=session-invalid`.
+Antes redirigía a `/dashboard/access-denied` en el patrón de 19 archivos y a
+`/login` en el de 4. En todos los casos se deniega sin tocar datos. Al navegar no
+cambia nada, porque el proxy ya aplicaba ese destino antes de llegar a la acción:
+solo es alcanzable con una petición directa o en una carrera entre el proxy y la
+acción.
+
+Resultado de acciones:
+
+- `ActionErrorState` (`lib/errors.ts`) incorpora `fieldErrors` opcional y el tipo
+  `FieldErrors`. Los 18 tipos de estado de formulario que repetían esa forma en 17
+  archivos son ahora alias suyos y conservan su nombre; los formularios no
+  cambiaron. Una aserción con `expectTypeOf` fija la forma.
+- Contrato objetivo para la pista B, no implementado: resultado discriminado por
+  `ok`. El éxito lleva los datos mínimos que necesita la vista y la clave del
+  mensaje en el catálogo de notificaciones. El fallo lleva `error` y `fieldErrors`
+  con los nombres actuales, un `AppErrorCode` y, en fallos inesperados, una
+  referencia de diagnóstico registrada por el logger. Se implementará con su
+  primer consumidor (ventanas de Clientes, entrega 9), para no diseñarlo sin uso.
+- Los 271 `throw new Error` de las acciones no se convierten en la pista A. Hoy un
+  error lanzado muestra la página de error genérica (solo producción tiene
+  `error.tsx`); convertirlo mostraría un mensaje en el formulario. Cada formulario
+  se convierte al migrarlo en la pista B, como `feat` y con prueba del mensaje.
+
+Decisiones:
+
+- `requireRole` y no `getAuthorizedSession`: las acciones migradas redirigen al
+  denegar y `requireRole` reproduce esas redirecciones. Es también lo que usaban
+  los 24 archivos migrados antes de esta entrega.
+- La tabla de acceso simula `@/auth` y no `@/lib/authz`, para que las mismas
+  pruebas validaran el código antes y después de migrar. Durante la migración
+  exigió solo el invariante de la sesión invalidada (denegar sin efectos); al
+  terminar se endureció al destino exacto.
+- Las 14 acciones de máquinas, repuestos, categorías de gasto y operarios siguen
+  redirigiendo al denegar, como antes, aunque CLAUDE.md pide devolver un error de
+  formulario en las acciones de `useActionState`. Se conserva el comportamiento.
+- Los tipos se unificaron con alias y no reemplazando nombres: diff mínimo y un
+  punto de evolución por funcionalidad.
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit, en
+Windows, con 247, 475, 475, 475, 475, 475, 475, 475 y 476 pruebas. En el primer
+commit, una de tres ejecuciones falló en el build al resolver la fuente de Google
+Fonts (`next/font/google`) sin cambios de código entre ejecuciones; se trató como
+un fallo transitorio de red. Pruebas de mutación:
+
+| Mutación | Resultado |
+|---|---|
+| `assertRole` sin la condición de estado activo | Falla solo la prueba que la protege. |
+| Asistencia solo para ADMIN | Falla solo el caso de WORKSHOP_MASTER permitido. |
+| Caja chica sin el chequeo de rol | Fallan SELLER, WORKSHOP_MASTER y la sesión invalidada: en el patrón legacy, la protección ante usuarios desactivados dependía del chequeo de rol. |
+| Versión legacy de cajas y operarios con la tabla endurecida | Fallan solo los 4 casos de sesión invalidada: es la única diferencia de comportamiento de la migración. |
+| `error` opcional en `ActionErrorState` | Falla solo la aserción de tipos; ninguno de los 18 consumidores lo detecta. |
+
+`npm run refactor:inventory` no cambia páginas, formularios ni acciones: actualiza
+el total de archivos analizados (357, por las pruebas nuevas desde la entrega 0)
+y tres números de línea de `inventory-catalog-manager.tsx`.
+
+Verificación en staging, informada el 2026-10-01, con datos de prueba `PRUEBA E2`
+y un usuario de cada rol en sesiones separadas:
+
+| # | Rol | Prueba | Esperado | Resultado |
+|---|---|---|---|---|
+| 1 | ADMIN | Registrar un costo indirecto en un costeo y recalcularlo | Mismos toasts que antes | Conforme |
+| 2 | ADMIN | Crear una máquina y registrar una falla sobre ella | Mismos toasts que antes | Conforme |
+| 3 | ADMIN | Abrir una caja chica y registrar un egreso | Mismos toasts que antes | Conforme |
+| 4 | ADMIN | Crear un operario y registrar su asistencia | Mismos toasts que antes | Conforme |
+| 5 | ADMIN | Registrar chatarra y venderla en la caja de prueba | Mismos toasts que antes | Conforme |
+| 6 | WORKSHOP_MASTER | Registrar falla, asistencia, tarea, chatarra y retazo, y cambiar el estado del retazo | Funciona como antes | Conforme |
+| 7 | WORKSHOP_MASTER | Abrir por URL caja chica y costos | Acceso denegado | Conforme |
+| 8 | SELLER | Abrir por URL mantenimiento, personal y mermas | Acceso denegado | Conforme |
+| 9 | ADMIN | Guardar una categoría de material y un cliente con datos inválidos | Mismos mensajes de error en el formulario | Conforme |
+
+Los registros `PRUEBA E2` creados por el guion quedan en staging como datos de
+prueba.
+
+Pendientes fuera de alcance:
+
+- 271 `throw new Error` en acciones: resultado tipado por formulario en la pista B.
+- 15 archivos con acciones de `useActionState` que redirigen con `requireRole` al
+  denegar en lugar de devolver un error de formulario: orders, products,
+  material-categories, materials, movements, supplier-materials, supplier-types,
+  suppliers (mixto), machines, spare-parts, petty-cash/categories, recipe-details,
+  stages, operators y users. Solo `clients` sigue la convención de CLAUDE.md.
+- Operaciones sin registro en la bitácora: apertura de caja chica
+  (`createPettyCashBoxAction`) y cambio de estado de retazos
+  (`updateReusableScrapStatusAction`). Agregarlo es un `feat`.
+- `api/reports/export/[report]/route.ts` compara el rol a mano después de
+  `requireApiAuth` (entrega 5).
+- Solo `production` tiene `error.tsx`.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -187,7 +313,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 |---|---|---|---|
 | 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
-| 2 | A | Contratos: resultado de acciones y autorización centralizada | Pendiente |
+| 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Pendiente |
 | 4 | A | Consultas fuera de las páginas, por área | Pendiente |
 | 5 | A | Exportaciones por reporte | Pendiente |
@@ -209,17 +335,29 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.055 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.026 | 6 |
 | Páginas con Prisma directo | 117 | 117 | 4 |
-| Archivos de `src/modules` con `auth()` directo | 23 | 23 | 2 |
+| Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
+| Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
+| Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
 | Definiciones locales de `toNumber` | 52 | 52 | 3 |
 | Definiciones locales de `formatMoney` | 49 | 49 | 3 |
 | Definiciones locales de `formatDate` | 52 | 52 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 19 / 219 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 21 / 476 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
-Actualizado en la entrega 1 (2026-09-29). Solo cambian las dos últimas filas: entre
-`cebe48f` y `2967564` únicamente se modificaron `inventory/purchases/actions.ts` y su
-prueba, por lo que las demás métricas conservan su valor.
+Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
+filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
+solo cambiaron `inventory/purchases/actions.ts` y su prueba, que no tienen ninguno
+de esos patrones, por lo que son también su línea base.
+
+Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
+
+- Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
+  `function <nombre>` en todo `src`, incluida la definición compartida de
+  `src/lib`. Fuera de `src/lib` hay una menos de cada una.
+- `sweetalert2` cuenta los archivos que lo mencionan. Uno es un comentario de
+  `lib/security-headers.ts`: el único archivo que lo importa es
+  `lib/notifications.ts`.
 
 Las reglas de negocio permanecen en su implementación actual en la entrega 0.
 La diferencia entre tarifa diaria y horaria sigue siendo una decisión pendiente

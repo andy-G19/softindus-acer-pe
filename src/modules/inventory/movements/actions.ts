@@ -9,6 +9,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { ActionErrorState } from "@/lib/errors";
 
 type MaterialLockRow = {
   id_material: string;
@@ -18,10 +19,7 @@ type MaterialLockRow = {
   estado: boolean;
 };
 
-export type InventoryOutputFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type InventoryOutputFormState = ActionErrorState;
 
 const outputSchema = z.object({
   id_material: z.string().trim().min(1, "Seleccione un material."),

@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 354 |
+| Archivos fuente analizados | 357 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -284,9 +284,9 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/modules/commercial/products/product-category-manager.tsx` | 151 | `{formAction}` |
 | `src/modules/commercial/products/product-category-manager.tsx` | 191 | `{toggleAction}` |
 | `src/modules/commercial/products/product-form.tsx` | 90 | `{formAction}` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 100 | `{formAction}` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 172 | `{formAction}` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 228 | `{toggleAction}` |
+| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 98 | `{formAction}` |
+| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 170 | `{formAction}` |
+| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 226 | `{toggleAction}` |
 | `src/modules/inventory/materials/material-form.tsx` | 86 | `{formAction}` |
 | `src/modules/inventory/movements/inventory-output-form.tsx` | 62 | `{formAction}` |
 | `src/modules/inventory/supplier-materials/supplier-material-form.tsx` | 91 | `{formAction}` |

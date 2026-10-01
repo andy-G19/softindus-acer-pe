@@ -3,36 +3,23 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { APP_ROLES } from "@/lib/permissions";
+import type { ActionErrorState } from "@/lib/errors";
 import {
   machineSchema,
   machineStatusSchema,
 } from "@/schemas/maintenance/machine.schema";
 
-export type MachineFormState = {
-  error: string;
-  fieldErrors?: Partial<Record<string, string[]>>;
-};
+export type MachineFormState = ActionErrorState;
 
 const MACHINES_PATH = "/dashboard/maintenance/machines";
 
 async function requireAdmin() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== APP_ROLES.ADMIN) {
-    redirect("/dashboard/access-denied");
-  }
-
-  return session;
+  return requireRole(["ADMIN"]);
 }
 
 function getMachineFormData(formData: FormData) {

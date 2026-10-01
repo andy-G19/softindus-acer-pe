@@ -3,21 +3,18 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { registerAuditLog } from "@/lib/audit";
+import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { APP_ROLES } from "@/lib/permissions";
 import {
   repairSchema,
   repairSparePartSchema,
   repairStatusSchema,
 } from "@/schemas/maintenance/repair.schema";
 
-function requireAdmin(role: string | undefined) {
-  if (role !== APP_ROLES.ADMIN) {
-    redirect("/dashboard/access-denied");
-  }
+async function requireAdmin() {
+  return requireRole(["ADMIN"]);
 }
 
 function toNumber(value: unknown) {
@@ -29,13 +26,7 @@ function toNumber(value: unknown) {
 }
 
 export async function createRepairAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsed = repairSchema.safeParse({
     id_falla: formData.get("id_falla"),
@@ -253,13 +244,7 @@ export async function createRepairAction(formData: FormData) {
 }
 
 export async function updateRepairStatusAction(formData: FormData) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  requireAdmin(session.user.role);
+  const session = await requireAdmin();
 
   const parsed = repairStatusSchema.safeParse({
     id_reparacion: formData.get("id_reparacion"),
