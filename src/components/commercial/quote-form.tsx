@@ -54,7 +54,9 @@ function formatDate(value: string | null) {
     return "-";
   }
 
-  return new Intl.DateTimeFormat("es-PE").format(new Date(value));
+  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
+    new Date(value),
+  );
 }
 
 export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
