@@ -112,3 +112,96 @@ describe.each(["America/Lima", "UTC"])(
     });
   },
 );
+
+describe("formatMoney con texto de vacio", () => {
+  it("usa el texto indicado cuando falta el monto", () => {
+    expect(formatMoney(null, { emptyText: "Sin precio" })).toBe("Sin precio");
+    expect(formatMoney(undefined, { emptyText: "-" })).toBe("-");
+    expect(formatMoney("", { emptyText: "Sin precio" })).toBe("Sin precio");
+  });
+
+  it("no cambia la presentacion de un monto presente", () => {
+    expect(
+      formatMoney(new Prisma.Decimal("15.3"), { emptyText: "Sin precio" }),
+    ).toBe("S/ 15.30");
+  });
+
+  it("muestra un guion si el valor no es numerico, aunque haya texto de vacio", () => {
+    expect(formatMoney("abc", { emptyText: "Sin precio" })).toBe("-");
+  });
+
+  it("cuando falta significa cero, quien llama lo expresa con ?? 0", () => {
+    const totalSinRegistros = null as Prisma.Decimal | null;
+
+    expect(formatMoney(totalSinRegistros ?? 0)).toBe("S/ 0.00");
+  });
+
+  it("obliga a decidir que mostrar si el monto puede faltar", () => {
+    // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
+    const montoOpcional = null as Prisma.Decimal | null;
+
+    // @ts-expect-error: sin opciones solo acepta un monto presente
+    formatMoney(montoOpcional);
+
+    expect(formatMoney(montoOpcional, { emptyText: "-" })).toBe("-");
+  });
+});
+
+describe.each(["America/Lima", "UTC"])(
+  "formatDate con opciones y el proceso en %s",
+  (timeZone) => {
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
+    function useProcessTimeZone() {
+      vi.stubEnv("TZ", timeZone);
+      expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe(timeZone);
+    }
+
+    it("dd/mm/yyyy completa con ceros a la izquierda", () => {
+      useProcessTimeZone();
+
+      expect(
+        formatDate(new Date(Date.UTC(2026, 0, 5)), { format: "dd/mm/yyyy" }),
+      ).toBe("05/01/2026");
+    });
+
+    it("d mmm yyyy usa el formato medio de es-PE", () => {
+      useProcessTimeZone();
+
+      expect(
+        formatDate(new Date(Date.UTC(2026, 0, 5)), { format: "d mmm yyyy" }),
+      ).toBe("5 ene. 2026");
+    });
+
+    it("todos los formatos muestran el dia en UTC", () => {
+      useProcessTimeZone();
+
+      const instant = new Date("2026-10-01T03:30:00.000Z");
+
+      expect(formatDate(instant, { format: "d/m/yyyy" })).toBe("1/10/2026");
+      expect(formatDate(instant, { format: "dd/mm/yyyy" })).toBe("01/10/2026");
+      expect(formatDate(instant, { format: "d mmm yyyy" })).toBe(
+        "1 oct. 2026",
+      );
+    });
+
+    it("usa el texto indicado cuando falta la fecha", () => {
+      useProcessTimeZone();
+
+      expect(formatDate(null, { format: "dd/mm/yyyy", emptyText: "" })).toBe(
+        "",
+      );
+      expect(formatDate(undefined, { format: "dd/mm/yyyy" })).toBe("-");
+    });
+
+    it("solo admite los formatos definidos", () => {
+      useProcessTimeZone();
+
+      // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
+      // @ts-expect-error: formato no definido
+      formatDate(new Date(), { format: "yyyy-mm-dd" });
+    });
+  },
+);

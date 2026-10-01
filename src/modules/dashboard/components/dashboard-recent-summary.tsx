@@ -99,7 +99,7 @@ export function DashboardRecentSummary({
                   <div className="space-y-2 text-right">
                     <Badge variant="secondary">{order.estado}</Badge>
                     <p className="text-xs text-muted-foreground">
-                      {formatMoney(order.monto_estimado)}
+                      {formatMoney(order.monto_estimado, { emptyText: "-" })}
                     </p>
                   </div>
                 </div>
