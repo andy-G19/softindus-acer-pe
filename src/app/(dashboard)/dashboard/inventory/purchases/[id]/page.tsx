@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -23,24 +24,6 @@ import {
 } from "@/lib/navigation";
 import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
-}
 
 type PurchaseDetailPageProps = {
   params: Promise<{
@@ -214,7 +197,7 @@ export default async function PurchaseDetailPage({
 
             <p className="text-sm">
               <span className="font-medium">IGV:</span>{" "}
-              {formatMoney(purchase.igv)}
+              {formatMoney(purchase.igv, { emptyText: "-" })}
             </p>
 
             <p className="text-sm">

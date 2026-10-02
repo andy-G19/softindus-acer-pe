@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -36,14 +37,6 @@ import { toggleMaterialStatusAction } from "@/modules/inventory/materials/action
 type MaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {

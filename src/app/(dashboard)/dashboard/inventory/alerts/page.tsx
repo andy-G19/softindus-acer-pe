@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
 
@@ -25,16 +26,6 @@ function formatDecimal(value: unknown) {
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
 }
 
 export default async function InventoryAlertsPage() {
