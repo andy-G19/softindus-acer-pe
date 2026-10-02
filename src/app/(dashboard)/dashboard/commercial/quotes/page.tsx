@@ -20,6 +20,7 @@ import {
 import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   buildDateRangeFilter,
@@ -32,24 +33,6 @@ import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 type QuotesPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
-}
 
 export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   await requireRole(["ADMIN", "SELLER"]);

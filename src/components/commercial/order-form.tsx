@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { formatMoney } from "@/lib/formatters";
 import { showError } from "@/lib/notifications";
 import {
   createOrderAction,
@@ -54,14 +55,6 @@ type OrderFormProps = {
 };
 
 const initialState: OrderFormState = { error: "" };
-
-function formatMoney(value: string | null) {
-  if (!value) {
-    return "Sin precio";
-  }
-
-  return `S/ ${Number(value).toFixed(2)}`;
-}
 
 function createEmptyItem(key: string): OrderItem {
   return {
@@ -121,6 +114,7 @@ export function OrderForm({
       label: product.nombre_producto,
       description: `${product.categoria} - ${product.unidad_medida} - ${formatMoney(
         product.precio_referencial,
+        { emptyText: "Sin precio" },
       )}`,
     }));
   }, [products]);

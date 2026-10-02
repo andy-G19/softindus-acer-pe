@@ -7,6 +7,7 @@ import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
@@ -16,24 +17,6 @@ type QuoteDetailPageProps = {
     id: string;
   }>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
-}
 
 function calculateExpirationDate(
   issueDate: Date,
@@ -303,7 +286,7 @@ export default async function QuoteDetailPage({
               <div className="flex items-center justify-between text-sm">
                 <span>Adelanto inicial</span>
                 <span className="font-medium">
-                  {formatMoney(quote.adelanto_inicial)}
+                  {formatMoney(quote.adelanto_inicial, { emptyText: "-" })}
                 </span>
               </div>
 

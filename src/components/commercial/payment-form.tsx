@@ -9,16 +9,13 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { createPaymentAction } from "@/modules/commercial/payments/actions";
+import { formatMoney } from "@/lib/formatters";
 
 type PaymentFormProps = {
   quoteId: string;
   currentBalance: string;
   isPaid: boolean;
 };
-
-function formatMoney(value: string | number) {
-  return `S/ ${Number(value).toFixed(2)}`;
-}
 
 export function PaymentForm({
   quoteId,

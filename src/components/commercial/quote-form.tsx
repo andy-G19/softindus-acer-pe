@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { createQuoteAction } from "@/modules/commercial/quotes/actions";
+import { formatDate, formatMoney } from "@/lib/formatters";
 
 type QuoteOrderItem = {
   id_detalle_pedido: string;
@@ -40,24 +41,6 @@ type QuoteFormProps = {
   orders: QuoteOrderOption[];
   defaultOrderId?: string;
 };
-
-function formatMoney(value: string | number | null | undefined) {
-  if (value === null || value === undefined || value === "") {
-    return "S/ 0.00";
-  }
-
-  return `S/ ${Number(value).toFixed(2)}`;
-}
-
-function formatDate(value: string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
-}
 
 export function QuoteForm({ orders, defaultOrderId }: QuoteFormProps) {
   const [selectedOrderId, setSelectedOrderId] = useState(() => {

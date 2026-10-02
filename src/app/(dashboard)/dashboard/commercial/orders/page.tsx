@@ -21,6 +21,7 @@ import {
 import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -39,24 +40,6 @@ import { cancelOrderAction } from "@/modules/commercial/orders/actions";
 type OrdersPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", { timeZone: "UTC" }).format(
-    new Date(value),
-  );
-}
 
 export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
@@ -322,7 +305,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                     {formatDate(order.fecha_entrega_estimada)}
                   </TableCell>
                   <TableCell>{productsText}</TableCell>
-                  <TableCell>{formatMoney(order.monto_estimado)}</TableCell>
+                  <TableCell>{formatMoney(order.monto_estimado, { emptyText: "-" })}</TableCell>
                   <TableCell>
                     <StatusBadge status={order.estado} />
                   </TableCell>

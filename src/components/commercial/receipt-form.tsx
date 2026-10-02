@@ -9,16 +9,13 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { createReceiptAction } from "@/modules/commercial/receipts/actions";
+import { formatMoney } from "@/lib/formatters";
 
 type ReceiptFormProps = {
   quoteId: string;
   suggestedAmount: string;
   hasReceipt: boolean;
 };
-
-function formatMoney(value: string | number) {
-  return `S/ ${Number(value).toFixed(2)}`;
-}
 
 function buildSuggestedNumber(type: string) {
   const now = new Date();
