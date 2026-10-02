@@ -306,8 +306,10 @@ Pendientes fuera de alcance:
 
 ## Entrega 3 — Conversión y formatos compartidos
 
-Fecha: 2026-10-01. Estado: implementada en staging (`ee1cea5` a `e5a1652`);
-pendiente de CI y de la verificación en staging.
+Fecha: 2026-10-01. Estado: cerrada el 2026-10-01. Commits `ee1cea5` a `e5a1652`
+y `7996f98` en staging; CI #29 en verde (1m 59s) sobre `7996f98` y despliegue de
+staging en estado Ready. Verificación en staging hecha con usuario ADMIN; las
+pruebas con SELLER y WORKSHOP_MASTER se omitieron por decisión del responsable.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -418,19 +420,43 @@ archivos); las pruebas suman 638. `npm run refactor:inventory` no cambia
 páginas, formularios ni acciones: analiza 360 archivos (4 nuevos, 1 eliminado)
 y desplaza números de línea.
 
-Verificación en staging, pendiente:
+Verificación en staging (2026-10-01), con usuario ADMIN y el navegador en
+America/Lima. No hubo foto del "antes": el despliegue anterior, abierto por su
+URL propia, redirige el inicio de sesión al dominio de producción y no se usó.
+Cada resultado se comparó con la salida esperada según las pruebas de oráculo.
 
 | # | Rol | Prueba | Esperado | Resultado |
 |---|---|---|---|---|
-| 1 | ADMIN o SELLER | Nueva proforma: elegir un pedido | La fecha del pedido coincide con el listado de pedidos (antes, un día menos) | Pendiente |
-| 2 | ADMIN | Exportar en CSV ventas y cobranzas y costos, antes y después del despliegue de `1452e1d`, con un pedido sin proforma y un costeo sin margen | Contenido idéntico: fecha de proforma vacía y `S/ 0.00` en monto proformado y precio sugerido | Pendiente |
-| 3 | ADMIN | Monto estimado, precio referencial, adelanto, IGV y tarifa vacíos | `-` | Pendiente |
-| 4 | ADMIN | Nuevo pedido con un producto sin precio | `Sin precio` en el buscador | Pendiente |
-| 5 | ADMIN | Indicadores con agregados vacíos en costos, caja chica, personal, mantenimiento y rentabilidad | `S/ 0.00` | Pendiente |
-| 6 | ADMIN | Recalcular un costeo de prueba | Total y unitario sin cambios | Pendiente |
-| 7 | ADMIN | Panel de mermas | Ingresos por chatarra con separador de miles, como antes | Pendiente |
-| 8 | WORKSHOP_MASTER | Mantenimiento, personal, mermas y entrega de material en producción | Funciona como antes | Pendiente |
-| 9 | SELLER | Pedidos, proformas, pagos y comprobantes | Igual que antes | Pendiente |
+| 1 | ADMIN | Nueva proforma con `PED00000006` preseleccionado | La fecha del pedido coincide con el detalle del pedido | Conforme: 31/7/2026 y entrega 1/8/2026, sin errores de hidratación. En ese navegador, el código anterior da 30/7/2026. |
+| 2 | ADMIN | Exportar en Excel ventas y cobranzas, y producción | Celdas vacías en fechas ausentes y `S/ 0.00` en montos ausentes | Conforme: `PED00000006`, `05` y `02`, sin proforma, con fecha de proforma vacía y monto proformado `S/ 0.00`; fecha de entrega real vacía en las 4 órdenes. |
+| 3 | ADMIN | Fechas, montos y textos opcionales vacíos | `-` | Conforme: entrega estimada de `PED00000005`, validez y vencimiento de proforma. Sin datos en staging para precio referencial, adelanto, IGV ni tarifa vacíos. |
+| 4 | ADMIN | Nuevo pedido con un producto sin precio | `Sin precio` | No observable: los 5 productos tienen precio. |
+| 5 | ADMIN | Indicadores con agregados vacíos | `S/ 0.00` | Conforme: costos de producción del mes (4), costo de mantenimiento del mes, total pagado, pagado del mes y por pagar. |
+| 6 | ADMIN | Recalcular `COS00000001` | Total y unitario sin cambios | Conforme: total S/ 1514.20 y unitario S/ 126.18, iguales antes y después; toast "Costeo recalculado correctamente". |
+| 7 | ADMIN | Panel de mermas | Montos con separador de miles | No observable: los montos son menores de 1.000. Fechas en `dd/mm/aaaa`. |
+| 8 | WORKSHOP_MASTER | Pantallas del rol | Funciona como antes | Omitida. |
+| 9 | SELLER | Pantallas del rol | Igual que antes | Omitida. |
+
+Prueba de humo, con peticiones secuenciales: 102 pantallas (56 listados y
+formularios, 30 detalles y 16 de recetas) responden 200, sin errores de render,
+sin `NaN` y sin `Invalid Date`. Las fechas se muestran en el formato de cada
+copia: `d/m/aaaa` en comercial e inventario, `dd/mm/aaaa` en costos,
+mantenimiento y mermas, y medio en producción.
+
+Observaciones de la verificación:
+
+- Una primera prueba de humo con 56 peticiones simultáneas agotó las 200
+  conexiones del pooler de Supabase de staging
+  (`EMAXCONN max client connections reached`). Nueve páginas respondieron 500
+  durante unos 8 minutos, hasta que las instancias liberaron sus conexiones.
+  `lib/db.ts` crea `PrismaPg` solo con `connectionString`, así que cada instancia
+  serverless usa el pool por defecto de `pg` (hasta 10 conexiones). Un pico real
+  de tráfico en producción podría causar lo mismo.
+- El despliegue de una rama, abierto por su URL propia de Vercel, redirige el
+  inicio de sesión a `softindus-acer-pe.vercel.app`, el dominio de producción.
+- El encabezado "Generado" de las exportaciones muestra la hora en UTC.
+- Datos de prueba que deja la verificación: dos registros en `exportacion_datos`
+  con su entrada en la bitácora y el registro de recálculo de `COS00000001`.
 
 Pendientes fuera de alcance:
 
@@ -438,7 +464,14 @@ Pendientes fuera de alcance:
   `movimiento_inventario.fecha_movimiento` (entradas y salidas), `fecha_falla`,
   `fecha_cierre_materiales` y los `fecha_registro` de tipo `Timestamptz`.
   Después de las 19:00 de Lima se muestran con el día siguiente. Es el
-  comportamiento vigente en producción; corregirlo es un `fix` por campo.
+  comportamiento vigente en producción; corregirlo es un `fix` por campo. Lo
+  mismo ocurre con la hora del encabezado "Generado" y la fecha del nombre de
+  los archivos exportados.
+- Pool de conexiones en serverless: limitar `max` por instancia, definir
+  `idleTimeoutMillis` y confirmar que `DATABASE_URL` usa el pooler de Supabase en
+  modo transacción. Es un cambio de infraestructura con su propia verificación.
+- Los despliegues de rama, abiertos por su URL propia, redirigen el inicio de
+  sesión a producción: revisar la URL de autenticación del entorno Preview.
 - 46 definiciones locales de otros formateadores (`formatNumber`,
   `formatPercent`, `formatDateTime`, `formatQuantity`, `formatDateInput`,
   `formatHours` y otros) en 40 archivos.
@@ -462,7 +495,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
-| 3 | A | Conversión y formatos compartidos | Implementada (pendiente de CI y staging) |
+| 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Pendiente |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
