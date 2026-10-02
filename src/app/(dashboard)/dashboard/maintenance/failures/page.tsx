@@ -30,16 +30,9 @@ import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateFailureStatusAction } from "@/modules/maintenance/failures/actions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;

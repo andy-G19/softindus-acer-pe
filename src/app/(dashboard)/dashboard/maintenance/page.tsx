@@ -28,33 +28,10 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
@@ -259,7 +236,7 @@ export default async function MaintenanceDashboardPage() {
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-bold">
-            {formatMoney(maintenanceCostsThisMonth._sum.costo_total)}
+            {formatMoney(maintenanceCostsThisMonth._sum.costo_total ?? 0)}
           </p>
           <p className="text-sm text-muted-foreground">
             Suma de reparaciones registradas durante el mes actual.
@@ -298,7 +275,7 @@ export default async function MaintenanceDashboardPage() {
                   >
                     <p className="font-medium text-foreground">{failure.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
-                      Fecha: {formatDate(failure.fecha_falla)} | Estado:{" "}
+                      Fecha: {formatDate(failure.fecha_falla, { format: "dd/mm/yyyy" })} | Estado:{" "}
                       {failure.estado_atencion}
                     </p>
                     <p className="text-sm text-muted-foreground">
@@ -330,7 +307,7 @@ export default async function MaintenanceDashboardPage() {
                     <p className="font-medium text-foreground">{maintenance.maquina.nombre}</p>
                     <p className="text-sm text-muted-foreground">
                       Fecha programada:{" "}
-                      {formatDate(maintenance.fecha_programada)} | Estado:{" "}
+                      {formatDate(maintenance.fecha_programada, { format: "dd/mm/yyyy" })} | Estado:{" "}
                       {maintenance.estado}
                     </p>
                     <p className="mt-2 text-sm">{maintenance.actividad}</p>

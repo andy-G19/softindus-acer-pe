@@ -26,6 +26,7 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -39,19 +40,6 @@ import { updatePreventiveMaintenanceStatusAction } from "@/modules/maintenance/p
 type PreventiveMaintenancePageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function getPreventiveStatusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -350,13 +338,13 @@ export default async function PreventiveMaintenancePage({
                       <TableCell>{maintenance.responsable ?? "-"}</TableCell>
 
                       <TableCell>
-                        {formatDate(maintenance.fecha_programada)}
+                        {formatDate(maintenance.fecha_programada, { format: "dd/mm/yyyy" })}
                         {isOverdue ? (
                           <p className="text-xs text-destructive">Vencido</p>
                         ) : null}
                       </TableCell>
 
-                      <TableCell>{formatDate(maintenance.fecha_realizada)}</TableCell>
+                      <TableCell>{formatDate(maintenance.fecha_realizada, { format: "dd/mm/yyyy" })}</TableCell>
 
                       <TableCell>
                         {maintenance.usuario.nombres}{" "}
