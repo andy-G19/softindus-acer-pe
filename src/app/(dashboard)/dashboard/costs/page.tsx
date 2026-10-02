@@ -25,31 +25,8 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 
 function formatPercent(value: unknown) {
   if (value === null || value === undefined) {
@@ -268,8 +245,8 @@ export default async function CostsDashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Costeos registrados" value={totalCostings.toString()} description={`${costingsThisMonth} generados este mes`} tone="info" icon={Calculator} />
-        <KpiCard title="Costo acumulado" value={formatMoney(totalCostAmount._sum.costo_total)} description={`Promedio: ${formatMoney(averageCost)}`} tone="info" icon={CircleDollarSign} />
-        <KpiCard title="Costos indirectos" value={formatMoney(totalIndirectCosts._sum.monto)} description="Gastos agregados a costeos." tone="warning" icon={Receipt} />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalCostAmount._sum.costo_total ?? 0)} description={`Promedio: ${formatMoney(averageCost)}`} tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Costos indirectos" value={formatMoney(totalIndirectCosts._sum.monto ?? 0)} description="Gastos agregados a costeos." tone="warning" icon={Receipt} />
         <KpiCard title="Alertas de bajo margen" value={lowMarginAlerts.toString()} description="Rentabilidades críticas." tone="warning" icon={AlertTriangle} />
       </section>
 
@@ -319,7 +296,7 @@ export default async function CostsDashboardPage() {
                     >
                       <div>
                         <p className="text-xs text-muted-foreground">
-                          {item.id_costeo} | {formatDate(item.fecha_costeo)}
+                          {item.id_costeo} | {formatDate(item.fecha_costeo, { format: "dd/mm/yyyy" })}
                         </p>
 
                         <p className="font-medium text-foreground">

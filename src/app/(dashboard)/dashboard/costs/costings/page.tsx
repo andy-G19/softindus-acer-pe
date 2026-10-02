@@ -24,7 +24,9 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -37,18 +39,6 @@ type CostingsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
 }
@@ -59,19 +49,6 @@ function formatPercent(value: unknown) {
   }
 
   return `${toNumber(value).toFixed(2)}%`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getOriginTypeLabel(type: string | null | undefined) {
@@ -371,7 +348,7 @@ export default async function CostingsPage({
                     {costing.id_costeo}
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {formatDate(costing.fecha_costeo)}
+                    {formatDate(costing.fecha_costeo, { format: "dd/mm/yyyy" })}
                   </p>
                 </TableCell>
 

@@ -25,7 +25,8 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
-import { formatDateTime } from "@/lib/formatters";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 import {
   createIndirectCostAction,
   annulIndirectCostAction,
@@ -43,31 +44,8 @@ type CostingDetailPageProps = {
   }>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function formatShortDate(value: Date | null | undefined) {
@@ -296,7 +274,7 @@ export default async function CostingDetailPage({
         <KpiCard title="Costo consumibles" value={formatMoney(costing.costo_consumibles)} description="Insumos secundarios." tone="info" icon={CircleDollarSign} />
         <KpiCard title="Mano de obra" value={formatMoney(costing.costo_mano_obra)} description="Estimada u operativa." tone="info" icon={Users} />
         <KpiCard title="Costo indirecto total" value={formatMoney(costing.costo_indirecto_total)} description="Gastos indirectos." tone="warning" icon={CircleDollarSign} />
-        <KpiCard title="Costo total" value={formatMoney(costing.costo_total)} description={`Unitario: ${formatMoney(costing.costo_unitario)}`} tone="warning" icon={CircleDollarSign} />
+        <KpiCard title="Costo total" value={formatMoney(costing.costo_total)} description={`Unitario: ${formatMoney(costing.costo_unitario ?? 0)}`} tone="warning" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
@@ -308,7 +286,7 @@ export default async function CostingDetailPage({
             <dl className="space-y-3 text-sm">
               <div className="flex justify-between gap-4">
                 <dt className="text-muted-foreground">Fecha de costeo</dt>
-                <dd className="font-medium">{formatDate(costing.fecha_costeo)}</dd>
+                <dd className="font-medium">{formatDate(costing.fecha_costeo, { format: "d mmm yyyy" })}</dd>
               </div>
 
               <div className="flex justify-between gap-4">
@@ -897,7 +875,7 @@ export default async function CostingDetailPage({
                     <div>
                       <p className="text-muted-foreground">Ingreso estimado</p>
                       <p className="font-semibold text-foreground">
-                        {formatMoney(profitabilityReference?.income)}
+                        {formatMoney(profitabilityReference?.income ?? 0)}
                       </p>
                     </div>
 
@@ -911,7 +889,7 @@ export default async function CostingDetailPage({
                     <div>
                       <p className="text-muted-foreground">Utilidad estimada</p>
                       <p className="font-semibold text-foreground">
-                        {formatMoney(profitabilityReference?.profit)}
+                        {formatMoney(profitabilityReference?.profit ?? 0)}
                       </p>
                     </div>
 

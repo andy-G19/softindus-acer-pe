@@ -10,24 +10,11 @@ import {
 } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { toNonNegativeNumber } from "@/lib/numbers";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  const numberValue = Number(value.toString());
-
-  if (Number.isNaN(numberValue) || numberValue < 0) {
-    return 0;
-  }
-
-  return numberValue;
 }
 
 function normalizeText(value: FormDataEntryValue | null) {
@@ -117,7 +104,7 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
     );
   }
 
-  const quantityToProduce = toNumber(workOrder.cantidad);
+  const quantityToProduce = toNonNegativeNumber(workOrder.cantidad);
 
   if (quantityToProduce <= 0) {
     throw new Error("La cantidad de la orden debe ser mayor que cero.");
@@ -127,9 +114,9 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
   let consumableCost = 0;
 
   for (const detail of workOrder.version_receta.detalle_receta) {
-    const quantityPerUnit = toNumber(detail.cantidad_requerida);
-    const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
-    const unitCost = toNumber(detail.material.costo_unitario_actual);
+    const quantityPerUnit = toNonNegativeNumber(detail.cantidad_requerida);
+    const wastePercentage = toNonNegativeNumber(detail.merma_estimada_porcentaje);
+    const unitCost = toNonNegativeNumber(detail.material.costo_unitario_actual);
 
     const requiredBase = quantityPerUnit * quantityToProduce;
     const requiredWithWaste = requiredBase * (1 + wastePercentage / 100);
