@@ -24,7 +24,9 @@ import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 
 function getOperatorStatusVariant(status: string) {
@@ -33,27 +35,6 @@ function getOperatorStatusVariant(status: string) {
   }
 
   return "secondary" as const;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 function formatHours(value: unknown) {
@@ -322,7 +303,7 @@ export default async function StaffDashboardPage() {
                           {attendance.operario.nombres}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Fecha: {formatDate(attendance.fecha)} | Horas:{" "}
+                          Fecha: {formatDate(attendance.fecha, { format: "dd/mm/yyyy" })} | Horas:{" "}
                           {formatHours(attendance.horas_trabajadas)}
                         </p>
                       </div>

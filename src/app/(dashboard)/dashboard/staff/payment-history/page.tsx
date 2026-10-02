@@ -21,33 +21,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function getPaymentMethodLabel(method: string | null) {
   const labels: Record<string, string> = {
@@ -156,8 +132,8 @@ export default async function PaymentHistoryPage() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Pagos registrados" value={totalPayments.toString()} description="Total histórico de pagos." tone="info" icon={ClipboardList} />
         <KpiCard title="Pagos del mes" value={paymentsThisMonth.toString()} description="Registros del periodo actual." tone="info" icon={CircleDollarSign} />
-        <KpiCard title="Total pagado" value={formatMoney(totalPaidAmount._sum.monto_pagado)} description="Acumulado histórico." tone="success" icon={CircleDollarSign} />
-        <KpiCard title="Pagado este mes" value={formatMoney(monthlyPaidAmount._sum.monto_pagado)} description="Total mensual registrado." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Total pagado" value={formatMoney(totalPaidAmount._sum.monto_pagado ?? 0)} description="Acumulado histórico." tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Pagado este mes" value={formatMoney(monthlyPaidAmount._sum.monto_pagado ?? 0)} description="Total mensual registrado." tone="success" icon={CircleDollarSign} />
       </section>
 
       <Card>
@@ -204,7 +180,7 @@ export default async function PaymentHistoryPage() {
                       {payment.id_historial_pago}
                     </TableCell>
 
-                    <TableCell>{formatDate(payment.fecha_pago)}</TableCell>
+                    <TableCell>{formatDate(payment.fecha_pago, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell className="font-medium">
                       {payment.planilla_pago.operario.apellidos},{" "}
