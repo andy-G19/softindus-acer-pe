@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 357 |
+| Archivos fuente analizados | 360 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -169,111 +169,111 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | --- | --- | --- |
 | `src/app/(dashboard)/dashboard/audit/page.tsx` | 187 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 164 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 208 | `"/dashboard/commercial/orders"` |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 379 | `{cancelOrderAction}` |
-| `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 158 | `"/dashboard/commercial/payments"` |
-| `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 184 | `"/dashboard/commercial/products"` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 123 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 201 | `"/dashboard/commercial/quotes"` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 347 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 117 | `"/dashboard/commercial/receipts"` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 217 | `{annulReceiptAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 344 | `{updateLaborCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 369 | `{recalculateCostingAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 554 | `{createIndirectCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 706 | `{annulIndirectCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 774 | `{createMarginAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 941 | `{createProfitabilityAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 262 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 328 | `{createCostingFromWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 239 | `{attendStockAlertAction}` |
-| `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 139 | `"/dashboard/inventory/entries"` |
-| `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 238 | `"/dashboard/inventory/materials"` |
-| `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 126 | `"/dashboard/inventory/outputs"` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 134 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 177 | `"/dashboard/inventory/purchases"` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 324 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 172 | `"/dashboard/inventory/supplier-materials"` |
-| `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 142 | `"/dashboard/inventory/supplier-payments"` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 193 | `"/dashboard/commercial/orders"` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 364 | `{cancelOrderAction}` |
+| `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 143 | `"/dashboard/commercial/payments"` |
+| `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 177 | `"/dashboard/commercial/products"` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 108 | `{annulQuoteAction}` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 186 | `"/dashboard/commercial/quotes"` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 332 | `{annulQuoteAction}` |
+| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 102 | `"/dashboard/commercial/receipts"` |
+| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 202 | `{annulReceiptAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 322 | `{updateLaborCostAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 347 | `{recalculateCostingAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 532 | `{createIndirectCostAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 684 | `{annulIndirectCostAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 752 | `{createMarginAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 919 | `{createProfitabilityAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 239 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 311 | `{createCostingFromWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 232 | `{attendStockAlertAction}` |
+| `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 132 | `"/dashboard/inventory/entries"` |
+| `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 231 | `"/dashboard/inventory/materials"` |
+| `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 119 | `"/dashboard/inventory/outputs"` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 119 | `{annulPurchaseAction}` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 162 | `"/dashboard/inventory/purchases"` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 309 | `{annulPurchaseAction}` |
+| `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 165 | `"/dashboard/inventory/supplier-materials"` |
+| `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 127 | `"/dashboard/inventory/supplier-payments"` |
 | `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 185 | `"/dashboard/inventory/suppliers"` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 98 | `{createFailureAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 232 | `{updateFailureStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 235 | `"/dashboard/maintenance/machines"` |
+| `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 225 | `{updateFailureStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 224 | `"/dashboard/maintenance/machines"` |
 | `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 100 | `{createPreventiveMaintenanceAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 219 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 386 | `{updatePreventiveMaintenanceStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 208 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 375 | `{updatePreventiveMaintenanceStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 118 | `{createRepairAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 226 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 396 | `{updateRepairStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 185 | `"/dashboard/maintenance/spare-parts"` |
+| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 204 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 374 | `{updateRepairStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 178 | `"/dashboard/maintenance/spare-parts"` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 155 | `"/dashboard/petty-cash/categories"` |
-| `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 131 | `{createPettyCashExpenseAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 160 | `{createPettyCashIncomeAdjustmentAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 413 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 310 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 468 | `{annulPettyCashMovementAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 121 | `{createPettyCashExpenseAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 138 | `{createPettyCashIncomeAdjustmentAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 391 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 292 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 450 | `{annulPettyCashMovementAction}` |
 | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 346 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 103 | `{addCampaignDetailAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 70 | `{updateProductionCampaignAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 33 | `{createProductionCampaignAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 242 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 383 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 397 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 411 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 275 | `{deleteRecipeDetailAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 194 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 240 | `{setCurrentRecipeVersionAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 263 | `{voidRecipeVersionAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 225 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 366 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 380 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 394 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 268 | `{deleteRecipeDetailAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 184 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 230 | `{setCurrentRecipeVersionAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 253 | `{voidRecipeVersionAction}` |
 | `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 69 | `{createTechnicalRecipeAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 176 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 310 | `{toggleTechnicalRecipeStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 166 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 300 | `{toggleTechnicalRecipeStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/routes/[id]/edit/page.tsx` | 82 | `{updateFabricationRouteAction}` |
 | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 199 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 366 | `{toggleRouteStageStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 60 | `{createFabricationRouteAction}` |
 | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 159 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 264 | `{toggleFabricationRouteStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 338 | `{deliverWorkOrderMaterialsAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 632 | `{reopenWorkOrderMaterialsAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 317 | `{deliverWorkOrderMaterialsAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 611 | `{reopenWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 144 | `{reassignWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 251 | `{generateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 274 | `{updateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 365 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 585 | `{annulWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 604 | `{finishWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 244 | `{generateWorkOrderProgressAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 267 | `{updateWorkOrderProgressAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 355 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 575 | `{annulWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 594 | `{finishWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 263 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 445 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 286 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 512 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 297 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 202 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 416 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 205 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 371 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 423 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 279 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 488 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 279 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 192 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 394 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 183 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 349 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 83 | `{createAttendanceAction}` |
-| `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 268 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 242 | `"/dashboard/staff/operators"` |
-| `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 129 | `{registerOperatorPaymentAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 125 | `{generatePayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 254 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 407 | `{cancelPayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 161 | `{createOperatorTaskAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 290 | `{cancelOperatorTaskAction}` |
+| `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 249 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 235 | `"/dashboard/staff/operators"` |
+| `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 106 | `{registerOperatorPaymentAction}` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 118 | `{generatePayrollAction}` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 231 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 384 | `{cancelPayrollAction}` |
+| `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 150 | `{createOperatorTaskAction}` |
+| `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 272 | `{cancelOperatorTaskAction}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 162 | `{navigationHrefs.users}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 288 | `{deactivateUserAction}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 304 | `{activateUserAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 99 | `{createReusableScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 250 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 374 | `{updateReusableScrapStatusAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 382 | `{updateReusableScrapStatusAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 118 | `{createScrapSaleAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 232 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 356 | `{updateReusableScrapStatusAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 364 | `{updateReusableScrapStatusAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 111 | `{createScrapSaleAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 91 | `{createScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 255 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/components/commercial/order-form.tsx` | 191 | `{formAction}` |
-| `src/components/commercial/payment-form.tsx` | 34 | `{createPaymentAction}` |
-| `src/components/commercial/quote-form.tsx` | 81 | `{createQuoteAction}` |
-| `src/components/commercial/receipt-form.tsx` | 57 | `{createReceiptAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 237 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/components/commercial/order-form.tsx` | 185 | `{formAction}` |
+| `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
+| `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
+| `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |
 | `src/components/inventory/purchase-form.tsx` | 142 | `{createPurchaseAction}` |
 | `src/components/inventory/supplier-payment-form.tsx` | 31 | `{createSupplierPaymentAction}` |
 | `src/components/table/row-actions.tsx` | 37 | `{action}` |

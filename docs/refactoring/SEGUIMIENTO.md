@@ -304,6 +304,154 @@ Pendientes fuera de alcance:
   `requireApiAuth` (entrega 5).
 - Solo `production` tiene `error.tsx`.
 
+## Entrega 3 — Conversión y formatos compartidos
+
+Fecha: 2026-10-01. Estado: implementada en staging (`ee1cea5` a `e5a1652`);
+pendiente de CI y de la verificación en staging.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| ee1cea5 | test | Caracterización de `formatMoney` y `formatDate` de `lib/formatters` (16 pruebas), con el proceso en America/Lima y en UTC. |
+| d3e8f2c | fix | Las 38 copias locales de `formatDate` del servidor fijan `timeZone: "UTC"`. |
+| 1fb27d7 | fix | `quote-form.tsx` formatea en UTC la fecha del pedido y la entrega estimada. |
+| 6069c5a | refactor | `lib/numbers.ts` (`toNumber`, `toNonNegativeNumber`, `NumericInput`); `formatMoney` con sobrecarga y `emptyText`; `formatDate` con `format` y `emptyText`. 47 pruebas. |
+| 18d508e | refactor | Las tres copias privadas de `toNonNegativeNumber` en lib usan la compartida. |
+| c806041 | refactor | Dashboard: se elimina `modules/dashboard/utils.ts`. |
+| 403eb57 a 1452e1d | refactor | Migración por área: mermas (5 archivos), comercial (11), inventario (8), mantenimiento (8), caja chica (9), personal (11), costos (8), producción (12) y reportes (10). |
+| e5a1652 | chore | Regla de ESLint contra copias locales y convención en CLAUDE.md. |
+
+Punto de partida: 153 definiciones locales en 84 archivos, con comportamientos
+distintos bajo el mismo nombre:
+
+- `toNumber`: 48 copias devolvían `NaN` con valores no numéricos, 2 los
+  convertían en cero (dashboard y órdenes de trabajo) y 2 anulaban además los
+  negativos (costeo).
+- `formatMoney`: ante un monto ausente, 31 copias mostraban `S/ 0.00`, 15 un
+  guion, la de pedidos `Sin precio` y la de lib un guion. La de mermas usaba
+  separador de miles.
+- `formatDate`: tres formatos (`d/m/aaaa`, `dd/mm/aaaa` y medio) y dos zonas.
+  38 copias del servidor y la de `quote-form.tsx` usaban la zona del proceso.
+
+Defectos corregidos:
+
+- Zona horaria en el servidor (`d3e8f2c`): las columnas `@db.Date` llegan como
+  medianoche UTC y, con la zona del proceso, una máquina en America/Lima mostraba
+  el día anterior. Vercel ejecuta las funciones en UTC y reserva la variable `TZ`,
+  así que producción, staging y CI no cambian: el cambio alinea el desarrollo
+  local.
+- Proforma nueva (`1fb27d7`): `QuoteForm` es un componente cliente. En el
+  navegador la fecha del pedido y la entrega estimada se mostraban un día antes, y
+  con el pedido preseleccionado el HTML del servidor no coincidía con el del
+  navegador. Visible en producción.
+
+Diseño:
+
+- `toNumber` es la copia literal de las 48 mayoritarias: `null` y `undefined`
+  valen 0 y no oculta `NaN`. `toNonNegativeNumber` es la versión que ya existía en
+  lib: `null`, negativo o no finito valen 0.
+- `formatMoney(valor)` solo acepta un valor presente. Si puede faltar, la llamada
+  decide: `x ?? 0` cuando falta significa cero, o `{ emptyText }`. En ejecución,
+  un valor ausente muestra `emptyText` (por defecto `-`) y uno no numérico `-`.
+- `formatDate(valor, { format, emptyText })` formatea siempre en UTC; el formato
+  por defecto es `d/m/yyyy`.
+- Los valores por defecto de lib no cambiaron: las 16 pruebas de caracterización
+  pasan sin modificarse.
+- Las dos llamadas de mermas con separador de miles pasan a anteponer `S/` a su
+  `formatNumber` local, que era la definición de su copia.
+- `formatSignedMoney` (caja chica) tipa su monto como `Prisma.Decimal` en lugar
+  de `unknown`: es lo que recibe de su único llamador.
+
+Migración y evidencia de equivalencia:
+
+- Codemod sobre el AST y el verificador de tipos de TypeScript, fuera del
+  repositorio. Identifica cada copia por su cuerpo y resuelve las llamadas por
+  símbolo. Aborta ante usos como valor o variantes desconocidas, conserva BOM y
+  saltos de línea, y registra la decisión de cada llamada.
+- Pruebas de oráculo: 14 copias literales de las variantes se comparan con la
+  llamada que las sustituye. El dominio es lo que reciben las pantallas (Decimal,
+  number, texto de `Decimal.toString()`, `null` y `undefined`), en America/Lima y
+  en UTC.
+- Las diferencias fuera de ese dominio quedan fijadas en pruebas: `NaN` se
+  muestra como guion y no como `S/ NaN`, y la cadena vacía es un monto ausente.
+  `toNumber` devuelve `NaN` donde dos copias devolvían cero, y
+  `toNonNegativeNumber` anula el infinito y conserva el cero negativo. Ninguna
+  llamada migrada recibe esas entradas.
+
+Hallazgo durante la migración: el codemod decidía por el tipo si un valor podía
+faltar. Sin `noUncheckedIndexedAccess`, TypeScript considera `arr[0]` siempre
+presente, y en `const quote = order.proforma[0] ?? null` tipa `quote` como
+presente.
+
+- Cinco llamadas de reportes (exportación y rentabilidad) accedían con `?.` a la
+  proforma, el margen o la rentabilidad más recientes. Habrían cambiado
+  `S/ 0.00` o la celda vacía por un guion. Se detectó al revisar el diff, antes
+  del commit.
+- Dos escáneres revisaron todas las llamadas migradas en busca de encadenamiento
+  opcional, acceso por índice, `as`, `!`, `?? null` y variables o parámetros que
+  los contienen. Las 5 eran las únicas con riesgo. Otras 13 marcas estaban
+  protegidas por una condición o eran valores calculados.
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit, en
+Windows, con 492 pruebas en los commits 1 a 3 y 539 desde el commit 4. Pruebas de
+mutación:
+
+| Mutación | Resultado |
+|---|---|
+| `formatDate` de lib sin `timeZone: "UTC"` (antes del commit 4) | Fallan solo las 3 pruebas de la variante America/Lima. |
+| `formatMoney` de lib sin la guarda de `NaN` | Falla solo su prueba. |
+| `formatDate` compartido sin UTC | 11 fallos, todos en la variante America/Lima. |
+| `toNonNegativeNumber` sin anular negativos | Fallan solo su contrato y el oráculo de costeo. |
+| Texto por defecto de `formatMoney` a `S/ 0.00` | Fallan la caracterización y la prueba de la cadena vacía. |
+
+La regla de ESLint se comprobó por entrada estándar:
+
+- Detecta una función en una página, una función flecha en una acción y una
+  copia de `toNonNegativeNumber` en `lib/costing.ts`.
+- No marca las definiciones compartidas, su uso importado ni los oráculos
+  `legacy*` de las pruebas.
+- Aplicada a las versiones anteriores a la entrega de tres archivos, detecta sus
+  1, 3 y 1 copias.
+- Detecta por nombre: no ve una copia renombrada.
+
+El código de producción pierde 1.103 líneas netas (+345 y −1.448 en 90
+archivos); las pruebas suman 638. `npm run refactor:inventory` no cambia
+páginas, formularios ni acciones: analiza 360 archivos (4 nuevos, 1 eliminado)
+y desplaza números de línea.
+
+Verificación en staging, pendiente:
+
+| # | Rol | Prueba | Esperado | Resultado |
+|---|---|---|---|---|
+| 1 | ADMIN o SELLER | Nueva proforma: elegir un pedido | La fecha del pedido coincide con el listado de pedidos (antes, un día menos) | Pendiente |
+| 2 | ADMIN | Exportar en CSV ventas y cobranzas y costos, antes y después del despliegue de `1452e1d`, con un pedido sin proforma y un costeo sin margen | Contenido idéntico: fecha de proforma vacía y `S/ 0.00` en monto proformado y precio sugerido | Pendiente |
+| 3 | ADMIN | Monto estimado, precio referencial, adelanto, IGV y tarifa vacíos | `-` | Pendiente |
+| 4 | ADMIN | Nuevo pedido con un producto sin precio | `Sin precio` en el buscador | Pendiente |
+| 5 | ADMIN | Indicadores con agregados vacíos en costos, caja chica, personal, mantenimiento y rentabilidad | `S/ 0.00` | Pendiente |
+| 6 | ADMIN | Recalcular un costeo de prueba | Total y unitario sin cambios | Pendiente |
+| 7 | ADMIN | Panel de mermas | Ingresos por chatarra con separador de miles, como antes | Pendiente |
+| 8 | WORKSHOP_MASTER | Mantenimiento, personal, mermas y entrega de material en producción | Funciona como antes | Pendiente |
+| 9 | SELLER | Pedidos, proformas, pagos y comprobantes | Igual que antes | Pendiente |
+
+Pendientes fuera de alcance:
+
+- Instantes formateados como fechas civiles en UTC:
+  `movimiento_inventario.fecha_movimiento` (entradas y salidas), `fecha_falla`,
+  `fecha_cierre_materiales` y los `fecha_registro` de tipo `Timestamptz`.
+  Después de las 19:00 de Lima se muestran con el día siguiente. Es el
+  comportamiento vigente en producción; corregirlo es un `fix` por campo.
+- 46 definiciones locales de otros formateadores (`formatNumber`,
+  `formatPercent`, `formatDateTime`, `formatQuantity`, `formatDateInput`,
+  `formatHours` y otros) en 40 archivos.
+- Formatos de monto distintos entre pantallas: `-` o `S/ 0.00` para un monto
+  ausente, y separador de miles solo en mermas (pista B).
+- El redondeo usa `toFixed` sobre `number`: `Decimal("2.675")` se muestra
+  `S/ 2.67`. Revisarlo es una decisión aparte (plan, sección 8).
+- Activar `noUncheckedIndexedAccess` para que `arr[0]` sea `T | undefined`.
+- El proyecto no tiene formateador de código; la migración deja líneas de más
+  de 80 columnas, como ya había.
+- `toNumber` acepta `unknown`: estrecharlo a `NumericInput` al unificar los
+  envoltorios locales que lo llaman.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -314,7 +462,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 0 | Base | Validación, inventario, CI y configuración de Claude Code | Cerrada (CI #19 verde, staging Ready) |
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
-| 3 | A | Conversión y formatos compartidos | Pendiente |
+| 3 | A | Conversión y formatos compartidos | Implementada (pendiente de CI y staging) |
 | 4 | A | Consultas fuera de las páginas, por área | Pendiente |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
@@ -331,18 +479,18 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 
 | Métrica | Línea base | Actual | Entrega que la mueve |
 |---|---|---|---|
-| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.499 | 5 |
-| `production/work-orders/actions.ts` | 1.055 líneas | 1.055 | 6 |
-| `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.026 | 6 |
+| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
+| `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
+| `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
 | Páginas con Prisma directo | 117 | 117 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
-| Definiciones locales de `toNumber` | 52 | 52 | 3 |
-| Definiciones locales de `formatMoney` | 49 | 49 | 3 |
-| Definiciones locales de `formatDate` | 52 | 52 | 3 |
+| Definiciones locales de `toNumber` | 52 | 1 | 3 |
+| Definiciones locales de `formatMoney` | 49 | 1 | 3 |
+| Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 21 / 476 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 24 / 539 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
@@ -350,11 +498,19 @@ filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
 solo cambiaron `inventory/purchases/actions.ts` y su prueba, que no tienen ninguno
 de esos patrones, por lo que son también su línea base.
 
+Actualizado en la entrega 3 (2026-10-01) sobre `e5a1652`. Las demás filas no
+cambian: páginas con Prisma directo 117, `auth()` directo 0 y `sweetalert2` 2,
+medidos de nuevo; las otras no las toca esta entrega.
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
-  `function <nombre>` en todo `src`, incluida la definición compartida de
-  `src/lib`. Fuera de `src/lib` hay una menos de cada una.
+  `function <nombre>` con cuerpo en todo `src`, incluida la definición
+  compartida de `src/lib`. Las dos firmas de sobrecarga de `formatMoney`, sin
+  cuerpo, no cuentan. Desde la entrega 3 hay 0 fuera de `src/lib`, que es lo que
+  mide `/verificar`, y una regla de ESLint lo mantiene.
+- Contar con grep o ripgrep. En PowerShell, `Select-String -Path` interpreta
+  `[id]` y `[report]` como comodines y omite esos archivos sin avisar.
 - `sweetalert2` cuenta los archivos que lo mencionan. Uno es un comentario de
   `lib/security-headers.ts`: el único archivo que lo importa es
   `lib/notifications.ts`.
