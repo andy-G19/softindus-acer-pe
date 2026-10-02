@@ -6,18 +6,11 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { toNumber } from "@/lib/numbers";
 import { scrapSaleSchema } from "@/schemas/waste-scrap/scrap-sale.schema";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 export async function createScrapSaleAction(formData: FormData) {
