@@ -46,6 +46,29 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  // Conversion y formatos compartidos (entrega 3): habia 153 copias locales con
+  // comportamientos distintos bajo el mismo nombre. Cada una vive en un solo lugar.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/lib/numbers.ts", "src/lib/formatters.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "FunctionDeclaration[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+          message:
+            "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.",
+        },
+        {
+          selector:
+            "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+          message:
+            "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.",
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;
