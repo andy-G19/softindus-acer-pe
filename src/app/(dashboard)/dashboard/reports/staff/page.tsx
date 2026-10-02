@@ -31,7 +31,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -44,31 +46,6 @@ import {
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 export default async function StaffReportPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);
@@ -303,8 +280,8 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
                         {payroll.operario.apellidos}, {payroll.operario.nombres}
                       </TableCell>
                       <TableCell>
-                        {formatDate(payroll.periodo_inicio)} -{" "}
-                        {formatDate(payroll.periodo_fin)}
+                        {formatDate(payroll.periodo_inicio, { format: "dd/mm/yyyy" })} -{" "}
+                        {formatDate(payroll.periodo_fin, { format: "dd/mm/yyyy" })}
                       </TableCell>
                       <TableCell>{payroll.modalidad_pago}</TableCell>
                       <TableCell className="text-right">

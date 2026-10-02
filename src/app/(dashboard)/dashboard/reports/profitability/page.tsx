@@ -24,7 +24,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
@@ -37,18 +39,6 @@ import {
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
 
 function formatPercent(value: unknown) {
   return `${toNumber(value).toFixed(2)}%`;
@@ -293,10 +283,10 @@ export default async function ProfitabilityReportPage({
                         {formatMoney(costing.costo_total)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {formatMoney(profitability?.ingreso_estimado)}
+                        {formatMoney(profitability?.ingreso_estimado ?? 0)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {formatMoney(profitability?.utilidad_estimada)}
+                        {formatMoney(profitability?.utilidad_estimada ?? 0)}
                       </TableCell>
                       <TableCell className="text-right">
                         {profitability ? formatPercent(profitability.margen_real) : "-"}

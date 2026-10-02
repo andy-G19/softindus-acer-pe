@@ -29,7 +29,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -88,33 +90,12 @@ function parseDateInputAsNextDay(value: string) {
   return new Date(year, month - 1, day + 1);
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
 }
 
 function formatPercent(value: unknown) {
   return `${toNumber(value).toFixed(2)}%`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getStatusLabel(status: string) {
@@ -433,11 +414,11 @@ export default async function ProductionReportPage({
 
                       <TableCell>{formatQuantity(order.cantidad)}</TableCell>
 
-                      <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
+                      <TableCell>{formatDate(order.fecha_inicio, { format: "dd/mm/yyyy" })}</TableCell>
 
                       <TableCell>
                         <div className="space-y-1">
-                          <p>{formatDate(order.fecha_entrega_estimada)}</p>
+                          <p>{formatDate(order.fecha_entrega_estimada, { format: "dd/mm/yyyy" })}</p>
                           {isDelayed ? (
                             <p className="text-xs font-medium text-destructive">
                               Retrasada

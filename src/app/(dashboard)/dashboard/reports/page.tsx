@@ -52,7 +52,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 
 const ACTIVE_WORK_ORDER_STATES = ["pendiente", "en_proceso", "pausada"];
@@ -155,33 +157,8 @@ const reportModules: ReportModule[] = [
   },
 ];
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 export default async function ReportsDashboardPage() {
@@ -531,7 +508,7 @@ export default async function ReportsDashboardPage() {
           <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm">
             <p className="font-medium">Periodo actual</p>
             <p className="text-muted-foreground">
-              {formatDate(startOfMonth)} - {formatDate(today)}
+              {formatDate(startOfMonth, { format: "dd/mm/yyyy" })} - {formatDate(today, { format: "dd/mm/yyyy" })}
             </p>
           </div>
         }
@@ -693,7 +670,7 @@ export default async function ReportsDashboardPage() {
                       </TableCell>
                       <TableCell>{order.estado}</TableCell>
                       <TableCell>
-                        {formatDate(order.fecha_entrega_estimada)}
+                        {formatDate(order.fecha_entrega_estimada, { format: "dd/mm/yyyy" })}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -841,7 +818,7 @@ export default async function ReportsDashboardPage() {
                       <p className="text-xs text-muted-foreground">
                         {movement.categoria_gasto?.nombre_categoria ??
                           "Sin categoría"}{" "}
-                        | {formatDate(movement.fecha_movimiento)}
+                        | {formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}
                       </p>
                     </div>
 

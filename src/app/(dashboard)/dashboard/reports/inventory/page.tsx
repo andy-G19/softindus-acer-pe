@@ -31,6 +31,7 @@ import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -85,14 +86,6 @@ function parseDateInputAsNextDay(value: string) {
   }
 
   return new Date(year, month - 1, day + 1);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 function formatQuantity(value: unknown) {

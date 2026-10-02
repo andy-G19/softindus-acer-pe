@@ -30,7 +30,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -85,31 +87,6 @@ function parseDateInputAsNextDay(value: string) {
   }
 
   return new Date(year, month - 1, day + 1);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getCashMovementTypeLabel(type: string) {
@@ -595,7 +572,7 @@ export default async function FinancialReportPage({
                       <p className="font-medium text-foreground">{row.purchase.id_compra}</p>
                       <p className="text-xs text-muted-foreground">
                         {row.purchase.proveedor.razon_social} ·{" "}
-                        {formatDate(row.purchase.fecha_compra)}
+                        {formatDate(row.purchase.fecha_compra, { format: "dd/mm/yyyy" })}
                       </p>
                     </div>
 
@@ -654,7 +631,7 @@ export default async function FinancialReportPage({
 
                     <TableCell>{movement.caja_chica.nombre_caja}</TableCell>
 
-                    <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                    <TableCell>{formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell>
                       {getCashMovementTypeLabel(movement.tipo_movimiento)}

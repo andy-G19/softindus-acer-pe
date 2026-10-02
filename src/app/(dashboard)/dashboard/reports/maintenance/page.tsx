@@ -33,8 +33,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
-import { formatDateTime } from "@/lib/formatters";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -106,37 +107,12 @@ function parseDateInputAsNextDay(value: string) {
   return new Date(year, month - 1, day + 1);
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
 }
 
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getFailureStatusLabel(status: string) {
@@ -695,7 +671,7 @@ export default async function MaintenanceReportPage({
 
                         <div className="text-right">
                           <p className="font-bold text-foreground">
-                            {formatDate(maintenance.fecha_programada)}
+                            {formatDate(maintenance.fecha_programada, { format: "dd/mm/yyyy" })}
                           </p>
                           <p
                             className={`text-xs ${
@@ -820,7 +796,7 @@ export default async function MaintenanceReportPage({
                                   )}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                  {formatDate(repair.fecha_reparacion)} |{" "}
+                                  {formatDate(repair.fecha_reparacion, { format: "dd/mm/yyyy" })} |{" "}
                                   {repair.tecnico_proveedor ?? "Sin técnico"}{" "}
                                   | {formatMoney(repair.costo_total)}
                                 </p>

@@ -30,7 +30,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 
@@ -91,33 +93,8 @@ function parseDateInputAsNextDay(value: string) {
   return new Date(year, month - 1, day + 1);
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getPurchaseStatusLabel(status: string) {
@@ -511,7 +488,7 @@ export default async function SuppliersPurchasesReportPage({
                       </div>
                     </TableCell>
 
-                    <TableCell>{formatDate(row.purchase.fecha_compra)}</TableCell>
+                    <TableCell>{formatDate(row.purchase.fecha_compra, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell>
                       <div>
@@ -575,7 +552,7 @@ export default async function SuppliersPurchasesReportPage({
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                   {formatMoney(history.precio_unitario)} ·{" "}
-                                  {formatDate(history.fecha_registro)} ·{" "}
+                                  {formatDate(history.fecha_registro, { format: "dd/mm/yyyy" })} ·{" "}
                                   {history.origen_registro}
                                 </p>
                               </div>
