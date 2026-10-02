@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
@@ -31,14 +32,6 @@ import { toggleProductStatusAction } from "@/modules/commercial/products/actions
 type ProductsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
@@ -266,7 +259,7 @@ export default async function ProductsPage({
               </TableCell>
               <TableCell>{product.unidad_medida}</TableCell>
               <TableCell>
-                {formatMoney(product.precio_referencial)}
+                {formatMoney(product.precio_referencial, { emptyText: "-" })}
               </TableCell>
               <TableCell>
                 <Badge variant={product.estado ? "success" : "outline"}>

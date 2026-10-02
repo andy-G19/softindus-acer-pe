@@ -14,7 +14,9 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 
 function getStatusBadgeVariant(status: string) {
@@ -33,35 +35,11 @@ function getStatusBadgeVariant(status: string) {
   return "secondary" as const;
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
 function formatNumber(value: unknown) {
   return new Intl.NumberFormat("es-PE", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(toNumber(value));
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${formatNumber(value)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
 }
 
 export default async function WasteScrapDashboardPage() {
@@ -247,7 +225,7 @@ export default async function WasteScrapDashboardPage() {
         <KpiCard title="Retazos registrados" value={totalRetazos.toString()} description={`${retazosDisponibles} disponibles`} tone="info" icon={Scissors} />
         <KpiCard title="Retazos reutilizados" value={retazosReutilizados.toString()} description={`${retazosDescartados} descartados`} tone="success" icon={Recycle} />
         <KpiCard title="Chatarra pendiente" value={chatarraAcumulada.toString()} description={`${chatarraVendida} registros vendidos`} tone="info" icon={Boxes} />
-        <KpiCard title="Ingresos por chatarra" value={formatMoney(totalIngresos)} description={`${ventasChatarra} venta(s) registradas`} tone="success" icon={CircleDollarSign} />
+        <KpiCard title="Ingresos por chatarra" value={`S/ ${formatNumber(totalIngresos)}`} description={`${ventasChatarra} venta(s) registradas`} tone="success" icon={CircleDollarSign} />
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -328,7 +306,7 @@ export default async function WasteScrapDashboardPage() {
                 >
                   <div>
                     <p className="font-mono text-xs text-muted-foreground">
-                      {item.id_retazo} | {formatDate(item.fecha_registro)}
+                      {item.id_retazo} | {formatDate(item.fecha_registro, { format: "dd/mm/yyyy" })}
                     </p>
 
                     <p className="font-medium text-foreground">
@@ -438,7 +416,7 @@ export default async function WasteScrapDashboardPage() {
               >
                 <div>
                   <p className="font-mono text-xs text-muted-foreground">
-                    {item.id_venta_chatarra} | {formatDate(item.fecha_venta)}
+                    {item.id_venta_chatarra} | {formatDate(item.fecha_venta, { format: "dd/mm/yyyy" })}
                   </p>
 
                   <p className="font-medium text-foreground">
@@ -454,7 +432,7 @@ export default async function WasteScrapDashboardPage() {
                     {item.cantidad_vendida
                       ? formatNumber(item.cantidad_vendida)
                       : "-"}{" "}
-                    | Monto: {formatMoney(item.monto_recibido)}
+                    | Monto: {`S/ ${formatNumber(item.monto_recibido)}`}
                   </p>
 
                   <p className="mt-1 text-xs text-muted-foreground">

@@ -38,30 +38,8 @@ import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 
 function getMovementLabel(type: string) {
   const labels: Record<string, string> = {
@@ -300,7 +278,7 @@ export default async function PettyCashDashboardPage() {
                 <TableBody>
                   {latestMovements.map((movement) => (
                     <TableRow key={movement.id_movimiento_caja}>
-                      <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                      <TableCell>{formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}</TableCell>
                       <TableCell>
                         <Badge variant={getMovementBadgeVariant(movement.tipo_movimiento)}>
                           {getMovementLabel(movement.tipo_movimiento)}
@@ -345,7 +323,7 @@ export default async function PettyCashDashboardPage() {
                     </div>
 
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Apertura: {formatDate(box.fecha_apertura)}
+                      Apertura: {formatDate(box.fecha_apertura, { format: "dd/mm/yyyy" })}
                     </p>
 
                     <p className="mt-1 text-sm">

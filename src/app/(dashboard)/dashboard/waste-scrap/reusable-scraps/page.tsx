@@ -29,7 +29,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateReusableScrapStatusAction } from "@/modules/waste-scrap/reusable-scraps/status-actions";
 
@@ -43,31 +45,11 @@ type ReusableScrapsPageProps = {
   searchParams?: Promise<SearchParams>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
 function formatNumber(value: unknown) {
   return new Intl.NumberFormat("es-PE", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(toNumber(value));
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
 }
 
 function getStatusBadgeVariant(status: string) {
@@ -366,7 +348,7 @@ export default async function ReusableScrapsPage({
                       </Badge>
                     </TableCell>
 
-                    <TableCell>{formatDate(item.fecha_registro)}</TableCell>
+                    <TableCell>{formatDate(item.fecha_registro, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell>
                       {item.estado === "disponible" ? (

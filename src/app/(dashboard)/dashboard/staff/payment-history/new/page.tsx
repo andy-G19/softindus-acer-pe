@@ -24,33 +24,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { registerOperatorPaymentAction } from "@/modules/staff/payment-history/actions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -292,8 +269,8 @@ export default async function NewOperatorPaymentPage() {
                     </TableCell>
 
                     <TableCell>
-                      {formatDate(payroll.periodo_inicio)} -{" "}
-                      {formatDate(payroll.periodo_fin)}
+                      {formatDate(payroll.periodo_inicio, { format: "dd/mm/yyyy" })} -{" "}
+                      {formatDate(payroll.periodo_fin, { format: "dd/mm/yyyy" })}
                     </TableCell>
 
                     <TableCell>

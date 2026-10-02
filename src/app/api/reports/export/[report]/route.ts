@@ -9,7 +9,8 @@ import {
   toApiErrorResponse,
 } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
-import { formatDateTime } from "@/lib/formatters";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import {
   DEFAULT_PDF_DISPLAY_ROWS,
@@ -94,32 +95,8 @@ function buildDateRange(dateFrom: string, dateTo: string) {
   };
 }
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatQuantity(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
 }
 
 function getDateStamp() {
@@ -267,9 +244,9 @@ async function buildProductionCsv(
         order.cliente?.nombre_razon_social ?? "",
         order.tipo_produccion,
         formatQuantity(order.cantidad),
-        formatDate(order.fecha_inicio),
-        formatDate(order.fecha_entrega_estimada),
-        formatDate(order.fecha_entrega_real),
+        formatDate(order.fecha_inicio, { format: "dd/mm/yyyy" }),
+        formatDate(order.fecha_entrega_estimada, { format: "dd/mm/yyyy", emptyText: "" }),
+        formatDate(order.fecha_entrega_real, { format: "dd/mm/yyyy", emptyText: "" }),
         order.estado,
         order.prioridad,
         order.ruta_fabricacion?.nombre_ruta ?? "",
@@ -509,13 +486,13 @@ async function buildSalesCollectionsCsv(
     rows: rows.map((row) => [
       row.order.id_pedido,
       row.order.cliente.nombre_razon_social,
-      formatDate(row.order.fecha_pedido),
+      formatDate(row.order.fecha_pedido, { format: "dd/mm/yyyy" }),
       row.order.estado,
-      formatMoney(row.order.monto_estimado),
+      formatMoney(row.order.monto_estimado ?? 0),
       row.quote?.numero_proforma ?? "",
-      formatDate(row.quote?.fecha_emision),
+      formatDate(row.quote?.fecha_emision, { format: "dd/mm/yyyy", emptyText: "" }),
       row.quote?.estado ?? "",
-      formatMoney(row.quote?.monto_total),
+      formatMoney(row.quote?.monto_total ?? 0),
       formatMoney(row.initialAdvance),
       formatMoney(row.advancePayments),
       formatMoney(row.amortizationPayments),
@@ -644,18 +621,18 @@ async function buildSuppliersPurchasesCsv(
         .map((history) => {
           return `${history.material.nombre_material}: ${formatMoney(
             history.precio_unitario,
-          )} (${formatDate(history.fecha_registro)})`;
+          )} (${formatDate(history.fecha_registro, { format: "dd/mm/yyyy" })})`;
         })
         .join(" | ");
 
       return [
         purchase.id_compra,
         purchase.proveedor.razon_social,
-        formatDate(purchase.fecha_compra),
+        formatDate(purchase.fecha_compra, { format: "dd/mm/yyyy" }),
         purchase.tipo_comprobante ?? "",
         purchase.numero_comprobante ?? "",
         formatMoney(purchase.subtotal),
-        formatMoney(purchase.igv),
+        formatMoney(purchase.igv ?? 0),
         formatMoney(purchase.monto_total),
         formatMoney(paidAmount),
         formatMoney(pendingBalance),
@@ -832,16 +809,16 @@ async function buildFinancialCsv(
   }, 0);
 
   const summaryRows: CsvValue[][] = [
-    ["Resumen", "Saldo caja chica abierta", "", formatMoney(cashBalance._sum.saldo_actual), "", "", "", ""],
+    ["Resumen", "Saldo caja chica abierta", "", formatMoney(cashBalance._sum.saldo_actual ?? 0), "", "", "", ""],
     ["Resumen", "Ingresos caja chica", "", formatMoney(totalCashIncome), "", "", "", ""],
     ["Resumen", "Egresos caja chica", "", formatMoney(totalCashExpense), "", "", "", ""],
     ["Resumen", "Movimiento neto caja", "", formatMoney(totalCashIncome - totalCashExpense), "", "", "", ""],
-    ["Resumen", "Cobrado a clientes", "", formatMoney(collectedPayments._sum.monto_pagado), "", "", "", ""],
-    ["Resumen", "Costo producción", "", formatMoney(productionCosts._sum.costo_total), "", "", "", ""],
-    ["Resumen", "Ingreso estimado", "", formatMoney(estimatedProfit._sum.ingreso_estimado), "", "", "", ""],
-    ["Resumen", "Costo estimado", "", formatMoney(estimatedProfit._sum.costo_total), "", "", "", ""],
-    ["Resumen", "Utilidad estimada", "", formatMoney(estimatedProfit._sum.utilidad_estimada), "", "", "", ""],
-    ["Resumen", "Cuentas por cobrar", "", formatMoney(receivables._sum.saldo), "", "", "", ""],
+    ["Resumen", "Cobrado a clientes", "", formatMoney(collectedPayments._sum.monto_pagado ?? 0), "", "", "", ""],
+    ["Resumen", "Costo producción", "", formatMoney(productionCosts._sum.costo_total ?? 0), "", "", "", ""],
+    ["Resumen", "Ingreso estimado", "", formatMoney(estimatedProfit._sum.ingreso_estimado ?? 0), "", "", "", ""],
+    ["Resumen", "Costo estimado", "", formatMoney(estimatedProfit._sum.costo_total ?? 0), "", "", "", ""],
+    ["Resumen", "Utilidad estimada", "", formatMoney(estimatedProfit._sum.utilidad_estimada ?? 0), "", "", "", ""],
+    ["Resumen", "Cuentas por cobrar", "", formatMoney(receivables._sum.saldo ?? 0), "", "", "", ""],
     ["Resumen", "Compras por pagar", "", formatMoney(totalPendingPurchases), "", "", "", ""],
   ];
 
@@ -850,7 +827,7 @@ async function buildFinancialCsv(
     movement.id_movimiento_caja,
     movement.concepto,
     formatMoney(movement.monto),
-    formatDate(movement.fecha_movimiento),
+    formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" }),
     movement.tipo_movimiento,
     movement.categoria_gasto?.nombre_categoria ?? "",
     movement.responsable ?? `${movement.usuario.apellidos}, ${movement.usuario.nombres}`,
@@ -1005,7 +982,7 @@ async function buildMaintenanceCsv(
     maintenance.id_mantenimiento,
     maintenance.maquina.nombre,
     maintenance.maquina.tipo,
-    formatDate(maintenance.fecha_programada),
+    formatDate(maintenance.fecha_programada, { format: "dd/mm/yyyy" }),
     maintenance.estado,
     maintenance.actividad,
     "",
@@ -1149,16 +1126,16 @@ async function buildProfitabilityCsv(
           costing.orden_trabajo?.cliente?.nombre_razon_social ??
           "",
         costing.orden_trabajo?.producto.nombre_producto ?? "",
-        formatDate(costing.fecha_costeo),
+        formatDate(costing.fecha_costeo, { format: "dd/mm/yyyy" }),
         formatMoney(costing.costo_materiales),
         formatMoney(costing.costo_consumibles),
         formatMoney(costing.costo_mano_obra),
         formatMoney(costing.costo_indirecto_total),
         formatMoney(costing.costo_total),
-        formatMoney(margin?.precio_sugerido),
-        formatMoney(margin?.precio_final),
-        formatMoney(profitability?.ingreso_estimado),
-        formatMoney(profitability?.utilidad_estimada),
+        formatMoney(margin?.precio_sugerido ?? 0),
+        formatMoney(margin?.precio_final ?? 0),
+        formatMoney(profitability?.ingreso_estimado ?? 0),
+        formatMoney(profitability?.utilidad_estimada ?? 0),
         `${formatQuantity(profitability?.margen_real)}%`,
         profitability?.alerta_bajo_margen ? "Margen bajo" : "Sin alerta",
       ];
@@ -1229,8 +1206,8 @@ async function buildStaffCsv(
         payroll.id_planilla,
         `${payroll.operario.apellidos}, ${payroll.operario.nombres}`,
         payroll.modalidad_pago,
-        formatDate(payroll.periodo_inicio),
-        formatDate(payroll.periodo_fin),
+        formatDate(payroll.periodo_inicio, { format: "dd/mm/yyyy" }),
+        formatDate(payroll.periodo_fin, { format: "dd/mm/yyyy" }),
         formatMoney(payroll.monto_bruto),
         formatMoney(payroll.descuentos),
         formatMoney(payroll.monto_neto),

@@ -27,6 +27,7 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -40,30 +41,6 @@ import { cancelPayrollAction } from "@/modules/staff/payrolls/actions";
 type PayrollsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -312,7 +289,7 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Planillas generadas" value={totalPayrolls.toString()} description="Total histórico registrado." tone="info" icon={FileSpreadsheet} />
-        <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} icon={Clock} />
+        <KpiCard title="Pendientes" value={pendingPayrolls.toString()} description={`Por pagar: ${formatMoney(pendingNetAmount._sum.monto_neto ?? 0)}`} tone={pendingPayrolls > 0 ? "warning" : "info"} icon={Clock} />
         <KpiCard title="Pagadas" value={paidPayrolls.toString()} description="Se marcarán en la siguiente subfase." tone="success" icon={CheckCircle2} />
         <KpiCard title="Anuladas" value={canceledPayrolls.toString()} description="Registros descartados." tone="info" icon={Ban} />
       </section>
@@ -367,8 +344,8 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
                     </TableCell>
 
                     <TableCell>
-                      {formatDate(payroll.periodo_inicio)} -{" "}
-                      {formatDate(payroll.periodo_fin)}
+                      {formatDate(payroll.periodo_inicio, { format: "dd/mm/yyyy" })} -{" "}
+                      {formatDate(payroll.periodo_fin, { format: "dd/mm/yyyy" })}
                     </TableCell>
 
                     <TableCell>

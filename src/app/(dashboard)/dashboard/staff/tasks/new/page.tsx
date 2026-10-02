@@ -17,21 +17,10 @@ import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createOperatorTaskAction } from "@/modules/staff/tasks/actions";
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
 
 export default async function NewOperatorTaskPage() {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
@@ -108,7 +97,7 @@ export default async function NewOperatorTaskPage() {
   const workOrderItems = workOrders.map((order) => ({
     id: order.id_orden_trabajo,
     label: `${order.id_orden_trabajo} - ${order.producto.nombre_producto}`,
-    description: `Cantidad: ${order.cantidad.toString()} - Estado: ${order.estado} - Inicio: ${formatDate(order.fecha_inicio)}`,
+    description: `Cantidad: ${order.cantidad.toString()} - Estado: ${order.estado} - Inicio: ${formatDate(order.fecha_inicio, { format: "dd/mm/yyyy" })}`,
   }));
   const stageItems = stages.map((stage) => ({
     id: stage.id_etapa_ruta,

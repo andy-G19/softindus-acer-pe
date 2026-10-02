@@ -10,6 +10,9 @@
  * el suyo. El modo solo determina cuánto dura la etapa, nunca cuánto cuesta.
  */
 
+import type { NumericInput } from "@/lib/numbers";
+import { toNonNegativeNumber } from "@/lib/numbers";
+
 export const STAGE_TIME_MODES = {
   SIMULTANEO: "simultaneo",
   SECUENCIAL: "secuencial",
@@ -35,26 +38,6 @@ export function isStageTimeMode(value: unknown): value is StageTimeMode {
     typeof value === "string" &&
     Object.values(STAGE_TIME_MODES).includes(value as StageTimeMode)
   );
-}
-
-/**
- * Los Decimal de Prisma no son números nativos: llegan como objeto con `toString()`.
- * Por eso se acepta también esa forma en lugar de exigir una conversión en cada llamada.
- */
-type NumericInput = number | string | { toString(): string } | null | undefined;
-
-function toNonNegativeNumber(value: NumericInput) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  const parsed = typeof value === "number" ? value : Number(value.toString());
-
-  if (!Number.isFinite(parsed) || parsed < 0) {
-    return 0;
-  }
-
-  return parsed;
 }
 
 type StageTimeParams = {

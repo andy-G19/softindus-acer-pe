@@ -18,6 +18,7 @@ import {
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import {
   generateWorkOrderProgressAction,
   updateWorkOrderProgressAction,
@@ -29,14 +30,6 @@ type WorkOrderProgressPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
 
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);

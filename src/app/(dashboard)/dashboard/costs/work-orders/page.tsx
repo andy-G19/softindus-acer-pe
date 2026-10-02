@@ -18,30 +18,13 @@ import {
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
 
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getOrderBadgeVariant(status: string) {
@@ -315,7 +298,7 @@ export default async function CostingWorkOrdersPage() {
                         )}
                       </TableCell>
 
-                      <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
+                      <TableCell>{formatDate(order.fecha_inicio, { format: "d mmm yyyy" })}</TableCell>
 
                       <TableCell>
                         <Badge variant={getOrderBadgeVariant(order.estado)}>

@@ -32,7 +32,9 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
   buildDateRangeFilter,
@@ -45,30 +47,6 @@ import { updateRepairStatusAction } from "@/modules/maintenance/repairs/actions"
 type RepairsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
 
 function getRepairStatusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -358,12 +336,12 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
                         ) : null}
                       </TableCell>
 
-                      <TableCell>{formatDate(repair.fecha_reparacion)}</TableCell>
+                      <TableCell>{formatDate(repair.fecha_reparacion, { format: "dd/mm/yyyy" })}</TableCell>
 
                       <TableCell>{repair.tecnico_proveedor ?? "-"}</TableCell>
 
                       <TableCell className="text-right">
-                        {formatMoney(repair.mano_obra)}
+                        {formatMoney(repair.mano_obra ?? 0)}
                       </TableCell>
 
                       <TableCell className="text-right">

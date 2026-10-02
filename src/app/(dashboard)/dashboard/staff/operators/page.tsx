@@ -30,6 +30,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
@@ -37,14 +38,6 @@ import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
 type OperatorsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
@@ -358,7 +351,7 @@ export default async function OperatorsPage({
                     <TableCell>{operator.especialidad ?? "-"}</TableCell>
                     <TableCell>{operator.modalidad_pago}</TableCell>
                     <TableCell className="text-right">
-                      {formatMoney(operator.tarifa)}
+                      {formatMoney(operator.tarifa, { emptyText: "-" })}
                     </TableCell>
                     <TableCell className="text-right">
                       {operator._count.asistencia}

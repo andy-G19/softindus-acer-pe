@@ -10,6 +10,7 @@ import {
   calculatePendingDelivery,
   validateClosure,
 } from "@/lib/material-reconciliation";
+import { toNumber } from "@/lib/numbers";
 import { calculateRequiredQuantityRounded } from "@/lib/recipe-quantities";
 import {
   deliverMaterials,
@@ -33,16 +34,6 @@ function parseNullableDate(value: string | null | undefined) {
   }
 
   return new Date(`${value}T00:00:00`);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined || value === "") {
-    return 0;
-  }
-
-  const numericValue = Number(value.toString());
-
-  return Number.isNaN(numericValue) ? 0 : numericValue;
 }
 
 export async function createWorkOrderAction(formData: FormData) {

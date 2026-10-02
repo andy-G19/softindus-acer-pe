@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   calculatePendingDelivery,
   summarizeMaterialLine,
@@ -32,6 +33,7 @@ import {
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import {
   deliverWorkOrderMaterialsAction,
   reopenWorkOrderMaterialsAction,
@@ -44,31 +46,8 @@ type WorkOrderDetailPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function getOrderBadgeVariant(status: string) {
@@ -367,8 +346,8 @@ export default async function WorkOrderDetailPage({
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Origen" value={origin} description="Origen de la orden." tone="info" icon={Route} />
-        <KpiCard title="Inicio" value={formatDate(workOrder.fecha_inicio)} description="Fecha de inicio." tone="info" icon={CalendarCheck} />
-        <KpiCard title="Entrega estimada" value={formatDate(workOrder.fecha_entrega_estimada)} description="Compromiso de entrega." tone="info" icon={CalendarClock} />
+        <KpiCard title="Inicio" value={formatDate(workOrder.fecha_inicio, { format: "d mmm yyyy" })} description="Fecha de inicio." tone="info" icon={CalendarCheck} />
+        <KpiCard title="Entrega estimada" value={formatDate(workOrder.fecha_entrega_estimada, { format: "d mmm yyyy" })} description="Compromiso de entrega." tone="info" icon={CalendarClock} />
         <KpiCard title="Costo material estimado" value={formatMoney(totalEstimatedCost)} description="Con merma incluida." tone="warning" icon={CircleDollarSign} />
       </section>
 
@@ -618,7 +597,7 @@ export default async function WorkOrderDetailPage({
                 <Alert variant="success">
                   <AlertDescription>
                     Materiales cerrados el{" "}
-                    {formatDate(workOrder.fecha_cierre_materiales)}. Unidades
+                    {formatDate(workOrder.fecha_cierre_materiales, { format: "d mmm yyyy" })}. Unidades
                     producidas:{" "}
                     <strong>
                       {formatDecimal(workOrder.cantidad_producida)}{" "}

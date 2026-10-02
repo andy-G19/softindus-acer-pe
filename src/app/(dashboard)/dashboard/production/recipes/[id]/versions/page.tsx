@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   setCurrentRecipeVersionAction,
@@ -29,17 +30,6 @@ type RecipeVersionsPageProps = {
     id: string;
   }>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
@@ -183,7 +173,7 @@ export default async function RecipeVersionsPage({
                 {version.numero_version}
               </TableCell>
 
-              <TableCell>{formatDate(version.fecha_version)}</TableCell>
+              <TableCell>{formatDate(version.fecha_version, { format: "d mmm yyyy" })}</TableCell>
 
               <TableCell>{version.motivo_cambio ?? "-"}</TableCell>
 

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { toNumber } from "@/lib/numbers";
 
 import {
   ACTIVE_WORK_ORDER_STATUSES,
@@ -7,7 +8,6 @@ import {
   PENDING_PURCHASE_PAYMENT_STATUSES,
   RECEIVABLE_QUOTE_STATUSES,
 } from "./constants";
-import { toNumber } from "./utils";
 
 export async function getDashboardData(role: string) {
   const canSeeCommercial = ["ADMIN", "SELLER"].includes(role);

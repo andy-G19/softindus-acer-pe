@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -27,22 +28,6 @@ type OrderDetailPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
-
-function formatDate(value: Date | string | null) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE").format(new Date(value));
-}
 
 export default async function OrderDetailPage({
   params,
@@ -112,7 +97,7 @@ export default async function OrderDetailPage({
         />
         <KpiCard
           title="Monto estimado"
-          value={formatMoney(order.monto_estimado)}
+          value={formatMoney(order.monto_estimado, { emptyText: "-" })}
           description="Suma referencial del detalle del pedido."
           tone="warning"
           icon={CircleDollarSign}

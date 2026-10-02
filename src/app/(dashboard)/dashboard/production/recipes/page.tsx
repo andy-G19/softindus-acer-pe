@@ -19,23 +19,13 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleTechnicalRecipeStatusAction } from "@/modules/production/recipes/actions";
 
 type RecipesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
@@ -266,7 +256,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
                   </p>
                 </TableCell>
 
-                <TableCell>{formatDate(recipe.fecha_creacion)}</TableCell>
+                <TableCell>{formatDate(recipe.fecha_creacion, { format: "d mmm yyyy" })}</TableCell>
 
                 <TableCell>
                   {currentVersion ? (

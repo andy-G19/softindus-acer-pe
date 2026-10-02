@@ -28,35 +28,13 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
 }
 
 function getMachineStatusLabel(status: string) {
@@ -306,7 +284,7 @@ export default async function MaintenanceRecurrencesPage() {
         <KpiCard title="Fallas totales" value={totalFailures.toString()} description={`Este mes: ${monthlyFailures}`} tone="info" icon={AlertTriangle} />
         <KpiCard title="Fallas abiertas" value={pendingFailuresCount.toString()} description="Pendientes o en atención." tone={pendingFailuresCount > 0 ? "warning" : "info"} icon={AlertTriangle} />
         <KpiCard title="Horas perdidas" value={formatHours(totalLostHours)} description="Acumuladas por fallas." tone="warning" icon={Clock} />
-        <KpiCard title="Costo acumulado" value={formatMoney(totalRepairCost)} description={`Este mes: ${formatMoney(monthlyRepairCost._sum.costo_total)}`} tone="info" icon={CircleDollarSign} />
+        <KpiCard title="Costo acumulado" value={formatMoney(totalRepairCost)} description={`Este mes: ${formatMoney(monthlyRepairCost._sum.costo_total ?? 0)}`} tone="info" icon={CircleDollarSign} />
         <KpiCard title="Preventivos vencidos" value={overduePreventiveCount.toString()} description="Requieren atención." tone={overduePreventiveCount > 0 ? "warning" : "info"} icon={CalendarClock} />
       </section>
 
@@ -473,7 +451,7 @@ export default async function MaintenanceRecurrencesPage() {
                       {machine.overduePreventives}
                     </TableCell>
 
-                    <TableCell>{formatDate(machine.lastFailureDate)}</TableCell>
+                    <TableCell>{formatDate(machine.lastFailureDate, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell className="text-right">
                       <Badge variant={getRiskBadgeVariant(machine.risk)}>

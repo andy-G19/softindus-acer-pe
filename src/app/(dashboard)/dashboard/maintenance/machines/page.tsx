@@ -30,6 +30,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -42,18 +43,6 @@ import { toggleMachineStatusAction } from "@/modules/maintenance/machines/action
 type MachinesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(value);
-}
 
 function getSearchParam(
   params: Record<string, string | string[] | undefined>,
@@ -330,7 +319,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
                     <TableCell>{machine.tipo}</TableCell>
                     <TableCell>{machine.ubicacion ?? "-"}</TableCell>
                     <TableCell>{machine.codigo_interno ?? "-"}</TableCell>
-                    <TableCell>{formatDate(machine.fecha_registro)}</TableCell>
+                    <TableCell>{formatDate(machine.fecha_registro, { format: "dd/mm/yyyy" })}</TableCell>
                     <TableCell className="text-right">
                       {machine._count.falla_maquina}
                     </TableCell>

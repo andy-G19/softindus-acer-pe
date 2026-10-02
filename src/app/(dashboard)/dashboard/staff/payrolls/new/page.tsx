@@ -23,17 +23,10 @@ import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { generatePayrollAction } from "@/modules/staff/payrolls/actions";
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "-";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
-}
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -84,7 +77,7 @@ export default async function NewPayrollPage() {
   const operatorItems = operators.map((operator) => ({
     id: operator.id_operario,
     label: `${operator.apellidos}, ${operator.nombres}`,
-    description: `${getPaymentModeLabel(operator.modalidad_pago)} - Tarifa: ${formatMoney(operator.tarifa)}`,
+    description: `${getPaymentModeLabel(operator.modalidad_pago)} - Tarifa: ${formatMoney(operator.tarifa, { emptyText: "-" })}`,
   }));
 
   return (
@@ -250,7 +243,7 @@ export default async function NewPayrollPage() {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    {formatMoney(operator.tarifa)}
+                    {formatMoney(operator.tarifa, { emptyText: "-" })}
                   </TableCell>
 
                   <TableCell className="text-right">

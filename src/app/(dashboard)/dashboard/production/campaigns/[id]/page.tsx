@@ -18,7 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 
 type ProductionCampaignDetailPageProps = {
   params: Promise<{
@@ -26,31 +28,12 @@ type ProductionCampaignDetailPageProps = {
   }>;
 };
 
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
-}
-
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
     return "0.00";
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 export default async function ProductionCampaignDetailPage({
@@ -279,7 +262,7 @@ export default async function ProductionCampaignDetailPage({
                     {order.producto.unidad_medida}
                   </TableCell>
 
-                  <TableCell>{formatDate(order.fecha_inicio)}</TableCell>
+                  <TableCell>{formatDate(order.fecha_inicio, { format: "d mmm yyyy" })}</TableCell>
 
                   <TableCell>
                     <Badge variant="secondary">{order.estado}</Badge>

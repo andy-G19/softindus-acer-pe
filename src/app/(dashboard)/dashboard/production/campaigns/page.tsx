@@ -20,23 +20,14 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
 
 type ProductionCampaignsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
@@ -44,14 +35,6 @@ function formatDecimal(value: unknown) {
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 function getCampaignBadgeVariant(status: string) {
@@ -339,9 +322,9 @@ export default async function ProductionCampaignsPage({
                 </TableCell>
 
                 <TableCell>
-                  <div>Inicio: {formatDate(campaign.fecha_inicio)}</div>
+                  <div>Inicio: {formatDate(campaign.fecha_inicio, { format: "d mmm yyyy" })}</div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Fin: {formatDate(campaign.fecha_fin)}
+                    Fin: {formatDate(campaign.fecha_fin, { format: "d mmm yyyy" })}
                   </p>
                 </TableCell>
 

@@ -15,6 +15,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { createScrapSaleAction } from "@/modules/waste-scrap/scrap-sales/actions";
 
@@ -25,14 +26,6 @@ type SearchParams = {
 type NewScrapSalePageProps = {
   searchParams?: Promise<SearchParams>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
 
 function formatNumber(value: unknown) {
   return new Intl.NumberFormat("es-PE", {
