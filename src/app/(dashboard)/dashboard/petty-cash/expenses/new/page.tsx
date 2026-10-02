@@ -19,19 +19,9 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 import { createPettyCashExpenseAction } from "@/modules/petty-cash/expenses/actions";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
 
 export default async function NewPettyCashExpensePage() {
   await requireRole([APP_ROLES.ADMIN]);

@@ -24,31 +24,8 @@ import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 
 function getBoxStatusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -166,7 +143,7 @@ export default async function PettyCashBoxesPage() {
 
                     <TableCell>{box.responsable ?? "-"}</TableCell>
 
-                    <TableCell>{formatDate(box.fecha_apertura)}</TableCell>
+                    <TableCell>{formatDate(box.fecha_apertura, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell className="text-right">
                       {formatMoney(box.saldo_inicial)}

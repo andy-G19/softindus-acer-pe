@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { prisma } from "@/lib/db";
+import { toNumber } from "@/lib/numbers";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
@@ -13,14 +14,6 @@ async function requireAdmin() {
 
 function normalizeText(value: FormDataEntryValue | null) {
   return value ? String(value).trim() : "";
-}
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
 }
 
 function isNegativeMovement(type: string, concept: string) {

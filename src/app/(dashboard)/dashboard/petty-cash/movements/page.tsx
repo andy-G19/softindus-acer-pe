@@ -30,6 +30,8 @@ import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
 
 type PettyCashMovementsPageProps = {
@@ -44,31 +46,6 @@ type PettyCashMovementsPageProps = {
     pageSize?: string;
   }>;
 };
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function normalizeParam(value: string | undefined) {
   return value?.trim() ?? "";
@@ -110,7 +87,11 @@ function isNegativeMovement(type: string, concept: string) {
   return type === "egreso" || concept.startsWith("Ajuste negativo");
 }
 
-function formatSignedMoney(type: string, concept: string, amount: unknown) {
+function formatSignedMoney(
+  type: string,
+  concept: string,
+  amount: Prisma.Decimal,
+) {
   const sign = isNegativeMovement(type, concept) ? "-" : "+";
 
   return `${sign} ${formatMoney(amount)}`;
@@ -413,7 +394,7 @@ export default async function PettyCashMovementsPage({
               <TableBody>
                 {movements.map((movement) => (
                   <TableRow key={movement.id_movimiento_caja} className="align-top">
-                    <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                    <TableCell>{formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}</TableCell>
 
                     <TableCell>
                       <Badge

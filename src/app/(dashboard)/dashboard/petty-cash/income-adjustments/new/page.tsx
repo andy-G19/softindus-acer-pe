@@ -19,33 +19,10 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
 import Link from "next/link";
-
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function getMovementLabel(type: string, concept: string) {
   if (type === "ingreso") {
@@ -300,7 +277,7 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
                           {movement.caja_chica.nombre_caja}
                         </p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {formatDate(movement.fecha_movimiento)}
+                          {formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}
                         </p>
                       </div>
 

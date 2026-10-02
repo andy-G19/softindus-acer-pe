@@ -31,6 +31,8 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { prisma } from "@/lib/db";
+import { formatDate, formatMoney } from "@/lib/formatters";
+import { toNumber } from "@/lib/numbers";
 
 type MonthlySummaryPageProps = {
   searchParams?: Promise<{
@@ -38,33 +40,8 @@ type MonthlySummaryPageProps = {
   }>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
-}
-
 function formatPercent(value: unknown) {
   return `${toNumber(value).toFixed(2)}%`;
-}
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(value);
 }
 
 function formatMonthLabel(value: Date) {
@@ -613,7 +590,7 @@ export default async function MonthlyFinancialSummaryPage({
                 <TableBody>
                   {cashMovements.slice(0, 8).map((movement) => (
                     <TableRow key={movement.id_movimiento_caja}>
-                      <TableCell>{formatDate(movement.fecha_movimiento)}</TableCell>
+                      <TableCell>{formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" })}</TableCell>
                       <TableCell>
                         <Badge
                           variant={getMovementBadgeVariant(
@@ -676,7 +653,7 @@ export default async function MonthlyFinancialSummaryPage({
                           {payment.tipo_pago} · {payment.metodo_pago}
                         </p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {formatDate(payment.fecha_pago)}
+                          {formatDate(payment.fecha_pago, { format: "dd/mm/yyyy" })}
                         </p>
                       </div>
 
@@ -704,21 +681,21 @@ export default async function MonthlyFinancialSummaryPage({
             <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Materiales</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoney(productionCosts._sum.costo_materiales)}
+                {formatMoney(productionCosts._sum.costo_materiales ?? 0)}
               </p>
             </div>
 
             <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Consumibles</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoney(productionCosts._sum.costo_consumibles)}
+                {formatMoney(productionCosts._sum.costo_consumibles ?? 0)}
               </p>
             </div>
 
             <div className="rounded-lg border border-border/80 p-3">
               <p className="text-xs text-muted-foreground">Mano de obra</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoney(productionCosts._sum.costo_mano_obra)}
+                {formatMoney(productionCosts._sum.costo_mano_obra ?? 0)}
               </p>
             </div>
 
@@ -727,7 +704,7 @@ export default async function MonthlyFinancialSummaryPage({
                 Costos indirectos
               </p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoney(productionCosts._sum.costo_indirecto_total)}
+                {formatMoney(productionCosts._sum.costo_indirecto_total ?? 0)}
               </p>
             </div>
           </section>
@@ -751,7 +728,7 @@ export default async function MonthlyFinancialSummaryPage({
               <TableBody>
                 {latestCostings.map((costing) => (
                   <TableRow key={costing.id_costeo}>
-                    <TableCell>{formatDate(costing.fecha_costeo)}</TableCell>
+                    <TableCell>{formatDate(costing.fecha_costeo, { format: "dd/mm/yyyy" })}</TableCell>
                     <TableCell>
                       {costing.pedido?.cliente.nombre_razon_social ??
                         costing.id_orden_trabajo ??
