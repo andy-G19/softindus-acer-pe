@@ -17,8 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { toNumber } from "@/lib/numbers";
 import { materialRequirementCalculationSchema } from "@/schemas/production/material-requirement.schema";
 
 type MaterialRequirementsPageProps = {
@@ -31,20 +33,8 @@ type MaterialRequirementsPageProps = {
   }>;
 };
 
-function toNumber(value: unknown) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-}
-
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
-}
-
-function formatMoney(value: unknown) {
-  return `S/ ${toNumber(value).toFixed(2)}`;
 }
 
 export default async function MaterialRequirementsPage({

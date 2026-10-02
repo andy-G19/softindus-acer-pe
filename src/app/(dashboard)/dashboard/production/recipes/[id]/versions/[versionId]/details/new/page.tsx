@@ -3,6 +3,7 @@ import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 import { RecipeDetailForm } from "@/modules/production/recipe-details/recipe-detail-form";
@@ -20,14 +21,6 @@ function formatDecimal(value: unknown) {
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "S/ 0.00";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
 }
 
 export default async function NewRecipeDetailPage({

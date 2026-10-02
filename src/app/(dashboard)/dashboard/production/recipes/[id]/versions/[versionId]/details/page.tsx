@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/db";
+import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { applyWaste } from "@/lib/recipe-quantities";
 import { deleteRecipeDetailAction } from "@/modules/production/recipe-details/actions";
@@ -35,14 +36,6 @@ function formatDecimal(value: unknown) {
   }
 
   return Number(value.toString()).toFixed(2);
-}
-
-function formatMoney(value: unknown) {
-  if (value === null || value === undefined) {
-    return "S/ 0.00";
-  }
-
-  return `S/ ${Number(value.toString()).toFixed(2)}`;
 }
 
 /**

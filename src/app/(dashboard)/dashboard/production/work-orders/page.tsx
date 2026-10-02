@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -36,17 +37,6 @@ import {
 type WorkOrdersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDate(value: Date | null | undefined) {
-  if (!value) {
-    return "-";
-  }
-
-  return new Intl.DateTimeFormat("es-PE", {
-    dateStyle: "medium",
-    timeZone: "UTC",
-  }).format(value);
-}
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
@@ -539,9 +529,9 @@ export default async function WorkOrdersPage({
                 </TableCell>
 
                 <TableCell>
-                  <div>Inicio: {formatDate(order.fecha_inicio)}</div>
+                  <div>Inicio: {formatDate(order.fecha_inicio, { format: "d mmm yyyy" })}</div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Entrega: {formatDate(order.fecha_entrega_estimada)}
+                    Entrega: {formatDate(order.fecha_entrega_estimada, { format: "d mmm yyyy" })}
                   </p>
                 </TableCell>
 
