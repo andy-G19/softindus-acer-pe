@@ -237,3 +237,39 @@ export function findMaterialFilterOptions() {
     },
   });
 }
+
+// Materiales activos con su categoria, para filtros de otras areas.
+export function findActiveMaterialFilterOptions() {
+  return prisma.material.findMany({
+    where: {
+      estado: true,
+    },
+    orderBy: {
+      nombre_material: "asc",
+    },
+    select: {
+      id_material: true,
+      nombre_material: true,
+      categoria: true,
+    },
+  });
+}
+
+// Materiales activos con unidad y stock, para formularios de otras areas.
+export function findActiveMaterialStockOptions() {
+  return prisma.material.findMany({
+    where: {
+      estado: true,
+    },
+    orderBy: {
+      nombre_material: "asc",
+    },
+    select: {
+      id_material: true,
+      nombre_material: true,
+      categoria: true,
+      unidad_medida: true,
+      stock_actual: true,
+    },
+  });
+}

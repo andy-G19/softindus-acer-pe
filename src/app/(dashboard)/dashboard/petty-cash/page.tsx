@@ -37,7 +37,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
-import { prisma } from "@/lib/db";
+import { getPettyCashOverviewData } from "@/modules/petty-cash/overview/queries";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 
@@ -67,14 +67,8 @@ export default async function PettyCashDashboardPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
   const today = new Date();
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const startOfNextMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    1,
-  );
 
-  const [
+  const {
     openBoxes,
     totalBoxes,
     activeCategories,
@@ -84,84 +78,7 @@ export default async function PettyCashDashboardPage() {
     monthlyMovements,
     latestBoxes,
     latestMovements,
-  ] = await Promise.all([
-    prisma.caja_chica.count({
-      where: {
-        estado: "abierta",
-      },
-    }),
-
-    prisma.caja_chica.count(),
-
-    prisma.categoria_gasto.count({
-      where: {
-        estado: true,
-      },
-    }),
-
-    prisma.caja_chica.aggregate({
-      where: {
-        estado: "abierta",
-      },
-      _sum: {
-        saldo_actual: true,
-      },
-    }),
-
-    prisma.movimiento_caja.aggregate({
-      where: {
-        tipo_movimiento: "ingreso",
-        fecha_movimiento: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-      _sum: {
-        monto: true,
-      },
-    }),
-
-    prisma.movimiento_caja.aggregate({
-      where: {
-        tipo_movimiento: "egreso",
-        fecha_movimiento: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-      _sum: {
-        monto: true,
-      },
-    }),
-
-    prisma.movimiento_caja.count({
-      where: {
-        fecha_movimiento: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-    }),
-
-    prisma.caja_chica.findMany({
-      orderBy: {
-        fecha_apertura: "desc",
-      },
-      take: 5,
-    }),
-
-    prisma.movimiento_caja.findMany({
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
-      take: 8,
-      include: {
-        caja_chica: true,
-        categoria_gasto: true,
-        usuario: true,
-      },
-    }),
-  ]);
+  } = await getPettyCashOverviewData(today);
 
   const totalCurrentBalance = toNumber(currentBalance._sum.saldo_actual);
   const totalMonthlyIncome = toNumber(monthlyIncome._sum.monto);

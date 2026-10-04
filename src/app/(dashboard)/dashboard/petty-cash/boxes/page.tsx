@@ -23,7 +23,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
-import { prisma } from "@/lib/db";
+import { getPettyCashBoxList } from "@/modules/petty-cash/boxes/queries";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 
@@ -40,23 +40,7 @@ function getBoxStatusLabel(status: string) {
 export default async function PettyCashBoxesPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const boxes = await prisma.caja_chica.findMany({
-    orderBy: [
-      {
-        estado: "asc",
-      },
-      {
-        fecha_apertura: "desc",
-      },
-    ],
-    include: {
-      _count: {
-        select: {
-          movimiento_caja: true,
-        },
-      },
-    },
-  });
+  const boxes = await getPettyCashBoxList();
 
   const openBoxes = boxes.filter((box) => box.estado === "abierta");
   const closedBoxes = boxes.filter((box) => box.estado === "cerrada");

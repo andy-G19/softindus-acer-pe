@@ -27,9 +27,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
@@ -37,6 +35,7 @@ import {
   toggleExpenseCategoryStatusAction,
 } from "@/modules/petty-cash/categories/actions";
 import { ExpenseCategoryForm } from "@/modules/petty-cash/categories/expense-category-form";
+import { getExpenseCategoryList } from "@/modules/petty-cash/categories/queries";
 
 type ExpenseCategoriesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -55,18 +54,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function ExpenseCategoriesPage({
   searchParams,
 }: ExpenseCategoriesPageProps) {
@@ -75,38 +62,7 @@ export default async function ExpenseCategoriesPage({
   const params = (await searchParams) ?? {};
   const q = getSearchParam(params, "q");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.categoria_gastoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      nombre_categoria: {
-        contains: q,
-        mode: "insensitive",
-      },
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.categoria_gastoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const categories = await prisma.categoria_gasto.findMany({
-    where,
-    orderBy: [
-      {
-        estado: "desc",
-      },
-      {
-        nombre_categoria: "asc",
-      },
-    ],
-  });
+  const categories = await getExpenseCategoryList({ q, status });
 
   const activeCategories = categories.filter((category) => category.estado);
   const inactiveCategories = categories.filter((category) => !category.estado);

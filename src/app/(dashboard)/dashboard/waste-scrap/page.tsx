@@ -13,7 +13,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
+import { getWasteScrapOverviewData } from "@/modules/waste-scrap/overview/queries";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -50,7 +50,7 @@ export default async function WasteScrapDashboardPage() {
 
   const canRegisterSale = session.user.role === APP_ROLES.ADMIN;
 
-  const [
+  const {
     totalRetazos,
     retazosDisponibles,
     retazosReutilizados,
@@ -63,98 +63,7 @@ export default async function WasteScrapDashboardPage() {
     latestRetazos,
     pendingScraps,
     latestSales,
-  ] = await Promise.all([
-    prisma.retazo_reutilizable.count(),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "disponible",
-      },
-    }),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "reutilizado",
-      },
-    }),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "descartado",
-      },
-    }),
-
-    prisma.chatarra.count(),
-
-    prisma.chatarra.count({
-      where: {
-        estado: {
-          in: ["acumulada", "disponible"],
-        },
-      },
-    }),
-
-    prisma.chatarra.count({
-      where: {
-        estado: "vendida",
-      },
-    }),
-
-    prisma.venta_chatarra.count(),
-
-    prisma.venta_chatarra.aggregate({
-      _sum: {
-        monto_recibido: true,
-        peso_vendido_kg: true,
-        cantidad_vendida: true,
-      },
-    }),
-
-    prisma.retazo_reutilizable.findMany({
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      take: 5,
-      include: {
-        material: true,
-        orden_trabajo: {
-          include: {
-            producto: true,
-          },
-        },
-      },
-    }),
-
-    prisma.chatarra.findMany({
-      where: {
-        estado: {
-          in: ["acumulada", "disponible"],
-        },
-      },
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      take: 5,
-      include: {
-        material: true,
-      },
-    }),
-
-    prisma.venta_chatarra.findMany({
-      orderBy: {
-        fecha_venta: "desc",
-      },
-      take: 5,
-      include: {
-        chatarra: {
-          include: {
-            material: true,
-          },
-        },
-        movimiento_caja: true,
-      },
-    }),
-  ]);
+  } = await getWasteScrapOverviewData();
 
   const totalIngresos = toNumber(ingresosChatarra._sum.monto_recibido);
   const totalPesoVendido = toNumber(ingresosChatarra._sum.peso_vendido_kg);

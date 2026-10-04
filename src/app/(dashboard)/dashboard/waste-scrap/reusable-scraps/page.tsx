@@ -28,12 +28,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateReusableScrapStatusAction } from "@/modules/waste-scrap/reusable-scraps/status-actions";
+import { getReusableScrapListData } from "@/modules/waste-scrap/reusable-scraps/queries";
 
 type SearchParams = {
   estado?: string;
@@ -79,58 +79,7 @@ export default async function ReusableScrapsPage({
   const material = params.material?.trim() ?? "";
   const query = params.q?.trim() ?? "";
 
-  const where = {
-    ...(estado
-      ? {
-          estado,
-        }
-      : {}),
-
-    ...(material
-      ? {
-          id_material: material,
-        }
-      : {}),
-
-    ...(query
-      ? {
-          OR: [
-            {
-              id_retazo: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              tipo_material: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              medida_aproximada: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              ubicacion: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              id_orden_trabajo: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [
+  const {
     materials,
     retazos,
     totalFiltered,
@@ -138,62 +87,7 @@ export default async function ReusableScrapsPage({
     retazosDisponibles,
     retazosReutilizados,
     retazosDescartados,
-  ] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        categoria: true,
-      },
-    }),
-
-    prisma.retazo_reutilizable.findMany({
-      where,
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      include: {
-        material: true,
-        orden_trabajo: {
-          include: {
-            producto: true,
-            cliente: true,
-          },
-        },
-        usuario: true,
-      },
-    }),
-
-    prisma.retazo_reutilizable.count({
-      where,
-    }),
-
-    prisma.retazo_reutilizable.count(),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "disponible",
-      },
-    }),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "reutilizado",
-      },
-    }),
-
-    prisma.retazo_reutilizable.count({
-      where: {
-        estado: "descartado",
-      },
-    }),
-  ]);
+  } = await getReusableScrapListData({ estado, material, query });
 
   const hasFilters = Boolean(estado || material || query);
 

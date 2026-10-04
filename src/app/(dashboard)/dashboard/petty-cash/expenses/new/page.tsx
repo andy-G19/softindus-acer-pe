@@ -18,49 +18,18 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { createPettyCashExpenseAction } from "@/modules/petty-cash/expenses/actions";
+import { getNewPettyCashExpenseData } from "@/modules/petty-cash/expenses/queries";
 
 export default async function NewPettyCashExpensePage() {
   await requireRole([APP_ROLES.ADMIN]);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [openBoxes, activeCategories, latestExpenses] = await Promise.all([
-    prisma.caja_chica.findMany({
-      where: {
-        estado: "abierta",
-      },
-      orderBy: {
-        nombre_caja: "asc",
-      },
-    }),
-
-    prisma.categoria_gasto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_categoria: "asc",
-      },
-    }),
-
-    prisma.movimiento_caja.findMany({
-      where: {
-        tipo_movimiento: "egreso",
-      },
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
-      take: 5,
-      include: {
-        caja_chica: true,
-        categoria_gasto: true,
-      },
-    }),
-  ]);
+  const { openBoxes, activeCategories, latestExpenses } =
+    await getNewPettyCashExpenseData();
 
   const totalOpenBalance = openBoxes.reduce((total, box) => {
     return total + toNumber(box.saldo_actual);
