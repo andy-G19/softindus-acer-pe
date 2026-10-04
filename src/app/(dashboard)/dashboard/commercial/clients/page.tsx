@@ -23,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -32,7 +31,7 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
-import type { Prisma } from "@/generated/prisma/client";
+import { getClientListData } from "@/modules/commercial/clients/queries";
 
 type ClientsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -62,68 +61,11 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   const origin = getSearchParam(params, "origin");
   const returnTo = createReturnToHref(navigationHrefs.clients, params);
   const { page, pageSize, skip, take } = getPaginationParams(params);
-  const filters: Prisma.clienteWhereInput[] = [];
 
-  if (client) {
-    filters.push({ id_cliente: client });
-  }
-
-  if (q) {
-    filters.push({
-      OR: [
-        { nombre_razon_social: { contains: q, mode: "insensitive" } },
-        { numero_documento: { contains: q, mode: "insensitive" } },
-        { telefono: { contains: q, mode: "insensitive" } },
-        { correo: { contains: q, mode: "insensitive" } },
-        { direccion: { contains: q, mode: "insensitive" } },
-        { lugar_origen: { contains: q, mode: "insensitive" } },
-      ],
-    });
-  }
-
-  if (type) {
-    filters.push({ tipo_cliente: type });
-  }
-
-  if (status === "activo") {
-    filters.push({ estado: true });
-  }
-
-  if (status === "inactivo") {
-    filters.push({ estado: false });
-  }
-
-  if (origin) {
-    filters.push({
-      lugar_origen: { contains: origin, mode: "insensitive" },
-    });
-  }
-
-  const where: Prisma.clienteWhereInput | undefined =
-    filters.length > 0 ? { AND: filters } : undefined;
-
-  const [clientOptions, clients, totalItems] = await Promise.all([
-    prisma.cliente.findMany({
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-        tipo_cliente: true,
-        numero_documento: true,
-        telefono: true,
-        lugar_origen: true,
-      },
-    }),
-    prisma.cliente.findMany({
-      where,
-      orderBy: [{ fecha_registro: "desc" }, { id_cliente: "desc" }],
-      skip,
-      take,
-    }),
-    prisma.cliente.count({ where }),
-  ]);
+  const { clientOptions, clients, totalItems } = await getClientListData(
+    { client, q, type, status, origin },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -10,6 +9,7 @@ import {
 } from "@/lib/navigation";
 import { updateClientAction } from "@/modules/commercial/clients/actions";
 import { ClientForm } from "@/modules/commercial/clients/client-form";
+import { getClientForEdit } from "@/modules/commercial/clients/queries";
 
 type EditClientPageProps = {
   params: Promise<{
@@ -27,23 +27,7 @@ export default async function EditClientPage({
 
   await requireRole(["ADMIN", "SELLER"]);
 
-  const client = await prisma.cliente.findUnique({
-    where: {
-      id_cliente: id,
-    },
-    select: {
-      id_cliente: true,
-      tipo_cliente: true,
-      nombre_razon_social: true,
-      tipo_documento: true,
-      numero_documento: true,
-      telefono: true,
-      correo: true,
-      direccion: true,
-      lugar_origen: true,
-      observaciones: true,
-    },
-  });
+  const client = await getClientForEdit(id);
 
   if (!client) {
     notFound();
