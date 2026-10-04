@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateOperatorAction } from "@/modules/staff/operators/actions";
 import { OperatorForm } from "@/modules/staff/operators/operator-form";
+import { getOperatorForEdit } from "@/modules/staff/operators/queries";
 
 type EditOperatorPageProps = {
   params: Promise<{
@@ -35,11 +35,7 @@ export default async function EditOperatorPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const operator = await prisma.operario.findUnique({
-    where: {
-      id_operario: id,
-    },
-  });
+  const operator = await getOperatorForEdit(id);
 
   if (!operator) {
     notFound();

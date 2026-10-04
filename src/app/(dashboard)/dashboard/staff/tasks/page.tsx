@@ -27,12 +27,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { cancelOperatorTaskAction } from "@/modules/staff/tasks/actions";
+import { getOperatorTaskData } from "@/modules/staff/tasks/queries";
 
 function formatHours(value: unknown) {
   if (value === null || value === undefined) {
@@ -70,82 +70,8 @@ export default async function OperatorTasksPage() {
 
   const today = new Date();
 
-  const startOfToday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
-
-  const startOfTomorrow = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 1,
-  );
-
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-
-  const startOfNextMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    1,
-  );
-
-  const [
-    totalTasks,
-    tasksToday,
-    tasksThisMonth,
-    finishedTasks,
-    latestTasks,
-  ] = await Promise.all([
-    prisma.tarea_operario.count(),
-
-    prisma.tarea_operario.count({
-      where: {
-        fecha_tarea: {
-          gte: startOfToday,
-          lt: startOfTomorrow,
-        },
-      },
-    }),
-
-    prisma.tarea_operario.count({
-      where: {
-        fecha_tarea: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-    }),
-
-    prisma.tarea_operario.count({
-      where: {
-        estado: "terminada",
-      },
-    }),
-
-    prisma.tarea_operario.findMany({
-      orderBy: [
-        {
-          fecha_tarea: "desc",
-        },
-        {
-          id_tarea_operario: "desc",
-        },
-      ],
-      take: 50,
-      include: {
-        operario: true,
-        etapa_ruta: true,
-        usuario: true,
-        orden_trabajo: {
-          include: {
-            producto: true,
-            cliente: true,
-          },
-        },
-      },
-    }),
-  ]);
+  const { totalTasks, tasksToday, tasksThisMonth, finishedTasks, latestTasks } =
+    await getOperatorTaskData(today);
 
   const activeTasks = latestTasks.filter((task) => task.estado !== "anulada");
 

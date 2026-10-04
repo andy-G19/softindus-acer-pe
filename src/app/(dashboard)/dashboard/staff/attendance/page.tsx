@@ -1,6 +1,5 @@
 import { CalendarCheck, ClipboardList, Clock, UserX } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,17 +24,16 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getAttendanceListData } from "@/modules/staff/attendance/queries";
 
 type AttendancePageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -101,125 +99,17 @@ export default async function AttendancePage({
   const q = parseStringParam(params, "q");
   const operario = parseStringParam(params, "operario");
   const estado = parseStringParam(params, "estado");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-
-  const filters: Prisma.asistenciaWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_asistencia: { contains: q, mode: "insensitive" } },
-        {
-          operario: {
-            nombres: { contains: q, mode: "insensitive" },
-          },
-        },
-        {
-          operario: {
-            apellidos: { contains: q, mode: "insensitive" },
-          },
-        },
-      ],
-    });
-  }
-
-  if (operario) {
-    filters.push({
-      id_operario: { contains: operario, mode: "insensitive" },
-    });
-  }
-
-  if (estado === "presente") {
-    filters.push({ falta: false, tardanza: false });
-  }
-
-  if (estado === "tardanza") {
-    filters.push({ falta: false, tardanza: true });
-  }
-
-  if (estado === "falta") {
-    filters.push({ falta: true });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha: dateRange });
-  }
-
-  const where: Prisma.asistenciaWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
   const today = new Date();
 
-  const startOfToday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
-
-  const startOfTomorrow = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 1,
-  );
-
-  const [
+  const {
     totalAttendance,
     attendanceToday,
     absencesToday,
     latenessToday,
     latestAttendance,
-  ] = await Promise.all([
-    prisma.asistencia.count({ where }),
-
-    prisma.asistencia.count({
-      where: {
-        fecha: {
-          gte: startOfToday,
-          lt: startOfTomorrow,
-        },
-      },
-    }),
-
-    prisma.asistencia.count({
-      where: {
-        fecha: {
-          gte: startOfToday,
-          lt: startOfTomorrow,
-        },
-        falta: true,
-      },
-    }),
-
-    prisma.asistencia.count({
-      where: {
-        fecha: {
-          gte: startOfToday,
-          lt: startOfTomorrow,
-        },
-        tardanza: true,
-      },
-    }),
-
-    prisma.asistencia.findMany({
-      where,
-      orderBy: [
-        {
-          fecha: "desc",
-        },
-        {
-          id_asistencia: "desc",
-        },
-      ],
-      take: 50,
-      include: {
-        operario: true,
-        usuario: true,
-      },
-    }),
-  ]);
+  } = await getAttendanceListData({ q, operario, estado, from, to }, today);
 
   return (
     <main className="space-y-6">

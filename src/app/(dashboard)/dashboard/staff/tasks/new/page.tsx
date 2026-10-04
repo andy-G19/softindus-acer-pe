@@ -16,77 +16,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createOperatorTaskAction } from "@/modules/staff/tasks/actions";
+import { getNewOperatorTaskFormOptions } from "@/modules/staff/tasks/queries";
 
 export default async function NewOperatorTaskPage() {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [operators, workOrders, stages] = await Promise.all([
-    prisma.operario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
-
-    prisma.orden_trabajo.findMany({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-      },
-      orderBy: [
-        {
-          fecha_inicio: "desc",
-        },
-        {
-          id_orden_trabajo: "desc",
-        },
-      ],
-      take: 50,
-      include: {
-        producto: true,
-        cliente: true,
-        ruta_fabricacion: true,
-      },
-    }),
-
-    prisma.etapa_ruta.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: [
-        {
-          ruta_fabricacion: {
-            nombre_ruta: "asc",
-          },
-        },
-        {
-          orden_secuencia: "asc",
-        },
-      ],
-      include: {
-        ruta_fabricacion: {
-          include: {
-            producto: true,
-          },
-        },
-      },
-    }),
-  ]);
+  const { operators, workOrders, stages } =
+    await getNewOperatorTaskFormOptions();
 
   const hasRequiredData = operators.length > 0 && workOrders.length > 0;
   const operatorItems = operators.map((operator) => ({

@@ -1,6 +1,5 @@
 import { Ban, CheckCircle2, Clock, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,17 +25,16 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { cancelPayrollAction } from "@/modules/staff/payrolls/actions";
+import { getPayrollListData } from "@/modules/staff/payrolls/queries";
 
 type PayrollsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -83,127 +81,25 @@ export default async function PayrollsPage({ searchParams }: PayrollsPageProps) 
   const periodo = parseStringParam(params, "periodo");
   const modalidad = parseStringParam(params, "modalidad");
   const estado = parseStringParam(params, "estado");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
-  const filters: Prisma.planilla_pagoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_planilla: { contains: q, mode: "insensitive" } },
-        {
-          operario: {
-            nombres: { contains: q, mode: "insensitive" },
-          },
-        },
-        {
-          operario: {
-            apellidos: { contains: q, mode: "insensitive" },
-          },
-        },
-      ],
-    });
-  }
-
-  if (operario) {
-    filters.push({
-      id_operario: { contains: operario, mode: "insensitive" },
-    });
-  }
-
-  if (periodo) {
-    const match = /^(\d{4})-(\d{2})$/.exec(periodo);
-
-    if (match) {
-      const year = Number(match[1]);
-      const monthIndex = Number(match[2]) - 1;
-      const start = new Date(year, monthIndex, 1);
-      const end = new Date(year, monthIndex + 1, 0);
-
-      filters.push({
-        periodo_inicio: { gte: start },
-        periodo_fin: { lte: end },
-      });
-    }
-  }
-
-  if (modalidad) {
-    filters.push({ modalidad_pago: modalidad });
-  }
-
-  if (estado) {
-    filters.push({ estado_pago: estado });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_generacion: dateRange });
-  }
-
-  const where: Prisma.planilla_pagoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [
+  const {
     totalPayrolls,
     pendingPayrolls,
     paidPayrolls,
     canceledPayrolls,
     pendingNetAmount,
     latestPayrolls,
-  ] = await Promise.all([
-    prisma.planilla_pago.count({ where }),
-
-    prisma.planilla_pago.count({
-      where: {
-        estado_pago: "pendiente",
-      },
-    }),
-
-    prisma.planilla_pago.count({
-      where: {
-        estado_pago: "pagado",
-      },
-    }),
-
-    prisma.planilla_pago.count({
-      where: {
-        estado_pago: "anulada",
-      },
-    }),
-
-    prisma.planilla_pago.aggregate({
-      where: {
-        estado_pago: "pendiente",
-      },
-      _sum: {
-        monto_neto: true,
-      },
-    }),
-
-    prisma.planilla_pago.findMany({
-      where,
-      orderBy: [
-        {
-          fecha_generacion: "desc",
-        },
-        {
-          id_planilla: "desc",
-        },
-      ],
-      take: 50,
-      include: {
-        operario: true,
-        usuario: true,
-        _count: {
-          select: {
-            historial_pago_operario: true,
-          },
-        },
-      },
-    }),
-  ]);
+  } = await getPayrollListData({
+    q,
+    operario,
+    periodo,
+    modalidad,
+    estado,
+    from,
+    to,
+  });
 
   return (
     <main className="space-y-6">
