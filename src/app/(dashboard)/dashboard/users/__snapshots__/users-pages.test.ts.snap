@@ -1,0 +1,1279 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/users > estado desconocido no filtra > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_usuario": "desc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "fecha_registro": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "ultimo_acceso": true,
+        "usuario": true,
+      },
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "inactivo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+]
+`;
+
+exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Usuarios</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Usuarios</h1>
+<p>Administra las cuentas de acceso al sistema: roles, estado y credenciales.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de cuentas en el sistema.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pueden iniciar sesión.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Sin acceso al sistema.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/users">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
+</div>
+<div>
+<label for="rol">Rol</label>
+<select id="rol" name="rol">
+<option value="" selected="">Todos los roles</option>
+<option value="ADMIN">Administrador</option>
+<option value="SELLER">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Usuarios registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Nombre</th>
+<th>Usuario</th>
+<th>Correo</th>
+<th>Rol</th>
+<th>Estado</th>
+<th>Último acceso</th>
+<th>Creado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_usuario-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>usuario-1</td>
+<td>correo-1</td>
+<td>
+<span data-variant="default">nombre_rol-1</span>
+</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_usuario-2</td>
+<td>nombres-2 apellidos-2</td>
+<td>usuario-2</td>
+<td>
+</td>
+<td>
+<span data-variant="default">nombre_rol-2</span>
+</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>Sin registro</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-2"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<div>
+<p>Mostrando 1-20 de 42 usuarios · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/users?estado=todos&amp;page=2">Siguiente</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_usuario": "desc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "fecha_registro": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "ultimo_acceso": true,
+        "usuario": true,
+      },
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "inactivo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+]
+`;
+
+exports[`/dashboard/users > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Usuarios</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Usuarios</h1>
+<p>Administra las cuentas de acceso al sistema: roles, estado y credenciales.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de cuentas en el sistema.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pueden iniciar sesión.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Sin acceso al sistema.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/users">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Nombre, usuario o correo" name="q" value=""/>
+</div>
+<div>
+<label for="rol">Rol</label>
+<select id="rol" name="rol">
+<option value="" selected="">Todos los roles</option>
+<option value="ADMIN">Administrador</option>
+<option value="SELLER">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Usuarios registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Nombre</th>
+<th>Usuario</th>
+<th>Correo</th>
+<th>Rol</th>
+<th>Estado</th>
+<th>Último acceso</th>
+<th>Creado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_usuario-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>usuario-1</td>
+<td>correo-1</td>
+<td>
+<span data-variant="default">nombre_rol-1</span>
+</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_usuario-2</td>
+<td>nombres-2 apellidos-2</td>
+<td>usuario-2</td>
+<td>
+</td>
+<td>
+<span data-variant="default">nombre_rol-2</span>
+</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>Sin registro</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-2"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<div>
+<p>Mostrando 1-20 de 42 usuarios · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/users?page=2">Siguiente</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_usuario": "desc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "fecha_registro": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "ultimo_acceso": true,
+        "usuario": true,
+      },
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "nombres": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "apellidos": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "usuario": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "correo": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "rol": {
+              "nombre_rol": "SELLER",
+            },
+          },
+          {
+            "estado": "activo",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "nombres": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "apellidos": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "usuario": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "correo": {
+                  "contains": "ana",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "rol": {
+              "nombre_rol": "SELLER",
+            },
+          },
+          {
+            "estado": "activo",
+          },
+        ],
+      },
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "inactivo",
+      },
+    },
+    "prisma": "usuario.count",
+  },
+]
+`;
+
+exports[`/dashboard/users > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Usuarios</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Usuarios</h1>
+<p>Administra las cuentas de acceso al sistema: roles, estado y credenciales.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/users/new">Nuevo usuario</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de cuentas en el sistema.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pueden iniciar sesión.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Sin acceso al sistema.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/users">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Nombre, usuario o correo" name="q" value="ana"/>
+</div>
+<div>
+<label for="rol">Rol</label>
+<select id="rol" name="rol">
+<option value="">Todos los roles</option>
+<option value="ADMIN">Administrador</option>
+<option value="SELLER" selected="">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="activo" selected="">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/users">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Usuarios registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Nombre</th>
+<th>Usuario</th>
+<th>Correo</th>
+<th>Rol</th>
+<th>Estado</th>
+<th>Último acceso</th>
+<th>Creado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_usuario-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>usuario-1</td>
+<td>correo-1</td>
+<td>
+<span data-variant="default">nombre_rol-1</span>
+</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-1/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_usuario-2</td>
+<td>nombres-2 apellidos-2</td>
+<td>usuario-2</td>
+<td>
+</td>
+<td>
+<span data-variant="default">nombre_rol-2</span>
+</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>Sin registro</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
+<a data-variant="outline" href="/dashboard/users/id_usuario-2/reset-password">Resetear contraseña</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-2"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<div>
+<p>Mostrando 21-40 de 42 usuarios · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/users?q=ana&amp;rol=SELLER&amp;estado=activo&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/users?q=ana&amp;rol=SELLER&amp;estado=activo&amp;page=3">Siguiente</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/[id]/edit > editar el propio usuario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000001",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/[id]/edit > editar el propio usuario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar usuario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar usuario</h1>
+<p>Actualiza los datos, el rol o el estado de la cuenta.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la cuenta</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="USU00000001"/>
+<div>
+<div>
+<label for="nombres">Nombres</label>
+<input id="nombres" required="" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos</label>
+<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario</label>
+<input id="usuario" required="" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico</label>
+<input type="email" id="correo" required="" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="rol">Rol</label>
+<input type="hidden" name="rol" value="nombre_rol-1"/>
+<div>nombre_rol-1</div>
+<p>No puedes cambiar tu propio rol.</p>
+</div>
+<div>
+<label for="estado">Estado</label>
+<input type="hidden" name="estado" value="activo"/>
+<div>Activo</div>
+<p>No puedes desactivar tu propio usuario.</p>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/[id]/edit > editar otro usuario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/[id]/edit > editar otro usuario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar usuario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar usuario</h1>
+<p>Actualiza los datos, el rol o el estado de la cuenta.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la cuenta</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres</label>
+<input id="nombres" required="" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos</label>
+<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="usuario">Usuario</label>
+<input id="usuario" required="" name="usuario" value="usuario-1"/>
+</div>
+<div>
+<label for="correo">Correo electrónico</label>
+<input type="email" id="correo" required="" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="rol">Rol</label>
+<select id="rol" name="rol" required="">
+<option value="ADMIN">Administrador</option>
+<option value="SELLER">Vendedor</option>
+<option value="WORKSHOP_MASTER">Maestro de taller</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/users/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "estado": true,
+        "id_usuario": true,
+        "nombres": true,
+        "rol": {
+          "select": {
+            "nombre_rol": true,
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_usuario": "USU99999999",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/users/[id]/reset-password > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "id_usuario": "USU99999999",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/[id]/reset-password > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/users/[id]/reset-password > restablecer > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "correo": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "id_usuario": "USU00000002",
+      },
+    },
+    "prisma": "usuario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/users/[id]/reset-password > restablecer > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/users">Usuarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reiniciar contraseña</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reiniciar contraseña</h1>
+<p>Define una nueva contraseña para nombres-1 apellidos-1 (correo-1). La contraseña anterior dejará de funcionar de inmediato.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a usuarios">
+<svg/>Volver a usuarios</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Nueva contraseña</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_usuario" value="id_usuario-1"/>
+<div>
+<label for="password">Nueva contraseña</label>
+<input type="password" id="password" required="" name="password"/>
+<p>Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial.</p>
+</div>
+<div>
+<label for="confirmPassword">Confirmar nueva contraseña</label>
+<input type="password" id="confirmPassword" required="" name="confirmPassword"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Reiniciar contraseña</button>
+<a data-variant="outline" href="/dashboard/users">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

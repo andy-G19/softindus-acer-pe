@@ -1,0 +1,639 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/staff > indicadores del dia y del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+      },
+    },
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_pago": "pendiente",
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "apellidos": "asc",
+        },
+      ],
+      "take": 6,
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+      },
+      "orderBy": {
+        "fecha": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff > indicadores del dia y del mes > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Personal</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Personal</h1>
+<p>Control de operarios, asistencia diaria, tareas realizadas, modalidades de pago, planillas e historial de pagos.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de trabajadores registrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Inactivos o retirados: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Faltas registradas hoy: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Tareas registradas este mes: 42</p>
+</div>
+</div>
+</div>
+<div>
+<a href="/dashboard/staff/operators">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Operarios</div>
+</div>
+<div>
+<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/attendance">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Asistencia diaria</div>
+</div>
+<div>
+<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/tasks">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Tareas diarias</div>
+</div>
+<div>
+<p>Registrar actividades realizadas por operario. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/payrolls">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Planillas</div>
+</div>
+<div>
+<p>Generar pagos según asistencia y modalidad. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/payment-history">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Historial de pagos</div>
+</div>
+<div>
+<p>Consultar pagos realizados a operarios. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+</div>
+<div>
+<div>
+<div>
+<div>Últimos operarios registrados</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>Cargo: cargo-1 | Modalidad: modalidad_pago-1</p>
+</div>
+<span data-variant="secondary">estado-1</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>Cargo: - | Modalidad: modalidad_pago-2</p>
+</div>
+<span data-variant="secondary">estado-2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimas asistencias</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>Fecha: 01/07/2026 | Horas: 11.50 h</p>
+</div>
+<span data-variant="destructive">Falta</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>Fecha: 02/07/2026 | Horas: 0.00 h</p>
+</div>
+<span data-variant="success">Puntual</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "activo",
+        },
+      },
+    },
+    "prisma": "operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_pago": "pendiente",
+      },
+    },
+    "prisma": "planilla_pago.count",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "apellidos": "asc",
+        },
+      ],
+      "take": 6,
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+      },
+      "orderBy": {
+        "fecha": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff > maestro de taller > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Personal</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Personal</h1>
+<p>Control de operarios, asistencia diaria, tareas realizadas, modalidades de pago, planillas e historial de pagos.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de trabajadores registrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Inactivos o retirados: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Faltas registradas hoy: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Tareas registradas este mes: 42</p>
+</div>
+</div>
+</div>
+<div>
+<a href="/dashboard/staff/operators">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Operarios</div>
+</div>
+<div>
+<p>Registrar y consultar trabajadores del taller. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/attendance">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Asistencia diaria</div>
+</div>
+<div>
+<p>Registrar ingreso, salida, tardanza o falta. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/tasks">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Tareas diarias</div>
+</div>
+<div>
+<p>Registrar actividades realizadas por operario. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/payrolls">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Planillas</div>
+</div>
+<div>
+<p>Generar pagos según asistencia y modalidad. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/staff/payment-history">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Historial de pagos</div>
+</div>
+<div>
+<p>Consultar pagos realizados a operarios. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+</div>
+<div>
+<div>
+<div>
+<div>Últimos operarios registrados</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>Cargo: cargo-1 | Modalidad: modalidad_pago-1</p>
+</div>
+<span data-variant="secondary">estado-1</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>Cargo: - | Modalidad: modalidad_pago-2</p>
+</div>
+<span data-variant="secondary">estado-2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimas asistencias</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>Fecha: 01/07/2026 | Horas: 11.50 h</p>
+</div>
+<span data-variant="destructive">Falta</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>Fecha: 02/07/2026 | Horas: 0.00 h</p>
+</div>
+<span data-variant="success">Puntual</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;

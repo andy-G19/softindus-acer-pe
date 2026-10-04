@@ -1,0 +1,394 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/staff/payment-history > pagos del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "historial_pago_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "historial_pago_operario.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+    },
+    "prisma": "historial_pago_operario.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "historial_pago_operario.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "planilla_pago": {
+          "include": {
+            "operario": true,
+          },
+        },
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_pago": "desc",
+        },
+        {
+          "id_historial_pago": "desc",
+        },
+      ],
+      "take": 50,
+    },
+    "prisma": "historial_pago_operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/payment-history > pagos del mes > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Historial de pagos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Historial de pagos por operario</h1>
+<p>Consulta los pagos realizados a operarios a partir de planillas generadas, registrando fecha, método de pago, monto pagado, periodo y usuario responsable.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/payment-history/new">Registrar pago</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagos registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total histórico de pagos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagos del mes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros del periodo actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Acumulado histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagado este mes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total mensual registrado.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimos pagos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Planilla</th>
+<th>Periodo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Registrado por</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_historial_pago-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>id_planilla-1</td>
+<td>periodo-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>nombres-1 apellidos-1</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>id_historial_pago-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>id_planilla-2</td>
+<td>periodo-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>nombres-2 apellidos-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/payment-history/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_generacion": "desc",
+        },
+        {
+          "id_planilla": "desc",
+        },
+      ],
+      "where": {
+        "estado_pago": "pendiente",
+      },
+    },
+    "prisma": "planilla_pago.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/payment-history/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/payment-history">Historial de pagos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Registrar pago</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar pago de planilla</h1>
+<p>Selecciona una planilla pendiente y registra el pago realizado al operario. El sistema guardará el historial y marcará la planilla como pagada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al historial">
+<svg/>Volver al historial</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del pago</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="id_planilla">Planilla pendiente</label>
+<select id="id_planilla" name="id_planilla" required="">
+<option value="" disabled="" selected="">Seleccione una planilla</option>
+<option value="id_planilla-1">id_planilla-1 · apellidos-1, nombres-1 · Neto: S/ 11.50</option>
+<option value="id_planilla-2">id_planilla-2 · apellidos-2, nombres-2 · Neto: S/ 22.50</option>
+</select>
+<p>Para esta versión, el monto pagado debe ser igual al monto neto de la planilla seleccionada.</p>
+</div>
+<div>
+<div>
+<label for="fecha_pago">Fecha de pago</label>
+<input type="date" id="fecha_pago" required="" name="fecha_pago" value="2026-07-15"/>
+</div>
+<div>
+<label for="monto_pagado">Monto pagado</label>
+<input type="number" id="monto_pagado" min="0" step="0.01" required="" placeholder="Ejemplo: 160.00" name="monto_pagado"/>
+</div>
+<div>
+<label for="metodo_pago">Método de pago</label>
+<select id="metodo_pago" name="metodo_pago" required="">
+<option value="efectivo" selected="">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: Pago entregado en efectivo al finalizar la semana.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar pago</button>
+<a data-variant="outline" href="/dashboard/staff/payment-history">Ver historial</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Reglas de pago</div>
+</div>
+<div>
+<p>Solo se pueden pagar planillas con estado pendiente.</p>
+<p>Al registrar el pago, la planilla cambia automáticamente a pagada.</p>
+<p>El historial conserva la fecha, monto, método, periodo y usuario responsable del registro.</p>
+<p>En esta versión no usaremos pagos parciales; el monto pagado debe coincidir con el monto neto.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Planillas pendientes disponibles</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Planilla</th>
+<th>Operario</th>
+<th>Periodo</th>
+<th>Modalidad</th>
+<th>Bruto</th>
+<th>Descuento</th>
+<th>Neto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_planilla-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>01/07/2026 - 01/07/2026</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>id_planilla-2</td>
+<td>apellidos-2, nombres-2</td>
+<td>02/07/2026 - 02/07/2026</td>
+<td>modalidad_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

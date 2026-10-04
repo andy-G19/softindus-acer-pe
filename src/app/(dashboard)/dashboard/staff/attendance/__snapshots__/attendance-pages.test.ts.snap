@@ -1,0 +1,1300 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/staff/attendance > faltas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "falta": true,
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha": "desc",
+        },
+        {
+          "id_asistencia": "desc",
+        },
+      ],
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "falta": true,
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/attendance > faltas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Asistencia</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Asistencia diaria</h1>
+<p>Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/attendance/new">Registrar asistencia</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario o codigo" name="q" value=""/>
+</div>
+<div>
+<label for="operario">ID operario</label>
+<input id="operario" placeholder="ID operario" name="operario" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="presente">Presente</option>
+<option value="tardanza">Tardanza</option>
+<option value="falta" selected="">Falta</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/attendance">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Registros totales</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de asistencia.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros creados para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Operarios marcados como ausentes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros marcados con tardanza.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimos registros de asistencia</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Ingreso</th>
+<th>Salida</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_asistencia-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>24:00</td>
+<td>24:00</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="destructive">Falta</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>id_asistencia-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="success">Asistió</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/attendance > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha": "desc",
+        },
+        {
+          "id_asistencia": "desc",
+        },
+      ],
+      "take": 50,
+      "where": {},
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/attendance > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Asistencia</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Asistencia diaria</h1>
+<p>Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/attendance/new">Registrar asistencia</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario o codigo" name="q" value=""/>
+</div>
+<div>
+<label for="operario">ID operario</label>
+<input id="operario" placeholder="ID operario" name="operario" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="presente">Presente</option>
+<option value="tardanza">Tardanza</option>
+<option value="falta">Falta</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/attendance">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Registros totales</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de asistencia.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros creados para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Operarios marcados como ausentes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros marcados con tardanza.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimos registros de asistencia</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Ingreso</th>
+<th>Salida</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_asistencia-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>24:00</td>
+<td>24:00</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="destructive">Falta</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>id_asistencia-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="success">Asistió</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/attendance > tardanzas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "falta": false,
+            "tardanza": true,
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha": "desc",
+        },
+        {
+          "id_asistencia": "desc",
+        },
+      ],
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "falta": false,
+            "tardanza": true,
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/attendance > tardanzas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Asistencia</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Asistencia diaria</h1>
+<p>Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/attendance/new">Registrar asistencia</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario o codigo" name="q" value=""/>
+</div>
+<div>
+<label for="operario">ID operario</label>
+<input id="operario" placeholder="ID operario" name="operario" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="presente">Presente</option>
+<option value="tardanza" selected="">Tardanza</option>
+<option value="falta">Falta</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/attendance">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Registros totales</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de asistencia.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros creados para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Operarios marcados como ausentes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros marcados con tardanza.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimos registros de asistencia</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Ingreso</th>
+<th>Salida</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_asistencia-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>24:00</td>
+<td>24:00</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="destructive">Falta</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>id_asistencia-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="success">Asistió</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/attendance > todos los filtros con presentes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_asistencia": {
+                  "contains": "quispe",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "operario": {
+                  "nombres": {
+                    "contains": "quispe",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "operario": {
+                  "apellidos": {
+                    "contains": "quispe",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_operario": {
+              "contains": "OPE",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "falta": false,
+            "tardanza": false,
+          },
+          {
+            "fecha": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha": "desc",
+        },
+        {
+          "id_asistencia": "desc",
+        },
+      ],
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_asistencia": {
+                  "contains": "quispe",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "operario": {
+                  "nombres": {
+                    "contains": "quispe",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "operario": {
+                  "apellidos": {
+                    "contains": "quispe",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_operario": {
+              "contains": "OPE",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "falta": false,
+            "tardanza": false,
+          },
+          {
+            "fecha": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "asistencia.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/attendance > todos los filtros con presentes > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Asistencia</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Asistencia diaria</h1>
+<p>Registra y consulta la asistencia de los operarios del taller, incluyendo ingreso, salida, tardanzas, faltas, horas trabajadas y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/attendance/new">Registrar asistencia</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario o codigo" name="q" value="quispe"/>
+</div>
+<div>
+<label for="operario">ID operario</label>
+<input id="operario" placeholder="ID operario" name="operario" value="OPE"/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="presente" selected="">Presente</option>
+<option value="tardanza">Tardanza</option>
+<option value="falta">Falta</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/attendance">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Registros totales</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de asistencia.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros creados para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Operarios marcados como ausentes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros marcados con tardanza.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimos registros de asistencia</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Ingreso</th>
+<th>Salida</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_asistencia-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>24:00</td>
+<td>24:00</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="destructive">Falta</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>observaciones-1</td>
+</tr>
+<tr>
+<td>id_asistencia-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="success">Asistió</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/attendance/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/attendance/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/attendance">Asistencia</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva asistencia</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar asistencia diaria</h1>
+<p>Registra la asistencia de un operario indicando fecha, hora de ingreso, hora de salida, tardanza, falta y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">ADMIN / Maestro de taller</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de asistencia</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_operario-_R_d6_">Operario *</label>
+<input type="hidden" name="id_operario" value=""/>
+<div>
+<input id="id_operario-_R_d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-_R_d6_-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="fecha">Fecha</label>
+<input type="date" id="fecha" required="" name="fecha" value="2026-07-15"/>
+</div>
+<div>
+<label for="hora_ingreso">Hora de ingreso</label>
+<input type="time" id="hora_ingreso" name="hora_ingreso"/>
+</div>
+<div>
+<label for="hora_salida">Hora de salida</label>
+<input type="time" id="hora_salida" name="hora_salida"/>
+</div>
+</div>
+<div>
+<label>
+<input type="checkbox" name="tardanza"/>
+<span>
+<span>Marcar tardanza</span>
+<span>Úsalo cuando el operario ingresó fuera del horario esperado.</span>
+</span>
+</label>
+<label>
+<input type="checkbox" name="falta"/>
+<span>
+<span>Marcar falta</span>
+<span>Si marcas falta, deja vacías las horas de ingreso y salida.</span>
+</span>
+</label>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: Llegó tarde por transporte, permiso, salida anticipada, etc.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar asistencia</button>
+<a data-variant="outline" href="/dashboard/staff/attendance">Ver listado</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Reglas de uso</div>
+</div>
+<div>
+<p>Cada operario solo puede tener un registro de asistencia por día.</p>
+<p>Si registras ingreso y salida, el sistema calculará las horas trabajadas automáticamente.</p>
+<p>Si marcas falta, no debes registrar horas de ingreso ni de salida.</p>
+<p>Este registro servirá más adelante para la generación de planillas.</p>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

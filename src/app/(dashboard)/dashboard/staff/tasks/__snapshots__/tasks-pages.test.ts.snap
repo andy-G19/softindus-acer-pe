@@ -1,0 +1,682 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/staff/tasks > administrador > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "terminada",
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_tarea": "desc",
+        },
+        {
+          "id_tarea_operario": "desc",
+        },
+      ],
+      "take": 50,
+    },
+    "prisma": "tarea_operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/tasks > administrador > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Tareas diarias</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Tareas diarias por operario</h1>
+<p>Registra y consulta qué actividad realizó cada operario, asociándola con una orden de trabajo, etapa productiva, fecha, horas dedicadas y responsable del registro.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/tasks/new">Registrar tarea</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de tareas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Actividades registradas para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas del mes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros del periodo actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Horas registradas</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Terminadas históricas: 42</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimas tareas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Orden</th>
+<th>Producto</th>
+<th>Etapa</th>
+<th>Descripción</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_tarea_operario-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>id_orden_trabajo-1</td>
+<td>nombre_producto-1</td>
+<td>nombre_etapa-1</td>
+<td>descripcion-1<p>observaciones-1</p>
+</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tarea_operario" value="id_tarea_operario-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_tarea_operario-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>id_orden_trabajo-2</td>
+<td>nombre_producto-2</td>
+<td>nombre_etapa-2</td>
+<td>descripcion-2</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tarea_operario" value="id_tarea_operario-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/tasks > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-15T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_tarea": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "terminada",
+      },
+    },
+    "prisma": "tarea_operario.count",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_tarea": "desc",
+        },
+        {
+          "id_tarea_operario": "desc",
+        },
+      ],
+      "take": 50,
+    },
+    "prisma": "tarea_operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/tasks > maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Tareas diarias</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Tareas diarias por operario</h1>
+<p>Registra y consulta qué actividad realizó cada operario, asociándola con una orden de trabajo, etapa productiva, fecha, horas dedicadas y responsable del registro.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/staff/tasks/new">Registrar tarea</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial general de tareas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas de hoy</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Actividades registradas para la fecha actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tareas del mes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros del periodo actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Horas registradas</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Terminadas históricas: 42</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Últimas tareas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Operario</th>
+<th>Orden</th>
+<th>Producto</th>
+<th>Etapa</th>
+<th>Descripción</th>
+<th>Horas</th>
+<th>Estado</th>
+<th>Registrado por</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_tarea_operario-1</td>
+<td>01/07/2026</td>
+<td>apellidos-1, nombres-1</td>
+<td>id_orden_trabajo-1</td>
+<td>nombre_producto-1</td>
+<td>nombre_etapa-1</td>
+<td>descripcion-1<p>observaciones-1</p>
+</td>
+<td>11.50 h</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tarea_operario" value="id_tarea_operario-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_tarea_operario-2</td>
+<td>02/07/2026</td>
+<td>apellidos-2, nombres-2</td>
+<td>id_orden_trabajo-2</td>
+<td>nombre_producto-2</td>
+<td>nombre_etapa-2</td>
+<td>descripcion-2</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>nombres-2 apellidos-2</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tarea_operario" value="id_tarea_operario-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/tasks/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+        "ruta_fabricacion": true,
+      },
+      "orderBy": [
+        {
+          "fecha_inicio": "desc",
+        },
+        {
+          "id_orden_trabajo": "desc",
+        },
+      ],
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "ruta_fabricacion": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "ruta_fabricacion": {
+            "nombre_ruta": "asc",
+          },
+        },
+        {
+          "orden_secuencia": "asc",
+        },
+      ],
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "etapa_ruta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/tasks/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/tasks">Tareas diarias</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva tarea</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar tarea diaria</h1>
+<p>Asocia un operario con una orden de trabajo, una etapa productiva opcional, la fecha de actividad, descripción y horas dedicadas.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">ADMIN / Maestro de taller</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de la tarea</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_operario-_R_d6_">Operario *</label>
+<input type="hidden" name="id_operario" value=""/>
+<div>
+<input id="id_operario-_R_d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_operario-_R_d6_-listbox" aria-expanded="false" required="" placeholder="Buscar operario..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo-_R_l6_">Orden de trabajo *</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo-_R_l6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-_R_l6_-listbox" aria-expanded="false" required="" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="id_etapa_ruta-_R_2t6_">Etapa de producción</label>
+<input type="hidden" name="id_etapa_ruta" value=""/>
+<div>
+<input id="id_etapa_ruta-_R_2t6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_etapa_ruta-_R_2t6_-listbox" aria-expanded="false" placeholder="Buscar etapa..." value=""/>
+</div>
+</div>
+<p>Importante: si seleccionas una etapa, debe pertenecer a la ruta de fabricación de la orden seleccionada.</p>
+</div>
+<div>
+<div>
+<label for="fecha_tarea">Fecha de tarea</label>
+<input type="date" id="fecha_tarea" required="" name="fecha_tarea" value="2026-07-15"/>
+</div>
+<div>
+<label for="horas_dedicadas">Horas dedicadas</label>
+<input type="number" id="horas_dedicadas" min="0" max="24" step="0.01" placeholder="Ejemplo: 4.50" name="horas_dedicadas"/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="registrada" selected="">Registrada</option>
+<option value="en_proceso">En proceso</option>
+<option value="terminada">Terminada</option>
+</select>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción de la tarea</label>
+<input type="text" id="descripcion" required="" placeholder="Ejemplo: Corte de piezas para lote de lampas" name="descripcion"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: Se avanzó parcialmente por falta de material.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar tarea</button>
+<a data-variant="outline" href="/dashboard/staff/tasks">Ver listado</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Reglas de uso</div>
+</div>
+<div>
+<p>Una tarea diaria permite saber qué hizo cada operario durante la jornada.</p>
+<p>La orden de trabajo es obligatoria porque la actividad debe quedar vinculada a producción.</p>
+<p>La etapa es opcional, pero si se selecciona debe pertenecer a la ruta de fabricación de la orden.</p>
+<p>Las horas dedicadas ayudarán más adelante a calcular mano de obra y planillas.</p>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

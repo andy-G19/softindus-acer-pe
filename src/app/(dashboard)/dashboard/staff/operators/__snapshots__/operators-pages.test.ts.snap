@@ -1,0 +1,776 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/staff/operators > filtros y maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "asistencia": true,
+            "planilla_pago": true,
+            "tarea_operario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "nombres": {
+                  "contains": "juan",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "apellidos": {
+                  "contains": "juan",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "cargo": {
+                  "contains": "juan",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "telefono": {
+                  "contains": "juan",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "cargo": "soldador",
+          },
+          {
+            "especialidad": "estructuras",
+          },
+          {
+            "modalidad_pago": "diario",
+          },
+          {
+            "estado": "activo",
+          },
+        ],
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "cargo",
+      ],
+      "orderBy": {
+        "cargo": "asc",
+      },
+      "select": {
+        "cargo": true,
+      },
+      "where": {
+        "cargo": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "especialidad",
+      ],
+      "orderBy": {
+        "especialidad": "asc",
+      },
+      "select": {
+        "especialidad": true,
+      },
+      "where": {
+        "especialidad": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "modalidad_pago",
+      ],
+      "orderBy": {
+        "modalidad_pago": "asc",
+      },
+      "select": {
+        "modalidad_pago": true,
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators > filtros y maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Operarios</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Operarios</h1>
+<p>Consulta operarios del taller, modalidad de pago y trazabilidad relacionada con asistencia, tareas y planillas.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total de operarios en el sistema.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Disponibles para asignación.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Retirados o suspendidos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/staff/operators">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario..." name="q" value="juan"/>
+</div>
+<div>
+<label for="cargo">Cargo</label>
+<select id="cargo" name="cargo">
+<option value="">Todos los cargos</option>
+<option value="cargo-1">cargo-1</option>
+</select>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<select id="especialidad" name="especialidad">
+<option value="">Especialidad</option>
+<option value="especialidad-1">especialidad-1</option>
+</select>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="">Modalidad</option>
+<option value="modalidad_pago-1">modalidad_pago-1</option>
+<option value="modalidad_pago-2">modalidad_pago-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="activo" selected="">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/operators">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Operarios registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Operario</th>
+<th>Cargo</th>
+<th>Especialidad</th>
+<th>Modalidad</th>
+<th>Tarifa</th>
+<th>Asist.</th>
+<th>Tareas</th>
+<th>Planillas</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_operario-1</td>
+<td>apellidos-1, nombres-1<p>telefono-1</p>
+</td>
+<td>cargo-1</td>
+<td>especialidad-1</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+</tr>
+<tr>
+<td>id_operario-2</td>
+<td>apellidos-2, nombres-2<p>Sin telefono</p>
+</td>
+<td>-</td>
+<td>-</td>
+<td>modalidad_pago-2</td>
+<td>-</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "asistencia": true,
+            "planilla_pago": true,
+            "tarea_operario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "cargo",
+      ],
+      "orderBy": {
+        "cargo": "asc",
+      },
+      "select": {
+        "cargo": true,
+      },
+      "where": {
+        "cargo": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "especialidad",
+      ],
+      "orderBy": {
+        "especialidad": "asc",
+      },
+      "select": {
+        "especialidad": true,
+      },
+      "where": {
+        "especialidad": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "modalidad_pago",
+      ],
+      "orderBy": {
+        "modalidad_pago": "asc",
+      },
+      "select": {
+        "modalidad_pago": true,
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Operarios</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Operarios</h1>
+<p>Consulta operarios del taller, modalidad de pago y trazabilidad relacionada con asistencia, tareas y planillas.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/staff/operators/new">Registrar operario</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total de operarios en el sistema.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Disponibles para asignación.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Retirados o suspendidos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/staff/operators">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario..." name="q" value=""/>
+</div>
+<div>
+<label for="cargo">Cargo</label>
+<select id="cargo" name="cargo">
+<option value="" selected="">Todos los cargos</option>
+<option value="cargo-1">cargo-1</option>
+</select>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<select id="especialidad" name="especialidad">
+<option value="" selected="">Especialidad</option>
+<option value="especialidad-1">especialidad-1</option>
+</select>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="" selected="">Modalidad</option>
+<option value="modalidad_pago-1">modalidad_pago-1</option>
+<option value="modalidad_pago-2">modalidad_pago-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/staff/operators">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Operarios registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Operario</th>
+<th>Cargo</th>
+<th>Especialidad</th>
+<th>Modalidad</th>
+<th>Tarifa</th>
+<th>Asist.</th>
+<th>Tareas</th>
+<th>Planillas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_operario-1</td>
+<td>apellidos-1, nombres-1<p>telefono-1</p>
+</td>
+<td>cargo-1</td>
+<td>especialidad-1</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_operario" value="id_operario-1"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_operario-2</td>
+<td>apellidos-2, nombres-2<p>Sin telefono</p>
+</td>
+<td>-</td>
+<td>-</td>
+<td>modalidad_pago-2</td>
+<td>-</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/staff/operators/id_operario-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_operario" value="id_operario-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff">Personal</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/staff/operators">Operarios</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar operario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar operario</h1>
+<p>Actualiza los datos laborales básicos del operario sin tocar asistencia ni planillas.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos laborales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_operario" value="id_operario-1"/>
+<div>
+<div>
+<label for="nombres">Nombres</label>
+<input id="nombres" required="" name="nombres" value="nombres-1"/>
+</div>
+<div>
+<label for="apellidos">Apellidos</label>
+<input id="apellidos" required="" name="apellidos" value="apellidos-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="cargo">Cargo</label>
+<input id="cargo" name="cargo" value="cargo-1"/>
+</div>
+<div>
+<label for="especialidad">Especialidad</label>
+<input id="especialidad" name="especialidad" value="especialidad-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Telefono</label>
+<input id="telefono" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="fecha_ingreso">Fecha de ingreso</label>
+<input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2026-07-01"/>
+</div>
+</div>
+<div>
+<label for="direccion">Direccion</label>
+<input id="direccion" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="modalidad_pago">Modalidad de pago</label>
+<select id="modalidad_pago" name="modalidad_pago" required="">
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="tarifa">Tarifa</label>
+<input type="number" id="tarifa" min="0" step="0.01" name="tarifa" value="11.5"/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/staff/operators">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_operario": "OPE99999999",
+      },
+    },
+    "prisma": "operario.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/staff/operators/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
