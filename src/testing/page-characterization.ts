@@ -373,6 +373,16 @@ export function generateResult(
   }
 }
 
+// Resultado generado para una llamada, para que un caso lo tome como base y
+// cambie solo lo que necesita (por ejemplo, un pedido sin proformas).
+export function generatedResult(modelName: string, method: string, args: PrismaArgs) {
+  return generateResult(getSchema(), modelName, method, args);
+}
+
+export function generatedRow(modelName: string, method: string, args: PrismaArgs) {
+  return generatedResult(modelName, method, args) as Row;
+}
+
 // ---------------------------------------------------------------------------
 // Estado de la ejecucion y dobles
 // ---------------------------------------------------------------------------
@@ -560,6 +570,30 @@ export function navigationModuleMock(actual: unknown) {
 // 10:00 de Lima.
 export const FIXED_NOW = new Date("2026-07-15T15:00:00.000Z");
 
+// Zona horaria fija, la de Vercel. Algunas paginas interpretan fechas en la
+// zona del proceso (parseDateParam, setHours): sin fijarla, los snapshots
+// dependerian de la maquina que ejecuta las pruebas.
+export const FIXED_TIME_ZONE = "UTC";
+
+async function withFixedClock<T>(callback: () => Promise<T>): Promise<T> {
+  const previousTimeZone = process.env.TZ;
+
+  process.env.TZ = FIXED_TIME_ZONE;
+  vi.useFakeTimers({ toFake: ["Date"], now: FIXED_NOW });
+
+  try {
+    return await callback();
+  } finally {
+    vi.useRealTimers();
+
+    if (previousTimeZone === undefined) {
+      delete process.env.TZ;
+    } else {
+      process.env.TZ = previousTimeZone;
+    }
+  }
+}
+
 type SearchParams = Record<string, string | string[]>;
 
 export type PageCase = {
@@ -650,27 +684,26 @@ export async function characterizePage(
   pathname = "/",
 ): Promise<PageResult> {
   resetState(pageCase, pathname);
-  vi.useFakeTimers({ toFake: ["Date"], now: FIXED_NOW });
 
-  try {
-    const tree = await runPage(load, pageCase);
+  return withFixedClock(async () => {
+    try {
+      const tree = await runPage(load, pageCase);
 
-    return {
-      calls: [...state.calls],
-      outcome: "render",
-      html: normalizeHtml(renderToStaticMarkup(tree)),
-    };
-  } catch (error) {
-    const outcome = describeNavigationError(error);
+      return {
+        calls: [...state.calls],
+        outcome: "render",
+        html: normalizeHtml(renderToStaticMarkup(tree)),
+      };
+    } catch (error) {
+      const outcome = describeNavigationError(error);
 
-    if (!outcome) {
-      throw error;
+      if (!outcome) {
+        throw error;
+      }
+
+      return { calls: [...state.calls], outcome, html: null };
     }
-
-    return { calls: [...state.calls], outcome, html: null };
-  } finally {
-    vi.useRealTimers();
-  }
+  });
 }
 
 // Ejecuta la pagina con la autorizacion rechazada y devuelve las llamadas que
@@ -682,21 +715,20 @@ export async function runWithRejectedAuth(
 ) {
   resetState(pageCase, pathname);
   state.rejectAuth = true;
-  vi.useFakeTimers({ toFake: ["Date"], now: FIXED_NOW });
 
-  try {
-    await runPage(load, pageCase);
-  } catch (error) {
-    if (!(error instanceof AuthRejected)) {
-      throw error;
+  return withFixedClock(async () => {
+    try {
+      await runPage(load, pageCase);
+    } catch (error) {
+      if (!(error instanceof AuthRejected)) {
+        throw error;
+      }
+
+      return [...state.calls];
     }
 
-    return [...state.calls];
-  } finally {
-    vi.useRealTimers();
-  }
-
-  throw new Error("La pagina termino sin pasar por la autorizacion.");
+    throw new Error("La pagina termino sin pasar por la autorizacion.");
+  });
 }
 
 export function isPrismaCall(call: RecordedCall): call is PrismaCall {

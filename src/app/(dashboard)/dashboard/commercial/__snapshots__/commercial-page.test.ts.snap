@@ -1,0 +1,251 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial > indicadores > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "pedido.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+      },
+    },
+    "prisma": "proforma.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "emitido",
+      },
+    },
+    "prisma": "comprobante_venta.count",
+  },
+  {
+    "args": {
+      "select": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+      },
+    },
+    "prisma": "proforma.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial > indicadores > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Comercial</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Comercial</h1>
+<p>Gestiona clientes, productos, pedidos, proformas, pagos y comprobantes.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Clientes activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Clientes disponibles para pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Productos activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Productos disponibles para venta.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pedidos comerciales acumulados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Proformas activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Proformas vigentes o aceptadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Saldo pendiente en proformas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Comprobantes emitidos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Comprobantes internos registrados.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<h2>Operaciones comerciales</h2>
+<p>Accede rápidamente a las funcionalidades principales del módulo.</p>
+</div>
+<div>
+<a href="/dashboard/commercial/clients">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Clientes</div>
+</div>
+<div>
+<p>Registrar y consultar clientes del taller.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/products">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Productos</div>
+</div>
+<div>
+<p>Registrar y consultar productos comerciales o fabricados.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/orders">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Pedidos</div>
+</div>
+<div>
+<p>Registrar pedidos de clientes y su detalle comercial.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/quotes">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Proformas</div>
+</div>
+<div>
+<p>Generar y consultar proformas digitales desde pedidos.</p>
+</div>
+</div>
+</a>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;

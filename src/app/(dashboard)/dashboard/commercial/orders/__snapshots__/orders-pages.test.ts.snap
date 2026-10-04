@@ -1,0 +1,1561 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/orders > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_pedido": "desc",
+        },
+        {
+          "id_pedido": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "pedido.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "pedido.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pedidos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pedidos</h1>
+<p>Lista de pedidos registrados por cliente y productos asociados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/orders">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pedido..." name="q" value=""/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado">Aprobado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/orders">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Fecha pedido</th>
+<th>Entrega estimada</th>
+<th>Productos</th>
+<th>Monto estimado</th>
+<th>Estado</th>
+<th>Proforma</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_pedido-1</td>
+<td>nombre_razon_social-1</td>
+<td>1/7/2026</td>
+<td>1/7/2026</td>
+<td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<span data-variant="success">numero_proforma-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-1?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_pedido-2</td>
+<td>nombre_razon_social-2</td>
+<td>2/7/2026</td>
+<td>-</td>
+<td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
+<td>-</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<span data-variant="success">numero_proforma-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-2?returnTo=%2Fdashboard%2Fcommercial%2Forders">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 pedidos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/orders?page=2">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "estado": true,
+            "id_proforma": true,
+            "numero_proforma": true,
+          },
+          "where": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_pedido": "desc",
+        },
+        {
+          "id_pedido": "desc",
+        },
+      ],
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_pedido": {
+                  "contains": "PED",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "cliente": {
+                  "nombre_razon_social": {
+                    "contains": "PED",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "detalle_pedido": {
+                  "some": {
+                    "producto": {
+                      "nombre_producto": {
+                        "contains": "PED",
+                        "mode": "insensitive",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_cliente": "CLI00000001",
+          },
+          {
+            "detalle_pedido": {
+              "some": {
+                "id_producto": "PRO00000001",
+              },
+            },
+          },
+          {
+            "estado": "aprobado",
+          },
+          {
+            "fecha_pedido": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_pedido": {
+                  "contains": "PED",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "cliente": {
+                  "nombre_razon_social": {
+                    "contains": "PED",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "detalle_pedido": {
+                  "some": {
+                    "producto": {
+                      "nombre_producto": {
+                        "contains": "PED",
+                        "mode": "insensitive",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_cliente": "CLI00000001",
+          },
+          {
+            "detalle_pedido": {
+              "some": {
+                "id_producto": "PRO00000001",
+              },
+            },
+          },
+          {
+            "estado": "aprobado",
+          },
+          {
+            "fecha_pedido": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pedido.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pedidos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pedidos</h1>
+<p>Lista de pedidos registrados por cliente y productos asociados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/orders">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pedido..." name="q" value="PED"/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado" selected="">Aprobado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/orders">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Fecha pedido</th>
+<th>Entrega estimada</th>
+<th>Productos</th>
+<th>Monto estimado</th>
+<th>Estado</th>
+<th>Proforma</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_pedido-1</td>
+<td>nombre_razon_social-1</td>
+<td>1/7/2026</td>
+<td>1/7/2026</td>
+<td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<span data-variant="success">numero_proforma-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-1?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_pedido-2</td>
+<td>nombre_razon_social-2</td>
+<td>2/7/2026</td>
+<td>-</td>
+<td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
+<td>-</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<span data-variant="success">numero_proforma-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/orders/id_pedido-2?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Ver detalle</a>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 21-40 de 42 pedidos · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/orders?q=PED&amp;client=CLI00000001&amp;product=PRO00000001&amp;status=aprobado&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/orders?q=PED&amp;client=CLI00000001&amp;product=PRO00000001&amp;status=aprobado&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id] > detalle > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "estado": true,
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">id_pedido-1</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Detalle de pedido</h1>
+<p>Consulta la información comercial, productos y estado del pedido.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cliente</div>
+</div>
+</div>
+<div>
+<p>nombre_razon_social-1</p>
+<p>Cliente asociado al pedido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Suma referencial del detalle del pedido.</p>
+</div>
+</div>
+<div>
+<p>Estado</p>
+<div>
+<span>estado-1</span>
+</div>
+</div>
+</section>
+<section>
+<h2>Datos del pedido</h2>
+<div>
+<p>
+<span>Fecha pedido:</span> 1/7/2026</p>
+<p>
+<span>Entrega estimada:</span> 1/7/2026</p>
+<p>
+<span>Registrado por:</span> usuario-1</p>
+</div>
+<p>observaciones-1</p>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+<th>Orden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>id_orden_trabajo-1</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>id_orden_trabajo-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<section>
+<div>
+<h2>Proformas</h2>
+<div>
+<a href="/dashboard/commercial/quotes/id_proforma-1">numero_proforma-1 - S/ 11.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-2">numero_proforma-2 - S/ 22.50</a>
+</div>
+</div>
+<div>
+<h2>Comprobantes</h2>
+<div>
+<p>tipo_comprobante-1 numero_comprobante-1 - S/ 11.50</p>
+<p>tipo_comprobante-2 numero_comprobante-2 - S/ 22.50</p>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id] > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "estado": true,
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_pedido": "PED99999999",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id] > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "estado": true,
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "usuario": true,
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders?status=aprobado">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">id_pedido-1</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Detalle de pedido</h1>
+<p>Consulta la información comercial, productos y estado del pedido.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cliente</div>
+</div>
+</div>
+<div>
+<p>nombre_razon_social-1</p>
+<p>Cliente asociado al pedido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Suma referencial del detalle del pedido.</p>
+</div>
+</div>
+<div>
+<p>Estado</p>
+<div>
+<span>estado-1</span>
+</div>
+</div>
+</section>
+<section>
+<h2>Datos del pedido</h2>
+<div>
+<p>
+<span>Fecha pedido:</span> 1/7/2026</p>
+<p>
+<span>Entrega estimada:</span> 1/7/2026</p>
+<p>
+<span>Registrado por:</span> usuario-1</p>
+</div>
+<p>observaciones-1</p>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+<th>Orden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>id_orden_trabajo-1</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>id_orden_trabajo-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<section>
+<div>
+<h2>Proformas</h2>
+<div>
+<a href="/dashboard/commercial/quotes/id_proforma-1">numero_proforma-1 - S/ 11.50</a>
+<a href="/dashboard/commercial/quotes/id_proforma-2">numero_proforma-2 - S/ 22.50</a>
+</div>
+</div>
+<div>
+<h2>Comprobantes</h2>
+<div>
+<p>tipo_comprobante-1 numero_comprobante-1 - S/ 11.50</p>
+<p>tipo_comprobante-2 numero_comprobante-2 - S/ 22.50</p>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > con proforma redirige al detalle > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > con proforma redirige al detalle > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "redirect:/dashboard/commercial/orders/id_pedido-1",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > editable > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente-_R_2i_">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente-_R_2i_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-_R_2i_-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-_R_2cm_">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-_R_2cm_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_2cm_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label>Cantidad</label>
+<input type="number" min="1" step="0.01" required="" name="cantidad" value="11.5"/>
+</div>
+<div>
+<label>Precio unitario</label>
+<input type="number" min="0" step="0.01" required="" name="precio_unitario" value="11.5"/>
+</div>
+<div>
+<label>Subtotal</label>
+<div>S/ 132.25</div>
+</div>
+</div>
+<div>
+<label>Observacion del producto</label>
+<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+<div>
+<div>
+<h3>Producto 2</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-_R_2km_">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<div>
+<input id="id_producto-_R_2km_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_2km_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label>Cantidad</label>
+<input type="number" min="1" step="0.01" required="" name="cantidad" value="22.5"/>
+</div>
+<div>
+<label>Precio unitario</label>
+<input type="number" min="0" step="0.01" required="" name="precio_unitario" value="22.5"/>
+</div>
+<div>
+<label>Subtotal</label>
+<div>S/ 506.25</div>
+</div>
+</div>
+<div>
+<label>Observacion del producto</label>
+<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 638.50</p>
+</div>
+</div>
+</div>
+<div>
+<label>Fecha estimada de entrega</label>
+<input type="date" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label>Observaciones generales del pedido</label>
+<textarea name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED99999999",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/commercial/orders/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo pedido</h1>
+<p>Registra un pedido comercial con uno o varios productos asociados al mismo cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_cliente-_R_2i_">Cliente *</label>
+<input type="hidden" name="id_cliente" value=""/>
+<div>
+<input id="id_cliente-_R_2i_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-_R_2i_-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-_R_1cm_">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto-_R_1cm_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_1cm_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label>Cantidad</label>
+<input type="number" min="1" step="0.01" required="" name="cantidad" value="1"/>
+</div>
+<div>
+<label>Precio unitario</label>
+<input type="number" min="0" step="0.01" required="" name="precio_unitario" value=""/>
+</div>
+<div>
+<label>Subtotal</label>
+<div>S/ 0.00</div>
+</div>
+</div>
+<div>
+<label>Observacion del producto</label>
+<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+<div>
+<label>Fecha estimada de entrega</label>
+<input type="date" name="fecha_entrega_estimada" value=""/>
+</div>
+<div>
+<label>Observaciones generales del pedido</label>
+<textarea name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar pedido</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,280 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/product-categories > administrador gestiona > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/product-categories > administrador gestiona > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Categorías</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Categorías de productos</h1>
+<p>Administra las categorías usadas en productos comerciales.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<h2>Nueva categoría</h2>
+<div>
+<label for="nombre">Nombre</label>
+<input id="nombre" placeholder="Ejemplo: Herramientas agrícolas" required="" name="nombre"/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Uso interno de la categoría.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Crear categoría</button>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Categoría</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_categoria_producto-1</td>
+<td colSpan="2">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-1"/>
+<input required="" name="nombre" value="nombre-1"/>
+<p>slug-1</p>
+<textarea name="descripcion">descripcion-1</textarea>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-1"/>
+<button data-variant="outline" type="submit">Inactivar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_categoria_producto-2</td>
+<td colSpan="2">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-2"/>
+<input required="" name="nombre" value="nombre-2"/>
+<p>slug-2</p>
+<textarea name="descripcion">
+</textarea>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-2"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/product-categories > vendedor solo consulta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/product-categories > vendedor solo consulta > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Categorías</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Categorías de productos</h1>
+<p>Administra las categorías usadas en productos comerciales.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Tu usuario puede consultar categorías, pero solo ADMIN puede crearlas o modificarlas.</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<h2>Nueva categoría</h2>
+<div>
+<label for="nombre">Nombre</label>
+<input id="nombre" placeholder="Ejemplo: Herramientas agrícolas" disabled="" required="" name="nombre"/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Uso interno de la categoría." disabled="">
+</textarea>
+</div>
+<button data-variant="default" type="submit" disabled="">Crear categoría</button>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Categoría</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_categoria_producto-1</td>
+<td colSpan="2">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-1"/>
+<input disabled="" required="" name="nombre" value="nombre-1"/>
+<p>slug-1</p>
+<textarea name="descripcion" disabled="">descripcion-1</textarea>
+</form>
+</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+<tr>
+<td>id_categoria_producto-2</td>
+<td colSpan="2">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_producto" value="id_categoria_producto-2"/>
+<input disabled="" required="" name="nombre" value="nombre-2"/>
+<p>slug-2</p>
+<textarea name="descripcion" disabled="">
+</textarea>
+</form>
+</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
