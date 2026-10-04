@@ -1,0 +1,783 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/categories > busqueda y activas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_categoria": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "nombre_categoria": {
+              "contains": "transporte",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Categorías</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Categorías de gasto</h1>
+<p>Registra y consulta categorías utilizadas para clasificar egresos de caja chica del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Categorías registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para clasificar egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Ya no disponibles.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Nueva categoría de gasto</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_categoria">Nombre de categoría</label>
+<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="true" selected="">Activa</option>
+<option value="false">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar categoría</button>
+<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
+<form action="/dashboard/petty-cash/categories">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar categoría..." name="q" value="transporte"/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activa</option>
+<option value="inactive">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Categoría</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_categoria_gasto-1</td>
+<td>nombre_categoria-1</td>
+<td>descripcion-1</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_categoria_gasto-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/categories > inactivas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_categoria": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Categorías</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Categorías de gasto</h1>
+<p>Registra y consulta categorías utilizadas para clasificar egresos de caja chica del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Categorías registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para clasificar egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Ya no disponibles.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Nueva categoría de gasto</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_categoria">Nombre de categoría</label>
+<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="true" selected="">Activa</option>
+<option value="false">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar categoría</button>
+<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
+<form action="/dashboard/petty-cash/categories">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar categoría..." name="q" value=""/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activa</option>
+<option value="inactive" selected="">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Categoría</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_categoria_gasto-1</td>
+<td>nombre_categoria-1</td>
+<td>descripcion-1</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_categoria_gasto-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/categories > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_categoria": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Categorías</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Categorías de gasto</h1>
+<p>Registra y consulta categorías utilizadas para clasificar egresos de caja chica del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Categorías registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para clasificar egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Ya no disponibles.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Nueva categoría de gasto</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_categoria">Nombre de categoría</label>
+<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="true" selected="">Activa</option>
+<option value="false">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar categoría</button>
+<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
+<form action="/dashboard/petty-cash/categories">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar categoría..." name="q" value=""/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activa</option>
+<option value="inactive">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Categoría</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_categoria_gasto-1</td>
+<td>nombre_categoria-1</td>
+<td>descripcion-1</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_categoria_gasto-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/categories/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_categoria_gasto": "CGA00000001",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash/categories">Categorías</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar categoría</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar categoría de gasto</h1>
+<p>Actualiza la categoría usada para clasificar egresos de caja chica.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la categoría</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<div>
+<label for="nombre_categoria">Nombre de categoría</label>
+<input id="nombre_categoria" required="" name="nombre_categoria" value="nombre_categoria-1"/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="true" selected="">Activa</option>
+<option value="false">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/categories/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_categoria_gasto": "CGA99999999",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/categories/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;

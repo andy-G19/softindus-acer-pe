@@ -1,0 +1,317 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/waste-scrap/scrap-sales/new > chatarra preseleccionada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_apertura": "desc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "responsable": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scrap-sales/new > chatarra preseleccionada > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/scraps">Chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva venta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar venta de chatarra</h1>
+<p>Registra el ingreso obtenido por vender chatarra acumulada. Si seleccionas una caja chica abierta, el sistema también generará un movimiento de caja de tipo ingreso.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a chatarra">
+<svg/>Volver a chatarra</button>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la venta</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_chatarra">Chatarra a vender *</label>
+<select id="id_chatarra" name="id_chatarra" required="">
+<option value="" disabled="">Selecciona un registro de chatarra</option>
+<option value="id_chatarra-1" selected="">id_chatarra-1 | tipo_material-1 | Peso: 11.5 kg | Cantidad: 11.5</option>
+<option value="id_chatarra-2">id_chatarra-2 | tipo_material-2 | Peso: - | Cantidad: -</option>
+</select>
+<p>Solo se muestran registros con estado acumulada o disponible.</p>
+</div>
+<div>
+<p>Chatarra seleccionada</p>
+<p>Código: id_chatarra-1 | Tipo: tipo_material-1</p>
+<p>Material origen: nombre_material-1</p>
+<p>Peso registrado: 11.50 kg | Cantidad registrada: 11.50</p>
+</div>
+<div>
+<label for="fecha_venta">Fecha de venta *</label>
+<input type="date" id="fecha_venta" required="" name="fecha_venta" value="2026-07-15"/>
+</div>
+<div>
+<label for="monto_recibido">Monto recibido *</label>
+<input type="number" id="monto_recibido" min="0.01" step="0.01" required="" placeholder="Ejemplo: 80.00" name="monto_recibido"/>
+</div>
+<div>
+<label for="peso_vendido_kg">Peso vendido en kg</label>
+<input type="number" id="peso_vendido_kg" min="0.01" step="0.01" placeholder="Ejemplo: 15.00" name="peso_vendido_kg" value="11.5"/>
+<p>Si lo dejas vacío, se usará el peso registrado en la chatarra.</p>
+</div>
+<div>
+<label for="cantidad_vendida">Cantidad vendida</label>
+<input type="number" id="cantidad_vendida" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad_vendida" value="11.5"/>
+<p>Útil si la venta se controla por bolsa, piezas o lote.</p>
+</div>
+<div>
+<label for="id_caja_chica">Registrar ingreso en caja chica</label>
+<select id="id_caja_chica" name="id_caja_chica">
+<option value="" selected="">No registrar en caja chica</option>
+<option value="id_caja_chica-1">nombre_caja-1 | Saldo: S/ 11.50</option>
+<option value="id_caja_chica-2">nombre_caja-2 | Saldo: S/ 22.50</option>
+</select>
+<p>Opcional. Si seleccionas una caja, se generará un movimiento de ingreso.</p>
+</div>
+<div>
+<label for="destino_dinero">Destino del dinero</label>
+<input type="text" id="destino_dinero" placeholder="Ejemplo: compra de discos de corte" name="destino_dinero"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: venta realizada a reciclador local">
+</textarea>
+</div>
+</div>
+<div>
+<p>Efecto de la operación</p>
+<p>Al registrar la venta, la chatarra cambiará a estado <span>vendida</span>. Si seleccionas una caja chica, también se incrementará su saldo con el monto recibido.</p>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
+<button data-variant="default" type="submit">Registrar venta</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scrap-sales/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_apertura": "desc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "responsable": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scrap-sales/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/scraps">Chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva venta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar venta de chatarra</h1>
+<p>Registra el ingreso obtenido por vender chatarra acumulada. Si seleccionas una caja chica abierta, el sistema también generará un movimiento de caja de tipo ingreso.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a chatarra">
+<svg/>Volver a chatarra</button>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la venta</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_chatarra">Chatarra a vender *</label>
+<select id="id_chatarra" name="id_chatarra" required="">
+<option value="" disabled="" selected="">Selecciona un registro de chatarra</option>
+<option value="id_chatarra-1">id_chatarra-1 | tipo_material-1 | Peso: 11.5 kg | Cantidad: 11.5</option>
+<option value="id_chatarra-2">id_chatarra-2 | tipo_material-2 | Peso: - | Cantidad: -</option>
+</select>
+<p>Solo se muestran registros con estado acumulada o disponible.</p>
+</div>
+<div>
+<label for="fecha_venta">Fecha de venta *</label>
+<input type="date" id="fecha_venta" required="" name="fecha_venta" value="2026-07-15"/>
+</div>
+<div>
+<label for="monto_recibido">Monto recibido *</label>
+<input type="number" id="monto_recibido" min="0.01" step="0.01" required="" placeholder="Ejemplo: 80.00" name="monto_recibido"/>
+</div>
+<div>
+<label for="peso_vendido_kg">Peso vendido en kg</label>
+<input type="number" id="peso_vendido_kg" min="0.01" step="0.01" placeholder="Ejemplo: 15.00" name="peso_vendido_kg" value=""/>
+<p>Si lo dejas vacío, se usará el peso registrado en la chatarra.</p>
+</div>
+<div>
+<label for="cantidad_vendida">Cantidad vendida</label>
+<input type="number" id="cantidad_vendida" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad_vendida" value=""/>
+<p>Útil si la venta se controla por bolsa, piezas o lote.</p>
+</div>
+<div>
+<label for="id_caja_chica">Registrar ingreso en caja chica</label>
+<select id="id_caja_chica" name="id_caja_chica">
+<option value="" selected="">No registrar en caja chica</option>
+<option value="id_caja_chica-1">nombre_caja-1 | Saldo: S/ 11.50</option>
+<option value="id_caja_chica-2">nombre_caja-2 | Saldo: S/ 22.50</option>
+</select>
+<p>Opcional. Si seleccionas una caja, se generará un movimiento de ingreso.</p>
+</div>
+<div>
+<label for="destino_dinero">Destino del dinero</label>
+<input type="text" id="destino_dinero" placeholder="Ejemplo: compra de discos de corte" name="destino_dinero"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: venta realizada a reciclador local">
+</textarea>
+</div>
+</div>
+<div>
+<p>Efecto de la operación</p>
+<p>Al registrar la venta, la chatarra cambiará a estado <span>vendida</span>. Si seleccionas una caja chica, también se incrementará su saldo con el monto recibido.</p>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps">Cancelar</a>
+<button data-variant="default" type="submit">Registrar venta</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,1721 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/movements > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "movimiento_caja.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {},
+          {
+            "tipo_movimiento": "ingreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {},
+          {
+            "tipo_movimiento": "egreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {},
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste positivo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {},
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste negativo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/movements > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Movimientos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de movimientos de caja</h1>
+<p>Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos encontrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de ingresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de egresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="caja">Caja chica</label>
+<select id="caja" name="caja">
+<option value="" selected="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="tipo">Tipo de movimiento</label>
+<select id="tipo" name="tipo">
+<option value="" selected="">Todos</option>
+<option value="ingreso">Ingresos</option>
+<option value="egreso">Egresos</option>
+<option value="ajuste">Ajustes</option>
+</select>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria">
+<option value="" selected="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="desde">Desde</label>
+<input type="date" id="desde" name="desde" value=""/>
+</div>
+<div>
+<label for="hasta">Hasta</label>
+<input type="date" id="hasta" name="hasta" value=""/>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="text" id="q" placeholder="Concepto, comprobante, responsable..." name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Movimientos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Categoría</th>
+<th>Responsable</th>
+<th>Comprobante</th>
+<th>Registrado por</th>
+<th>Monto</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-1</p>
+<p>observaciones-1</p>
+</td>
+<td>nombre_caja-1</td>
+<td>nombre_categoria-1</td>
+<td>responsable-1</td>
+<td>comprobante-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>+ S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-2</p>
+</td>
+<td>nombre_caja-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>+ S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 movimientos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/movements > solo desde > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ingreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "egreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste positivo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste negativo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/movements > solo desde > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Movimientos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de movimientos de caja</h1>
+<p>Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos encontrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de ingresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de egresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="caja">Caja chica</label>
+<select id="caja" name="caja">
+<option value="" selected="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="tipo">Tipo de movimiento</label>
+<select id="tipo" name="tipo">
+<option value="" selected="">Todos</option>
+<option value="ingreso">Ingresos</option>
+<option value="egreso">Egresos</option>
+<option value="ajuste">Ajustes</option>
+</select>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria">
+<option value="" selected="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="desde">Desde</label>
+<input type="date" id="desde" name="desde" value="2026-07-01"/>
+</div>
+<div>
+<label for="hasta">Hasta</label>
+<input type="date" id="hasta" name="hasta" value=""/>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="text" id="q" placeholder="Concepto, comprobante, responsable..." name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Movimientos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Categoría</th>
+<th>Responsable</th>
+<th>Comprobante</th>
+<th>Registrado por</th>
+<th>Monto</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-1</p>
+<p>observaciones-1</p>
+</td>
+<td>nombre_caja-1</td>
+<td>nombre_categoria-1</td>
+<td>responsable-1</td>
+<td>comprobante-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>+ S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-2</p>
+</td>
+<td>nombre_caja-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>+ S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 movimientos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?desde=2026-07-01&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "fecha_movimiento": {
+          "lte": 2026-07-31T23:59:59.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_movimiento": {
+          "lte": 2026-07-31T23:59:59.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ingreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "egreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste positivo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "fecha_movimiento": {
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste negativo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/movements > solo hasta > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Movimientos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de movimientos de caja</h1>
+<p>Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos encontrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de ingresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de egresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="caja">Caja chica</label>
+<select id="caja" name="caja">
+<option value="" selected="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="tipo">Tipo de movimiento</label>
+<select id="tipo" name="tipo">
+<option value="" selected="">Todos</option>
+<option value="ingreso">Ingresos</option>
+<option value="egreso">Egresos</option>
+<option value="ajuste">Ajustes</option>
+</select>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria">
+<option value="" selected="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="desde">Desde</label>
+<input type="date" id="desde" name="desde" value=""/>
+</div>
+<div>
+<label for="hasta">Hasta</label>
+<input type="date" id="hasta" name="hasta" value="2026-07-31"/>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="text" id="q" placeholder="Concepto, comprobante, responsable..." name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Movimientos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Categoría</th>
+<th>Responsable</th>
+<th>Comprobante</th>
+<th>Registrado por</th>
+<th>Monto</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-1</p>
+<p>observaciones-1</p>
+</td>
+<td>nombre_caja-1</td>
+<td>nombre_categoria-1</td>
+<td>responsable-1</td>
+<td>comprobante-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>+ S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-2</p>
+</td>
+<td>nombre_caja-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>+ S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 movimientos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?hasta=2026-07-31&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "OR": [
+          {
+            "concepto": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "comprobante": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "responsable": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "observaciones": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lte": 2026-07-31T23:59:59.000Z,
+        },
+        "id_caja_chica": "CCH00000001",
+        "id_categoria_gasto": "CGA00000001",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "OR": [
+          {
+            "concepto": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "comprobante": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "responsable": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "observaciones": {
+              "contains": "combustible",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lte": 2026-07-31T23:59:59.000Z,
+        },
+        "id_caja_chica": "CCH00000001",
+        "id_categoria_gasto": "CGA00000001",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "concepto": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "comprobante": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "responsable": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "observaciones": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+            "id_caja_chica": "CCH00000001",
+            "id_categoria_gasto": "CGA00000001",
+            "tipo_movimiento": "egreso",
+          },
+          {
+            "tipo_movimiento": "ingreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "concepto": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "comprobante": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "responsable": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "observaciones": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+            "id_caja_chica": "CCH00000001",
+            "id_categoria_gasto": "CGA00000001",
+            "tipo_movimiento": "egreso",
+          },
+          {
+            "tipo_movimiento": "egreso",
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "concepto": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "comprobante": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "responsable": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "observaciones": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+            "id_caja_chica": "CCH00000001",
+            "id_categoria_gasto": "CGA00000001",
+            "tipo_movimiento": "egreso",
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste positivo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "concepto": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "comprobante": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "responsable": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "observaciones": {
+                  "contains": "combustible",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+            "fecha_movimiento": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+            "id_caja_chica": "CCH00000001",
+            "id_categoria_gasto": "CGA00000001",
+            "tipo_movimiento": "egreso",
+          },
+          {
+            "tipo_movimiento": "ajuste",
+          },
+          {
+            "concepto": {
+              "startsWith": "Ajuste negativo",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/movements > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Movimientos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de movimientos de caja</h1>
+<p>Consulta ingresos, egresos y ajustes de caja chica usando filtros por caja, tipo, categoría, fecha, concepto, comprobante o responsable.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos encontrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de ingresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos mostrados</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Total de egresos según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos y ajustes positivos menos egresos y ajustes negativos.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="caja">Caja chica</label>
+<select id="caja" name="caja">
+<option value="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="tipo">Tipo de movimiento</label>
+<select id="tipo" name="tipo">
+<option value="">Todos</option>
+<option value="ingreso">Ingresos</option>
+<option value="egreso" selected="">Egresos</option>
+<option value="ajuste">Ajustes</option>
+</select>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria">
+<option value="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="desde">Desde</label>
+<input type="date" id="desde" name="desde" value="2026-07-01"/>
+</div>
+<div>
+<label for="hasta">Hasta</label>
+<input type="date" id="hasta" name="hasta" value="2026-07-31"/>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="text" id="q" placeholder="Concepto, comprobante, responsable..." name="q" value="combustible"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/petty-cash/movements">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Movimientos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Categoría</th>
+<th>Responsable</th>
+<th>Comprobante</th>
+<th>Registrado por</th>
+<th>Monto</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-1</p>
+<p>observaciones-1</p>
+</td>
+<td>nombre_caja-1</td>
+<td>nombre_categoria-1</td>
+<td>responsable-1</td>
+<td>comprobante-1</td>
+<td>nombres-1 apellidos-1</td>
+<td>+ S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>
+<p>concepto-2</p>
+</td>
+<td>nombre_caja-2</td>
+<td>nombre_categoria-2</td>
+<td>-</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>+ S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_movimiento_caja" value="id_movimiento_caja-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 21-40 de 42 movimientos · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?caja=CCH00000001&amp;tipo=egreso&amp;categoria=CGA00000001&amp;desde=2026-07-01&amp;hasta=2026-07-31&amp;q=combustible&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?caja=CCH00000001&amp;tipo=egreso&amp;categoria=CGA00000001&amp;desde=2026-07-01&amp;hasta=2026-07-31&amp;q=combustible&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,740 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/waste-scrap > administrador > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "disponible",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "reutilizado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "descartado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vendida",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "venta_chatarra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "cantidad_vendida": true,
+        "monto_recibido": true,
+        "peso_vendido_kg": true,
+      },
+    },
+    "prisma": "venta_chatarra.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "retazo_reutilizable.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "chatarra": {
+          "include": {
+            "material": true,
+          },
+        },
+        "movimiento_caja": true,
+      },
+      "orderBy": {
+        "fecha_venta": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "venta_chatarra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap > administrador > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mermas y chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mermas y chatarra</h1>
+<p>Controla los sobrantes generados en producción, diferenciando retazos reutilizables, chatarra acumulada y ventas de chatarra como ingreso menor del taller.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scrap-sales/new">Registrar venta</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Ver retazos</a>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps">Ver chatarra</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Módulo operativo y con registros</div>
+<div>El módulo ya permite registrar, consultar y controlar retazos, chatarra y ventas de chatarra.</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Retazos registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 disponibles</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Retazos reutilizados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 descartados</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Chatarra pendiente</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 registros vendidos</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos por chatarra</div>
+</div>
+</div>
+<div>
+<p>S/ 1,234.50</p>
+<p>42 venta(s) registradas</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<p>Retazos disponibles</p>
+<p>Sí</p>
+<p>Existen retazos que pueden ser reutilizados en producción.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Chatarra pendiente de venta</p>
+<p>Sí</p>
+<p>Hay chatarra acumulada que puede generar ingreso menor.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Ingreso recuperado</p>
+<p>Registrado</p>
+<p>Peso vendido: 1,234.50 kg | Cantidad: 1,234.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<h2>Últimos retazos</h2>
+<p>Retazos reutilizables registrados recientemente.</p>
+</div>
+<a href="/dashboard/waste-scrap/reusable-scraps">Ver todos</a>
+</div>
+<div>
+<div>
+<div>
+<p>id_retazo-1 | 01/07/2026</p>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 | medida_aproximada-1 | ubicacion-1</p>
+<p>Orden: id_orden_trabajo-1 | nombre_producto-1</p>
+</div>
+<span data-variant="secondary">estado-1</span>
+</div>
+<div>
+<div>
+<p>id_retazo-2 | 02/07/2026</p>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 | Sin medida | Sin ubicación</p>
+<p>Orden: id_orden_trabajo-2 | nombre_producto-2</p>
+</div>
+<span data-variant="secondary">estado-2</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Chatarra pendiente</h2>
+<p>Chatarra acumulada o disponible para venta.</p>
+</div>
+<a href="/dashboard/waste-scrap/scraps">Ver todos</a>
+</div>
+<div>
+<div>
+<div>
+<p>id_chatarra-1</p>
+<span data-variant="secondary">estado-1</span>
+</div>
+<p>tipo_material-1</p>
+<p>Peso: 11.50 kg | Cantidad: 11.50</p>
+<p>Material origen: nombre_material-1</p>
+<a href="/dashboard/waste-scrap/scrap-sales/new?id_chatarra=id_chatarra-1">Registrar venta</a>
+</div>
+<div>
+<div>
+<p>id_chatarra-2</p>
+<span data-variant="secondary">estado-2</span>
+</div>
+<p>tipo_material-2</p>
+<p>Peso: - | Cantidad: -</p>
+<p>Material origen: nombre_material-2</p>
+<a href="/dashboard/waste-scrap/scrap-sales/new?id_chatarra=id_chatarra-2">Registrar venta</a>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<h2>Últimas ventas de chatarra</h2>
+<p>Ingresos menores obtenidos por venta de chatarra.</p>
+</div>
+<div>
+<div>
+<div>
+<p>id_venta_chatarra-1 | 01/07/2026</p>
+<p>tipo_material-1</p>
+<p>Peso vendido: 11.50 kg | Cantidad: 11.50 | Monto: S/ 11.50</p>
+<p>Destino: destino_dinero-1</p>
+<p>Caja chica: vinculada al movimiento id_movimiento_caja-1</p>
+</div>
+<span data-variant="info">Venta registrada</span>
+</div>
+<div>
+<div>
+<p>id_venta_chatarra-2 | 02/07/2026</p>
+<p>tipo_material-2</p>
+<p>Peso vendido: - | Cantidad: - | Monto: S/ 22.50</p>
+<p>Destino: No especificado</p>
+<p>Caja chica: no vinculada</p>
+</div>
+<span data-variant="info">Venta registrada</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Validaciones finales del módulo</div>
+</div>
+<div>
+<div>
+<div>
+<p>Registro de retazos reutilizables</p>
+<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada opcional.</p>
+</div>
+<div>
+<p>Registro de chatarra generada</p>
+<p>Se puede registrar chatarra por tipo, peso, cantidad y material de origen opcional.</p>
+</div>
+<div>
+<p>Venta de chatarra</p>
+<p>La venta cambia la chatarra a vendida y puede generar ingreso en caja chica.</p>
+</div>
+<div>
+<p>Cambio de estado de retazos</p>
+<p>Los retazos disponibles pueden marcarse como reutilizados o descartados.</p>
+</div>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "disponible",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "reutilizado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "descartado",
+      },
+    },
+    "prisma": "retazo_reutilizable.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vendida",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "venta_chatarra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "cantidad_vendida": true,
+        "monto_recibido": true,
+        "peso_vendido_kg": true,
+      },
+    },
+    "prisma": "venta_chatarra.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "retazo_reutilizable.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+      "where": {
+        "estado": {
+          "in": [
+            "acumulada",
+            "disponible",
+          ],
+        },
+      },
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "chatarra": {
+          "include": {
+            "material": true,
+          },
+        },
+        "movimiento_caja": true,
+      },
+      "orderBy": {
+        "fecha_venta": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "venta_chatarra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap > maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mermas y chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mermas y chatarra</h1>
+<p>Controla los sobrantes generados en producción, diferenciando retazos reutilizables, chatarra acumulada y ventas de chatarra como ingreso menor del taller.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps/new">Registrar retazo</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/reusable-scraps">Ver retazos</a>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps">Ver chatarra</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Módulo operativo y con registros</div>
+<div>El módulo ya permite registrar, consultar y controlar retazos, chatarra y ventas de chatarra.</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Retazos registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 disponibles</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Retazos reutilizados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 descartados</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Chatarra pendiente</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 registros vendidos</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos por chatarra</div>
+</div>
+</div>
+<div>
+<p>S/ 1,234.50</p>
+<p>42 venta(s) registradas</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<p>Retazos disponibles</p>
+<p>Sí</p>
+<p>Existen retazos que pueden ser reutilizados en producción.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Chatarra pendiente de venta</p>
+<p>Sí</p>
+<p>Hay chatarra acumulada que puede generar ingreso menor.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Ingreso recuperado</p>
+<p>Registrado</p>
+<p>Peso vendido: 1,234.50 kg | Cantidad: 1,234.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<h2>Últimos retazos</h2>
+<p>Retazos reutilizables registrados recientemente.</p>
+</div>
+<a href="/dashboard/waste-scrap/reusable-scraps">Ver todos</a>
+</div>
+<div>
+<div>
+<div>
+<p>id_retazo-1 | 01/07/2026</p>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 | medida_aproximada-1 | ubicacion-1</p>
+<p>Orden: id_orden_trabajo-1 | nombre_producto-1</p>
+</div>
+<span data-variant="secondary">estado-1</span>
+</div>
+<div>
+<div>
+<p>id_retazo-2 | 02/07/2026</p>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 | Sin medida | Sin ubicación</p>
+<p>Orden: id_orden_trabajo-2 | nombre_producto-2</p>
+</div>
+<span data-variant="secondary">estado-2</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Chatarra pendiente</h2>
+<p>Chatarra acumulada o disponible para venta.</p>
+</div>
+<a href="/dashboard/waste-scrap/scraps">Ver todos</a>
+</div>
+<div>
+<div>
+<div>
+<p>id_chatarra-1</p>
+<span data-variant="secondary">estado-1</span>
+</div>
+<p>tipo_material-1</p>
+<p>Peso: 11.50 kg | Cantidad: 11.50</p>
+<p>Material origen: nombre_material-1</p>
+</div>
+<div>
+<div>
+<p>id_chatarra-2</p>
+<span data-variant="secondary">estado-2</span>
+</div>
+<p>tipo_material-2</p>
+<p>Peso: - | Cantidad: -</p>
+<p>Material origen: nombre_material-2</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<h2>Últimas ventas de chatarra</h2>
+<p>Ingresos menores obtenidos por venta de chatarra.</p>
+</div>
+<div>
+<div>
+<div>
+<p>id_venta_chatarra-1 | 01/07/2026</p>
+<p>tipo_material-1</p>
+<p>Peso vendido: 11.50 kg | Cantidad: 11.50 | Monto: S/ 11.50</p>
+<p>Destino: destino_dinero-1</p>
+<p>Caja chica: vinculada al movimiento id_movimiento_caja-1</p>
+</div>
+<span data-variant="info">Venta registrada</span>
+</div>
+<div>
+<div>
+<p>id_venta_chatarra-2 | 02/07/2026</p>
+<p>tipo_material-2</p>
+<p>Peso vendido: - | Cantidad: - | Monto: S/ 22.50</p>
+<p>Destino: No especificado</p>
+<p>Caja chica: no vinculada</p>
+</div>
+<span data-variant="info">Venta registrada</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Validaciones finales del módulo</div>
+</div>
+<div>
+<div>
+<div>
+<p>Registro de retazos reutilizables</p>
+<p>Se pueden registrar retazos con material, cantidad, unidad, ubicación y orden relacionada opcional.</p>
+</div>
+<div>
+<p>Registro de chatarra generada</p>
+<p>Se puede registrar chatarra por tipo, peso, cantidad y material de origen opcional.</p>
+</div>
+<div>
+<p>Venta de chatarra</p>
+<p>La venta cambia la chatarra a vendida y puede generar ingreso en caja chica.</p>
+</div>
+<div>
+<p>Cambio de estado de retazos</p>
+<p>Los retazos disponibles pueden marcarse como reutilizados o descartados.</p>
+</div>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

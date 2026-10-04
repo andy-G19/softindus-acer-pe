@@ -1,0 +1,426 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash > indicadores del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "caja_chica.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_gasto.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_apertura": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 8,
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash > indicadores del mes > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Caja chica</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Caja chica</h1>
+<p>Controla cajas chicas, ingresos menores, egresos, categorías de gasto y movimientos financieros menores del taller.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo actual abierto</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Suma de saldos de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos del mes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Incluye ingresos menores y ventas de chatarra vinculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos del mes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Gastos menores registrados en caja chica.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado mensual</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menos egresos del mes actual.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas abiertas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de cajas chicas actualmente abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Historial total de cajas creadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Categorías activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Disponibles para clasificar egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos del mes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Ingresos, egresos y ajustes registrados este mes.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Últimos movimientos de caja</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Categoría</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="secondary">tipo_movimiento-1</span>
+</td>
+<td>concepto-1</td>
+<td>nombre_caja-1</td>
+<td>nombre_categoria-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="secondary">tipo_movimiento-2</span>
+</td>
+<td>concepto-2</td>
+<td>nombre_caja-2</td>
+<td>nombre_categoria-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimas cajas chicas</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre_caja-1</p>
+<span data-variant="secondary">estado-1</span>
+</div>
+<p>Apertura: 01/07/2026</p>
+<p>Saldo actual: <span>S/ 11.50</span>
+</p>
+</div>
+<div>
+<div>
+<p>nombre_caja-2</p>
+<span data-variant="secondary">estado-2</span>
+</div>
+<p>Apertura: 02/07/2026</p>
+<p>Saldo actual: <span>S/ 22.50</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<a href="/dashboard/petty-cash/boxes">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Listado de cajas chicas</div>
+</div>
+<div>
+<p>Consultar cajas abiertas, cerradas, responsables, saldos y movimientos.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/boxes/new">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Abrir caja chica</div>
+</div>
+<div>
+<p>Registrar una nueva caja con saldo inicial y responsable.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/expenses/new">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Registrar egreso</div>
+</div>
+<div>
+<p>Registrar gastos menores, descontar saldo de caja y clasificar el egreso por categoría.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/income-adjustments/new">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Registrar ingreso o ajuste</div>
+</div>
+<div>
+<p>Registrar ingresos menores, ajustes positivos o ajustes negativos de caja chica.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/movements">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Movimientos de caja</div>
+</div>
+<div>
+<p>Consultar ingresos, egresos y ajustes con filtros por caja, tipo, categoría, fechas y concepto.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/monthly-summary">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Resumen mensual</div>
+</div>
+<div>
+<p>Consultar ventas cobradas, saldos pendientes, costos, caja chica y utilidad estimada por mes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/categories">
+<div>
+<span aria-hidden="true">07</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Categorías de gasto</div>
+</div>
+<div>
+<p>Administrar categorías como repuestos, transporte, mantenimiento, refrigerios y otros.</p>
+</div>
+</div>
+</a>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;

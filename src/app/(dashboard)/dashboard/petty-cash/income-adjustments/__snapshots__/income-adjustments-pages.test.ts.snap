@@ -1,0 +1,216 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/income-adjustments/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 6,
+      "where": {
+        "tipo_movimiento": {
+          "in": [
+            "ingreso",
+            "ajuste",
+          ],
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/income-adjustments/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ingresos y ajustes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar ingresos menores y ajustes</h1>
+<p>Registra ingresos menores del taller o ajustes de caja chica para corregir diferencias de saldo, manteniendo trazabilidad de fecha, responsable, concepto, monto y observaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas abiertas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Disponibles para ingresos y ajustes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo disponible</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes recientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Dentro de los últimos movimientos consultados.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del ingreso o ajuste</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="id_caja_chica">Caja chica</label>
+<select id="id_caja_chica" name="id_caja_chica" required="">
+<option value="">Selecciona una caja</option>
+<option value="id_caja_chica-1">nombre_caja-1 · Saldo: S/ 11.50</option>
+<option value="id_caja_chica-2">nombre_caja-2 · Saldo: S/ 22.50</option>
+</select>
+</div>
+<div>
+<label for="tipo_operacion">Tipo de operación</label>
+<select id="tipo_operacion" name="tipo_operacion" required="">
+<option value="ingreso" selected="">Ingreso menor — aumenta saldo</option>
+<option value="ajuste_incremento">Ajuste positivo — aumenta saldo</option>
+<option value="ajuste_disminucion">Ajuste negativo — disminuye saldo</option>
+</select>
+</div>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" placeholder="Ejemplo: Devolución de vuelto no usado" name="concepto"/>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" min="0.01" step="0.01" required="" placeholder="Ejemplo: 20.00" name="monto"/>
+</div>
+<div>
+<label for="fecha_movimiento">Fecha del movimiento</label>
+<input type="date" id="fecha_movimiento" required="" name="fecha_movimiento" value="2026-07-15"/>
+</div>
+<div>
+<label for="comprobante">Comprobante o referencia</label>
+<input type="text" id="comprobante" placeholder="Ejemplo: Ref. interna AJ-001" name="comprobante"/>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Detalle adicional del ingreso o ajuste.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar movimiento</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos ingresos y ajustes</div>
+</div>
+<div>
+<div>
+<div>
+<p>Ingresos recientes consultados</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<div>
+<div>
+<p>concepto-1</p>
+<p>nombre_caja-1</p>
+<p>01/07/2026</p>
+</div>
+<span data-variant="secondary">Ajuste</span>
+</div>
+<p>S/ 11.50</p>
+</div>
+<div>
+<div>
+<div>
+<p>concepto-2</p>
+<p>nombre_caja-2</p>
+<p>02/07/2026</p>
+</div>
+<span data-variant="secondary">Ajuste</span>
+</div>
+<p>S/ 22.50</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

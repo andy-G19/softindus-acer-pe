@@ -1,0 +1,835 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+            "producto": {
+              "select": {
+                "nombre_producto": true,
+              },
+            },
+          },
+        },
+        "venta_chatarra": {
+          "orderBy": {
+            "fecha_venta": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "OR": [
+          {
+            "id_chatarra": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "tipo_material": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "observaciones": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "estado": "acumulada",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "OR": [
+          {
+            "id_chatarra": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "tipo_material": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "observaciones": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "estado": "acumulada",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "acumulada",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vendida",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "cantidad": true,
+        "peso_kg": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "id_chatarra": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "tipo_material": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "observaciones": {
+              "contains": "viruta",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "estado": "acumulada",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "chatarra.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps > filtros y maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Chatarra generada</h1>
+<p>Consulta los materiales no reutilizables acumulados durante la producción. Puedes filtrar por estado, material de origen o buscar por código, tipo de material u observación.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total registros</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 según filtros</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Acumulada</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pendiente de venta</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Vendida</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Ya generó ingreso menor</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Peso filtrado</div>
+</div>
+</div>
+<div>
+<p>1,234.50 kg</p>
+<p>Cantidad: 1,234.50</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos</option>
+<option value="acumulada" selected="">Acumulada</option>
+<option value="disponible">Disponible</option>
+<option value="vendida">Vendida</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="">Todos</option>
+<option value="id_material-1">nombre_material-1 | categoria-1</option>
+<option value="id_material-2">nombre_material-2 | categoria-2</option>
+</select>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="search" id="q" placeholder="Código, tipo u observación" name="q" value="viruta"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/waste-scrap/scraps">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de chatarra</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Tipo</th>
+<th>Material origen</th>
+<th>Orden de trabajo</th>
+<th>Peso</th>
+<th>Cantidad</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Observación</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_chatarra-1</td>
+<td>tipo_material-1</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1</p>
+</div>
+</td>
+<td>
+<div>
+<p>id_orden_trabajo-1</p>
+<p>nombre_producto-1</p>
+</div>
+</td>
+<td>11.50 kg</td>
+<td>11.50</td>
+<td>
+<div>
+<span data-variant="secondary">estado-1</span>
+<p>Vendida el 01/07/2026</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>observaciones-1</td>
+<td>
+<span>-</span>
+</td>
+</tr>
+<tr>
+<td>id_chatarra-2</td>
+<td>tipo_material-2</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2</p>
+</div>
+</td>
+<td>
+<div>
+<p>id_orden_trabajo-2</p>
+<p>nombre_producto-2</p>
+</div>
+</td>
+<td>-</td>
+<td>-</td>
+<td>
+<div>
+<span data-variant="secondary">estado-2</span>
+<p>Vendida el 01/07/2026</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>
+<span>-</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "id_orden_trabajo": true,
+            "producto": {
+              "select": {
+                "nombre_producto": true,
+              },
+            },
+          },
+        },
+        "venta_chatarra": {
+          "orderBy": {
+            "fecha_venta": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "chatarra.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "acumulada",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vendida",
+      },
+    },
+    "prisma": "chatarra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "cantidad": true,
+        "peso_kg": true,
+      },
+      "where": {},
+    },
+    "prisma": "chatarra.aggregate",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Chatarra generada</h1>
+<p>Consulta los materiales no reutilizables acumulados durante la producción. Puedes filtrar por estado, material de origen o buscar por código, tipo de material u observación.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/waste-scrap/scraps/new">Registrar chatarra</a>
+<a data-variant="outline" href="/dashboard/waste-scrap/scrap-sales/new">Registrar venta</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total registros</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 según filtros</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Acumulada</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pendiente de venta</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Vendida</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Ya generó ingreso menor</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Peso filtrado</div>
+</div>
+</div>
+<div>
+<p>1,234.50 kg</p>
+<p>Cantidad: 1,234.50</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos</option>
+<option value="acumulada">Acumulada</option>
+<option value="disponible">Disponible</option>
+<option value="vendida">Vendida</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos</option>
+<option value="id_material-1">nombre_material-1 | categoria-1</option>
+<option value="id_material-2">nombre_material-2 | categoria-2</option>
+</select>
+</div>
+<div>
+<label for="q">Buscar</label>
+<input type="search" id="q" placeholder="Código, tipo u observación" name="q" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Listado de chatarra</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Tipo</th>
+<th>Material origen</th>
+<th>Orden de trabajo</th>
+<th>Peso</th>
+<th>Cantidad</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Observación</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_chatarra-1</td>
+<td>tipo_material-1</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1</p>
+</div>
+</td>
+<td>
+<div>
+<p>id_orden_trabajo-1</p>
+<p>nombre_producto-1</p>
+</div>
+</td>
+<td>11.50 kg</td>
+<td>11.50</td>
+<td>
+<div>
+<span data-variant="secondary">estado-1</span>
+<p>Vendida el 01/07/2026</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>observaciones-1</td>
+<td>
+<a href="/dashboard/waste-scrap/scrap-sales/new?id_chatarra=id_chatarra-1">Vender</a>
+</td>
+</tr>
+<tr>
+<td>id_chatarra-2</td>
+<td>tipo_material-2</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2</p>
+</div>
+</td>
+<td>
+<div>
+<p>id_orden_trabajo-2</p>
+<p>nombre_producto-2</p>
+</div>
+</td>
+<td>-</td>
+<td>-</td>
+<td>
+<div>
+<span data-variant="secondary">estado-2</span>
+<p>Vendida el 01/07/2026</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>
+<a href="/dashboard/waste-scrap/scrap-sales/new?id_chatarra=id_chatarra-2">Vender</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 50,
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/waste-scrap/scraps/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap">Mermas y chatarra</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/waste-scrap/scraps">Chatarra</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva chatarra</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar chatarra generada</h1>
+<p>Registra sobrantes no reutilizables generados durante el corte, fabricación o limpieza del área productiva. La chatarra quedará acumulada hasta que se registre su venta.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a chatarra">
+<svg/>Volver a chatarra</button>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la chatarra</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<div>
+<label for="id_material-_R_2ba_">Material de origen</label>
+<input type="hidden" name="id_material" value=""/>
+<div>
+<input id="id_material-_R_2ba_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_material-_R_2ba_-listbox" aria-expanded="false" placeholder="Buscar material..." value=""/>
+</div>
+</div>
+<p>Selecciona el material si se conoce el origen. Si la chatarra está mezclada, puedes dejarlo como no identificado.</p>
+</div>
+<div>
+<div>
+<label for="id_orden_trabajo-_R_2ja_">Orden de trabajo relacionada</label>
+<input type="hidden" name="id_orden_trabajo" value=""/>
+<div>
+<input id="id_orden_trabajo-_R_2ja_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_orden_trabajo-_R_2ja_-listbox" aria-expanded="false" placeholder="Buscar orden..." value=""/>
+</div>
+</div>
+<p>Indica la orden que generó la chatarra. Déjalo vacío si proviene de limpieza de taller o de un origen no productivo.</p>
+</div>
+<div>
+<label for="tipo_material">Tipo de material *</label>
+<input type="text" id="tipo_material" required="" placeholder="Ejemplo: acero, fierro, plancha, tubo, mixto" name="tipo_material"/>
+<p>Este campo ayuda a clasificar la chatarra cuando se venda o se consulte el historial.</p>
+</div>
+<div>
+<label for="peso_kg">Peso en kg</label>
+<input type="number" id="peso_kg" min="0.01" step="0.01" placeholder="Ejemplo: 12.50" name="peso_kg"/>
+<p>Recomendado cuando la chatarra se controla por peso.</p>
+</div>
+<div>
+<label for="cantidad">Cantidad aproximada</label>
+<input type="number" id="cantidad" min="0.01" step="0.01" placeholder="Ejemplo: 3" name="cantidad"/>
+<p>Útil cuando se registra por bolsas, piezas, baldes o grupos.</p>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: chatarra generada durante corte de planchas para lampas">
+</textarea>
+</div>
+</div>
+<div>
+<p>Estado inicial de la chatarra</p>
+<p>Todo registro de chatarra se guardará inicialmente con estado <span>acumulada</span>. Cuando se registre una venta, el estado cambiará a <span>vendida</span>.</p>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/waste-scrap">Cancelar</a>
+<button data-variant="default" type="submit">Guardar chatarra</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

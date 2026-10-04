@@ -1,0 +1,1669 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/monthly-summary > mes actual > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_pago_cliente": true,
+      },
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_proforma": true,
+      },
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_costeo": true,
+      },
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_avg": {
+        "margen_real": true,
+      },
+      "_count": {
+        "id_rentabilidad": true,
+      },
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "proforma": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/monthly-summary > mes actual > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Resumen mensual</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Resumen mensual financiero</h1>
+<p>Consulta ventas cobradas, saldos pendientes, costos de producción, movimientos de caja chica y utilidad estimada del mes seleccionado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Periodo de análisis</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="month">Mes</label>
+<input type="month" id="month" name="month" value="2026-07"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Consultar</button>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-06">Mes anterior</a>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-08">Mes siguiente</a>
+</div>
+</form>
+<p>Periodo seleccionado: <span>julio de 2026</span>
+</p>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ventas cobradas</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 pagos de cliente en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldos pendientes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 proformas con saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos de producción</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 costeos registrados en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Margen promedio: 617.25%</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos + ajustes - egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo abierto actual</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de cajas abiertas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Resultado financiero referencial</div>
+</div>
+<div>
+<div>
+<span>Ventas cobradas</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Resultado caja chica</span>
+<span>S/ 0.00</span>
+</div>
+<div>
+<span>Costos de producción</span>
+<span>- S/ 1234.50</span>
+</div>
+<div>
+<div>
+<span>Resultado referencial</span>
+<span>S/ 0.00</span>
+</div>
+<p>Este resultado no reemplaza el módulo contable. Resume ventas cobradas, caja chica y costos registrados dentro del sistema.</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Rentabilidad registrada</div>
+</div>
+<div>
+<div>
+<span>Ingreso estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Costo estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Utilidad estimada</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Cálculos de rentabilidad</span>
+<span>42</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Gastos por categoría</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay egresos categorizados en este mes.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Últimos movimientos de caja del mes</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-1</td>
+<td>nombre_caja-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-2</td>
+<td>nombre_caja-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?desde=2026-07-01&amp;hasta=2026-07-31">Ver movimientos filtrados</a>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos pagos de clientes del mes</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_pago-1 · metodo_pago-1</p>
+<p>01/07/2026</p>
+</div>
+<span data-variant="success">S/ 11.50</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_pago-2 · metodo_pago-2</p>
+<p>02/07/2026</p>
+</div>
+<span data-variant="success">S/ 22.50</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Costos de producción del mes</div>
+</div>
+<div>
+<section>
+<div>
+<p>Materiales</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 1234.50</p>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Referencia</th>
+<th>Producto</th>
+<th>Costo total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>nombre_razon_social-1</td>
+<td>nombre_producto-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>nombre_razon_social-2</td>
+<td>nombre_producto-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/monthly-summary > mes elegido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_pago_cliente": true,
+      },
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_proforma": true,
+      },
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_costeo": true,
+      },
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_avg": {
+        "margen_real": true,
+      },
+      "_count": {
+        "id_rentabilidad": true,
+      },
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "proforma": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-05-01T00:00:00.000Z,
+          "lt": 2026-06-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/monthly-summary > mes elegido > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Resumen mensual</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Resumen mensual financiero</h1>
+<p>Consulta ventas cobradas, saldos pendientes, costos de producción, movimientos de caja chica y utilidad estimada del mes seleccionado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Periodo de análisis</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="month">Mes</label>
+<input type="month" id="month" name="month" value="2026-05"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Consultar</button>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-04">Mes anterior</a>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-06">Mes siguiente</a>
+</div>
+</form>
+<p>Periodo seleccionado: <span>mayo de 2026</span>
+</p>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ventas cobradas</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 pagos de cliente en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldos pendientes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 proformas con saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos de producción</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 costeos registrados en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Margen promedio: 617.25%</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos + ajustes - egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo abierto actual</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de cajas abiertas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Resultado financiero referencial</div>
+</div>
+<div>
+<div>
+<span>Ventas cobradas</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Resultado caja chica</span>
+<span>S/ 0.00</span>
+</div>
+<div>
+<span>Costos de producción</span>
+<span>- S/ 1234.50</span>
+</div>
+<div>
+<div>
+<span>Resultado referencial</span>
+<span>S/ 0.00</span>
+</div>
+<p>Este resultado no reemplaza el módulo contable. Resume ventas cobradas, caja chica y costos registrados dentro del sistema.</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Rentabilidad registrada</div>
+</div>
+<div>
+<div>
+<span>Ingreso estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Costo estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Utilidad estimada</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Cálculos de rentabilidad</span>
+<span>42</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Gastos por categoría</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay egresos categorizados en este mes.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Últimos movimientos de caja del mes</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-1</td>
+<td>nombre_caja-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-2</td>
+<td>nombre_caja-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?desde=2026-05-01&amp;hasta=2026-05-31">Ver movimientos filtrados</a>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos pagos de clientes del mes</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_pago-1 · metodo_pago-1</p>
+<p>01/07/2026</p>
+</div>
+<span data-variant="success">S/ 11.50</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_pago-2 · metodo_pago-2</p>
+<p>02/07/2026</p>
+</div>
+<span data-variant="success">S/ 22.50</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Costos de producción del mes</div>
+</div>
+<div>
+<section>
+<div>
+<p>Materiales</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 1234.50</p>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Referencia</th>
+<th>Producto</th>
+<th>Costo total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>nombre_razon_social-1</td>
+<td>nombre_producto-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>nombre_razon_social-2</td>
+<td>nombre_producto-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": true,
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento_caja": "desc",
+        },
+      ],
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_pago_cliente": true,
+      },
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_proforma": true,
+      },
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "_count": {
+        "id_costeo": true,
+      },
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_avg": {
+        "margen_real": true,
+      },
+      "_count": {
+        "id_rentabilidad": true,
+      },
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "proforma": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "take": 5,
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Resumen mensual</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Resumen mensual financiero</h1>
+<p>Consulta ventas cobradas, saldos pendientes, costos de producción, movimientos de caja chica y utilidad estimada del mes seleccionado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Periodo de análisis</div>
+</div>
+<div>
+<form method="GET">
+<div>
+<label for="month">Mes</label>
+<input type="month" id="month" name="month" value="2026-07"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Consultar</button>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-06">Mes anterior</a>
+<a data-variant="outline" href="/dashboard/petty-cash/monthly-summary?month=2026-08">Mes siguiente</a>
+</div>
+</form>
+<p>Periodo seleccionado: <span>julio de 2026</span>
+</p>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ventas cobradas</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 pagos de cliente en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldos pendientes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 proformas con saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos de producción</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>42 costeos registrados en el mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Margen promedio: 617.25%</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos menores del mes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes netos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ajustes positivos menos negativos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos + ajustes - egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo abierto actual</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de cajas abiertas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Resultado financiero referencial</div>
+</div>
+<div>
+<div>
+<span>Ventas cobradas</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Resultado caja chica</span>
+<span>S/ 0.00</span>
+</div>
+<div>
+<span>Costos de producción</span>
+<span>- S/ 1234.50</span>
+</div>
+<div>
+<div>
+<span>Resultado referencial</span>
+<span>S/ 0.00</span>
+</div>
+<p>Este resultado no reemplaza el módulo contable. Resume ventas cobradas, caja chica y costos registrados dentro del sistema.</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Rentabilidad registrada</div>
+</div>
+<div>
+<div>
+<span>Ingreso estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Costo estimado</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Utilidad estimada</span>
+<span>S/ 1234.50</span>
+</div>
+<div>
+<span>Cálculos de rentabilidad</span>
+<span>42</span>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Gastos por categoría</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay egresos categorizados en este mes.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Últimos movimientos de caja del mes</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Caja</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-1</td>
+<td>nombre_caja-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<span data-variant="success">Ajuste</span>
+</td>
+<td>concepto-2</td>
+<td>nombre_caja-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/petty-cash/movements?desde=2026-07-01&amp;hasta=2026-07-31">Ver movimientos filtrados</a>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos pagos de clientes del mes</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_pago-1 · metodo_pago-1</p>
+<p>01/07/2026</p>
+</div>
+<span data-variant="success">S/ 11.50</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_pago-2 · metodo_pago-2</p>
+<p>02/07/2026</p>
+</div>
+<span data-variant="success">S/ 22.50</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Costos de producción del mes</div>
+</div>
+<div>
+<section>
+<div>
+<p>Materiales</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 1234.50</p>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Referencia</th>
+<th>Producto</th>
+<th>Costo total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>nombre_razon_social-1</td>
+<td>nombre_producto-1</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>nombre_razon_social-2</td>
+<td>nombre_producto-2</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
