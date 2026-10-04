@@ -11,18 +11,18 @@ const authImportRestriction = {
     "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
 };
 
-// Consultas fuera de las paginas (entrega 4): las paginas migradas leen sus
-// datos a traves de src/modules/<area>/<funcionalidad>/queries.ts. La lista
-// crece con cada sub-entrega.
-const pagesWithoutPrisma = [
-  "src/app/(dashboard)/dashboard/commercial/**/page.tsx",
-  "src/app/(dashboard)/dashboard/inventory/**/page.tsx",
-  "src/app/(dashboard)/dashboard/maintenance/**/page.tsx",
-  "src/app/(dashboard)/dashboard/staff/**/page.tsx",
-  "src/app/(dashboard)/dashboard/users/**/page.tsx",
-  "src/app/(dashboard)/dashboard/audit/**/page.tsx",
-  "src/app/(dashboard)/dashboard/petty-cash/**/page.tsx",
-  "src/app/(dashboard)/dashboard/waste-scrap/**/page.tsx",
+// Consultas fuera de las paginas (entrega 4): las paginas leen sus datos a
+// traves de src/modules/<area>/<funcionalidad>/queries.ts. La regla cubre todas
+// las paginas, tambien las nuevas, salvo las que aun consultan Prisma; esa
+// lista solo puede encogerse.
+const pagesWithoutPrisma = ["src/app/**/page.tsx"];
+
+// Pendientes: los reportes se migran con sus exportaciones (entrega 5), y las
+// ordenes de trabajo y el costeo con su division por caso de uso (entrega 6).
+const pagesStillWithPrisma = [
+  "src/app/(dashboard)/dashboard/reports/**/page.tsx",
+  "src/app/(dashboard)/dashboard/production/work-orders/**/page.tsx",
+  "src/app/(dashboard)/dashboard/costs/**/page.tsx",
 ];
 
 const dbImportRestriction = {
@@ -73,6 +73,7 @@ const eslintConfig = defineConfig([
   // del anterior: este bloque repite la restriccion de @/auth para no perderla.
   {
     files: pagesWithoutPrisma,
+    ignores: pagesStillWithPrisma,
     rules: {
       "no-restricted-imports": [
         "error",
