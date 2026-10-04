@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 360 |
+| Archivos fuente analizados | 364 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -168,7 +168,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | Fuente | Línea | Acción |
 | --- | --- | --- |
 | `src/app/(dashboard)/dashboard/audit/page.tsx` | 187 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 164 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 106 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 193 | `"/dashboard/commercial/orders"` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 364 | `{cancelOrderAction}` |
 | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 143 | `"/dashboard/commercial/payments"` |

@@ -485,6 +485,95 @@ Pendientes fuera de alcance:
 - `toNumber` acepta `unknown`: estrecharlo a `NumericInput` al unificar los
   envoltorios locales que lo llaman.
 
+## Entrega 4 — Consultas fuera de las páginas
+
+Fecha: 2026-10-02. Estado: en curso. La entrega se divide por área para que la
+métrica baje en cada sub-entrega. Commits en local sobre `staging`, sin publicar
+hasta terminar la serie.
+
+| Sub-entrega | Alcance | Páginas | Páginas con Prisma |
+|---|---|---|---|
+| 4.1 | Piloto Clientes, arnés de caracterización, convención y regla de ESLint | 2 | 117 → 115 |
+| 4.2 | Resto de Comercial | 14 | 115 → 101 |
+| 4.3 | Inventario | 20 | 101 → 81 |
+| 4.4 | Mantenimiento | 13 | 81 → 68 |
+| 4.5 | Personal, Usuarios y Auditoría | 15 | 68 → 53 |
+| 4.6 | Caja chica y Mermas | 14 | 53 → 39 |
+| 4.7 | Producción sin órdenes de trabajo | 20 | 39 → 19 |
+| Entrega 5 | Reportes, junto con sus exportaciones | 10 | 19 → 9 |
+| Entrega 6 | Órdenes de trabajo y Costos, junto con su división por caso de uso | 9 | 9 → 0 |
+
+Los reportes esperan a la entrega 5 porque la pantalla y la exportación
+consultan lo mismo: la consulta se extrae una vez y la comparten. Órdenes de
+trabajo y costeo esperan a la entrega 6 para no mover dos veces páginas que se
+van a reorganizar.
+
+Decisiones:
+
+- Las consultas viven en `src/modules/<área>/<funcionalidad>/queries.ts`, junto
+  a `actions.ts`, con `import "server-only"`: si un componente cliente las
+  importara, el build fallaría.
+- La página autoriza y la consulta no. `requireRole` revalida el usuario contra
+  la base en cada llamada (`auth.ts`), y cada punto de entrada rechaza de forma
+  distinta: redirección, estado de formulario o 401/403. Autorizar también en la
+  consulta duplicaría esa lectura y daría la respuesta equivocada a una acción o
+  a una API. Si los datos dependen del rol, la consulta recibe la sesión ya
+  verificada.
+- La página conserva la lectura de parámetros, `notFound()`/`redirect()`, las
+  derivaciones de presentación y el JSX. La consulta construye los filtros de
+  Prisma y devuelve sus resultados con los nombres de campo sin cambios: sin
+  DTO, sin React y sin redirecciones.
+- Las páginas migradas no pueden importar `@/lib/db` (regla
+  `no-restricted-imports` con la lista `pagesWithoutPrisma`). En flat config, el
+  último bloque que configura una regla reemplaza las opciones del anterior: un
+  bloque que solo prohibiera `@/lib/db` anulaba en silencio la restricción de
+  `@/auth` de la entrega 2. Ambos bloques comparten esa restricción.
+
+Arnés de caracterización (`src/testing/page-characterization.ts`):
+
+- Ejecuta la página real con Prisma, la sesión y la navegación simulados.
+  Registra en orden las llamadas a Prisma y a la autorización, el resultado
+  (render, notFound o redirect) y el HTML renderizado sin clases ni trazos de
+  iconos, una etiqueta por línea.
+- Los datos se generan a partir de `prisma/schema.prisma` según el `select`,
+  `include` u `omit` de cada llamada; en las filas pares los opcionales valen
+  `null`. Cada caso puede sustituir el resultado de una llamada; `projectRows`
+  recorta las filas escritas a mano según el `select`. El reloj se fija en el
+  15/07/2026 a las 10:00 de Lima.
+- Cada página exige autorizar antes de consultar y que un acceso rechazado no
+  toque Prisma. Los snapshots se escriben antes de mover y deben pasar sin
+  cambios después.
+- Se comprobó que el renderizado es determinista y que un `.snap` con CRLF,
+  como queda tras el checkout en Windows, pasa sin reescribirse.
+
+### Entrega 4.1 — Piloto Clientes
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| ae1b636 | test | Arnés de caracterización y sus 15 pruebas. |
+| 02a1140 | test | 20 pruebas de las páginas de listado y edición de Clientes. |
+| dd6d6e7 | refactor | `modules/commercial/clients/queries.ts`; las páginas dejan de importar Prisma. |
+| 37547b1 | refactor | La página de filas del listado pide las 6 columnas que muestra. |
+| 0afb658 | chore | Regla de ESLint y convención en CLAUDE.md. |
+
+Evidencia:
+
+- Los snapshots no cambiaron en `dd6d6e7`, y el bloque JSX de las dos páginas
+  es idéntico al anterior, comprobado contra `git show`.
+- En `37547b1` solo cambió el snapshot de los argumentos de la consulta; el HTML
+  de todos los casos, con las filas recortadas según el `select`, no cambió.
+- Pruebas de mutación: quitar el filtro de estado inactivo, invertir el orden de
+  las filas o consultar antes de autorizar hacen fallar solo las pruebas que lo
+  protegen. Quitar `estado` del `select` hace fallar la prueba del HTML y da 3
+  errores de TypeScript.
+- La regla de ESLint se comprobó por entrada estándar: en las páginas de
+  Clientes detecta `@/lib/db` y `auth` de `@/auth`; en una página sin migrar,
+  solo `auth`; `queries.ts` puede importar Prisma.
+- `npm run check` terminó con código 0 después de cada commit: 554 pruebas en el
+  primero y 574, 574, 575 y 575 en los siguientes.
+- `npm run refactor:inventory`: 364 archivos analizados y un número de línea
+  desplazado en la página de Clientes.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -496,7 +585,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | Pendiente |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -515,7 +604,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 117 | 4 |
+| Páginas con Prisma directo | 117 | 115 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -523,7 +612,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 24 / 539 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 26 / 575 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
