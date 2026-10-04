@@ -619,6 +619,34 @@ Evidencia:
 - `npm run check` terminó con código 0 después de cada commit, con 620
   pruebas.
 
+### Entrega 4.3 — Inventario
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 7338882 | test | 59 pruebas de las 20 páginas. |
+| dd7a4fc | refactor | `queries.ts` en overview, alerts, movements, material-categories, materials, purchases, supplier-materials, supplier-payments, supplier-types y suppliers; opciones compartidas de materiales, proveedores y compras. |
+| 8b4a291 | refactor | Sin usuarios completos en salidas y pagos a proveedores; columnas de los listados de materiales, alertas, proveedores y catálogos. |
+| d40dcc4 | chore | `pagesWithoutPrisma` cubre Inventario. |
+
+Evidencia:
+
+- Los casos cubren el filtro de stock crítico o suficiente que se resuelve y
+  pagina en memoria, `notFound` en las ediciones, la compra inexistente que
+  redirige al listado, el regreso al listado filtrado y las diferencias entre
+  administrador y maestro de taller.
+- En `dd7a4fc` los 59 snapshots no cambiaron y el bloque JSX de las 20 páginas
+  es idéntico. Las consultas que dependen de una anterior (materiales de las
+  alertas y del detalle de compra) conservan su secuencia. Pruebas de
+  mutación: invertir el filtro de stock en memoria hace fallar sus 2 casos;
+  invertir el orden de las opciones de proveedor compartidas, los 9 casos de
+  sus 4 consumidores; consultar el detalle de una compra inexistente, solo su
+  caso.
+- En `8b4a291` cambiaron 17 snapshots, todos de llamadas; ninguno de HTML.
+  Las categorías y tipos se mapeaban antes de llegar al componente cliente,
+  así que no se enviaban filas completas al navegador.
+- `npm run check` terminó con código 0 después de cada commit, con 679
+  pruebas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -630,7 +658,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 y 4.2 en local |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.3 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -649,7 +677,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 101 | 4 |
+| Páginas con Prisma directo | 117 | 81 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -657,7 +685,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 33 / 620 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 44 / 679 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

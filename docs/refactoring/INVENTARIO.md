@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 377 |
+| Archivos fuente analizados | 398 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -186,16 +186,16 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 919 | `{createProfitabilityAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 239 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 311 | `{createCostingFromWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 232 | `{attendStockAlertAction}` |
-| `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 132 | `"/dashboard/inventory/entries"` |
-| `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 231 | `"/dashboard/inventory/materials"` |
-| `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 119 | `"/dashboard/inventory/outputs"` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 119 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 162 | `"/dashboard/inventory/purchases"` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 309 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 165 | `"/dashboard/inventory/supplier-materials"` |
-| `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 127 | `"/dashboard/inventory/supplier-payments"` |
-| `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 185 | `"/dashboard/inventory/suppliers"` |
+| `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 208 | `{attendStockAlertAction}` |
+| `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 66 | `"/dashboard/inventory/entries"` |
+| `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 113 | `"/dashboard/inventory/materials"` |
+| `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 72 | `"/dashboard/inventory/outputs"` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 83 | `{annulPurchaseAction}` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 78 | `"/dashboard/inventory/purchases"` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 225 | `{annulPurchaseAction}` |
+| `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 90 | `"/dashboard/inventory/supplier-materials"` |
+| `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 67 | `"/dashboard/inventory/supplier-payments"` |
+| `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 92 | `"/dashboard/inventory/suppliers"` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 98 | `{createFailureAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 225 | `{updateFailureStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 224 | `"/dashboard/maintenance/machines"` |
