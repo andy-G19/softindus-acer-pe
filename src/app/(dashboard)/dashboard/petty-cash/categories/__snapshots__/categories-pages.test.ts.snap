@@ -18,6 +18,12 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > llamadas 1`] = 
           "nombre_categoria": "asc",
         },
       ],
+      "select": {
+        "descripcion": true,
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
       "where": {
         "AND": [
           {
@@ -245,6 +251,12 @@ exports[`/dashboard/petty-cash/categories > inactivas > llamadas 1`] = `
           "nombre_categoria": "asc",
         },
       ],
+      "select": {
+        "descripcion": true,
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
       "where": {
         "AND": [
           {
@@ -466,6 +478,12 @@ exports[`/dashboard/petty-cash/categories > sin filtros > llamadas 1`] = `
           "nombre_categoria": "asc",
         },
       ],
+      "select": {
+        "descripcion": true,
+        "estado": true,
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
       "where": {},
     },
     "prisma": "categoria_gasto.findMany",

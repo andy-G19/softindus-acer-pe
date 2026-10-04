@@ -13,6 +13,10 @@ exports[`/dashboard/petty-cash/movements > sin filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -20,6 +24,10 @@ exports[`/dashboard/petty-cash/movements > sin filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
     },
     "prisma": "categoria_gasto.findMany",
@@ -29,7 +37,12 @@ exports[`/dashboard/petty-cash/movements > sin filtros > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -380,6 +393,10 @@ exports[`/dashboard/petty-cash/movements > solo desde > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -387,6 +404,10 @@ exports[`/dashboard/petty-cash/movements > solo desde > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
     },
     "prisma": "categoria_gasto.findMany",
@@ -396,7 +417,12 @@ exports[`/dashboard/petty-cash/movements > solo desde > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -771,6 +797,10 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -778,6 +808,10 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
     },
     "prisma": "categoria_gasto.findMany",
@@ -787,7 +821,12 @@ exports[`/dashboard/petty-cash/movements > solo hasta > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -1162,6 +1201,10 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -1169,6 +1212,10 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
     },
     "prisma": "categoria_gasto.findMany",
@@ -1178,7 +1225,12 @@ exports[`/dashboard/petty-cash/movements > todos los filtros > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {

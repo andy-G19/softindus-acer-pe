@@ -17,6 +17,10 @@ export async function getNewPettyCashExpenseData() {
       orderBy: {
         nombre_categoria: "asc",
       },
+      select: {
+        id_categoria_gasto: true,
+        nombre_categoria: true,
+      },
     }),
 
     prisma.movimiento_caja.findMany({

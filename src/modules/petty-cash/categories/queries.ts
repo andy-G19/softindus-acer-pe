@@ -61,6 +61,12 @@ export async function getExpenseCategoryList(filters: ExpenseCategoryListFilters
         nombre_categoria: "asc",
       },
     ],
+    select: {
+      id_categoria_gasto: true,
+      nombre_categoria: true,
+      descripcion: true,
+      estado: true,
+    },
   });
 }
 

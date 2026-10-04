@@ -13,6 +13,11 @@ exports[`/dashboard/petty-cash/expenses/new > formulario > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
       "where": {
         "estado": "abierta",
       },
@@ -23,6 +28,10 @@ exports[`/dashboard/petty-cash/expenses/new > formulario > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
       "where": {
         "estado": true,

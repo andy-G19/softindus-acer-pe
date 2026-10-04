@@ -88,6 +88,13 @@ export async function getPettyCashOverviewData(today: Date) {
         fecha_apertura: "desc",
       },
       take: 5,
+      select: {
+        id_caja_chica: true,
+        nombre_caja: true,
+        saldo_actual: true,
+        estado: true,
+        fecha_apertura: true,
+      },
     }),
 
     prisma.movimiento_caja.findMany({
@@ -98,7 +105,6 @@ export async function getPettyCashOverviewData(today: Date) {
       include: {
         caja_chica: true,
         categoria_gasto: true,
-        usuario: true,
       },
     }),
   ]);

@@ -85,6 +85,13 @@ exports[`/dashboard/petty-cash > indicadores del mes > llamadas 1`] = `
       "orderBy": {
         "fecha_apertura": "desc",
       },
+      "select": {
+        "estado": true,
+        "fecha_apertura": true,
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
       "take": 5,
     },
     "prisma": "caja_chica.findMany",
@@ -94,7 +101,6 @@ exports[`/dashboard/petty-cash > indicadores del mes > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
       },
       "orderBy": {
         "fecha_movimiento": "desc",

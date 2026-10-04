@@ -100,7 +100,6 @@ export async function getReusableScrapListData(filters: ReusableScrapListFilters
             cliente: true,
           },
         },
-        usuario: true,
       },
     }),
 

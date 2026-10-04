@@ -13,7 +13,6 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
       },
       "orderBy": [
         {
@@ -115,6 +114,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes actual > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
       },
       "where": {
         "estado": "abierta",
@@ -569,7 +573,6 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
       },
       "orderBy": [
         {
@@ -671,6 +674,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes elegido > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
       },
       "where": {
         "estado": "abierta",
@@ -1125,7 +1133,6 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > ll
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
       },
       "orderBy": [
         {
@@ -1227,6 +1234,11 @@ exports[`/dashboard/petty-cash/monthly-summary > mes invalido usa el actual > ll
     "args": {
       "orderBy": {
         "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
       },
       "where": {
         "estado": "abierta",

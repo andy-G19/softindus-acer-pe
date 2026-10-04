@@ -99,11 +99,19 @@ export async function getPettyCashMovementListData(
       orderBy: {
         nombre_caja: "asc",
       },
+      select: {
+        id_caja_chica: true,
+        nombre_caja: true,
+      },
     }),
 
     prisma.categoria_gasto.findMany({
       orderBy: {
         nombre_categoria: "asc",
+      },
+      select: {
+        id_categoria_gasto: true,
+        nombre_categoria: true,
       },
     }),
 
@@ -122,7 +130,12 @@ export async function getPettyCashMovementListData(
       include: {
         caja_chica: true,
         categoria_gasto: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
 

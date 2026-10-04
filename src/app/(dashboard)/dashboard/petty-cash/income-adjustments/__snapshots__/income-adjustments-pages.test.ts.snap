@@ -13,6 +13,11 @@ exports[`/dashboard/petty-cash/income-adjustments/new > formulario > llamadas 1`
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
       "where": {
         "estado": "abierta",
       },

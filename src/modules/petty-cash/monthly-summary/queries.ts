@@ -45,7 +45,6 @@ export async function getPettyCashMonthlySummaryData({
       include: {
         caja_chica: true,
         categoria_gasto: true,
-        usuario: true,
       },
     }),
 

@@ -35,5 +35,10 @@ export function findOpenPettyCashBoxes() {
     orderBy: {
       nombre_caja: "asc",
     },
+    select: {
+      id_caja_chica: true,
+      nombre_caja: true,
+      saldo_actual: true,
+    },
   });
 }

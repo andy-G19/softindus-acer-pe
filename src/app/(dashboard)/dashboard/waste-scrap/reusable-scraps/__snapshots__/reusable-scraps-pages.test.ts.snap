@@ -35,7 +35,6 @@ exports[`/dashboard/waste-scrap/reusable-scraps > sin filtros > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_registro": "desc",
@@ -319,7 +318,6 @@ exports[`/dashboard/waste-scrap/reusable-scraps > todos los filtros > llamadas 1
             "producto": true,
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_registro": "desc",
