@@ -528,6 +528,19 @@ Decisiones:
   último bloque que configura una regla reemplaza las opciones del anterior: un
   bloque que solo prohibiera `@/lib/db` anulaba en silencio la restricción de
   `@/auth` de la entrega 2. Ambos bloques comparten esa restricción.
+- Las consultas que varias funcionalidades repiten pasan a la interfaz pública
+  del módulo dueño de la entidad (opciones de clientes, productos y pedidos).
+  Las funciones `find*` devuelven la promesa de Prisma para componerse en el
+  `Promise.all` del llamador sin cambiar el orden de las llamadas; las `get*`
+  devuelven los datos de una página. Una consulta de edición que depende del
+  registro principal devuelve `null` si este no existe, y la página decide el
+  `notFound()`.
+- Criterio para limitar columnas: nunca cargar filas completas de `usuario`,
+  que incluyen `clave_hash` (si se usa, solo las columnas necesarias; si no se
+  usa, no se carga), y pedir con `select` las columnas de los listados que
+  traen filas completas sin `include`. Las filas que se pasan a un componente
+  cliente se limitan a su tipo, porque se serializan en el navegador. Los
+  detalles con `include` profundos quedan como pendiente.
 
 Arnés de caracterización (`src/testing/page-characterization.ts`):
 
@@ -539,7 +552,9 @@ Arnés de caracterización (`src/testing/page-characterization.ts`):
   `include` u `omit` de cada llamada; en las filas pares los opcionales valen
   `null`. Cada caso puede sustituir el resultado de una llamada; `projectRows`
   recorta las filas escritas a mano según el `select`. El reloj se fija en el
-  15/07/2026 a las 10:00 de Lima.
+  15/07/2026 a las 10:00 de Lima, y la zona horaria en UTC, como en Vercel:
+  `parseDateParam`, `buildDateRangeFilter` y el vencimiento de la proforma
+  interpretan fechas en la zona del proceso.
 - Cada página exige autorizar antes de consultar y que un acceso rechazado no
   toque Prisma. Los snapshots se escriben antes de mover y deben pasar sin
   cambios después.
@@ -574,6 +589,36 @@ Evidencia:
 - `npm run refactor:inventory`: 364 archivos analizados y un número de línea
   desplazado en la página de Clientes.
 
+### Entrega 4.2 — Resto de Comercial
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 346a90a | test | 45 pruebas de las 14 páginas; el arnés fija la zona horaria y expone el generador. |
+| 7dd0866 | refactor | `queries.ts` en overview, orders, payments, products, quotes y receipts; opciones compartidas de clientes, productos y pedidos. |
+| 3b4ac53 | refactor | Sin usuarios completos en el detalle del pedido, pagos y el detalle de la proforma; columnas del listado de productos y de las categorías que recibe un componente cliente. |
+| 607c0b6 | chore | `pagesWithoutPrisma` cubre todo Comercial. |
+
+Evidencia:
+
+- Los casos cubren cada página con y sin filtros y los cambios de flujo:
+  `notFound`, la edición de un pedido con proforma que redirige al detalle, un
+  pedido editable, una proforma anulable, el vendedor sin permisos de gestión y
+  el pedido preseleccionado en la proforma nueva.
+- Con el proceso en America/Lima y sin fijar la zona en el arnés fallan 6
+  casos (filtros de fecha y vencimiento de la proforma); con la zona fijada
+  pasan en cualquier zona.
+- En `7dd0866` los 65 snapshots no cambiaron y el bloque JSX de las 14 páginas
+  es idéntico. Pruebas de mutación: invertir el orden de las opciones de
+  cliente compartidas hace fallar los 7 casos de sus tres consumidores;
+  intercambiar dos consultas del `Promise.all` de pedidos y consultar
+  categorías de un producto inexistente hacen fallar solo los casos que lo
+  protegen.
+- En `3b4ac53` cambiaron 14 snapshots, todos de llamadas; ninguno de HTML, con
+  datos generados que respetan el `select`. Ningún componente cliente recibía
+  el hash del usuario: solo valores sueltos.
+- `npm run check` terminó con código 0 después de cada commit, con 620
+  pruebas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -585,7 +630,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 en local |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 y 4.2 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -604,7 +649,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 115 | 4 |
+| Páginas con Prisma directo | 117 | 101 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -612,7 +657,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 26 / 575 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 33 / 620 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

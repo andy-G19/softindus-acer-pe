@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 364 |
+| Archivos fuente analizados | 377 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -169,15 +169,15 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | --- | --- | --- |
 | `src/app/(dashboard)/dashboard/audit/page.tsx` | 187 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 106 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 193 | `"/dashboard/commercial/orders"` |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 364 | `{cancelOrderAction}` |
-| `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 143 | `"/dashboard/commercial/payments"` |
-| `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 177 | `"/dashboard/commercial/products"` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 108 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 186 | `"/dashboard/commercial/quotes"` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 332 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 102 | `"/dashboard/commercial/receipts"` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 202 | `{annulReceiptAction}` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
+| `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 66 | `"/dashboard/commercial/payments"` |
+| `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 99 | `"/dashboard/commercial/products"` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 72 | `"/dashboard/commercial/quotes"` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 218 | `{annulQuoteAction}` |
+| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 56 | `"/dashboard/commercial/receipts"` |
+| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 156 | `{annulReceiptAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 322 | `{updateLaborCostAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 347 | `{recalculateCostingAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 532 | `{createIndirectCostAction}` |
