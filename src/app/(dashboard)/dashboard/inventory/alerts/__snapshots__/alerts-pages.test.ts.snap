@@ -1,0 +1,440 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/alerts > administrador > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_alerta": "desc",
+      },
+    },
+    "prisma": "alerta_stock.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": {
+          "in": [
+            "id_material-1",
+            "id_material-2",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Alertas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Alertas y stock crítico</h1>
+<p>Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a inventario">
+<svg/>Volver a inventario</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales activos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Materiales disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales críticos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Bajo el stock mínimo definido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Alertas generadas sin atender.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Stock crítico actual</div>
+<p>Materiales cuyo stock disponible está igual o por debajo del stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Categoría</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>unidad_medida-1</td>
+</tr>
+<tr>
+<td>nombre_material-2</td>
+<td>categoria-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>22.50</td>
+<td>unidad_medida-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de alertas</div>
+<p>Alertas generadas cuando un material llega al stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Material</th>
+<th>Stock detectado</th>
+<th>Stock mínimo</th>
+<th>Estado</th>
+<th>Mensaje</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>nombre_material-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="success">estado_alerta-1</span>
+</td>
+<td>mensaje-1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>nombre_material-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="success">estado_alerta-2</span>
+</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/alerts > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_alerta": "desc",
+      },
+    },
+    "prisma": "alerta_stock.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": {
+          "in": [
+            "id_material-1",
+            "id_material-2",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Alertas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Alertas y stock crítico</h1>
+<p>Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a inventario">
+<svg/>Volver a inventario</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales activos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Materiales disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales críticos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Bajo el stock mínimo definido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Alertas generadas sin atender.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Stock crítico actual</div>
+<p>Materiales cuyo stock disponible está igual o por debajo del stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Categoría</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>unidad_medida-1</td>
+</tr>
+<tr>
+<td>nombre_material-2</td>
+<td>categoria-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>22.50</td>
+<td>unidad_medida-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de alertas</div>
+<p>Alertas generadas cuando un material llega al stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Material</th>
+<th>Stock detectado</th>
+<th>Stock mínimo</th>
+<th>Estado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>nombre_material-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="success">estado_alerta-1</span>
+</td>
+<td>mensaje-1</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>nombre_material-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="success">estado_alerta-2</span>
+</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

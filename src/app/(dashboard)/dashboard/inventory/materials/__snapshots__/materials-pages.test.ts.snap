@@ -1,0 +1,1352 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/materials > filtros y maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_material": "desc",
+        },
+      ],
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_material": {
+                  "contains": "plancha",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_material": {
+                  "contains": "plancha",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "categoria": "materia_prima",
+          },
+          {
+            "unidad_medida": "kg",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_material": {
+                  "contains": "plancha",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_material": {
+                  "contains": "plancha",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "categoria": "materia_prima",
+          },
+          {
+            "unidad_medida": "kg",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "material.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Materiales</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales e insumos</h1>
+<p>Consulta stock actual, stock reservado, stock mínimo y costo vigente.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/materials">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar material..." name="q" value="plancha"/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="stock">Stock</label>
+<select id="stock" name="stock">
+<option value="" selected="">Todo el stock</option>
+<option value="critical">Críticos</option>
+<option value="ok">No críticos</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Costo actual</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_material-1</td>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+<tr>
+<td>id_material-2</td>
+<td>nombre_material-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 21-40 de 42 materiales · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials > inactivos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_material": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "material.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Materiales</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales e insumos</h1>
+<p>Consulta stock actual, stock reservado, stock mínimo y costo vigente.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/materials">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar material..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive" selected="">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="stock">Stock</label>
+<select id="stock" name="stock">
+<option value="" selected="">Todo el stock</option>
+<option value="critical">Críticos</option>
+<option value="ok">No críticos</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Costo actual</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_material-1</td>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_material-2</td>
+<td>nombre_material-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 materiales · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_material": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "material.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Materiales</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales e insumos</h1>
+<p>Consulta stock actual, stock reservado, stock mínimo y costo vigente.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/materials">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar material..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="stock">Stock</label>
+<select id="stock" name="stock">
+<option value="" selected="">Todo el stock</option>
+<option value="critical">Críticos</option>
+<option value="ok">No críticos</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Costo actual</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_material-1</td>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_material-2</td>
+<td>nombre_material-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 materiales · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials > stock critico paginado en memoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_material": "desc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials > stock critico paginado en memoria > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Materiales</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales e insumos</h1>
+<p>Consulta stock actual, stock reservado, stock mínimo y costo vigente.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/materials">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar material..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="stock">Stock</label>
+<select id="stock" name="stock">
+<option value="">Todo el stock</option>
+<option value="critical" selected="">Críticos</option>
+<option value="ok">No críticos</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Costo actual</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_material-1</td>
+<td>nombre_material-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<span data-variant="destructive">0.00</span>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-1 de 2 materiales · Página 1 de 2</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?stock=critical&amp;pageSize=1&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials > stock suficiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_material": "desc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Materiales</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales e insumos</h1>
+<p>Consulta stock actual, stock reservado, stock mínimo y costo vigente.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/materials">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar material..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="stock">Stock</label>
+<select id="stock" name="stock">
+<option value="">Todo el stock</option>
+<option value="critical">Críticos</option>
+<option value="ok" selected="">No críticos</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Material</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Costo actual</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="11">
+<div>
+<div>
+<p>Todavía no hay materiales registrados.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 0-0 de 0 materiales · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "slug": "categoria-1",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/materials?status=active">Materiales</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar material</h1>
+<p>Actualiza los datos maestros del material. El stock se mantiene por movimientos de inventario.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a materiales">
+<svg/>Volver a materiales</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_material" value="id_material-1"/>
+<div>
+<label for="nombre_material">Nombre del material *</label>
+<input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value="nombre_material-1"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría *</label>
+<select id="categoria" name="categoria" required="">
+<option value="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida *</label>
+<input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value="unidad_medida-1"/>
+</div>
+</div>
+<div>
+<div>
+<span>Stock actual</span>
+<div>11.50</div>
+</div>
+<div>
+<span>Stock reservado</span>
+<div>11.50</div>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_minimo">Stock mínimo *</label>
+<input type="number" id="stock_minimo" step="0.01" min="0" required="" name="stock_minimo" value="11.50"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual *</label>
+<input type="number" id="costo_unitario_actual" step="0.01" min="0" required="" name="costo_unitario_actual" value="11.50"/>
+</div>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/inventory/materials">Cancelar</a>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/materials/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_material": "MAT99999999",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/inventory/materials/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/materials">Materiales</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo material</h1>
+<p>Registra materia prima, consumibles, repuestos, herramientas u otros insumos del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a materiales">
+<svg/>Volver a materiales</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_material">Nombre del material *</label>
+<input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value=""/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría *</label>
+<select id="categoria" name="categoria" required="">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida *</label>
+<input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_actual">Stock actual *</label>
+<input type="number" id="stock_actual" step="0.01" min="0" required="" name="stock_actual" value="0"/>
+</div>
+<div>
+<label for="stock_reservado">Stock reservado *</label>
+<input type="number" id="stock_reservado" step="0.01" min="0" required="" name="stock_reservado" value="0"/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_minimo">Stock mínimo *</label>
+<input type="number" id="stock_minimo" step="0.01" min="0" required="" name="stock_minimo" value="0"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual *</label>
+<input type="number" id="costo_unitario_actual" step="0.01" min="0" required="" name="costo_unitario_actual" value="0"/>
+</div>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/inventory/materials">Cancelar</a>
+<button data-variant="default" type="submit">Guardar material</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

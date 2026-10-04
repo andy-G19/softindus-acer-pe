@@ -1,0 +1,159 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/supplier-types > catalogo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-types > catalogo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/suppliers">Proveedores</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Tipos de proveedor</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Tipos de proveedor</h1>
+<p>Administra los tipos dinámicos usados para clasificar proveedores.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proveedores">
+<svg/>Volver a proveedores</button>
+</div>
+</div>
+</section>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<h2>Nuevo tipo de proveedor</h2>
+<div>
+<label for="nombre">Nombre</label>
+<input id="nombre" required="" name="nombre"/>
+</div>
+<div>
+<label for="slug">Slug</label>
+<input id="slug" placeholder="materia_prima" required="" name="slug"/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Crear</button>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Nombre</th>
+<th>Slug</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_tipo_proveedor-1</td>
+<td colSpan="3">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-1"/>
+<div>
+<input required="" name="nombre" value="nombre-1"/>
+</div>
+<div>
+<input required="" name="slug" value="slug-1"/>
+</div>
+<div>
+<textarea name="descripcion">descripcion-1</textarea>
+</div>
+<button data-variant="outline" type="submit">Editar</button>
+</form>
+</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-1"/>
+<button data-variant="outline" type="submit">Inactivar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_tipo_proveedor-2</td>
+<td colSpan="3">
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-2"/>
+<div>
+<input required="" name="nombre" value="nombre-2"/>
+</div>
+<div>
+<input required="" name="slug" value="slug-2"/>
+</div>
+<div>
+<textarea name="descripcion">
+</textarea>
+</div>
+<button data-variant="outline" type="submit">Editar</button>
+</form>
+</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-2"/>
+<button data-variant="outline" type="submit">Activar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
