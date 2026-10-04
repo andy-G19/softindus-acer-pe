@@ -21,6 +21,8 @@ const pagesWithoutPrisma = [
   "src/app/(dashboard)/dashboard/staff/**/page.tsx",
   "src/app/(dashboard)/dashboard/users/**/page.tsx",
   "src/app/(dashboard)/dashboard/audit/**/page.tsx",
+  "src/app/(dashboard)/dashboard/petty-cash/**/page.tsx",
+  "src/app/(dashboard)/dashboard/waste-scrap/**/page.tsx",
 ];
 
 const dbImportRestriction = {
