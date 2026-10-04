@@ -15,7 +15,7 @@ const authImportRestriction = {
 // datos a traves de src/modules/<area>/<funcionalidad>/queries.ts. La lista
 // crece con cada sub-entrega.
 const pagesWithoutPrisma = [
-  "src/app/(dashboard)/dashboard/commercial/clients/**/page.tsx",
+  "src/app/(dashboard)/dashboard/commercial/**/page.tsx",
 ];
 
 const dbImportRestriction = {
