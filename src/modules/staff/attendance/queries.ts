@@ -135,7 +135,12 @@ export async function getAttendanceListData(
       take: 50,
       include: {
         operario: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
   ]);

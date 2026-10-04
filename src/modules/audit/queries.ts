@@ -101,7 +101,12 @@ export async function getAuditLogData(
       skip,
       take,
       include: {
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
     prisma.bitacora_operacion.count({ where }),

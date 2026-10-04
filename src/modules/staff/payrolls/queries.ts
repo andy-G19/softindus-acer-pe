@@ -132,7 +132,12 @@ export async function getPayrollListData(filters: PayrollListFilters) {
       take: 50,
       include: {
         operario: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
         _count: {
           select: {
             historial_pago_operario: true,

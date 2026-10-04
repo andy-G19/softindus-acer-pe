@@ -75,7 +75,12 @@ export async function getOperatorTaskData(today: Date) {
       include: {
         operario: true,
         etapa_ruta: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
         orden_trabajo: {
           include: {
             producto: true,

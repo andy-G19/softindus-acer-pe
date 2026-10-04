@@ -53,7 +53,12 @@ exports[`/dashboard/staff/payment-history > pagos del mes > llamadas 1`] = `
             "operario": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {

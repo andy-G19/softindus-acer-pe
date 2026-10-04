@@ -54,7 +54,12 @@ exports[`/dashboard/staff/tasks > administrador > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -293,7 +298,12 @@ exports[`/dashboard/staff/tasks > maestro de taller > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -497,6 +507,12 @@ exports[`/dashboard/staff/tasks/new > formulario > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },

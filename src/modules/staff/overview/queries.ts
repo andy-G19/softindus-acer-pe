@@ -99,6 +99,14 @@ export async function getStaffOverviewData(today: Date) {
         },
       ],
       take: 6,
+      select: {
+        id_operario: true,
+        nombres: true,
+        apellidos: true,
+        cargo: true,
+        modalidad_pago: true,
+        estado: true,
+      },
     }),
 
     prisma.asistencia.findMany({

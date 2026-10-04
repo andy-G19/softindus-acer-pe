@@ -170,5 +170,11 @@ export function findActiveOperators() {
         nombres: "asc",
       },
     ],
+    select: {
+      id_operario: true,
+      nombres: true,
+      apellidos: true,
+      cargo: true,
+    },
   });
 }

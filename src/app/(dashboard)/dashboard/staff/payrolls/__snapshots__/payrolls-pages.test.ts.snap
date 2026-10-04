@@ -58,7 +58,12 @@ exports[`/dashboard/staff/payrolls > periodo con formato invalido > llamadas 1`]
           },
         },
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -342,7 +347,12 @@ exports[`/dashboard/staff/payrolls > sin filtros > llamadas 1`] = `
           },
         },
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -681,7 +691,12 @@ exports[`/dashboard/staff/payrolls > todos los filtros > llamadas 1`] = `
           },
         },
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {

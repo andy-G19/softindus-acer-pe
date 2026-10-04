@@ -66,7 +66,12 @@ export async function getOperatorPaymentHistoryData(today: Date) {
             operario: true,
           },
         },
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
   ]);

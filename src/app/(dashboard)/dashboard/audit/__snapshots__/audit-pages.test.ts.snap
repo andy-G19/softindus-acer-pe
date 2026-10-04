@@ -57,7 +57,12 @@ exports[`/dashboard/audit > sin filtros > llamadas 1`] = `
   {
     "args": {
       "include": {
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -337,7 +342,12 @@ exports[`/dashboard/audit > todos los filtros > llamadas 1`] = `
   {
     "args": {
       "include": {
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {

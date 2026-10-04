@@ -60,7 +60,12 @@ exports[`/dashboard/staff/attendance > faltas > llamadas 1`] = `
     "args": {
       "include": {
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -326,7 +331,12 @@ exports[`/dashboard/staff/attendance > sin filtros > llamadas 1`] = `
     "args": {
       "include": {
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -593,7 +603,12 @@ exports[`/dashboard/staff/attendance > tardanzas > llamadas 1`] = `
     "args": {
       "include": {
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -905,7 +920,12 @@ exports[`/dashboard/staff/attendance > todos los filtros con presentes > llamada
     "args": {
       "include": {
         "operario": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -1175,6 +1195,12 @@ exports[`/dashboard/staff/attendance/new > formulario > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
