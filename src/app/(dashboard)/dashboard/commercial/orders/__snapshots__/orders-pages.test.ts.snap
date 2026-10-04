@@ -620,7 +620,11 @@ exports[`/dashboard/commercial/orders/[id] > detalle > llamadas 1`] = `
             "fecha_emision": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
       },
       "where": {
         "id_pedido": "PED00000001",
@@ -801,7 +805,11 @@ exports[`/dashboard/commercial/orders/[id] > inexistente > llamadas 1`] = `
             "fecha_emision": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
       },
       "where": {
         "id_pedido": "PED99999999",
@@ -853,7 +861,11 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > llama
             "fecha_emision": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
       },
       "where": {
         "id_pedido": "PED00000001",

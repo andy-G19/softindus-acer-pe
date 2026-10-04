@@ -94,7 +94,6 @@ export async function getCustomerPaymentListData(
             },
           },
         },
-        usuario: true,
       },
     }),
     findClientFilterOptions(),

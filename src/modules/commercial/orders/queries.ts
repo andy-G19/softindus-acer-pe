@@ -153,7 +153,11 @@ export async function getOrderDetail(idPedido: string) {
     },
     include: {
       cliente: true,
-      usuario: true,
+      usuario: {
+        select: {
+          usuario: true,
+        },
+      },
       proforma: {
         orderBy: {
           fecha_emision: "desc",

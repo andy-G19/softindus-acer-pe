@@ -21,7 +21,6 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
             },
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_pago": "desc",
@@ -213,7 +212,6 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
             },
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_pago": "desc",

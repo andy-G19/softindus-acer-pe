@@ -181,9 +181,6 @@ export async function getQuoteDetail(idProforma: string) {
         orderBy: {
           fecha_pago: "desc",
         },
-        include: {
-          usuario: true,
-        },
       },
       pedido: {
         include: {

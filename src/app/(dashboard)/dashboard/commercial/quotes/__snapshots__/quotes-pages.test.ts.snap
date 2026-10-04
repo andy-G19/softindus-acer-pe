@@ -741,9 +741,6 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > llamadas 1`] = `
           },
         },
         "pago_cliente": {
-          "include": {
-            "usuario": true,
-          },
           "orderBy": {
             "fecha_pago": "desc",
           },
@@ -1088,9 +1085,6 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > llamadas 1`] = `
           },
         },
         "pago_cliente": {
-          "include": {
-            "usuario": true,
-          },
           "orderBy": {
             "fecha_pago": "desc",
           },
@@ -1457,9 +1451,6 @@ exports[`/dashboard/commercial/quotes/[id] > inexistente > llamadas 1`] = `
           },
         },
         "pago_cliente": {
-          "include": {
-            "usuario": true,
-          },
           "orderBy": {
             "fecha_pago": "desc",
           },

@@ -85,6 +85,14 @@ export async function getProductListData(
       orderBy: [{ fecha_registro: "desc" }, { id_producto: "desc" }],
       skip,
       take,
+      select: {
+        id_producto: true,
+        nombre_producto: true,
+        categoria: true,
+        unidad_medida: true,
+        precio_referencial: true,
+        estado: true,
+      },
     }),
     prisma.producto.count({ where }),
     prisma.categoria_producto.findMany({
@@ -179,6 +187,13 @@ export async function getProductCategoryList() {
         nombre: "asc",
       },
     ],
+    select: {
+      id_categoria_producto: true,
+      nombre: true,
+      slug: true,
+      descripcion: true,
+      estado: true,
+    },
   });
 }
 
