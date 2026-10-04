@@ -93,6 +93,16 @@ export async function getSupplierListData(filters: SupplierListFilters) {
       orderBy: {
         razon_social: "asc",
       },
+      select: {
+        id_proveedor: true,
+        razon_social: true,
+        tipo_documento: true,
+        numero_documento: true,
+        telefono: true,
+        tipo_proveedor: true,
+        condicion_pago: true,
+        estado: true,
+      },
     }),
     prisma.tipo_proveedor_catalogo.findMany({
       orderBy: {

@@ -151,7 +151,11 @@ export async function getInventoryOutputListData(
       take,
       include: {
         material: true,
-        usuario: true,
+        usuario: {
+          select: {
+            usuario: true,
+          },
+        },
       },
     }),
     prisma.movimiento_inventario.count({ where }),

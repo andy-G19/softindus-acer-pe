@@ -86,7 +86,6 @@ export async function getSupplierPaymentListData(
             proveedor: true,
           },
         },
-        usuario: true,
       },
     }),
     findSupplierFilterOptions(),

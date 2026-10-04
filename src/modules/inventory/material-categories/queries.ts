@@ -15,5 +15,12 @@ export async function getMaterialCategoryList() {
         nombre: "asc",
       },
     ],
+    select: {
+      id_categoria_material: true,
+      nombre: true,
+      slug: true,
+      descripcion: true,
+      estado: true,
+    },
   });
 }

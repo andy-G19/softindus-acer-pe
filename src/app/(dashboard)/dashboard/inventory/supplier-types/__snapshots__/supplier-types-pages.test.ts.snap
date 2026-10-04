@@ -18,6 +18,13 @@ exports[`/dashboard/inventory/supplier-types > catalogo > llamadas 1`] = `
           "nombre": "asc",
         },
       ],
+      "select": {
+        "descripcion": true,
+        "estado": true,
+        "id_tipo_proveedor": true,
+        "nombre": true,
+        "slug": true,
+      },
     },
     "prisma": "tipo_proveedor_catalogo.findMany",
   },

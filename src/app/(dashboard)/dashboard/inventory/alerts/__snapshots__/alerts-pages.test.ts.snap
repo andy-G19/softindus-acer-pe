@@ -14,6 +14,15 @@ exports[`/dashboard/inventory/alerts > administrador > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
@@ -25,11 +34,29 @@ exports[`/dashboard/inventory/alerts > administrador > llamadas 1`] = `
       "orderBy": {
         "fecha_alerta": "desc",
       },
+      "select": {
+        "estado_alerta": true,
+        "fecha_alerta": true,
+        "id_alerta": true,
+        "id_material": true,
+        "mensaje": true,
+        "stock_detectado": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "alerta_stock.findMany",
   },
   {
     "args": {
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
       "where": {
         "id_material": {
           "in": [
@@ -235,6 +262,15 @@ exports[`/dashboard/inventory/alerts > maestro de taller > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
@@ -246,11 +282,29 @@ exports[`/dashboard/inventory/alerts > maestro de taller > llamadas 1`] = `
       "orderBy": {
         "fecha_alerta": "desc",
       },
+      "select": {
+        "estado_alerta": true,
+        "fecha_alerta": true,
+        "id_alerta": true,
+        "id_material": true,
+        "mensaje": true,
+        "stock_detectado": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "alerta_stock.findMany",
   },
   {
     "args": {
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
       "where": {
         "id_material": {
           "in": [

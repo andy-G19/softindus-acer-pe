@@ -16,7 +16,6 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > llamadas 1`] = `
             "proveedor": true,
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_pago": "desc",
@@ -204,7 +203,6 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > llamadas 1
             "proveedor": true,
           },
         },
-        "usuario": true,
       },
       "orderBy": {
         "fecha_pago": "desc",

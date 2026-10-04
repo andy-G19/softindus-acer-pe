@@ -15,5 +15,12 @@ export async function getSupplierTypeList() {
         nombre: "asc",
       },
     ],
+    select: {
+      id_tipo_proveedor: true,
+      nombre: true,
+      slug: true,
+      descripcion: true,
+      estado: true,
+    },
   });
 }

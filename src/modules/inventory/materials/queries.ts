@@ -106,6 +106,17 @@ export async function getMaterialListData(
           .findMany({
             where,
             orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
+            select: {
+              id_material: true,
+              nombre_material: true,
+              categoria: true,
+              unidad_medida: true,
+              costo_unitario_actual: true,
+              stock_actual: true,
+              stock_reservado: true,
+              stock_minimo: true,
+              estado: true,
+            },
           })
           .then((allMatching) => {
             const filtered = allMatching.filter((material) => {
@@ -124,6 +135,17 @@ export async function getMaterialListData(
             orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
             skip,
             take,
+            select: {
+              id_material: true,
+              nombre_material: true,
+              categoria: true,
+              unidad_medida: true,
+              costo_unitario_actual: true,
+              stock_actual: true,
+              stock_reservado: true,
+              stock_minimo: true,
+              estado: true,
+            },
           }),
           prisma.material.count({ where }),
         ]).then(([materials, totalItems]) => ({ materials, totalItems })),

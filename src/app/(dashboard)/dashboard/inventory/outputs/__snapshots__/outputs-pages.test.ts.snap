@@ -13,7 +13,11 @@ exports[`/dashboard/inventory/outputs > sin filtros > llamadas 1`] = `
     "args": {
       "include": {
         "material": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -205,7 +209,11 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
     "args": {
       "include": {
         "material": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
       },
       "orderBy": [
         {

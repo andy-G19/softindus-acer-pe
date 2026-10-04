@@ -13,6 +13,16 @@ exports[`/dashboard/inventory/suppliers > inactivos > llamadas 1`] = `
       "orderBy": {
         "razon_social": "asc",
       },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
+      },
       "where": {
         "AND": [
           {
@@ -203,6 +213,16 @@ exports[`/dashboard/inventory/suppliers > sin filtros > llamadas 1`] = `
       "orderBy": {
         "razon_social": "asc",
       },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
+      },
       "where": {},
     },
     "prisma": "proveedor.findMany",
@@ -386,6 +406,16 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "razon_social": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
       },
       "where": {
         "AND": [
