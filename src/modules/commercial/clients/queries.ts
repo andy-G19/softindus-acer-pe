@@ -84,6 +84,14 @@ export async function getClientListData(
       orderBy: [{ fecha_registro: "desc" }, { id_cliente: "desc" }],
       skip,
       take,
+      select: {
+        id_cliente: true,
+        nombre_razon_social: true,
+        tipo_cliente: true,
+        telefono: true,
+        lugar_origen: true,
+        estado: true,
+      },
     }),
     prisma.cliente.count({ where }),
   ]);

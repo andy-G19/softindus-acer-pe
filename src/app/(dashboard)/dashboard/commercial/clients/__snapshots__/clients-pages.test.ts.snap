@@ -266,6 +266,14 @@ exports[`listado de clientes > consulta Prisma con los mismos argumentos 1`] = `
           "id_cliente": "desc",
         },
       ],
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "lugar_origen": true,
+        "nombre_razon_social": true,
+        "telefono": true,
+        "tipo_cliente": true,
+      },
       "skip": 20,
       "take": 20,
       "where": {

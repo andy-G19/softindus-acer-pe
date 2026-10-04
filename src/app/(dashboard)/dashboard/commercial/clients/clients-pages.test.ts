@@ -5,6 +5,7 @@ import {
   expectAuthorizesBeforePrisma,
   isPrismaCall,
   preloadPages,
+  projectRows,
   runWithRejectedAuth,
   type DataOverrides,
   type PrismaCall,
@@ -92,11 +93,15 @@ const CLIENT_OPTIONS = [
 ];
 
 // La pagina del listado consulta cliente.findMany dos veces: las opciones del
-// buscador (sin paginacion) y la pagina de filas (con take).
-function listData(rows: unknown[], totalItems: number): DataOverrides {
+// buscador (sin paginacion) y la pagina de filas (con take). Las filas se
+// recortan segun el select de la consulta, como haria Prisma.
+function listData(
+  rows: Array<Record<string, unknown>>,
+  totalItems: number,
+): DataOverrides {
   return {
     "cliente.findMany": (args) =>
-      args && "take" in args ? rows : CLIENT_OPTIONS,
+      args && "take" in args ? projectRows(rows, args) : CLIENT_OPTIONS,
     "cliente.count": totalItems,
   };
 }

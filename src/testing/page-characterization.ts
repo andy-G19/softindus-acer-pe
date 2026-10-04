@@ -383,6 +383,22 @@ export type PrismaCall = { prisma: string; args: unknown };
 export type AuthzCall = { authz: string; roles: unknown };
 export type RecordedCall = PrismaCall | AuthzCall;
 
+// Recorta filas escritas a mano segun el select de la llamada, como haria
+// Prisma. Sin select las devuelve completas.
+export function projectRows(rows: Row[], args: PrismaArgs) {
+  const select = asArgs(args?.select);
+
+  if (!select) {
+    return rows;
+  }
+
+  const keys = Object.keys(select).filter((key) => select[key]);
+
+  return rows.map((row) =>
+    Object.fromEntries(keys.filter((key) => key in row).map((key) => [key, row[key]])),
+  );
+}
+
 // Sustituye el resultado de una llamada, por clave "modelo.metodo". Una
 // funcion recibe los argumentos de la llamada.
 export type DataOverride = ((args: PrismaArgs) => unknown) | object | number | null;

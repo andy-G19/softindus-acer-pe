@@ -10,6 +10,7 @@ import {
   generateRow,
   normalizeHtml,
   parsePrismaSchema,
+  projectRows,
 } from "./page-characterization";
 
 // Pruebas del arnes de caracterizacion de paginas: si el arnes generara datos
@@ -181,6 +182,17 @@ describe("generateResult", () => {
     expect(() => generateResult(models, "cliente", "update", {})).toThrow(
       "no esta soportado",
     );
+  });
+});
+
+describe("projectRows", () => {
+  it("recorta las filas segun el select y sin select las deja completas", () => {
+    const rows = [{ id: "1", nombre: "A", telefono: null }];
+
+    expect(projectRows(rows, { select: { id: true, telefono: true, nombre: false } })).toEqual([
+      { id: "1", telefono: null },
+    ]);
+    expect(projectRows(rows, { where: {} })).toBe(rows);
   });
 });
 
