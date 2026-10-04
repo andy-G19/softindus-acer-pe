@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
+import { getMaintenanceRecurrenceData } from "@/modules/maintenance/recurrences/queries";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -96,55 +96,13 @@ export default async function MaintenanceRecurrencesPage() {
     today.getDate(),
   );
 
-  const machines = await prisma.maquina.findMany({
-    orderBy: {
-      nombre: "asc",
-    },
-    include: {
-      falla_maquina: {
-        include: {
-          reparacion: true,
-        },
-      },
-      mantenimiento_preventivo: true,
-    },
-  });
-
-  const monthlyFailures = await prisma.falla_maquina.count({
-    where: {
-      fecha_falla: {
-        gte: startOfMonth,
-      },
-    },
-  });
-
-  const monthlyRepairCost = await prisma.reparacion.aggregate({
-    where: {
-      fecha_reparacion: {
-        gte: startOfMonth,
-      },
-    },
-    _sum: {
-      costo_total: true,
-    },
-  });
-
-  const overduePreventiveCount = await prisma.mantenimiento_preventivo.count({
-    where: {
-      estado: "pendiente",
-      fecha_programada: {
-        lt: startOfToday,
-      },
-    },
-  });
-
-  const pendingFailuresCount = await prisma.falla_maquina.count({
-    where: {
-      estado_atencion: {
-        in: ["pendiente", "en_atencion"],
-      },
-    },
-  });
+  const {
+    machines,
+    monthlyFailures,
+    monthlyRepairCost,
+    overduePreventiveCount,
+    pendingFailuresCount,
+  } = await getMaintenanceRecurrenceData({ startOfMonth, startOfToday });
 
   const machineReports = machines
     .map((machine) => {

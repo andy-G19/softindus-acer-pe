@@ -6,7 +6,6 @@ import {
   Hammer,
 } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,18 +30,17 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { updateRepairStatusAction } from "@/modules/maintenance/repairs/actions";
+import { getRepairList } from "@/modules/maintenance/repairs/queries";
 
 type RepairsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -82,76 +80,16 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
   const machine = parseStringParam(params, "machine");
   const failure = parseStringParam(params, "failure");
   const status = parseStringParam(params, "status");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
-  const filters: Prisma.reparacionWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_reparacion: { contains: q, mode: "insensitive" } },
-        { tecnico_proveedor: { contains: q, mode: "insensitive" } },
-        {
-          falla_maquina: {
-            descripcion: { contains: q, mode: "insensitive" },
-          },
-        },
-        {
-          falla_maquina: {
-            maquina: {
-              nombre: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (machine) {
-    filters.push({
-      falla_maquina: {
-        maquina: {
-          nombre: { contains: machine, mode: "insensitive" },
-        },
-      },
-    });
-  }
-
-  if (failure) {
-    filters.push({ id_falla: { contains: failure, mode: "insensitive" } });
-  }
-
-  if (status) {
-    filters.push({ estado_reparacion: status });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_reparacion: dateRange });
-  }
-
-  const where: Prisma.reparacionWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const repairs = await prisma.reparacion.findMany({
-    where,
-    orderBy: {
-      fecha_reparacion: "desc",
-    },
-    include: {
-      falla_maquina: {
-        include: {
-          maquina: true,
-        },
-      },
-      detalle_repuesto_reparacion: {
-        include: {
-          repuesto: true,
-        },
-      },
-    },
+  const repairs = await getRepairList({
+    q,
+    machine,
+    failure,
+    status,
+    from,
+    to,
   });
 
   const scheduledRepairs = repairs.filter(

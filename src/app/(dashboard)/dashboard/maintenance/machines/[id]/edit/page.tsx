@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -18,6 +17,7 @@ import {
 import { APP_ROLES } from "@/lib/permissions";
 import { updateMachineAction } from "@/modules/maintenance/machines/actions";
 import { MachineForm } from "@/modules/maintenance/machines/machine-form";
+import { getMachineForEdit } from "@/modules/maintenance/machines/queries";
 
 type EditMachinePageProps = {
   params: Promise<{
@@ -34,11 +34,7 @@ export default async function EditMachinePage({
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
-  const machine = await prisma.maquina.findUnique({
-    where: {
-      id_maquina: id,
-    },
-  });
+  const machine = await getMachineForEdit(id);
 
   if (!machine) {
     notFound();
