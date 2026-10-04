@@ -90,6 +90,14 @@ export async function getNewRecipeDetailData(
         nombre_material: "asc",
       },
     ],
+    select: {
+      id_material: true,
+      nombre_material: true,
+      categoria: true,
+      unidad_medida: true,
+      stock_actual: true,
+      costo_unitario_actual: true,
+    },
   });
 
   return { version, materials };
@@ -156,6 +164,14 @@ export async function getRecipeDetailEditData(
       ],
     },
     orderBy: [{ categoria: "asc" }, { nombre_material: "asc" }],
+    select: {
+      id_material: true,
+      nombre_material: true,
+      categoria: true,
+      unidad_medida: true,
+      stock_actual: true,
+      costo_unitario_actual: true,
+    },
   });
 
   return { detail, materials };

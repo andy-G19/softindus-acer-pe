@@ -13,10 +13,14 @@ export async function getRecipeVersionsData(idReceta: string) {
     },
     include: {
       producto: true,
-      usuario: true,
       version_receta: {
         include: {
-          usuario: true,
+          usuario: {
+            select: {
+              nombres: true,
+              apellidos: true,
+            },
+          },
           detalle_receta: {
             include: {
               material: true,

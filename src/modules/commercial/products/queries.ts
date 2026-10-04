@@ -260,5 +260,11 @@ export function findActiveProductsByCategory() {
         nombre_producto: "asc",
       },
     ],
+    select: {
+      id_producto: true,
+      nombre_producto: true,
+      categoria: true,
+      unidad_medida: true,
+    },
   });
 }

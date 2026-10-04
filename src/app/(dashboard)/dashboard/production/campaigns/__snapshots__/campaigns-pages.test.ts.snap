@@ -1181,6 +1181,12 @@ exports[`/dashboard/production/campaigns/[id]/details/new > campana sin detalles
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
         "id_producto": undefined,
@@ -1296,6 +1302,12 @@ exports[`/dashboard/production/campaigns/[id]/details/new > excluye productos ya
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
         "id_producto": {

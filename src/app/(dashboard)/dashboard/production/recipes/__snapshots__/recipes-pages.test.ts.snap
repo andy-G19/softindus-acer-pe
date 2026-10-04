@@ -18,7 +18,6 @@ exports[`/dashboard/production/recipes > sin filtros > llamadas 1`] = `
           },
         },
         "producto": true,
-        "usuario": true,
         "version_receta": {
           "include": {
             "_count": {
@@ -291,7 +290,6 @@ exports[`/dashboard/production/recipes > todos los filtros > llamadas 1`] = `
           },
         },
         "producto": true,
-        "usuario": true,
         "version_receta": {
           "include": {
             "_count": {
@@ -592,7 +590,6 @@ exports[`/dashboard/production/recipes/[id]/versions > inexistente > llamadas 1`
     "args": {
       "include": {
         "producto": true,
-        "usuario": true,
         "version_receta": {
           "include": {
             "_count": {
@@ -609,7 +606,12 @@ exports[`/dashboard/production/recipes/[id]/versions > inexistente > llamadas 1`
                 "id_detalle_receta": "asc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_version": "desc",
@@ -645,7 +647,6 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > llamadas 1`] 
     "args": {
       "include": {
         "producto": true,
-        "usuario": true,
         "version_receta": {
           "include": {
             "_count": {
@@ -662,7 +663,12 @@ exports[`/dashboard/production/recipes/[id]/versions > versiones > llamadas 1`] 
                 "id_detalle_receta": "asc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_version": "desc",
@@ -1205,6 +1211,14 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/[detail
           "nombre_material": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "costo_unitario_actual": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
       "where": {
         "OR": [
           {
@@ -1478,6 +1492,14 @@ exports[`/dashboard/production/recipes/[id]/versions/[versionId]/details/new > n
           "nombre_material": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "costo_unitario_actual": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
         "id_material": {

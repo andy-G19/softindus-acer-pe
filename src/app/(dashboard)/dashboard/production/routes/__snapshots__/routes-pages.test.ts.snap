@@ -626,6 +626,12 @@ exports[`/dashboard/production/routes/[id]/edit > editar > llamadas 1`] = `
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
@@ -735,6 +741,12 @@ exports[`/dashboard/production/routes/[id]/edit > inexistente > llamadas 1`] = `
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
@@ -2236,6 +2248,12 @@ exports[`/dashboard/production/routes/new > formulario > llamadas 1`] = `
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },

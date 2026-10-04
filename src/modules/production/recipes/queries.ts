@@ -71,7 +71,6 @@ export async function getTechnicalRecipeListData(
       where,
       include: {
         producto: true,
-        usuario: true,
         version_receta: {
           where: {
             estado: "vigente",
