@@ -487,9 +487,9 @@ Pendientes fuera de alcance:
 
 ## Entrega 4 — Consultas fuera de las páginas
 
-Fecha: 2026-10-02. Estado: en curso. La entrega se divide por área para que la
-métrica baje en cada sub-entrega. Commits en local sobre `staging`, sin publicar
-hasta terminar la serie.
+Fecha: 2026-10-02. Estado: sub-entregas 4.1 a 4.7 terminadas en local el
+2026-10-03; falta publicarlas y verificarlas en staging. La entrega se divide
+por área para que la métrica baje en cada sub-entrega.
 
 | Sub-entrega | Alcance | Páginas | Páginas con Prisma |
 |---|---|---|---|
@@ -721,6 +721,79 @@ Evidencia:
 - `npm run check` terminó con código 0 después de cada commit, con 800
   pruebas.
 
+### Entrega 4.7 — Producción sin órdenes de trabajo
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| f73dbc8 | test | 68 pruebas de las 20 páginas. |
+| 2ec7228 | refactor | `queries.ts` en overview, bottlenecks, campaigns, recipes, recipe-versions, recipe-details, routes y stages; productos activos en la interfaz pública de Productos. |
+| 7b2350b | refactor | Sin usuarios completos en recetas y versiones; columnas de productos y materiales de los formularios. |
+| 95e7604 | chore | La regla de ESLint se invierte: cubre todas las páginas salvo las 19 pendientes. |
+
+Evidencia:
+
+- Los casos cubren `notFound` en cada detalle y edición, el detalle de otra
+  receta, una campaña sin detalles, una etapa sin máquina asignada, la cantidad
+  válida e inválida de requerimientos y los filtros por separado y juntos.
+- En `2ec7228` los 68 snapshots no cambiaron y el bloque JSX de las 20 páginas
+  es idéntico. Las consultas que dependen de otra (productos que la campaña aún
+  no tiene, materiales que la versión aún no usa, máquina asignada a la etapa)
+  conservan su secuencia y devuelven `null` cuando el registro principal no
+  existe o no pertenece a su padre. Pruebas de mutación: no verificar que el
+  detalle sea de la receta y excluir productos de una campaña sin detalles
+  hacen fallar solo su caso; cambiar el orden de los productos activos
+  compartidos, los 11 casos de sus 4 consumidores.
+- En `7b2350b` cambiaron 11 snapshots, todos de llamadas; ninguno de HTML.
+- La regla invertida se comprobó por entrada estándar: el login, la raíz, el
+  inicio del dashboard y páginas de cada área detectan `@/lib/db` y `auth`;
+  reportes, una orden de trabajo y un costeo solo detectan `auth`; `queries.ts`
+  puede importar Prisma. `npx eslint src/app` no reporta errores.
+- `npm run check` terminó con código 0 después de cada commit, con 868
+  pruebas.
+
+### Balance de las sub-entregas 4.1 a 4.7
+
+- Páginas con Prisma directo: de 117 a 19, las de reportes (10), órdenes de
+  trabajo (5) y costos (4), que se migran con las entregas 5 y 6.
+- 52 archivos `queries.ts` con `server-only`. Las opciones repetidas viven en
+  el módulo dueño de su entidad: clientes, productos, pedidos, materiales,
+  proveedores, compras, operarios, máquinas, cajas abiertas y órdenes de
+  trabajo recientes.
+- 50 archivos de caracterización con 313 pruebas, además de las 15 del arnés.
+  Las 98 páginas migradas conservan su JSX byte a byte y sus snapshots no
+  cambiaron al mover las consultas.
+- Criterio de columnas aplicado en cada área: 18 inclusiones de `usuario`
+  completas, con `clave_hash`, pasan a pedir solo nombres y apellidos o el
+  nombre de usuario (10), o dejan de cargarse porque no se mostraban (8). En
+  los `queries.ts` ya no queda ninguna. En Comercial se comprobó que ningún
+  componente cliente recibía el hash; en las demás áreas las páginas solo
+  leían nombres y apellidos en el servidor o no usaban el usuario.
+
+Pendientes fuera de alcance:
+
+- Verificación en staging: la foto del «antes» no se tomó porque el navegador
+  integrado no tenía sesión en el ERP de staging. Debe tomarse antes de
+  publicar estos commits; si ya no es posible, la evidencia queda en las
+  pruebas de caracterización y en una prueba de humo posterior.
+- La URL propia de staging, abierta sin sesión, redirige al login de
+  producción: el proxy usa `request.nextUrl` y next-auth sustituye su origen
+  por `AUTH_URL`. Revisar `AUTH_URL` del entorno Preview en Vercel.
+- 22 páginas conservan su `getSearchParam` local, que no recorta a 200
+  caracteres como `parseStringParam`. Unificarlo cambia el comportamiento con
+  textos largos: es un `fix`.
+- `getStatusFilter` (`active`/`inactive` a booleano) se repite en 8
+  `queries.ts`, como antes se repetía en las páginas.
+- `modules/dashboard/data.ts` no tiene `server-only` ni sigue el nombre
+  `queries.ts`.
+- Los detalles con `include` profundos siguen cargando filas completas, según
+  el criterio de columnas.
+- `parseDateParam`, `setDate` y los rangos «del mes» usan la zona del proceso.
+  En Vercel es UTC y el arnés la fija; en una máquina en America/Lima el
+  resultado cambia. Es el mismo tema de fechas civiles e instantes pendiente
+  de la entrega 3.
+- Los snapshots de HTML dependen del marcado de los componentes compartidos:
+  la entrega 8 tendrá que actualizarlos con `vitest -u` y revisar el diff.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -732,7 +805,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.6 en local |
+| 4 | A | Consultas fuera de las páginas, por área | 4.1 a 4.7 terminadas en local; falta staging |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -751,7 +824,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 39 | 4 |
+| Páginas con Prisma directo | 117 | 19 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -759,7 +832,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 70 / 800 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 75 / 868 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

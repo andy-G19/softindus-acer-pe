@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 451 |
+| Archivos fuente analizados | 464 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -213,27 +213,27 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 177 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 335 | `{annulPettyCashMovementAction}` |
-| `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 346 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 103 | `{addCampaignDetailAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 70 | `{updateProductionCampaignAction}` |
+| `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 245 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 70 | `{addCampaignDetailAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 66 | `{updateProductionCampaignAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 33 | `{createProductionCampaignAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 225 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 366 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 380 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 394 | `{changeProductionCampaignStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 268 | `{deleteRecipeDetailAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 184 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 230 | `{setCurrentRecipeVersionAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 253 | `{voidRecipeVersionAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 69 | `{createTechnicalRecipeAction}` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 166 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 300 | `{toggleTechnicalRecipeStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/routes/[id]/edit/page.tsx` | 82 | `{updateFabricationRouteAction}` |
-| `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 199 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 366 | `{toggleRouteStageStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 60 | `{createFabricationRouteAction}` |
-| `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 159 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 264 | `{toggleFabricationRouteStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 143 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 284 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 298 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 312 | `{changeProductionCampaignStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 243 | `{deleteRecipeDetailAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 164 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 200 | `{setCurrentRecipeVersionAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 223 | `{voidRecipeVersionAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 48 | `{createTechnicalRecipeAction}` |
+| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 80 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 214 | `{toggleTechnicalRecipeStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/routes/[id]/edit/page.tsx` | 55 | `{updateFabricationRouteAction}` |
+| `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 121 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 288 | `{toggleRouteStageStatusAction}` |
+| `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 48 | `{createFabricationRouteAction}` |
+| `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 177 | `{toggleFabricationRouteStatusAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 317 | `{deliverWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 611 | `{reopenWorkOrderMaterialsAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 144 | `{reassignWorkOrderProgressAction}` |
