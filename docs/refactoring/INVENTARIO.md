@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 412 |
+| Archivos fuente analizados | 428 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -167,7 +167,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/audit/page.tsx` | 187 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/audit/page.tsx` | 104 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 106 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
@@ -251,18 +251,18 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 394 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 183 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 349 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 83 | `{createAttendanceAction}` |
-| `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 249 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 235 | `"/dashboard/staff/operators"` |
-| `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 106 | `{registerOperatorPaymentAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 118 | `{generatePayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 231 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 384 | `{cancelPayrollAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 150 | `{createOperatorTaskAction}` |
-| `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 272 | `{cancelOperatorTaskAction}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 162 | `{navigationHrefs.users}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 288 | `{deactivateUserAction}` |
-| `src/app/(dashboard)/dashboard/users/page.tsx` | 304 | `{activateUserAction}` |
+| `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 71 | `{createAttendanceAction}` |
+| `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 139 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 114 | `"/dashboard/staff/operators"` |
+| `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 91 | `{registerOperatorPaymentAction}` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 98 | `{generatePayrollAction}` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 127 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 280 | `{cancelPayrollAction}` |
+| `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 92 | `{createOperatorTaskAction}` |
+| `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 198 | `{cancelOperatorTaskAction}` |
+| `src/app/(dashboard)/dashboard/users/page.tsx` | 111 | `{navigationHrefs.users}` |
+| `src/app/(dashboard)/dashboard/users/page.tsx` | 237 | `{deactivateUserAction}` |
+| `src/app/(dashboard)/dashboard/users/page.tsx` | 253 | `{activateUserAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 99 | `{createReusableScrapAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 232 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 356 | `{updateReusableScrapStatusAction}` |

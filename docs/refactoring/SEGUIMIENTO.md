@@ -673,6 +673,30 @@ Evidencia:
   comparten una ejecución, hecha con ambos cambios: la única diferencia del
   primero es no tener aún la regla de ESLint, que esas páginas ya cumplían.
 
+### Entrega 4.5 — Personal, Usuarios y Auditoría
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| dcefec9 | test | 45 pruebas de las 15 páginas. |
+| 8d832e4 | refactor | `queries.ts` en overview, attendance, operators, payment-history, payrolls y tasks de Personal, y en `modules/users` y `modules/audit`. |
+| 88779b0 | refactor | Sin usuarios completos en asistencia, historial de pagos, planillas, tareas y la bitácora; columnas de los operarios del panel y de los formularios. |
+| 4872212 | chore | `pagesWithoutPrisma` cubre Personal, Usuarios y Auditoría. |
+
+Evidencia:
+
+- Los casos fijan el reloj y cubren los tres estados de asistencia, el periodo
+  de planilla válido e inválido, `notFound` en las ediciones, la edición del
+  propio usuario y las diferencias entre administrador y maestro de taller.
+- En `8d832e4` los 45 snapshots no cambiaron y el bloque JSX de las 15
+  páginas es idéntico. Pruebas de mutación: filtrar tardanzas sin excluir
+  faltas, terminar el periodo de planilla un día después y cambiar el orden
+  de los operarios activos hacen fallar solo los casos que lo protegen.
+- En `88779b0` cambiaron 16 snapshots, todos de llamadas; ninguno de HTML.
+  Las páginas de Usuarios ya usaban `select` sin `clave_hash`; la bitácora de
+  auditoría cargaba el usuario completo de cada registro.
+- `npm run check` terminó con código 0 después de cada commit, con 760
+  pruebas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -684,7 +708,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.4 en local |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.5 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -703,7 +727,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 68 | 4 |
+| Páginas con Prisma directo | 117 | 53 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -711,7 +735,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 51 / 715 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 59 / 760 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
