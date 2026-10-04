@@ -15,60 +15,21 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { getCommercialOverviewData } from "@/modules/commercial/overview/queries";
 
 export default async function CommercialPage() {
   await requireRole(["ADMIN", "SELLER"]);
 
-  const [
+  const {
     activeClients,
     activeProducts,
     registeredOrders,
     activeQuotes,
     issuedReceipts,
     pendingQuotes,
-  ] = await Promise.all([
-    prisma.cliente.count({
-      where: {
-        estado: true,
-      },
-    }),
-
-    prisma.producto.count({
-      where: {
-        estado: true,
-      },
-    }),
-
-    prisma.pedido.count(),
-
-    prisma.proforma.count({
-      where: {
-        estado: {
-          in: ["vigente", "aceptada"],
-        },
-      },
-    }),
-
-    prisma.comprobante_venta.count({
-      where: {
-        estado: "emitido",
-      },
-    }),
-
-    prisma.proforma.findMany({
-      where: {
-        estado: {
-          in: ["vigente", "aceptada"],
-        },
-      },
-      select: {
-        saldo: true,
-      },
-    }),
-  ]);
+  } = await getCommercialOverviewData();
 
   const totalPendingBalance = pendingQuotes.reduce((total, quote) => {
     return total + Number(quote.saldo.toString());

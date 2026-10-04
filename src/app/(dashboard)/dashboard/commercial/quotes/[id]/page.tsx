@@ -6,11 +6,11 @@ import { requireRole } from "@/lib/authz";
 import { PrintButton } from "@/components/commercial/print-button";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { StatusBadge } from "@/components/commercial/status-badge";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
+import { getQuoteDetail } from "@/modules/commercial/quotes/queries";
 
 type QuoteDetailPageProps = {
   params: Promise<{
@@ -39,36 +39,7 @@ export default async function QuoteDetailPage({
 
   await requireRole(["ADMIN", "SELLER"]);
 
-  const quote = await prisma.proforma.findUnique({
-    where: {
-      id_proforma: id,
-    },
-    include: {
-      comprobante_venta: {
-        orderBy: {
-          fecha_emision: "desc",
-        },
-      },
-      pago_cliente: {
-        orderBy: {
-          fecha_pago: "desc",
-        },
-        include: {
-          usuario: true,
-        },
-      },
-      pedido: {
-        include: {
-          cliente: true,
-          detalle_pedido: {
-            include: {
-              producto: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const quote = await getQuoteDetail(id);
 
   if (!quote) {
     notFound();

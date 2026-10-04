@@ -14,13 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
   navigationHrefs,
 } from "@/lib/navigation";
+import { getOrderDetail } from "@/modules/commercial/orders/queries";
 
 type OrderDetailPageProps = {
   params: Promise<{
@@ -37,36 +37,7 @@ export default async function OrderDetailPage({
 
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
-  const order = await prisma.pedido.findUnique({
-    where: {
-      id_pedido: id,
-    },
-    include: {
-      cliente: true,
-      usuario: true,
-      proforma: {
-        orderBy: {
-          fecha_emision: "desc",
-        },
-      },
-      comprobante_venta: {
-        orderBy: {
-          fecha_emision: "desc",
-        },
-      },
-      detalle_pedido: {
-        include: {
-          producto: true,
-          orden_trabajo: {
-            select: {
-              id_orden_trabajo: true,
-              estado: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const order = await getOrderDetail(id);
 
   if (!order) {
     notFound();

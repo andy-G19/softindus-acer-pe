@@ -22,12 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
+import { getProductListData } from "@/modules/commercial/products/queries";
 
 type ProductsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -46,18 +45,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
@@ -68,77 +55,12 @@ export default async function ProductsPage({
   const category = getSearchParam(params, "category");
   const unit = getSearchParam(params, "unit");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.productoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_producto: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_producto: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (category) {
-    filters.push({
-      categoria: category,
-    });
-  }
-
-  if (unit) {
-    filters.push({
-      unidad_medida: unit,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.productoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [products, totalItems, categories, units] = await Promise.all([
-    prisma.producto.findMany({
-      where,
-      orderBy: [{ fecha_registro: "desc" }, { id_producto: "desc" }],
-      skip,
-      take,
-    }),
-    prisma.producto.count({ where }),
-    prisma.categoria_producto.findMany({
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        nombre: true,
-        slug: true,
-      },
-    }),
-    prisma.producto.findMany({
-      distinct: ["unidad_medida"],
-      orderBy: {
-        unidad_medida: "asc",
-      },
-      select: {
-        unidad_medida: true,
-      },
-    }),
-  ]);
+  const { products, totalItems, categories, units } = await getProductListData(
+    { q, category, unit, status },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
   const canManageProduct = session.user.role === "ADMIN";

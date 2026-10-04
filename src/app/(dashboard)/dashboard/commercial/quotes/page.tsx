@@ -17,18 +17,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
+import { getQuoteListData } from "@/modules/commercial/quotes/queries";
 
 type QuotesPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -45,127 +43,15 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   const balance = parseStringParam(params, "balance");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const dateRange = buildDateRangeFilter(from, to);
-  const filters: Prisma.proformaWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          numero_proforma: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          id_pedido: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          pedido: {
-            cliente: {
-              nombre_razon_social: {
-                contains: q,
-                mode: "insensitive",
-              },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (client) {
-    filters.push({
-      pedido: {
-        id_cliente: client,
-      },
-    });
-  }
-
-  if (order) {
-    filters.push({ id_pedido: order });
-  }
-
-  if (status) {
-    filters.push({ estado: status });
-  }
-
-  if (balance === "pending") {
-    filters.push({
-      saldo: {
-        gt: 0,
-      },
-    });
-  }
-
-  if (balance === "paid") {
-    filters.push({
-      saldo: 0,
-    });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_emision: dateRange });
-  }
-
-  const where: Prisma.proformaWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [quotes, clients, orders] = await Promise.all([
-    prisma.proforma.findMany({
-      where,
-      orderBy: {
-        fecha_emision: "desc",
-      },
-      include: {
-        pago_cliente: {
-          select: {
-            id_pago_cliente: true,
-          },
-        },
-        comprobante_venta: {
-          where: {
-            estado: "emitido",
-          },
-          select: {
-            id_comprobante: true,
-            numero_comprobante: true,
-            tipo_comprobante: true,
-          },
-        },
-        pedido: {
-          include: {
-            cliente: true,
-            detalle_pedido: {
-              include: {
-                producto: true,
-              },
-            },
-          },
-        },
-      },
-    }),
-    prisma.cliente.findMany({
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-      },
-    }),
-    prisma.pedido.findMany({
-      orderBy: {
-        fecha_pedido: "desc",
-      },
-      select: {
-        id_pedido: true,
-      },
-    }),
-  ]);
+  const { quotes, clients, orders } = await getQuoteListData({
+    q,
+    client,
+    order,
+    status,
+    balance,
+    from,
+    to,
+  });
 
   return (
     <main className="space-y-6">

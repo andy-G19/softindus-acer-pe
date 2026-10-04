@@ -2,24 +2,15 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleProductCategoryStatusAction } from "@/modules/commercial/products/actions";
 import { ProductCategoryManager } from "@/modules/commercial/products/product-category-manager";
+import { getProductCategoryList } from "@/modules/commercial/products/queries";
 
 export default async function ProductCategoriesPage() {
   const session = await requireRole(["ADMIN", "SELLER"]);
 
-  const categories = await prisma.categoria_producto.findMany({
-    orderBy: [
-      {
-        estado: "desc",
-      },
-      {
-        nombre: "asc",
-      },
-    ],
-  });
+  const categories = await getProductCategoryList();
 
   const canManage = session.user.role === "ADMIN";
 

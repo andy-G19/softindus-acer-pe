@@ -118,3 +118,34 @@ export async function getClientForEdit(idCliente: string) {
     },
   });
 }
+
+// Opciones de cliente que otras funcionalidades usan en sus filtros y
+// formularios. Devuelven la promesa de Prisma para que el llamador la componga
+// en su Promise.all.
+export function findClientFilterOptions() {
+  return prisma.cliente.findMany({
+    orderBy: {
+      nombre_razon_social: "asc",
+    },
+    select: {
+      id_cliente: true,
+      nombre_razon_social: true,
+    },
+  });
+}
+
+export function findActiveClientOptions() {
+  return prisma.cliente.findMany({
+    where: {
+      estado: true,
+    },
+    orderBy: {
+      nombre_razon_social: "asc",
+    },
+    select: {
+      id_cliente: true,
+      nombre_razon_social: true,
+      tipo_cliente: true,
+    },
+  });
+}

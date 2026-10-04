@@ -16,18 +16,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { annulReceiptAction } from "@/modules/commercial/receipts/actions";
+import { getReceiptList } from "@/modules/commercial/receipts/queries";
 
 type ReceiptsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -42,51 +40,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   const status = parseStringParam(params, "status");
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
-  const dateRange = buildDateRangeFilter(from, to);
-  const filters: Prisma.comprobante_ventaWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { numero_comprobante: { contains: q, mode: "insensitive" } },
-        { id_pedido: { contains: q, mode: "insensitive" } },
-        {
-          pedido: {
-            cliente: {
-              nombre_razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (type) {
-    filters.push({ tipo_comprobante: type });
-  }
-
-  if (status) {
-    filters.push({ estado: status });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_emision: dateRange });
-  }
-
-  const receipts = await prisma.comprobante_venta.findMany({
-    where: filters.length > 0 ? { AND: filters } : {},
-    orderBy: {
-      fecha_emision: "desc",
-    },
-    include: {
-      pedido: {
-        include: {
-          cliente: true,
-        },
-      },
-      proforma: true,
-    },
-  });
+  const receipts = await getReceiptList({ q, type, status, from, to });
 
   return (
     <main className="space-y-6">
