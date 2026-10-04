@@ -697,6 +697,30 @@ Evidencia:
 - `npm run check` terminó con código 0 después de cada commit, con 760
   pruebas.
 
+### Entrega 4.6 — Caja chica y Mermas
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 12ec900 | test | 40 pruebas de las 14 páginas. |
+| 149a8bf | refactor | `queries.ts` en overview, boxes, categories, expenses, income-adjustments, monthly-summary y movements de Caja chica, y en overview, scraps, reusable-scraps y scrap-sales de Mermas; opciones de cajas abiertas, materiales activos y órdenes de trabajo recientes en sus módulos dueños. |
+| 774ea40 | refactor | Sin usuarios completos en movimientos, el panel, el resumen mensual y retazos; columnas de cajas y categorías. |
+| 9e8b00b | chore | `pagesWithoutPrisma` cubre Caja chica y Mermas. |
+
+Evidencia:
+
+- Los casos fijan el reloj y cubren el mes actual, uno elegido y uno inválido
+  del resumen, los filtros de fecha de movimientos por separado y juntos,
+  `notFound` en la edición de categorías, la chatarra preseleccionada en la
+  venta y las diferencias entre administrador y maestro de taller.
+- En `149a8bf` los 40 snapshots no cambiaron y el bloque JSX de las 14
+  páginas es idéntico. Pruebas de mutación: cerrar el filtro «hasta» al
+  inicio del día hace fallar sus 2 casos; cambiar el orden de las cajas
+  abiertas, los 5 casos de sus 3 consumidores; reducir las órdenes recientes,
+  los de sus 2 consumidores.
+- En `774ea40` cambiaron 15 snapshots, todos de llamadas; ninguno de HTML.
+- `npm run check` terminó con código 0 después de cada commit, con 800
+  pruebas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -708,7 +732,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.5 en local |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.6 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -727,7 +751,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 53 | 4 |
+| Páginas con Prisma directo | 117 | 39 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -735,7 +759,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 59 / 760 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 70 / 800 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

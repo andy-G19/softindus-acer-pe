@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 428 |
+| Archivos fuente analizados | 451 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -207,12 +207,12 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 312 | `{updateRepairStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 103 | `"/dashboard/maintenance/spare-parts"` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 155 | `"/dashboard/petty-cash/categories"` |
-| `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 121 | `{createPettyCashExpenseAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 138 | `{createPettyCashIncomeAdjustmentAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 391 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 292 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 450 | `{annulPettyCashMovementAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 111 | `"/dashboard/petty-cash/categories"` |
+| `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
+| `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 177 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 335 | `{annulPettyCashMovementAction}` |
 | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 346 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 103 | `{addCampaignDetailAction}` |
 | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 70 | `{updateProductionCampaignAction}` |
@@ -263,13 +263,13 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 111 | `{navigationHrefs.users}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 237 | `{deactivateUserAction}` |
 | `src/app/(dashboard)/dashboard/users/page.tsx` | 253 | `{activateUserAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 99 | `{createReusableScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 232 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 356 | `{updateReusableScrapStatusAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 364 | `{updateReusableScrapStatusAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 111 | `{createScrapSaleAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 91 | `{createScrapAction}` |
-| `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 237 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 67 | `{createReusableScrapAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 126 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 250 | `{updateReusableScrapStatusAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 258 | `{updateReusableScrapStatusAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 59 | `{createScrapAction}` |
+| `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 132 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/components/commercial/order-form.tsx` | 185 | `{formAction}` |
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
