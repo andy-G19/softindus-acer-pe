@@ -129,5 +129,11 @@ export function findMachineOptions() {
         nombre: "asc",
       },
     ],
+    select: {
+      id_maquina: true,
+      nombre: true,
+      tipo: true,
+      estado: true,
+    },
   });
 }

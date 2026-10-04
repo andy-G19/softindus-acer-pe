@@ -80,7 +80,12 @@ export async function getPreventiveMaintenanceList(
     ],
     include: {
       maquina: true,
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
     },
   });
 }

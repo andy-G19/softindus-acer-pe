@@ -112,6 +112,11 @@ export async function getNewRepairFormOptions() {
     orderBy: {
       nombre_repuesto: "asc",
     },
+    select: {
+      id_repuesto: true,
+      nombre_repuesto: true,
+      costo_unitario: true,
+    },
   });
 
   return { failures, spareParts };

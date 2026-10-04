@@ -459,6 +459,12 @@ exports[`/dashboard/maintenance/failures/new > formulario > llamadas 1`] = `
           "nombre": "asc",
         },
       ],
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
     },
     "prisma": "maquina.findMany",
   },

@@ -638,6 +638,11 @@ exports[`/dashboard/maintenance/repairs/new > formulario > llamadas 1`] = `
       "orderBy": {
         "nombre_repuesto": "asc",
       },
+      "select": {
+        "costo_unitario": true,
+        "id_repuesto": true,
+        "nombre_repuesto": true,
+      },
       "where": {
         "estado": true,
       },

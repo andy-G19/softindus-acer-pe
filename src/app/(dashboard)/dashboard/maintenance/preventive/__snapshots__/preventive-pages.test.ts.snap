@@ -12,7 +12,12 @@ exports[`/dashboard/maintenance/preventive > sin filtros > llamadas 1`] = `
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -264,7 +269,12 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > llamadas 1`] = 
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": [
         {
@@ -578,6 +588,12 @@ exports[`/dashboard/maintenance/preventive/new > formulario > llamadas 1`] = `
           "nombre": "asc",
         },
       ],
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
     },
     "prisma": "maquina.findMany",
   },
