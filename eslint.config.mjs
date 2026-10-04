@@ -17,6 +17,7 @@ const authImportRestriction = {
 const pagesWithoutPrisma = [
   "src/app/(dashboard)/dashboard/commercial/**/page.tsx",
   "src/app/(dashboard)/dashboard/inventory/**/page.tsx",
+  "src/app/(dashboard)/dashboard/maintenance/**/page.tsx",
 ];
 
 const dbImportRestriction = {
