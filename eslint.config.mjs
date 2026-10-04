@@ -2,6 +2,28 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
+// Autorizacion centralizada (entrega 2): la sesion se obtiene solo a traves
+// de los helpers de src/lib/authz.ts.
+const authImportRestriction = {
+  name: "@/auth",
+  importNames: ["auth"],
+  message:
+    "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
+};
+
+// Consultas fuera de las paginas (entrega 4): las paginas migradas leen sus
+// datos a traves de src/modules/<area>/<funcionalidad>/queries.ts. La lista
+// crece con cada sub-entrega.
+const pagesWithoutPrisma = [
+  "src/app/(dashboard)/dashboard/commercial/clients/**/page.tsx",
+];
+
+const dbImportRestriction = {
+  name: "@/lib/db",
+  message:
+    "Las paginas no consultan Prisma: mueve la consulta a src/modules/<area>/<funcionalidad>/queries.ts.",
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -34,14 +56,21 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [
-            {
-              name: "@/auth",
-              importNames: ["auth"],
-              message:
-                "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
-            },
-          ],
+          paths: [authImportRestriction],
+        },
+      ],
+    },
+  },
+  // Paginas sin Prisma directo (entrega 4). En flat config, si dos bloques
+  // configuran la misma regla para un archivo, el ultimo reemplaza las opciones
+  // del anterior: este bloque repite la restriccion de @/auth para no perderla.
+  {
+    files: pagesWithoutPrisma,
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [authImportRestriction, dbImportRestriction],
         },
       ],
     },

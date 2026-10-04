@@ -59,9 +59,18 @@ Roles are `ADMIN`, `SELLER`, `WORKSHOP_MASTER` (constants in [src/lib/permission
 
 A feature is split across three trees, by area (`commercial`, `inventory`, `production`, `costs`, `petty-cash`, `maintenance`, `staff`, `reports`, …):
 
-- `src/app/(dashboard)/dashboard/<area>/<feature>/` — **RSC pages** that read `searchParams` (a `Promise` — must be awaited), enforce auth, query Prisma directly, and render. `new/`, `[id]/`, `[id]/edit/` subroutes follow.
+- `src/app/(dashboard)/dashboard/<area>/<feature>/` — **RSC pages** that read `searchParams` (a `Promise` — must be awaited), enforce auth, load data through the feature's `queries.ts`, and render. `new/`, `[id]/`, `[id]/edit/` subroutes follow. Pages not yet migrated (delivery 4, see SEGUIMIENTO.md) still query Prisma directly.
 - `src/modules/<area>/<feature>/actions.ts` — `"use server"` **server actions** + the feature's form components (`*-form.tsx`).
+- `src/modules/<area>/<feature>/queries.ts` — **read queries for the pages**, with `import "server-only"`. Reference: [src/modules/commercial/clients/queries.ts](src/modules/commercial/clients/queries.ts).
 - `src/schemas/<area>/*.schema.ts` — Zod validation shared by action + form.
+
+### Page query pattern (reads)
+
+- **The page authorizes, the query does not.** The page calls `requireRole` first, as before. `requireRole` revalidates the user against the DB on every call, and each entry point rejects differently (redirect, `FormState`, 401/403), so a query that authorized would double the DB work and give the wrong response to non-page callers. When data depends on the role, the query receives the already verified session or role (like `getDashboardData(role)`).
+- **The page keeps** parsing `searchParams`/`params`, `notFound()`/`redirect()`, presentation derivations and the JSX. **The query owns** everything Prisma: `where` construction (`Prisma.*WhereInput`), `select`/`include`, ordering, pagination arguments and `Promise.all`. It receives parsed values (strings, dates, `{ skip, take }`) and returns Prisma results with the field names unchanged; no DTO mapping, no React, no redirects.
+- Prefer an explicit `select` with the columns the view uses: TypeScript then rejects any access to a column that is not loaded.
+- Migrated pages cannot import `@/lib/db`: an ESLint `no-restricted-imports` rule lists them in `pagesWithoutPrisma` (`eslint.config.mjs`). In flat config the last block that configures a rule replaces the earlier options for that file, so that block repeats the `@/auth` restriction.
+- Before moving a page's queries, characterize it with the harness in [src/testing/page-characterization.ts](src/testing/page-characterization.ts): it runs the real page with Prisma, session and navigation mocked, and snapshots the Prisma calls and the normalized HTML. The same snapshots must pass unchanged after the move.
 
 ### Server action pattern (mutations)
 
