@@ -647,6 +647,32 @@ Evidencia:
 - `npm run check` terminó con código 0 después de cada commit, con 679
   pruebas.
 
+### Entrega 4.4 — Mantenimiento
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 10964ba | test | 36 pruebas de las 13 páginas. |
+| 529b2bb | refactor | `queries.ts` en overview, failures, machines, preventive, recurrences, repairs y spare-parts; repuestos usa la interfaz pública de Proveedores. |
+| e7bfea5 | refactor | Sin usuarios completos en preventivos; columnas de las máquinas y repuestos de los formularios. |
+| 377e741 | chore | `pagesWithoutPrisma` cubre Mantenimiento. |
+
+Evidencia:
+
+- El panel conserva el instante actual y lo pasa a la consulta, que calcula
+  los rangos del mes; reincidencias pasa el inicio del mes y de hoy porque la
+  página también los usa. Los casos fijan el reloj y cubren `notFound`, el
+  regreso al listado filtrado, un repuesto sin proveedor y las diferencias
+  entre administrador y maestro de taller.
+- En `529b2bb` los 36 snapshots no cambiaron y el bloque JSX de las 13
+  páginas es idéntico. Pruebas de mutación: calcular el mes anterior en el
+  panel hace fallar sus 2 casos; cambiar el orden de las opciones de máquina,
+  los casos de sus 2 consumidores; agregar siempre el proveedor actual de un
+  repuesto, solo el caso sin proveedor.
+- En `e7bfea5` cambiaron 5 snapshots, todos de llamadas; ninguno de HTML.
+- `npm run check` terminó con código 0 con 715 pruebas. `e7bfea5` y `377e741`
+  comparten una ejecución, hecha con ambos cambios: la única diferencia del
+  primero es no tener aún la regla de ESLint, que esas páginas ya cumplían.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -658,7 +684,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.3 en local |
+| 4 | A | Consultas fuera de las páginas, por área | En curso: 4.1 a 4.4 en local |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -677,7 +703,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 81 | 4 |
+| Páginas con Prisma directo | 117 | 68 | 4 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -685,7 +711,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 44 / 679 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 51 / 715 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 398 |
+| Archivos fuente analizados | 412 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -196,16 +196,16 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 90 | `"/dashboard/inventory/supplier-materials"` |
 | `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 67 | `"/dashboard/inventory/supplier-payments"` |
 | `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 92 | `"/dashboard/inventory/suppliers"` |
-| `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 98 | `{createFailureAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 225 | `{updateFailureStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 224 | `"/dashboard/maintenance/machines"` |
-| `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 100 | `{createPreventiveMaintenanceAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 208 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 375 | `{updatePreventiveMaintenanceStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 118 | `{createRepairAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 204 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 374 | `{updateRepairStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 178 | `"/dashboard/maintenance/spare-parts"` |
+| `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 89 | `{createFailureAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 213 | `{updateFailureStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 142 | `"/dashboard/maintenance/machines"` |
+| `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 91 | `{createPreventiveMaintenanceAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 155 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 322 | `{updatePreventiveMaintenanceStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 97 | `{createRepairAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 142 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 312 | `{updateRepairStatusAction}` |
+| `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 103 | `"/dashboard/maintenance/spare-parts"` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 155 | `"/dashboard/petty-cash/categories"` |
 | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 121 | `{createPettyCashExpenseAction}` |
