@@ -15,17 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getSupplierPaymentListData } from "@/modules/inventory/supplier-payments/queries";
 
 type SupplierPaymentsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -42,76 +40,18 @@ export default async function SupplierPaymentsPage({
   const purchase = parseStringParam(params, "purchase");
   const method = parseStringParam(params, "method");
   const status = parseStringParam(params, "status");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-  const filters: Prisma.pago_proveedorWhereInput[] = [];
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
-  if (q) {
-    filters.push({
-      OR: [
-        { id_compra: { contains: q, mode: "insensitive" } },
-        {
-          compra: {
-            numero_comprobante: { contains: q, mode: "insensitive" },
-          },
-        },
-        {
-          compra: {
-            proveedor: {
-              razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (supplier) {
-    filters.push({ id_proveedor: supplier });
-  }
-
-  if (purchase) {
-    filters.push({ id_compra: purchase });
-  }
-
-  if (method) {
-    filters.push({ metodo_pago: method });
-  }
-
-  if (status) {
-    filters.push({ estado_pago: status });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_pago: dateRange });
-  }
-
-  const [payments, suppliers, purchases] = await Promise.all([
-    prisma.pago_proveedor.findMany({
-      where: filters.length > 0 ? { AND: filters } : {},
-      orderBy: {
-        fecha_pago: "desc",
-      },
-      include: {
-        compra: {
-          include: {
-            proveedor: true,
-          },
-        },
-        usuario: true,
-      },
-    }),
-    prisma.proveedor.findMany({
-      orderBy: { razon_social: "asc" },
-      select: { id_proveedor: true, razon_social: true },
-    }),
-    prisma.compra.findMany({
-      orderBy: { fecha_compra: "desc" },
-      select: { id_compra: true },
-    }),
-  ]);
+  const { payments, suppliers, purchases } = await getSupplierPaymentListData({
+    q,
+    supplier,
+    purchase,
+    method,
+    status,
+    from,
+    to,
+  });
 
   return (
     <main className="space-y-6">

@@ -21,10 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleSupplierStatusAction } from "@/modules/inventory/suppliers/actions";
+import { getSupplierListData } from "@/modules/inventory/suppliers/queries";
 
 type SuppliersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -43,18 +42,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function SuppliersPage({
   searchParams,
 }: SuppliersPageProps) {
@@ -65,92 +52,12 @@ export default async function SuppliersPage({
   const type = getSearchParam(params, "type");
   const payment = getSearchParam(params, "payment");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.proveedorWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_proveedor: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          razon_social: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          numero_documento: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          telefono: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (type) {
-    filters.push({
-      tipo_proveedor: type,
-    });
-  }
-
-  if (payment) {
-    filters.push({
-      condicion_pago: payment,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.proveedorWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [suppliers, supplierTypes, paymentConditions] = await Promise.all([
-    prisma.proveedor.findMany({
-      where,
-      orderBy: {
-        razon_social: "asc",
-      },
-    }),
-    prisma.tipo_proveedor_catalogo.findMany({
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        nombre: true,
-        slug: true,
-      },
-    }),
-    prisma.proveedor.findMany({
-      where: {
-        condicion_pago: {
-          not: null,
-        },
-      },
-      distinct: ["condicion_pago"],
-      orderBy: {
-        condicion_pago: "asc",
-      },
-      select: {
-        condicion_pago: true,
-      },
-    }),
-  ]);
+  const { suppliers, supplierTypes, paymentConditions } = await getSupplierListData({
+    q,
+    type,
+    payment,
+    status,
+  });
 
   const typeLabels = new Map(
     supplierTypes.map((item) => [item.slug, item.nombre]),

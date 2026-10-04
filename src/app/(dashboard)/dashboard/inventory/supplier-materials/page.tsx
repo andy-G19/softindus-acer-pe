@@ -18,12 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleSupplierMaterialStatusAction } from "@/modules/inventory/supplier-materials/actions";
+import { getSupplierMaterialListData } from "@/modules/inventory/supplier-materials/queries";
 
 type SupplierMaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -40,18 +39,6 @@ function getSearchParam(
   }
 
   return value?.trim() ?? "";
-}
-
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
 }
 
 function getAvailabilityLabel(value: string | null) {
@@ -75,74 +62,12 @@ export default async function SupplierMaterialsPage({
   const material = getSearchParam(params, "material");
   const availability = getSearchParam(params, "availability");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.proveedor_materialWhereInput[] = [];
-
-  if (supplier) {
-    filters.push({
-      id_proveedor: supplier,
-    });
-  }
-
-  if (material) {
-    filters.push({
-      id_material: material,
-    });
-  }
-
-  if (availability) {
-    filters.push({
-      disponibilidad: availability,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.proveedor_materialWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [relations, suppliers, materials] = await Promise.all([
-    prisma.proveedor_material.findMany({
-      where,
-      orderBy: {
-        fecha_actualizacion: "desc",
-      },
-      include: {
-        proveedor: {
-          select: {
-            razon_social: true,
-          },
-        },
-        material: {
-          select: {
-            nombre_material: true,
-          },
-        },
-      },
-    }),
-    prisma.proveedor.findMany({
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-    prisma.material.findMany({
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-      },
-    }),
-  ]);
+  const { relations, suppliers, materials } = await getSupplierMaterialListData({
+    supplier,
+    material,
+    availability,
+    status,
+  });
 
   return (
     <main className="space-y-6">

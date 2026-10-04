@@ -15,10 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
+import { getStockAlertsData } from "@/modules/inventory/alerts/queries";
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
@@ -33,21 +33,7 @@ export default async function InventoryAlertsPage() {
 
   const isAdmin = session.user.role === "ADMIN";
 
-  const [materials, alerts] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-    }),
-    prisma.alerta_stock.findMany({
-      orderBy: {
-        fecha_alerta: "desc",
-      },
-    }),
-  ]);
+  const { materials, alerts, alertMaterials } = await getStockAlertsData();
 
   const criticalMaterials = materials.filter((material) => {
     const stockActual = Number(material.stock_actual.toString());
@@ -56,16 +42,6 @@ export default async function InventoryAlertsPage() {
     const stockDisponible = stockActual - stockReservado;
 
     return stockMinimo > 0 && stockDisponible <= stockMinimo;
-  });
-
-  const materialIds = [...new Set(alerts.map((alert) => alert.id_material))];
-
-  const alertMaterials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: materialIds,
-      },
-    },
   });
 
   const materialById = new Map(

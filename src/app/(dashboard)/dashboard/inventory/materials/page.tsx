@@ -22,8 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
@@ -33,6 +31,7 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleMaterialStatusAction } from "@/modules/inventory/materials/actions";
+import { getMaterialListData } from "@/modules/inventory/materials/queries";
 
 type MaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -59,18 +58,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function MaterialsPage({
   searchParams,
 }: MaterialsPageProps) {
@@ -83,117 +70,12 @@ export default async function MaterialsPage({
   const status = getSearchParam(params, "status");
   const stock = getSearchParam(params, "stock");
   const returnTo = createReturnToHref(navigationHrefs.materials, params);
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.materialWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_material: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_material: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (category) {
-    filters.push({
-      categoria: category,
-    });
-  }
-
-  if (unit) {
-    filters.push({
-      unidad_medida: unit,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.materialWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  function isCriticalStock(material: {
-    stock_actual: unknown;
-    stock_reservado: unknown;
-    stock_minimo: unknown;
-  }) {
-    const stockActual = Number(String(material.stock_actual));
-    const stockReservado = Number(String(material.stock_reservado));
-    const stockMinimo = Number(String(material.stock_minimo));
-    const stockDisponible = stockActual - stockReservado;
-
-    return stockMinimo > 0 && stockDisponible <= stockMinimo;
-  }
-
-  const [materialsQuery, categories, units] = await Promise.all([
-    // El filtro "stock" compara stock_actual - stock_reservado contra
-    // stock_minimo (tres columnas entre si): Prisma no puede expresar eso en
-    // un `where`. Cuando ese filtro esta activo, se resuelve y se pagina en
-    // memoria sobre el conjunto ya acotado por el resto de filtros (q,
-    // categoria, unidad, estado); en el caso normal (sin filtro de stock) la
-    // paginacion es 100% a nivel de base de datos con skip/take/count.
-    stock === "critical" || stock === "ok"
-      ? prisma.material
-          .findMany({
-            where,
-            orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
-          })
-          .then((allMatching) => {
-            const filtered = allMatching.filter((material) => {
-              const isCritical = isCriticalStock(material);
-              return stock === "critical" ? isCritical : !isCritical;
-            });
-
-            return {
-              materials: filtered.slice(skip, skip + take),
-              totalItems: filtered.length,
-            };
-          })
-      : Promise.all([
-          prisma.material.findMany({
-            where,
-            orderBy: [{ fecha_registro: "desc" }, { id_material: "desc" }],
-            skip,
-            take,
-          }),
-          prisma.material.count({ where }),
-        ]).then(([materials, totalItems]) => ({ materials, totalItems })),
-    prisma.categoria_material.findMany({
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        nombre: true,
-        slug: true,
-      },
-    }),
-    prisma.material.findMany({
-      distinct: ["unidad_medida"],
-      orderBy: {
-        unidad_medida: "asc",
-      },
-      select: {
-        unidad_medida: true,
-      },
-    }),
-  ]);
-
-  const { materials, totalItems } = materialsQuery;
+  const { materials, totalItems, categories, units } = await getMaterialListData(
+    { q, category, unit, status, stock },
+    { skip, take },
+  );
   const meta = getPaginationMeta({ totalItems, page, pageSize });
   const isAdmin = session.user.role === "ADMIN";
   const categoryLabels = new Map(

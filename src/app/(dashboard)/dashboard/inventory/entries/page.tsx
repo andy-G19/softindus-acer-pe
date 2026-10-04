@@ -15,18 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getInventoryEntryListData } from "@/modules/inventory/movements/queries";
 
 type EntriesPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -42,79 +40,15 @@ export default async function InventoryEntriesPage({
   const material = parseStringParam(params, "material");
   const supplier = parseStringParam(params, "supplier");
   const purchase = parseStringParam(params, "purchase");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-  const filters: Prisma.movimiento_inventarioWhereInput[] = [
-    { tipo_movimiento: "entrada" },
-  ];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_compra: { contains: q, mode: "insensitive" } },
-        { material: { nombre_material: { contains: q, mode: "insensitive" } } },
-        {
-          compra: {
-            proveedor: {
-              razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (material) {
-    filters.push({ id_material: material });
-  }
-
-  if (supplier) {
-    filters.push({ compra: { id_proveedor: supplier } });
-  }
-
-  if (purchase) {
-    filters.push({ id_compra: purchase });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_movimiento: dateRange });
-  }
-
-  const where: Prisma.movimiento_inventarioWhereInput = { AND: filters };
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [movements, totalItems, materials, suppliers, purchases] =
-    await Promise.all([
-      prisma.movimiento_inventario.findMany({
-        where,
-        orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento: "desc" }],
-        skip,
-        take,
-        include: {
-          material: true,
-          compra: {
-            include: {
-              proveedor: true,
-            },
-          },
-        },
-      }),
-      prisma.movimiento_inventario.count({ where }),
-      prisma.material.findMany({
-        orderBy: { nombre_material: "asc" },
-        select: { id_material: true, nombre_material: true },
-      }),
-      prisma.proveedor.findMany({
-        orderBy: { razon_social: "asc" },
-        select: { id_proveedor: true, razon_social: true },
-      }),
-      prisma.compra.findMany({
-        orderBy: { fecha_compra: "desc" },
-        select: { id_compra: true },
-      }),
-    ]);
+  const { movements, totalItems, materials, suppliers, purchases } =
+    await getInventoryEntryListData(
+      { q, material, supplier, purchase, from, to },
+      { skip, take },
+    );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 
