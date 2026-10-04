@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateFabricationRouteAction } from "@/modules/production/routes/actions";
+import { getFabricationRouteEditData } from "@/modules/production/routes/queries";
 import Link from "next/link";
 
 type EditFabricationRoutePageProps = {
@@ -24,34 +24,7 @@ export default async function EditFabricationRoutePage({
 
   const { id } = await params;
 
-  const [route, products] = await Promise.all([
-    prisma.ruta_fabricacion.findUnique({
-      where: {
-        id_ruta: id,
-      },
-      include: {
-        producto: true,
-        _count: {
-          select: {
-            orden_trabajo: true,
-          },
-        },
-      },
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: [
-        {
-          categoria: "asc",
-        },
-        {
-          nombre_producto: "asc",
-        },
-      ],
-    }),
-  ]);
+  const { route, products } = await getFabricationRouteEditData(id);
 
   if (!route) {
     notFound();

@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateProductionCampaignAction } from "@/modules/production/campaigns/actions";
+import { getProductionCampaignForEdit } from "@/modules/production/campaigns/queries";
 
 type EditProductionCampaignPageProps = {
   params: Promise<{
@@ -33,11 +33,7 @@ export default async function EditProductionCampaignPage({
 
   const { id } = await params;
 
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: id,
-    },
-  });
+  const campaign = await getProductionCampaignForEdit(id);
 
   if (!campaign) {
     notFound();

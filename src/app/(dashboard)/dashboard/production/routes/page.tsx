@@ -15,10 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/actions";
+import { getFabricationRouteListData } from "@/modules/production/routes/queries";
 
 type FabricationRoutesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -37,18 +36,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function FabricationRoutesPage({
   searchParams,
 }: FabricationRoutesPageProps) {
@@ -58,85 +45,11 @@ export default async function FabricationRoutesPage({
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.ruta_fabricacionWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_ruta: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_ruta: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          producto: {
-            nombre_producto: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (product) {
-    filters.push({
-      id_producto: product,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.ruta_fabricacionWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [routes, products] = await Promise.all([
-    prisma.ruta_fabricacion.findMany({
-      where,
-      include: {
-        producto: true,
-        _count: {
-          select: {
-            etapa_ruta: true,
-            orden_trabajo: true,
-          },
-        },
-      },
-      orderBy: [
-        {
-          estado: "desc",
-        },
-        {
-          nombre_ruta: "asc",
-        },
-      ],
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-  ]);
+  const { routes, products } = await getFabricationRouteListData({
+    q,
+    product,
+    status,
+  });
 
   return (
     <main className="space-y-6">

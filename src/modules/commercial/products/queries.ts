@@ -229,3 +229,36 @@ export function findActiveProductOptions() {
     },
   });
 }
+
+// Productos activos por nombre, para los filtros de Produccion.
+export function findActiveProductFilterOptions() {
+  return prisma.producto.findMany({
+    where: {
+      estado: true,
+    },
+    orderBy: {
+      nombre_producto: "asc",
+    },
+    select: {
+      id_producto: true,
+      nombre_producto: true,
+    },
+  });
+}
+
+// Productos activos por categoria y nombre, para los formularios de rutas.
+export function findActiveProductsByCategory() {
+  return prisma.producto.findMany({
+    where: {
+      estado: true,
+    },
+    orderBy: [
+      {
+        categoria: "asc",
+      },
+      {
+        nombre_producto: "asc",
+      },
+    ],
+  });
+}

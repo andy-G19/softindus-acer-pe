@@ -18,14 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   STAGE_TIME_MODES,
   getStageDurationPerUnit,
 } from "@/lib/production-times";
 import { toggleRouteStageStatusAction } from "@/modules/production/stages/actions";
+import { getRouteStagesData } from "@/modules/production/stages/queries";
 
 type RouteStagesPageProps = {
   params: Promise<{
@@ -55,30 +54,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getBooleanFilter(value: string) {
-  if (value === "yes") {
-    return true;
-  }
-
-  if (value === "no") {
-    return false;
-  }
-
-  return undefined;
-}
-
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function RouteStagesPage({
   params,
   searchParams,
@@ -90,63 +65,10 @@ export default async function RouteStagesPage({
   const q = getSearchParam(queryParams, "q");
   const requiresMachine = getSearchParam(queryParams, "requiresMachine");
   const status = getSearchParam(queryParams, "status");
-  const machineFilter = getBooleanFilter(requiresMachine);
-  const statusFilter = getStatusFilter(status);
-  const stageFilters: Prisma.etapa_rutaWhereInput[] = [];
-
-  if (q) {
-    stageFilters.push({
-      nombre_etapa: {
-        contains: q,
-        mode: "insensitive",
-      },
-    });
-  }
-
-  if (machineFilter !== undefined) {
-    stageFilters.push({
-      requiere_maquina: machineFilter,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    stageFilters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const route = await prisma.ruta_fabricacion.findUnique({
-    where: {
-      id_ruta: id,
-    },
-    include: {
-      producto: true,
-      etapa_ruta: {
-        where: stageFilters.length > 0 ? { AND: stageFilters } : undefined,
-        include: {
-          etapa_ruta_maquina: {
-            select: {
-              tiempo_maquina_minutos_unidad: true,
-              maquina: {
-                select: {
-                  nombre: true,
-                  estado: true,
-                },
-              },
-            },
-          },
-          _count: {
-            select: {
-              avance_orden: true,
-              tarea_operario: true,
-            },
-          },
-        },
-        orderBy: {
-          orden_secuencia: "asc",
-        },
-      },
-    },
+  const route = await getRouteStagesData(id, {
+    q,
+    requiresMachine,
+    status,
   });
 
   if (!route) {

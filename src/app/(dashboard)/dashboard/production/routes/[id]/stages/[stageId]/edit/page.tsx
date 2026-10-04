@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateRouteStageAction } from "@/modules/production/stages/actions";
 import { StageForm } from "@/modules/production/stages/stage-form";
+import { getRouteStageEditData } from "@/modules/production/stages/queries";
 
 type EditRouteStagePageProps = {
   params: Promise<{
@@ -29,61 +29,14 @@ export default async function EditRouteStagePage({
 
   const { id, stageId } = await params;
 
-  const stage = await prisma.etapa_ruta.findFirst({
-    where: {
-      id_etapa_ruta: stageId,
-      id_ruta: id,
-    },
-    include: {
-      ruta_fabricacion: {
-        include: {
-          producto: true,
-        },
-      },
-      etapa_ruta_maquina: {
-        select: {
-          id_maquina: true,
-          tiempo_maquina_minutos_unidad: true,
-        },
-      },
-      _count: {
-        select: {
-          avance_orden: true,
-          tarea_operario: true,
-        },
-      },
-    },
-  });
+  const routeStageEditData = await getRouteStageEditData(id, stageId);
 
-  if (!stage) {
+  if (!routeStageEditData) {
     notFound();
   }
 
+  const { stage, machines } = routeStageEditData;
   const assignment = stage.etapa_ruta_maquina[0];
-
-  // La máquina ya asignada se incluye aunque hoy esté dada de baja o inactiva: quitarla
-  // del selector haría que editar cualquier otro campo borrara la asignación en silencio.
-  const machines = await prisma.maquina.findMany({
-    where: {
-      OR: [
-        {
-          estado: {
-            notIn: ["dada_de_baja", "inactiva"],
-          },
-        },
-        ...(assignment ? [{ id_maquina: assignment.id_maquina }] : []),
-      ],
-    },
-    orderBy: {
-      nombre: "asc",
-    },
-    select: {
-      id_maquina: true,
-      nombre: true,
-      tipo: true,
-      estado: true,
-    },
-  });
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">

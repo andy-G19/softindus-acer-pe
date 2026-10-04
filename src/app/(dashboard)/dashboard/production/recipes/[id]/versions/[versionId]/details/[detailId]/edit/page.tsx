@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 import { RecipeDetailForm } from "@/modules/production/recipe-details/recipe-detail-form";
+import { getRecipeDetailEditData } from "@/modules/production/recipe-details/queries";
 
 type EditRecipeDetailPageProps = {
   params: Promise<{
@@ -39,63 +39,18 @@ export default async function EditRecipeDetailPage({
 
   const { id, versionId, detailId } = await params;
 
-  const detail = await prisma.detalle_receta.findFirst({
-    where: {
-      id_detalle_receta: detailId,
-      id_version_receta: versionId,
-    },
-    include: {
-      material: true,
-      version_receta: {
-        include: {
-          receta_tecnica: {
-            include: {
-              producto: true,
-            },
-          },
-          detalle_receta: {
-            select: {
-              id_material: true,
-            },
-          },
-          _count: {
-            select: {
-              orden_trabajo: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const recipeDetailEditData = await getRecipeDetailEditData(
+    id,
+    versionId,
+    detailId,
+  );
 
-  if (!detail || detail.version_receta.id_receta !== id) {
+  if (!recipeDetailEditData) {
     notFound();
   }
 
+  const { detail, materials } = recipeDetailEditData;
   const version = detail.version_receta;
-
-  // Los materiales ya usados en otras líneas se excluyen, pero el de esta línea se
-  // conserva: si no, editar la cantidad obligaría a cambiar también el material.
-  const usedMaterialIds = version.detalle_receta
-    .map((item) => item.id_material)
-    .filter((materialId) => materialId !== detail.id_material);
-
-  const materials = await prisma.material.findMany({
-    where: {
-      OR: [
-        {
-          estado: true,
-          id_material: {
-            notIn: usedMaterialIds,
-          },
-        },
-        // El material actual se incluye aunque hoy esté inactivo, para no borrarlo en
-        // silencio al guardar cualquier otro cambio de la línea.
-        { id_material: detail.id_material },
-      ],
-    },
-    orderBy: [{ categoria: "asc" }, { nombre_material: "asc" }],
-  });
 
   const canEditDetail =
     version.estado === "vigente" &&

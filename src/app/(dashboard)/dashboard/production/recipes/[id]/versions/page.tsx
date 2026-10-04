@@ -17,13 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   setCurrentRecipeVersionAction,
   voidRecipeVersionAction,
 } from "@/modules/production/recipe-versions/actions";
+import { getRecipeVersionsData } from "@/modules/production/recipe-versions/queries";
 
 type RecipeVersionsPageProps = {
   params: Promise<{
@@ -62,37 +62,7 @@ export default async function RecipeVersionsPage({
 
   const { id } = await params;
 
-  const recipe = await prisma.receta_tecnica.findUnique({
-    where: {
-      id_receta: id,
-    },
-    include: {
-      producto: true,
-      usuario: true,
-      version_receta: {
-        include: {
-          usuario: true,
-          detalle_receta: {
-            include: {
-              material: true,
-            },
-            orderBy: {
-              id_detalle_receta: "asc",
-            },
-          },
-          _count: {
-            select: {
-              detalle_receta: true,
-              orden_trabajo: true,
-            },
-          },
-        },
-        orderBy: {
-          fecha_version: "desc",
-        },
-      },
-    },
-  });
+  const recipe = await getRecipeVersionsData(id);
 
   if (!recipe) {
     notFound();

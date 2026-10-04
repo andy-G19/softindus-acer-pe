@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createRecipeDetailAction } from "@/modules/production/recipe-details/actions";
 import { RecipeDetailForm } from "@/modules/production/recipe-details/recipe-detail-form";
+import { getNewRecipeDetailData } from "@/modules/production/recipe-details/queries";
 
 type NewRecipeDetailPageProps = {
   params: Promise<{
@@ -30,54 +30,13 @@ export default async function NewRecipeDetailPage({
 
   const { id, versionId } = await params;
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: versionId,
-      id_receta: id,
-    },
-    include: {
-      receta_tecnica: {
-        include: {
-          producto: true,
-        },
-      },
-      detalle_receta: {
-        select: {
-          id_material: true,
-        },
-      },
-      _count: {
-        select: {
-          orden_trabajo: true,
-        },
-      },
-    },
-  });
+  const newRecipeDetailData = await getNewRecipeDetailData(id, versionId);
 
-  if (!version) {
+  if (!newRecipeDetailData) {
     notFound();
   }
 
-  const usedMaterialIds = version.detalle_receta.map(
-    (detail) => detail.id_material,
-  );
-
-  const materials = await prisma.material.findMany({
-    where: {
-      estado: true,
-      id_material: {
-        notIn: usedMaterialIds,
-      },
-    },
-    orderBy: [
-      {
-        categoria: "asc",
-      },
-      {
-        nombre_material: "asc",
-      },
-    ],
-  });
+  const { version, materials } = newRecipeDetailData;
 
   const canAddDetail =
     version.estado === "vigente" &&

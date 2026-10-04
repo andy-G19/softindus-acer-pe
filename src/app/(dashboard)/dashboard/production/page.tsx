@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
-import { prisma } from "@/lib/db";
+import { getProductionOverviewData } from "@/modules/production/overview/queries";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import Link from "next/link";
 import {
@@ -66,7 +66,7 @@ function getModuleHealthMessage(data: {
 export default async function ProductionDashboardPage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const [
+  const {
     totalOrders,
     activeOrders,
     pendingOrders,
@@ -81,98 +81,7 @@ export default async function ProductionDashboardPage() {
     recipeDetails,
     totalCampaigns,
     activeCampaigns,
-  ] = await Promise.all([
-    prisma.orden_trabajo.count(),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          in: ["pendiente", "en_proceso", "pausada"],
-        },
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: "pendiente",
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: "en_proceso",
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: "pausada",
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: "finalizada",
-      },
-    }),
-
-    prisma.producto.count({
-      where: {
-        estado: true,
-      },
-    }),
-
-    prisma.ruta_fabricacion.count({
-      where: {
-        estado: true,
-      },
-    }),
-
-    prisma.etapa_ruta.count({
-      where: {
-        estado: true,
-        ruta_fabricacion: {
-          estado: true,
-        },
-      },
-    }),
-
-    prisma.receta_tecnica.count({
-      where: {
-        estado: "activa",
-      },
-    }),
-
-    prisma.version_receta.count({
-      where: {
-        estado: "vigente",
-        receta_tecnica: {
-          estado: "activa",
-        },
-      },
-    }),
-
-    prisma.detalle_receta.count({
-      where: {
-        version_receta: {
-          estado: "vigente",
-          receta_tecnica: {
-            estado: "activa",
-          },
-        },
-      },
-    }),
-
-    prisma.campania_produccion.count(),
-
-    prisma.campania_produccion.count({
-      where: {
-        estado: {
-          in: ["planificada", "activa"],
-        },
-      },
-    }),
-  ]);
+  } = await getProductionOverviewData();
 
   const moduleHealthMessage = getModuleHealthMessage({
     activeProducts,

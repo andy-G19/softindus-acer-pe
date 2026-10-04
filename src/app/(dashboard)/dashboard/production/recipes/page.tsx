@@ -17,11 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toggleTechnicalRecipeStatusAction } from "@/modules/production/recipes/actions";
+import { getTechnicalRecipeListData } from "@/modules/production/recipes/queries";
 
 type RecipesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -47,96 +46,11 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
-  const filters: Prisma.receta_tecnicaWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_receta: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_receta: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          producto: {
-            nombre_producto: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (product) {
-    filters.push({
-      id_producto: product,
-    });
-  }
-
-  if (status) {
-    filters.push({
-      estado: status,
-    });
-  }
-
-  const where: Prisma.receta_tecnicaWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [recipes, products] = await Promise.all([
-    prisma.receta_tecnica.findMany({
-      where,
-      include: {
-        producto: true,
-        usuario: true,
-        version_receta: {
-          where: {
-            estado: "vigente",
-          },
-          include: {
-            _count: {
-              select: {
-                detalle_receta: true,
-                orden_trabajo: true,
-              },
-            },
-          },
-          orderBy: {
-            fecha_version: "desc",
-          },
-          take: 1,
-        },
-        _count: {
-          select: {
-            version_receta: true,
-          },
-        },
-      },
-      orderBy: {
-        fecha_creacion: "desc",
-      },
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-  ]);
+  const { recipes, products } = await getTechnicalRecipeListData({
+    q,
+    product,
+    status,
+  });
 
   const activeRecipes = recipes.filter((recipe) => recipe.estado === "activa");
   const recipesWithCurrentVersion = recipes.filter((recipe) => {

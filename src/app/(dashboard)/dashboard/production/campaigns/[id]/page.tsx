@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
+import { getProductionCampaignDetail } from "@/modules/production/campaigns/queries";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -43,30 +43,7 @@ export default async function ProductionCampaignDetailPage({
 
   const { id } = await params;
 
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: id,
-    },
-    include: {
-      campania_detalle: {
-        include: {
-          producto: true,
-        },
-        orderBy: {
-          id_campania_detalle: "asc",
-        },
-      },
-      orden_trabajo: {
-        include: {
-          producto: true,
-        },
-        orderBy: {
-          fecha_registro: "desc",
-        },
-        take: 8,
-      },
-    },
-  });
+  const campaign = await getProductionCampaignDetail(id);
 
   if (!campaign) {
     notFound();

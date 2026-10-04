@@ -6,27 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createFabricationRouteAction } from "@/modules/production/routes/actions";
+import { getNewFabricationRouteProducts } from "@/modules/production/routes/queries";
 import Link from "next/link";
 
 export default async function NewFabricationRoutePage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const products = await prisma.producto.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: [
-      {
-        categoria: "asc",
-      },
-      {
-        nombre_producto: "asc",
-      },
-    ],
-  });
+  const products = await getNewFabricationRouteProducts();
 
   const productItems = products.map((product) => ({
     id: product.id_producto,
