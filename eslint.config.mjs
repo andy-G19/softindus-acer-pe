@@ -16,6 +16,7 @@ const authImportRestriction = {
 // crece con cada sub-entrega.
 const pagesWithoutPrisma = [
   "src/app/(dashboard)/dashboard/commercial/**/page.tsx",
+  "src/app/(dashboard)/dashboard/inventory/**/page.tsx",
 ];
 
 const dbImportRestriction = {
