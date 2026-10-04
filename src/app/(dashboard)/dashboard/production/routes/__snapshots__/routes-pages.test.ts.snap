@@ -1,0 +1,2315 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/production/routes > inactivas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "etapa_ruta": true,
+            "orden_trabajo": true,
+          },
+        },
+        "producto": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_ruta": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rutas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Rutas de fabricación</h1>
+<p>Consulta las rutas productivas definidas para cada producto del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+<a data-variant="default" href="/dashboard/production/routes/new">Nueva ruta</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activas</option>
+<option value="inactive" selected="">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Ruta</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Etapas</th>
+<th>Órdenes asociadas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_ruta-1</td>
+<td>
+<div>nombre_ruta-1</div>
+<p>descripcion-1</p>
+</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_ruta-2</td>
+<td>
+<div>nombre_ruta-2</div>
+</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "etapa_ruta": true,
+            "orden_trabajo": true,
+          },
+        },
+        "producto": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_ruta": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rutas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Rutas de fabricación</h1>
+<p>Consulta las rutas productivas definidas para cada producto del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+<a data-variant="default" href="/dashboard/production/routes/new">Nueva ruta</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activas</option>
+<option value="inactive">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Ruta</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Etapas</th>
+<th>Órdenes asociadas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_ruta-1</td>
+<td>
+<div>nombre_ruta-1</div>
+<p>descripcion-1</p>
+</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_ruta-2</td>
+<td>
+<div>nombre_ruta-2</div>
+</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "etapa_ruta": true,
+            "orden_trabajo": true,
+          },
+        },
+        "producto": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_ruta": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_ruta": {
+                  "contains": "corte",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_ruta": {
+                  "contains": "corte",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "producto": {
+                  "nombre_producto": {
+                    "contains": "corte",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_producto": "PRO00000001",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rutas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Rutas de fabricación</h1>
+<p>Consulta las rutas productivas definidas para cada producto del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+<a data-variant="default" href="/dashboard/production/routes/new">Nueva ruta</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar ruta, código o producto..." name="q" value="corte"/>
+</div>
+<div>
+<label for="product">Producto</label>
+<select id="product" name="product">
+<option value="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activas</option>
+<option value="inactive">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Ruta</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Etapas</th>
+<th>Órdenes asociadas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_ruta-1</td>
+<td>
+<div>nombre_ruta-1</div>
+<p>descripcion-1</p>
+</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_ruta-2</td>
+<td>
+<div>nombre_ruta-2</div>
+</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "categoria": "asc",
+        },
+        {
+          "nombre_producto": "asc",
+        },
+      ],
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar ruta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar ruta de fabricación</h1>
+<p>Actualiza los datos generales de la ruta. Si ya tiene órdenes asociadas, el producto queda protegido para conservar trazabilidad.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a rutas">
+<svg/>Volver a rutas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<label>Producto</label>
+<div>nombre_producto-1</div>
+<p>Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
+</div>
+<div>
+<label>Nombre de la ruta *</label>
+<input required="" maxLength="100" name="nombre_ruta" value="nombre_ruta-1"/>
+</div>
+<div>
+<label>Descripción</label>
+<textarea name="descripcion" rows="4" maxLength="500">descripcion-1</textarea>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/production/routes">Volver a rutas</a>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT99999999",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "categoria": "asc",
+        },
+        {
+          "nombre_producto": "asc",
+        },
+      ],
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > etapas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "_count": {
+              "select": {
+                "avance_orden": true,
+                "tarea_operario": true,
+              },
+            },
+            "etapa_ruta_maquina": {
+              "select": {
+                "maquina": {
+                  "select": {
+                    "estado": true,
+                    "nombre": true,
+                  },
+                },
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+          "orderBy": {
+            "orden_secuencia": "asc",
+          },
+          "where": undefined,
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Etapas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Etapas de la ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1 · descripcion-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a rutas">
+<svg/>Volver a rutas</button>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar etapa..." name="q" value=""/>
+</div>
+<div>
+<label for="requiresMachine">Máquina</label>
+<select id="requiresMachine" name="requiresMachine">
+<option value="" selected="">Máquina: todos</option>
+<option value="yes">Requiere máquina</option>
+<option value="no">No requiere máquina</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activas</option>
+<option value="inactive">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en esta ruta.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Requieren máquina</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Dependen de equipo crítico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Minutos por unidad</div>
+</div>
+</div>
+<div>
+<p>11.50 min</p>
+<p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Etapa</th>
+<th>Operario / unidad</th>
+<th>Máquina</th>
+<th>Duración / unidad</th>
+<th>Avances</th>
+<th>Tareas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>descripcion-1</p>
+</td>
+<td>11.50 min</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>2</td>
+<td>
+<div>nombre_etapa-2</div>
+</td>
+<td>-</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "_count": {
+              "select": {
+                "avance_orden": true,
+                "tarea_operario": true,
+              },
+            },
+            "etapa_ruta_maquina": {
+              "select": {
+                "maquina": {
+                  "select": {
+                    "estado": true,
+                    "nombre": true,
+                  },
+                },
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+          "orderBy": {
+            "orden_secuencia": "asc",
+          },
+          "where": {
+            "AND": [
+              {
+                "nombre_etapa": {
+                  "contains": "soldadura",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "requiere_maquina": true,
+              },
+              {
+                "estado": true,
+              },
+            ],
+          },
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Etapas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Etapas de la ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1 · descripcion-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a rutas">
+<svg/>Volver a rutas</button>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar etapa..." name="q" value="soldadura"/>
+</div>
+<div>
+<label for="requiresMachine">Máquina</label>
+<select id="requiresMachine" name="requiresMachine">
+<option value="">Máquina: todos</option>
+<option value="yes" selected="">Requiere máquina</option>
+<option value="no">No requiere máquina</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activas</option>
+<option value="inactive">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en esta ruta.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Requieren máquina</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Dependen de equipo crítico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Minutos por unidad</div>
+</div>
+</div>
+<div>
+<p>11.50 min</p>
+<p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Etapa</th>
+<th>Operario / unidad</th>
+<th>Máquina</th>
+<th>Duración / unidad</th>
+<th>Avances</th>
+<th>Tareas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>descripcion-1</p>
+</td>
+<td>11.50 min</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>2</td>
+<td>
+<div>nombre_etapa-2</div>
+</td>
+<td>-</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "_count": {
+              "select": {
+                "avance_orden": true,
+                "tarea_operario": true,
+              },
+            },
+            "etapa_ruta_maquina": {
+              "select": {
+                "maquina": {
+                  "select": {
+                    "estado": true,
+                    "nombre": true,
+                  },
+                },
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+          "orderBy": {
+            "orden_secuencia": "asc",
+          },
+          "where": undefined,
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT99999999",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "_count": {
+              "select": {
+                "avance_orden": true,
+                "tarea_operario": true,
+              },
+            },
+            "etapa_ruta_maquina": {
+              "select": {
+                "maquina": {
+                  "select": {
+                    "estado": true,
+                    "nombre": true,
+                  },
+                },
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+          "orderBy": {
+            "orden_secuencia": "asc",
+          },
+          "where": {
+            "AND": [
+              {
+                "requiere_maquina": false,
+              },
+              {
+                "estado": false,
+              },
+            ],
+          },
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Etapas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Etapas de la ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1 · descripcion-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a rutas">
+<svg/>Volver a rutas</button>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar etapa..." name="q" value=""/>
+</div>
+<div>
+<label for="requiresMachine">Máquina</label>
+<select id="requiresMachine" name="requiresMachine">
+<option value="">Máquina: todos</option>
+<option value="yes">Requiere máquina</option>
+<option value="no" selected="">No requiere máquina</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activas</option>
+<option value="inactive" selected="">Inactivas</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en esta ruta.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Requieren máquina</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Dependen de equipo crítico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Minutos por unidad</div>
+</div>
+</div>
+<div>
+<p>11.50 min</p>
+<p>1 etapa(s) sin tiempo capturado.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Etapa</th>
+<th>Operario / unidad</th>
+<th>Máquina</th>
+<th>Duración / unidad</th>
+<th>Avances</th>
+<th>Tareas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>descripcion-1</p>
+</td>
+<td>11.50 min</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activa</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<button data-variant="link" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>2</td>
+<td>
+<div>nombre_etapa-2</div>
+</td>
+<td>-</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>11.50 min · simultáneo</p>
+</div>
+</td>
+<td>11.50 min</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
+<button data-variant="link" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con maquina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "avance_orden": true,
+            "tarea_operario": true,
+          },
+        },
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+            "tiempo_maquina_minutos_unidad": true,
+          },
+        },
+        "ruta_fabricacion": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETR00000001",
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": {
+              "notIn": [
+                "dada_de_baja",
+                "inactiva",
+              ],
+            },
+          },
+          {
+            "id_maquina": "id_maquina-1",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con maquina > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar etapa</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar etapa de ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a etapas">
+<svg/>Volver a etapas</button>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div>
+<label for="nombre_etapa">Nombre de la etapa *</label>
+<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
+</div>
+<div>
+<div>
+<label for="orden_secuencia">Orden de ejecución *</label>
+<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="1"/>
+</div>
+<div>
+<label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
+<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
+<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_maquina">Máquina utilizada</label>
+<select id="id_maquina" name="id_maquina">
+<option value="">Sin máquina</option>
+<option value="id_maquina-1" selected="">nombre-1 · tipo-1</option>
+<option value="id_maquina-2">nombre-2 · tipo-2</option>
+</select>
+</div>
+<div>
+<label for="tiempo_maquina_minutos_unidad">Minutos de máquina por unidad *</label>
+<input type="number" id="tiempo_maquina_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 6" name="tiempo_maquina_minutos_unidad" value="11.5"/>
+<p>Minutos de uso de la máquina para producir <strong>una</strong> unidad.</p>
+</div>
+</div>
+<div>
+<div>
+<button type="button" role="switch" aria-checked="true" data-state="checked" value="on" id="modo_tiempo_switch" aria-label="El operario trabaja simultáneamente con la máquina">
+<span data-state="checked">
+</span>
+</button>
+<input type="checkbox" aria-hidden="true" tabindex="-1" checked="" value="on"/>
+<span>El operario trabaja junto a la máquina</span>
+</div>
+<p>
+<span>Modo: simultáneo</span> — El operario atiende la máquina durante toda la etapa. La etapa dura lo que tarde el más lento de los dos.</p>
+</div>
+<div>
+<p>Para una orden de 10 unidades</p>
+<ul>
+<li>Trabajo de operario: <span>115.00 min</span>
+</li>
+<li>Uso de maquinaria: <span>115.00 min</span>
+</li>
+<li>Duración de la etapa: <span>115.00 min</span>
+</li>
+</ul>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">descripcion-1</textarea>
+</div>
+<label>
+<input type="checkbox" disabled="" name="requiere_maquina" checked=""/>
+<span>
+<span>Esta etapa requiere máquina o equipo crítico</span>
+<span>Se marca automáticamente porque la etapa ya tiene una máquina asignada.</span>
+</span>
+</label>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin maquina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "avance_orden": true,
+            "tarea_operario": true,
+          },
+        },
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+            "tiempo_maquina_minutos_unidad": true,
+          },
+        },
+        "ruta_fabricacion": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETR00000002",
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": {
+              "notIn": [
+                "dada_de_baja",
+                "inactiva",
+              ],
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin maquina > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar etapa</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar etapa de ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a etapas">
+<svg/>Volver a etapas</button>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div>
+<label for="nombre_etapa">Nombre de la etapa *</label>
+<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
+</div>
+<div>
+<div>
+<label for="orden_secuencia">Orden de ejecución *</label>
+<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="1"/>
+</div>
+<div>
+<label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
+<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
+<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_maquina">Máquina utilizada</label>
+<select id="id_maquina" name="id_maquina">
+<option value="" selected="">Sin máquina</option>
+<option value="id_maquina-1">nombre-1 · tipo-1</option>
+<option value="id_maquina-2">nombre-2 · tipo-2</option>
+</select>
+</div>
+</div>
+<div>
+<p>Para una orden de 10 unidades</p>
+<ul>
+<li>Trabajo de operario: <span>115.00 min</span>
+</li>
+<li>Duración de la etapa: <span>115.00 min</span>
+</li>
+</ul>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">descripcion-1</textarea>
+</div>
+<label>
+<input type="checkbox" name="requiere_maquina" checked=""/>
+<span>
+<span>Esta etapa requiere máquina o equipo crítico</span>
+<span>Márcala para etapas como corte, prensa, soldadura o esmerilado, aunque todavía no asignes la máquina.</span>
+</span>
+</label>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "avance_orden": true,
+            "tarea_operario": true,
+          },
+        },
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+            "tiempo_maquina_minutos_unidad": true,
+          },
+        },
+        "ruta_fabricacion": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETR99999999",
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/new > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "orderBy": {
+            "orden_secuencia": "desc",
+          },
+          "take": 1,
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT99999999",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+      "where": {
+        "estado": {
+          "notIn": [
+            "dada_de_baja",
+            "inactiva",
+          ],
+        },
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/new > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "orderBy": {
+            "orden_secuencia": "desc",
+          },
+          "take": 1,
+        },
+        "producto": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+      "where": {
+        "estado": {
+          "notIn": [
+            "dada_de_baja",
+            "inactiva",
+          ],
+        },
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes/id_ruta-1/stages">Etapas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva etapa</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva etapa de ruta</h1>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a etapas">
+<svg/>Volver a etapas</button>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>Usa números consecutivos en el orden de ejecución: 1, 2, 3, 4... Esto permite calcular el flujo de producción y mostrar los avances ordenados.</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div>
+<label for="nombre_etapa">Nombre de la etapa *</label>
+<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value=""/>
+</div>
+<div>
+<div>
+<label for="orden_secuencia">Orden de ejecución *</label>
+<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="2"/>
+</div>
+<div>
+<label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
+<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_maquina">Máquina utilizada</label>
+<select id="id_maquina" name="id_maquina">
+<option value="" selected="">Sin máquina</option>
+<option value="id_maquina-1">nombre-1 · tipo-1</option>
+<option value="id_maquina-2">nombre-2 · tipo-2</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">
+</textarea>
+</div>
+<label>
+<input type="checkbox" name="requiere_maquina"/>
+<span>
+<span>Esta etapa requiere máquina o equipo crítico</span>
+<span>Márcala para etapas como corte, prensa, soldadura o esmerilado, aunque todavía no asignes la máquina.</span>
+</span>
+</label>
+<div>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
+<button data-variant="default" type="submit">Registrar etapa</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/routes/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "categoria": "asc",
+        },
+        {
+          "nombre_producto": "asc",
+        },
+      ],
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/routes/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production/routes">Rutas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva ruta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva ruta de fabricación</h1>
+<p>Registra una ruta productiva para un producto. Luego agregaremos sus etapas: corte, forjado, soldadura, lijado, pintura u otras.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a rutas">
+<svg/>Volver a rutas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="id_producto-_R_7_">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto-_R_7_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_7_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+<div>
+<label>Nombre de la ruta *</label>
+<input required="" maxLength="100" placeholder="Ej. Ruta estándar para lampa" name="nombre_ruta"/>
+</div>
+<div>
+<label>Descripción</label>
+<textarea name="descripcion" rows="4" maxLength="500" placeholder="Ej. Corte de plancha, formado, soldadura, lijado y pintura.">
+</textarea>
+</div>
+<div role="alert">
+<div>En esta pantalla solo registramos la ruta general. Las etapas ordenadas de la ruta se crean desde la gestión de etapas de cada ruta.</div>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/production/routes">Cancelar</a>
+<button data-variant="default" type="submit">Guardar ruta</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

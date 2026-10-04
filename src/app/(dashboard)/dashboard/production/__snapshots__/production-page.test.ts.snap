@@ -1,0 +1,849 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/production > indicadores > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "en_proceso",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pausada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "finalizada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "ruta_fabricacion.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "ruta_fabricacion": {
+          "estado": true,
+        },
+      },
+    },
+    "prisma": "etapa_ruta.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activa",
+      },
+    },
+    "prisma": "receta_tecnica.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vigente",
+        "receta_tecnica": {
+          "estado": "activa",
+        },
+      },
+    },
+    "prisma": "version_receta.count",
+  },
+  {
+    "args": {
+      "where": {
+        "version_receta": {
+          "estado": "vigente",
+          "receta_tecnica": {
+            "estado": "activa",
+          },
+        },
+      },
+    },
+    "prisma": "detalle_receta.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "campania_produccion.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+      },
+    },
+    "prisma": "campania_produccion.count",
+  },
+]
+`;
+
+exports[`/dashboard/production > indicadores > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Producción</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Producción</h1>
+<p>Gestiona rutas de fabricación, etapas, recetas técnicas, versiones, materiales requeridos, órdenes de trabajo y avances de producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/production/work-orders/new">Nueva orden</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Producción lista</span>
+<span>El módulo Producción está listo para operar órdenes de trabajo.</span>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pendientes, en proceso o pausadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En proceso</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Con avance operativo actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Finalizadas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Órdenes completadas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Productos activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Rutas activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Rutas de fabricación habilitadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Etapas dentro de rutas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales en recetas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registrados en versión vigente.</p>
+</div>
+</div>
+</section>
+<section>
+<a href="/dashboard/production/routes">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Rutas de fabricación</div>
+</div>
+<div>
+<p>Define rutas por producto y estructura el proceso productivo.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/recipes">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Recetas técnicas</div>
+</div>
+<div>
+<p>Administra recetas, versiones y materiales requeridos por producto.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/work-orders">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Órdenes de trabajo</div>
+</div>
+<div>
+<p>Crea órdenes, revisa materiales y controla avances por etapa.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/campaigns">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Campañas</div>
+</div>
+<div>
+<p>Planifica lotes de producción y vincúlalos con órdenes de trabajo.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/bottlenecks">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Cuellos de botella</div>
+</div>
+<div>
+<p>Detecta etapas en proceso atrasadas, en riesgo o saturadas.</p>
+</div>
+</div>
+</a>
+</section>
+<section>
+<h2>Checklist operativo</h2>
+<div>
+<div>
+<svg/>
+<div>
+<p>Productos activos</p>
+<p>Necesarios para crear rutas, recetas y órdenes.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Rutas de fabricación</p>
+<p>Definen el flujo productivo de cada producto.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Etapas activas</p>
+<p>Permiten generar avances de producción.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Recetas técnicas activas</p>
+<p>Permiten asociar materiales al producto.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Versiones vigentes</p>
+<p>Cada receta necesita una versión vigente para operar.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Materiales requeridos</p>
+<p>Necesarios para calcular requerimientos de producción.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<p>Estados actuales</p>
+<div>
+<span data-variant="secondary">Pendientes: 42</span>
+<span data-variant="info">En proceso: 42</span>
+<span data-variant="warning">Pausadas: 42</span>
+<span data-variant="success">Finalizadas: 42</span>
+<span data-variant="secondary">Campañas activas/planificadas: 42</span>
+<span data-variant="secondary">Campañas registradas: 42</span>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "en_proceso",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pausada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "finalizada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "ruta_fabricacion.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "ruta_fabricacion": {
+          "estado": true,
+        },
+      },
+    },
+    "prisma": "etapa_ruta.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "activa",
+      },
+    },
+    "prisma": "receta_tecnica.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "vigente",
+        "receta_tecnica": {
+          "estado": "activa",
+        },
+      },
+    },
+    "prisma": "version_receta.count",
+  },
+  {
+    "args": {
+      "where": {
+        "version_receta": {
+          "estado": "vigente",
+          "receta_tecnica": {
+            "estado": "activa",
+          },
+        },
+      },
+    },
+    "prisma": "detalle_receta.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "campania_produccion.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+      },
+    },
+    "prisma": "campania_produccion.count",
+  },
+]
+`;
+
+exports[`/dashboard/production > maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Producción</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Producción</h1>
+<p>Gestiona rutas de fabricación, etapas, recetas técnicas, versiones, materiales requeridos, órdenes de trabajo y avances de producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/production/work-orders/new">Nueva orden</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Producción lista</span>
+<span>El módulo Producción está listo para operar órdenes de trabajo.</span>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pendientes, en proceso o pausadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En proceso</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Con avance operativo actual.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Finalizadas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Órdenes completadas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Productos activos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Rutas activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Rutas de fabricación habilitadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Etapas dentro de rutas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales en recetas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registrados en versión vigente.</p>
+</div>
+</div>
+</section>
+<section>
+<a href="/dashboard/production/routes">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Rutas de fabricación</div>
+</div>
+<div>
+<p>Define rutas por producto y estructura el proceso productivo.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/recipes">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Recetas técnicas</div>
+</div>
+<div>
+<p>Administra recetas, versiones y materiales requeridos por producto.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/work-orders">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Órdenes de trabajo</div>
+</div>
+<div>
+<p>Crea órdenes, revisa materiales y controla avances por etapa.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/campaigns">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Campañas</div>
+</div>
+<div>
+<p>Planifica lotes de producción y vincúlalos con órdenes de trabajo.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/production/bottlenecks">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Cuellos de botella</div>
+</div>
+<div>
+<p>Detecta etapas en proceso atrasadas, en riesgo o saturadas.</p>
+</div>
+</div>
+</a>
+</section>
+<section>
+<h2>Checklist operativo</h2>
+<div>
+<div>
+<svg/>
+<div>
+<p>Productos activos</p>
+<p>Necesarios para crear rutas, recetas y órdenes.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Rutas de fabricación</p>
+<p>Definen el flujo productivo de cada producto.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Etapas activas</p>
+<p>Permiten generar avances de producción.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Recetas técnicas activas</p>
+<p>Permiten asociar materiales al producto.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Versiones vigentes</p>
+<p>Cada receta necesita una versión vigente para operar.</p>
+</div>
+</div>
+<div>
+<svg/>
+<div>
+<p>Materiales requeridos</p>
+<p>Necesarios para calcular requerimientos de producción.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<p>Estados actuales</p>
+<div>
+<span data-variant="secondary">Pendientes: 42</span>
+<span data-variant="info">En proceso: 42</span>
+<span data-variant="warning">Pausadas: 42</span>
+<span data-variant="success">Finalizadas: 42</span>
+<span data-variant="secondary">Campañas activas/planificadas: 42</span>
+<span data-variant="secondary">Campañas registradas: 42</span>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
