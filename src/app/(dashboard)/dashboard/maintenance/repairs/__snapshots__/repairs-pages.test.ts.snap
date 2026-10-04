@@ -1,0 +1,809 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance/repairs > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "reparacion.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reparaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de reparaciones</h1>
+<p>Consulta las reparaciones registradas por falla, máquina, técnico, mano de obra, repuestos utilizados y costo total.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/repairs/new">Registrar reparación</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value=""/>
+</div>
+<div>
+<label for="machine">Máquina</label>
+<input id="machine" placeholder="Maquina" name="machine" value=""/>
+</div>
+<div>
+<label for="failure">Falla</label>
+<input id="failure" placeholder="Falla" name="failure" value=""/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/repairs">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Programadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Observadas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ejecutadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Anuladas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Mano de obra + repuestos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Promedio</div>
+</div>
+</div>
+<div>
+<p>S/ 17.00</p>
+<p>Costo promedio por reparación.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Reparaciones registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina / Falla</th>
+<th>Fecha</th>
+<th>Técnico</th>
+<th>Mano de obra</th>
+<th>Repuestos</th>
+<th>Costo total</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_reparacion-1</td>
+<td>nombre-1<p>Falla: descripcion-1</p>
+<div>
+<p>nombre_repuesto-1 × 11.5 = S/ 11.50</p>
+<p>nombre_repuesto-2 × 22.5 = S/ 22.50</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>tecnico_proveedor-1</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="secondary">estado_reparacion-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_reparacion" value="id_reparacion-1"/>
+<select name="estado_reparacion">
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_reparacion-2</td>
+<td>nombre-2<p>Falla: descripcion-2</p>
+<div>
+<p>nombre_repuesto-1 × 11.5 = S/ 11.50</p>
+<p>nombre_repuesto-2 × 22.5 = S/ 22.50</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>S/ 0.00</td>
+<td>S/ 34.00</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="secondary">estado_reparacion-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_reparacion" value="id_reparacion-2"/>
+<select name="estado_reparacion">
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/repairs > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_reparacion": {
+                  "contains": "rodamiento",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tecnico_proveedor": {
+                  "contains": "rodamiento",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "falla_maquina": {
+                  "descripcion": {
+                    "contains": "rodamiento",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "falla_maquina": {
+                  "maquina": {
+                    "nombre": {
+                      "contains": "rodamiento",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "falla_maquina": {
+              "maquina": {
+                "nombre": {
+                  "contains": "torno",
+                  "mode": "insensitive",
+                },
+              },
+            },
+          },
+          {
+            "id_falla": {
+              "contains": "FAL",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "estado_reparacion": "ejecutada",
+          },
+          {
+            "fecha_reparacion": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "reparacion.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reparaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de reparaciones</h1>
+<p>Consulta las reparaciones registradas por falla, máquina, técnico, mano de obra, repuestos utilizados y costo total.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/repairs/new">Registrar reparación</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value="rodamiento"/>
+</div>
+<div>
+<label for="machine">Máquina</label>
+<input id="machine" placeholder="Maquina" name="machine" value="torno"/>
+</div>
+<div>
+<label for="failure">Falla</label>
+<input id="failure" placeholder="Falla" name="failure" value="FAL"/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="programada">Programada</option>
+<option value="ejecutada" selected="">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/repairs">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Programadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Observadas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ejecutadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Anuladas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Mano de obra + repuestos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Promedio</div>
+</div>
+</div>
+<div>
+<p>S/ 17.00</p>
+<p>Costo promedio por reparación.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Reparaciones registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina / Falla</th>
+<th>Fecha</th>
+<th>Técnico</th>
+<th>Mano de obra</th>
+<th>Repuestos</th>
+<th>Costo total</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_reparacion-1</td>
+<td>nombre-1<p>Falla: descripcion-1</p>
+<div>
+<p>nombre_repuesto-1 × 11.5 = S/ 11.50</p>
+<p>nombre_repuesto-2 × 22.5 = S/ 22.50</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>tecnico_proveedor-1</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="secondary">estado_reparacion-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_reparacion" value="id_reparacion-1"/>
+<select name="estado_reparacion">
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_reparacion-2</td>
+<td>nombre-2<p>Falla: descripcion-2</p>
+<div>
+<p>nombre_repuesto-1 × 11.5 = S/ 11.50</p>
+<p>nombre_repuesto-2 × 22.5 = S/ 22.50</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>S/ 0.00</td>
+<td>S/ 34.00</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="secondary">estado_reparacion-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_reparacion" value="id_reparacion-2"/>
+<select name="estado_reparacion">
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/repairs/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_repuesto": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/repairs/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/repairs">Reparaciones</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva reparación</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar reparacion</h1>
+<p>Registra la atencion realizada a una falla, incluyendo tecnico, mano de obra, repuestos utilizados y costo total calculado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de la reparacion</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_falla-_R_d6_">Falla a reparar *</label>
+<input type="hidden" name="id_falla" value=""/>
+<div>
+<input id="id_falla-_R_d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_falla-_R_d6_-listbox" aria-expanded="false" required="" placeholder="Buscar falla por maquina..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="fecha_reparacion">Fecha de reparacion</label>
+<input type="date" id="fecha_reparacion" required="" name="fecha_reparacion" value="2026-07-15"/>
+</div>
+<div>
+<label for="estado_reparacion">Estado</label>
+<select id="estado_reparacion" name="estado_reparacion" required="">
+<option value="programada" selected="">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="mano_obra">Mano de obra</label>
+<input type="number" id="mano_obra" min="0" step="0.01" placeholder="Ejemplo: 80.00" name="mano_obra"/>
+</div>
+</div>
+<div>
+<label for="tecnico_proveedor">Tecnico o proveedor</label>
+<input type="text" id="tecnico_proveedor" placeholder="Ejemplo: Tecnico interno / proveedor externo" name="tecnico_proveedor"/>
+</div>
+<div>
+<div>
+<h2>Repuestos usados</h2>
+<p>Puedes registrar hasta 3 repuestos en esta version. El costo unitario se tomara automaticamente del catalogo de repuestos.</p>
+</div>
+<div>
+<div>
+<div>
+<div>
+<label for="id_repuesto_1-_R_1d56_">Repuesto 1</label>
+<input type="hidden" name="id_repuesto_1" value=""/>
+<div>
+<input id="id_repuesto_1-_R_1d56_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_repuesto_1-_R_1d56_-listbox" aria-expanded="false" placeholder="Buscar repuesto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<label for="cantidad_1">Cantidad</label>
+<input type="number" id="cantidad_1" min="0" step="0.01" placeholder="Ejemplo: 1" name="cantidad_1"/>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_repuesto_2-_R_1l56_">Repuesto 2</label>
+<input type="hidden" name="id_repuesto_2" value=""/>
+<div>
+<input id="id_repuesto_2-_R_1l56_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_repuesto_2-_R_1l56_-listbox" aria-expanded="false" placeholder="Buscar repuesto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<label for="cantidad_2">Cantidad</label>
+<input type="number" id="cantidad_2" min="0" step="0.01" placeholder="Ejemplo: 1" name="cantidad_2"/>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_repuesto_3-_R_1t56_">Repuesto 3</label>
+<input type="hidden" name="id_repuesto_3" value=""/>
+<div>
+<input id="id_repuesto_3-_R_1t56_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_repuesto_3-_R_1t56_-listbox" aria-expanded="false" placeholder="Buscar repuesto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<label for="cantidad_3">Cantidad</label>
+<input type="number" id="cantidad_3" min="0" step="0.01" placeholder="Ejemplo: 1" name="cantidad_3"/>
+</div>
+</div>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: Se cambio la manguera hidraulica y se realizo prueba de presion.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar reparacion</button>
+<a data-variant="outline" href="/dashboard/maintenance/repairs">Ver listado</a>
+<a data-variant="outline" href="/dashboard/maintenance">Volver al modulo</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Calculo automatico</div>
+</div>
+<div>
+<p>El costo total se calcula automaticamente sumando la mano de obra mas los subtotales de los repuestos usados.</p>
+<p>Si registras una reparacion como <strong>Ejecutada</strong>, la falla pasara a <strong>Reparada</strong> y la maquina volvera a estado <strong>Operativa</strong>.</p>
+<p>Si la reparacion queda programada u observada, la falla pasara a<strong> En atencion</strong> y la maquina quedara en <strong>En mantenimiento</strong>.</p>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

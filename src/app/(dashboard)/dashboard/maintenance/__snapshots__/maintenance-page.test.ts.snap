@@ -1,0 +1,667 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance > indicadores del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "operativa",
+      },
+    },
+    "prisma": "maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_falla": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 6,
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance > indicadores del mes > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mantenimiento</h1>
+<p>Control de máquinas, fallas, reparaciones, repuestos, costos, reincidencias y mantenimientos preventivos del taller.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de equipos críticos registrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas operativas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No operativas o inactivas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Fallas registradas este mes: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Vencidos: 42</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Costos de mantenimiento del mes</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Suma de reparaciones registradas durante el mes actual.</p>
+</div>
+</div>
+<div>
+<a href="/dashboard/maintenance/machines">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Máquinas</div>
+</div>
+<div>
+<p>Registro y consulta de máquinas o equipos críticos del taller. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/failures">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Fallas</div>
+</div>
+<div>
+<p>Registro de fallas, paradas, responsable e impacto productivo. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/spare-parts">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Repuestos</div>
+</div>
+<div>
+<p>Registro de repuestos utilizados en reparaciones de maquinaria. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reparaciones</div>
+</div>
+<div>
+<p>Registro de técnico, mano de obra, costo total y repuestos usados. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/preventive">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Preventivos</div>
+</div>
+<div>
+<p>Programación y seguimiento de mantenimientos preventivos básicos. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/recurrences">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reincidencias</div>
+</div>
+<div>
+<p>Consulta de máquinas con más fallas, tiempos perdidos y costos. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+</div>
+<div>
+<div>
+<div>
+<div>Últimas fallas registradas</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>Fecha: 01/07/2026 | Estado: estado_atencion-1</p>
+<p>Tiempo perdido: 11.50 h</p>
+<p>descripcion-1</p>
+</div>
+<div>
+<p>nombre-2</p>
+<p>Fecha: 02/07/2026 | Estado: estado_atencion-2</p>
+<p>Tiempo perdido: 0.00 h</p>
+<p>descripcion-2</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Próximos mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>Fecha programada: 01/07/2026 | Estado: estado-1</p>
+<p>actividad-1</p>
+<p>Responsable: responsable-1</p>
+</div>
+<div>
+<p>nombre-2</p>
+<p>Fecha programada: 02/07/2026 | Estado: estado-2</p>
+<p>actividad-2</p>
+<p>Responsable: -</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "operativa",
+      },
+    },
+    "prisma": "maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_falla": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 6,
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance > maestro de taller > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mantenimiento</h1>
+<p>Control de máquinas, fallas, reparaciones, repuestos, costos, reincidencias y mantenimientos preventivos del taller.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas registradas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Total de equipos críticos registrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas operativas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No operativas o inactivas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Fallas registradas este mes: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Vencidos: 42</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Costos de mantenimiento del mes</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Suma de reparaciones registradas durante el mes actual.</p>
+</div>
+</div>
+<div>
+<a href="/dashboard/maintenance/machines">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Máquinas</div>
+</div>
+<div>
+<p>Registro y consulta de máquinas o equipos críticos del taller. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/failures">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Fallas</div>
+</div>
+<div>
+<p>Registro de fallas, paradas, responsable e impacto productivo. Acceso: ADMIN / Maestro de taller.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/spare-parts">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Repuestos</div>
+</div>
+<div>
+<p>Registro de repuestos utilizados en reparaciones de maquinaria. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reparaciones</div>
+</div>
+<div>
+<p>Registro de técnico, mano de obra, costo total y repuestos usados. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/preventive">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Preventivos</div>
+</div>
+<div>
+<p>Programación y seguimiento de mantenimientos preventivos básicos. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/recurrences">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reincidencias</div>
+</div>
+<div>
+<p>Consulta de máquinas con más fallas, tiempos perdidos y costos. Acceso: ADMIN.</p>
+</div>
+</div>
+</a>
+</div>
+<div>
+<div>
+<div>
+<div>Últimas fallas registradas</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>Fecha: 01/07/2026 | Estado: estado_atencion-1</p>
+<p>Tiempo perdido: 11.50 h</p>
+<p>descripcion-1</p>
+</div>
+<div>
+<p>nombre-2</p>
+<p>Fecha: 02/07/2026 | Estado: estado_atencion-2</p>
+<p>Tiempo perdido: 0.00 h</p>
+<p>descripcion-2</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Próximos mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>Fecha programada: 01/07/2026 | Estado: estado-1</p>
+<p>actividad-1</p>
+<p>Responsable: responsable-1</p>
+</div>
+<div>
+<p>nombre-2</p>
+<p>Fecha programada: 02/07/2026 | Estado: estado-2</p>
+<p>actividad-2</p>
+<p>Responsable: -</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,1160 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance/spare-parts > inactivos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "detalle_repuesto_reparacion": true,
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_repuesto": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Repuestos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de repuestos</h1>
+<p>Consulta repuestos disponibles para mantenimiento, proveedor, costo unitario, estado y uso historico en reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Repuestos registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en catálogo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Fuera de catálogo.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/maintenance/spare-parts">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
+</div>
+<div>
+<label for="provider">Proveedor</label>
+<select id="provider" name="provider">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive" selected="">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Repuestos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Repuesto</th>
+<th>Proveedor</th>
+<th>Costo unitario</th>
+<th>Usos</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_repuesto-1</td>
+<td>nombre_repuesto-1<p>descripcion-1</p>
+</td>
+<td>razon_social-1</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_repuesto-2</td>
+<td>nombre_repuesto-2<p>Sin descripcion</p>
+</td>
+<td>razon_social-2</td>
+<td>S/ 22.50</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "detalle_repuesto_reparacion": true,
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_repuesto": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Repuestos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de repuestos</h1>
+<p>Consulta repuestos disponibles para mantenimiento, proveedor, costo unitario, estado y uso historico en reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Repuestos registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en catálogo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Fuera de catálogo.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/maintenance/spare-parts">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
+</div>
+<div>
+<label for="provider">Proveedor</label>
+<select id="provider" name="provider">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Repuestos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Repuesto</th>
+<th>Proveedor</th>
+<th>Costo unitario</th>
+<th>Usos</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_repuesto-1</td>
+<td>nombre_repuesto-1<p>descripcion-1</p>
+</td>
+<td>razon_social-1</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_repuesto-2</td>
+<td>nombre_repuesto-2<p>Sin descripcion</p>
+</td>
+<td>razon_social-2</td>
+<td>S/ 22.50</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "detalle_repuesto_reparacion": true,
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": [
+        {
+          "estado": "desc",
+        },
+        {
+          "nombre_repuesto": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_repuesto": {
+                  "contains": "rodamiento",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_repuesto": {
+                  "contains": "rodamiento",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "id_proveedor": "PRV00000001",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Repuestos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Listado de repuestos</h1>
+<p>Consulta repuestos disponibles para mantenimiento, proveedor, costo unitario, estado y uso historico en reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Repuestos registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total en catálogo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Activos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Fuera de catálogo.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form action="/dashboard/maintenance/spare-parts">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar repuesto..." name="q" value="rodamiento"/>
+</div>
+<div>
+<label for="provider">Proveedor</label>
+<select id="provider" name="provider">
+<option value="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Repuestos registrados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Repuesto</th>
+<th>Proveedor</th>
+<th>Costo unitario</th>
+<th>Usos</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_repuesto-1</td>
+<td>nombre_repuesto-1<p>descripcion-1</p>
+</td>
+<td>razon_social-1</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_repuesto-2</td>
+<td>nombre_repuesto-2<p>Sin descripcion</p>
+</td>
+<td>razon_social-2</td>
+<td>S/ 22.50</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_repuesto": "REP00000001",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "id_proveedor": "id_proveedor-1",
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/spare-parts">Repuestos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar repuesto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar repuesto</h1>
+<p>Actualiza datos maestros del repuesto sin tocar reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<div>
+<label for="nombre_repuesto">Nombre del repuesto</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<div>
+<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario</label>
+<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_repuesto": "REP00000002",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/spare-parts">Repuestos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar repuesto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar repuesto</h1>
+<p>Actualiza datos maestros del repuesto sin tocar reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<div>
+<label for="nombre_repuesto">Nombre del repuesto</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<input type="hidden" name="id_proveedor" value=""/>
+<div>
+<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario</label>
+<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_repuesto": "REP99999999",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/spare-parts">Repuestos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo repuesto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar repuesto</h1>
+<p>Registra repuestos disponibles para mantenimiento, proveedor, descripcion y costo unitario.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_repuesto">Nombre del repuesto</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value=""/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<input type="hidden" name="id_proveedor" value=""/>
+<div>
+<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario</label>
+<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar repuesto</button>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
