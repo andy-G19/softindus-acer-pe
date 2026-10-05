@@ -207,8 +207,8 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <td>
 <span data-variant="secondary">estado-1</span>
 </td>
-<td>30 jun. 2026, 7:00 p. m.</td>
-<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
@@ -233,7 +233,7 @@ exports[`/dashboard/users > estado desconocido no filtra > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>Sin registro</td>
-<td>1 jul. 2026, 7:00 p. m.</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
@@ -472,8 +472,8 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <td>
 <span data-variant="secondary">estado-1</span>
 </td>
-<td>30 jun. 2026, 7:00 p. m.</td>
-<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
@@ -498,7 +498,7 @@ exports[`/dashboard/users > sin filtros > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>Sin registro</td>
-<td>1 jul. 2026, 7:00 p. m.</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>
@@ -815,8 +815,8 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <td>
 <span data-variant="secondary">estado-1</span>
 </td>
-<td>30 jun. 2026, 7:00 p. m.</td>
-<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-1/edit">Editar</a>
@@ -841,7 +841,7 @@ exports[`/dashboard/users > todos los filtros > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>Sin registro</td>
-<td>1 jul. 2026, 7:00 p. m.</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/users/id_usuario-2/edit">Editar</a>

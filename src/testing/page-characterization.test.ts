@@ -204,6 +204,12 @@ describe("normalizeHtml", () => {
       ),
     ).toBe('<a data-variant="ghost" href="/x">Editar<svg/>\n</a>');
   });
+
+  it("unifica los espacios que Intl emite segun la version de ICU", () => {
+    expect(
+      normalizeHtml("<td>30 jun. 2026, 7:00\u202Fp.\u00A0m.</td><td>1\u2009000</td>"),
+    ).toBe("<td>30 jun. 2026, 7:00 p. m.</td>\n<td>1 000</td>");
+  });
 });
 
 describe("describeNavigationError", () => {

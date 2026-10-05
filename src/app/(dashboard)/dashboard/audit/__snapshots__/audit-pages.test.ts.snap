@@ -251,7 +251,7 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
 <td>apellidos-1, nombres-1</td>
 <td>accion-1</td>
 <td>entidad_afectada-1</td>
@@ -260,7 +260,7 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 <td>ip_origen-1</td>
 </tr>
 <tr>
-<td>1 jul. 2026, 7:00 p. m.</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
 <td>apellidos-2, nombres-2</td>
 <td>accion-2</td>
 <td>entidad_afectada-2</td>
@@ -720,7 +720,7 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 </thead>
 <tbody>
 <tr>
-<td>30 jun. 2026, 7:00 p. m.</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
 <td>apellidos-1, nombres-1</td>
 <td>accion-1</td>
 <td>entidad_afectada-1</td>
@@ -729,7 +729,7 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 <td>ip_origen-1</td>
 </tr>
 <tr>
-<td>1 jul. 2026, 7:00 p. m.</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
 <td>apellidos-2, nombres-2</td>
 <td>accion-2</td>
 <td>entidad_afectada-2</td>

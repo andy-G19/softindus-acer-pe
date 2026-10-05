@@ -621,10 +621,17 @@ export type PageResult = {
   html: string | null;
 };
 
+// Intl.DateTimeFormat separa "p. m." con un espacio normal o con uno de no
+// separacion segun la version de ICU que trae Node: con Node 20 e ICU 77 en
+// Windows sale U+00A0 y en el CI sale U+0020. Se unifican para que los
+// snapshots no dependan de la maquina.
+const INTL_SPACES = /[\u00A0\u202F\u2009]/g;
+
 export function normalizeHtml(html: string) {
   return html
     .replace(/<svg\b[\s\S]*?<\/svg>/g, "<svg/>")
     .replace(/ (?:class|style|data-slot|data-size)="[^"]*"/g, "")
+    .replace(INTL_SPACES, " ")
     .replace(/></g, ">\n<");
 }
 
