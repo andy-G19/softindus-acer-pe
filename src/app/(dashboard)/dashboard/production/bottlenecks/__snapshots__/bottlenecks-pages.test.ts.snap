@@ -1,0 +1,1000 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/production/bottlenecks > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "etapa_ruta_maquina": {
+              "select": {
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+        },
+        "operario": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_inicio_etapa": "asc",
+        },
+        {
+          "id_avance": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado_etapa": "en_proceso",
+          },
+        ],
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_ruta": "asc",
+      },
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "nombre_etapa": "asc",
+        },
+      ],
+      "select": {
+        "id_etapa_ruta": true,
+        "nombre_etapa": true,
+      },
+    },
+    "prisma": "etapa_ruta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/bottlenecks > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Cuellos de botella</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Cuellos de botella en producción</h1>
+<p>Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="product-_R_a_">Producto</label>
+<input type="hidden" name="product" value=""/>
+<div>
+<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+</div>
+</div>
+<div>
+<label for="route">Ruta</label>
+<select id="route" name="route">
+<option value="" selected="">Todas las rutas</option>
+<option value="id_ruta-1">nombre_ruta-1</option>
+<option value="id_ruta-2">nombre_ruta-2</option>
+</select>
+</div>
+<div>
+<label for="stage">Etapa</label>
+<select id="stage" name="stage">
+<option value="" selected="">Todas las etapas</option>
+<option value="id_etapa_ruta-1">nombre_etapa-1</option>
+<option value="id_etapa_ruta-2">nombre_etapa-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado de orden</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_proceso">En proceso</option>
+<option value="pausada">Pausada</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Avances en proceso</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Etapas activas monitoreadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Atrasados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Superan el tiempo estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En riesgo</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cerca de vencer.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas saturadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Más de una orden simultánea.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Órdenes en etapa</th>
+<th>Atrasadas</th>
+<th>En riesgo</th>
+<th>Tiempo estimado</th>
+<th>Mayor permanencia</th>
+<th>Saturación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_etapa-1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+<tr>
+<td>nombre_etapa-2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código de orden</th>
+<th>Producto</th>
+<th>Etapa</th>
+<th>Operario</th>
+<th>Horas estimadas</th>
+<th>Horas transcurridas</th>
+<th>Estado de alerta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks">id_orden_trabajo-1</a>
+</td>
+<td>nombre_producto-1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>Secuencia: 1</p>
+</td>
+<td>apellidos-1, nombres-1</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="destructive">atrasada</span>
+</td>
+</tr>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks">id_orden_trabajo-2</a>
+</td>
+<td>nombre_producto-2</td>
+<td>
+<div>nombre_etapa-2</div>
+<p>Secuencia: 2</p>
+</td>
+<td>apellidos-2, nombres-2</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="success">normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/bottlenecks > solo desde > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "etapa_ruta_maquina": {
+              "select": {
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+        },
+        "operario": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_inicio_etapa": "asc",
+        },
+        {
+          "id_avance": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado_etapa": "en_proceso",
+          },
+          {
+            "fecha_inicio_etapa": {
+              "gte": 2026-07-01T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_ruta": "asc",
+      },
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "nombre_etapa": "asc",
+        },
+      ],
+      "select": {
+        "id_etapa_ruta": true,
+        "nombre_etapa": true,
+      },
+    },
+    "prisma": "etapa_ruta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/bottlenecks > solo desde > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Cuellos de botella</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Cuellos de botella en producción</h1>
+<p>Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="product-_R_a_">Producto</label>
+<input type="hidden" name="product" value=""/>
+<div>
+<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+</div>
+</div>
+<div>
+<label for="route">Ruta</label>
+<select id="route" name="route">
+<option value="" selected="">Todas las rutas</option>
+<option value="id_ruta-1">nombre_ruta-1</option>
+<option value="id_ruta-2">nombre_ruta-2</option>
+</select>
+</div>
+<div>
+<label for="stage">Etapa</label>
+<select id="stage" name="stage">
+<option value="" selected="">Todas las etapas</option>
+<option value="id_etapa_ruta-1">nombre_etapa-1</option>
+<option value="id_etapa_ruta-2">nombre_etapa-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado de orden</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_proceso">En proceso</option>
+<option value="pausada">Pausada</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Avances en proceso</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Etapas activas monitoreadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Atrasados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Superan el tiempo estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En riesgo</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cerca de vencer.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas saturadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Más de una orden simultánea.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Órdenes en etapa</th>
+<th>Atrasadas</th>
+<th>En riesgo</th>
+<th>Tiempo estimado</th>
+<th>Mayor permanencia</th>
+<th>Saturación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_etapa-1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+<tr>
+<td>nombre_etapa-2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código de orden</th>
+<th>Producto</th>
+<th>Etapa</th>
+<th>Operario</th>
+<th>Horas estimadas</th>
+<th>Horas transcurridas</th>
+<th>Estado de alerta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks%3Ffrom%3D2026-07-01">id_orden_trabajo-1</a>
+</td>
+<td>nombre_producto-1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>Secuencia: 1</p>
+</td>
+<td>apellidos-1, nombres-1</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="destructive">atrasada</span>
+</td>
+</tr>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks%3Ffrom%3D2026-07-01">id_orden_trabajo-2</a>
+</td>
+<td>nombre_producto-2</td>
+<td>
+<div>nombre_etapa-2</div>
+<p>Secuencia: 2</p>
+</td>
+<td>apellidos-2, nombres-2</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="success">normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/production/bottlenecks > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "include": {
+            "etapa_ruta_maquina": {
+              "select": {
+                "tiempo_maquina_minutos_unidad": true,
+              },
+            },
+          },
+        },
+        "operario": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_inicio_etapa": "asc",
+        },
+        {
+          "id_avance": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "estado_etapa": "en_proceso",
+          },
+          {
+            "orden_trabajo": {
+              "id_producto": "PRO00000001",
+            },
+          },
+          {
+            "etapa_ruta": {
+              "id_ruta": "RUT00000001",
+            },
+          },
+          {
+            "id_etapa_ruta": "ETR00000001",
+          },
+          {
+            "orden_trabajo": {
+              "estado": "en_proceso",
+            },
+          },
+          {
+            "fecha_inicio_etapa": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_ruta": "asc",
+      },
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+    },
+    "prisma": "ruta_fabricacion.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "nombre_etapa": "asc",
+        },
+      ],
+      "select": {
+        "id_etapa_ruta": true,
+        "nombre_etapa": true,
+      },
+    },
+    "prisma": "etapa_ruta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/production/bottlenecks > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/production">Producción</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Cuellos de botella</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Cuellos de botella en producción</h1>
+<p>Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a producción">
+<svg/>Volver a producción</button>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="product-_R_a_">Producto</label>
+<input type="hidden" name="product" value="PRO00000001"/>
+<div>
+<input id="product-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="product-_R_a_-listbox" aria-expanded="false" placeholder="Todos los productos" value=""/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+<div>
+<label for="route">Ruta</label>
+<select id="route" name="route">
+<option value="">Todas las rutas</option>
+<option value="id_ruta-1">nombre_ruta-1</option>
+<option value="id_ruta-2">nombre_ruta-2</option>
+</select>
+</div>
+<div>
+<label for="stage">Etapa</label>
+<select id="stage" name="stage">
+<option value="">Todas las etapas</option>
+<option value="id_etapa_ruta-1">nombre_etapa-1</option>
+<option value="id_etapa_ruta-2">nombre_etapa-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado de orden</label>
+<select id="orderStatus" name="orderStatus">
+<option value="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_proceso" selected="">En proceso</option>
+<option value="pausada">Pausada</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/production/bottlenecks">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Avances en proceso</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Etapas activas monitoreadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Atrasados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Superan el tiempo estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En riesgo</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cerca de vencer.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Etapas saturadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Más de una orden simultánea.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Órdenes en etapa</th>
+<th>Atrasadas</th>
+<th>En riesgo</th>
+<th>Tiempo estimado</th>
+<th>Mayor permanencia</th>
+<th>Saturación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_etapa-1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+<tr>
+<td>nombre_etapa-2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="outline">Normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código de orden</th>
+<th>Producto</th>
+<th>Etapa</th>
+<th>Operario</th>
+<th>Horas estimadas</th>
+<th>Horas transcurridas</th>
+<th>Estado de alerta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-1/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks%3Fproduct%3DPRO00000001%26route%3DRUT00000001%26stage%3DETR00000001%26orderStatus%3Den_proceso%26from%3D2026-07-01%26to%3D2026-07-31">id_orden_trabajo-1</a>
+</td>
+<td>nombre_producto-1</td>
+<td>
+<div>nombre_etapa-1</div>
+<p>Secuencia: 1</p>
+</td>
+<td>apellidos-1, nombres-1</td>
+<td>2.20 h</td>
+<td>351.00 h</td>
+<td>
+<span data-variant="destructive">atrasada</span>
+</td>
+</tr>
+<tr>
+<td>
+<a data-variant="link" href="/dashboard/production/work-orders/id_orden_trabajo-2/progress?returnTo=%2Fdashboard%2Fproduction%2Fbottlenecks%3Fproduct%3DPRO00000001%26route%3DRUT00000001%26stage%3DETR00000001%26orderStatus%3Den_proceso%26from%3D2026-07-01%26to%3D2026-07-31">id_orden_trabajo-2</a>
+</td>
+<td>nombre_producto-2</td>
+<td>
+<div>nombre_etapa-2</div>
+<p>Secuencia: 2</p>
+</td>
+<td>apellidos-2, nombres-2</td>
+<td>4.31 h</td>
+<td>0.00 h</td>
+<td>
+<span data-variant="success">normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

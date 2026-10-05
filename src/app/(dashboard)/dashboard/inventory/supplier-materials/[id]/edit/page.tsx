@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
+import { getSupplierMaterialEditData } from "@/modules/inventory/supplier-materials/queries";
 
 type EditSupplierMaterialPageProps = {
   params: Promise<{
@@ -27,61 +27,13 @@ export default async function EditSupplierMaterialPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const relation = await prisma.proveedor_material.findUnique({
-    where: {
-      id_proveedor_material: id,
-    },
-    include: {
-      proveedor: true,
-      material: true,
-    },
-  });
+  const supplierMaterialEditData = await getSupplierMaterialEditData(id);
 
-  if (!relation) {
+  if (!supplierMaterialEditData) {
     notFound();
   }
 
-  const [suppliers, materials] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        OR: [
-          {
-            estado: true,
-          },
-          {
-            id_proveedor: relation.id_proveedor,
-          },
-        ],
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-    prisma.material.findMany({
-      where: {
-        OR: [
-          {
-            estado: true,
-          },
-          {
-            id_material: relation.id_material,
-          },
-        ],
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        unidad_medida: true,
-      },
-    }),
-  ]);
+  const { relation, suppliers, materials } = supplierMaterialEditData;
 
   return (
     <main className="space-y-6">

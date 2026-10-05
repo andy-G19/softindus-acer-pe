@@ -16,11 +16,11 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createRepairAction } from "@/modules/maintenance/repairs/actions";
+import { getNewRepairFormOptions } from "@/modules/maintenance/repairs/queries";
 
 function getTodayValue() {
   const now = new Date();
@@ -43,28 +43,7 @@ function getFailureStatusLabel(status: string) {
 export default async function NewRepairPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const failures = await prisma.falla_maquina.findMany({
-    where: {
-      estado_atencion: {
-        in: ["pendiente", "en_atencion"],
-      },
-    },
-    orderBy: {
-      fecha_falla: "desc",
-    },
-    include: {
-      maquina: true,
-    },
-  });
-
-  const spareParts = await prisma.repuesto.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      nombre_repuesto: "asc",
-    },
-  });
+  const { failures, spareParts } = await getNewRepairFormOptions();
 
   const today = getTodayValue();
   const failureItems = failures.map((failure) => ({

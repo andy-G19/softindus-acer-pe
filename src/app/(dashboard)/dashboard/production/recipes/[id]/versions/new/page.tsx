@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { RecipeVersionForm } from "@/modules/production/recipes/components/recipe-version-form";
+import { getNewRecipeVersionData } from "@/modules/production/recipe-versions/queries";
 
 type NewRecipeVersionPageProps = {
   params: Promise<{
@@ -19,47 +19,7 @@ export default async function NewRecipeVersionPage({
 
   const { id } = await params;
 
-  const [recipe, materials] = await Promise.all([
-    prisma.receta_tecnica.findUnique({
-      where: {
-        id_receta: id,
-      },
-      include: {
-        producto: true,
-        version_receta: {
-          include: {
-            detalle_receta: {
-              include: {
-                material: true,
-              },
-              orderBy: {
-                id_detalle_receta: "asc",
-              },
-            },
-          },
-          orderBy: {
-            fecha_version: "desc",
-          },
-          take: 1,
-        },
-      },
-    }),
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        categoria: true,
-        unidad_medida: true,
-        costo_unitario_actual: true,
-      },
-    }),
-  ]);
+  const { recipe, materials } = await getNewRecipeVersionData(id);
 
   if (!recipe) {
     notFound();

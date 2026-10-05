@@ -1,0 +1,350 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance/recurrences > reporte del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": {
+          "include": {
+            "reparacion": true,
+          },
+        },
+        "mantenimiento_preventivo": true,
+      },
+      "orderBy": {
+        "nombre": "asc",
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_falla": {
+          "gte": 2026-07-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reincidencias</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reincidencias y reportes básicos</h1>
+<p>Analiza máquinas con mayor número de fallas, horas perdidas, costo acumulado de reparaciones y mantenimientos preventivos vencidos.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<div>
+<a data-variant="outline" href="/dashboard/maintenance/failures">Ver fallas</a>
+<a data-variant="outline" href="/dashboard/maintenance/repairs">Ver reparaciones</a>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas totales</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Este mes: 42</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pendientes o en atención.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Horas perdidas</div>
+</div>
+</div>
+<div>
+<p>23.00 h</p>
+<p>Acumuladas por fallas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 136.00</p>
+<p>Este mes: S/ 1234.50</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos vencidos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Requieren atención.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Top 5 máquinas con más fallas</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>1. nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+<div>
+<p>2 fallas</p>
+<p>11.50 h</p>
+</div>
+</div>
+<div>
+<div>
+<p>2. nombre-2</p>
+<p>tipo-2 · Sin código</p>
+</div>
+<div>
+<p>2 fallas</p>
+<p>11.50 h</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Top 5 máquinas por costo de reparación</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>1. nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>2 fallas</p>
+</div>
+</div>
+<div>
+<div>
+<p>2. nombre-2</p>
+<p>tipo-2 · Sin código</p>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>2 fallas</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Reporte general por máquina</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Máquina</th>
+<th>Estado</th>
+<th>Fallas</th>
+<th>Abiertas</th>
+<th>Reparadas</th>
+<th>Horas perdidas</th>
+<th>Costo reparación</th>
+<th>Preventivos</th>
+<th>Vencidos</th>
+<th>Última falla</th>
+<th>Riesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre-1<p>tipo-1 · ubicacion-1</p>
+</td>
+<td>estado-1</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>11.50 h</td>
+<td>S/ 68.00</td>
+<td>2</td>
+<td>0</td>
+<td>02/07/2026</td>
+<td>
+<span data-variant="warning">Medio</span>
+</td>
+</tr>
+<tr>
+<td>nombre-2<p>tipo-2 · Sin ubicación</p>
+</td>
+<td>estado-2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>11.50 h</td>
+<td>S/ 68.00</td>
+<td>2</td>
+<td>0</td>
+<td>02/07/2026</td>
+<td>
+<span data-variant="warning">Medio</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas críticas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Riesgo alto por fallas, horas perdidas o costo acumulado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas reincidentes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Máquinas con 3 o más fallas registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>Criterio de riesgo usado</div>
+</div>
+<div>
+<p>Alto: 5 o más fallas, 20 h perdidas o S/ 1000 en reparaciones.</p>
+<p>Medio: 3 o más fallas, 8 h perdidas o S/ 300 en reparaciones.</p>
+<p>Bajo: por debajo de los umbrales anteriores.</p>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;

@@ -1,6 +1,5 @@
 import { Ban, CalendarClock, CheckCircle2, Clock } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,17 +24,16 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { updatePreventiveMaintenanceStatusAction } from "@/modules/maintenance/preventive/actions";
+import { getPreventiveMaintenanceList } from "@/modules/maintenance/preventive/queries";
 
 type PreventiveMaintenancePageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -88,52 +86,8 @@ export default async function PreventiveMaintenancePage({
   const machine = parseStringParam(params, "machine");
   const responsible = parseStringParam(params, "responsible");
   const status = parseStringParam(params, "status");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-
-  const filters: Prisma.mantenimiento_preventivoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_mantenimiento: { contains: q, mode: "insensitive" } },
-        { actividad: { contains: q, mode: "insensitive" } },
-        { responsable: { contains: q, mode: "insensitive" } },
-        {
-          maquina: {
-            nombre: { contains: q, mode: "insensitive" },
-          },
-        },
-      ],
-    });
-  }
-
-  if (machine) {
-    filters.push({
-      maquina: {
-        nombre: { contains: machine, mode: "insensitive" },
-      },
-    });
-  }
-
-  if (responsible) {
-    filters.push({
-      responsable: { contains: responsible, mode: "insensitive" },
-    });
-  }
-
-  if (status) {
-    filters.push({ estado: status });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_programada: dateRange });
-  }
-
-  const where: Prisma.mantenimiento_preventivoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
   const today = new Date();
 
@@ -143,20 +97,13 @@ export default async function PreventiveMaintenancePage({
     today.getDate(),
   );
 
-  const maintenances = await prisma.mantenimiento_preventivo.findMany({
-    where,
-    orderBy: [
-      {
-        fecha_programada: "asc",
-      },
-      {
-        estado: "asc",
-      },
-    ],
-    include: {
-      maquina: true,
-      usuario: true,
-    },
+  const maintenances = await getPreventiveMaintenanceList({
+    q,
+    machine,
+    responsible,
+    status,
+    from,
+    to,
   });
 
   const pendingMaintenances = maintenances.filter(

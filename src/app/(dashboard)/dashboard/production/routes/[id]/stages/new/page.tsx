@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createRouteStageAction } from "@/modules/production/stages/actions";
 import { StageForm } from "@/modules/production/stages/stage-form";
+import { getNewRouteStageData } from "@/modules/production/stages/queries";
 
 type NewRouteStagePageProps = {
   params: Promise<{
@@ -20,40 +20,7 @@ export default async function NewRouteStagePage({
 
   const { id } = await params;
 
-  const [route, machines] = await Promise.all([
-    prisma.ruta_fabricacion.findUnique({
-      where: {
-        id_ruta: id,
-      },
-      include: {
-        producto: true,
-        etapa_ruta: {
-          orderBy: {
-            orden_secuencia: "desc",
-          },
-          take: 1,
-        },
-      },
-    }),
-
-    // Solo máquinas asignables: una dada de baja o inactiva no debe ofrecerse.
-    prisma.maquina.findMany({
-      where: {
-        estado: {
-          notIn: ["dada_de_baja", "inactiva"],
-        },
-      },
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        id_maquina: true,
-        nombre: true,
-        tipo: true,
-        estado: true,
-      },
-    }),
-  ]);
+  const { route, machines } = await getNewRouteStageData(id);
 
   if (!route) {
     notFound();

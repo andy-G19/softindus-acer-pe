@@ -1,0 +1,1150 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/products > estado desconocido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_producto": "desc",
+        },
+      ],
+      "select": {
+        "categoria": true,
+        "estado": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Productos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Productos</h1>
+<p>Lista de productos registrados para ventas, pedidos y producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/products">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar producto..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_producto-1</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_producto-2</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?status=todos&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products > filtros y vendedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_producto": "desc",
+        },
+      ],
+      "select": {
+        "categoria": true,
+        "estado": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_producto": {
+                  "contains": "reja",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_producto": {
+                  "contains": "reja",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "categoria": "estructuras",
+          },
+          {
+            "unidad_medida": "unidad",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_producto": {
+                  "contains": "reja",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "nombre_producto": {
+                  "contains": "reja",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "categoria": "estructuras",
+          },
+          {
+            "unidad_medida": "unidad",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Productos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Productos</h1>
+<p>Lista de productos registrados para ventas, pedidos y producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/products">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar producto..." name="q" value="reja"/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_producto-1</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+<tr>
+<td>id_producto-2</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<span>Solo lectura</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 21-40 de 42 productos · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products > inactivos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_producto": "desc",
+        },
+      ],
+      "select": {
+        "categoria": true,
+        "estado": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Productos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Productos</h1>
+<p>Lista de productos registrados para ventas, pedidos y producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/products">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar producto..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive" selected="">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_producto-1</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_producto-2</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?status=inactive&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_producto": "desc",
+        },
+      ],
+      "select": {
+        "categoria": true,
+        "estado": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "producto.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "unidad_medida",
+      ],
+      "orderBy": {
+        "unidad_medida": "asc",
+      },
+      "select": {
+        "unidad_medida": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Productos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Productos</h1>
+<p>Lista de productos registrados para ventas, pedidos y producción.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
+<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/products">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar producto..." name="q" value=""/>
+</div>
+<div>
+<label for="category">Categoría</label>
+<select id="category" name="category">
+<option value="" selected="">Todas las categorías</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unit">Unidad</label>
+<select id="unit" name="unit">
+<option value="" selected="">Todas las unidades</option>
+<option value="unidad_medida-1">unidad_medida-1</option>
+<option value="unidad_medida-2">unidad_medida-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_producto-1</td>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_producto-2</td>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 productos · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/commercial/products?page=2">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "descripcion": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "slug": "categoria-1",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar producto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar producto</h1>
+<p>Actualiza los datos comerciales del producto.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<label for="nombre_producto">Nombre del producto</label>
+<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value="nombre_producto-1"/>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida</label>
+<select id="unidad_medida" name="unidad_medida" required="">
+<option value="unidad">Unidad</option>
+<option value="docena">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="11.5"/>
+<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "descripcion": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_producto": "PRO99999999",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/commercial/products/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo producto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo producto</h1>
+<p>Registra productos fabricados por el taller usando categorías dinámicas.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_producto">Nombre del producto</label>
+<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value=""/>
+</div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida</label>
+<select id="unidad_medida" name="unidad_medida" required="">
+<option value="unidad" selected="">Unidad</option>
+<option value="docena">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
+<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar producto</button>
+<a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

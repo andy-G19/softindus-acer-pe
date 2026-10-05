@@ -1,7 +1,6 @@
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { InventoryCatalogManager } from "@/modules/inventory/components/inventory-catalog-manager";
 import {
@@ -9,20 +8,12 @@ import {
   toggleSupplierTypeStatusAction,
   updateSupplierTypeAction,
 } from "@/modules/inventory/supplier-types/actions";
+import { getSupplierTypeList } from "@/modules/inventory/supplier-types/queries";
 
 export default async function SupplierTypesPage() {
   await requireRole(["ADMIN"]);
 
-  const supplierTypes = await prisma.tipo_proveedor_catalogo.findMany({
-    orderBy: [
-      {
-        estado: "desc",
-      },
-      {
-        nombre: "asc",
-      },
-    ],
-  });
+  const supplierTypes = await getSupplierTypeList();
 
   return (
     <main className="space-y-6">

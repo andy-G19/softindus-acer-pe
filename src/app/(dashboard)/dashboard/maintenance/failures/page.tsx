@@ -27,12 +27,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateFailureStatusAction } from "@/modules/maintenance/failures/actions";
+import { getFailureList } from "@/modules/maintenance/failures/queries";
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
@@ -73,19 +73,7 @@ export default async function FailuresPage() {
     session.user.role === APP_ROLES.ADMIN ||
     session.user.role === APP_ROLES.WORKSHOP_MASTER;
 
-  const failures = await prisma.falla_maquina.findMany({
-    orderBy: {
-      fecha_falla: "desc",
-    },
-    include: {
-      maquina: true,
-      _count: {
-        select: {
-          reparacion: true,
-        },
-      },
-    },
-  });
+  const failures = await getFailureList();
 
   const pendingFailures = failures.filter(
     (failure) => failure.estado_atencion === "pendiente",

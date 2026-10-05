@@ -16,11 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { applyWaste } from "@/lib/recipe-quantities";
 import { deleteRecipeDetailAction } from "@/modules/production/recipe-details/actions";
+import { getRecipeVersionDetails } from "@/modules/production/recipe-details/queries";
 import Link from "next/link";
 
 type RecipeDetailsPageProps = {
@@ -54,32 +54,7 @@ export default async function RecipeDetailsPage({
 
   const { id, versionId } = await params;
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: versionId,
-      id_receta: id,
-    },
-    include: {
-      receta_tecnica: {
-        include: {
-          producto: true,
-        },
-      },
-      detalle_receta: {
-        include: {
-          material: true,
-        },
-        orderBy: {
-          id_detalle_receta: "asc",
-        },
-      },
-      _count: {
-        select: {
-          orden_trabajo: true,
-        },
-      },
-    },
-  });
+  const version = await getRecipeVersionDetails(id, versionId);
 
   if (!version) {
     notFound();

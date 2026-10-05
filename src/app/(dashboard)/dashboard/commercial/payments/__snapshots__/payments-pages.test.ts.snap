@@ -1,0 +1,436 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "proforma": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "select": {
+        "id_pedido": true,
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pagos de cliente</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pagos de cliente</h1>
+<p>Consulta pagos registrados desde proformas.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/payments">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pago..." name="q" value=""/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="order">Pedido</label>
+<select id="order" name="order">
+<option value="" selected="">Todos los pedidos</option>
+<option value="id_pedido-1">id_pedido-1</option>
+<option value="id_pedido-2">id_pedido-2</option>
+</select>
+</div>
+<div>
+<label for="method">Método</label>
+<select id="method" name="method">
+<option value="" selected="">Método</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="type">Tipo de pago</label>
+<select id="type" name="type">
+<option value="" selected="">Tipo pago</option>
+<option value="adelanto">Adelanto</option>
+<option value="amortizacion">Amortización</option>
+<option value="cancelacion">Cancelación</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Cliente</th>
+<th>Pedido</th>
+<th>Proforma</th>
+<th>Tipo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>nombre_razon_social-1</td>
+<td>id_pedido-1</td>
+<td>id_proforma-1</td>
+<td>tipo_pago-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>nombre_razon_social-2</td>
+<td>id_pedido-2</td>
+<td>id_proforma-2</td>
+<td>tipo_pago-2</td>
+<td>metodo_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "proforma": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_pedido": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_proforma": {
+                  "contains": "PRO",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "proforma": {
+                  "pedido": {
+                    "cliente": {
+                      "nombre_razon_social": {
+                        "contains": "PRO",
+                        "mode": "insensitive",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "proforma": {
+              "pedido": {
+                "id_cliente": "CLI00000001",
+              },
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "metodo_pago": "efectivo",
+          },
+          {
+            "tipo_pago": "adelanto",
+          },
+          {
+            "fecha_pago": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "select": {
+        "id_pedido": true,
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pagos de cliente</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pagos de cliente</h1>
+<p>Consulta pagos registrados desde proformas.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/payments">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pago..." name="q" value="PRO"/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="order">Pedido</label>
+<select id="order" name="order">
+<option value="">Todos los pedidos</option>
+<option value="id_pedido-1">id_pedido-1</option>
+<option value="id_pedido-2">id_pedido-2</option>
+</select>
+</div>
+<div>
+<label for="method">Método</label>
+<select id="method" name="method">
+<option value="">Método</option>
+<option value="efectivo" selected="">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="type">Tipo de pago</label>
+<select id="type" name="type">
+<option value="">Tipo pago</option>
+<option value="adelanto" selected="">Adelanto</option>
+<option value="amortizacion">Amortización</option>
+<option value="cancelacion">Cancelación</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Cliente</th>
+<th>Pedido</th>
+<th>Proforma</th>
+<th>Tipo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>nombre_razon_social-1</td>
+<td>id_pedido-1</td>
+<td>id_proforma-1</td>
+<td>tipo_pago-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>nombre_razon_social-2</td>
+<td>id_pedido-2</td>
+<td>id_proforma-2</td>
+<td>tipo_pago-2</td>
+<td>metodo_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver proforma</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

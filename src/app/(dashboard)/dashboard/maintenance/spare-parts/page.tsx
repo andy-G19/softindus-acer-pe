@@ -26,14 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleSparePartStatusAction } from "@/modules/maintenance/spare-parts/actions";
+import { getSparePartListData } from "@/modules/maintenance/spare-parts/queries";
 
 type SparePartsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -52,18 +51,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function getStatusFilter(status: string) {
-  if (status === "active") {
-    return true;
-  }
-
-  if (status === "inactive") {
-    return false;
-  }
-
-  return undefined;
-}
-
 export default async function SparePartsPage({
   searchParams,
 }: SparePartsPageProps) {
@@ -73,73 +60,11 @@ export default async function SparePartsPage({
   const q = getSearchParam(params, "q");
   const provider = getSearchParam(params, "provider");
   const status = getSearchParam(params, "status");
-  const statusFilter = getStatusFilter(status);
-  const filters: Prisma.repuestoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_repuesto: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_repuesto: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (provider) {
-    filters.push({
-      id_proveedor: provider,
-    });
-  }
-
-  if (statusFilter !== undefined) {
-    filters.push({
-      estado: statusFilter,
-    });
-  }
-
-  const where: Prisma.repuestoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [spareParts, providers] = await Promise.all([
-    prisma.repuesto.findMany({
-      where,
-      orderBy: [
-        {
-          estado: "desc",
-        },
-        {
-          nombre_repuesto: "asc",
-        },
-      ],
-      include: {
-        proveedor: true,
-        _count: {
-          select: {
-            detalle_repuesto_reparacion: true,
-          },
-        },
-      },
-    }),
-    prisma.proveedor.findMany({
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-  ]);
+  const { spareParts, providers } = await getSparePartListData({
+    q,
+    provider,
+    status,
+  });
 
   const activeSpareParts = spareParts.filter((sparePart) => sparePart.estado);
   const inactiveSpareParts = spareParts.filter((sparePart) => !sparePart.estado);

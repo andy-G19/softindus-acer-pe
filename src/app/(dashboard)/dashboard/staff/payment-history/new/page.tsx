@@ -23,11 +23,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { registerOperatorPaymentAction } from "@/modules/staff/payment-history/actions";
+import { getPendingPayrolls } from "@/modules/staff/payment-history/queries";
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -44,22 +44,7 @@ export default async function NewOperatorPaymentPage() {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const pendingPayrolls = await prisma.planilla_pago.findMany({
-    where: {
-      estado_pago: "pendiente",
-    },
-    orderBy: [
-      {
-        fecha_generacion: "desc",
-      },
-      {
-        id_planilla: "desc",
-      },
-    ],
-    include: {
-      operario: true,
-    },
-  });
+  const pendingPayrolls = await getPendingPayrolls();
 
   return (
     <main className="space-y-6">

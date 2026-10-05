@@ -14,17 +14,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getCustomerPaymentListData } from "@/modules/commercial/payments/queries";
 
 type CustomerPaymentsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -41,93 +39,18 @@ export default async function CustomerPaymentsPage({
   const order = parseStringParam(params, "order");
   const method = parseStringParam(params, "method");
   const type = parseStringParam(params, "type");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-  const filters: Prisma.pago_clienteWhereInput[] = [];
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
-  if (q) {
-    filters.push({
-      OR: [
-        { id_pedido: { contains: q, mode: "insensitive" } },
-        { id_proforma: { contains: q, mode: "insensitive" } },
-        {
-          proforma: {
-            pedido: {
-              cliente: {
-                nombre_razon_social: { contains: q, mode: "insensitive" },
-              },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (client) {
-    filters.push({
-      proforma: {
-        pedido: {
-          id_cliente: client,
-        },
-      },
-    });
-  }
-
-  if (order) {
-    filters.push({ id_pedido: order });
-  }
-
-  if (method) {
-    filters.push({ metodo_pago: method });
-  }
-
-  if (type) {
-    filters.push({ tipo_pago: type });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_pago: dateRange });
-  }
-
-  const [payments, clients, orders] = await Promise.all([
-    prisma.pago_cliente.findMany({
-      where: filters.length > 0 ? { AND: filters } : {},
-      orderBy: {
-        fecha_pago: "desc",
-      },
-      include: {
-        proforma: {
-          include: {
-            pedido: {
-              include: {
-                cliente: true,
-              },
-            },
-          },
-        },
-        usuario: true,
-      },
-    }),
-    prisma.cliente.findMany({
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-      },
-    }),
-    prisma.pedido.findMany({
-      orderBy: {
-        fecha_pedido: "desc",
-      },
-      select: {
-        id_pedido: true,
-      },
-    }),
-  ]);
+  const { payments, clients, orders } = await getCustomerPaymentListData({
+    q,
+    client,
+    order,
+    method,
+    type,
+    from,
+    to,
+  });
 
   return (
     <main className="space-y-6">

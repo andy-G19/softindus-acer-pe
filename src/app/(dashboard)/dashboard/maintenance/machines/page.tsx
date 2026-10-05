@@ -26,10 +26,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
@@ -39,6 +37,7 @@ import {
 } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleMachineStatusAction } from "@/modules/maintenance/machines/actions";
+import { getMachineListData } from "@/modules/maintenance/machines/queries";
 
 type MachinesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -95,93 +94,12 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
   const location = getSearchParam(params, "location");
   const status = getSearchParam(params, "status");
   const returnTo = createReturnToHref(navigationHrefs.machines, params);
-  const filters: Prisma.maquinaWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          nombre: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          codigo_interno: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (type) {
-    filters.push({
-      tipo: type,
-    });
-  }
-
-  if (location) {
-    filters.push({
-      ubicacion: location,
-    });
-  }
-
-  if (status) {
-    filters.push({
-      estado: status,
-    });
-  }
-
-  const where: Prisma.maquinaWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [machines, types, locations] = await Promise.all([
-    prisma.maquina.findMany({
-      where,
-      orderBy: [
-        {
-          estado: "asc",
-        },
-        {
-          nombre: "asc",
-        },
-      ],
-      include: {
-        _count: {
-          select: {
-            falla_maquina: true,
-            mantenimiento_preventivo: true,
-            etapa_ruta_maquina: true,
-          },
-        },
-      },
-    }),
-    prisma.maquina.findMany({
-      distinct: ["tipo"],
-      orderBy: {
-        tipo: "asc",
-      },
-      select: {
-        tipo: true,
-      },
-    }),
-    prisma.maquina.findMany({
-      where: {
-        ubicacion: {
-          not: null,
-        },
-      },
-      distinct: ["ubicacion"],
-      orderBy: {
-        ubicacion: "asc",
-      },
-      select: {
-        ubicacion: true,
-      },
-    }),
-  ]);
+  const { machines, types, locations } = await getMachineListData({
+    q,
+    type,
+    location,
+    status,
+  });
 
   const operationalMachines = machines.filter(
     (machine) => machine.estado === "operativa",

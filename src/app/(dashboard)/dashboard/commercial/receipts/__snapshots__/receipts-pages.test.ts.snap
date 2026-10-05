@@ -1,0 +1,358 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/receipts > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "proforma": true,
+      },
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "comprobante_venta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Comprobantes de venta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Comprobantes de venta</h1>
+<p>Consulta comprobantes emitidos y anulados.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/receipts">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar comprobante..." name="q" value=""/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="boleta">Boleta</option>
+<option value="factura">Factura</option>
+<option value="recibo">Recibo</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="emitido">Emitido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/receipts">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Número</th>
+<th>Cliente</th>
+<th>Pedido</th>
+<th>Tipo</th>
+<th>Fecha</th>
+<th>Total</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numero_comprobante-1</td>
+<td>nombre_razon_social-1</td>
+<td>id_pedido-1</td>
+<td>tipo_comprobante-1</td>
+<td>1/7/2026</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_comprobante" value="id_comprobante-1"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>numero_comprobante-2</td>
+<td>nombre_razon_social-2</td>
+<td>id_pedido-2</td>
+<td>tipo_comprobante-2</td>
+<td>2/7/2026</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_comprobante" value="id_comprobante-2"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/receipts > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "proforma": true,
+      },
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "numero_comprobante": {
+                  "contains": "B001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "B001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "B001",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "tipo_comprobante": "boleta",
+          },
+          {
+            "estado": "emitido",
+          },
+          {
+            "fecha_emision": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "comprobante_venta.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Comprobantes de venta</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Comprobantes de venta</h1>
+<p>Consulta comprobantes emitidos y anulados.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/receipts">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar comprobante..." name="q" value="B001"/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="">Todos los tipos</option>
+<option value="boleta" selected="">Boleta</option>
+<option value="factura">Factura</option>
+<option value="recibo">Recibo</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="emitido" selected="">Emitido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/receipts">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Número</th>
+<th>Cliente</th>
+<th>Pedido</th>
+<th>Tipo</th>
+<th>Fecha</th>
+<th>Total</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numero_comprobante-1</td>
+<td>nombre_razon_social-1</td>
+<td>id_pedido-1</td>
+<td>tipo_comprobante-1</td>
+<td>1/7/2026</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver proforma</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_comprobante" value="id_comprobante-1"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>numero_comprobante-2</td>
+<td>nombre_razon_social-2</td>
+<td>id_pedido-2</td>
+<td>tipo_comprobante-2</td>
+<td>2/7/2026</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_comprobante" value="id_comprobante-2"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

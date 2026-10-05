@@ -12,47 +12,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createScrapAction } from "@/modules/waste-scrap/scraps/actions";
+import { getNewScrapFormOptions } from "@/modules/waste-scrap/scraps/queries";
 
 export default async function NewScrapPage() {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-  const [materials, workOrders] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        categoria: true,
-        unidad_medida: true,
-        stock_actual: true,
-      },
-    }),
-
-    prisma.orden_trabajo.findMany({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-      },
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      take: 50,
-      include: {
-        producto: true,
-        cliente: true,
-      },
-    }),
-  ]);
+  const { materials, workOrders } = await getNewScrapFormOptions();
 
   const materialItems = materials.map((material) => ({
     id: material.id_material,

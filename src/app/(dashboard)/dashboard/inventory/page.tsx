@@ -15,31 +15,14 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
+import { getInventoryOverviewData } from "@/modules/inventory/overview/queries";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 
 export default async function InventoryPage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const [materialsCount, suppliersCount, activeAlertsCount, movementsCount] =
-    await Promise.all([
-      prisma.material.count({
-        where: {
-          estado: true,
-        },
-      }),
-      prisma.proveedor.count({
-        where: {
-          estado: true,
-        },
-      }),
-      prisma.alerta_stock.count({
-        where: {
-          estado_alerta: "activa",
-        },
-      }),
-      prisma.movimiento_inventario.count(),
-    ]);
+  const { materialsCount, suppliersCount, activeAlertsCount, movementsCount } =
+    await getInventoryOverviewData();
 
   const modules = [
     {

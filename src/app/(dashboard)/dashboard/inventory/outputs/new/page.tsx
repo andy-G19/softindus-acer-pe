@@ -1,45 +1,15 @@
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createInventoryOutputAction } from "@/modules/inventory/movements/actions";
 import { InventoryOutputForm } from "@/modules/inventory/movements/inventory-output-form";
+import { getInventoryOutputFormOptions } from "@/modules/inventory/movements/queries";
 
 export default async function NewInventoryOutputPage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const [materials, workOrders] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        unidad_medida: true,
-        stock_actual: true,
-        stock_reservado: true,
-      },
-    }),
-    prisma.orden_trabajo.findMany({
-      where: {
-        estado: {
-          notIn: ["finalizada", "cancelada"],
-        },
-      },
-      orderBy: {
-        fecha_inicio: "desc",
-      },
-      select: {
-        id_orden_trabajo: true,
-        estado: true,
-      },
-    }),
-  ]);
+  const { materials, workOrders } = await getInventoryOutputFormOptions();
 
   return (
     <main className="mx-auto max-w-4xl space-y-6">

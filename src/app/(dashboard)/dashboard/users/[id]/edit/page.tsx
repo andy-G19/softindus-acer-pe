@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateUserAction } from "@/modules/users/actions";
 import { UserForm } from "@/modules/users/user-form";
+import { getUserForEdit } from "@/modules/users/queries";
 
 type EditUserPageProps = {
   params: Promise<{
@@ -25,18 +25,7 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
   const session = await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const user = await prisma.usuario.findUnique({
-    where: { id_usuario: id },
-    select: {
-      id_usuario: true,
-      nombres: true,
-      apellidos: true,
-      usuario: true,
-      correo: true,
-      estado: true,
-      rol: { select: { nombre_rol: true } },
-    },
-  });
+  const user = await getUserForEdit(id);
 
   if (!user) {
     notFound();

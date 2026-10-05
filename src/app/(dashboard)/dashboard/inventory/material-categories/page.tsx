@@ -2,7 +2,6 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import {
   createMaterialCategoryAction,
@@ -10,20 +9,12 @@ import {
   updateMaterialCategoryAction,
 } from "@/modules/inventory/material-categories/actions";
 import { InventoryCatalogManager } from "@/modules/inventory/components/inventory-catalog-manager";
+import { getMaterialCategoryList } from "@/modules/inventory/material-categories/queries";
 
 export default async function MaterialCategoriesPage() {
   const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const categories = await prisma.categoria_material.findMany({
-    orderBy: [
-      {
-        estado: "desc",
-      },
-      {
-        nombre: "asc",
-      },
-    ],
-  });
+  const categories = await getMaterialCategoryList();
 
   const canManage = session.user.role === "ADMIN";
 

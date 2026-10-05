@@ -485,6 +485,315 @@ Pendientes fuera de alcance:
 - `toNumber` acepta `unknown`: estrecharlo a `NumericInput` al unificar los
   envoltorios locales que lo llaman.
 
+## Entrega 4 — Consultas fuera de las páginas
+
+Fecha: 2026-10-02. Estado: sub-entregas 4.1 a 4.7 terminadas en local el
+2026-10-03; falta publicarlas y verificarlas en staging. La entrega se divide
+por área para que la métrica baje en cada sub-entrega.
+
+| Sub-entrega | Alcance | Páginas | Páginas con Prisma |
+|---|---|---|---|
+| 4.1 | Piloto Clientes, arnés de caracterización, convención y regla de ESLint | 2 | 117 → 115 |
+| 4.2 | Resto de Comercial | 14 | 115 → 101 |
+| 4.3 | Inventario | 20 | 101 → 81 |
+| 4.4 | Mantenimiento | 13 | 81 → 68 |
+| 4.5 | Personal, Usuarios y Auditoría | 15 | 68 → 53 |
+| 4.6 | Caja chica y Mermas | 14 | 53 → 39 |
+| 4.7 | Producción sin órdenes de trabajo | 20 | 39 → 19 |
+| Entrega 5 | Reportes, junto con sus exportaciones | 10 | 19 → 9 |
+| Entrega 6 | Órdenes de trabajo y Costos, junto con su división por caso de uso | 9 | 9 → 0 |
+
+Los reportes esperan a la entrega 5 porque la pantalla y la exportación
+consultan lo mismo: la consulta se extrae una vez y la comparten. Órdenes de
+trabajo y costeo esperan a la entrega 6 para no mover dos veces páginas que se
+van a reorganizar.
+
+Decisiones:
+
+- Las consultas viven en `src/modules/<área>/<funcionalidad>/queries.ts`, junto
+  a `actions.ts`, con `import "server-only"`: si un componente cliente las
+  importara, el build fallaría.
+- La página autoriza y la consulta no. `requireRole` revalida el usuario contra
+  la base en cada llamada (`auth.ts`), y cada punto de entrada rechaza de forma
+  distinta: redirección, estado de formulario o 401/403. Autorizar también en la
+  consulta duplicaría esa lectura y daría la respuesta equivocada a una acción o
+  a una API. Si los datos dependen del rol, la consulta recibe la sesión ya
+  verificada.
+- La página conserva la lectura de parámetros, `notFound()`/`redirect()`, las
+  derivaciones de presentación y el JSX. La consulta construye los filtros de
+  Prisma y devuelve sus resultados con los nombres de campo sin cambios: sin
+  DTO, sin React y sin redirecciones.
+- Las páginas migradas no pueden importar `@/lib/db` (regla
+  `no-restricted-imports` con la lista `pagesWithoutPrisma`). En flat config, el
+  último bloque que configura una regla reemplaza las opciones del anterior: un
+  bloque que solo prohibiera `@/lib/db` anulaba en silencio la restricción de
+  `@/auth` de la entrega 2. Ambos bloques comparten esa restricción.
+- Las consultas que varias funcionalidades repiten pasan a la interfaz pública
+  del módulo dueño de la entidad (opciones de clientes, productos y pedidos).
+  Las funciones `find*` devuelven la promesa de Prisma para componerse en el
+  `Promise.all` del llamador sin cambiar el orden de las llamadas; las `get*`
+  devuelven los datos de una página. Una consulta de edición que depende del
+  registro principal devuelve `null` si este no existe, y la página decide el
+  `notFound()`.
+- Criterio para limitar columnas: nunca cargar filas completas de `usuario`,
+  que incluyen `clave_hash` (si se usa, solo las columnas necesarias; si no se
+  usa, no se carga), y pedir con `select` las columnas de los listados que
+  traen filas completas sin `include`. Las filas que se pasan a un componente
+  cliente se limitan a su tipo, porque se serializan en el navegador. Los
+  detalles con `include` profundos quedan como pendiente.
+
+Arnés de caracterización (`src/testing/page-characterization.ts`):
+
+- Ejecuta la página real con Prisma, la sesión y la navegación simulados.
+  Registra en orden las llamadas a Prisma y a la autorización, el resultado
+  (render, notFound o redirect) y el HTML renderizado sin clases ni trazos de
+  iconos, una etiqueta por línea.
+- Los datos se generan a partir de `prisma/schema.prisma` según el `select`,
+  `include` u `omit` de cada llamada; en las filas pares los opcionales valen
+  `null`. Cada caso puede sustituir el resultado de una llamada; `projectRows`
+  recorta las filas escritas a mano según el `select`. El reloj se fija en el
+  15/07/2026 a las 10:00 de Lima, y la zona horaria en UTC, como en Vercel:
+  `parseDateParam`, `buildDateRangeFilter` y el vencimiento de la proforma
+  interpretan fechas en la zona del proceso.
+- Cada página exige autorizar antes de consultar y que un acceso rechazado no
+  toque Prisma. Los snapshots se escriben antes de mover y deben pasar sin
+  cambios después.
+- Se comprobó que el renderizado es determinista y que un `.snap` con CRLF,
+  como queda tras el checkout en Windows, pasa sin reescribirse.
+
+### Entrega 4.1 — Piloto Clientes
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| ae1b636 | test | Arnés de caracterización y sus 15 pruebas. |
+| 02a1140 | test | 20 pruebas de las páginas de listado y edición de Clientes. |
+| dd6d6e7 | refactor | `modules/commercial/clients/queries.ts`; las páginas dejan de importar Prisma. |
+| 37547b1 | refactor | La página de filas del listado pide las 6 columnas que muestra. |
+| 0afb658 | chore | Regla de ESLint y convención en CLAUDE.md. |
+
+Evidencia:
+
+- Los snapshots no cambiaron en `dd6d6e7`, y el bloque JSX de las dos páginas
+  es idéntico al anterior, comprobado contra `git show`.
+- En `37547b1` solo cambió el snapshot de los argumentos de la consulta; el HTML
+  de todos los casos, con las filas recortadas según el `select`, no cambió.
+- Pruebas de mutación: quitar el filtro de estado inactivo, invertir el orden de
+  las filas o consultar antes de autorizar hacen fallar solo las pruebas que lo
+  protegen. Quitar `estado` del `select` hace fallar la prueba del HTML y da 3
+  errores de TypeScript.
+- La regla de ESLint se comprobó por entrada estándar: en las páginas de
+  Clientes detecta `@/lib/db` y `auth` de `@/auth`; en una página sin migrar,
+  solo `auth`; `queries.ts` puede importar Prisma.
+- `npm run check` terminó con código 0 después de cada commit: 554 pruebas en el
+  primero y 574, 574, 575 y 575 en los siguientes.
+- `npm run refactor:inventory`: 364 archivos analizados y un número de línea
+  desplazado en la página de Clientes.
+
+### Entrega 4.2 — Resto de Comercial
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 346a90a | test | 45 pruebas de las 14 páginas; el arnés fija la zona horaria y expone el generador. |
+| 7dd0866 | refactor | `queries.ts` en overview, orders, payments, products, quotes y receipts; opciones compartidas de clientes, productos y pedidos. |
+| 3b4ac53 | refactor | Sin usuarios completos en el detalle del pedido, pagos y el detalle de la proforma; columnas del listado de productos y de las categorías que recibe un componente cliente. |
+| 607c0b6 | chore | `pagesWithoutPrisma` cubre todo Comercial. |
+
+Evidencia:
+
+- Los casos cubren cada página con y sin filtros y los cambios de flujo:
+  `notFound`, la edición de un pedido con proforma que redirige al detalle, un
+  pedido editable, una proforma anulable, el vendedor sin permisos de gestión y
+  el pedido preseleccionado en la proforma nueva.
+- Con el proceso en America/Lima y sin fijar la zona en el arnés fallan 6
+  casos (filtros de fecha y vencimiento de la proforma); con la zona fijada
+  pasan en cualquier zona.
+- En `7dd0866` los 65 snapshots no cambiaron y el bloque JSX de las 14 páginas
+  es idéntico. Pruebas de mutación: invertir el orden de las opciones de
+  cliente compartidas hace fallar los 7 casos de sus tres consumidores;
+  intercambiar dos consultas del `Promise.all` de pedidos y consultar
+  categorías de un producto inexistente hacen fallar solo los casos que lo
+  protegen.
+- En `3b4ac53` cambiaron 14 snapshots, todos de llamadas; ninguno de HTML, con
+  datos generados que respetan el `select`. Ningún componente cliente recibía
+  el hash del usuario: solo valores sueltos.
+- `npm run check` terminó con código 0 después de cada commit, con 620
+  pruebas.
+
+### Entrega 4.3 — Inventario
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 7338882 | test | 59 pruebas de las 20 páginas. |
+| dd7a4fc | refactor | `queries.ts` en overview, alerts, movements, material-categories, materials, purchases, supplier-materials, supplier-payments, supplier-types y suppliers; opciones compartidas de materiales, proveedores y compras. |
+| 8b4a291 | refactor | Sin usuarios completos en salidas y pagos a proveedores; columnas de los listados de materiales, alertas, proveedores y catálogos. |
+| d40dcc4 | chore | `pagesWithoutPrisma` cubre Inventario. |
+
+Evidencia:
+
+- Los casos cubren el filtro de stock crítico o suficiente que se resuelve y
+  pagina en memoria, `notFound` en las ediciones, la compra inexistente que
+  redirige al listado, el regreso al listado filtrado y las diferencias entre
+  administrador y maestro de taller.
+- En `dd7a4fc` los 59 snapshots no cambiaron y el bloque JSX de las 20 páginas
+  es idéntico. Las consultas que dependen de una anterior (materiales de las
+  alertas y del detalle de compra) conservan su secuencia. Pruebas de
+  mutación: invertir el filtro de stock en memoria hace fallar sus 2 casos;
+  invertir el orden de las opciones de proveedor compartidas, los 9 casos de
+  sus 4 consumidores; consultar el detalle de una compra inexistente, solo su
+  caso.
+- En `8b4a291` cambiaron 17 snapshots, todos de llamadas; ninguno de HTML.
+  Las categorías y tipos se mapeaban antes de llegar al componente cliente,
+  así que no se enviaban filas completas al navegador.
+- `npm run check` terminó con código 0 después de cada commit, con 679
+  pruebas.
+
+### Entrega 4.4 — Mantenimiento
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 10964ba | test | 36 pruebas de las 13 páginas. |
+| 529b2bb | refactor | `queries.ts` en overview, failures, machines, preventive, recurrences, repairs y spare-parts; repuestos usa la interfaz pública de Proveedores. |
+| e7bfea5 | refactor | Sin usuarios completos en preventivos; columnas de las máquinas y repuestos de los formularios. |
+| 377e741 | chore | `pagesWithoutPrisma` cubre Mantenimiento. |
+
+Evidencia:
+
+- El panel conserva el instante actual y lo pasa a la consulta, que calcula
+  los rangos del mes; reincidencias pasa el inicio del mes y de hoy porque la
+  página también los usa. Los casos fijan el reloj y cubren `notFound`, el
+  regreso al listado filtrado, un repuesto sin proveedor y las diferencias
+  entre administrador y maestro de taller.
+- En `529b2bb` los 36 snapshots no cambiaron y el bloque JSX de las 13
+  páginas es idéntico. Pruebas de mutación: calcular el mes anterior en el
+  panel hace fallar sus 2 casos; cambiar el orden de las opciones de máquina,
+  los casos de sus 2 consumidores; agregar siempre el proveedor actual de un
+  repuesto, solo el caso sin proveedor.
+- En `e7bfea5` cambiaron 5 snapshots, todos de llamadas; ninguno de HTML.
+- `npm run check` terminó con código 0 con 715 pruebas. `e7bfea5` y `377e741`
+  comparten una ejecución, hecha con ambos cambios: la única diferencia del
+  primero es no tener aún la regla de ESLint, que esas páginas ya cumplían.
+
+### Entrega 4.5 — Personal, Usuarios y Auditoría
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| dcefec9 | test | 45 pruebas de las 15 páginas. |
+| 8d832e4 | refactor | `queries.ts` en overview, attendance, operators, payment-history, payrolls y tasks de Personal, y en `modules/users` y `modules/audit`. |
+| 88779b0 | refactor | Sin usuarios completos en asistencia, historial de pagos, planillas, tareas y la bitácora; columnas de los operarios del panel y de los formularios. |
+| 4872212 | chore | `pagesWithoutPrisma` cubre Personal, Usuarios y Auditoría. |
+
+Evidencia:
+
+- Los casos fijan el reloj y cubren los tres estados de asistencia, el periodo
+  de planilla válido e inválido, `notFound` en las ediciones, la edición del
+  propio usuario y las diferencias entre administrador y maestro de taller.
+- En `8d832e4` los 45 snapshots no cambiaron y el bloque JSX de las 15
+  páginas es idéntico. Pruebas de mutación: filtrar tardanzas sin excluir
+  faltas, terminar el periodo de planilla un día después y cambiar el orden
+  de los operarios activos hacen fallar solo los casos que lo protegen.
+- En `88779b0` cambiaron 16 snapshots, todos de llamadas; ninguno de HTML.
+  Las páginas de Usuarios ya usaban `select` sin `clave_hash`; la bitácora de
+  auditoría cargaba el usuario completo de cada registro.
+- `npm run check` terminó con código 0 después de cada commit, con 760
+  pruebas.
+
+### Entrega 4.6 — Caja chica y Mermas
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 12ec900 | test | 40 pruebas de las 14 páginas. |
+| 149a8bf | refactor | `queries.ts` en overview, boxes, categories, expenses, income-adjustments, monthly-summary y movements de Caja chica, y en overview, scraps, reusable-scraps y scrap-sales de Mermas; opciones de cajas abiertas, materiales activos y órdenes de trabajo recientes en sus módulos dueños. |
+| 774ea40 | refactor | Sin usuarios completos en movimientos, el panel, el resumen mensual y retazos; columnas de cajas y categorías. |
+| 9e8b00b | chore | `pagesWithoutPrisma` cubre Caja chica y Mermas. |
+
+Evidencia:
+
+- Los casos fijan el reloj y cubren el mes actual, uno elegido y uno inválido
+  del resumen, los filtros de fecha de movimientos por separado y juntos,
+  `notFound` en la edición de categorías, la chatarra preseleccionada en la
+  venta y las diferencias entre administrador y maestro de taller.
+- En `149a8bf` los 40 snapshots no cambiaron y el bloque JSX de las 14
+  páginas es idéntico. Pruebas de mutación: cerrar el filtro «hasta» al
+  inicio del día hace fallar sus 2 casos; cambiar el orden de las cajas
+  abiertas, los 5 casos de sus 3 consumidores; reducir las órdenes recientes,
+  los de sus 2 consumidores.
+- En `774ea40` cambiaron 15 snapshots, todos de llamadas; ninguno de HTML.
+- `npm run check` terminó con código 0 después de cada commit, con 800
+  pruebas.
+
+### Entrega 4.7 — Producción sin órdenes de trabajo
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| f73dbc8 | test | 68 pruebas de las 20 páginas. |
+| 2ec7228 | refactor | `queries.ts` en overview, bottlenecks, campaigns, recipes, recipe-versions, recipe-details, routes y stages; productos activos en la interfaz pública de Productos. |
+| 7b2350b | refactor | Sin usuarios completos en recetas y versiones; columnas de productos y materiales de los formularios. |
+| 95e7604 | chore | La regla de ESLint se invierte: cubre todas las páginas salvo las 19 pendientes. |
+
+Evidencia:
+
+- Los casos cubren `notFound` en cada detalle y edición, el detalle de otra
+  receta, una campaña sin detalles, una etapa sin máquina asignada, la cantidad
+  válida e inválida de requerimientos y los filtros por separado y juntos.
+- En `2ec7228` los 68 snapshots no cambiaron y el bloque JSX de las 20 páginas
+  es idéntico. Las consultas que dependen de otra (productos que la campaña aún
+  no tiene, materiales que la versión aún no usa, máquina asignada a la etapa)
+  conservan su secuencia y devuelven `null` cuando el registro principal no
+  existe o no pertenece a su padre. Pruebas de mutación: no verificar que el
+  detalle sea de la receta y excluir productos de una campaña sin detalles
+  hacen fallar solo su caso; cambiar el orden de los productos activos
+  compartidos, los 11 casos de sus 4 consumidores.
+- En `7b2350b` cambiaron 11 snapshots, todos de llamadas; ninguno de HTML.
+- La regla invertida se comprobó por entrada estándar: el login, la raíz, el
+  inicio del dashboard y páginas de cada área detectan `@/lib/db` y `auth`;
+  reportes, una orden de trabajo y un costeo solo detectan `auth`; `queries.ts`
+  puede importar Prisma. `npx eslint src/app` no reporta errores.
+- `npm run check` terminó con código 0 después de cada commit, con 868
+  pruebas.
+
+### Balance de las sub-entregas 4.1 a 4.7
+
+- Páginas con Prisma directo: de 117 a 19, las de reportes (10), órdenes de
+  trabajo (5) y costos (4), que se migran con las entregas 5 y 6.
+- 52 archivos `queries.ts` con `server-only`. Las opciones repetidas viven en
+  el módulo dueño de su entidad: clientes, productos, pedidos, materiales,
+  proveedores, compras, operarios, máquinas, cajas abiertas y órdenes de
+  trabajo recientes.
+- 50 archivos de caracterización con 313 pruebas, además de las 15 del arnés.
+  Las 98 páginas migradas conservan su JSX byte a byte y sus snapshots no
+  cambiaron al mover las consultas.
+- Criterio de columnas aplicado en cada área: 18 inclusiones de `usuario`
+  completas, con `clave_hash`, pasan a pedir solo nombres y apellidos o el
+  nombre de usuario (10), o dejan de cargarse porque no se mostraban (8). En
+  los `queries.ts` ya no queda ninguna. En Comercial se comprobó que ningún
+  componente cliente recibía el hash; en las demás áreas las páginas solo
+  leían nombres y apellidos en el servidor o no usaban el usuario.
+
+Pendientes fuera de alcance:
+
+- Verificación en staging: la foto del «antes» no se tomó porque el navegador
+  integrado no tenía sesión en el ERP de staging. Debe tomarse antes de
+  publicar estos commits; si ya no es posible, la evidencia queda en las
+  pruebas de caracterización y en una prueba de humo posterior.
+- La URL propia de staging, abierta sin sesión, redirige al login de
+  producción: el proxy usa `request.nextUrl` y next-auth sustituye su origen
+  por `AUTH_URL`. Revisar `AUTH_URL` del entorno Preview en Vercel.
+- 22 páginas conservan su `getSearchParam` local, que no recorta a 200
+  caracteres como `parseStringParam`. Unificarlo cambia el comportamiento con
+  textos largos: es un `fix`.
+- `getStatusFilter` (`active`/`inactive` a booleano) se repite en 8
+  `queries.ts`, como antes se repetía en las páginas.
+- `modules/dashboard/data.ts` no tiene `server-only` ni sigue el nombre
+  `queries.ts`.
+- Los detalles con `include` profundos siguen cargando filas completas, según
+  el criterio de columnas.
+- `parseDateParam`, `setDate` y los rangos «del mes» usan la zona del proceso.
+  En Vercel es UTC y el arnés la fija; en una máquina en America/Lima el
+  resultado cambia. Es el mismo tema de fechas civiles e instantes pendiente
+  de la entrega 3.
+- Los snapshots de HTML dependen del marcado de los componentes compartidos:
+  la entrega 8 tendrá que actualizarlos con `vitest -u` y revisar el diff.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -496,7 +805,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | Pendiente |
+| 4 | A | Consultas fuera de las páginas, por área | 4.1 a 4.7 terminadas en local; falta staging |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -515,7 +824,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 117 | 4 |
+| Páginas con Prisma directo | 117 | 19 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -523,7 +832,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 24 / 539 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 75 / 868 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos

@@ -1,0 +1,709 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance/preventive > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_programada": "asc",
+        },
+        {
+          "estado": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Preventivos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mantenimientos preventivos</h1>
+<p>Programa y consulta mantenimientos preventivos por máquina, responsable, fecha programada, fecha realizada y estado de cumplimiento.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/preventive/new">Programar preventivo</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value=""/>
+</div>
+<div>
+<label for="machine">Máquina</label>
+<input id="machine" placeholder="Maquina" name="machine" value=""/>
+</div>
+<div>
+<label for="responsible">Responsable</label>
+<input id="responsible" placeholder="Responsable" name="responsible" value=""/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/preventive">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico de programaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Vencidos: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Realizados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cumplidos según registro.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Anulados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Programaciones canceladas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Programaciones preventivas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Actividad</th>
+<th>Responsable</th>
+<th>Programada</th>
+<th>Realizada</th>
+<th>Usuario</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_mantenimiento-1</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>actividad-1</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>01/07/2026</td>
+<td>01/07/2026</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-1"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_mantenimiento-2</td>
+<td>nombre-2<p>tipo-2 · estado-2</p>
+</td>
+<td>
+<p>actividad-2</p>
+</td>
+<td>-</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-2"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/preventive > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_programada": "asc",
+        },
+        {
+          "estado": "asc",
+        },
+      ],
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_mantenimiento": {
+                  "contains": "lubricacion",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "actividad": {
+                  "contains": "lubricacion",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "responsable": {
+                  "contains": "lubricacion",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "maquina": {
+                  "nombre": {
+                    "contains": "lubricacion",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "maquina": {
+              "nombre": {
+                "contains": "torno",
+                "mode": "insensitive",
+              },
+            },
+          },
+          {
+            "responsable": {
+              "contains": "juan",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "estado": "pendiente",
+          },
+          {
+            "fecha_programada": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Preventivos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mantenimientos preventivos</h1>
+<p>Programa y consulta mantenimientos preventivos por máquina, responsable, fecha programada, fecha realizada y estado de cumplimiento.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/preventive/new">Programar preventivo</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value="lubricacion"/>
+</div>
+<div>
+<label for="machine">Máquina</label>
+<input id="machine" placeholder="Maquina" name="machine" value="torno"/>
+</div>
+<div>
+<label for="responsible">Responsable</label>
+<input id="responsible" placeholder="Responsable" name="responsible" value="juan"/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="pendiente" selected="">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/preventive">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos registrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico de programaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Vencidos: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Realizados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cumplidos según registro.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Anulados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Programaciones canceladas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Programaciones preventivas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Actividad</th>
+<th>Responsable</th>
+<th>Programada</th>
+<th>Realizada</th>
+<th>Usuario</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_mantenimiento-1</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>actividad-1</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>01/07/2026</td>
+<td>01/07/2026</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-1"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_mantenimiento-2</td>
+<td>nombre-2<p>tipo-2 · estado-2</p>
+</td>
+<td>
+<p>actividad-2</p>
+</td>
+<td>-</td>
+<td>02/07/2026</td>
+<td>-</td>
+<td>nombres-2 apellidos-2</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-2"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/preventive/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/preventive/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/preventive">Preventivos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo preventivo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Programar mantenimiento preventivo</h1>
+<p>Programa actividades preventivas por maquina para anticipar fallas, reducir paradas imprevistas y mantener la continuidad del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del mantenimiento preventivo</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_maquina-_R_d6_">Maquina *</label>
+<input type="hidden" name="id_maquina" value=""/>
+<div>
+<input id="id_maquina-_R_d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-_R_d6_-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="fecha_programada">Fecha programada</label>
+<input type="date" id="fecha_programada" required="" name="fecha_programada" value="2026-07-15"/>
+</div>
+<div>
+<label for="estado">Estado inicial</label>
+<select id="estado" name="estado" required="">
+<option value="pendiente" selected="">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Maestro de taller" name="responsable"/>
+</div>
+</div>
+<div>
+<label for="actividad">Actividad preventiva</label>
+<input type="text" id="actividad" required="" placeholder="Ejemplo: Lubricacion general y revision de presion hidraulica" name="actividad"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Ejemplo: Revisar mangueras, pernos, fugas y nivel de aceite.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Programar preventivo</button>
+<a data-variant="outline" href="/dashboard/maintenance/preventive">Ver listado</a>
+<a data-variant="outline" href="/dashboard/maintenance">Volver al modulo</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Recomendacion</div>
+</div>
+<div>
+<p>Programa mantenimientos preventivos para maquinas criticas como prensas, cortadoras, soldadoras, compresoras o dobladoras.</p>
+<p>Manten el estado como <strong>Pendiente</strong> hasta que se realice la actividad. Al marcarlo como <strong>Realizado</strong>, el sistema registrara la fecha real de ejecucion.</p>
+<p>Los preventivos ayudan a reducir fallas inesperadas y costos por paradas de produccion.</p>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

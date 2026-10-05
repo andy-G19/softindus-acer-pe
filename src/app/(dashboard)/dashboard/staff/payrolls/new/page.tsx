@@ -22,11 +22,11 @@ import {
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { generatePayrollAction } from "@/modules/staff/payrolls/actions";
+import { getPayrollFormOperators } from "@/modules/staff/payrolls/queries";
 
 function getPaymentModeLabel(mode: string) {
   const labels: Record<string, string> = {
@@ -52,27 +52,7 @@ export default async function NewPayrollPage() {
     .toISOString()
     .split("T")[0];
 
-  const operators = await prisma.operario.findMany({
-    where: {
-      estado: "activo",
-    },
-    orderBy: [
-      {
-        apellidos: "asc",
-      },
-      {
-        nombres: "asc",
-      },
-    ],
-    include: {
-      _count: {
-        select: {
-          asistencia: true,
-          planilla_pago: true,
-        },
-      },
-    },
-  });
+  const operators = await getPayrollFormOperators();
 
   const operatorItems = operators.map((operator) => ({
     id: operator.id_operario,

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
+import { getScrapListData } from "@/modules/waste-scrap/scraps/queries";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
@@ -77,46 +77,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
   const material = params.material?.trim() ?? "";
   const query = params.q?.trim() ?? "";
 
-  const where = {
-    ...(estado
-      ? {
-          estado,
-        }
-      : {}),
-
-    ...(material
-      ? {
-          id_material: material,
-        }
-      : {}),
-
-    ...(query
-      ? {
-          OR: [
-            {
-              id_chatarra: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              tipo_material: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              observaciones: {
-                contains: query,
-                mode: "insensitive" as const,
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [
+  const {
     materials,
     scraps,
     totalFiltered,
@@ -124,73 +85,7 @@ export default async function ScrapsPage({ searchParams }: ScrapsPageProps) {
     chatarraAcumulada,
     chatarraVendida,
     filteredTotals,
-  ] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        categoria: true,
-      },
-    }),
-
-    prisma.chatarra.findMany({
-      where,
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      include: {
-        material: true,
-        orden_trabajo: {
-          select: {
-            id_orden_trabajo: true,
-            producto: {
-              select: {
-                nombre_producto: true,
-              },
-            },
-          },
-        },
-        venta_chatarra: {
-          orderBy: {
-            fecha_venta: "desc",
-          },
-          take: 1,
-        },
-      },
-    }),
-
-    prisma.chatarra.count({
-      where,
-    }),
-
-    prisma.chatarra.count(),
-
-    prisma.chatarra.count({
-      where: {
-        estado: "acumulada",
-      },
-    }),
-
-    prisma.chatarra.count({
-      where: {
-        estado: "vendida",
-      },
-    }),
-
-    prisma.chatarra.aggregate({
-      where,
-      _sum: {
-        peso_kg: true,
-        cantidad: true,
-      },
-    }),
-  ]);
+  } = await getScrapListData({ estado, material, query });
 
   const hasFilters = Boolean(estado || material || query);
 

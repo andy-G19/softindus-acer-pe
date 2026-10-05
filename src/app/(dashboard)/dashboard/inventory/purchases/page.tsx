@@ -17,9 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
@@ -29,12 +27,12 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { getPurchaseListData } from "@/modules/inventory/purchases/queries";
 
 type PurchasesPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -50,96 +48,14 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
   const purchaseStatus = parseStringParam(params, "status");
   const paymentStatus = parseStringParam(params, "payment");
   const returnTo = createReturnToHref(navigationHrefs.purchases, params);
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-  const filters: Prisma.compraWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_compra: { contains: q, mode: "insensitive" } },
-        { numero_comprobante: { contains: q, mode: "insensitive" } },
-        {
-          proveedor: {
-            razon_social: { contains: q, mode: "insensitive" },
-          },
-        },
-      ],
-    });
-  }
-
-  if (supplier) {
-    filters.push({ id_proveedor: supplier });
-  }
-
-  if (material) {
-    filters.push({
-      detalle_compra: {
-        some: {
-          id_material: material,
-        },
-      },
-    });
-  }
-
-  if (purchaseStatus) {
-    filters.push({ estado_compra: purchaseStatus });
-  }
-
-  if (paymentStatus) {
-    filters.push({ estado_pago: paymentStatus });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_compra: dateRange });
-  }
-
-  const where: Prisma.compraWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [purchases, totalItems, suppliers, materials] = await Promise.all([
-    prisma.compra.findMany({
-      where,
-      orderBy: [{ fecha_registro: "desc" }, { id_compra: "desc" }],
-      skip,
-      take,
-      include: {
-        proveedor: true,
-        pago_proveedor: {
-          select: {
-            id_pago_proveedor: true,
-          },
-        },
-        movimiento_inventario: {
-          select: {
-            id_movimiento: true,
-          },
-        },
-      },
-    }),
-    prisma.compra.count({ where }),
-    prisma.proveedor.findMany({
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-    prisma.material.findMany({
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-      },
-    }),
-  ]);
+  const { purchases, totalItems, suppliers, materials } = await getPurchaseListData(
+    { q, supplier, material, purchaseStatus, paymentStatus, from, to },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

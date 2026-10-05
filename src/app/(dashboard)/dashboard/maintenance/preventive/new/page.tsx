@@ -16,10 +16,10 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createPreventiveMaintenanceAction } from "@/modules/maintenance/preventive/actions";
+import { findMachineOptions } from "@/modules/maintenance/machines/queries";
 
 function getTodayValue() {
   const now = new Date();
@@ -42,16 +42,7 @@ function getMachineStatusLabel(status: string) {
 export default async function NewPreventiveMaintenancePage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const machines = await prisma.maquina.findMany({
-    orderBy: [
-      {
-        estado: "asc",
-      },
-      {
-        nombre: "asc",
-      },
-    ],
-  });
+  const machines = await findMachineOptions();
 
   const today = getTodayValue();
   const machineItems = machines.map((machine) => ({

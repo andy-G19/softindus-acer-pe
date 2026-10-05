@@ -15,29 +15,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createAttendanceAction } from "@/modules/staff/attendance/actions";
+import { findActiveOperators } from "@/modules/staff/operators/queries";
 
 export default async function NewAttendancePage() {
   await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const operators = await prisma.operario.findMany({
-    where: {
-      estado: "activo",
-    },
-    orderBy: [
-      {
-        apellidos: "asc",
-      },
-      {
-        nombres: "asc",
-      },
-    ],
-  });
+  const operators = await findActiveOperators();
 
   const operatorItems = operators.map((operator) => ({
     id: operator.id_operario,

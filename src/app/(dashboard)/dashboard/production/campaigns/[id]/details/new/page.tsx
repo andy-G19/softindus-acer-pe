@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { addCampaignDetailAction } from "@/modules/production/campaigns/actions";
+import { getNewCampaignDetailData } from "@/modules/production/campaigns/queries";
 
 type NewCampaignDetailPageProps = {
   params: Promise<{
@@ -25,47 +25,14 @@ export default async function NewCampaignDetailPage({
 
   const { id } = await params;
 
-  const campaign = await prisma.campania_produccion.findUnique({
-    where: {
-      id_campania: id,
-    },
-    include: {
-      campania_detalle: {
-        select: {
-          id_producto: true,
-        },
-      },
-    },
-  });
+  const newCampaignDetailData = await getNewCampaignDetailData(id);
 
-  if (!campaign) {
+  if (!newCampaignDetailData) {
     notFound();
   }
 
+  const { campaign, products } = newCampaignDetailData;
   const isClosedCampaign = ["finalizada", "anulada"].includes(campaign.estado);
-  const existingProductIds = campaign.campania_detalle.map(
-    (detail) => detail.id_producto,
-  );
-
-  const products = await prisma.producto.findMany({
-    where: {
-      estado: true,
-      id_producto:
-        existingProductIds.length > 0
-          ? {
-              notIn: existingProductIds,
-            }
-          : undefined,
-    },
-    orderBy: [
-      {
-        categoria: "asc",
-      },
-      {
-        nombre_producto: "asc",
-      },
-    ],
-  });
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">

@@ -1,0 +1,921 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`edicion de cliente > consulta el cliente y muestra el formulario con el regreso al listado > html 1`] = `
+"<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/clients?q=andina&amp;page=2">Clientes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar cliente</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar cliente</h1>
+<p>Actualiza los datos comerciales del cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a clientes">
+<svg/>Volver a clientes</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_cliente" value="CLI00000003"/>
+<div>
+<label for="tipo_cliente">Tipo de cliente</label>
+<select id="tipo_cliente" name="tipo_cliente" required="">
+<option value="cliente_final">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="nombre_razon_social">Nombre o razón social</label>
+<input id="nombre_razon_social" required="" name="nombre_razon_social" value="Metalmecanica Andina SAC"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="">Sin documento</option>
+<option value="dni">DNI</option>
+<option value="ruc">RUC</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" name="numero_documento" value="20123456789"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" name="telefono" value="987654321"/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" name="correo" value="compras@andina.pe"/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" name="direccion" value="Av. Industrial 123"/>
+</div>
+<div>
+<label for="lugar_origen">Lugar de origen</label>
+<input id="lugar_origen" name="lugar_origen" value="Arequipa"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones">Cliente frecuente</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/clients">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`edicion de cliente > consulta el cliente y muestra el formulario con el regreso al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "correo": true,
+        "direccion": true,
+        "id_cliente": true,
+        "lugar_origen": true,
+        "nombre_razon_social": true,
+        "numero_documento": true,
+        "observaciones": true,
+        "telefono": true,
+        "tipo_cliente": true,
+        "tipo_documento": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ignora un regreso externo 1`] = `
+"<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/clients">Clientes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar cliente</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar cliente</h1>
+<p>Actualiza los datos comerciales del cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a clientes">
+<svg/>Volver a clientes</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_cliente" value="CLI00000002"/>
+<div>
+<label for="tipo_cliente">Tipo de cliente</label>
+<select id="tipo_cliente" name="tipo_cliente" required="">
+<option value="cliente_final">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="nombre_razon_social">Nombre o razón social</label>
+<input id="nombre_razon_social" required="" name="nombre_razon_social" value="Juan Quispe"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="" selected="">Sin documento</option>
+<option value="dni">DNI</option>
+<option value="ruc">RUC</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" name="numero_documento" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" name="telefono" value=""/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" name="direccion" value=""/>
+</div>
+<div>
+<label for="lugar_origen">Lugar de origen</label>
+<input id="lugar_origen" name="lugar_origen" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/clients">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`listado de clientes > consulta Prisma con los mismos argumentos 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "lugar_origen": true,
+        "nombre_razon_social": true,
+        "numero_documento": true,
+        "telefono": true,
+        "tipo_cliente": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "fecha_registro": "desc",
+        },
+        {
+          "id_cliente": "desc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "lugar_origen": true,
+        "nombre_razon_social": true,
+        "telefono": true,
+        "tipo_cliente": true,
+      },
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "id_cliente": "CLI00000003",
+          },
+          {
+            "OR": [
+              {
+                "nombre_razon_social": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "numero_documento": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "telefono": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "correo": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "direccion": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "lugar_origen": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "tipo_cliente": "empresa",
+          },
+          {
+            "estado": true,
+          },
+          {
+            "lugar_origen": {
+              "contains": "Arequipa",
+              "mode": "insensitive",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "id_cliente": "CLI00000003",
+          },
+          {
+            "OR": [
+              {
+                "nombre_razon_social": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "numero_documento": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "telefono": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "correo": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "direccion": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "lugar_origen": {
+                  "contains": "andina",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "tipo_cliente": "empresa",
+          },
+          {
+            "estado": true,
+          },
+          {
+            "lugar_origen": {
+              "contains": "Arequipa",
+              "mode": "insensitive",
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "cliente.count",
+  },
+]
+`;
+
+exports[`listado de clientes > filtro: busqueda con espacios 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "OR": [
+          {
+            "nombre_razon_social": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "numero_documento": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "telefono": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "correo": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "direccion": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "lugar_origen": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: busqueda repetida toma el primer valor 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "OR": [
+          {
+            "nombre_razon_social": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "numero_documento": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "telefono": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "correo": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "direccion": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "lugar_origen": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: cliente 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "id_cliente": "CLI00000001",
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: estado activo 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "estado": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: estado desconocido no filtra 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": undefined,
+}
+`;
+
+exports[`listado de clientes > filtro: estado inactivo 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "estado": false,
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: origen 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "lugar_origen": {
+          "contains": "Tacna",
+          "mode": "insensitive",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: pagina y tamano 1`] = `
+{
+  "skip": 10,
+  "take": 5,
+  "where": undefined,
+}
+`;
+
+exports[`listado de clientes > filtro: pagina y tamano fuera de rango 1`] = `
+{
+  "skip": 0,
+  "take": 100,
+  "where": undefined,
+}
+`;
+
+exports[`listado de clientes > filtro: sin filtros 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": undefined,
+}
+`;
+
+exports[`listado de clientes > filtro: tipo 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "tipo_cliente": "empresa",
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > filtro: todos los filtros 1`] = `
+{
+  "skip": 0,
+  "take": 20,
+  "where": {
+    "AND": [
+      {
+        "id_cliente": "CLI00000003",
+      },
+      {
+        "OR": [
+          {
+            "nombre_razon_social": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "numero_documento": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "telefono": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "correo": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "direccion": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "lugar_origen": {
+              "contains": "andina",
+              "mode": "insensitive",
+            },
+          },
+        ],
+      },
+      {
+        "tipo_cliente": "empresa",
+      },
+      {
+        "estado": false,
+      },
+      {
+        "lugar_origen": {
+          "contains": "Arequipa",
+          "mode": "insensitive",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`listado de clientes > muestra el estado vacio 1`] = `
+"<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Clientes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Clientes</h1>
+<p>Lista de clientes registrados en el sistema.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/clients/new">Nuevo cliente</a>
+</div>
+</div>
+</section>
+<form method="GET">
+<div>
+<label for="client-_R_a_">Cliente</label>
+<input type="hidden" name="client" value=""/>
+<div>
+<input id="client-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+</div>
+</div>
+<div>
+<label for="q">Búsqueda general</label>
+<input type="text" id="q" placeholder="Buscar por nombre, documento, teléfono o correo" name="q" value=""/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="empresa">empresa</option>
+<option value="persona">persona</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="origin">Origen</label>
+<input type="text" id="origin" placeholder="Origen" name="origin" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/clients">Limpiar filtros</a>
+</div>
+</form>
+<p>Resultados encontrados: 0</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Origen</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="7">
+<div>
+<div>
+<p>No se encontraron clientes con los filtros aplicados.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 0-0 de 0 clientes · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
+</main>"
+`;
+
+exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`] = `
+"<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Clientes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Clientes</h1>
+<p>Lista de clientes registrados en el sistema.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/clients/new">Nuevo cliente</a>
+</div>
+</div>
+</section>
+<form method="GET">
+<div>
+<label for="client-_R_a_">Cliente</label>
+<input type="hidden" name="client" value=""/>
+<div>
+<input id="client-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+</div>
+</div>
+<div>
+<label for="q">Búsqueda general</label>
+<input type="text" id="q" placeholder="Buscar por nombre, documento, teléfono o correo" name="q" value="andina"/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="empresa">empresa</option>
+<option value="persona">persona</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="activo" selected="">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="origin">Origen</label>
+<input type="text" id="origin" placeholder="Origen" name="origin" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/clients">Limpiar filtros</a>
+</div>
+</form>
+<p>Resultados encontrados: 45</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Origen</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLI00000003</td>
+<td>Metalmecanica Andina SAC</td>
+<td>empresa</td>
+<td>987654321</td>
+<td>Arequipa</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_cliente" value="CLI00000003"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>CLI00000002</td>
+<td>Juan Quispe</td>
+<td>persona</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_cliente" value="CLI00000002"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 21-40 de 45 clientes · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;

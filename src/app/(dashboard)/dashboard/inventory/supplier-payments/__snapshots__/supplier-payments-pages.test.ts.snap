@@ -1,0 +1,424 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/supplier-payments > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "select": {
+        "id_compra": true,
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pagos a proveedores</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pagos a proveedores</h1>
+<p>Consulta pagos registrados desde compras.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/supplier-payments">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pago..." name="q" value=""/>
+</div>
+<div>
+<label for="supplier">Proveedor</label>
+<select id="supplier" name="supplier">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="purchase">Compra</label>
+<select id="purchase" name="purchase">
+<option value="" selected="">Todas las compras</option>
+<option value="id_compra-1">id_compra-1</option>
+<option value="id_compra-2">id_compra-2</option>
+</select>
+</div>
+<div>
+<label for="method">Método</label>
+<select id="method" name="method">
+<option value="" selected="">Método</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Estado pago</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial">Parcial</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Proveedor</th>
+<th>Compra</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>razon_social-1</td>
+<td>id_compra-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="secondary">estado_pago-1</span>
+</td>
+<td>
+<a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-1">Ver compra</a>
+</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>razon_social-2</td>
+<td>id_compra-2</td>
+<td>metodo_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="secondary">estado_pago-2</span>
+</td>
+<td>
+<a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-2">Ver compra</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-payments > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pago": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_compra": {
+                  "contains": "F001",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "compra": {
+                  "numero_comprobante": {
+                    "contains": "F001",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+              {
+                "compra": {
+                  "proveedor": {
+                    "razon_social": {
+                      "contains": "F001",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_proveedor": "PRV00000001",
+          },
+          {
+            "id_compra": "COM00000001",
+          },
+          {
+            "metodo_pago": "transferencia",
+          },
+          {
+            "estado_pago": "pagado",
+          },
+          {
+            "fecha_pago": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "pago_proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "select": {
+        "id_compra": true,
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Pagos a proveedores</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Pagos a proveedores</h1>
+<p>Consulta pagos registrados desde compras.</p>
+</div>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/supplier-payments">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar pago..." name="q" value="F001"/>
+</div>
+<div>
+<label for="supplier">Proveedor</label>
+<select id="supplier" name="supplier">
+<option value="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="purchase">Compra</label>
+<select id="purchase" name="purchase">
+<option value="">Todas las compras</option>
+<option value="id_compra-1">id_compra-1</option>
+<option value="id_compra-2">id_compra-2</option>
+</select>
+</div>
+<div>
+<label for="method">Método</label>
+<select id="method" name="method">
+<option value="">Método</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia" selected="">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Estado pago</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial">Parcial</option>
+<option value="pagado" selected="">Pagado</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Proveedor</th>
+<th>Compra</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>razon_social-1</td>
+<td>id_compra-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="secondary">estado_pago-1</span>
+</td>
+<td>
+<a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-1">Ver compra</a>
+</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>razon_social-2</td>
+<td>id_compra-2</td>
+<td>metodo_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span data-variant="secondary">estado_pago-2</span>
+</td>
+<td>
+<a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-2">Ver compra</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

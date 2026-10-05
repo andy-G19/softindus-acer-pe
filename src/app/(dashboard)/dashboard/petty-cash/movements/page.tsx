@@ -29,10 +29,10 @@ import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { annulPettyCashMovementAction } from "@/modules/petty-cash/movements/actions";
+import { getPettyCashMovementListData } from "@/modules/petty-cash/movements/queries";
 
 type PettyCashMovementsPageProps = {
   searchParams?: Promise<{
@@ -111,67 +111,9 @@ export default async function PettyCashMovementsPage({
   const selectedEndDate = normalizeParam(params.hasta);
   const searchText = normalizeParam(params.q);
 
-  const where: Prisma.movimiento_cajaWhereInput = {};
-
-  if (selectedCashBox) {
-    where.id_caja_chica = selectedCashBox;
-  }
-
-  if (selectedType) {
-    where.tipo_movimiento = selectedType;
-  }
-
-  if (selectedCategory) {
-    where.id_categoria_gasto = selectedCategory;
-  }
-
-  if (selectedStartDate || selectedEndDate) {
-    where.fecha_movimiento = {
-      ...(selectedStartDate
-        ? {
-            gte: new Date(`${selectedStartDate}T00:00:00`),
-          }
-        : {}),
-      ...(selectedEndDate
-        ? {
-            lte: new Date(`${selectedEndDate}T23:59:59`),
-          }
-        : {}),
-    };
-  }
-
-  if (searchText) {
-    where.OR = [
-      {
-        concepto: {
-          contains: searchText,
-          mode: "insensitive",
-        },
-      },
-      {
-        comprobante: {
-          contains: searchText,
-          mode: "insensitive",
-        },
-      },
-      {
-        responsable: {
-          contains: searchText,
-          mode: "insensitive",
-        },
-      },
-      {
-        observaciones: {
-          contains: searchText,
-          mode: "insensitive",
-        },
-      },
-    ];
-  }
-
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [
+  const {
     cashBoxes,
     categories,
     movements,
@@ -180,74 +122,17 @@ export default async function PettyCashMovementsPage({
     expenseSum,
     positiveAdjustmentSum,
     negativeAdjustmentSum,
-  ] = await Promise.all([
-    prisma.caja_chica.findMany({
-      orderBy: {
-        nombre_caja: "asc",
-      },
-    }),
-
-    prisma.categoria_gasto.findMany({
-      orderBy: {
-        nombre_categoria: "asc",
-      },
-    }),
-
-    prisma.movimiento_caja.findMany({
-      where,
-      orderBy: [
-        {
-          fecha_movimiento: "desc",
-        },
-        {
-          id_movimiento_caja: "desc",
-        },
-      ],
-      skip,
-      take,
-      include: {
-        caja_chica: true,
-        categoria_gasto: true,
-        usuario: true,
-      },
-    }),
-
-    prisma.movimiento_caja.count({
-      where,
-    }),
-
-    // Los totales de las KPI se calculan con aggregate sobre TODO el
-    // conjunto filtrado (no solo la pagina actual), para que sigan siendo
-    // correctos ahora que la tabla esta paginada.
-    prisma.movimiento_caja.aggregate({
-      where: { AND: [where, { tipo_movimiento: "ingreso" }] },
-      _sum: { monto: true },
-    }),
-    prisma.movimiento_caja.aggregate({
-      where: { AND: [where, { tipo_movimiento: "egreso" }] },
-      _sum: { monto: true },
-    }),
-    prisma.movimiento_caja.aggregate({
-      where: {
-        AND: [
-          where,
-          { tipo_movimiento: "ajuste" },
-          { concepto: { startsWith: "Ajuste positivo" } },
-        ],
-      },
-      _sum: { monto: true },
-    }),
-    prisma.movimiento_caja.aggregate({
-      where: {
-        AND: [
-          where,
-          { tipo_movimiento: "ajuste" },
-          { concepto: { startsWith: "Ajuste negativo" } },
-        ],
-      },
-      _sum: { monto: true },
-    }),
-  ]);
+  } = await getPettyCashMovementListData(
+    {
+      cashBox: selectedCashBox,
+      type: selectedType,
+      category: selectedCategory,
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+      searchText,
+    },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems: totalMatches, page, pageSize });
 

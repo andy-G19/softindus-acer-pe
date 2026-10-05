@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
+import { getOperatorPaymentHistoryData } from "@/modules/staff/payment-history/queries";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
@@ -45,69 +45,14 @@ export default async function PaymentHistoryPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
   const today = new Date();
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const startOfNextMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    1,
-  );
 
-  const [
+  const {
     totalPayments,
     paymentsThisMonth,
     totalPaidAmount,
     monthlyPaidAmount,
     latestPayments,
-  ] = await Promise.all([
-    prisma.historial_pago_operario.count(),
-
-    prisma.historial_pago_operario.count({
-      where: {
-        fecha_pago: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-    }),
-
-    prisma.historial_pago_operario.aggregate({
-      _sum: {
-        monto_pagado: true,
-      },
-    }),
-
-    prisma.historial_pago_operario.aggregate({
-      where: {
-        fecha_pago: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-      _sum: {
-        monto_pagado: true,
-      },
-    }),
-
-    prisma.historial_pago_operario.findMany({
-      orderBy: [
-        {
-          fecha_pago: "desc",
-        },
-        {
-          id_historial_pago: "desc",
-        },
-      ],
-      take: 50,
-      include: {
-        planilla_pago: {
-          include: {
-            operario: true,
-          },
-        },
-        usuario: true,
-      },
-    }),
-  ]);
+  } = await getOperatorPaymentHistoryData(today);
 
   return (
     <main className="space-y-6">

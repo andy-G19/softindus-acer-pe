@@ -1,0 +1,755 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/audit > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "accion",
+      ],
+      "orderBy": {
+        "accion": "asc",
+      },
+      "select": {
+        "accion": true,
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "entidad_afectada",
+      ],
+      "orderBy": {
+        "entidad_afectada": "asc",
+      },
+      "select": {
+        "entidad_afectada": true,
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_hora": "desc",
+        },
+        {
+          "id_bitacora": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {},
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "bitacora_operacion.count",
+  },
+  {
+    "args": {
+      "distinct": [
+        "id_usuario",
+      ],
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {},
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "entidad_afectada",
+      ],
+      "select": {
+        "entidad_afectada": true,
+      },
+      "where": {},
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/audit > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Auditoría</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Bitácora de operaciones</h1>
+<p>Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/audit?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/audit?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value=""/>
+</div>
+<div>
+<label for="usuario">Usuario</label>
+<select id="usuario" name="usuario">
+<option value="" selected="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="accion">Acción</label>
+<select id="accion" name="accion">
+<option value="" selected="">Todas las acciones</option>
+<option value="accion-1">accion-1</option>
+<option value="accion-2">accion-2</option>
+</select>
+</div>
+<div>
+<label for="entidad">Entidad</label>
+<select id="entidad" name="entidad">
+<option value="" selected="">Todas las entidades</option>
+<option value="entidad_afectada-1">entidad_afectada-1</option>
+<option value="entidad_afectada-2">entidad_afectada-2</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/audit">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operaciones</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Coincidencias segun filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Usuarios distintos según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entidades</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Entidades afectadas según filtros.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Operaciones registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Usuario</th>
+<th>Acción</th>
+<th>Entidad</th>
+<th>Registro</th>
+<th>Detalle</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>accion-1</td>
+<td>entidad_afectada-1</td>
+<td>id_registro_afectado-1</td>
+<td>detalle-1</td>
+<td>ip_origen-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>accion-2</td>
+<td>entidad_afectada-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 operaciones · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/audit?page=2">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/audit > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "accion",
+      ],
+      "orderBy": {
+        "accion": "asc",
+      },
+      "select": {
+        "accion": true,
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "entidad_afectada",
+      ],
+      "orderBy": {
+        "entidad_afectada": "asc",
+      },
+      "select": {
+        "entidad_afectada": true,
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_hora": "desc",
+        },
+        {
+          "id_bitacora": "desc",
+        },
+      ],
+      "skip": 20,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "detalle": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "accion": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "entidad_afectada": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_registro_afectado": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "id_usuario": "USU00000001",
+          },
+          {
+            "accion": "crear",
+          },
+          {
+            "entidad_afectada": "cliente",
+          },
+          {
+            "fecha_hora": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "detalle": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "accion": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "entidad_afectada": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_registro_afectado": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "id_usuario": "USU00000001",
+          },
+          {
+            "accion": "crear",
+          },
+          {
+            "entidad_afectada": "cliente",
+          },
+          {
+            "fecha_hora": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "bitacora_operacion.count",
+  },
+  {
+    "args": {
+      "distinct": [
+        "id_usuario",
+      ],
+      "select": {
+        "id_usuario": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "detalle": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "accion": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "entidad_afectada": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_registro_afectado": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "id_usuario": "USU00000001",
+          },
+          {
+            "accion": "crear",
+          },
+          {
+            "entidad_afectada": "cliente",
+          },
+          {
+            "fecha_hora": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "entidad_afectada",
+      ],
+      "select": {
+        "entidad_afectada": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "detalle": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "accion": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "entidad_afectada": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_registro_afectado": {
+                  "contains": "cliente",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "id_usuario": "USU00000001",
+          },
+          {
+            "accion": "crear",
+          },
+          {
+            "entidad_afectada": "cliente",
+          },
+          {
+            "fecha_hora": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "bitacora_operacion.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Auditoría</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Bitácora de operaciones</h1>
+<p>Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar detalle, entidad o accion" name="q" value="cliente"/>
+</div>
+<div>
+<label for="usuario">Usuario</label>
+<select id="usuario" name="usuario">
+<option value="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="accion">Acción</label>
+<select id="accion" name="accion">
+<option value="">Todas las acciones</option>
+<option value="accion-1">accion-1</option>
+<option value="accion-2">accion-2</option>
+</select>
+</div>
+<div>
+<label for="entidad">Entidad</label>
+<select id="entidad" name="entidad">
+<option value="">Todas las entidades</option>
+<option value="entidad_afectada-1">entidad_afectada-1</option>
+<option value="entidad_afectada-2">entidad_afectada-2</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/audit">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operaciones</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Coincidencias segun filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Usuarios distintos según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entidades</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Entidades afectadas según filtros.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Operaciones registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Usuario</th>
+<th>Acción</th>
+<th>Entidad</th>
+<th>Registro</th>
+<th>Detalle</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>accion-1</td>
+<td>entidad_afectada-1</td>
+<td>id_registro_afectado-1</td>
+<td>detalle-1</td>
+<td>ip_origen-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>accion-2</td>
+<td>entidad_afectada-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<p>Mostrando 21-40 de 42 operaciones · Página 2 de 3</p>
+<div>
+<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=1">Anterior</a>
+<a data-variant="outline" href="/dashboard/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

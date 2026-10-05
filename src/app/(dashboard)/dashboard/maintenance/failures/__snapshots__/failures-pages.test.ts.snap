@@ -1,0 +1,587 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/maintenance/failures > administrador > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "reparacion": true,
+          },
+        },
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/failures > administrador > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Fallas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Fallas</h1>
+<p>Consulta las fallas registradas por máquina, su estado de atención, tiempo perdido, impacto en producción y trazabilidad de reparaciones asociadas.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/maintenance/failures/new">Registrar falla</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico de fallas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Aún no atendidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En atención</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Requieren seguimiento.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Anuladas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Acumulado por fallas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Fecha</th>
+<th>Descripción</th>
+<th>Responsable</th>
+<th>Tiempo perdido</th>
+<th>Reparaciones</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_falla-1</td>
+<td>nombre-1<p>codigo_interno-1</p>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>responsable_registro-1</td>
+<td>11.50 h</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado_atencion-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_falla" value="id_falla-1"/>
+<select name="estado_atencion">
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_falla-2</td>
+<td>nombre-2<p>Sin código interno</p>
+</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<p>descripcion-2</p>
+</td>
+<td>-</td>
+<td>0.00 h</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado_atencion-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_falla" value="id_falla-2"/>
+<select name="estado_atencion">
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/failures > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "reparacion": true,
+          },
+        },
+        "maquina": true,
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/failures > maestro de taller > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Fallas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Fallas</h1>
+<p>Consulta las fallas registradas por máquina, su estado de atención, tiempo perdido, impacto en producción y trazabilidad de reparaciones asociadas.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/maintenance/failures/new">Registrar falla</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico de fallas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Aún no atendidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>En atención</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Requieren seguimiento.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Anuladas: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Acumulado por fallas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Fecha</th>
+<th>Descripción</th>
+<th>Responsable</th>
+<th>Tiempo perdido</th>
+<th>Reparaciones</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_falla-1</td>
+<td>nombre-1<p>codigo_interno-1</p>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>responsable_registro-1</td>
+<td>11.50 h</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado_atencion-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_falla" value="id_falla-1"/>
+<select name="estado_atencion">
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_falla-2</td>
+<td>nombre-2<p>Sin código interno</p>
+</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<p>descripcion-2</p>
+</td>
+<td>-</td>
+<td>0.00 h</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado_atencion-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_falla" value="id_falla-2"/>
+<select name="estado_atencion">
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/failures/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+        "tipo": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/failures/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/failures">Fallas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva falla</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar falla de maquinaria</h1>
+<p>Documenta una falla tecnica de una maquina o equipo critico, registrando fecha, descripcion, responsable, tiempo perdido e impacto en produccion.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">ADMIN / Maestro de taller</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos de la falla</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_maquina-_R_d6_">Maquina *</label>
+<input type="hidden" name="id_maquina" value=""/>
+<div>
+<input id="id_maquina-_R_d6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_maquina-_R_d6_-listbox" aria-expanded="false" required="" placeholder="Buscar maquina..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="fecha_falla">Fecha y hora de falla</label>
+<input type="datetime-local" id="fecha_falla" required="" name="fecha_falla" value="2026-07-15T15:00"/>
+</div>
+<div>
+<label for="estado_atencion">Estado de atencion</label>
+<select id="estado_atencion" name="estado_atencion" required="">
+<option value="pendiente" selected="">Pendiente</option>
+<option value="en_atencion">En atencion</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripcion de la falla</label>
+<textarea id="descripcion" name="descripcion" rows="4" required="" placeholder="Ejemplo: La prensa hidraulica perdio presion durante el proceso de doblado.">
+</textarea>
+</div>
+<div>
+<div>
+<label for="responsable_registro">Responsable del registro</label>
+<input type="text" id="responsable_registro" placeholder="Ejemplo: Maestro de taller" name="responsable_registro"/>
+</div>
+<div>
+<label for="tiempo_perdido_horas">Tiempo perdido en horas</label>
+<input type="number" id="tiempo_perdido_horas" min="0" step="0.01" placeholder="Ejemplo: 2.50" name="tiempo_perdido_horas"/>
+</div>
+</div>
+<div>
+<label for="impacto_produccion">Impacto en produccion</label>
+<textarea id="impacto_produccion" name="impacto_produccion" rows="3" placeholder="Ejemplo: Se detuvo el doblado de piezas durante la tarde.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar falla</button>
+<a data-variant="outline" href="/dashboard/maintenance/failures">Ver listado</a>
+<a data-variant="outline" href="/dashboard/maintenance">Volver al modulo</a>
+</div>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Recomendacion</div>
+</div>
+<div>
+<p>Registra la falla apenas ocurra para no perder trazabilidad del tiempo detenido y del impacto en produccion.</p>
+<p>Si la falla todavia no fue revisada, usa el estado <strong>Pendiente</strong>. Si ya esta siendo atendida, usa <strong>En atencion</strong>.</p>
+<p>La reparacion y el costo economico se registraran en la siguiente subfase, cuando implementemos reparaciones y repuestos.</p>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

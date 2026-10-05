@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateSupplierAction } from "@/modules/inventory/suppliers/actions";
 import { SupplierForm } from "@/modules/inventory/suppliers/supplier-form";
+import { getSupplierEditData } from "@/modules/inventory/suppliers/queries";
 
 type EditSupplierPageProps = {
   params: Promise<{
@@ -19,35 +19,13 @@ export default async function EditSupplierPage({
   const { id } = await params;
   await requireRole(["ADMIN"]);
 
-  const supplier = await prisma.proveedor.findUnique({
-    where: {
-      id_proveedor: id,
-    },
-  });
+  const supplierEditData = await getSupplierEditData(id);
 
-  if (!supplier) {
+  if (!supplierEditData) {
     notFound();
   }
 
-  const supplierTypes = await prisma.tipo_proveedor_catalogo.findMany({
-    where: {
-      OR: [
-        {
-          estado: true,
-        },
-        {
-          slug: supplier.tipo_proveedor,
-        },
-      ],
-    },
-    orderBy: {
-      nombre: "asc",
-    },
-    select: {
-      nombre: true,
-      slug: true,
-    },
-  });
+  const { supplier, supplierTypes } = supplierEditData;
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">

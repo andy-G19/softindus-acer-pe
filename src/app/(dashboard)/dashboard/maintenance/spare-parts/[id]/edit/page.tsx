@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateSparePartAction } from "@/modules/maintenance/spare-parts/actions";
 import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form";
+import { getSparePartEditData } from "@/modules/maintenance/spare-parts/queries";
 
 type EditSparePartPageProps = {
   params: Promise<{
@@ -27,54 +27,13 @@ export default async function EditSparePartPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const sparePart = await prisma.repuesto.findUnique({
-    where: {
-      id_repuesto: id,
-    },
-  });
+  const sparePartEditData = await getSparePartEditData(id);
 
-  if (!sparePart) {
+  if (!sparePartEditData) {
     notFound();
   }
 
-  const [providers, supplierTypes] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        OR: [
-          {
-            estado: true,
-          },
-          ...(sparePart.id_proveedor
-            ? [
-                {
-                  id_proveedor: sparePart.id_proveedor,
-                },
-              ]
-            : []),
-        ],
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-
-    prisma.tipo_proveedor_catalogo.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        slug: true,
-        nombre: true,
-      },
-    }),
-  ]);
+  const { sparePart, providers, supplierTypes } = sparePartEditData;
 
   return (
     <main className="space-y-6">

@@ -18,9 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   createReturnToHref,
@@ -30,12 +28,12 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
 import { cancelOrderAction } from "@/modules/commercial/orders/actions";
+import { getOrderListData } from "@/modules/commercial/orders/queries";
 
 type OrdersPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -52,125 +50,12 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   const from = parseDateParam(params, "from");
   const to = parseDateParam(params, "to");
   const returnTo = createReturnToHref(navigationHrefs.orders, params);
-  const dateRange = buildDateRangeFilter(from, to);
-  const filters: Prisma.pedidoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_pedido: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          cliente: {
-            nombre_razon_social: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          detalle_pedido: {
-            some: {
-              producto: {
-                nombre_producto: {
-                  contains: q,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (client) {
-    filters.push({ id_cliente: client });
-  }
-
-  if (product) {
-    filters.push({
-      detalle_pedido: {
-        some: {
-          id_producto: product,
-        },
-      },
-    });
-  }
-
-  if (status) {
-    filters.push({ estado: status });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_pedido: dateRange });
-  }
-
-  const where: Prisma.pedidoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [orders, totalItems, clients, products] = await Promise.all([
-    prisma.pedido.findMany({
-      where,
-      orderBy: [{ fecha_pedido: "desc" }, { id_pedido: "desc" }],
-      skip,
-      take,
-      include: {
-        cliente: true,
-        comprobante_venta: {
-          select: {
-            id_comprobante: true,
-          },
-        },
-        proforma: {
-          where: {
-            estado: {
-              in: ["vigente", "aceptada", "pagada"],
-            },
-          },
-          select: {
-            id_proforma: true,
-            numero_proforma: true,
-            estado: true,
-          },
-        },
-        detalle_pedido: {
-          include: {
-            producto: true,
-            orden_trabajo: {
-              select: {
-                id_orden_trabajo: true,
-              },
-            },
-          },
-        },
-      },
-    }),
-    prisma.pedido.count({ where }),
-    prisma.cliente.findMany({
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-      },
-    }),
-    prisma.producto.findMany({
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-  ]);
+  const { orders, totalItems, clients, products } = await getOrderListData(
+    { q, client, product, status, from, to },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

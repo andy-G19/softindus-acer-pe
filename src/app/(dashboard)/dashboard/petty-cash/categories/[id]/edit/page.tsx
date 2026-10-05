@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateExpenseCategoryAction } from "@/modules/petty-cash/categories/actions";
 import { ExpenseCategoryForm } from "@/modules/petty-cash/categories/expense-category-form";
+import { getExpenseCategoryForEdit } from "@/modules/petty-cash/categories/queries";
 
 type EditExpenseCategoryPageProps = {
   params: Promise<{
@@ -27,11 +27,7 @@ export default async function EditExpenseCategoryPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const category = await prisma.categoria_gasto.findUnique({
-    where: {
-      id_categoria_gasto: id,
-    },
-  });
+  const category = await getExpenseCategoryForEdit(id);
 
   if (!category) {
     notFound();

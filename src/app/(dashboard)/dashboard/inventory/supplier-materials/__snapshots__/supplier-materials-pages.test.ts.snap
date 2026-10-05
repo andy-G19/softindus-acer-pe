@@ -1,0 +1,955 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/supplier-materials > activos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_actualizacion": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor_material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials > activos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedor-material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales por proveedor</h1>
+<p>Consulta qué proveedores abastecen cada material o insumo.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/supplier-materials/new">Nueva asociación</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/supplier-materials">
+<div>
+<label for="supplier">Proveedor</label>
+<select id="supplier" name="supplier">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="availability">Disponibilidad</label>
+<select id="availability" name="availability">
+<option value="" selected="">Disponibilidad</option>
+<option value="alta">Alta</option>
+<option value="media">Media</option>
+<option value="baja">Baja</option>
+<option value="no_disponible">No disponible</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-materials">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Proveedor</th>
+<th>Material</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Entrega</th>
+<th>Disponibilidad</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor_material-1</td>
+<td>razon_social-1</td>
+<td>nombre_material-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>1 días</td>
+<td>disponibilidad-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor_material-2</td>
+<td>razon_social-2</td>
+<td>nombre_material-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-materials > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_actualizacion": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "proveedor_material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedor-material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales por proveedor</h1>
+<p>Consulta qué proveedores abastecen cada material o insumo.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/supplier-materials/new">Nueva asociación</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/supplier-materials">
+<div>
+<label for="supplier">Proveedor</label>
+<select id="supplier" name="supplier">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="availability">Disponibilidad</label>
+<select id="availability" name="availability">
+<option value="" selected="">Disponibilidad</option>
+<option value="alta">Alta</option>
+<option value="media">Media</option>
+<option value="baja">Baja</option>
+<option value="no_disponible">No disponible</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-materials">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Proveedor</th>
+<th>Material</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Entrega</th>
+<th>Disponibilidad</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor_material-1</td>
+<td>razon_social-1</td>
+<td>nombre_material-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>1 días</td>
+<td>disponibilidad-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor_material-2</td>
+<td>razon_social-2</td>
+<td>nombre_material-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-materials > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_actualizacion": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "id_proveedor": "PRV00000001",
+          },
+          {
+            "id_material": "MAT00000001",
+          },
+          {
+            "disponibilidad": "alta",
+          },
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor_material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedor-material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Materiales por proveedor</h1>
+<p>Consulta qué proveedores abastecen cada material o insumo.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/supplier-materials/new">Nueva asociación</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/supplier-materials">
+<div>
+<label for="supplier">Proveedor</label>
+<select id="supplier" name="supplier">
+<option value="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="availability">Disponibilidad</label>
+<select id="availability" name="availability">
+<option value="">Disponibilidad</option>
+<option value="alta" selected="">Alta</option>
+<option value="media">Media</option>
+<option value="baja">Baja</option>
+<option value="no_disponible">No disponible</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive" selected="">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-materials">Limpiar</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Proveedor</th>
+<th>Material</th>
+<th>Unidad</th>
+<th>Precio referencial</th>
+<th>Entrega</th>
+<th>Disponibilidad</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor_material-1</td>
+<td>razon_social-1</td>
+<td>nombre_material-1</td>
+<td>unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>1 días</td>
+<td>disponibilidad-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor_material-2</td>
+<td>razon_social-2</td>
+<td>nombre_material-2</td>
+<td>unidad_medida-2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/supplier-materials/id_proveedor_material-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "proveedor": true,
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000001",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "id_proveedor": "id_proveedor-1",
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "id_material": "id_material-1",
+          },
+        ],
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/supplier-materials">Proveedor-material</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar asociación</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar asociación proveedor-material</h1>
+<p>Actualiza el proveedor, material, precio referencial, disponibilidad y tiempo de entrega.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la asociación</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor_material" value="id_proveedor_material-1"/>
+<div>
+<div>
+<label for="id_proveedor">Proveedor</label>
+<select id="id_proveedor" name="id_proveedor" required="">
+<option value="">Selecciona un proveedor</option>
+<option value="id_proveedor-1" selected="">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="id_material">Material</label>
+<select id="id_material" name="id_material" required="">
+<option value="">Selecciona un material</option>
+<option value="id_material-1" selected="">nombre_material-1 (unidad_medida-1)</option>
+<option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="unidad_medida">Unidad de medida</label>
+<input id="unidad_medida" required="" name="unidad_medida" value="unidad_medida-1"/>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" min="0" step="0.01" name="precio_referencial" value="11.5"/>
+</div>
+</div>
+<div>
+<div>
+<label for="tiempo_entrega_dias">Tiempo de entrega (dias)</label>
+<input type="number" id="tiempo_entrega_dias" min="0" step="1" name="tiempo_entrega_dias" value="1"/>
+</div>
+<div>
+<label for="disponibilidad">Disponibilidad</label>
+<select id="disponibilidad" name="disponibilidad">
+<option value="">Sin definir</option>
+<option value="alta">Alta</option>
+<option value="media">Media</option>
+<option value="baja">Baja</option>
+<option value="no_disponible">No disponible</option>
+</select>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-materials">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-materials/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "proveedor": true,
+      },
+      "where": {
+        "id_proveedor_material": "PVM99999999",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/inventory/supplier-materials/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/supplier-materials">Proveedor-material</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva asociación</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva asociación proveedor-material</h1>
+<p>Relaciona proveedores activos con materiales activos para mantener precios referenciales, disponibilidad y tiempos de entrega.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos de la asociación</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_proveedor">Proveedor</label>
+<select id="id_proveedor" name="id_proveedor" required="">
+<option value="" selected="">Selecciona un proveedor</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="id_material">Material</label>
+<select id="id_material" name="id_material" required="">
+<option value="" selected="">Selecciona un material</option>
+<option value="id_material-1">nombre_material-1 (unidad_medida-1)</option>
+<option value="id_material-2">nombre_material-2 (unidad_medida-2)</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="unidad_medida">Unidad de medida</label>
+<input id="unidad_medida" required="" name="unidad_medida" value=""/>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" min="0" step="0.01" name="precio_referencial" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="tiempo_entrega_dias">Tiempo de entrega (dias)</label>
+<input type="number" id="tiempo_entrega_dias" min="0" step="1" name="tiempo_entrega_dias" value=""/>
+</div>
+<div>
+<label for="disponibilidad">Disponibilidad</label>
+<select id="disponibilidad" name="disponibilidad">
+<option value="" selected="">Sin definir</option>
+<option value="alta">Alta</option>
+<option value="media">Media</option>
+<option value="baja">Baja</option>
+<option value="no_disponible">No disponible</option>
+</select>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar asociación</button>
+<a data-variant="outline" href="/dashboard/inventory/supplier-materials">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,946 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/inventory/suppliers > inactivos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "estado": false,
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "condicion_pago",
+      ],
+      "orderBy": {
+        "condicion_pago": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+      },
+      "where": {
+        "condicion_pago": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proveedores</h1>
+<p>Registra proveedores de materia prima, consumibles, repuestos y servicios.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/suppliers">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="payment">Condición de pago</label>
+<select id="payment" name="payment">
+<option value="" selected="">Todas las condiciones</option>
+<option value="condicion_pago-1">condicion_pago-1</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive" selected="">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Razón social</th>
+<th>Documento</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Condición de pago</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor-1</td>
+<td>razon_social-1</td>
+<td>tipo_documento-1 numero_documento-1</td>
+<td>tipo_proveedor-1</td>
+<td>telefono-1</td>
+<td>condicion_pago-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor-2</td>
+<td>razon_social-2</td>
+<td>-</td>
+<td>tipo_proveedor-2</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
+      },
+      "where": {},
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "condicion_pago",
+      ],
+      "orderBy": {
+        "condicion_pago": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+      },
+      "where": {
+        "condicion_pago": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proveedores</h1>
+<p>Registra proveedores de materia prima, consumibles, repuestos y servicios.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/suppliers">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="payment">Condición de pago</label>
+<select id="payment" name="payment">
+<option value="" selected="">Todas las condiciones</option>
+<option value="condicion_pago-1">condicion_pago-1</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="active">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Razón social</th>
+<th>Documento</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Condición de pago</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor-1</td>
+<td>razon_social-1</td>
+<td>tipo_documento-1 numero_documento-1</td>
+<td>tipo_proveedor-1</td>
+<td>telefono-1</td>
+<td>condicion_pago-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor-2</td>
+<td>razon_social-2</td>
+<td>-</td>
+<td>tipo_proveedor-2</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+        "estado": true,
+        "id_proveedor": true,
+        "numero_documento": true,
+        "razon_social": true,
+        "telefono": true,
+        "tipo_documento": true,
+        "tipo_proveedor": true,
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_proveedor": {
+                  "contains": "acero",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "razon_social": {
+                  "contains": "acero",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "numero_documento": {
+                  "contains": "acero",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "telefono": {
+                  "contains": "acero",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "tipo_proveedor": "distribuidor",
+          },
+          {
+            "condicion_pago": "contado",
+          },
+          {
+            "estado": true,
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "condicion_pago",
+      ],
+      "orderBy": {
+        "condicion_pago": "asc",
+      },
+      "select": {
+        "condicion_pago": true,
+      },
+      "where": {
+        "condicion_pago": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proveedores</h1>
+<p>Registra proveedores de materia prima, consumibles, repuestos y servicios.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/suppliers">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proveedor..." name="q" value="acero"/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="">Todos los tipos</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="payment">Condición de pago</label>
+<select id="payment" name="payment">
+<option value="">Todas las condiciones</option>
+<option value="condicion_pago-1">condicion_pago-1</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="active" selected="">Activo</option>
+<option value="inactive">Inactivo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+</div>
+<div>
+<a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Razón social</th>
+<th>Documento</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Condición de pago</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_proveedor-1</td>
+<td>razon_social-1</td>
+<td>tipo_documento-1 numero_documento-1</td>
+<td>tipo_proveedor-1</td>
+<td>telefono-1</td>
+<td>condicion_pago-1</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<button data-variant="destructive" type="submit">Inactivar</button>
+</form>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_proveedor-2</td>
+<td>razon_social-2</td>
+<td>-</td>
+<td>tipo_proveedor-2</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<button data-variant="ghost" type="submit">Activar</button>
+</form>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor": "PRV00000001",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "slug": "tipo_proveedor-1",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/suppliers">Proveedores</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar proveedor</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar proveedor</h1>
+<p>Actualiza los datos comerciales del proveedor.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proveedores">
+<svg/>Volver a proveedores</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<div>
+<label for="razon_social">Razón social *</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value="razon_social-1"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value="numero_documento-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value="contacto_principal-1"/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor *</label>
+<select id="tipo_proveedor" name="tipo_proveedor" required="">
+<option value="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">observaciones-1</textarea>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/inventory/suppliers">Cancelar</a>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor": "PRV99999999",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/suppliers">Proveedores</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo proveedor</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo proveedor</h1>
+<p>Registra los datos comerciales del proveedor para usarlo luego en compras y abastecimiento.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proveedores">
+<svg/>Volver a proveedores</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="razon_social">Razón social *</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value=""/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="" selected="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value=""/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value=""/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor *</label>
+<select id="tipo_proveedor" name="tipo_proveedor" required="">
+<option value="" selected="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="" selected="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">
+</textarea>
+</div>
+<div>
+<a data-variant="link" href="/dashboard/inventory/suppliers">Cancelar</a>
+<button data-variant="default" type="submit">Guardar proveedor</button>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

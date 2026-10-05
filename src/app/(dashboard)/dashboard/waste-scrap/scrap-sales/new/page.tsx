@@ -13,11 +13,11 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { createScrapSaleAction } from "@/modules/waste-scrap/scrap-sales/actions";
+import { getNewScrapSaleFormOptions } from "@/modules/waste-scrap/scrap-sales/queries";
 
 type SearchParams = {
   id_chatarra?: string;
@@ -46,36 +46,7 @@ export default async function NewScrapSalePage({
   const params = searchParams ? await searchParams : {};
   const selectedScrapId = params.id_chatarra?.trim() ?? "";
 
-  const [scraps, cashBoxes] = await Promise.all([
-    prisma.chatarra.findMany({
-      where: {
-        estado: {
-          in: ["acumulada", "disponible"],
-        },
-      },
-      orderBy: {
-        fecha_registro: "desc",
-      },
-      include: {
-        material: true,
-      },
-    }),
-
-    prisma.caja_chica.findMany({
-      where: {
-        estado: "abierta",
-      },
-      orderBy: {
-        fecha_apertura: "desc",
-      },
-      select: {
-        id_caja_chica: true,
-        nombre_caja: true,
-        saldo_actual: true,
-        responsable: true,
-      },
-    }),
-  ]);
+  const { scraps, cashBoxes } = await getNewScrapSaleFormOptions();
 
   const selectedScrap = scraps.find(
     (item) => item.id_chatarra === selectedScrapId,

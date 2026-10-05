@@ -1,0 +1,226 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/expenses/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 5,
+      "where": {
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/expenses/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Registrar egreso</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar egreso de caja chica</h1>
+<p>Registra gastos menores del taller, descuenta automáticamente el saldo de la caja seleccionada y conserva la trazabilidad del responsable, concepto, categoría, fecha y comprobante.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas abiertas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Disponibles para registrar egresos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo disponible</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de saldos actuales de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Categorías activas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Disponibles para clasificar gastos.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del egreso</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="id_caja_chica">Caja chica</label>
+<select id="id_caja_chica" name="id_caja_chica" required="">
+<option value="">Selecciona una caja</option>
+<option value="id_caja_chica-1">nombre_caja-1 · Saldo: S/ 11.50</option>
+<option value="id_caja_chica-2">nombre_caja-2 · Saldo: S/ 22.50</option>
+</select>
+</div>
+<div>
+<label for="id_categoria_gasto">Categoría de gasto</label>
+<select id="id_categoria_gasto" name="id_categoria_gasto" required="">
+<option value="">Selecciona una categoría</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" placeholder="Ejemplo: Compra de discos de corte" name="concepto"/>
+</div>
+<div>
+<label for="monto">Monto del egreso</label>
+<input type="number" id="monto" min="0.01" step="0.01" required="" placeholder="Ejemplo: 35.50" name="monto"/>
+</div>
+<div>
+<label for="fecha_movimiento">Fecha del egreso</label>
+<input type="date" id="fecha_movimiento" required="" name="fecha_movimiento" value="2026-07-15"/>
+</div>
+<div>
+<label for="comprobante">Comprobante</label>
+<input type="text" id="comprobante" placeholder="Ejemplo: Boleta B001-45" name="comprobante"/>
+</div>
+<div>
+<label for="responsable">Responsable</label>
+<input type="text" id="responsable" placeholder="Ejemplo: Administrador" name="responsable"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Detalle adicional del gasto.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar egreso</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos egresos</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>concepto-1</p>
+<p>nombre_caja-1</p>
+<p>nombre_categoria-1</p>
+</div>
+<span data-variant="destructive">S/ 11.50</span>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>concepto-2</p>
+<p>nombre_caja-2</p>
+<p>nombre_categoria-2</p>
+</div>
+<span data-variant="destructive">S/ 22.50</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

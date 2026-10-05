@@ -1,0 +1,1822 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+            "tipo_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "saldo": 0,
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "select": {
+        "id_pedido": true,
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proformas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proformas</h1>
+<p>Lista de proformas digitales generadas desde pedidos registrados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/quotes">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proforma..." name="q" value=""/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="order">Pedido</label>
+<select id="order" name="order">
+<option value="" selected="">Todos los pedidos</option>
+<option value="id_pedido-1">id_pedido-1</option>
+<option value="id_pedido-2">id_pedido-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="vigente">Vigente</option>
+<option value="aceptada">Aceptada</option>
+<option value="pagada">Pagada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="balance">Saldo</label>
+<select id="balance" name="balance">
+<option value="">Todos los saldos</option>
+<option value="pending">Con saldo</option>
+<option value="paid" selected="">Sin saldo</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Nro. Proforma</th>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Total</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th>Comprobante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numero_proforma-1</td>
+<td>id_pedido-1</td>
+<td>nombre_razon_social-1</td>
+<td>1/7/2026</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>numero_proforma-2</td>
+<td>id_pedido-2</td>
+<td>nombre_razon_social-2</td>
+<td>2/7/2026</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+            "tipo_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "where": {},
+    },
+    "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "select": {
+        "id_pedido": true,
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proformas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proformas</h1>
+<p>Lista de proformas digitales generadas desde pedidos registrados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/quotes">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proforma..." name="q" value=""/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="order">Pedido</label>
+<select id="order" name="order">
+<option value="" selected="">Todos los pedidos</option>
+<option value="id_pedido-1">id_pedido-1</option>
+<option value="id_pedido-2">id_pedido-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="vigente">Vigente</option>
+<option value="aceptada">Aceptada</option>
+<option value="pagada">Pagada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="balance">Saldo</label>
+<select id="balance" name="balance">
+<option value="" selected="">Todos los saldos</option>
+<option value="pending">Con saldo</option>
+<option value="paid">Sin saldo</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Nro. Proforma</th>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Total</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th>Comprobante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numero_proforma-1</td>
+<td>id_pedido-1</td>
+<td>nombre_razon_social-1</td>
+<td>1/7/2026</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>numero_proforma-2</td>
+<td>id_pedido-2</td>
+<td>nombre_razon_social-2</td>
+<td>2/7/2026</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+            "numero_comprobante": true,
+            "tipo_comprobante": true,
+          },
+          "where": {
+            "estado": "emitido",
+          },
+        },
+        "pago_cliente": {
+          "select": {
+            "id_pago_cliente": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_emision": "desc",
+      },
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "numero_proforma": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "PRF",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "PRF",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "pedido": {
+              "id_cliente": "CLI00000001",
+            },
+          },
+          {
+            "id_pedido": "PED00000001",
+          },
+          {
+            "estado": "vigente",
+          },
+          {
+            "saldo": {
+              "gt": 0,
+            },
+          },
+          {
+            "fecha_emision": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "proforma.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "select": {
+        "id_pedido": true,
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proformas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Proformas</h1>
+<p>Lista de proformas digitales generadas desde pedidos registrados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/commercial/quotes/new">Nueva proforma</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/commercial/quotes">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar proforma..." name="q" value="PRF"/>
+</div>
+<div>
+<label for="client">Cliente</label>
+<select id="client" name="client">
+<option value="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="order">Pedido</label>
+<select id="order" name="order">
+<option value="">Todos los pedidos</option>
+<option value="id_pedido-1">id_pedido-1</option>
+<option value="id_pedido-2">id_pedido-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="vigente" selected="">Vigente</option>
+<option value="aceptada">Aceptada</option>
+<option value="pagada">Pagada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="balance">Saldo</label>
+<select id="balance" name="balance">
+<option value="">Todos los saldos</option>
+<option value="pending" selected="">Con saldo</option>
+<option value="paid">Sin saldo</option>
+</select>
+</div>
+<div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Nro. Proforma</th>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Total</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th>Comprobante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>numero_proforma-1</td>
+<td>id_pedido-1</td>
+<td>nombre_razon_social-1</td>
+<td>1/7/2026</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-1">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-1">Registrar pago</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>numero_proforma-2</td>
+<td>id_pedido-2</td>
+<td>nombre_razon_social-2</td>
+<td>2/7/2026</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+<td>
+<span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
+</td>
+<td>
+<div>
+<a data-variant="outline" href="/dashboard/commercial/quotes/id_proforma-2">Ver detalle</a>
+<a data-variant="default" href="/dashboard/commercial/quotes/id_proforma-2">Registrar pago</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > anulable > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "pago_cliente": {
+          "orderBy": {
+            "fecha_pago": "desc",
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000001",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
+{
+  "html": "<main>
+<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle de proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Detalle de proforma</h1>
+<p>Revisa, imprime o guarda la proforma como PDF desde el navegador.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+<button data-variant="default" type="button">Imprimir proforma</button>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<button type="submit">Anular</button>
+</form>
+</div>
+</div>
+</section>
+</div>
+<section>
+<div>
+<header>
+<div>
+<h2>Industrias Aceros Perú</h2>
+<p>Taller metalúrgico especializado en herramientas agrícolas, productos metálicos y estructuras.</p>
+<div>
+<p>
+<span>Documento:</span> Proforma comercial</p>
+<p>
+<span>Pedido asociado:</span> id_pedido-1</p>
+</div>
+</div>
+<div>
+<p>N° Proforma</p>
+<p>numero_proforma-1</p>
+<p>
+<span>Emisión:</span> 1/7/2026</p>
+<p>
+<span>Validez:</span> 1 días</p>
+<p>
+<span>Vence:</span> 2/7/2026</p>
+</div>
+</header>
+<section>
+<div>
+<h3>Datos del cliente</h3>
+<div>
+<p>
+<span>Cliente:</span> nombre_razon_social-1</p>
+<p>
+<span>Tipo:</span> tipo_cliente-1</p>
+<p>
+<span>Documento:</span> tipo_documento-1 numero_documento-1</p>
+<p>
+<span>Teléfono:</span> telefono-1</p>
+<p>
+<span>Correo:</span> correo-1</p>
+<p>
+<span>Dirección:</span> direccion-1</p>
+<p>
+<span>Lugar de origen:</span> lugar_origen-1</p>
+</div>
+</div>
+<div>
+<h3>Datos del pedido</h3>
+<div>
+<p>
+<span>Código de pedido:</span> id_pedido-1</p>
+<p>
+<span>Fecha de pedido:</span> 1/7/2026</p>
+<p>
+<span>Entrega estimada:</span> 1/7/2026</p>
+<p>
+<span>Estado del pedido:</span> <span>estado-1</span>
+</p>
+<p>
+<span>Estado de proforma:</span> <span>Vigente</span>
+</p>
+</div>
+</div>
+</section>
+<section>
+<h3>Detalle de productos</h3>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section>
+<div>
+<div>
+<span>Monto total</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<span>Adelanto inicial</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<div>
+<span>Saldo pendiente</span>
+<span>S/ 11.50</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<div>
+<h3>Registrar pago de cliente</h3>
+<p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
+</div>
+<div>
+<div>
+<label>Monto pagado</label>
+<input type="number" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" required="" name="monto_pagado" value=""/>
+<button data-variant="link" type="button">Usar saldo total: S/ 11.50</button>
+</div>
+<div>
+<label>Método de pago</label>
+<select name="metodo_pago" required="">
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label>Tipo de pago</label>
+<select name="tipo_pago" required="">
+<option value="amortizacion">Amortización</option>
+<option value="adelanto">Adelanto</option>
+<option value="cancelacion">Cancelación</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<span>Saldo actual</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<span>Saldo después del pago</span>
+<span>S/ 11.50</span>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar pago</button>
+</form>
+<div>
+<h3>Historial de pagos</h3>
+<p>Pagos registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="5">Todavía no hay pagos registrados para esta proforma.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<div>
+<h3>Registrar comprobante de venta</h3>
+<p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
+</div>
+<div>
+<div>
+<label>Tipo</label>
+<select name="tipo_comprobante" required="">
+<option value="boleta" selected="">Boleta</option>
+<option value="factura">Factura</option>
+<option value="recibo">Recibo</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label>Número</label>
+<input required="" name="numero_comprobante" value="B001-202607151500"/>
+</div>
+<div>
+<label>Monto total</label>
+<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
+<p>Monto sugerido: S/ 11.50</p>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar comprobante</button>
+</form>
+<div>
+<h3>Comprobantes emitidos</h3>
+<p>Historial de comprobantes registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Número</th>
+<th>Monto</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="5">Todavía no hay comprobantes registrados para esta proforma.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<h3>Observaciones</h3>
+<p>observaciones-1</p>
+</section>
+<footer>
+<p>Esta proforma es un documento comercial referencial. Los precios, cantidades y fechas quedan sujetos a confirmación del taller.</p>
+<p>Documento generado desde el Sistema de Gestión Integral para Industrias Aceros Perú.</p>
+</footer>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > detalle > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "pago_cliente": {
+          "orderBy": {
+            "fecha_pago": "desc",
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF00000001",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
+{
+  "html": "<main>
+<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle de proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Detalle de proforma</h1>
+<p>Revisa, imprime o guarda la proforma como PDF desde el navegador.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+<button data-variant="default" type="button">Imprimir proforma</button>
+</div>
+</div>
+</section>
+</div>
+<section>
+<div>
+<header>
+<div>
+<h2>Industrias Aceros Perú</h2>
+<p>Taller metalúrgico especializado en herramientas agrícolas, productos metálicos y estructuras.</p>
+<div>
+<p>
+<span>Documento:</span> Proforma comercial</p>
+<p>
+<span>Pedido asociado:</span> id_pedido-1</p>
+</div>
+</div>
+<div>
+<p>N° Proforma</p>
+<p>numero_proforma-1</p>
+<p>
+<span>Emisión:</span> 1/7/2026</p>
+<p>
+<span>Validez:</span> 1 días</p>
+<p>
+<span>Vence:</span> 2/7/2026</p>
+</div>
+</header>
+<section>
+<div>
+<h3>Datos del cliente</h3>
+<div>
+<p>
+<span>Cliente:</span> nombre_razon_social-1</p>
+<p>
+<span>Tipo:</span> tipo_cliente-1</p>
+<p>
+<span>Documento:</span> tipo_documento-1 numero_documento-1</p>
+<p>
+<span>Teléfono:</span> telefono-1</p>
+<p>
+<span>Correo:</span> correo-1</p>
+<p>
+<span>Dirección:</span> direccion-1</p>
+<p>
+<span>Lugar de origen:</span> lugar_origen-1</p>
+</div>
+</div>
+<div>
+<h3>Datos del pedido</h3>
+<div>
+<p>
+<span>Código de pedido:</span> id_pedido-1</p>
+<p>
+<span>Fecha de pedido:</span> 1/7/2026</p>
+<p>
+<span>Entrega estimada:</span> 1/7/2026</p>
+<p>
+<span>Estado del pedido:</span> <span>estado-1</span>
+</p>
+<p>
+<span>Estado de proforma:</span> <span>estado-1</span>
+</p>
+</div>
+</div>
+</section>
+<section>
+<h3>Detalle de productos</h3>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Categoría</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>categoria-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>categoria-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section>
+<div>
+<div>
+<span>Monto total</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<span>Adelanto inicial</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<div>
+<span>Saldo pendiente</span>
+<span>S/ 11.50</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<div>
+<h3>Registrar pago de cliente</h3>
+<p>Registra adelantos, amortizaciones o cancelaciones para actualizar el saldo de la proforma.</p>
+</div>
+<div>
+<div>
+<label>Monto pagado</label>
+<input type="number" min="0.01" max="11.5" step="0.01" placeholder="Ejemplo: 150.00" required="" name="monto_pagado" value=""/>
+<button data-variant="link" type="button">Usar saldo total: S/ 11.50</button>
+</div>
+<div>
+<label>Método de pago</label>
+<select name="metodo_pago" required="">
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label>Tipo de pago</label>
+<select name="tipo_pago" required="">
+<option value="amortizacion">Amortización</option>
+<option value="adelanto">Adelanto</option>
+<option value="cancelacion">Cancelación</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<span>Saldo actual</span>
+<span>S/ 11.50</span>
+</div>
+<div>
+<span>Saldo después del pago</span>
+<span>S/ 11.50</span>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Pago recibido por Yape. Cliente cancela saldo pendiente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar pago</button>
+</form>
+<div>
+<h3>Historial de pagos</h3>
+<p>Pagos registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Método</th>
+<th>Monto</th>
+<th>Saldo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>tipo_pago-1</td>
+<td>metodo_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>tipo_pago-2</td>
+<td>metodo_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proforma" value="id_proforma-1"/>
+<div>
+<h3>Registrar comprobante de venta</h3>
+<p>Registra boleta, factura, recibo u otro comprobante básico asociado a la proforma.</p>
+</div>
+<div>
+<div>
+<label>Tipo</label>
+<select name="tipo_comprobante" required="">
+<option value="boleta" selected="">Boleta</option>
+<option value="factura">Factura</option>
+<option value="recibo">Recibo</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label>Número</label>
+<input required="" name="numero_comprobante" value="B001-202607151500"/>
+</div>
+<div>
+<label>Monto total</label>
+<input type="number" min="0.01" step="0.01" required="" name="monto_total" value="11.50"/>
+<p>Monto sugerido: S/ 11.50</p>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Comprobante emitido por cancelación del pedido.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar comprobante</button>
+</form>
+<div>
+<h3>Comprobantes emitidos</h3>
+<p>Historial de comprobantes registrados para esta proforma.</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Número</th>
+<th>Monto</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/7/2026</td>
+<td>tipo_comprobante-1</td>
+<td>numero_comprobante-1</td>
+<td>S/ 11.50</td>
+<td>
+<span>estado-1</span>
+</td>
+</tr>
+<tr>
+<td>2/7/2026</td>
+<td>tipo_comprobante-2</td>
+<td>numero_comprobante-2</td>
+<td>S/ 22.50</td>
+<td>
+<span>estado-2</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<h3>Observaciones</h3>
+<p>observaciones-1</p>
+</section>
+<footer>
+<p>Esta proforma es un documento comercial referencial. Los precios, cantidades y fechas quedan sujetos a confirmación del taller.</p>
+<p>Documento generado desde el Sistema de Gestión Integral para Industrias Aceros Perú.</p>
+</footer>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+        "pago_cliente": {
+          "orderBy": {
+            "fecha_pago": "desc",
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "producto": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_proforma": "PRF99999999",
+      },
+    },
+    "prisma": "proforma.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/[id] > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "where": {
+        "detalle_pedido": {
+          "some": {},
+        },
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+          ],
+        },
+        "proforma": {
+          "none": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/new > formulario > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva proforma</h1>
+<p>Genera una proforma digital a partir de un pedido registrado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label>Pedido</label>
+<select name="id_pedido" required="">
+<option value="" selected="">Selecciona un pedido</option>
+<option value="id_pedido-1">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
+<option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
+</select>
+</div>
+<div>
+<div>
+<label>Adelanto inicial</label>
+<input type="number" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p>Opcional. Si no hay adelanto, déjalo vacío.</p>
+</div>
+<div>
+<label>Método de pago del adelanto</label>
+<select name="metodo_pago_adelanto" disabled="">
+<option value="">Seleccione...</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+<p>Se habilita al ingresar un adelanto.</p>
+</div>
+<div>
+<label>Saldo calculado</label>
+<div>S/ 0.00</div>
+<p>Se calcula como total menos adelanto.</p>
+</div>
+<div>
+<label>Validez en días</label>
+<input type="number" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias"/>
+<p>Opcional. Ejemplo: 7, 15 o 30 días.</p>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Generar proforma</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "where": {
+        "detalle_pedido": {
+          "some": {},
+        },
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+          ],
+        },
+        "proforma": {
+          "none": {
+            "estado": {
+              "in": [
+                "vigente",
+                "aceptada",
+                "pagada",
+              ],
+            },
+          },
+        },
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/quotes/new > pedido preseleccionado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/quotes">Proformas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva proforma</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nueva proforma</h1>
+<p>Genera una proforma digital a partir de un pedido registrado.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proformas">
+<svg/>Volver a proformas</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div role="alert">
+<div>Pedido preseleccionado correctamente desde el listado de pedidos.</div>
+</div>
+<div>
+<label>Pedido</label>
+<select name="id_pedido" required="">
+<option value="">Selecciona un pedido</option>
+<option value="id_pedido-1" selected="">id_pedido-1 — nombre_razon_social-1 — S/ 34.00</option>
+<option value="id_pedido-2">id_pedido-2 — nombre_razon_social-2 — S/ 34.00</option>
+</select>
+</div>
+<div>
+<div>
+<h2>Resumen del pedido</h2>
+<p>Revisa los datos antes de generar la proforma.</p>
+</div>
+<div>
+<div>
+<p>Cliente</p>
+<p>nombre_razon_social-1</p>
+</div>
+<div>
+<p>Fecha de pedido</p>
+<p>1/7/2026</p>
+</div>
+<div>
+<p>Entrega estimada</p>
+<p>1/7/2026</p>
+</div>
+</div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Precio unitario</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nombre_producto-1</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+</tr>
+<tr>
+<td>nombre_producto-2</td>
+<td>22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<div>
+<p>Monto total</p>
+<p>S/ 34.00</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label>Adelanto inicial</label>
+<input type="number" min="0" step="0.01" placeholder="Ejemplo: 100.00" name="adelanto_inicial" value=""/>
+<p>Opcional. Si no hay adelanto, déjalo vacío.</p>
+</div>
+<div>
+<label>Método de pago del adelanto</label>
+<select name="metodo_pago_adelanto" disabled="">
+<option value="">Seleccione...</option>
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="yape">Yape</option>
+<option value="plin">Plin</option>
+<option value="otro">Otro</option>
+</select>
+<p>Se habilita al ingresar un adelanto.</p>
+</div>
+<div>
+<label>Saldo calculado</label>
+<div>S/ 34.00</div>
+<p>Se calcula como total menos adelanto.</p>
+</div>
+<div>
+<label>Validez en días</label>
+<input type="number" min="1" step="1" placeholder="Ejemplo: 15" name="validez_dias"/>
+<p>Opcional. Ejemplo: 7, 15 o 30 días.</p>
+</div>
+</div>
+<div>
+<label>Observaciones</label>
+<textarea name="observaciones" placeholder="Ejemplo: Proforma válida hasta agotar stock. Precio sujeto a confirmación.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Generar proforma</button>
+<a data-variant="outline" href="/dashboard/commercial/quotes">Cancelar</a>
+</div>
+</form>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;

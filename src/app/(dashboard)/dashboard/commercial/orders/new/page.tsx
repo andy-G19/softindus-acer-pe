@@ -1,41 +1,13 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { OrderForm } from "@/components/commercial/order-form";
+import { getNewOrderFormOptions } from "@/modules/commercial/orders/queries";
 
 export default async function NewOrderPage() {
   await requireRole(["ADMIN", "SELLER"]);
 
-  const clients = await prisma.cliente.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      nombre_razon_social: "asc",
-    },
-    select: {
-      id_cliente: true,
-      nombre_razon_social: true,
-      tipo_cliente: true,
-    },
-  });
-
-  const products = await prisma.producto.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      nombre_producto: "asc",
-    },
-    select: {
-      id_producto: true,
-      nombre_producto: true,
-      categoria: true,
-      unidad_medida: true,
-      precio_referencial: true,
-    },
-  });
+  const { clients, products } = await getNewOrderFormOptions();
 
   const clientOptions = clients.map((client) => ({
     id_cliente: client.id_cliente,

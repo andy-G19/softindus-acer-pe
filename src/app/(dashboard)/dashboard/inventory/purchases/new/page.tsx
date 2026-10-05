@@ -1,40 +1,13 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
+import { getNewPurchaseFormOptions } from "@/modules/inventory/purchases/queries";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { PurchaseForm } from "@/components/inventory/purchase-form";
 
 export default async function NewPurchasePage() {
   await requireRole(["ADMIN"]);
 
-  const [suppliers, materials] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        unidad_medida: true,
-        costo_unitario_actual: true,
-      },
-    }),
-  ]);
+  const { suppliers, materials } = await getNewPurchaseFormOptions();
 
   return (
     <main className="mx-auto max-w-5xl space-y-6">

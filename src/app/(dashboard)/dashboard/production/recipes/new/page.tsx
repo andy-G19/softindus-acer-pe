@@ -7,35 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createTechnicalRecipeAction } from "@/modules/production/recipes/actions";
+import { getNewTechnicalRecipeProducts } from "@/modules/production/recipes/queries";
 
 export default async function NewTechnicalRecipePage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const products = await prisma.producto.findMany({
-    where: {
-      estado: true,
-    },
-    include: {
-      receta_tecnica: {
-        select: {
-          id_receta: true,
-          nombre_receta: true,
-          estado: true,
-        },
-      },
-    },
-    orderBy: [
-      {
-        categoria: "asc",
-      },
-      {
-        nombre_producto: "asc",
-      },
-    ],
-  });
+  const products = await getNewTechnicalRecipeProducts();
 
   const productItems = products.map((product) => ({
     id: product.id_producto,

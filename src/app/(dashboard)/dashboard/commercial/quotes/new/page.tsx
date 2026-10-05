@@ -1,8 +1,8 @@
 
 import { requireRole } from "@/lib/authz";
 import { QuoteForm } from "@/components/commercial/quote-form";
+import { getQuotableOrders } from "@/modules/commercial/quotes/queries";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 
 type NewQuotePageProps = {
@@ -17,34 +17,7 @@ export default async function NewQuotePage({ searchParams }: NewQuotePageProps) 
 
   await requireRole(["ADMIN", "SELLER"]);
 
-  const orders = await prisma.pedido.findMany({
-    where: {
-      estado: {
-        in: ["registrado", "aprobado"],
-      },
-      detalle_pedido: {
-        some: {},
-      },
-      proforma: {
-        none: {
-          estado: {
-            in: ["vigente", "aceptada", "pagada"],
-          },
-        },
-      },
-    },
-    orderBy: {
-      fecha_pedido: "desc",
-    },
-    include: {
-      cliente: true,
-      detalle_pedido: {
-        include: {
-          producto: true,
-        },
-      },
-    },
-  });
+  const orders = await getQuotableOrders();
 
   const orderOptions = orders.map((order) => {
     const total = order.detalle_pedido.reduce((sum, detail) => {

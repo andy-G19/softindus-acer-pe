@@ -18,8 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { getProductionBottleneckData } from "@/modules/production/bottlenecks/queries";
 import { getStageDurationForQuantity } from "@/lib/production-times";
 import {
   createReturnToHref,
@@ -131,115 +130,15 @@ export default async function ProductionBottlenecksPage({
   const returnTo = createReturnToHref(navigationHrefs.bottlenecks, params);
   const fromDate = parseDate(from);
   const toDate = parseDate(to, true);
-  const filters: Prisma.avance_ordenWhereInput[] = [
-    {
-      estado_etapa: "en_proceso",
-    },
-  ];
-
-  if (product) {
-    filters.push({
-      orden_trabajo: {
-        id_producto: product,
-      },
+  const { activeAdvances, products, routes, stages } =
+    await getProductionBottleneckData({
+      product,
+      route,
+      stage,
+      orderStatus,
+      fromDate,
+      toDate,
     });
-  }
-
-  if (route) {
-    filters.push({
-      etapa_ruta: {
-        id_ruta: route,
-      },
-    });
-  }
-
-  if (stage) {
-    filters.push({
-      id_etapa_ruta: stage,
-    });
-  }
-
-  if (orderStatus) {
-    filters.push({
-      orden_trabajo: {
-        estado: orderStatus,
-      },
-    });
-  }
-
-  if (fromDate || toDate) {
-    filters.push({
-      fecha_inicio_etapa: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
-    });
-  }
-
-  const [activeAdvances, products, routes, stages] = await Promise.all([
-    prisma.avance_orden.findMany({
-      where: {
-        AND: filters,
-      },
-      include: {
-        etapa_ruta: {
-          include: {
-            etapa_ruta_maquina: {
-              select: {
-                tiempo_maquina_minutos_unidad: true,
-              },
-            },
-          },
-        },
-        operario: true,
-        orden_trabajo: {
-          include: {
-            producto: true,
-          },
-        },
-      },
-      orderBy: [
-        {
-          fecha_inicio_etapa: "asc",
-        },
-        {
-          id_avance: "asc",
-        },
-      ],
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-    prisma.ruta_fabricacion.findMany({
-      orderBy: {
-        nombre_ruta: "asc",
-      },
-      select: {
-        id_ruta: true,
-        nombre_ruta: true,
-      },
-    }),
-    prisma.etapa_ruta.findMany({
-      orderBy: [
-        {
-          nombre_etapa: "asc",
-        },
-      ],
-      select: {
-        id_etapa_ruta: true,
-        nombre_etapa: true,
-      },
-    }),
-  ]);
 
   const now = new Date();
 

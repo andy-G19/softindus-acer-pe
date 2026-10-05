@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
+import { getMaterialRequirementsVersion } from "@/modules/production/recipe-versions/queries";
 import { formatMoney } from "@/lib/formatters";
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
@@ -58,27 +58,7 @@ export default async function MaterialRequirementsPage({
 
   const hasInvalidQuantity = Boolean(rawQuantity) && !parsedQuantity.success;
 
-  const version = await prisma.version_receta.findFirst({
-    where: {
-      id_version_receta: versionId,
-      id_receta: id,
-    },
-    include: {
-      receta_tecnica: {
-        include: {
-          producto: true,
-        },
-      },
-      detalle_receta: {
-        include: {
-          material: true,
-        },
-        orderBy: {
-          id_detalle_receta: "asc",
-        },
-      },
-    },
-  });
+  const version = await getMaterialRequirementsVersion(id, versionId);
 
   if (!version) {
     notFound();

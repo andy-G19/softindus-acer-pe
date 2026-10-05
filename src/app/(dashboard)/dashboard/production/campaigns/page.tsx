@@ -18,12 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { changeProductionCampaignStatusAction } from "@/modules/production/campaigns/actions";
+import { getProductionCampaignListData } from "@/modules/production/campaigns/queries";
 
 type ProductionCampaignsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -89,94 +88,13 @@ export default async function ProductionCampaignsPage({
   const to = getSearchParam(params, "to");
   const fromDate = parseDate(from);
   const toDate = parseDate(to, true);
-  const filters: Prisma.campania_produccionWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_campania: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          nombre_campania: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (product) {
-    filters.push({
-      campania_detalle: {
-        some: {
-          id_producto: product,
-        },
-      },
-    });
-  }
-
-  if (status) {
-    filters.push({
-      estado: status,
-    });
-  }
-
-  if (fromDate || toDate) {
-    filters.push({
-      fecha_inicio: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
-    });
-  }
-
-  const where: Prisma.campania_produccionWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [campaigns, products] = await Promise.all([
-    prisma.campania_produccion.findMany({
-      where,
-      include: {
-        campania_detalle: {
-          select: {
-            cantidad_objetivo: true,
-            cantidad_producida: true,
-          },
-        },
-        _count: {
-          select: {
-            campania_detalle: true,
-            orden_trabajo: true,
-          },
-        },
-      },
-      orderBy: [
-        {
-          fecha_inicio: "desc",
-        },
-        {
-          id_campania: "desc",
-        },
-      ],
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-  ]);
+  const { campaigns, products } = await getProductionCampaignListData({
+    q,
+    product,
+    status,
+    fromDate,
+    toDate,
+  });
 
   const activeCampaigns = campaigns.filter((campaign) =>
     ["planificada", "activa"].includes(campaign.estado),

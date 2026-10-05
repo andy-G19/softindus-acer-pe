@@ -7,42 +7,16 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createSparePartAction } from "@/modules/maintenance/spare-parts/actions";
 import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form";
+import { getNewSparePartFormOptions } from "@/modules/maintenance/spare-parts/queries";
 
 export default async function NewSparePartPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const [providers, supplierTypes] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-
-    prisma.tipo_proveedor_catalogo.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre: "asc",
-      },
-      select: {
-        slug: true,
-        nombre: true,
-      },
-    }),
-  ]);
+  const { providers, supplierTypes } = await getNewSparePartFormOptions();
 
   return (
     <main className="space-y-6">

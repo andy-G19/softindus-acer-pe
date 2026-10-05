@@ -15,18 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getInventoryOutputListData } from "@/modules/inventory/movements/queries";
 
 type OutputsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -41,60 +39,15 @@ export default async function InventoryOutputsPage({
   const q = parseStringParam(params, "q");
   const material = parseStringParam(params, "material");
   const order = parseStringParam(params, "order");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-  const filters: Prisma.movimiento_inventarioWhereInput[] = [
-    { tipo_movimiento: "salida" },
-  ];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_orden_trabajo: { contains: q, mode: "insensitive" } },
-        { material: { nombre_material: { contains: q, mode: "insensitive" } } },
-        { usuario: { usuario: { contains: q, mode: "insensitive" } } },
-      ],
-    });
-  }
-
-  if (material) {
-    filters.push({ id_material: material });
-  }
-
-  if (order) {
-    filters.push({ id_orden_trabajo: order });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_movimiento: dateRange });
-  }
-
-  const where: Prisma.movimiento_inventarioWhereInput = { AND: filters };
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [movements, totalItems, materials, workOrders] = await Promise.all([
-    prisma.movimiento_inventario.findMany({
-      where,
-      orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento: "desc" }],
-      skip,
-      take,
-      include: {
-        material: true,
-        usuario: true,
-      },
-    }),
-    prisma.movimiento_inventario.count({ where }),
-    prisma.material.findMany({
-      orderBy: { nombre_material: "asc" },
-      select: { id_material: true, nombre_material: true },
-    }),
-    prisma.orden_trabajo.findMany({
-      orderBy: { fecha_inicio: "desc" },
-      select: { id_orden_trabajo: true },
-    }),
-  ]);
+  const { movements, totalItems, materials, workOrders } =
+    await getInventoryOutputListData(
+      { q, material, order, from, to },
+      { skip, take },
+    );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

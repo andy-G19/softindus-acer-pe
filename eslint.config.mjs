@@ -2,6 +2,35 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
+// Autorizacion centralizada (entrega 2): la sesion se obtiene solo a traves
+// de los helpers de src/lib/authz.ts.
+const authImportRestriction = {
+  name: "@/auth",
+  importNames: ["auth"],
+  message:
+    "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
+};
+
+// Consultas fuera de las paginas (entrega 4): las paginas leen sus datos a
+// traves de src/modules/<area>/<funcionalidad>/queries.ts. La regla cubre todas
+// las paginas, tambien las nuevas, salvo las que aun consultan Prisma; esa
+// lista solo puede encogerse.
+const pagesWithoutPrisma = ["src/app/**/page.tsx"];
+
+// Pendientes: los reportes se migran con sus exportaciones (entrega 5), y las
+// ordenes de trabajo y el costeo con su division por caso de uso (entrega 6).
+const pagesStillWithPrisma = [
+  "src/app/(dashboard)/dashboard/reports/**/page.tsx",
+  "src/app/(dashboard)/dashboard/production/work-orders/**/page.tsx",
+  "src/app/(dashboard)/dashboard/costs/**/page.tsx",
+];
+
+const dbImportRestriction = {
+  name: "@/lib/db",
+  message:
+    "Las paginas no consultan Prisma: mueve la consulta a src/modules/<area>/<funcionalidad>/queries.ts.",
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -34,14 +63,22 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [
-            {
-              name: "@/auth",
-              importNames: ["auth"],
-              message:
-                "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
-            },
-          ],
+          paths: [authImportRestriction],
+        },
+      ],
+    },
+  },
+  // Paginas sin Prisma directo (entrega 4). En flat config, si dos bloques
+  // configuran la misma regla para un archivo, el ultimo reemplaza las opciones
+  // del anterior: este bloque repite la restriccion de @/auth para no perderla.
+  {
+    files: pagesWithoutPrisma,
+    ignores: pagesStillWithPrisma,
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [authImportRestriction, dbImportRestriction],
         },
       ],
     },

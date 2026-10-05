@@ -1,6 +1,5 @@
 ﻿import { Database, ScrollText, Users } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,18 +23,17 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getAuditLogData } from "@/modules/audit/queries";
 
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -51,45 +49,11 @@ export default async function AuditPage({ searchParams }: PageProps) {
   const entidad = parseStringParam(params, "entidad");
   const from = parseStringParam(params, "from");
   const to = parseStringParam(params, "to");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-
-  const filters: Prisma.bitacora_operacionWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { detalle: { contains: q, mode: "insensitive" } },
-        { accion: { contains: q, mode: "insensitive" } },
-        { entidad_afectada: { contains: q, mode: "insensitive" } },
-        { id_registro_afectado: { contains: q, mode: "insensitive" } },
-      ],
-    });
-  }
-
-  if (usuario) {
-    filters.push({ id_usuario: usuario });
-  }
-
-  if (accion) {
-    filters.push({ accion });
-  }
-
-  if (entidad) {
-    filters.push({ entidad_afectada: entidad });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_hora: dateRange });
-  }
-
-  const where: Prisma.bitacora_operacionWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
+  const fromDate = parseDateParam(params, "from");
+  const toDate = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [
+  const {
     users,
     actions,
     entities,
@@ -97,57 +61,10 @@ export default async function AuditPage({ searchParams }: PageProps) {
     totalLogs,
     distinctUsers,
     distinctEntities,
-  ] = await Promise.all([
-    prisma.usuario.findMany({
-      orderBy: [{ apellidos: "asc" }, { nombres: "asc" }],
-      select: {
-        id_usuario: true,
-        nombres: true,
-        apellidos: true,
-      },
-    }),
-    prisma.bitacora_operacion.findMany({
-      distinct: ["accion"],
-      orderBy: {
-        accion: "asc",
-      },
-      select: {
-        accion: true,
-      },
-    }),
-    prisma.bitacora_operacion.findMany({
-      distinct: ["entidad_afectada"],
-      orderBy: {
-        entidad_afectada: "asc",
-      },
-      select: {
-        entidad_afectada: true,
-      },
-    }),
-    prisma.bitacora_operacion.findMany({
-      where,
-      orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
-      skip,
-      take,
-      include: {
-        usuario: true,
-      },
-    }),
-    prisma.bitacora_operacion.count({ where }),
-    // Usuarios/entidades distintos dentro de TODO el conjunto filtrado (no
-    // solo la pagina actual), para que las KPI sigan siendo correctas ahora
-    // que la tabla esta paginada.
-    prisma.bitacora_operacion.findMany({
-      where,
-      distinct: ["id_usuario"],
-      select: { id_usuario: true },
-    }),
-    prisma.bitacora_operacion.findMany({
-      where,
-      distinct: ["entidad_afectada"],
-      select: { entidad_afectada: true },
-    }),
-  ]);
+  } = await getAuditLogData(
+    { q, usuario, accion, entidad, from: fromDate, to: toDate },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems: totalLogs, page, pageSize });
 

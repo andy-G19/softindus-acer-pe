@@ -26,9 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
@@ -42,6 +40,7 @@ import {
   activateUserAction,
   deactivateUserAction,
 } from "@/modules/users/actions";
+import { getUserListData } from "@/modules/users/queries";
 
 const ROLE_OPTIONS = [
   APP_ROLES.ADMIN,
@@ -62,58 +61,8 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
   const estado = parseStringParam(params, "estado");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const filters: Prisma.usuarioWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { nombres: { contains: q, mode: "insensitive" } },
-        { apellidos: { contains: q, mode: "insensitive" } },
-        { usuario: { contains: q, mode: "insensitive" } },
-        { correo: { contains: q, mode: "insensitive" } },
-      ],
-    });
-  }
-
-  if (rol) {
-    filters.push({ rol: { nombre_rol: rol } });
-  }
-
-  if (estado === "activo" || estado === "inactivo") {
-    filters.push({ estado });
-  }
-
-  const where: Prisma.usuarioWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [users, totalItems, totalUsers, totalActive, totalInactive] =
-    await Promise.all([
-      prisma.usuario.findMany({
-        where,
-        orderBy: [{ fecha_registro: "desc" }, { id_usuario: "desc" }],
-        skip,
-        take,
-        select: {
-          id_usuario: true,
-          nombres: true,
-          apellidos: true,
-          usuario: true,
-          correo: true,
-          estado: true,
-          ultimo_acceso: true,
-          fecha_registro: true,
-          rol: {
-            select: {
-              nombre_rol: true,
-            },
-          },
-        },
-      }),
-      prisma.usuario.count({ where }),
-      prisma.usuario.count(),
-      prisma.usuario.count({ where: { estado: "activo" } }),
-      prisma.usuario.count({ where: { estado: "inactivo" } }),
-    ]);
+  const { users, totalItems, totalUsers, totalActive, totalInactive } =
+    await getUserListData({ q, rol, estado }, { skip, take });
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

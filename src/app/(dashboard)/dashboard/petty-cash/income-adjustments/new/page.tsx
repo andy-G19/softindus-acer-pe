@@ -18,10 +18,10 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import { createPettyCashIncomeAdjustmentAction } from "@/modules/petty-cash/income-adjustments/actions";
+import { getNewPettyCashIncomeAdjustmentData } from "@/modules/petty-cash/income-adjustments/queries";
 import Link from "next/link";
 
 function getMovementLabel(type: string, concept: string) {
@@ -53,31 +53,8 @@ export default async function NewPettyCashIncomeAdjustmentPage() {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [openBoxes, latestMovements] = await Promise.all([
-    prisma.caja_chica.findMany({
-      where: {
-        estado: "abierta",
-      },
-      orderBy: {
-        nombre_caja: "asc",
-      },
-    }),
-
-    prisma.movimiento_caja.findMany({
-      where: {
-        tipo_movimiento: {
-          in: ["ingreso", "ajuste"],
-        },
-      },
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
-      take: 6,
-      include: {
-        caja_chica: true,
-      },
-    }),
-  ]);
+  const { openBoxes, latestMovements } =
+    await getNewPettyCashIncomeAdjustmentData();
 
   const totalOpenBalance = openBoxes.reduce((total, box) => {
     return total + toNumber(box.saldo_actual);

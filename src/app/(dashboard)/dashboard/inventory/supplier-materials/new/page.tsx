@@ -7,42 +7,16 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
+import { getNewSupplierMaterialFormOptions } from "@/modules/inventory/supplier-materials/queries";
 
 export default async function NewSupplierMaterialPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const [suppliers, materials] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-      select: {
-        id_proveedor: true,
-        razon_social: true,
-      },
-    }),
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-      select: {
-        id_material: true,
-        nombre_material: true,
-        unidad_medida: true,
-      },
-    }),
-  ]);
+  const { suppliers, materials } = await getNewSupplierMaterialFormOptions();
 
   return (
     <main className="space-y-6">

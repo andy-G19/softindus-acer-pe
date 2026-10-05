@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
@@ -24,6 +23,7 @@ import {
 } from "@/lib/navigation";
 import { SupplierPaymentForm } from "@/components/inventory/supplier-payment-form";
 import { annulPurchaseAction } from "@/modules/inventory/purchases/actions";
+import { getPurchaseDetail } from "@/modules/inventory/purchases/queries";
 
 type PurchaseDetailPageProps = {
   params: Promise<{
@@ -41,49 +41,13 @@ export default async function PurchaseDetailPage({
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
 
-  const purchase = await prisma.compra.findUnique({
-    where: {
-      id_compra: id,
-    },
-  });
+  const purchaseDetail = await getPurchaseDetail(id);
 
-  if (!purchase) {
+  if (!purchaseDetail) {
     redirect("/dashboard/inventory/purchases");
   }
 
-  const [supplier, details, payments] = await Promise.all([
-    prisma.proveedor.findUnique({
-      where: {
-        id_proveedor: purchase.id_proveedor,
-      },
-    }),
-    prisma.detalle_compra.findMany({
-      where: {
-        id_compra: purchase.id_compra,
-      },
-      orderBy: {
-        id_detalle_compra: "asc",
-      },
-    }),
-    prisma.pago_proveedor.findMany({
-      where: {
-        id_compra: purchase.id_compra,
-      },
-      orderBy: {
-        fecha_pago: "desc",
-      },
-    }),
-  ]);
-
-  const materialIds = details.map((detail) => detail.id_material);
-
-  const materials = await prisma.material.findMany({
-    where: {
-      id_material: {
-        in: materialIds,
-      },
-    },
-  });
+  const { purchase, supplier, details, payments, materials } = purchaseDetail;
 
   const materialById = new Map(
     materials.map((material) => [material.id_material, material]),

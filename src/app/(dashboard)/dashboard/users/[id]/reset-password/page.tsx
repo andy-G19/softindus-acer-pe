@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { ResetPasswordForm } from "@/modules/users/reset-password-form";
+import { getUserForPasswordReset } from "@/modules/users/queries";
 
 type ResetPasswordPageProps = {
   params: Promise<{
@@ -26,15 +26,7 @@ export default async function ResetUserPasswordPage({
   await requireRole([APP_ROLES.ADMIN]);
 
   const { id } = await params;
-  const user = await prisma.usuario.findUnique({
-    where: { id_usuario: id },
-    select: {
-      id_usuario: true,
-      nombres: true,
-      apellidos: true,
-      correo: true,
-    },
-  });
+  const user = await getUserForPasswordReset(id);
 
   if (!user) {
     notFound();

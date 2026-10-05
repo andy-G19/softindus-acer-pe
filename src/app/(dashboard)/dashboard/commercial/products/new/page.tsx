@@ -1,26 +1,15 @@
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createProductAction } from "@/modules/commercial/products/actions";
 import { ProductForm } from "@/modules/commercial/products/product-form";
+import { getActiveProductCategoryOptions } from "@/modules/commercial/products/queries";
 
 export default async function NewProductPage() {
   await requireRole(["ADMIN"]);
 
-  const categories = await prisma.categoria_producto.findMany({
-    where: {
-      estado: true,
-    },
-    orderBy: {
-      nombre: "asc",
-    },
-    select: {
-      nombre: true,
-      slug: true,
-    },
-  });
+  const categories = await getActiveProductCategoryOptions();
 
   return (
     <main className="mx-auto max-w-2xl space-y-6">

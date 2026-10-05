@@ -26,14 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleOperatorStatusAction } from "@/modules/staff/operators/actions";
+import { getOperatorListData } from "@/modules/staff/operators/queries";
 
 type OperatorsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -71,128 +70,8 @@ export default async function OperatorsPage({
   const especialidad = getSearchParam(params, "especialidad");
   const modalidad = getSearchParam(params, "modalidad");
   const status = getSearchParam(params, "status");
-  const filters: Prisma.operarioWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          nombres: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          apellidos: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          cargo: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          telefono: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-      ],
-    });
-  }
-
-  if (cargo) {
-    filters.push({
-      cargo,
-    });
-  }
-
-  if (especialidad) {
-    filters.push({
-      especialidad,
-    });
-  }
-
-  if (modalidad) {
-    filters.push({
-      modalidad_pago: modalidad,
-    });
-  }
-
-  if (status) {
-    filters.push({
-      estado: status,
-    });
-  }
-
-  const where: Prisma.operarioWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const [operators, cargos, especialidades, modalidades] = await Promise.all([
-    prisma.operario.findMany({
-      where,
-      orderBy: [
-        {
-          estado: "asc",
-        },
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-      include: {
-        _count: {
-          select: {
-            asistencia: true,
-            tarea_operario: true,
-            planilla_pago: true,
-          },
-        },
-      },
-    }),
-    prisma.operario.findMany({
-      where: {
-        cargo: {
-          not: null,
-        },
-      },
-      distinct: ["cargo"],
-      orderBy: {
-        cargo: "asc",
-      },
-      select: {
-        cargo: true,
-      },
-    }),
-    prisma.operario.findMany({
-      where: {
-        especialidad: {
-          not: null,
-        },
-      },
-      distinct: ["especialidad"],
-      orderBy: {
-        especialidad: "asc",
-      },
-      select: {
-        especialidad: true,
-      },
-    }),
-    prisma.operario.findMany({
-      distinct: ["modalidad_pago"],
-      orderBy: {
-        modalidad_pago: "asc",
-      },
-      select: {
-        modalidad_pago: true,
-      },
-    }),
-  ]);
+  const { operators, cargos, especialidades, modalidades } =
+    await getOperatorListData({ q, cargo, especialidad, modalidad, status });
 
   const activeOperators = operators.filter(
     (operator) => operator.estado === "activo",

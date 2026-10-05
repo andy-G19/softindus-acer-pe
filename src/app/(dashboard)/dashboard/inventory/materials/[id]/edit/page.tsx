@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { prisma } from "@/lib/db";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -10,6 +9,7 @@ import {
 } from "@/lib/navigation";
 import { updateMaterialAction } from "@/modules/inventory/materials/actions";
 import { MaterialForm } from "@/modules/inventory/materials/material-form";
+import { getMaterialEditData } from "@/modules/inventory/materials/queries";
 
 type EditMaterialPageProps = {
   params: Promise<{
@@ -34,35 +34,13 @@ export default async function EditMaterialPage({
   const queryParams = (await searchParams) ?? {};
   await requireRole(["ADMIN"]);
 
-  const material = await prisma.material.findUnique({
-    where: {
-      id_material: id,
-    },
-  });
+  const materialEditData = await getMaterialEditData(id);
 
-  if (!material) {
+  if (!materialEditData) {
     notFound();
   }
 
-  const categories = await prisma.categoria_material.findMany({
-    where: {
-      OR: [
-        {
-          estado: true,
-        },
-        {
-          slug: material.categoria,
-        },
-      ],
-    },
-    orderBy: {
-      nombre: "asc",
-    },
-    select: {
-      nombre: true,
-      slug: true,
-    },
-  });
+  const { material, categories } = materialEditData;
   const backHref = getSafeReturnTo(
     queryParams.returnTo,
     navigationHrefs.materials,

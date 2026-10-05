@@ -1,0 +1,187 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/petty-cash/boxes > listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "movimiento_caja": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "fecha_apertura": "desc",
+        },
+      ],
+    },
+    "prisma": "caja_chica.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/petty-cash/boxes > listado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/petty-cash">Caja chica</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Cajas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Cajas chicas</h1>
+<p>Consulta las cajas chicas abiertas y cerradas, sus saldos, responsables, fechas de apertura y cantidad de movimientos registrados.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/petty-cash/boxes/new">Abrir caja</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total histórico de cajas chicas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas abiertas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cajas disponibles para nuevos movimientos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cajas cerradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cajas que ya no deberían recibir movimientos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo abierto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma actual de cajas abiertas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Cajas chicas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Caja</th>
+<th>Responsable</th>
+<th>Apertura</th>
+<th>Saldo inicial</th>
+<th>Saldo actual</th>
+<th>Movimientos</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_caja_chica-1</td>
+<td>nombre_caja-1</td>
+<td>responsable-1</td>
+<td>01/07/2026</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+</tr>
+<tr>
+<td>id_caja_chica-2</td>
+<td>nombre_caja-2</td>
+<td>-</td>
+<td>02/07/2026</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colSpan="4">Totales</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>4</td>
+<td>
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

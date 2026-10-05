@@ -3,9 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { OrderForm } from "@/components/commercial/order-form";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateOrderAction } from "@/modules/commercial/orders/actions";
+import { getOrderEditData } from "@/modules/commercial/orders/queries";
 
 type EditOrderPageProps = {
   params: Promise<{
@@ -25,63 +25,7 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const { id } = await params;
-  const [order, clients, products] = await Promise.all([
-    prisma.pedido.findUnique({
-      where: {
-        id_pedido: id,
-      },
-      include: {
-        proforma: {
-          select: {
-            id_proforma: true,
-          },
-        },
-        comprobante_venta: {
-          select: {
-            id_comprobante: true,
-          },
-        },
-        detalle_pedido: {
-          include: {
-            producto: true,
-            orden_trabajo: {
-              select: {
-                id_orden_trabajo: true,
-              },
-            },
-          },
-        },
-      },
-    }),
-    prisma.cliente.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-        tipo_cliente: true,
-      },
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-        categoria: true,
-        unidad_medida: true,
-        precio_referencial: true,
-      },
-    }),
-  ]);
+  const { order, clients, products } = await getOrderEditData(id);
 
   if (!order) {
     notFound();
