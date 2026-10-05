@@ -487,9 +487,10 @@ Pendientes fuera de alcance:
 
 ## Entrega 4 — Consultas fuera de las páginas
 
-Fecha: 2026-10-02. Estado: sub-entregas 4.1 a 4.7 terminadas en local el
-2026-10-03; falta publicarlas y verificarlas en staging. La entrega se divide
-por área para que la métrica baje en cada sub-entrega.
+Fecha: 2026-10-02. Estado: cerrada el 2026-10-05. Sub-entregas 4.1 a 4.7 hechas
+en local el 2026-10-03, publicadas en staging con `fbe2ec7` (CI #34 en verde) e
+integradas en `main` con el PR #13 (merge commit `0843a21`, CI #36 en verde). La
+entrega se divide por área para que la métrica baje en cada sub-entrega.
 
 | Sub-entrega | Alcance | Páginas | Páginas con Prisma |
 |---|---|---|---|
@@ -759,7 +760,7 @@ Evidencia:
   el módulo dueño de su entidad: clientes, productos, pedidos, materiales,
   proveedores, compras, operarios, máquinas, cajas abiertas y órdenes de
   trabajo recientes.
-- 50 archivos de caracterización con 313 pruebas, además de las 15 del arnés.
+- 50 archivos de caracterización con 313 pruebas, además de las 17 del arnés.
   Las 98 páginas migradas conservan su JSX byte a byte y sus snapshots no
   cambiaron al mover las consultas.
 - Criterio de columnas aplicado en cada área: 18 inclusiones de `usuario`
@@ -769,12 +770,52 @@ Evidencia:
   componente cliente recibía el hash; en las demás áreas las páginas solo
   leían nombres y apellidos en el servidor o no usaban el usuario.
 
+### Publicación, CI y verificación en staging
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| fbe2ec7 | test | El arnés unifica los espacios que emite `Intl` según la versión de ICU. |
+
+- CI #33, sobre `f191c66`, falló en 7 snapshots de HTML de fallas, usuarios y
+  auditoría, las páginas que muestran fecha y hora con `formatDateTime`.
+  `Intl.DateTimeFormat` separa «p. m.» con U+00A0 en Windows (Node 20.19.3,
+  ICU 77.1), donde se escribieron los snapshots, y con U+0020 en el CI, que
+  instala la última 20.x. No es un fallo de la aplicación: es el mismo tipo de
+  no determinismo que la zona horaria de la 4.2.
+- `fbe2ec7`: `normalizeHtml` convierte U+00A0, U+202F y U+2009 en un espacio
+  normal, y una prueba nueva lo fija. Los 3 snapshots solo cambian ese
+  carácter. Simulando en local el ICU del CI, el arnés anterior reproduce los
+  7 fallos y el nuevo pasa tanto con U+0020 como con U+202F. Quitar la
+  normalización hace fallar solo su prueba. `npm run check`: 869 pruebas; el
+  primer intento falló en el build al descargar la fuente de Google Fonts,
+  fallo transitorio conocido, y el segundo terminó con código 0.
+- CI #34 en verde (2m 30s) sobre `fbe2ec7`. El primer intento del CI #35, el
+  del PR #13, falló sin ejecutarse: GitHub respondió «Internal server error» y
+  no asignó una máquina («The job was not acquired by Runner»). Al
+  re-ejecutarlo pasó en verde (2m 6s). CI #36 en verde (2m 37s) en `main`
+  sobre `0843a21`.
+
+Verificación en staging, informada por el responsable el 2026-10-05:
+
+| # | Rol | Prueba | Resultado |
+|---|---|---|---|
+| 1 | ADMIN | Prueba de humo con un guion en la consola, peticiones secuenciales con pausa de 1,5 s: las 98 páginas migradas (70 fijas y 28 con id tomado de los enlaces de las páginas visitadas) y 14 ids inexistentes | Todas OK: sin errores, sin `NaN` ni `Invalid Date`; 404 en los ids inexistentes y redirección al listado en la compra |
+| 2 | ADMIN | Quién registró cada fila (asistencia, planillas, tareas, historial de pagos, auditoría, preventivos, movimientos de caja, versiones de receta, salidas y detalle de pedido), edición de una categoría de producto y filtro de stock crítico | Conforme |
+| 3 | SELLER | Comercial funciona; Inventario muestra acceso denegado | Conforme |
+| 4 | WORKSHOP_MASTER | Inventario, Producción, Mantenimiento, Personal y Mermas funcionan; Caja chica muestra acceso denegado | Conforme |
+| 5 | — | Logs de Vercel durante las pruebas | Sin errores de Prisma ni respuestas 500 |
+
+No hubo foto del «antes»: el navegador integrado no tenía sesión en el ERP de
+staging antes de publicar. La equivalencia descansa en las pruebas de
+caracterización, escritas antes de mover cada consulta, y en la prueba de humo.
+
 Pendientes fuera de alcance:
 
-- Verificación en staging: la foto del «antes» no se tomó porque el navegador
-  integrado no tenía sesión en el ERP de staging. Debe tomarse antes de
-  publicar estos commits; si ya no es posible, la evidencia queda en las
-  pruebas de caracterización y en una prueba de humo posterior.
+- El CI usa `node-version: "20"` sin fijar la versión menor y `ubuntu-latest`,
+  que pasa a Ubuntu 26 desde el 19/10/2026. Las pruebas ya fijan la zona
+  horaria y normalizan los espacios de `Intl`. GitHub avisa además de que
+  `actions/checkout@v4` y `actions/setup-node@v4` se ejecutan forzadas en
+  Node 24.
 - La URL propia de staging, abierta sin sesión, redirige al login de
   producción: el proxy usa `request.nextUrl` y next-auth sustituye su origen
   por `AUTH_URL`. Revisar `AUTH_URL` del entorno Preview en Vercel.
@@ -805,7 +846,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 1 | Fix | Stock atómico en compras y anulación | Cerrada (CI #21 verde, staging verificado) |
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
-| 4 | A | Consultas fuera de las páginas, por área | 4.1 a 4.7 terminadas en local; falta staging |
+| 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Pendiente |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
@@ -832,7 +873,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 75 / 868 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 75 / 869 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
@@ -843,6 +884,11 @@ de esos patrones, por lo que son también su línea base.
 Actualizado en la entrega 3 (2026-10-01) sobre `e5a1652`. Las demás filas no
 cambian: páginas con Prisma directo 117, `auth()` directo 0 y `sweetalert2` 2,
 medidos de nuevo; las otras no las toca esta entrega.
+
+Actualizado en la entrega 4 (2026-10-05) sobre `fbe2ec7`: páginas con Prisma
+directo 19 y pruebas 75 / 869. Las demás filas no cambian: los tres archivos
+más grandes (1.476, 1.046 y 1.004 líneas), `auth()` directo 0, copias locales de
+conversión y formato 0 y `sweetalert2` 2, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
