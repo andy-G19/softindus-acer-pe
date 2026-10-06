@@ -1,6 +1,5 @@
 ﻿import { CircleDollarSign, ClipboardList, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,14 +22,13 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getProfitabilityReportData } from "@/modules/reports/profitability/queries";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
@@ -55,83 +53,12 @@ export default async function ProfitabilityReportPage({
   const to = parseStringParam(params, "to");
   const lowMargin = parseStringParam(params, "lowMargin");
   const negativeProfit = parseStringParam(params, "negativeProfit");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-
-  const filters: Prisma.costeoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_costeo: { contains: q, mode: "insensitive" } },
-        { id_pedido: { contains: q, mode: "insensitive" } },
-        { id_orden_trabajo: { contains: q, mode: "insensitive" } },
-        {
-          pedido: {
-            cliente: {
-              nombre_razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-        {
-          orden_trabajo: {
-            producto: {
-              nombre_producto: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_costeo: dateRange });
-  }
-
-  if (lowMargin === "true") {
-    filters.push({ rentabilidad: { some: { alerta_bajo_margen: true } } });
-  }
-
-  if (negativeProfit === "true") {
-    filters.push({ rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } });
-  }
-
-  const where: Prisma.costeoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const costings = await prisma.costeo.findMany({
-    where,
-    orderBy: {
-      fecha_costeo: "desc",
-    },
-    take: 100,
-    include: {
-      pedido: {
-        include: {
-          cliente: true,
-        },
-      },
-      orden_trabajo: {
-        include: {
-          producto: true,
-          cliente: true,
-        },
-      },
-      margen_ganancia: {
-        orderBy: {
-          fecha_aplicacion: "desc",
-        },
-        take: 1,
-      },
-      rentabilidad: {
-        orderBy: {
-          fecha_calculo: "desc",
-        },
-        take: 1,
-      },
-    },
+  const costings = await getProfitabilityReportData({
+    q,
+    lowMargin,
+    negativeProfit,
+    from: parseDateParam(params, "from"),
+    to: parseDateParam(params, "to"),
   });
 
   const totals = costings.reduce(

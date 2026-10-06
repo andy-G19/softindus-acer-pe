@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 464 |
+| Archivos fuente analizados | 497 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -242,15 +242,15 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 355 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 575 | `{annulWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 594 | `{finishWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 263 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 423 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 279 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 488 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 279 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 192 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 394 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 183 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 349 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 171 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 216 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 189 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 310 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 201 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 119 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 288 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 122 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 234 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 71 | `{createAttendanceAction}` |
 | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 139 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 114 | `"/dashboard/staff/operators"` |

@@ -1,0 +1,1592 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin detalle, pagos ni historial > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_compra": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_detalle_compra": "asc",
+          },
+        },
+        "historial_precio_proveedor": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+          "take": 5,
+        },
+        "pago_proveedor": {
+          "orderBy": {
+            "fecha_pago": "asc",
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > estados de pago y compra sin detalle, pagos ni historial > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores y compras</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de proveedores y compras</h1>
+<p>Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="supplierId">Proveedor</label>
+<select id="supplierId" name="supplierId">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="purchaseStatus">Estado compra</label>
+<select id="purchaseStatus" name="purchaseStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrada">Registrada</option>
+<option value="confirmada">Confirmada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="paymentStatus">Estado pago</label>
+<select id="paymentStatus" name="paymentStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial">Parcial</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Compra o comprobante</label>
+<input type="text" id="searchCode" placeholder="Ej: COM00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/suppliers-purchases">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras encontradas</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>Compras según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto comprado</div>
+</div>
+</div>
+<div>
+<p>S/ 45.50</p>
+<p>Suma total de compras encontradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Pagos registrados a proveedores.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Monto estimado aún pendiente de pago.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras pendientes</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Parciales: 1. Pagadas: 1.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Proveedores</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Proveedores presentes en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales distintos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Materiales comprados en el periodo filtrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad comprada</div>
+</div>
+</div>
+<div>
+<p>68.00</p>
+<p>Suma general de cantidades compradas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Compra</th>
+<th>Proveedor</th>
+<th>Fecha</th>
+<th>Comprobante</th>
+<th>Materiales</th>
+<th>Monto total</th>
+<th>Pagado</th>
+<th>Saldo</th>
+<th>Estado compra</th>
+<th>Estado pago</th>
+<th>Precios históricos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COM00000001</td>
+<td>
+<div>
+<p>razon_social-1</p>
+<p>tipo_proveedor-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<p>tipo_comprobante-1</p>
+<p>numero_comprobante-1</p>
+</div>
+</td>
+<td>
+<div>
+</div>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>estado_compra-1</td>
+<td>Pendiente</td>
+<td>
+<span>Sin historial</span>
+</td>
+</tr>
+<tr>
+<td>COM00000002</td>
+<td>
+<div>
+<p>razon_social-2</p>
+<p>tipo_proveedor-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>
+<div>
+<p>-</p>
+<p>Sin número</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-2</td>
+<td>Parcial</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>COM00000003</td>
+<td>
+<div>
+<p>razon_social-1</p>
+<p>tipo_proveedor-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<p>tipo_comprobante-1</p>
+<p>numero_comprobante-1</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-1</td>
+<td>Pagado</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de abastecimiento: proveedor, compra, comprobante, materiales adquiridos, precios unitarios, historial de precios, pagos realizados y saldo pendiente.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_compra": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_detalle_compra": "asc",
+          },
+        },
+        "historial_precio_proveedor": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+          "take": 5,
+        },
+        "pago_proveedor": {
+          "orderBy": {
+            "fecha_pago": "asc",
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > sin filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores y compras</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de proveedores y compras</h1>
+<p>Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="supplierId">Proveedor</label>
+<select id="supplierId" name="supplierId">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="purchaseStatus">Estado compra</label>
+<select id="purchaseStatus" name="purchaseStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrada">Registrada</option>
+<option value="confirmada">Confirmada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="paymentStatus">Estado pago</label>
+<select id="paymentStatus" name="paymentStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial">Parcial</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Compra o comprobante</label>
+<input type="text" id="searchCode" placeholder="Ej: COM00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/suppliers-purchases">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras encontradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Compras según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto comprado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma total de compras encontradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Pagos registrados a proveedores.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Monto estimado aún pendiente de pago.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Parciales: 0. Pagadas: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Proveedores</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Proveedores presentes en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales distintos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Materiales comprados en el periodo filtrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad comprada</div>
+</div>
+</div>
+<div>
+<p>68.00</p>
+<p>Suma general de cantidades compradas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Compra</th>
+<th>Proveedor</th>
+<th>Fecha</th>
+<th>Comprobante</th>
+<th>Materiales</th>
+<th>Monto total</th>
+<th>Pagado</th>
+<th>Saldo</th>
+<th>Estado compra</th>
+<th>Estado pago</th>
+<th>Precios históricos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_compra-1</td>
+<td>
+<div>
+<p>razon_social-1</p>
+<p>tipo_proveedor-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<p>tipo_comprobante-1</p>
+<p>numero_comprobante-1</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-1</td>
+<td>estado_pago-1</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_compra-2</td>
+<td>
+<div>
+<p>razon_social-2</p>
+<p>tipo_proveedor-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>
+<div>
+<p>-</p>
+<p>Sin número</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-2</td>
+<td>estado_pago-2</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de abastecimiento: proveedor, compra, comprobante, materiales adquiridos, precios unitarios, historial de precios, pagos realizados y saldo pendiente.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_compra": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_detalle_compra": "asc",
+          },
+        },
+        "historial_precio_proveedor": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+          "take": 5,
+        },
+        "pago_proveedor": {
+          "orderBy": {
+            "fecha_pago": "asc",
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > sin resultados > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores y compras</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de proveedores y compras</h1>
+<p>Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/suppliers-purchases?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="supplierId">Proveedor</label>
+<select id="supplierId" name="supplierId">
+<option value="" selected="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="purchaseStatus">Estado compra</label>
+<select id="purchaseStatus" name="purchaseStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrada">Registrada</option>
+<option value="confirmada">Confirmada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="paymentStatus">Estado pago</label>
+<select id="paymentStatus" name="paymentStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial">Parcial</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Compra o comprobante</label>
+<input type="text" id="searchCode" placeholder="Ej: COM00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/suppliers-purchases">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras encontradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Compras según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto comprado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma total de compras encontradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Pagos registrados a proveedores.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Monto estimado aún pendiente de pago.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Parciales: 0. Pagadas: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Proveedores</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Proveedores presentes en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales distintos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Materiales comprados en el periodo filtrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad comprada</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Suma general de cantidades compradas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron compras con los filtros aplicados.</p>
+</div>
+</div>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de abastecimiento: proveedor, compra, comprobante, materiales adquiridos, precios unitarios, historial de precios, pagos realizados y saldo pendiente.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_compra": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_detalle_compra": "asc",
+          },
+        },
+        "historial_precio_proveedor": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+          "take": 5,
+        },
+        "pago_proveedor": {
+          "orderBy": {
+            "fecha_pago": "asc",
+          },
+        },
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {
+        "OR": [
+          {
+            "id_compra": {
+              "contains": "F001",
+            },
+          },
+          {
+            "numero_comprobante": {
+              "contains": "F001",
+            },
+          },
+        ],
+        "detalle_compra": {
+          "some": {
+            "id_material": "MAT00000001",
+          },
+        },
+        "estado_compra": "confirmada",
+        "estado_pago": "parcial",
+        "fecha_compra": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "id_proveedor": "PRV00000001",
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/suppliers-purchases > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Proveedores y compras</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de proveedores y compras</h1>
+<p>Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/suppliers-purchases?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;supplierId=PRV00000001&amp;materialId=MAT00000001&amp;purchaseStatus=confirmada&amp;paymentStatus=parcial&amp;searchCode=f001&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/suppliers-purchases?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;supplierId=PRV00000001&amp;materialId=MAT00000001&amp;purchaseStatus=confirmada&amp;paymentStatus=parcial&amp;searchCode=f001&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
+</div>
+<div>
+<label for="supplierId">Proveedor</label>
+<select id="supplierId" name="supplierId">
+<option value="">Todos los proveedores</option>
+<option value="id_proveedor-1">razon_social-1</option>
+<option value="id_proveedor-2">razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="purchaseStatus">Estado compra</label>
+<select id="purchaseStatus" name="purchaseStatus">
+<option value="">Todos los estados</option>
+<option value="registrada">Registrada</option>
+<option value="confirmada" selected="">Confirmada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="paymentStatus">Estado pago</label>
+<select id="paymentStatus" name="paymentStatus">
+<option value="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="parcial" selected="">Parcial</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Compra o comprobante</label>
+<input type="text" id="searchCode" placeholder="Ej: COM00000001" name="searchCode" value="f001"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/suppliers-purchases">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras encontradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Compras según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto comprado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma total de compras encontradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Pagos registrados a proveedores.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Monto estimado aún pendiente de pago.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Parciales: 0. Pagadas: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Proveedores</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Proveedores presentes en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales distintos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Materiales comprados en el periodo filtrado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad comprada</div>
+</div>
+</div>
+<div>
+<p>68.00</p>
+<p>Suma general de cantidades compradas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Compra</th>
+<th>Proveedor</th>
+<th>Fecha</th>
+<th>Comprobante</th>
+<th>Materiales</th>
+<th>Monto total</th>
+<th>Pagado</th>
+<th>Saldo</th>
+<th>Estado compra</th>
+<th>Estado pago</th>
+<th>Precios históricos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_compra-1</td>
+<td>
+<div>
+<p>razon_social-1</p>
+<p>tipo_proveedor-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<p>tipo_comprobante-1</p>
+<p>numero_comprobante-1</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-1</td>
+<td>estado_pago-1</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_compra-2</td>
+<td>
+<div>
+<p>razon_social-2</p>
+<p>tipo_proveedor-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>
+<div>
+<p>-</p>
+<p>Sin número</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>11.50 unidad_medida-1 · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>22.50 unidad_medida-2 · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 34.00</td>
+<td>S/ 0.00</td>
+<td>estado_compra-2</td>
+<td>estado_pago-2</td>
+<td>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>S/ 11.50 · 01/07/2026 · origen_registro-1</p>
+</div>
+<div>
+<p>nombre_material-2</p>
+<p>S/ 22.50 · 02/07/2026 · origen_registro-2</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 compras para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de abastecimiento: proveedor, compra, comprobante, materiales adquiridos, precios unitarios, historial de precios, pagos realizados y saldo pendiente.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

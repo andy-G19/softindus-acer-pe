@@ -1,0 +1,964 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/export-history > parametros vacios, con filtros e ilegibles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_exportacion": "desc",
+      },
+      "take": 150,
+      "where": {},
+    },
+    "prisma": "exportacion_datos.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/export-history > parametros vacios, con filtros e ilegibles > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Historial de exportaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Historial de exportaciones</h1>
+<p>Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del historial</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="module">Reporte</label>
+<select id="module" name="module">
+<option value="" selected="">Todos los reportes</option>
+<option value="Reporte de producción">Reporte de producción</option>
+<option value="Reporte de inventario">Reporte de inventario</option>
+<option value="Reporte de ventas y cobranzas">Reporte de ventas y cobranzas</option>
+<option value="Reporte de proveedores y compras">Reporte de proveedores y compras</option>
+<option value="Reporte financiero">Reporte financiero</option>
+<option value="Reporte de mantenimiento">Reporte de mantenimiento</option>
+<option value="Reporte de costos y rentabilidad">Reporte de costos y rentabilidad</option>
+<option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
+<option value="Reporte de auditoria">Reporte de auditoria</option>
+</select>
+</div>
+<div>
+<label for="format">Formato</label>
+<select id="format" name="format">
+<option value="" selected="">Todos los formatos</option>
+<option value="excel">Excel</option>
+<option value="pdf">PDF</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="generada">Generada</option>
+<option value="fallida">Fallida</option>
+</select>
+</div>
+<div>
+<label for="userId">Usuario</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Archivo, filtros..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Exportaciones</div>
+</div>
+</div>
+<div>
+<p>5</p>
+<p>Registros encontrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Excel</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Exportaciones registradas como Excel.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>PDF</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Exportaciones PDF registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Generadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones completadas correctamente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Usuarios que exportaron reportes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Módulos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Tipos de reporte exportados.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del historial</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Usuario</th>
+<th>Reporte</th>
+<th>Formato</th>
+<th>Estado</th>
+<th>Archivo</th>
+<th>Filtros usados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EXP00000001</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>correo-1</p>
+</div>
+</td>
+<td>modulo_origen-1</td>
+<td>formato-1</td>
+<td>estado-1</td>
+<td>ruta_archivo-1</td>
+<td>Sin filtros</td>
+</tr>
+<tr>
+<td>EXP00000002</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>
+</p>
+</div>
+</td>
+<td>modulo_origen-2</td>
+<td>formato-2</td>
+<td>estado-2</td>
+<td>-</td>
+<td>Sin filtros</td>
+</tr>
+<tr>
+<td>EXP00000003</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>correo-1</p>
+</div>
+</td>
+<td>modulo_origen-1</td>
+<td>Excel</td>
+<td>estado-1</td>
+<td>ruta_archivo-1</td>
+<td>dateFrom: 2026-07-01</td>
+</tr>
+<tr>
+<td>EXP00000004</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>
+</p>
+</div>
+</td>
+<td>modulo_origen-2</td>
+<td>PDF</td>
+<td>estado-2</td>
+<td>-</td>
+<td>Sin filtros</td>
+</tr>
+<tr>
+<td>EXP00000005</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>correo-1</p>
+</div>
+</td>
+<td>modulo_origen-1</td>
+<td>formato-1</td>
+<td>estado-1</td>
+<td>ruta_archivo-1</td>
+<td>no es json</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 150 exportaciones para mantener una consulta rápida.</p>
+</div>
+</div>
+<section>
+<p>Este historial sirve como trazabilidad administrativa: permite auditar qué usuario exportó información, desde qué módulo, con qué filtros y en qué fecha.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/export-history > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_exportacion": "desc",
+      },
+      "take": 150,
+      "where": {},
+    },
+    "prisma": "exportacion_datos.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Historial de exportaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Historial de exportaciones</h1>
+<p>Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del historial</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="module">Reporte</label>
+<select id="module" name="module">
+<option value="" selected="">Todos los reportes</option>
+<option value="Reporte de producción">Reporte de producción</option>
+<option value="Reporte de inventario">Reporte de inventario</option>
+<option value="Reporte de ventas y cobranzas">Reporte de ventas y cobranzas</option>
+<option value="Reporte de proveedores y compras">Reporte de proveedores y compras</option>
+<option value="Reporte financiero">Reporte financiero</option>
+<option value="Reporte de mantenimiento">Reporte de mantenimiento</option>
+<option value="Reporte de costos y rentabilidad">Reporte de costos y rentabilidad</option>
+<option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
+<option value="Reporte de auditoria">Reporte de auditoria</option>
+</select>
+</div>
+<div>
+<label for="format">Formato</label>
+<select id="format" name="format">
+<option value="" selected="">Todos los formatos</option>
+<option value="excel">Excel</option>
+<option value="pdf">PDF</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="generada">Generada</option>
+<option value="fallida">Fallida</option>
+</select>
+</div>
+<div>
+<label for="userId">Usuario</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Archivo, filtros..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Exportaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Registros encontrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Excel</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones registradas como Excel.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>PDF</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones PDF registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Generadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones completadas correctamente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Usuarios que exportaron reportes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Módulos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Tipos de reporte exportados.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del historial</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Usuario</th>
+<th>Reporte</th>
+<th>Formato</th>
+<th>Estado</th>
+<th>Archivo</th>
+<th>Filtros usados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_exportacion-1</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>correo-1</p>
+</div>
+</td>
+<td>modulo_origen-1</td>
+<td>formato-1</td>
+<td>estado-1</td>
+<td>ruta_archivo-1</td>
+<td>parametros-1</td>
+</tr>
+<tr>
+<td>id_exportacion-2</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>
+</p>
+</div>
+</td>
+<td>modulo_origen-2</td>
+<td>formato-2</td>
+<td>estado-2</td>
+<td>-</td>
+<td>Sin filtros</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 150 exportaciones para mantener una consulta rápida.</p>
+</div>
+</div>
+<section>
+<p>Este historial sirve como trazabilidad administrativa: permite auditar qué usuario exportó información, desde qué módulo, con qué filtros y en qué fecha.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/export-history > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_exportacion": "desc",
+      },
+      "take": 150,
+      "where": {
+        "OR": [
+          {
+            "modulo_origen": {
+              "contains": "produccion",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "ruta_archivo": {
+              "contains": "produccion",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "parametros": {
+              "contains": "produccion",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "estado": "generada",
+        "fecha_exportacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "formato": "pdf",
+        "id_usuario": "USU00000002",
+        "modulo_origen": "Reporte financiero",
+      },
+    },
+    "prisma": "exportacion_datos.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Historial de exportaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Historial de exportaciones</h1>
+<p>Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado.</p>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del historial</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
+</div>
+<div>
+<label for="module">Reporte</label>
+<select id="module" name="module">
+<option value="">Todos los reportes</option>
+<option value="Reporte de producción">Reporte de producción</option>
+<option value="Reporte de inventario">Reporte de inventario</option>
+<option value="Reporte de ventas y cobranzas">Reporte de ventas y cobranzas</option>
+<option value="Reporte de proveedores y compras">Reporte de proveedores y compras</option>
+<option value="Reporte financiero" selected="">Reporte financiero</option>
+<option value="Reporte de mantenimiento">Reporte de mantenimiento</option>
+<option value="Reporte de costos y rentabilidad">Reporte de costos y rentabilidad</option>
+<option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
+<option value="Reporte de auditoria">Reporte de auditoria</option>
+</select>
+</div>
+<div>
+<label for="format">Formato</label>
+<select id="format" name="format">
+<option value="">Todos los formatos</option>
+<option value="excel">Excel</option>
+<option value="pdf" selected="">PDF</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="">Todos los estados</option>
+<option value="generada" selected="">Generada</option>
+<option value="fallida">Fallida</option>
+</select>
+</div>
+<div>
+<label for="userId">Usuario</label>
+<select id="userId" name="userId">
+<option value="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Archivo, filtros..." name="searchText" value="produccion"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Exportaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Registros encontrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Excel</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones registradas como Excel.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>PDF</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones PDF registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Generadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Exportaciones completadas correctamente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Usuarios</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Usuarios que exportaron reportes.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Módulos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Tipos de reporte exportados.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del historial</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Usuario</th>
+<th>Reporte</th>
+<th>Formato</th>
+<th>Estado</th>
+<th>Archivo</th>
+<th>Filtros usados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_exportacion-1</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-1, nombres-1</p>
+<p>correo-1</p>
+</div>
+</td>
+<td>modulo_origen-1</td>
+<td>formato-1</td>
+<td>estado-1</td>
+<td>ruta_archivo-1</td>
+<td>parametros-1</td>
+</tr>
+<tr>
+<td>id_exportacion-2</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>
+<div>
+<p>apellidos-2, nombres-2</p>
+<p>
+</p>
+</div>
+</td>
+<td>modulo_origen-2</td>
+<td>formato-2</td>
+<td>estado-2</td>
+<td>-</td>
+<td>Sin filtros</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 150 exportaciones para mantener una consulta rápida.</p>
+</div>
+</div>
+<section>
+<p>Este historial sirve como trazabilidad administrativa: permite auditar qué usuario exportó información, desde qué módulo, con qué filtros y en qué fecha.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

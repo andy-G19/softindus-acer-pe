@@ -1,0 +1,996 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni rentabilidad > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni rentabilidad > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rentabilidad</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="lowMargin">Margen</label>
+<select id="lowMargin" name="lowMargin">
+<option value="" selected="">Todos los margenes</option>
+<option value="true">Solo margen bajo</option>
+</select>
+</div>
+<div>
+<label for="negativeProfit">Utilidad</label>
+<select id="negativeProfit" name="negativeProfit">
+<option value="" selected="">Toda utilidad</option>
+<option value="true">Solo utilidad negativa</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Registros listados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo acumulado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Ingreso estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Utilidad estimada.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Margen promedio</div>
+</div>
+</div>
+<div>
+<p>100.00%</p>
+<p>Alertas: 1</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Producto</th>
+<th>Costo</th>
+<th>Ingreso</th>
+<th>Utilidad</th>
+<th>Margen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COS00000001</td>
+<td>id_pedido-1</td>
+<td>
+<p>-</p>
+<p>-</p>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>-</td>
+</tr>
+<tr>
+<td>COS00000002</td>
+<td>-</td>
+<td>
+<p>nombre_razon_social-2</p>
+<p>nombre_producto-2</p>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/profitability > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rentabilidad</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="lowMargin">Margen</label>
+<select id="lowMargin" name="lowMargin">
+<option value="" selected="">Todos los margenes</option>
+<option value="true">Solo margen bajo</option>
+</select>
+</div>
+<div>
+<label for="negativeProfit">Utilidad</label>
+<select id="negativeProfit" name="negativeProfit">
+<option value="" selected="">Toda utilidad</option>
+<option value="true">Solo utilidad negativa</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Registros listados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo acumulado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Ingreso estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Utilidad estimada.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Margen promedio</div>
+</div>
+</div>
+<div>
+<p>100.00%</p>
+<p>Alertas: 2</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Producto</th>
+<th>Costo</th>
+<th>Ingreso</th>
+<th>Utilidad</th>
+<th>Margen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_costeo-1</td>
+<td>id_pedido-1</td>
+<td>
+<p>nombre_razon_social-1</p>
+<p>nombre_producto-1</p>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+</tr>
+<tr>
+<td>id_costeo-2</td>
+<td>-</td>
+<td>
+<p>nombre_razon_social-2</p>
+<p>nombre_producto-2</p>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/profitability > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rentabilidad</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="lowMargin">Margen</label>
+<select id="lowMargin" name="lowMargin">
+<option value="" selected="">Todos los margenes</option>
+<option value="true">Solo margen bajo</option>
+</select>
+</div>
+<div>
+<label for="negativeProfit">Utilidad</label>
+<select id="negativeProfit" name="negativeProfit">
+<option value="" selected="">Toda utilidad</option>
+<option value="true">Solo utilidad negativa</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Registros listados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costo acumulado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingreso estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Utilidad estimada.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Margen promedio</div>
+</div>
+</div>
+<div>
+<p>0.00%</p>
+<p>Alertas: 0</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultados</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron costeos con los filtros aplicados.</p>
+</div>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/profitability > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 100,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_costeo": {
+                  "contains": "Estructura",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "Estructura",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_orden_trabajo": {
+                  "contains": "Estructura",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "Estructura",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                "orden_trabajo": {
+                  "producto": {
+                    "nombre_producto": {
+                      "contains": "Estructura",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "fecha_costeo": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+          {
+            "rentabilidad": {
+              "some": {
+                "alerta_bajo_margen": true,
+              },
+            },
+          },
+          {
+            "rentabilidad": {
+              "some": {
+                "utilidad_estimada": {
+                  "lt": 0,
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Rentabilidad</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value="Estructura"/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<label for="lowMargin">Margen</label>
+<select id="lowMargin" name="lowMargin">
+<option value="">Todos los margenes</option>
+<option value="true" selected="">Solo margen bajo</option>
+</select>
+</div>
+<div>
+<label for="negativeProfit">Utilidad</label>
+<select id="negativeProfit" name="negativeProfit">
+<option value="">Toda utilidad</option>
+<option value="true" selected="">Solo utilidad negativa</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Registros listados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo acumulado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Ingreso estimado.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Utilidad estimada.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Margen promedio</div>
+</div>
+</div>
+<div>
+<p>100.00%</p>
+<p>Alertas: 2</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultados</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Producto</th>
+<th>Costo</th>
+<th>Ingreso</th>
+<th>Utilidad</th>
+<th>Margen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_costeo-1</td>
+<td>id_pedido-1</td>
+<td>
+<p>nombre_razon_social-1</p>
+<p>nombre_producto-1</p>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+</tr>
+<tr>
+<td>id_costeo-2</td>
+<td>-</td>
+<td>
+<p>nombre_razon_social-2</p>
+<p>nombre_producto-2</p>
+</td>
+<td>S/ 22.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

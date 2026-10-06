@@ -1,0 +1,2270 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo vencido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "reparacion": {
+          "include": {
+            "detalle_repuesto_reparacion": {
+              "include": {
+                "repuesto": true,
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_reparacion": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "reparacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo vencido > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de mantenimiento</h1>
+<p>Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/maintenance?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/maintenance?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="machineId">Máquina</label>
+<select id="machineId" name="machineId">
+<option value="" selected="">Todas las máquinas</option>
+<option value="id_maquina-1">nombre-1</option>
+<option value="id_maquina-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="failureStatus">Estado falla</label>
+<select id="failureStatus" name="failureStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="repairStatus">Estado reparación</label>
+<select id="repairStatus" name="repairStatus">
+<option value="" selected="">Todos</option>
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="preventiveStatus">Estado preventivo</label>
+<select id="preventiveStatus" name="preventiveStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Máquina, falla, responsable..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>Fallas encontradas según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Fallas pendientes o en atención.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas reparadas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Fallas marcadas como reparadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>23.00 h</p>
+<p>Horas perdidas por fallas registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo reparación</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo total de reparaciones filtradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Costo de mano de obra en reparaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo repuestos</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Subtotal de repuestos usados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas reincidentes</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Máquinas con dos o más fallas en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Preventivos vencidos: 1.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos realizados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Mantenimientos preventivos completados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Reparaciones encontradas en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas afectadas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Máquinas con al menos una falla en el reporte.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Reincidencias por máquina</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 | estado-1</p>
+</div>
+<div>
+<p>2 fallas</p>
+<p>Abiertas: 2</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>11.50 h</span>
+</p>
+<p>Costo reparación: <span>S/ 68.00</span>
+</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 | estado-1</p>
+</div>
+<div>
+<p>1 fallas</p>
+<p>Abiertas: 0</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>11.50 h</span>
+</p>
+<p>Costo reparación: <span>S/ 0.00</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>actividad-1</p>
+</div>
+<div>
+<p>01/07/2026</p>
+<p>Vencido</p>
+</div>
+</div>
+<p>Responsable: responsable-1 | Usuario: apellidos-1, nombres-1</p>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-2</p>
+<p>actividad-2</p>
+</div>
+<div>
+<p>02/07/2026</p>
+<p>Realizado</p>
+</div>
+</div>
+<p>Responsable: - | Usuario: apellidos-2, nombres-2</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas y reparaciones</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Falla</th>
+<th>Máquina</th>
+<th>Fecha</th>
+<th>Estado</th>
+<th>Tiempo perdido</th>
+<th>Descripción</th>
+<th>Reparaciones</th>
+<th>Repuestos</th>
+<th>Responsable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FAL00000001</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>Pendiente</td>
+<td>11.50 h</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>responsable_registro-1</p>
+<p>apellidos-1, nombres-1</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>FAL00000002</td>
+<td>
+<div>
+<p>nombre-2</p>
+<p>tipo-2 · Sin código</p>
+</div>
+</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>En atención</td>
+<td>0.00 h</td>
+<td>
+<p>descripcion-2</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>-</p>
+<p>apellidos-2, nombres-2</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>FAL00000003</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>Reparada</td>
+<td>11.50 h</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>
+<span>Sin reparación</span>
+</td>
+<td>
+<span>Sin repuestos</span>
+</td>
+<td>
+<div>
+<p>responsable_registro-1</p>
+<p>apellidos-1, nombres-1</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 fallas, 100 reparaciones y 100 mantenimientos preventivos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de mantenimiento: máquina, falla, tiempo perdido, impacto productivo, reparaciones, repuestos, costos, preventivos y reincidencias por equipo.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "reparacion": {
+          "include": {
+            "detalle_repuesto_reparacion": {
+              "include": {
+                "repuesto": true,
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_reparacion": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "reparacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de mantenimiento</h1>
+<p>Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/maintenance?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/maintenance?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="machineId">Máquina</label>
+<select id="machineId" name="machineId">
+<option value="" selected="">Todas las máquinas</option>
+<option value="id_maquina-1">nombre-1</option>
+<option value="id_maquina-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="failureStatus">Estado falla</label>
+<select id="failureStatus" name="failureStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="repairStatus">Estado reparación</label>
+<select id="repairStatus" name="repairStatus">
+<option value="" selected="">Todos</option>
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="preventiveStatus">Estado preventivo</label>
+<select id="preventiveStatus" name="preventiveStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Máquina, falla, responsable..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Fallas encontradas según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas pendientes o en atención.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas reparadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas marcadas como reparadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Horas perdidas por fallas registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo reparación</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo total de reparaciones filtradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Costo de mano de obra en reparaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo repuestos</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Subtotal de repuestos usados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas reincidentes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Máquinas con dos o más fallas en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Preventivos vencidos: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos realizados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Mantenimientos preventivos completados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Reparaciones encontradas en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas afectadas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Máquinas con al menos una falla en el reporte.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Reincidencias por máquina</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 | estado-1</p>
+</div>
+<div>
+<p>1 fallas</p>
+<p>Abiertas: 0</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>11.50 h</span>
+</p>
+<p>Costo reparación: <span>S/ 34.00</span>
+</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-2</p>
+<p>tipo-2 | estado-2</p>
+</div>
+<div>
+<p>1 fallas</p>
+<p>Abiertas: 0</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>0.00 h</span>
+</p>
+<p>Costo reparación: <span>S/ 34.00</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>actividad-1</p>
+</div>
+<div>
+<p>01/07/2026</p>
+<p>estado-1</p>
+</div>
+</div>
+<p>Responsable: responsable-1 | Usuario: apellidos-1, nombres-1</p>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-2</p>
+<p>actividad-2</p>
+</div>
+<div>
+<p>02/07/2026</p>
+<p>estado-2</p>
+</div>
+</div>
+<p>Responsable: - | Usuario: apellidos-2, nombres-2</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas y reparaciones</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Falla</th>
+<th>Máquina</th>
+<th>Fecha</th>
+<th>Estado</th>
+<th>Tiempo perdido</th>
+<th>Descripción</th>
+<th>Reparaciones</th>
+<th>Repuestos</th>
+<th>Responsable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_falla-1</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>estado_atencion-1</td>
+<td>11.50 h</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>responsable_registro-1</p>
+<p>apellidos-1, nombres-1</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_falla-2</td>
+<td>
+<div>
+<p>nombre-2</p>
+<p>tipo-2 · Sin código</p>
+</div>
+</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>estado_atencion-2</td>
+<td>0.00 h</td>
+<td>
+<p>descripcion-2</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>-</p>
+<p>apellidos-2, nombres-2</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 fallas, 100 reparaciones y 100 mantenimientos preventivos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de mantenimiento: máquina, falla, tiempo perdido, impacto productivo, reparaciones, repuestos, costos, preventivos y reincidencias por equipo.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/maintenance > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "reparacion": {
+          "include": {
+            "detalle_repuesto_reparacion": {
+              "include": {
+                "repuesto": true,
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_reparacion": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "reparacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de mantenimiento</h1>
+<p>Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/maintenance?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/maintenance?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="machineId">Máquina</label>
+<select id="machineId" name="machineId">
+<option value="" selected="">Todas las máquinas</option>
+<option value="id_maquina-1">nombre-1</option>
+<option value="id_maquina-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="failureStatus">Estado falla</label>
+<select id="failureStatus" name="failureStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="repairStatus">Estado reparación</label>
+<select id="repairStatus" name="repairStatus">
+<option value="" selected="">Todos</option>
+<option value="programada">Programada</option>
+<option value="ejecutada">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="preventiveStatus">Estado preventivo</label>
+<select id="preventiveStatus" name="preventiveStatus">
+<option value="" selected="">Todos</option>
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Máquina, falla, responsable..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas encontradas según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas pendientes o en atención.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas reparadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas marcadas como reparadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>0.00 h</p>
+<p>Horas perdidas por fallas registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo reparación</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costo total de reparaciones filtradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costo de mano de obra en reparaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo repuestos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Subtotal de repuestos usados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas reincidentes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Máquinas con dos o más fallas en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Preventivos vencidos: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos realizados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Mantenimientos preventivos completados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Reparaciones encontradas en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas afectadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Máquinas con al menos una falla en el reporte.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Reincidencias por máquina</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay reincidencias o fallas registradas con los filtros aplicados.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron mantenimientos preventivos con los filtros aplicados.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas y reparaciones</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron fallas con los filtros aplicados.</p>
+</div>
+</div>
+<p>Se muestran como máximo 100 fallas, 100 reparaciones y 100 mantenimientos preventivos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de mantenimiento: máquina, falla, tiempo perdido, impacto productivo, reparaciones, repuestos, costos, preventivos y reincidencias por equipo.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/maintenance > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "reparacion": {
+          "include": {
+            "detalle_repuesto_reparacion": {
+              "include": {
+                "repuesto": true,
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_reparacion": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_falla": "desc",
+      },
+      "take": 100,
+      "where": {
+        "OR": [
+          {
+            "descripcion": {
+              "contains": "MAQ-01",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "responsable_registro": {
+              "contains": "MAQ-01",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "impacto_produccion": {
+              "contains": "MAQ-01",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "maquina": {
+              "nombre": {
+                "contains": "MAQ-01",
+                "mode": "insensitive",
+              },
+            },
+          },
+          {
+            "maquina": {
+              "codigo_interno": {
+                "contains": "MAQ-01",
+                "mode": "insensitive",
+              },
+            },
+          },
+        ],
+        "estado_atencion": "pendiente",
+        "fecha_falla": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "id_maquina": "MAQ00000001",
+        "reparacion": {
+          "some": {
+            "estado_reparacion": "ejecutada",
+          },
+        },
+      },
+    },
+    "prisma": "falla_maquina.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_repuesto_reparacion": {
+          "include": {
+            "repuesto": true,
+          },
+        },
+        "falla_maquina": {
+          "include": {
+            "maquina": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_reparacion": "desc",
+      },
+      "take": 100,
+      "where": {
+        "estado_reparacion": "ejecutada",
+        "falla_maquina": {
+          "id_maquina": "MAQ00000001",
+        },
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_programada": "asc",
+      },
+      "take": 100,
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "id_maquina": "MAQ00000001",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/maintenance > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Mantenimiento</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de mantenimiento</h1>
+<p>Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/maintenance?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;machineId=MAQ00000001&amp;failureStatus=pendiente&amp;repairStatus=ejecutada&amp;preventiveStatus=pendiente&amp;searchText=MAQ-01&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/maintenance?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;machineId=MAQ00000001&amp;failureStatus=pendiente&amp;repairStatus=ejecutada&amp;preventiveStatus=pendiente&amp;searchText=MAQ-01&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
+</div>
+<div>
+<label for="machineId">Máquina</label>
+<select id="machineId" name="machineId">
+<option value="">Todas las máquinas</option>
+<option value="id_maquina-1">nombre-1</option>
+<option value="id_maquina-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="failureStatus">Estado falla</label>
+<select id="failureStatus" name="failureStatus">
+<option value="">Todos</option>
+<option value="pendiente" selected="">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="repairStatus">Estado reparación</label>
+<select id="repairStatus" name="repairStatus">
+<option value="">Todos</option>
+<option value="programada">Programada</option>
+<option value="ejecutada" selected="">Ejecutada</option>
+<option value="observada">Observada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="preventiveStatus">Estado preventivo</label>
+<select id="preventiveStatus" name="preventiveStatus">
+<option value="">Todos</option>
+<option value="pendiente" selected="">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Máquina, falla, responsable..." name="searchText" value="MAQ-01"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas registradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Fallas encontradas según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas pendientes o en atención.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas reparadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Fallas marcadas como reparadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tiempo perdido</div>
+</div>
+</div>
+<div>
+<p>11.50 h</p>
+<p>Horas perdidas por fallas registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo reparación</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Costo total de reparaciones filtradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Costo de mano de obra en reparaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo repuestos</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Subtotal de repuestos usados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas reincidentes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Máquinas con dos o más fallas en el reporte.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Preventivos vencidos: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos realizados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Mantenimientos preventivos completados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reparaciones</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Reparaciones encontradas en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Máquinas afectadas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Máquinas con al menos una falla en el reporte.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Reincidencias por máquina</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 | estado-1</p>
+</div>
+<div>
+<p>1 fallas</p>
+<p>Abiertas: 0</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>11.50 h</span>
+</p>
+<p>Costo reparación: <span>S/ 34.00</span>
+</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-2</p>
+<p>tipo-2 | estado-2</p>
+</div>
+<div>
+<p>1 fallas</p>
+<p>Abiertas: 0</p>
+</div>
+</div>
+<div>
+<p>Tiempo perdido: <span>0.00 h</span>
+</p>
+<p>Costo reparación: <span>S/ 34.00</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Mantenimientos preventivos</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre-1</p>
+<p>actividad-1</p>
+</div>
+<div>
+<p>01/07/2026</p>
+<p>estado-1</p>
+</div>
+</div>
+<p>Responsable: responsable-1 | Usuario: apellidos-1, nombres-1</p>
+</div>
+<div>
+<div>
+<div>
+<p>nombre-2</p>
+<p>actividad-2</p>
+</div>
+<div>
+<p>02/07/2026</p>
+<p>estado-2</p>
+</div>
+</div>
+<p>Responsable: - | Usuario: apellidos-2, nombres-2</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Fallas y reparaciones</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Falla</th>
+<th>Máquina</th>
+<th>Fecha</th>
+<th>Estado</th>
+<th>Tiempo perdido</th>
+<th>Descripción</th>
+<th>Reparaciones</th>
+<th>Repuestos</th>
+<th>Responsable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_falla-1</td>
+<td>
+<div>
+<p>nombre-1</p>
+<p>tipo-1 · codigo_interno-1</p>
+</div>
+</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>estado_atencion-1</td>
+<td>11.50 h</td>
+<td>
+<p>descripcion-1</p>
+<p>Impacto: impacto_produccion-1</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>responsable_registro-1</p>
+<p>apellidos-1, nombres-1</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>id_falla-2</td>
+<td>
+<div>
+<p>nombre-2</p>
+<p>tipo-2 · Sin código</p>
+</div>
+</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>estado_atencion-2</td>
+<td>0.00 h</td>
+<td>
+<p>descripcion-2</p>
+</td>
+<td>
+<div>
+<div>
+<p>id_reparacion-1 | estado_reparacion-1</p>
+<p>01/07/2026 | tecnico_proveedor-1 | S/ 11.50</p>
+</div>
+<div>
+<p>id_reparacion-2 | estado_reparacion-2</p>
+<p>02/07/2026 | Sin técnico | S/ 22.50</p>
+</div>
+<p>Costo total: S/ 34.00</p>
+</div>
+</td>
+<td>
+<div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+<div>
+<p>nombre_repuesto-1</p>
+<p>11.50 und · S/ 11.50 c/u · subtotal S/ 11.50</p>
+</div>
+<div>
+<p>nombre_repuesto-2</p>
+<p>22.50 und · S/ 22.50 c/u · subtotal S/ 22.50</p>
+</div>
+</div>
+</td>
+<td>
+<div>
+<p>-</p>
+<p>apellidos-2, nombres-2</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 fallas, 100 reparaciones y 100 mantenimientos preventivos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad de mantenimiento: máquina, falla, tiempo perdido, impacto productivo, reparaciones, repuestos, costos, preventivos y reincidencias por equipo.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

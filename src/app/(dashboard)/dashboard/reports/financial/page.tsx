@@ -29,20 +29,17 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getFinancialReportData } from "@/modules/reports/financial/queries";
 
 const CASH_MOVEMENT_TYPE_OPTIONS = [
   { value: "ingreso", label: "Ingreso" },
   { value: "egreso", label: "Egreso" },
 ];
-
-const ACTIVE_PROFORMA_STATES = ["vigente", "aceptada"];
-const PENDING_PURCHASE_PAYMENT_STATES = ["pendiente", "parcial"];
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -59,34 +56,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function getCashMovementTypeLabel(type: string) {
@@ -142,54 +111,7 @@ export default async function FinancialReportPage({
   "pdf",
   );
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-  const normalizedSearchText = searchText;
-
-  const dateRangeFilter =
-    fromDate || toDate
-      ? {
-          ...(fromDate ? { gte: fromDate } : {}),
-          ...(toDate ? { lt: toDate } : {}),
-        }
-      : undefined;
-
-  const cashMovementWhere = {
-    ...(dateRangeFilter
-      ? {
-          fecha_movimiento: dateRangeFilter,
-        }
-      : {}),
-    ...(cashBoxId ? { id_caja_chica: cashBoxId } : {}),
-    ...(movementType ? { tipo_movimiento: movementType } : {}),
-    ...(categoryId ? { id_categoria_gasto: categoryId } : {}),
-    ...(normalizedSearchText
-      ? {
-          OR: [
-            {
-              concepto: {
-                contains: normalizedSearchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              responsable: {
-                contains: normalizedSearchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              comprobante: {
-                contains: normalizedSearchText,
-                mode: "insensitive" as const,
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [
+  const {
     cashBoxes,
     categories,
     cashMovements,
@@ -200,143 +122,14 @@ export default async function FinancialReportPage({
     lowMarginAlerts,
     receivables,
     pendingSupplierPurchases,
-  ] = await Promise.all([
-    prisma.caja_chica.findMany({
-      orderBy: {
-        nombre_caja: "asc",
-      },
-    }),
-
-    prisma.categoria_gasto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_categoria: "asc",
-      },
-    }),
-
-    prisma.movimiento_caja.findMany({
-      where: cashMovementWhere,
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
-      take: 100,
-      include: {
-        caja_chica: true,
-        categoria_gasto: true,
-        usuario: true,
-      },
-    }),
-
-    prisma.caja_chica.aggregate({
-      where: {
-        estado: "abierta",
-      },
-      _sum: {
-        saldo_actual: true,
-      },
-    }),
-
-    prisma.pago_cliente.aggregate({
-      where: {
-        ...(dateRangeFilter
-          ? {
-              fecha_pago: dateRangeFilter,
-            }
-          : {}),
-      },
-      _sum: {
-        monto_pagado: true,
-      },
-    }),
-
-    prisma.costeo.aggregate({
-      where: {
-        ...(dateRangeFilter
-          ? {
-              fecha_costeo: dateRangeFilter,
-            }
-          : {}),
-      },
-      _sum: {
-        costo_total: true,
-        costo_materiales: true,
-        costo_consumibles: true,
-        costo_mano_obra: true,
-        costo_indirecto_total: true,
-      },
-    }),
-
-    prisma.rentabilidad.aggregate({
-      where: {
-        ...(dateRangeFilter
-          ? {
-              fecha_calculo: dateRangeFilter,
-            }
-          : {}),
-      },
-      _sum: {
-        ingreso_estimado: true,
-        costo_total: true,
-        utilidad_estimada: true,
-      },
-    }),
-
-    prisma.rentabilidad.count({
-      where: {
-        alerta_bajo_margen: true,
-        ...(dateRangeFilter
-          ? {
-              fecha_calculo: dateRangeFilter,
-            }
-          : {}),
-      },
-    }),
-
-    prisma.proforma.aggregate({
-      where: {
-        estado: {
-          in: ACTIVE_PROFORMA_STATES,
-        },
-        saldo: {
-          gt: 0,
-        },
-        ...(dateRangeFilter
-          ? {
-              fecha_emision: dateRangeFilter,
-            }
-          : {}),
-      },
-      _sum: {
-        saldo: true,
-      },
-    }),
-
-    prisma.compra.findMany({
-      where: {
-        estado_pago: {
-          in: PENDING_PURCHASE_PAYMENT_STATES,
-        },
-        estado_compra: {
-          not: "anulada",
-        },
-        ...(dateRangeFilter
-          ? {
-              fecha_compra: dateRangeFilter,
-            }
-          : {}),
-      },
-      include: {
-        proveedor: true,
-        pago_proveedor: true,
-      },
-      orderBy: {
-        fecha_compra: "desc",
-      },
-      take: 100,
-    }),
-  ]);
+  } = await getFinancialReportData({
+    dateFrom,
+    dateTo,
+    cashBoxId,
+    movementType,
+    categoryId,
+    searchText,
+  });
 
   const incomeMovements = cashMovements.filter((movement) => {
     return movement.tipo_movimiento === "ingreso";

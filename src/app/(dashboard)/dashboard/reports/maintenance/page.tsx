@@ -32,12 +32,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getMaintenanceReportData } from "@/modules/reports/maintenance/queries";
 
 const FAILURE_STATUS_OPTIONS = [
   { value: "pendiente", label: "Pendiente" },
@@ -77,34 +77,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function formatHours(value: unknown) {
@@ -195,17 +167,6 @@ export default async function MaintenanceReportPage({
   "pdf",
   );
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-
-  const dateRangeFilter =
-    fromDate || toDate
-      ? {
-          ...(fromDate ? { gte: fromDate } : {}),
-          ...(toDate ? { lt: toDate } : {}),
-        }
-      : undefined;
-
   const today = new Date();
   const startOfToday = new Date(
     today.getFullYear(),
@@ -213,155 +174,16 @@ export default async function MaintenanceReportPage({
     today.getDate(),
   );
 
-  const failureWhere = {
-    ...(dateRangeFilter
-      ? {
-          fecha_falla: dateRangeFilter,
-        }
-      : {}),
-    ...(machineId ? { id_maquina: machineId } : {}),
-    ...(failureStatus ? { estado_atencion: failureStatus } : {}),
-    ...(repairStatus
-      ? {
-          reparacion: {
-            some: {
-              estado_reparacion: repairStatus,
-            },
-          },
-        }
-      : {}),
-    ...(searchText
-      ? {
-          OR: [
-            {
-              descripcion: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              responsable_registro: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              impacto_produccion: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              maquina: {
-                nombre: {
-                  contains: searchText,
-                  mode: "insensitive" as const,
-                },
-              },
-            },
-            {
-              maquina: {
-                codigo_interno: {
-                  contains: searchText,
-                  mode: "insensitive" as const,
-                },
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const repairWhere = {
-    ...(dateRangeFilter
-      ? {
-          fecha_reparacion: dateRangeFilter,
-        }
-      : {}),
-    ...(repairStatus ? { estado_reparacion: repairStatus } : {}),
-    ...(machineId
-      ? {
-          falla_maquina: {
-            id_maquina: machineId,
-          },
-        }
-      : {}),
-  };
-
-  const preventiveWhere = {
-    ...(dateRangeFilter
-      ? {
-          fecha_programada: dateRangeFilter,
-        }
-      : {}),
-    ...(machineId ? { id_maquina: machineId } : {}),
-    ...(preventiveStatus ? { estado: preventiveStatus } : {}),
-  };
-
-  const [machines, failures, repairs, preventiveMaintenances] =
-    await Promise.all([
-      prisma.maquina.findMany({
-        orderBy: {
-          nombre: "asc",
-        },
-      }),
-
-      prisma.falla_maquina.findMany({
-        where: failureWhere,
-        orderBy: {
-          fecha_falla: "desc",
-        },
-        take: 100,
-        include: {
-          maquina: true,
-          usuario: true,
-          reparacion: {
-            orderBy: {
-              fecha_reparacion: "desc",
-            },
-            include: {
-              detalle_repuesto_reparacion: {
-                include: {
-                  repuesto: true,
-                },
-              },
-            },
-          },
-        },
-      }),
-
-      prisma.reparacion.findMany({
-        where: repairWhere,
-        orderBy: {
-          fecha_reparacion: "desc",
-        },
-        take: 100,
-        include: {
-          falla_maquina: {
-            include: {
-              maquina: true,
-            },
-          },
-          detalle_repuesto_reparacion: {
-            include: {
-              repuesto: true,
-            },
-          },
-        },
-      }),
-
-      prisma.mantenimiento_preventivo.findMany({
-        where: preventiveWhere,
-        orderBy: {
-          fecha_programada: "asc",
-        },
-        take: 100,
-        include: {
-          maquina: true,
-          usuario: true,
-        },
-      }),
-    ]);
+  const { machines, failures, repairs, preventiveMaintenances } =
+    await getMaintenanceReportData({
+      dateFrom,
+      dateTo,
+      machineId,
+      failureStatus,
+      repairStatus,
+      preventiveStatus,
+      searchText,
+    });
 
   const totalFailures = failures.length;
 

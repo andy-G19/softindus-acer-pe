@@ -1,0 +1,1710 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/inventory > maestro de taller > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Inventario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de inventario</h1>
+<p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/inventory?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/inventory?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="entrada">Entrada</option>
+<option value="salida">Salida</option>
+<option value="ajuste">Ajuste</option>
+<option value="reserva">Reserva</option>
+<option value="devolucion">Devolución</option>
+</select>
+</div>
+<div>
+<label for="userId">Responsable</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los responsables</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="workOrderId">Orden de trabajo</label>
+<input type="text" id="workOrderId" placeholder="Ej: OTR00000001" name="workOrderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total de movimientos encontrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad ingresada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Salidas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad retirada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Movimientos correctivos de inventario.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reservas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad reservada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Balance cantidad</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cantidad</th>
+<th>Stock anterior</th>
+<th>Stock resultante</th>
+<th>Fecha</th>
+<th>Responsable</th>
+<th>Orden</th>
+<th>Compra</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento-1</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1 · unidad_medida-1</p>
+</div>
+</td>
+<td>tipo_movimiento-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-1">
+<span>id_orden_trabajo-1</span>
+<br/>
+<span>nombre_producto-1</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1</p>
+</div>
+</td>
+<td>motivo-1</td>
+</tr>
+<tr>
+<td>id_movimiento-2</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2 · unidad_medida-2</p>
+</div>
+</td>
+<td>tipo_movimiento-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
+<span>id_orden_trabajo-2</span>
+<br/>
+<span>nombre_producto-2</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2</p>
+</div>
+</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/inventory > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Inventario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de inventario</h1>
+<p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/inventory?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/inventory?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="entrada">Entrada</option>
+<option value="salida">Salida</option>
+<option value="ajuste">Ajuste</option>
+<option value="reserva">Reserva</option>
+<option value="devolucion">Devolución</option>
+</select>
+</div>
+<div>
+<label for="userId">Responsable</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los responsables</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="workOrderId">Orden de trabajo</label>
+<input type="text" id="workOrderId" placeholder="Ej: OTR00000001" name="workOrderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total de movimientos encontrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad ingresada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Salidas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad retirada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Movimientos correctivos de inventario.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reservas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad reservada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Balance cantidad</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cantidad</th>
+<th>Stock anterior</th>
+<th>Stock resultante</th>
+<th>Fecha</th>
+<th>Responsable</th>
+<th>Orden</th>
+<th>Compra</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento-1</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1 · unidad_medida-1</p>
+</div>
+</td>
+<td>tipo_movimiento-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-1">
+<span>id_orden_trabajo-1</span>
+<br/>
+<span>nombre_producto-1</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1</p>
+</div>
+</td>
+<td>motivo-1</td>
+</tr>
+<tr>
+<td>id_movimiento-2</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2 · unidad_medida-2</p>
+</div>
+</td>
+<td>tipo_movimiento-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
+<span>id_orden_trabajo-2</span>
+<br/>
+<span>nombre_producto-2</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2</p>
+</div>
+</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/inventory > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Inventario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de inventario</h1>
+<p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/inventory?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/inventory?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="entrada">Entrada</option>
+<option value="salida">Salida</option>
+<option value="ajuste">Ajuste</option>
+<option value="reserva">Reserva</option>
+<option value="devolucion">Devolución</option>
+</select>
+</div>
+<div>
+<label for="userId">Responsable</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los responsables</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="workOrderId">Orden de trabajo</label>
+<input type="text" id="workOrderId" placeholder="Ej: OTR00000001" name="workOrderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Total de movimientos encontrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad ingresada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Salidas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad retirada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Movimientos correctivos de inventario.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reservas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad reservada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Balance cantidad</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron movimientos de inventario con los filtros aplicados.</p>
+</div>
+</div>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Inventario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de inventario</h1>
+<p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/inventory?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/inventory?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="entrada">Entrada</option>
+<option value="salida">Salida</option>
+<option value="ajuste">Ajuste</option>
+<option value="reserva">Reserva</option>
+<option value="devolucion">Devolución</option>
+</select>
+</div>
+<div>
+<label for="userId">Responsable</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los responsables</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="workOrderId">Orden de trabajo</label>
+<input type="text" id="workOrderId" placeholder="Ej: OTR00000001" name="workOrderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Total de movimientos encontrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entradas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Cantidad ingresada: 11.50.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Salidas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Cantidad retirada: 22.50.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Movimientos correctivos de inventario.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reservas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Cantidad reservada: 11.50.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Balance cantidad</div>
+</div>
+</div>
+<div>
+<p>-11.00</p>
+<p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cantidad</th>
+<th>Stock anterior</th>
+<th>Stock resultante</th>
+<th>Fecha</th>
+<th>Responsable</th>
+<th>Orden</th>
+<th>Compra</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MVI00000001</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1 · unidad_medida-1</p>
+</div>
+</td>
+<td>Entrada</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>-</td>
+<td>-</td>
+<td>motivo-1</td>
+</tr>
+<tr>
+<td>MVI00000002</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2 · unidad_medida-2</p>
+</div>
+</td>
+<td>Salida</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
+<span>id_orden_trabajo-2</span>
+<br/>
+<span>nombre_producto-2</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2</p>
+</div>
+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>MVI00000003</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1 · unidad_medida-1</p>
+</div>
+</td>
+<td>Reserva</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-1">
+<span>id_orden_trabajo-1</span>
+<br/>
+<span>nombre_producto-1</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1</p>
+</div>
+</td>
+<td>motivo-1</td>
+</tr>
+<tr>
+<td>MVI00000004</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2 · unidad_medida-2</p>
+</div>
+</td>
+<td>Ajuste</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
+<span>id_orden_trabajo-2</span>
+<br/>
+<span>nombre_producto-2</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2</p>
+</div>
+</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/inventory > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "compra": {
+          "include": {
+            "proveedor": true,
+          },
+        },
+        "material": true,
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-07-16T00:00:00.000Z,
+        },
+        "id_material": "MAT00000001",
+        "id_orden_trabajo": {
+          "contains": "OTR00000001",
+        },
+        "id_usuario_responsable": "USU00000002",
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Inventario</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de inventario</h1>
+<p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/inventory?dateFrom=2026-07-01&amp;dateTo=2026-07-15&amp;materialId=MAT00000001&amp;movementType=salida&amp;userId=USU00000002&amp;workOrderId=otr00000001&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/inventory?dateFrom=2026-07-01&amp;dateTo=2026-07-15&amp;materialId=MAT00000001&amp;movementType=salida&amp;userId=USU00000002&amp;workOrderId=otr00000001&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-15"/>
+</div>
+<div>
+<label for="materialId">Material</label>
+<select id="materialId" name="materialId">
+<option value="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo</label>
+<select id="movementType" name="movementType">
+<option value="">Todos los tipos</option>
+<option value="entrada">Entrada</option>
+<option value="salida" selected="">Salida</option>
+<option value="ajuste">Ajuste</option>
+<option value="reserva">Reserva</option>
+<option value="devolucion">Devolución</option>
+</select>
+</div>
+<div>
+<label for="userId">Responsable</label>
+<select id="userId" name="userId">
+<option value="">Todos los responsables</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="workOrderId">Orden de trabajo</label>
+<input type="text" id="workOrderId" placeholder="Ej: OTR00000001" name="workOrderId" value="otr00000001"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimientos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Total de movimientos encontrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Entradas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad ingresada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Salidas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad retirada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ajustes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Movimientos correctivos de inventario.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Reservas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Cantidad reservada: 0.00.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Balance cantidad</div>
+</div>
+</div>
+<div>
+<p>0.00</p>
+<p>Entradas menos salidas del reporte.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cantidad</th>
+<th>Stock anterior</th>
+<th>Stock resultante</th>
+<th>Fecha</th>
+<th>Responsable</th>
+<th>Orden</th>
+<th>Compra</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento-1</td>
+<td>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1 · unidad_medida-1</p>
+</div>
+</td>
+<td>tipo_movimiento-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>apellidos-1, nombres-1</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-1">
+<span>id_orden_trabajo-1</span>
+<br/>
+<span>nombre_producto-1</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1</p>
+</div>
+</td>
+<td>motivo-1</td>
+</tr>
+<tr>
+<td>id_movimiento-2</td>
+<td>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2 · unidad_medida-2</p>
+</div>
+</td>
+<td>tipo_movimiento-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>apellidos-2, nombres-2</td>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
+<span>id_orden_trabajo-2</span>
+<br/>
+<span>nombre_producto-2</span>
+</a>
+</td>
+<td>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2</p>
+</div>
+</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

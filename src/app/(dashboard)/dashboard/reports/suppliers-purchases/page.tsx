@@ -29,12 +29,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getSuppliersPurchasesReportData } from "@/modules/reports/suppliers-purchases/queries";
 
 const PURCHASE_STATUS_OPTIONS = [
   { value: "registrada", label: "Registrada" },
@@ -63,34 +63,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function formatQuantity(value: unknown) {
@@ -160,102 +132,15 @@ export default async function SuppliersPurchasesReportPage({
   "pdf",
   );
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-  const normalizedCode = searchCode.toUpperCase();
-
-  const purchaseWhere = {
-    ...(fromDate || toDate
-      ? {
-          fecha_compra: {
-            ...(fromDate ? { gte: fromDate } : {}),
-            ...(toDate ? { lt: toDate } : {}),
-          },
-        }
-      : {}),
-    ...(supplierId ? { id_proveedor: supplierId } : {}),
-    ...(purchaseStatus ? { estado_compra: purchaseStatus } : {}),
-    ...(paymentStatus ? { estado_pago: paymentStatus } : {}),
-    ...(materialId
-      ? {
-          detalle_compra: {
-            some: {
-              id_material: materialId,
-            },
-          },
-        }
-      : {}),
-    ...(normalizedCode
-      ? {
-          OR: [
-            {
-              id_compra: {
-                contains: normalizedCode,
-              },
-            },
-            {
-              numero_comprobante: {
-                contains: normalizedCode,
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [suppliers, materials, purchases] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-    }),
-
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-    }),
-
-    prisma.compra.findMany({
-      where: purchaseWhere,
-      orderBy: {
-        fecha_compra: "desc",
-      },
-      take: 100,
-      include: {
-        proveedor: true,
-        usuario: true,
-        detalle_compra: {
-          include: {
-            material: true,
-          },
-          orderBy: {
-            id_detalle_compra: "asc",
-          },
-        },
-        pago_proveedor: {
-          orderBy: {
-            fecha_pago: "asc",
-          },
-        },
-        historial_precio_proveedor: {
-          include: {
-            material: true,
-          },
-          orderBy: {
-            fecha_registro: "desc",
-          },
-          take: 5,
-        },
-      },
-    }),
-  ]);
+  const { suppliers, materials, purchases } = await getSuppliersPurchasesReportData({
+    dateFrom,
+    dateTo,
+    supplierId,
+    materialId,
+    purchaseStatus,
+    paymentStatus,
+    searchCode: searchCode.toUpperCase(),
+  });
 
   const reportRows = purchases.map((purchase) => {
     const paidAmount = getPaidAmount(purchase.pago_proveedor);

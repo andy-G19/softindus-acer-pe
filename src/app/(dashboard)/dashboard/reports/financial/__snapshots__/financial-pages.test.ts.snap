@@ -1,0 +1,1609 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/financial > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {},
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {},
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {},
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "pago_proveedor": true,
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/financial > sin filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Financiero</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte financiero</h1>
+<p>Consulta caja chica, ingresos, egresos, costos de producción, utilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/financial?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/financial?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="cashBoxId">Caja chica</label>
+<select id="cashBoxId" name="cashBoxId">
+<option value="" selected="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo movimiento</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="ingreso">Ingreso</option>
+<option value="egreso">Egreso</option>
+</select>
+</div>
+<div>
+<label for="categoryId">Categoría</label>
+<select id="categoryId" name="categoryId">
+<option value="" selected="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Concepto / responsable</label>
+<input type="text" id="searchText" placeholder="Ej: transporte, repuesto..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/financial">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Saldo actual acumulado de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menores según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos menores registrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimiento neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menos egresos de caja chica.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cobrado a clientes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Pagos de clientes registrados en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cuentas por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Saldo pendiente de proformas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras por pagar</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Compras pendientes o parciales: 2.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cobros + ingresos caja - egresos - costos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo producción</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Costos de producción registrados en costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Alertas de bajo margen: 42.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Ingreso estimado registrado en rentabilidad.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Desglose de costos de producción</div>
+</div>
+<div>
+<div>
+<div>
+<p>Materiales</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 1234.50</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Saldos pendientes a proveedores</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1 · 01/07/2026</p>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>estado_pago-1</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2 · 02/07/2026</p>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>estado_pago-2</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Movimientos de caja chica</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Caja</th>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Monto</th>
+<th>Responsable</th>
+<th>Usuario</th>
+<th>Comprobante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento_caja-1</td>
+<td>nombre_caja-1</td>
+<td>01/07/2026</td>
+<td>tipo_movimiento-1</td>
+<td>concepto-1</td>
+<td>nombre_categoria-1</td>
+<td>S/ 11.50</td>
+<td>responsable-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>comprobante-1</td>
+</tr>
+<tr>
+<td>id_movimiento_caja-2</td>
+<td>nombre_caja-2</td>
+<td>02/07/2026</td>
+<td>tipo_movimiento-2</td>
+<td>concepto-2</td>
+<td>nombre_categoria-2</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida información financiera del taller: caja chica, ingresos menores, egresos, cobranzas, costos de producción, rentabilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/financial > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {
+        "OR": [
+          {
+            "concepto": {
+              "contains": "Combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "responsable": {
+              "contains": "Combustible",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "comprobante": {
+              "contains": "Combustible",
+              "mode": "insensitive",
+            },
+          },
+        ],
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "id_caja_chica": "CCH00000001",
+        "id_categoria_gasto": "CGA00000001",
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "fecha_emision": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "pago_proveedor": true,
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+        "fecha_compra": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/financial > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Financiero</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte financiero</h1>
+<p>Consulta caja chica, ingresos, egresos, costos de producción, utilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/financial?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;cashBoxId=CCH00000001&amp;movementType=egreso&amp;categoryId=CGA00000001&amp;searchText=Combustible&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/financial?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;cashBoxId=CCH00000001&amp;movementType=egreso&amp;categoryId=CGA00000001&amp;searchText=Combustible&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
+</div>
+<div>
+<label for="cashBoxId">Caja chica</label>
+<select id="cashBoxId" name="cashBoxId">
+<option value="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo movimiento</label>
+<select id="movementType" name="movementType">
+<option value="">Todos los tipos</option>
+<option value="ingreso">Ingreso</option>
+<option value="egreso" selected="">Egreso</option>
+</select>
+</div>
+<div>
+<label for="categoryId">Categoría</label>
+<select id="categoryId" name="categoryId">
+<option value="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Concepto / responsable</label>
+<input type="text" id="searchText" placeholder="Ej: transporte, repuesto..." name="searchText" value="Combustible"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/financial">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Saldo actual acumulado de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menores según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos menores registrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimiento neto</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos menos egresos de caja chica.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cobrado a clientes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Pagos de clientes registrados en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cuentas por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Saldo pendiente de proformas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras por pagar</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Compras pendientes o parciales: 2.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cobros + ingresos caja - egresos - costos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo producción</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Costos de producción registrados en costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Alertas de bajo margen: 42.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Ingreso estimado registrado en rentabilidad.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Desglose de costos de producción</div>
+</div>
+<div>
+<div>
+<div>
+<p>Materiales</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 1234.50</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Saldos pendientes a proveedores</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>id_compra-1</p>
+<p>razon_social-1 · 01/07/2026</p>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>estado_pago-1</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>id_compra-2</p>
+<p>razon_social-2 · 02/07/2026</p>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>estado_pago-2</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Movimientos de caja chica</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Caja</th>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Monto</th>
+<th>Responsable</th>
+<th>Usuario</th>
+<th>Comprobante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento_caja-1</td>
+<td>nombre_caja-1</td>
+<td>01/07/2026</td>
+<td>tipo_movimiento-1</td>
+<td>concepto-1</td>
+<td>nombre_categoria-1</td>
+<td>S/ 11.50</td>
+<td>responsable-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>comprobante-1</td>
+</tr>
+<tr>
+<td>id_movimiento_caja-2</td>
+<td>nombre_caja-2</td>
+<td>02/07/2026</td>
+<td>tipo_movimiento-2</td>
+<td>concepto-2</td>
+<td>nombre_categoria-2</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida información financiera del taller: caja chica, ingresos menores, egresos, cobranzas, costos de producción, rentabilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_caja": "asc",
+      },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
+    },
+    "prisma": "caja_chica.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_gasto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "caja_chica": true,
+        "categoria_gasto": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {},
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_consumibles": true,
+        "costo_indirecto_total": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "costo_total": true,
+      },
+      "where": {},
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+        "ingreso_estimado": true,
+        "utilidad_estimada": true,
+      },
+      "where": {},
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "pago_proveedor": true,
+        "proveedor": true,
+      },
+      "orderBy": {
+        "fecha_compra": "desc",
+      },
+      "take": 100,
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Financiero</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte financiero</h1>
+<p>Consulta caja chica, ingresos, egresos, costos de producción, utilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/financial?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/financial?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="cashBoxId">Caja chica</label>
+<select id="cashBoxId" name="cashBoxId">
+<option value="" selected="">Todas las cajas</option>
+<option value="id_caja_chica-1">nombre_caja-1</option>
+<option value="id_caja_chica-2">nombre_caja-2</option>
+</select>
+</div>
+<div>
+<label for="movementType">Tipo movimiento</label>
+<select id="movementType" name="movementType">
+<option value="" selected="">Todos los tipos</option>
+<option value="ingreso">Ingreso</option>
+<option value="egreso">Egreso</option>
+</select>
+</div>
+<div>
+<label for="categoryId">Categoría</label>
+<select id="categoryId" name="categoryId">
+<option value="" selected="">Todas las categorías</option>
+<option value="id_categoria_gasto-1">nombre_categoria-1</option>
+<option value="id_categoria_gasto-2">nombre_categoria-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Concepto / responsable</label>
+<input type="text" id="searchText" placeholder="Ej: transporte, repuesto..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/financial">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Saldo actual acumulado de cajas abiertas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Ingresos menores según filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 22.50</p>
+<p>Gastos menores registrados según filtros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Movimiento neto</div>
+</div>
+</div>
+<div>
+<p>S/ -11.00</p>
+<p>Ingresos menos egresos de caja chica.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cobrado a clientes</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Pagos de clientes registrados en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cuentas por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Saldo pendiente de proformas activas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras por pagar</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Compras pendientes o parciales: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Resultado estimado</div>
+</div>
+</div>
+<div>
+<p>S/ -11.00</p>
+<p>Cobros + ingresos caja - egresos - costos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo producción</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costos de producción registrados en costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Alertas de bajo margen: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ingreso estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingreso estimado registrado en rentabilidad.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costo total usado en cálculo de rentabilidad.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Desglose de costos de producción</div>
+</div>
+<div>
+<div>
+<div>
+<p>Materiales</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Consumibles</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Mano de obra</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Costos indirectos</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Saldos pendientes a proveedores</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay compras pendientes de pago en el periodo filtrado.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Movimientos de caja chica</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Movimiento</th>
+<th>Caja</th>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Monto</th>
+<th>Responsable</th>
+<th>Usuario</th>
+<th>Comprobante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCJ00000001</td>
+<td>nombre_caja-1</td>
+<td>01/07/2026</td>
+<td>Ingreso</td>
+<td>concepto-1</td>
+<td>-</td>
+<td>S/ 11.50</td>
+<td>responsable-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>comprobante-1</td>
+</tr>
+<tr>
+<td>MCJ00000002</td>
+<td>nombre_caja-2</td>
+<td>02/07/2026</td>
+<td>Egreso</td>
+<td>concepto-2</td>
+<td>nombre_categoria-2</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>apellidos-2, nombres-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 movimientos de caja para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida información financiera del taller: caja chica, ingresos menores, egresos, cobranzas, costos de producción, rentabilidad estimada, cuentas por cobrar y compras pendientes de pago.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

@@ -1,0 +1,1685 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports > panel del mes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+        "fecha_entrega_estimada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "finalizada",
+        "fecha_entrega_real": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+            "en_produccion",
+          ],
+        },
+      },
+    },
+    "prisma": "pedido.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "emitido",
+        "fecha_emision": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "comprobante_venta.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_total": true,
+      },
+      "where": {
+        "estado": "emitido",
+        "fecha_emision": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "comprobante_venta.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_alerta": "activa",
+      },
+    },
+    "prisma": "alerta_stock.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_total": true,
+      },
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "stock_actual": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "take": 8,
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "categoria_gasto": true,
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports > panel del mes > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reportes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reportes</h1>
+<p>Vista gerencial consolidada de producción, ventas, inventario, cobranzas, caja chica, utilidad, proveedores y mantenimiento.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Periodo actual</p>
+<p>01/07/2026 - 15/07/2026</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<a href="/dashboard/production/work-orders">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Retrasadas: 42. Finalizadas este mes: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/orders">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pedidos registrados, aprobados o en producción.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/materials">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Stock crítico</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Alertas activas de stock: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cuentas por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Proformas con saldo pendiente: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cobrado este mes</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Pagos de clientes registrados durante el mes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Comprobantes emitidos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Monto emitido: S/ 1234.50.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo de caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Movimiento neto del mes: S/ 0.00.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/costs">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Alertas de bajo margen: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Preventivos vencidos: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo mantenimiento</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Costo total de reparaciones registradas este mes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/purchases">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras por pagar</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Monto referencial pendiente: S/ 1234.50.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/movements">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Ingresos del mes: S/ 1234.50.</p>
+</div>
+</div>
+</a>
+</section>
+<section>
+<div>
+<div>
+<div>Últimas Órdenes de trabajo</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Cliente</th>
+<th>Estado</th>
+<th>Entrega</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_orden_trabajo-1</td>
+<td>nombre_producto-1</td>
+<td>nombre_razon_social-1</td>
+<td>estado-1</td>
+<td>01/07/2026</td>
+</tr>
+<tr>
+<td>id_orden_trabajo-2</td>
+<td>nombre_producto-2</td>
+<td>nombre_razon_social-2</td>
+<td>estado-2</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Materiales más críticos</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>nombre_material-1</p>
+<p>categoria-1</p>
+</div>
+<span>unidad_medida-1</span>
+</div>
+<div>
+<p>Stock actual: <span>11.50</span>
+</p>
+<p>Stock mínimo: <span>11.50</span>
+</p>
+<p>Reservado: <span>11.50</span>
+</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>nombre_material-2</p>
+<p>categoria-2</p>
+</div>
+<span>unidad_medida-2</span>
+</div>
+<div>
+<p>Stock actual: <span>22.50</span>
+</p>
+<p>Stock mínimo: <span>22.50</span>
+</p>
+<p>Reservado: <span>22.50</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Resumen financiero del mes</div>
+</div>
+<div>
+<div>
+<div>
+<p>Cobranza de clientes</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Cuentas por cobrar</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Ingresos caja chica</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Egresos caja chica</p>
+<p>S/ 1234.50</p>
+</div>
+<div>
+<p>Utilidad estimada del mes</p>
+<p>S/ 1234.50</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos movimientos de caja</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>concepto-1</p>
+<p>nombre_categoria-1 | 01/07/2026</p>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>tipo_movimiento-1</p>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>concepto-2</p>
+<p>nombre_categoria-2 | 02/07/2026</p>
+</div>
+<div>
+<p>S/ 22.50</p>
+<p>tipo_movimiento-2</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<h2>Reportes por módulo</h2>
+<p>Consulta reportes administrativos filtrables según cada área del sistema.</p>
+<p>Las exportaciones tienen un límite de seguridad por formato: el PDF muestra hasta 80 registros por página (con aviso si el reporte fue más grande) y el Excel exporta hasta 5000 filas. Use los filtros de cada reporte para acotar el resultado.</p>
+</div>
+<div>
+<a href="/dashboard/reports/production">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de producción</div>
+</div>
+<div>
+<p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/inventory">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de inventario</div>
+</div>
+<div>
+<p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/sales-collections">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de ventas y cobranzas</div>
+</div>
+<div>
+<p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/suppliers-purchases">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de proveedores y compras</div>
+</div>
+<div>
+<p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/financial">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte financiero</div>
+</div>
+<div>
+<p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/maintenance">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de mantenimiento</div>
+</div>
+<div>
+<p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/profitability">
+<div>
+<span aria-hidden="true">07</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de costos y rentabilidad</div>
+</div>
+<div>
+<p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/staff">
+<div>
+<span aria-hidden="true">08</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de personal y planillas</div>
+</div>
+<div>
+<p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/export-history">
+<div>
+<span aria-hidden="true">09</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Historial de exportaciones</div>
+</div>
+<div>
+<p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/audit">
+<div>
+<span aria-hidden="true">10</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Bitacora de auditoria</div>
+</div>
+<div>
+<p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+</div>
+</a>
+</div>
+</section>
+<section>
+<p>Este dashboard usa información consolidada de los módulos ya implementados. La precisión de los indicadores dependerá de que los usuarios registren oportunamente producción, pagos, movimientos de inventario, caja chica, costos y mantenimiento.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales criticos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "pendiente",
+            "en_proceso",
+            "pausada",
+          ],
+        },
+        "fecha_entrega_estimada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "finalizada",
+        "fecha_entrega_real": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "registrado",
+            "aprobado",
+            "en_produccion",
+          ],
+        },
+      },
+    },
+    "prisma": "pedido.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_pagado": true,
+      },
+      "where": {
+        "fecha_pago": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "pago_cliente.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "emitido",
+        "fecha_emision": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "comprobante_venta.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_total": true,
+      },
+      "where": {
+        "estado": "emitido",
+        "fecha_emision": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "comprobante_venta.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo": true,
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "in": [
+            "vigente",
+            "aceptada",
+          ],
+        },
+        "saldo": {
+          "gt": 0,
+        },
+      },
+    },
+    "prisma": "proforma.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_alerta": "activa",
+      },
+    },
+    "prisma": "alerta_stock.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "_sum": {
+        "saldo_actual": true,
+      },
+      "where": {
+        "estado": "abierta",
+      },
+    },
+    "prisma": "caja_chica.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "ingreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+      "where": {
+        "fecha_movimiento": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "tipo_movimiento": "egreso",
+      },
+    },
+    "prisma": "movimiento_caja.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "utilidad_estimada": true,
+      },
+      "where": {
+        "fecha_calculo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "rentabilidad.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_atencion": {
+          "in": [
+            "pendiente",
+            "en_atencion",
+          ],
+        },
+      },
+    },
+    "prisma": "falla_maquina.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "pendiente",
+        "fecha_programada": {
+          "lt": 2026-07-15T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "mantenimiento_preventivo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+      "where": {
+        "fecha_reparacion": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "reparacion.aggregate",
+  },
+  {
+    "args": {
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto_total": true,
+      },
+      "where": {
+        "estado_compra": {
+          "not": "anulada",
+        },
+        "estado_pago": {
+          "in": [
+            "pendiente",
+            "parcial",
+          ],
+        },
+      },
+    },
+    "prisma": "compra.aggregate",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "producto": true,
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "stock_actual": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "take": 8,
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "categoria_gasto": true,
+      },
+      "orderBy": {
+        "fecha_movimiento": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "movimiento_caja.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports > sin datos recientes, totales vacios ni materiales criticos > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Reportes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reportes</h1>
+<p>Vista gerencial consolidada de producción, ventas, inventario, cobranzas, caja chica, utilidad, proveedores y mantenimiento.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Periodo actual</p>
+<p>01/07/2026 - 15/07/2026</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<a href="/dashboard/production/work-orders">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Retrasadas: 0. Finalizadas este mes: 0.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/orders">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pendientes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Pedidos registrados, aprobados o en producción.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/materials">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Stock crítico</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Alertas activas de stock: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cuentas por cobrar</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Proformas con saldo pendiente: 42.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/payments">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cobrado este mes</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Pagos de clientes registrados durante el mes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Comprobantes emitidos</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Monto emitido: S/ 0.00.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo de caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Movimiento neto del mes: S/ 0.00.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/costs">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad estimada</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Alertas de bajo margen: 0.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Fallas abiertas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Preventivos vencidos: 0.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/maintenance/repairs">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo mantenimiento</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Costo total de reparaciones registradas este mes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/inventory/purchases">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Compras por pagar</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Monto referencial pendiente: S/ 0.00.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/petty-cash/movements">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Egresos caja chica</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Ingresos del mes: S/ 0.00.</p>
+</div>
+</div>
+</a>
+</section>
+<section>
+<div>
+<div>
+<div>Últimas Órdenes de trabajo</div>
+</div>
+<div>
+<div>
+<div>
+<p>Aún no hay Órdenes de trabajo registradas.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Materiales más críticos</div>
+</div>
+<div>
+<div>
+<div>
+<p>No hay materiales por debajo del stock mínimo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Resumen financiero del mes</div>
+</div>
+<div>
+<div>
+<div>
+<p>Cobranza de clientes</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Cuentas por cobrar</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Ingresos caja chica</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Egresos caja chica</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Utilidad estimada del mes</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Últimos movimientos de caja</div>
+</div>
+<div>
+<div>
+<div>
+<p>Aún no hay movimientos de caja registrados.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<h2>Reportes por módulo</h2>
+<p>Consulta reportes administrativos filtrables según cada área del sistema.</p>
+<p>Las exportaciones tienen un límite de seguridad por formato: el PDF muestra hasta 80 registros por página (con aviso si el reporte fue más grande) y el Excel exporta hasta 5000 filas. Use los filtros de cada reporte para acotar el resultado.</p>
+</div>
+<div>
+<a href="/dashboard/reports/production">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de producción</div>
+</div>
+<div>
+<p>Órdenes de trabajo filtradas por fecha, producto, estado y código de orden.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/inventory">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de inventario</div>
+</div>
+<div>
+<p>Movimientos por material, tipo, responsable, fechas y orden de trabajo asociada.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/sales-collections">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de ventas y cobranzas</div>
+</div>
+<div>
+<p>Pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos y estados de cobranza.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/suppliers-purchases">
+<div>
+<span aria-hidden="true">04</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de proveedores y compras</div>
+</div>
+<div>
+<p>Proveedores, materiales comprados, montos, comprobantes, precios históricos y pagos pendientes.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/financial">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte financiero</div>
+</div>
+<div>
+<p>Caja chica, ingresos, egresos, costos, utilidad estimada, cuentas por cobrar y compras por pagar.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/maintenance">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de mantenimiento</div>
+</div>
+<div>
+<p>Máquinas, fallas, reparaciones, costos, repuestos, preventivos y reincidencias.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/profitability">
+<div>
+<span aria-hidden="true">07</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de costos y rentabilidad</div>
+</div>
+<div>
+<p>Costeos, margenes, ingresos, utilidad estimada y alertas de baja rentabilidad.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/staff">
+<div>
+<span aria-hidden="true">08</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Reporte de personal y planillas</div>
+</div>
+<div>
+<p>Asistencias, faltas, tardanzas, planillas, pagos y pendientes por operario.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/reports/export-history">
+<div>
+<span aria-hidden="true">09</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Historial de exportaciones</div>
+</div>
+<div>
+<p>Auditoría de reportes exportados por usuario, módulo, formato, filtros y fecha.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/audit">
+<div>
+<span aria-hidden="true">10</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Bitacora de auditoria</div>
+</div>
+<div>
+<p>Operaciones criticas por usuario, accion, entidad afectada y fecha.</p>
+</div>
+</div>
+</a>
+</div>
+</section>
+<section>
+<p>Este dashboard usa información consolidada de los módulos ya implementados. La precisión de los indicadores dependerá de que los usuarios registren oportunamente producción, pagos, movimientos de inventario, caja chica, costos y mantenimiento.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

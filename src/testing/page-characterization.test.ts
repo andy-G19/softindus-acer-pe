@@ -4,13 +4,18 @@ import { notFound, redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 
 import {
+  FIXED_NOW,
   GENERATED_COUNT,
+  characterizeHandler,
+  dbModuleMock,
   describeNavigationError,
   generateResult,
   generateRow,
   normalizeHtml,
+  normalizeIntlStrings,
   parsePrismaSchema,
   projectRows,
+  recordEffect,
 } from "./page-characterization";
 
 // Pruebas del arnes de caracterizacion de paginas: si el arnes generara datos
@@ -209,6 +214,120 @@ describe("normalizeHtml", () => {
     expect(
       normalizeHtml("<td>30 jun. 2026, 7:00\u202Fp.\u00A0m.</td><td>1\u2009000</td>"),
     ).toBe("<td>30 jun. 2026, 7:00 p. m.</td>\n<td>1 000</td>");
+  });
+});
+
+describe("normalizeIntlStrings", () => {
+  it("unifica los espacios en textos anidados y conserva fechas y Decimal", () => {
+    const date = new Date(Date.UTC(2026, 6, 1));
+    const amount = new Prisma.Decimal("10.50");
+
+    const normalized = normalizeIntlStrings({
+      metadata: "15/7/2026, 3:00:00\u202Fp.\u00A0m.",
+      rows: [["a\u2009b", 3, null], [date, amount]],
+    }) as { rows: unknown[][] };
+
+    expect(normalized).toEqual({
+      metadata: "15/7/2026, 3:00:00 p. m.",
+      rows: [["a b", 3, null], [date, amount]],
+    });
+    expect(normalized.rows[1][0]).toBe(date);
+    expect(normalized.rows[1][1]).toBe(amount);
+  });
+});
+
+describe("characterizeHandler", () => {
+  it("fija el reloj y la zona horaria, y registra lecturas y efectos en orden", async () => {
+    const prisma = dbModuleMock().prisma as {
+      cliente: { findMany: (args: unknown) => Promise<unknown[]> };
+    };
+
+    const { calls, result } = await characterizeHandler(async () => {
+      const rows = await prisma.cliente.findMany({ take: 1 });
+
+      recordEffect("archivo", { filas: rows.length });
+
+      return {
+        now: new Date().toISOString(),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+    });
+
+    expect(result).toEqual({ now: FIXED_NOW.toISOString(), timeZone: "UTC" });
+    expect(calls).toEqual([
+      { prisma: "cliente.findMany", args: { take: 1 } },
+      { effect: "archivo", args: { filas: 1 } },
+    ]);
+  });
+
+  it("cada ejecucion empieza sin llamadas y con sus propios datos", async () => {
+    const prisma = dbModuleMock().prisma as {
+      cliente: { count: () => Promise<number> };
+    };
+
+    const first = await characterizeHandler(() => prisma.cliente.count(), {
+      "cliente.count": 7,
+    });
+    const second = await characterizeHandler(() => prisma.cliente.count());
+
+    expect(first.result).toBe(7);
+    expect(second.result).toBe(GENERATED_COUNT);
+    expect(second.calls).toEqual([{ prisma: "cliente.count", args: undefined }]);
+  });
+});
+
+describe("dbModuleMock con transacciones", () => {
+  type Client = {
+    $transaction: <T>(callback: (tx: Client) => Promise<T>) => Promise<T>;
+    cliente: {
+      count: () => Promise<number>;
+      create: (args: { data: object }) => Promise<unknown>;
+    };
+  };
+
+  it("el cliente de solo lectura no admite transacciones ni escrituras", () => {
+    const prisma = dbModuleMock().prisma as Client;
+
+    expect(() => prisma.$transaction).toThrow("no esta soportado");
+    expect(() => prisma.cliente.create).toThrow("solo leen");
+  });
+
+  it("registra la transaccion y las escrituras de su cliente, sin escribir fuera", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+
+    expect(() => prisma.cliente.create).toThrow("solo leen");
+
+    const { calls, result } = await characterizeHandler(() =>
+      prisma.$transaction(async (tx) => {
+        const total = await tx.cliente.count();
+        const created = await tx.cliente.create({ data: { nombre: "A" } });
+
+        return { total, created };
+      }),
+    );
+
+    expect(result).toEqual({ total: GENERATED_COUNT, created: { nombre: "A" } });
+    expect(calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.count", args: undefined },
+      { prisma: "cliente.create", args: { data: { nombre: "A" } } },
+    ]);
+  });
+
+  it("un caso puede hacer fallar una escritura", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+
+    await expect(
+      characterizeHandler(
+        () =>
+          prisma.$transaction((tx) => tx.cliente.create({ data: { nombre: "A" } })),
+        {
+          "cliente.create": () => {
+            throw new Error("fallo de escritura");
+          },
+        },
+      ),
+    ).rejects.toThrow("fallo de escritura");
   });
 });
 

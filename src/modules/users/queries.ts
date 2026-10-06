@@ -103,3 +103,26 @@ export async function getUserForPasswordReset(idUsuario: string) {
     },
   });
 }
+
+// Usuarios activos por apellidos y nombres, para los filtros de otras areas.
+// Solo las columnas de la opcion: nunca la fila completa, que trae clave_hash.
+export function findActiveUserOptions() {
+  return prisma.usuario.findMany({
+    where: {
+      estado: "activo",
+    },
+    orderBy: [
+      {
+        apellidos: "asc",
+      },
+      {
+        nombres: "asc",
+      },
+    ],
+    select: {
+      id_usuario: true,
+      nombres: true,
+      apellidos: true,
+    },
+  });
+}

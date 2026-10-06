@@ -28,12 +28,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getSalesCollectionsReportData } from "@/modules/reports/sales-collections/queries";
 
 const ORDER_STATUS_OPTIONS = [
   { value: "registrado", label: "Registrado" },
@@ -65,34 +65,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function getOrderStatusLabel(status: string) {
@@ -182,91 +154,13 @@ export default async function SalesCollectionsReportPage({
   );
 
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-  const normalizedCode = searchCode.toUpperCase();
-
-  const orderWhere = {
-    ...(fromDate || toDate
-      ? {
-          fecha_pedido: {
-            ...(fromDate ? { gte: fromDate } : {}),
-            ...(toDate ? { lt: toDate } : {}),
-          },
-        }
-      : {}),
-    ...(clientId ? { id_cliente: clientId } : {}),
-    ...(orderStatus ? { estado: orderStatus } : {}),
-    ...(normalizedCode
-      ? {
-          OR: [
-            {
-              id_pedido: {
-                contains: normalizedCode,
-              },
-            },
-            {
-              proforma: {
-                some: {
-                  OR: [
-                    {
-                      id_proforma: {
-                        contains: normalizedCode,
-                      },
-                    },
-                    {
-                      numero_proforma: {
-                        contains: normalizedCode,
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [clients, orders] = await Promise.all([
-    prisma.cliente.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-    }),
-
-    prisma.pedido.findMany({
-      where: orderWhere,
-      orderBy: {
-        fecha_pedido: "desc",
-      },
-      take: 100,
-      include: {
-        cliente: true,
-        proforma: {
-          orderBy: {
-            fecha_emision: "desc",
-          },
-          include: {
-            pago_cliente: {
-              orderBy: {
-                fecha_pago: "asc",
-              },
-            },
-            comprobante_venta: true,
-          },
-        },
-        detalle_pedido: {
-          include: {
-            producto: true,
-          },
-        },
-      },
-    }),
-  ]);
+  const { clients, orders } = await getSalesCollectionsReportData({
+    dateFrom,
+    dateTo,
+    clientId,
+    orderStatus,
+    searchCode: searchCode.toUpperCase(),
+  });
 
   const reportRows = orders
     .map((order) => {
