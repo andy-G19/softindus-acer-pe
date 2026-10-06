@@ -8,6 +8,7 @@ import {
   GENERATED_COUNT,
   characterizeHandler,
   dbModuleMock,
+  decimalSnapshotSerializer,
   describeNavigationError,
   generateResult,
   generateRow,
@@ -328,6 +329,105 @@ describe("dbModuleMock con transacciones", () => {
         },
       ),
     ).rejects.toThrow("fallo de escritura");
+  });
+
+  it("registra update, updateMany y createMany con un resultado por defecto", async () => {
+    type WriteClient = {
+      cliente: {
+        update: (args: object) => Promise<unknown>;
+        updateMany: (args: object) => Promise<unknown>;
+        createMany: (args: object) => Promise<unknown>;
+      };
+    };
+    const prisma = dbModuleMock({ transactions: true }).prisma as {
+      $transaction: <T>(callback: (tx: WriteClient) => Promise<T>) => Promise<T>;
+    };
+
+    const { calls, result } = await characterizeHandler(() =>
+      prisma.$transaction(async (tx) => ({
+        updated: await tx.cliente.update({
+          where: { id_cliente: "CLI00000001" },
+          data: { estado: false },
+        }),
+        updatedMany: await tx.cliente.updateMany({ data: { estado: true } }),
+        created: await tx.cliente.createMany({
+          data: [{ nombre: "A" }, { nombre: "B" }],
+        }),
+      })),
+    );
+
+    expect(result).toEqual({
+      updated: { estado: false },
+      updatedMany: { count: 1 },
+      created: { count: 2 },
+    });
+    expect(calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      {
+        prisma: "cliente.update",
+        args: { where: { id_cliente: "CLI00000001" }, data: { estado: false } },
+      },
+      { prisma: "cliente.updateMany", args: { data: { estado: true } } },
+      {
+        prisma: "cliente.createMany",
+        args: { data: [{ nombre: "A" }, { nombre: "B" }] },
+      },
+    ]);
+  });
+
+  it("con recordTransactionEnd registra el commit, o el rollback con su motivo", async () => {
+    const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
+      .prisma as Client;
+
+    const committed = await characterizeHandler(() =>
+      prisma.$transaction((tx) => tx.cliente.count()),
+    );
+
+    expect(committed.calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.count", args: undefined },
+      { effect: "prisma.$transaction:commit", args: null },
+    ]);
+
+    const rolledBack = await characterizeHandler(() =>
+      prisma
+        .$transaction(async (tx) => {
+          await tx.cliente.create({ data: { nombre: "A" } });
+          throw new Error("Stock insuficiente.");
+        })
+        .catch((error: Error) => error.message),
+    );
+
+    expect(rolledBack.result).toBe("Stock insuficiente.");
+    expect(rolledBack.calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.create", args: { data: { nombre: "A" } } },
+      { effect: "prisma.$transaction:rollback", args: "Stock insuficiente." },
+    ]);
+  });
+
+  it("sin recordTransactionEnd no registra el final, como en la exportacion", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+
+    const { calls } = await characterizeHandler(() =>
+      prisma.$transaction((tx) => tx.cliente.count()),
+    );
+
+    expect(calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.count", args: undefined },
+    ]);
+  });
+});
+
+describe("decimalSnapshotSerializer", () => {
+  it("imprime los Decimal con su valor y deja pasar los demas valores", () => {
+    expect(decimalSnapshotSerializer.test(new Prisma.Decimal("11.50"))).toBe(true);
+    expect(decimalSnapshotSerializer.test(11.5)).toBe(false);
+    expect(decimalSnapshotSerializer.test("11.50")).toBe(false);
+    expect(decimalSnapshotSerializer.serialize(new Prisma.Decimal("11.50"))).toBe(
+      "Decimal(11.5)",
+    );
   });
 });
 
