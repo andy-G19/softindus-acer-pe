@@ -30,9 +30,9 @@ import {
   formatQuantity,
   getExportDateStamp,
   getExportParam,
-  type ExportCell,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportMaintenanceReport } from "@/modules/reports/maintenance/exporter";
 import { exportFinancialReport } from "@/modules/reports/financial/exporter";
 import { exportSalesCollectionsReport } from "@/modules/reports/sales-collections/exporter";
 import { exportSuppliersPurchasesReport } from "@/modules/reports/suppliers-purchases/exporter";
@@ -47,167 +47,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-async function buildMaintenanceCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom");
-  const dateTo = getExportParam(searchParams, "dateTo");
-  const machineId = getExportParam(searchParams, "machineId");
-  const failureStatus = getExportParam(searchParams, "failureStatus");
-  const repairStatus = getExportParam(searchParams, "repairStatus");
-  const preventiveStatus = getExportParam(searchParams, "preventiveStatus");
-  const searchText = getExportParam(searchParams, "searchText");
-
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const [failures, preventives] = await Promise.all([
-    prisma.falla_maquina.findMany({
-      where: {
-        ...(dateRange ? { fecha_falla: dateRange } : {}),
-        ...(machineId ? { id_maquina: machineId } : {}),
-        ...(failureStatus ? { estado_atencion: failureStatus } : {}),
-        ...(repairStatus
-          ? {
-              reparacion: {
-                some: {
-                  estado_reparacion: repairStatus,
-                },
-              },
-            }
-          : {}),
-        ...(searchText
-          ? {
-              OR: [
-                {
-                  descripcion: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  responsable_registro: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  impacto_produccion: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  maquina: {
-                    nombre: {
-                      contains: searchText,
-                      mode: "insensitive" as const,
-                    },
-                  },
-                },
-              ],
-            }
-          : {}),
-      },
-      orderBy: [{ fecha_falla: "desc" }, { id_falla: "desc" }],
-      // La lista final combina fallas + preventivos: se acota cada consulta
-      // al limite completo (el total combinado se vuelve a recortar al
-      // armar el reporte final).
-      take: limit,
-      include: {
-        maquina: true,
-        usuario: true,
-        reparacion: {
-          include: {
-            detalle_repuesto_reparacion: {
-              include: {
-                repuesto: true,
-              },
-            },
-          },
-        },
-      },
-    }),
-
-    prisma.mantenimiento_preventivo.findMany({
-      where: {
-        ...(dateRange ? { fecha_programada: dateRange } : {}),
-        ...(machineId ? { id_maquina: machineId } : {}),
-        ...(preventiveStatus ? { estado: preventiveStatus } : {}),
-      },
-      orderBy: [{ fecha_programada: "asc" }, { id_mantenimiento: "desc" }],
-      take: limit,
-      include: {
-        maquina: true,
-        usuario: true,
-      },
-    }),
-  ]);
-
-  const failureRows: ExportCell[][] = failures.map((failure) => {
-    const repairCost = failure.reparacion.reduce((sum, repair) => {
-      return sum + toNumber(repair.costo_total);
-    }, 0);
-
-    const spareParts = failure.reparacion
-      .flatMap((repair) => repair.detalle_repuesto_reparacion)
-      .map((detail) => {
-        return `${detail.repuesto.nombre_repuesto}: ${formatQuantity(
-          detail.cantidad,
-        )} x ${formatMoney(detail.costo_unitario)}`;
-      })
-      .join(" | ");
-
-    return [
-      "Falla",
-      failure.id_falla,
-      failure.maquina.nombre,
-      failure.maquina.tipo,
-      formatDateTime(failure.fecha_falla),
-      failure.estado_atencion,
-      failure.descripcion,
-      formatQuantity(failure.tiempo_perdido_horas),
-      formatMoney(repairCost),
-      spareParts,
-      failure.responsable_registro ?? `${failure.usuario.apellidos}, ${failure.usuario.nombres}`,
-    ];
-  });
-
-  const preventiveRows: ExportCell[][] = preventives.map((maintenance) => [
-    "Preventivo",
-    maintenance.id_mantenimiento,
-    maintenance.maquina.nombre,
-    maintenance.maquina.tipo,
-    formatDate(maintenance.fecha_programada, { format: "dd/mm/yyyy" }),
-    maintenance.estado,
-    maintenance.actividad,
-    "",
-    "",
-    "",
-    maintenance.responsable ?? `${maintenance.usuario.apellidos}, ${maintenance.usuario.nombres}`,
-  ]);
-
-  return {
-    filename: `reporte_mantenimiento_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `reporte_mantenimiento_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Mantenimiento",
-    headers: [
-      "Tipo registro",
-      "Código",
-      "Máquina",
-      "Tipo máquina",
-      "Fecha",
-      "Estado",
-      "Descripción / Actividad",
-      "Tiempo perdido horas",
-      "Costo",
-      "Repuestos",
-      "Responsable",
-    ],
-    rows: [...failureRows, ...preventiveRows],
-  };
-}
 
 async function buildProfitabilityCsv(
   searchParams: URLSearchParams,
@@ -499,7 +338,7 @@ async function buildReport(
       return exportFinancialReport(searchParams, limit);
 
     case "maintenance":
-      return buildMaintenanceCsv(searchParams, limit);
+      return exportMaintenanceReport(searchParams, limit);
 
     case "profitability":
       return buildProfitabilityCsv(searchParams, limit);
