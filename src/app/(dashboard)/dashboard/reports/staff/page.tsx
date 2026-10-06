@@ -7,7 +7,6 @@
   UserX,
 } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,14 +29,13 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getStaffReportData } from "@/modules/reports/staff/queries";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
@@ -57,74 +55,15 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
   const estado = parseStringParam(params, "estado");
   const from = parseStringParam(params, "from");
   const to = parseStringParam(params, "to");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
-
-  const payrollFilters: Prisma.planilla_pagoWhereInput[] = [];
-
-  if (q) {
-    payrollFilters.push({
-      operario: {
-        OR: [
-          { nombres: { contains: q, mode: "insensitive" } },
-          { apellidos: { contains: q, mode: "insensitive" } },
-        ],
-      },
+  const { operators, payrolls, attendanceCount, absenceCount, latenessCount } =
+    await getStaffReportData({
+      q,
+      operario,
+      modalidad,
+      estado,
+      from: parseDateParam(params, "from"),
+      to: parseDateParam(params, "to"),
     });
-  }
-
-  if (operario) {
-    payrollFilters.push({ id_operario: operario });
-  }
-
-  if (modalidad) {
-    payrollFilters.push({ modalidad_pago: modalidad });
-  }
-
-  if (estado) {
-    payrollFilters.push({ estado_pago: estado });
-  }
-
-  if (dateRange) {
-    payrollFilters.push({ periodo_inicio: dateRange });
-  }
-
-  const payrollWhere: Prisma.planilla_pagoWhereInput =
-    payrollFilters.length > 0 ? { AND: payrollFilters } : {};
-
-  const attendanceWhere: Prisma.asistenciaWhereInput = {
-    ...(operario ? { id_operario: operario } : {}),
-    ...(dateRange ? { fecha: dateRange } : {}),
-  };
-
-  const [operators, payrolls, attendanceCount, absenceCount, latenessCount] =
-    await Promise.all([
-      prisma.operario.findMany({
-        where: {
-          estado: "activo",
-        },
-        orderBy: [
-          { apellidos: "asc" },
-          { nombres: "asc" },
-        ],
-      }),
-      prisma.planilla_pago.findMany({
-        where: payrollWhere,
-        orderBy: {
-          fecha_generacion: "desc",
-        },
-        take: 100,
-        include: {
-          operario: true,
-          historial_pago_operario: true,
-        },
-      }),
-      prisma.asistencia.count({ where: attendanceWhere }),
-      prisma.asistencia.count({ where: { ...attendanceWhere, falta: true } }),
-      prisma.asistencia.count({ where: { ...attendanceWhere, tardanza: true } }),
-    ]);
 
   const totals = payrolls.reduce(
     (acc, payroll) => {

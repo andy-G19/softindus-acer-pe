@@ -8,7 +8,6 @@ import {
 } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
-import { toNumber } from "@/lib/numbers";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import {
   DEFAULT_PDF_DISPLAY_ROWS,
@@ -32,6 +31,7 @@ import {
   getExportParam,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportStaffReport } from "@/modules/reports/staff/exporter";
 import { exportMaintenanceReport } from "@/modules/reports/maintenance/exporter";
 import { exportFinancialReport } from "@/modules/reports/financial/exporter";
 import { exportSalesCollectionsReport } from "@/modules/reports/sales-collections/exporter";
@@ -179,82 +179,6 @@ async function buildProfitabilityCsv(
   };
 }
 
-async function buildStaffCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
-  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
-  const operatorId = getExportParam(searchParams, "operatorId") || getExportParam(searchParams, "operario");
-  const payrollStatus = getExportParam(searchParams, "payrollStatus") || getExportParam(searchParams, "estado");
-  const paymentMode = getExportParam(searchParams, "paymentMode") || getExportParam(searchParams, "modalidad");
-  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const payrolls = await prisma.planilla_pago.findMany({
-    where: {
-      ...(operatorId ? { id_operario: operatorId } : {}),
-      ...(payrollStatus ? { estado_pago: payrollStatus } : {}),
-      ...(paymentMode ? { modalidad_pago: paymentMode } : {}),
-      ...(dateRange ? { periodo_inicio: dateRange } : {}),
-      ...(searchText
-        ? {
-            operario: {
-              OR: [
-                { nombres: { contains: searchText, mode: "insensitive" } },
-                { apellidos: { contains: searchText, mode: "insensitive" } },
-              ],
-            },
-          }
-        : {}),
-    },
-    orderBy: [{ fecha_generacion: "desc" }, { id_planilla: "desc" }],
-    take: limit,
-    include: {
-      operario: true,
-      historial_pago_operario: true,
-    },
-  });
-
-  return {
-    filename: `personal_planillas_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `personal_planillas_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Personal y Planillas",
-    headers: [
-      "Planilla",
-      "Operario",
-      "Modalidad",
-      "Periodo inicio",
-      "Periodo fin",
-      "Monto bruto",
-      "Descuentos",
-      "Monto neto",
-      "Monto pagado",
-      "Estado",
-      "Fecha generacion",
-    ],
-    rows: payrolls.map((payroll) => {
-      const paidAmount = payroll.historial_pago_operario.reduce((sum, item) => {
-        return sum + toNumber(item.monto_pagado);
-      }, 0);
-
-      return [
-        payroll.id_planilla,
-        `${payroll.operario.apellidos}, ${payroll.operario.nombres}`,
-        payroll.modalidad_pago,
-        formatDate(payroll.periodo_inicio, { format: "dd/mm/yyyy" }),
-        formatDate(payroll.periodo_fin, { format: "dd/mm/yyyy" }),
-        formatMoney(payroll.monto_bruto),
-        formatMoney(payroll.descuentos),
-        formatMoney(payroll.monto_neto),
-        formatMoney(paidAmount),
-        payroll.estado_pago,
-        formatDateTime(payroll.fecha_generacion),
-      ];
-    }),
-  };
-}
-
 async function buildAuditCsv(
   searchParams: URLSearchParams,
   limit: number,
@@ -344,7 +268,7 @@ async function buildReport(
       return buildProfitabilityCsv(searchParams, limit);
 
     case "staff":
-      return buildStaffCsv(searchParams, limit);
+      return exportStaffReport(searchParams, limit);
 
     case "audit":
       return buildAuditCsv(searchParams, limit);
