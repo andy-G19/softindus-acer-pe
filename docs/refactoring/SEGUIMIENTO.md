@@ -835,6 +835,183 @@ Pendientes fuera de alcance:
 - Los snapshots de HTML dependen del marcado de los componentes compartidos:
   la entrega 8 tendrá que actualizarlos con `vitest -u` y revisar el diff.
 
+## Entrega 5 — Exportaciones por reporte
+
+Fecha: 2026-10-05. Estado: hecha en local el 2026-10-05, con 18 commits de
+`60e1830` a `6fc7c11` sobre staging sin push; falta publicarla y verificarla
+en staging. Se divide en cuatro sub-entregas para que cada paso deje el
+proyecto comprobable y se pueda revertir por reporte.
+
+| Sub-entrega | Alcance | Resultado |
+|---|---|---|
+| 5.1 | Caracterización: arnés para route handlers, la exportación y las 10 páginas de reportes | 101 pruebas nuevas antes de mover código |
+| 5.2 | Un exportador por reporte con la consulta compartida, registro tipado y `assertRole` | `route.ts` de 1.476 a 186 líneas; páginas con Prisma de 19 a 9 |
+| 5.3 | Columnas | 15 cargas de `usuario` completo a 0 |
+| 5.4 | Regla de ESLint y `CLAUDE.md` | Reportes fuera de `pagesStillWithPrisma` |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 60e1830 | test | El arnés ejecuta route handlers: `characterizeHandler`, `$transaction` simulado que registra escrituras (solo si el archivo lo pide) y `normalizeIntlSpaces`. 6 pruebas. |
+| 982832a | test | 47 pruebas de `GET /api/reports/export/[report]`. |
+| bb09990 | test | 48 pruebas de las 10 páginas de reportes. |
+| cadc40b | refactor | Base común: fechas de reporte en `lib/reports/report-filters`, contrato `ExportReport`/`ReportExporter` y `registerExportLog` en `modules/reports`. |
+| c3929e2 | refactor | Piloto Producción: `queries.ts` y `exporter.ts`; pantalla y exportación comparten el filtro. |
+| 4b4523e | refactor | Inventario. |
+| a334ff4 | refactor | Proveedores y compras. |
+| 522a1a4 | refactor | Ventas y cobranzas. |
+| 3483a87 | refactor | Financiero: filtro de caja y significado de cada total. |
+| f31ec5f | refactor | Mantenimiento, con la divergencia de búsqueda como opción explícita. |
+| 5e658f3 | refactor | Personal, con los dos filtros documentados. |
+| 4e161c8 | refactor | Costos y rentabilidad, con los dos filtros documentados. |
+| 0fcbc60 | refactor | Exportación de la bitácora en `modules/audit`. |
+| 9676287 | refactor | Panel de reportes e historial de exportaciones. |
+| c03cc7b | refactor | `REPORT_EXPORTERS: Record<ReportKey, ReportExporter>` en lugar del `switch`. |
+| 3a6d617 | refactor | La exportación valida el rol con `assertRole` (pendiente de la entrega 2). |
+| e21cd62 | refactor | Sin usuarios completos; opciones de filtros desde los módulos dueños. |
+| 6fc7c11 | chore | Reportes fuera de `pagesStillWithPrisma` y convención en `CLAUDE.md`. |
+
+Punto de partida, medido sobre `e6c8c29`:
+
+- `route.ts` tenía 1.476 líneas: ayudantes privados, nueve constructores
+  (lectura de parámetros, consulta y mapeo de filas), un `switch`, el registro
+  de la exportación y el `GET`.
+- No existe exportación CSV. La ruta genera Excel (por defecto) y PDF, y
+  `parseExportFormat` responde 400 a cualquier otro formato. `lib/csv-export.ts`
+  no tiene consumidores; los nombres `build*Csv` y `csvExportHref` (la variable
+  del botón Excel) son históricos.
+- La pantalla y la exportación no consultaban exactamente lo mismo: comparten
+  el significado de los filtros, pero difieren a propósito en el límite (100
+  filas o el del formato), en el desempate del orden (la exportación agrega el
+  id) y en las columnas. En producción, inventario, ventas, compras, financiero
+  y los preventivos de mantenimiento el `where` era idéntico. En los demás
+  difería (ver divergencias).
+- 15 cargas de `usuario` completo (con `clave_hash`): 7 en la ruta, 6
+  `include` en las páginas y 2 listas de opciones. 8 copias idénticas de
+  `parseDateInput`/`parseDateInputAsNextDay` (7 páginas y la ruta, comparadas
+  por hash del cuerpo). El rol se comparaba a mano tras `requireApiAuth`.
+
+Decisiones:
+
+- La ruta conserva solo la parte HTTP y su orden de validaciones: sesión (401)
+  antes de revelar si el reporte existe (404), rol (403), formato, rango,
+  límite, recorte, registro antes de generar el archivo y respuesta. Cada
+  reporte tiene `modules/reports/<reporte>/exporter.ts`; la bitácora, en su
+  módulo dueño (`modules/audit/exporter.ts`).
+- El registro de exportadores es `Record<ReportKey, ReportExporter>`: el
+  compilador exige un exportador por clave y la rama `default: return null`,
+  inalcanzable tras `parseReportKey`, desaparece. Vive en
+  `modules/reports/exporters.ts` y no en `lib/reports/report-registry.ts`, que
+  son metadatos puros (nombre y roles) probados sin base: colgarle código con
+  Prisma invertiría la dirección de las dependencias. Se creó al final porque
+  un `route.ts` solo puede exportar handlers y configuración: los exportadores
+  tenían que existir antes en `modules`.
+- Se comparte el `where`, no la consulta completa. Cada `queries.ts` lo
+  construye una vez y lo usan `get<Reporte>ReportData` (pantalla) y
+  `get<Reporte>Export…` (archivo), cada uno con su límite, orden y columnas.
+  Cada punto de entrada sigue leyendo sus parámetros como antes (la página sin
+  recorte, la exportación con `trim` y 200 caracteres): el constructor es una
+  función pura de esos valores y su resultado no cambia.
+- Un commit por reporte (pantalla y exportación juntas), de lo simple a lo
+  complejo: el piloto fue Producción (una consulta, `where` idéntico, usa el
+  usuario y el reloj). Los reportes divergentes, al final.
+- `buildReportDateRange` reemplaza las 8 copias de la regla de fechas, con 7
+  pruebas propias (desborde de días y meses, espacios y valores inválidos).
+- Columnas con el criterio de la entrega 4: usuario solo con nombres y
+  apellidos (y correo en el historial), o sin cargar si no se muestra; las
+  opciones de filtros desde `find*` de los módulos dueños, más
+  `findActiveUserOptions` nueva en `modules/users`; los `include` profundos de
+  los listados quedan como pendiente.
+
+Divergencias entre pantalla y exportación, conservadas y documentadas junto a
+ambas consultas (igualarlas cambia lo que se ve o se exporta: es un `fix`):
+
+- D1, mantenimiento: la búsqueda de fallas de la pantalla incluye el código
+  interno de la máquina y la de la exportación no. Queda como la opción
+  `includeMachineCode` de un único constructor.
+- D2, rentabilidad: con `lowMargin` y `negativeProfit` a la vez, la segunda
+  condición de la exportación reemplaza la clave `rentabilidad` y se ignora el
+  margen bajo. La pantalla aplica las dos. La caracterización fija el
+  comportamiento actual.
+- Personal, rentabilidad y auditoría: la pantalla combina condiciones con
+  `AND`, lee las fechas con `parseDateParam` y cierra "hasta" al final del día
+  (`lte`); la exportación usa un objeto plano, acepta alias de parámetros
+  (`from`/`dateFrom`, `q`/`searchText`, `operario`/`operatorId`...) y cierra
+  "hasta" antes del día siguiente (`lt`).
+
+Evidencia de que los archivos exportados no cambian:
+
+1. Generadores intactos: `git diff e6c8c29..6fc7c11` no toca
+   `lib/excel-export.ts` ni `lib/pdf-export.ts`.
+2. Caracterización de la ruta (47 pruebas): cada caso fija en orden la sesión,
+   las lecturas de Prisma, el registro de la exportación (correlativo,
+   `exportacion_datos` y bitácora), la entrada completa del generador (título,
+   metadatos, encabezados y cada celda) y la respuesta (estado y cabeceras con
+   el nombre del archivo). Cubre cada reporte en Excel y PDF, los alias,
+   relaciones opcionales ausentes, los límites, los recortes de 80 filas en PDF
+   y 5.000 en Excel, y los rechazos 401, 403, 404, 400 y 500. Ningún snapshot
+   cambió en 5.2; en 5.3 cambiaron 23, solo en argumentos de Prisma.
+3. Comparación byte a byte, fuera del repositorio (`tmp/`, ignorado, como el
+   codemod de la entrega 3): la ruta original de `e6c8c29` y la actual se
+   ejecutan en el mismo proceso, con los mismos datos y los generadores reales,
+   y se compara el SHA-256 de cada respuesta, las escrituras y las lecturas.
+   Mismo proceso implica misma ICU y mismo reloj. Antes de cada commit de 5.2 y
+   5.3: 47 de 47 casos idénticos y 35 archivos .xlsx y .pdf iguales byte a
+   byte. Las lecturas fueron idénticas hasta 5.2; en 5.3 difieren en 25 casos
+   (columnas) con archivos y escrituras iguales. Control: la ruta original es
+   determinista consigo misma.
+4. Páginas: 48 pruebas; ningún snapshot cambió en 5.2 y el JSX de las 10
+   páginas es idéntico al de `HEAD` antes de cada commit, con el BOM
+   conservado. En 5.3 cambiaron 32 snapshots, todos de llamadas: cero líneas de
+   HTML.
+
+| Mutación | Resultado |
+|---|---|
+| Quitar el filtro de estado del `where` compartido de producción | Fallan solo el caso con filtros de la pantalla y el de la exportación. |
+| Cambiar el campo de fecha de "cobrado a clientes" en financiero | Fallan solo el caso con filtros de la pantalla y el de la exportación. |
+| `includeMachineCode: true` en la exportación de mantenimiento | Falla solo el caso de exportación con búsqueda. |
+| Quitar una entrada de `REPORT_EXPORTERS` | Error TS2741 de TypeScript. |
+| `assertRole` con todos los roles | Fallan solo los dos casos 403. |
+| Quitar `apellidos` del `select` de usuario de producción | Error TS2339 en el exportador. |
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows, con 875, 922 y 970 pruebas en los commits de 5.1 y 977 desde
+`cadc40b`. La regla de ESLint se comprobó por entrada estándar: una página de
+reportes detecta `@/lib/db` y `auth`; una orden de trabajo, solo `auth`;
+`queries.ts` puede importar Prisma. `npx eslint src/app` no reporta errores.
+
+El código de producción cambia en 36 archivos (+2.947 y −2.669: 278 netas por
+las firmas, tipos y comentarios de 22 archivos nuevos); las pruebas y el arnés
+suman 1.678. `queries.ts` pasa de 52 a 62. `npm run refactor:inventory` no
+cambia páginas, formularios ni acciones: analiza 497 archivos y desplaza los
+números de línea de los formularios de 9 páginas de reportes.
+
+Verificación en staging: pendiente. Guion previsto: exportar en Excel y PDF los
+9 reportes antes de publicar (foto del «antes», con permiso: cada exportación
+escribe en `exportacion_datos` y en la bitácora) y repetirlo con los mismos
+filtros tras el despliegue, comparando celdas y texto salvo la marca
+«Generado»; prueba de humo secuencial de las 10 páginas; SELLER y
+WORKSHOP_MASTER en sus reportes y exportaciones, con 403 en los ajenos;
+historial de exportaciones y logs de Vercel.
+
+Pendientes fuera de alcance:
+
+- Corregir D1, D2 y las diferencias de fechas, forma y alias de personal,
+  rentabilidad y auditoría: un `fix` por reporte, con su caracterización.
+- `lib/csv-export.ts` sin consumidores y los nombres `csvExportHref` de 6
+  páginas.
+- Métricas derivadas repetidas entre la página y su exportador: cobrado y
+  estado de cobranza en ventas, saldo de compras en financiero y avance
+  promedio en producción. Compartirlas completa el "significado compartido".
+- El estado de cobranza se filtra después del límite (100 pedidos en pantalla,
+  el límite del formato en el archivo): pueden faltar filas que cumplen el
+  filtro. Es el comportamiento actual de ambos.
+- La pantalla no desempata el orden por id y la exportación sí: con fechas
+  iguales, el orden puede diferir entre pantalla y archivo.
+- `formatQuantity` conserva copias locales en las páginas (pendiente de la
+  entrega 3) además de la de `modules/reports/export-report.ts`.
+- Los `include` profundos de los listados de reportes (producto, cliente,
+  ruta, material...) siguen cargando filas completas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -847,7 +1024,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
-| 5 | A | Exportaciones por reporte | Pendiente |
+| 5 | A | Exportaciones por reporte | Hecha en local (18 commits, sin push); falta staging |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
 | 7 | A | Fachada de notificaciones | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
@@ -862,10 +1039,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 
 | Métrica | Línea base | Actual | Entrega que la mueve |
 |---|---|---|---|
-| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 1.476 | 5 |
+| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 186 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 19 | 4, 5 y 6 |
+| Páginas con Prisma directo | 117 | 9 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -873,8 +1050,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 75 / 869 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 86 / 977 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
+| Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
+| Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -889,6 +1068,12 @@ Actualizado en la entrega 4 (2026-10-05) sobre `fbe2ec7`: páginas con Prisma
 directo 19 y pruebas 75 / 869. Las demás filas no cambian: los tres archivos
 más grandes (1.476, 1.046 y 1.004 líneas), `auth()` directo 0, copias locales de
 conversión y formato 0 y `sweetalert2` 2, medidos de nuevo.
+
+Actualizado en la entrega 5 (2026-10-05) sobre `6fc7c11`: `route.ts` 186 líneas (el
+archivo más grande pasa a ser `production/work-orders/actions.ts`, 1.046, de la
+entrega 6), páginas con Prisma directo 9 y pruebas 86 / 977. Las dos filas nuevas
+se midieron sobre `e6c8c29`, su línea base. Las demás no cambian: `auth()` directo
+0, copias locales de conversión y formato 0 y `sweetalert2` 2, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
