@@ -1,0 +1,5925 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: alias de la pantalla 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_hora": "desc",
+          },
+          {
+            "id_bitacora": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {
+          "OR": [
+            {
+              "detalle": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "entidad_afectada": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "accion": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_registro_afectado": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+          ],
+          "accion": "crear",
+          "entidad_afectada": "cliente",
+          "fecha_hora": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_usuario": "USU00000002",
+        },
+      },
+      "prisma": "bitacora_operacion.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de auditoria",
+          "parametros": "{"q":"CLI","usuario":"USU00000002","accion":"crear","entidad":"cliente","from":"2026-07-01","to":"2026-07-31"}",
+          "ruta_archivo": "auditoria_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de auditoria (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Fecha",
+          "Usuario",
+          "Accion",
+          "Entidad",
+          "Registro",
+          "Detalle",
+          "IP",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: q=CLI, usuario=USU00000002, accion=crear, entidad=cliente, from=2026-07-01, to=2026-07-31 | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "accion-1",
+            "entidad_afectada-1",
+            "id_registro_afectado-1",
+            "detalle-1",
+            "ip_origen-1",
+          ],
+          [
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "accion-2",
+            "entidad_afectada-2",
+            "",
+            "",
+            "",
+          ],
+        ],
+        "title": "Reporte de Auditoria",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="auditoria_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_hora": "desc",
+          },
+          {
+            "id_bitacora": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "bitacora_operacion.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de auditoria",
+          "parametros": "{}",
+          "ruta_archivo": "auditoria_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de auditoria (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Fecha",
+          "Usuario",
+          "Accion",
+          "Entidad",
+          "Registro",
+          "Detalle",
+          "IP",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "accion-1",
+            "entidad_afectada-1",
+            "id_registro_afectado-1",
+            "detalle-1",
+            "ip_origen-1",
+          ],
+          [
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "accion-2",
+            "entidad_afectada-2",
+            "",
+            "",
+            "",
+          ],
+        ],
+        "title": "Reporte de Auditoria",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="auditoria_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: pdf con los nombres de la exportacion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_hora": "desc",
+          },
+          {
+            "id_bitacora": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "detalle": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "entidad_afectada": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "accion": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_registro_afectado": {
+                "contains": "CLI",
+                "mode": "insensitive",
+              },
+            },
+          ],
+          "accion": "crear",
+          "entidad_afectada": "cliente",
+          "fecha_hora": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_usuario": "USU00000002",
+        },
+      },
+      "prisma": "bitacora_operacion.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de auditoria",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","userId":"USU00000002","action":"crear","entity":"cliente","searchText":"CLI"}",
+          "ruta_archivo": "auditoria_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de auditoria (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Fecha",
+          "Usuario",
+          "Accion",
+          "Entidad",
+          "Registro",
+          "Detalle",
+          "IP",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "accion-1",
+            "entidad_afectada-1",
+            "id_registro_afectado-1",
+            "detalle-1",
+            "ip_origen-1",
+          ],
+          [
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "accion-2",
+            "entidad_afectada-2",
+            "",
+            "",
+            "",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Auditoria",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="auditoria_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > compras: compra sin detalle, pagos ni historial 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "detalle_compra": {
+            "include": {
+              "material": true,
+            },
+          },
+          "historial_precio_proveedor": {
+            "include": {
+              "material": true,
+            },
+            "orderBy": {
+              "fecha_registro": "desc",
+            },
+          },
+          "pago_proveedor": true,
+          "proveedor": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de proveedores y compras",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_proveedores_compras_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de proveedores y compras (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Compra",
+          "Proveedor",
+          "Fecha compra",
+          "Tipo comprobante",
+          "Número comprobante",
+          "Subtotal",
+          "IGV",
+          "Monto total",
+          "Monto pagado",
+          "Saldo pendiente",
+          "Estado compra",
+          "Estado pago",
+          "Materiales comprados",
+          "Precios históricos",
+          "Usuario registro",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_compra-1",
+            "razon_social-1",
+            "01/07/2026",
+            "tipo_comprobante-1",
+            "numero_comprobante-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 11.50",
+            "estado_compra-1",
+            "estado_pago-1",
+            "",
+            "",
+            "apellidos-1, nombres-1",
+            "observaciones-1",
+          ],
+          [
+            "id_compra-2",
+            "razon_social-2",
+            "02/07/2026",
+            "",
+            "",
+            "S/ 22.50",
+            "S/ 0.00",
+            "S/ 22.50",
+            "S/ 34.00",
+            "S/ 0.00",
+            "estado_compra-2",
+            "estado_pago-2",
+            "nombre_material-1: 11.50 unidad_medida-1 x S/ 11.50 = S/ 11.50 | nombre_material-2: 22.50 unidad_medida-2 x S/ 22.50 = S/ 22.50",
+            "nombre_material-1: S/ 11.50 (01/07/2026) | nombre_material-2: S/ 22.50 (02/07/2026)",
+            "apellidos-2, nombres-2",
+            "",
+          ],
+        ],
+        "title": "Reporte de Proveedores y Compras",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_proveedores_compras_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > compras: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "detalle_compra": {
+            "include": {
+              "material": true,
+            },
+          },
+          "historial_precio_proveedor": {
+            "include": {
+              "material": true,
+            },
+            "orderBy": {
+              "fecha_registro": "desc",
+            },
+          },
+          "pago_proveedor": true,
+          "proveedor": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de proveedores y compras",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_proveedores_compras_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de proveedores y compras (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Compra",
+          "Proveedor",
+          "Fecha compra",
+          "Tipo comprobante",
+          "Número comprobante",
+          "Subtotal",
+          "IGV",
+          "Monto total",
+          "Monto pagado",
+          "Saldo pendiente",
+          "Estado compra",
+          "Estado pago",
+          "Materiales comprados",
+          "Precios históricos",
+          "Usuario registro",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_compra-1",
+            "razon_social-1",
+            "01/07/2026",
+            "tipo_comprobante-1",
+            "numero_comprobante-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 34.00",
+            "S/ 0.00",
+            "estado_compra-1",
+            "estado_pago-1",
+            "nombre_material-1: 11.50 unidad_medida-1 x S/ 11.50 = S/ 11.50 | nombre_material-2: 22.50 unidad_medida-2 x S/ 22.50 = S/ 22.50",
+            "nombre_material-1: S/ 11.50 (01/07/2026) | nombre_material-2: S/ 22.50 (02/07/2026)",
+            "apellidos-1, nombres-1",
+            "observaciones-1",
+          ],
+          [
+            "id_compra-2",
+            "razon_social-2",
+            "02/07/2026",
+            "",
+            "",
+            "S/ 22.50",
+            "S/ 0.00",
+            "S/ 22.50",
+            "S/ 34.00",
+            "S/ 0.00",
+            "estado_compra-2",
+            "estado_pago-2",
+            "nombre_material-1: 11.50 unidad_medida-1 x S/ 11.50 = S/ 11.50 | nombre_material-2: 22.50 unidad_medida-2 x S/ 22.50 = S/ 22.50",
+            "nombre_material-1: S/ 11.50 (01/07/2026) | nombre_material-2: S/ 22.50 (02/07/2026)",
+            "apellidos-2, nombres-2",
+            "",
+          ],
+        ],
+        "title": "Reporte de Proveedores y Compras",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_proveedores_compras_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > compras: pdf con todos los filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "detalle_compra": {
+            "include": {
+              "material": true,
+            },
+          },
+          "historial_precio_proveedor": {
+            "include": {
+              "material": true,
+            },
+            "orderBy": {
+              "fecha_registro": "desc",
+            },
+          },
+          "pago_proveedor": true,
+          "proveedor": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "id_compra": {
+                "contains": "F001",
+              },
+            },
+            {
+              "numero_comprobante": {
+                "contains": "F001",
+              },
+            },
+          ],
+          "detalle_compra": {
+            "some": {
+              "id_material": "MAT00000001",
+            },
+          },
+          "estado_compra": "confirmada",
+          "estado_pago": "parcial",
+          "fecha_compra": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_proveedor": "PRV00000001",
+        },
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de proveedores y compras",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","supplierId":"PRV00000001","materialId":"MAT00000001","purchaseStatus":"confirmada","paymentStatus":"parcial","searchCode":"f001"}",
+          "ruta_archivo": "reporte_proveedores_compras_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de proveedores y compras (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Compra",
+          "Proveedor",
+          "Fecha compra",
+          "Tipo comprobante",
+          "Número comprobante",
+          "Subtotal",
+          "IGV",
+          "Monto total",
+          "Monto pagado",
+          "Saldo pendiente",
+          "Estado compra",
+          "Estado pago",
+          "Materiales comprados",
+          "Precios históricos",
+          "Usuario registro",
+          "Observaciones",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_compra-1",
+            "razon_social-1",
+            "01/07/2026",
+            "tipo_comprobante-1",
+            "numero_comprobante-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 34.00",
+            "S/ 0.00",
+            "estado_compra-1",
+            "estado_pago-1",
+            "nombre_material-1: 11.50 unidad_medida-1 x S/ 11.50 = S/ 11.50 | nombre_material-2: 22.50 unidad_medida-2 x S/ 22.50 = S/ 22.50",
+            "nombre_material-1: S/ 11.50 (01/07/2026) | nombre_material-2: S/ 22.50 (02/07/2026)",
+            "apellidos-1, nombres-1",
+            "observaciones-1",
+          ],
+          [
+            "id_compra-2",
+            "razon_social-2",
+            "02/07/2026",
+            "",
+            "",
+            "S/ 22.50",
+            "S/ 0.00",
+            "S/ 22.50",
+            "S/ 34.00",
+            "S/ 0.00",
+            "estado_compra-2",
+            "estado_pago-2",
+            "nombre_material-1: 11.50 unidad_medida-1 x S/ 11.50 = S/ 11.50 | nombre_material-2: 22.50 unidad_medida-2 x S/ 22.50 = S/ 22.50",
+            "nombre_material-1: S/ 11.50 (01/07/2026) | nombre_material-2: S/ 22.50 (02/07/2026)",
+            "apellidos-2, nombres-2",
+            "",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Proveedores y Compras",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_proveedores_compras_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "caja_chica": true,
+          "categoria_gasto": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento_caja": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "movimiento_caja.findMany",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo_actual": true,
+        },
+        "where": {
+          "estado": "abierta",
+        },
+      },
+      "prisma": "caja_chica.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "monto_pagado": true,
+        },
+        "where": {},
+      },
+      "prisma": "pago_cliente.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+        },
+        "where": {},
+      },
+      "prisma": "costeo.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+          "ingreso_estimado": true,
+          "utilidad_estimada": true,
+        },
+        "where": {},
+      },
+      "prisma": "rentabilidad.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo": true,
+        },
+        "where": {
+          "estado": {
+            "in": [
+              "vigente",
+              "aceptada",
+            ],
+          },
+          "saldo": {
+            "gt": 0,
+          },
+        },
+      },
+      "prisma": "proforma.aggregate",
+    },
+    {
+      "args": {
+        "include": {
+          "pago_proveedor": true,
+          "proveedor": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {
+          "estado_compra": {
+            "not": "anulada",
+          },
+          "estado_pago": {
+            "in": [
+              "pendiente",
+              "parcial",
+            ],
+          },
+        },
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte financiero",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_financiero_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte financiero (excel). Registros: 13.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Sección",
+          "Código / Indicador",
+          "Detalle",
+          "Monto",
+          "Fecha",
+          "Tipo",
+          "Categoría",
+          "Responsable",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 13 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "Resumen",
+            "Saldo caja chica abierta",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingresos caja chica",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Egresos caja chica",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Movimiento neto caja",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cobrado a clientes",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo producción",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingreso estimado",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo estimado",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Utilidad estimada",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cuentas por cobrar",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Compras por pagar",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-1",
+            "concepto-1",
+            "S/ 11.50",
+            "01/07/2026",
+            "tipo_movimiento-1",
+            "nombre_categoria-1",
+            "responsable-1",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-2",
+            "concepto-2",
+            "S/ 22.50",
+            "02/07/2026",
+            "tipo_movimiento-2",
+            "nombre_categoria-2",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "title": "Reporte Financiero",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_financiero_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: pdf con todos los filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "caja_chica": true,
+          "categoria_gasto": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento_caja": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "concepto": {
+                "contains": "Combustible",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "responsable": {
+                "contains": "Combustible",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "comprobante": {
+                "contains": "Combustible",
+                "mode": "insensitive",
+              },
+            },
+          ],
+          "fecha_movimiento": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_caja_chica": "CCH00000001",
+          "id_categoria_gasto": "CGA00000001",
+          "tipo_movimiento": "egreso",
+        },
+      },
+      "prisma": "movimiento_caja.findMany",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo_actual": true,
+        },
+        "where": {
+          "estado": "abierta",
+        },
+      },
+      "prisma": "caja_chica.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "monto_pagado": true,
+        },
+        "where": {
+          "fecha_pago": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "pago_cliente.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+        },
+        "where": {
+          "fecha_costeo": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "costeo.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+          "ingreso_estimado": true,
+          "utilidad_estimada": true,
+        },
+        "where": {
+          "fecha_calculo": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "rentabilidad.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo": true,
+        },
+        "where": {
+          "estado": {
+            "in": [
+              "vigente",
+              "aceptada",
+            ],
+          },
+          "fecha_emision": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "saldo": {
+            "gt": 0,
+          },
+        },
+      },
+      "prisma": "proforma.aggregate",
+    },
+    {
+      "args": {
+        "include": {
+          "pago_proveedor": true,
+          "proveedor": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "estado_compra": {
+            "not": "anulada",
+          },
+          "estado_pago": {
+            "in": [
+              "pendiente",
+              "parcial",
+            ],
+          },
+          "fecha_compra": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte financiero",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","cashBoxId":"CCH00000001","movementType":"egreso","categoryId":"CGA00000001","searchText":" Combustible "}",
+          "ruta_archivo": "reporte_financiero_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte financiero (pdf). Registros: 13.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Sección",
+          "Código / Indicador",
+          "Detalle",
+          "Monto",
+          "Fecha",
+          "Tipo",
+          "Categoría",
+          "Responsable",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "Resumen",
+            "Saldo caja chica abierta",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingresos caja chica",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Egresos caja chica",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Movimiento neto caja",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cobrado a clientes",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo producción",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingreso estimado",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo estimado",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Utilidad estimada",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cuentas por cobrar",
+            "",
+            "S/ 1234.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Compras por pagar",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-1",
+            "concepto-1",
+            "S/ 11.50",
+            "01/07/2026",
+            "tipo_movimiento-1",
+            "nombre_categoria-1",
+            "responsable-1",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-2",
+            "concepto-2",
+            "S/ 22.50",
+            "02/07/2026",
+            "tipo_movimiento-2",
+            "nombre_categoria-2",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte Financiero",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_financiero_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: totales vacios y movimiento sin categoria 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "caja_chica": true,
+          "categoria_gasto": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento_caja": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "movimiento_caja.findMany",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo_actual": true,
+        },
+        "where": {
+          "estado": "abierta",
+        },
+      },
+      "prisma": "caja_chica.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "monto_pagado": true,
+        },
+        "where": {},
+      },
+      "prisma": "pago_cliente.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+        },
+        "where": {},
+      },
+      "prisma": "costeo.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "costo_total": true,
+          "ingreso_estimado": true,
+          "utilidad_estimada": true,
+        },
+        "where": {},
+      },
+      "prisma": "rentabilidad.aggregate",
+    },
+    {
+      "args": {
+        "_sum": {
+          "saldo": true,
+        },
+        "where": {
+          "estado": {
+            "in": [
+              "vigente",
+              "aceptada",
+            ],
+          },
+          "saldo": {
+            "gt": 0,
+          },
+        },
+      },
+      "prisma": "proforma.aggregate",
+    },
+    {
+      "args": {
+        "include": {
+          "pago_proveedor": true,
+          "proveedor": true,
+        },
+        "orderBy": [
+          {
+            "fecha_compra": "desc",
+          },
+          {
+            "id_compra": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {
+          "estado_compra": {
+            "not": "anulada",
+          },
+          "estado_pago": {
+            "in": [
+              "pendiente",
+              "parcial",
+            ],
+          },
+        },
+      },
+      "prisma": "compra.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte financiero",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_financiero_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte financiero (excel). Registros: 13.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Sección",
+          "Código / Indicador",
+          "Detalle",
+          "Monto",
+          "Fecha",
+          "Tipo",
+          "Categoría",
+          "Responsable",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 13 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "Resumen",
+            "Saldo caja chica abierta",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingresos caja chica",
+            "",
+            "S/ 11.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Egresos caja chica",
+            "",
+            "S/ 22.50",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Movimiento neto caja",
+            "",
+            "S/ -11.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cobrado a clientes",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo producción",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Ingreso estimado",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Costo estimado",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Utilidad estimada",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Cuentas por cobrar",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Resumen",
+            "Compras por pagar",
+            "",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-1",
+            "concepto-1",
+            "S/ 11.50",
+            "01/07/2026",
+            "ingreso",
+            "",
+            "responsable-1",
+          ],
+          [
+            "Movimiento caja",
+            "id_movimiento_caja-2",
+            "concepto-2",
+            "S/ 22.50",
+            "02/07/2026",
+            "egreso",
+            "nombre_categoria-2",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "title": "Reporte Financiero",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_financiero_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "compra": {
+            "include": {
+              "proveedor": true,
+            },
+          },
+          "material": true,
+          "orden_trabajo": {
+            "include": {
+              "producto": true,
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "movimiento_inventario.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de inventario",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_inventario_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de inventario (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Movimiento",
+          "Material",
+          "Categoría",
+          "Unidad",
+          "Tipo movimiento",
+          "Cantidad",
+          "Stock anterior",
+          "Stock resultante",
+          "Fecha",
+          "Responsable",
+          "Orden de trabajo",
+          "Producto orden",
+          "Compra",
+          "Proveedor",
+          "Motivo",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_movimiento-1",
+            "nombre_material-1",
+            "categoria-1",
+            "unidad_medida-1",
+            "tipo_movimiento-1",
+            "11.50",
+            "11.50",
+            "11.50",
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "id_compra-1",
+            "razon_social-1",
+            "motivo-1",
+          ],
+          [
+            "id_movimiento-2",
+            "nombre_material-2",
+            "categoria-2",
+            "unidad_medida-2",
+            "tipo_movimiento-2",
+            "22.50",
+            "22.50",
+            "22.50",
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "id_compra-2",
+            "razon_social-2",
+            "",
+          ],
+        ],
+        "title": "Reporte de Inventario",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_inventario_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: movimiento sin orden ni compra 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "compra": {
+            "include": {
+              "proveedor": true,
+            },
+          },
+          "material": true,
+          "orden_trabajo": {
+            "include": {
+              "producto": true,
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "movimiento_inventario.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de inventario",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_inventario_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de inventario (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Movimiento",
+          "Material",
+          "Categoría",
+          "Unidad",
+          "Tipo movimiento",
+          "Cantidad",
+          "Stock anterior",
+          "Stock resultante",
+          "Fecha",
+          "Responsable",
+          "Orden de trabajo",
+          "Producto orden",
+          "Compra",
+          "Proveedor",
+          "Motivo",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_movimiento-1",
+            "nombre_material-1",
+            "categoria-1",
+            "unidad_medida-1",
+            "tipo_movimiento-1",
+            "11.50",
+            "11.50",
+            "11.50",
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "",
+            "",
+            "",
+            "",
+            "motivo-1",
+          ],
+          [
+            "id_movimiento-2",
+            "nombre_material-2",
+            "categoria-2",
+            "unidad_medida-2",
+            "tipo_movimiento-2",
+            "22.50",
+            "22.50",
+            "22.50",
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "id_compra-2",
+            "razon_social-2",
+            "",
+          ],
+        ],
+        "title": "Reporte de Inventario",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_inventario_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: pdf con todos los filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "compra": {
+            "include": {
+              "proveedor": true,
+            },
+          },
+          "material": true,
+          "orden_trabajo": {
+            "include": {
+              "producto": true,
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_movimiento": "desc",
+          },
+          {
+            "id_movimiento": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "fecha_movimiento": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-07-16T00:00:00.000Z,
+          },
+          "id_material": "MAT00000001",
+          "id_orden_trabajo": {
+            "contains": "OTR00000001",
+          },
+          "id_usuario_responsable": "USU00000002",
+          "tipo_movimiento": "salida",
+        },
+      },
+      "prisma": "movimiento_inventario.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de inventario",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-15","materialId":"MAT00000001","movementType":"salida","userId":"USU00000002","workOrderId":"otr00000001"}",
+          "ruta_archivo": "reporte_inventario_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de inventario (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Movimiento",
+          "Material",
+          "Categoría",
+          "Unidad",
+          "Tipo movimiento",
+          "Cantidad",
+          "Stock anterior",
+          "Stock resultante",
+          "Fecha",
+          "Responsable",
+          "Orden de trabajo",
+          "Producto orden",
+          "Compra",
+          "Proveedor",
+          "Motivo",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_movimiento-1",
+            "nombre_material-1",
+            "categoria-1",
+            "unidad_medida-1",
+            "tipo_movimiento-1",
+            "11.50",
+            "11.50",
+            "11.50",
+            "30 jun. 2026, 7:00 p. m.",
+            "apellidos-1, nombres-1",
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "id_compra-1",
+            "razon_social-1",
+            "motivo-1",
+          ],
+          [
+            "id_movimiento-2",
+            "nombre_material-2",
+            "categoria-2",
+            "unidad_medida-2",
+            "tipo_movimiento-2",
+            "22.50",
+            "22.50",
+            "22.50",
+            "1 jul. 2026, 7:00 p. m.",
+            "apellidos-2, nombres-2",
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "id_compra-2",
+            "razon_social-2",
+            "",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Inventario",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_inventario_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento: excel sin filtros, maestro de taller 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "reparacion": {
+            "include": {
+              "detalle_repuesto_reparacion": {
+                "include": {
+                  "repuesto": true,
+                },
+              },
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_falla": "desc",
+          },
+          {
+            "id_falla": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "falla_maquina.findMany",
+    },
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_programada": "asc",
+          },
+          {
+            "id_mantenimiento": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "mantenimiento_preventivo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de mantenimiento",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_mantenimiento_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de mantenimiento (excel). Registros: 4.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Tipo registro",
+          "Código",
+          "Máquina",
+          "Tipo máquina",
+          "Fecha",
+          "Estado",
+          "Descripción / Actividad",
+          "Tiempo perdido horas",
+          "Costo",
+          "Repuestos",
+          "Responsable",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 4 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "Falla",
+            "id_falla-1",
+            "nombre-1",
+            "tipo-1",
+            "30 jun. 2026, 7:00 p. m.",
+            "estado_atencion-1",
+            "descripcion-1",
+            "11.50",
+            "S/ 34.00",
+            "nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50 | nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50",
+            "responsable_registro-1",
+          ],
+          [
+            "Falla",
+            "id_falla-2",
+            "nombre-2",
+            "tipo-2",
+            "1 jul. 2026, 7:00 p. m.",
+            "estado_atencion-2",
+            "descripcion-2",
+            "0.00",
+            "S/ 34.00",
+            "nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50 | nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50",
+            "apellidos-2, nombres-2",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-1",
+            "nombre-1",
+            "tipo-1",
+            "01/07/2026",
+            "estado-1",
+            "actividad-1",
+            "",
+            "",
+            "",
+            "responsable-1",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-2",
+            "nombre-2",
+            "tipo-2",
+            "02/07/2026",
+            "estado-2",
+            "actividad-2",
+            "",
+            "",
+            "",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "title": "Reporte de Mantenimiento",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_mantenimiento_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento: falla sin reparaciones 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "reparacion": {
+            "include": {
+              "detalle_repuesto_reparacion": {
+                "include": {
+                  "repuesto": true,
+                },
+              },
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_falla": "desc",
+          },
+          {
+            "id_falla": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "falla_maquina.findMany",
+    },
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_programada": "asc",
+          },
+          {
+            "id_mantenimiento": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "mantenimiento_preventivo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de mantenimiento",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_mantenimiento_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de mantenimiento (excel). Registros: 4.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Tipo registro",
+          "Código",
+          "Máquina",
+          "Tipo máquina",
+          "Fecha",
+          "Estado",
+          "Descripción / Actividad",
+          "Tiempo perdido horas",
+          "Costo",
+          "Repuestos",
+          "Responsable",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 4 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "Falla",
+            "id_falla-1",
+            "nombre-1",
+            "tipo-1",
+            "30 jun. 2026, 7:00 p. m.",
+            "estado_atencion-1",
+            "descripcion-1",
+            "11.50",
+            "S/ 0.00",
+            "",
+            "responsable_registro-1",
+          ],
+          [
+            "Falla",
+            "id_falla-2",
+            "nombre-2",
+            "tipo-2",
+            "1 jul. 2026, 7:00 p. m.",
+            "estado_atencion-2",
+            "descripcion-2",
+            "0.00",
+            "S/ 34.00",
+            "nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50 | nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50",
+            "apellidos-2, nombres-2",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-1",
+            "nombre-1",
+            "tipo-1",
+            "01/07/2026",
+            "estado-1",
+            "actividad-1",
+            "",
+            "",
+            "",
+            "responsable-1",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-2",
+            "nombre-2",
+            "tipo-2",
+            "02/07/2026",
+            "estado-2",
+            "actividad-2",
+            "",
+            "",
+            "",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "title": "Reporte de Mantenimiento",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_mantenimiento_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento: pdf con todos los filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "reparacion": {
+            "include": {
+              "detalle_repuesto_reparacion": {
+                "include": {
+                  "repuesto": true,
+                },
+              },
+            },
+          },
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_falla": "desc",
+          },
+          {
+            "id_falla": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "descripcion": {
+                "contains": "MAQ-01",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "responsable_registro": {
+                "contains": "MAQ-01",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "impacto_produccion": {
+                "contains": "MAQ-01",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "maquina": {
+                "nombre": {
+                  "contains": "MAQ-01",
+                  "mode": "insensitive",
+                },
+              },
+            },
+          ],
+          "estado_atencion": "pendiente",
+          "fecha_falla": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_maquina": "MAQ00000001",
+          "reparacion": {
+            "some": {
+              "estado_reparacion": "ejecutada",
+            },
+          },
+        },
+      },
+      "prisma": "falla_maquina.findMany",
+    },
+    {
+      "args": {
+        "include": {
+          "maquina": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_programada": "asc",
+          },
+          {
+            "id_mantenimiento": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "estado": "pendiente",
+          "fecha_programada": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_maquina": "MAQ00000001",
+        },
+      },
+      "prisma": "mantenimiento_preventivo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de mantenimiento",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","machineId":"MAQ00000001","failureStatus":"pendiente","repairStatus":"ejecutada","preventiveStatus":"pendiente","searchText":"MAQ-01"}",
+          "ruta_archivo": "reporte_mantenimiento_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de mantenimiento (pdf). Registros: 4.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Tipo registro",
+          "Código",
+          "Máquina",
+          "Tipo máquina",
+          "Fecha",
+          "Estado",
+          "Descripción / Actividad",
+          "Tiempo perdido horas",
+          "Costo",
+          "Repuestos",
+          "Responsable",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "Falla",
+            "id_falla-1",
+            "nombre-1",
+            "tipo-1",
+            "30 jun. 2026, 7:00 p. m.",
+            "estado_atencion-1",
+            "descripcion-1",
+            "11.50",
+            "S/ 34.00",
+            "nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50 | nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50",
+            "responsable_registro-1",
+          ],
+          [
+            "Falla",
+            "id_falla-2",
+            "nombre-2",
+            "tipo-2",
+            "1 jul. 2026, 7:00 p. m.",
+            "estado_atencion-2",
+            "descripcion-2",
+            "0.00",
+            "S/ 34.00",
+            "nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50 | nombre_repuesto-1: 11.50 x S/ 11.50 | nombre_repuesto-2: 22.50 x S/ 22.50",
+            "apellidos-2, nombres-2",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-1",
+            "nombre-1",
+            "tipo-1",
+            "01/07/2026",
+            "estado-1",
+            "actividad-1",
+            "",
+            "",
+            "",
+            "responsable-1",
+          ],
+          [
+            "Preventivo",
+            "id_mantenimiento-2",
+            "nombre-2",
+            "tipo-2",
+            "02/07/2026",
+            "estado-2",
+            "actividad-2",
+            "",
+            "",
+            "",
+            "apellidos-2, nombres-2",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Mantenimiento",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_mantenimiento_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > personal: alias de la pantalla 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "historial_pago_operario": true,
+          "operario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_generacion": "desc",
+          },
+          {
+            "id_planilla": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {
+          "estado_pago": "pagado",
+          "id_operario": "OPE00000001",
+          "modalidad_pago": "semanal",
+          "operario": {
+            "OR": [
+              {
+                "nombres": {
+                  "contains": "Quispe",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "apellidos": {
+                  "contains": "Quispe",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          "periodo_inicio": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "planilla_pago.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de personal y planillas",
+          "parametros": "{"q":"Quispe","operario":"OPE00000001","modalidad":"semanal","estado":"pagado","from":"2026-07-01","to":"2026-07-31"}",
+          "ruta_archivo": "personal_planillas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de personal y planillas (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Planilla",
+          "Operario",
+          "Modalidad",
+          "Periodo inicio",
+          "Periodo fin",
+          "Monto bruto",
+          "Descuentos",
+          "Monto neto",
+          "Monto pagado",
+          "Estado",
+          "Fecha generacion",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: q=Quispe, operario=OPE00000001, modalidad=semanal, estado=pagado, from=2026-07-01, to=2026-07-31 | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_planilla-1",
+            "apellidos-1, nombres-1",
+            "modalidad_pago-1",
+            "01/07/2026",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "estado_pago-1",
+            "30 jun. 2026, 7:00 p. m.",
+          ],
+          [
+            "id_planilla-2",
+            "apellidos-2, nombres-2",
+            "modalidad_pago-2",
+            "02/07/2026",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 34.00",
+            "estado_pago-2",
+            "1 jul. 2026, 7:00 p. m.",
+          ],
+        ],
+        "title": "Reporte de Personal y Planillas",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="personal_planillas_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > personal: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "historial_pago_operario": true,
+          "operario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_generacion": "desc",
+          },
+          {
+            "id_planilla": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "planilla_pago.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de personal y planillas",
+          "parametros": "{}",
+          "ruta_archivo": "personal_planillas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de personal y planillas (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Planilla",
+          "Operario",
+          "Modalidad",
+          "Periodo inicio",
+          "Periodo fin",
+          "Monto bruto",
+          "Descuentos",
+          "Monto neto",
+          "Monto pagado",
+          "Estado",
+          "Fecha generacion",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_planilla-1",
+            "apellidos-1, nombres-1",
+            "modalidad_pago-1",
+            "01/07/2026",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 34.00",
+            "estado_pago-1",
+            "30 jun. 2026, 7:00 p. m.",
+          ],
+          [
+            "id_planilla-2",
+            "apellidos-2, nombres-2",
+            "modalidad_pago-2",
+            "02/07/2026",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 34.00",
+            "estado_pago-2",
+            "1 jul. 2026, 7:00 p. m.",
+          ],
+        ],
+        "title": "Reporte de Personal y Planillas",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="personal_planillas_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > personal: pdf con los nombres de la exportacion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "historial_pago_operario": true,
+          "operario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_generacion": "desc",
+          },
+          {
+            "id_planilla": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "estado_pago": "pendiente",
+          "id_operario": "OPE00000001",
+          "modalidad_pago": "semanal",
+          "operario": {
+            "OR": [
+              {
+                "nombres": {
+                  "contains": "Quispe",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "apellidos": {
+                  "contains": "Quispe",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          "periodo_inicio": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+        },
+      },
+      "prisma": "planilla_pago.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de personal y planillas",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","operatorId":"OPE00000001","payrollStatus":"pendiente","paymentMode":"semanal","searchText":"Quispe"}",
+          "ruta_archivo": "personal_planillas_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de personal y planillas (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Planilla",
+          "Operario",
+          "Modalidad",
+          "Periodo inicio",
+          "Periodo fin",
+          "Monto bruto",
+          "Descuentos",
+          "Monto neto",
+          "Monto pagado",
+          "Estado",
+          "Fecha generacion",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_planilla-1",
+            "apellidos-1, nombres-1",
+            "modalidad_pago-1",
+            "01/07/2026",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 34.00",
+            "estado_pago-1",
+            "30 jun. 2026, 7:00 p. m.",
+          ],
+          [
+            "id_planilla-2",
+            "apellidos-2, nombres-2",
+            "modalidad_pago-2",
+            "02/07/2026",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 34.00",
+            "estado_pago-2",
+            "1 jul. 2026, 7:00 p. m.",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Personal y Planillas",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="personal_planillas_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: limite excesivo en excel 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 5000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 5000",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: limite excesivo en pdf 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: limite invalido 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: limite pedido 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 3,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 3",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: orden sin cliente, ruta ni avances 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "",
+            "apellidos-1, nombres-1",
+            "0.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: pdf con todos los filtros, maestro de taller 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "estado": "en_proceso",
+          "fecha_inicio": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_orden_trabajo": {
+            "contains": "OTR0000",
+          },
+          "id_producto": "PRO00000001",
+        },
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","productId":"PRO00000001","status":"en_proceso","orderId":" otr0000 "}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > rentabilidad: alias de la pantalla con margen bajo y utilidad negativa 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "margen_ganancia": {
+            "orderBy": {
+              "fecha_aplicacion": "desc",
+            },
+            "take": 1,
+          },
+          "orden_trabajo": {
+            "include": {
+              "cliente": true,
+              "producto": true,
+            },
+          },
+          "pedido": {
+            "include": {
+              "cliente": true,
+            },
+          },
+          "rentabilidad": {
+            "orderBy": {
+              "fecha_calculo": "desc",
+            },
+            "take": 1,
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_costeo": "desc",
+          },
+          {
+            "id_costeo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {
+          "OR": [
+            {
+              "id_costeo": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_pedido": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_orden_trabajo": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "pedido": {
+                "cliente": {
+                  "nombre_razon_social": {
+                    "contains": "Estructura",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            },
+            {
+              "orden_trabajo": {
+                "producto": {
+                  "nombre_producto": {
+                    "contains": "Estructura",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            },
+          ],
+          "fecha_costeo": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "rentabilidad": {
+            "some": {
+              "utilidad_estimada": {
+                "lt": 0,
+              },
+            },
+          },
+        },
+      },
+      "prisma": "costeo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de costos y rentabilidad",
+          "parametros": "{"q":"Estructura","from":"2026-07-01","to":"2026-07-31","lowMargin":"true","negativeProfit":"true"}",
+          "ruta_archivo": "costos_rentabilidad_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de costos y rentabilidad (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Costeo",
+          "Pedido",
+          "Orden",
+          "Cliente",
+          "Producto",
+          "Fecha",
+          "Materiales",
+          "Consumibles",
+          "Mano de obra",
+          "Indirectos",
+          "Costo total",
+          "Precio sugerido",
+          "Precio final",
+          "Ingreso",
+          "Utilidad",
+          "Margen real",
+          "Estado",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: q=Estructura, from=2026-07-01, to=2026-07-31, lowMargin=true, negativeProfit=true | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_costeo-1",
+            "id_pedido-1",
+            "id_orden_trabajo-1",
+            "nombre_razon_social-1",
+            "nombre_producto-1",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+          [
+            "id_costeo-2",
+            "",
+            "",
+            "nombre_razon_social-2",
+            "nombre_producto-2",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+        ],
+        "title": "Reporte de Costos y Rentabilidad",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="costos_rentabilidad_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > rentabilidad: costeo sin pedido, orden, margen ni rentabilidad 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "margen_ganancia": {
+            "orderBy": {
+              "fecha_aplicacion": "desc",
+            },
+            "take": 1,
+          },
+          "orden_trabajo": {
+            "include": {
+              "cliente": true,
+              "producto": true,
+            },
+          },
+          "pedido": {
+            "include": {
+              "cliente": true,
+            },
+          },
+          "rentabilidad": {
+            "orderBy": {
+              "fecha_calculo": "desc",
+            },
+            "take": 1,
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_costeo": "desc",
+          },
+          {
+            "id_costeo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "costeo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de costos y rentabilidad",
+          "parametros": "{}",
+          "ruta_archivo": "costos_rentabilidad_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de costos y rentabilidad (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Costeo",
+          "Pedido",
+          "Orden",
+          "Cliente",
+          "Producto",
+          "Fecha",
+          "Materiales",
+          "Consumibles",
+          "Mano de obra",
+          "Indirectos",
+          "Costo total",
+          "Precio sugerido",
+          "Precio final",
+          "Ingreso",
+          "Utilidad",
+          "Margen real",
+          "Estado",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_costeo-1",
+            "id_pedido-1",
+            "id_orden_trabajo-1",
+            "",
+            "",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "0.00%",
+            "Sin alerta",
+          ],
+          [
+            "id_costeo-2",
+            "",
+            "",
+            "nombre_razon_social-2",
+            "nombre_producto-2",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+        ],
+        "title": "Reporte de Costos y Rentabilidad",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="costos_rentabilidad_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > rentabilidad: excel sin filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "margen_ganancia": {
+            "orderBy": {
+              "fecha_aplicacion": "desc",
+            },
+            "take": 1,
+          },
+          "orden_trabajo": {
+            "include": {
+              "cliente": true,
+              "producto": true,
+            },
+          },
+          "pedido": {
+            "include": {
+              "cliente": true,
+            },
+          },
+          "rentabilidad": {
+            "orderBy": {
+              "fecha_calculo": "desc",
+            },
+            "take": 1,
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_costeo": "desc",
+          },
+          {
+            "id_costeo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "costeo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de costos y rentabilidad",
+          "parametros": "{}",
+          "ruta_archivo": "costos_rentabilidad_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de costos y rentabilidad (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Costeo",
+          "Pedido",
+          "Orden",
+          "Cliente",
+          "Producto",
+          "Fecha",
+          "Materiales",
+          "Consumibles",
+          "Mano de obra",
+          "Indirectos",
+          "Costo total",
+          "Precio sugerido",
+          "Precio final",
+          "Ingreso",
+          "Utilidad",
+          "Margen real",
+          "Estado",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_costeo-1",
+            "id_pedido-1",
+            "id_orden_trabajo-1",
+            "nombre_razon_social-1",
+            "nombre_producto-1",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+          [
+            "id_costeo-2",
+            "",
+            "",
+            "nombre_razon_social-2",
+            "nombre_producto-2",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+        ],
+        "title": "Reporte de Costos y Rentabilidad",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="costos_rentabilidad_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > rentabilidad: pdf con los nombres de la exportacion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "margen_ganancia": {
+            "orderBy": {
+              "fecha_aplicacion": "desc",
+            },
+            "take": 1,
+          },
+          "orden_trabajo": {
+            "include": {
+              "cliente": true,
+              "producto": true,
+            },
+          },
+          "pedido": {
+            "include": {
+              "cliente": true,
+            },
+          },
+          "rentabilidad": {
+            "orderBy": {
+              "fecha_calculo": "desc",
+            },
+            "take": 1,
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_costeo": "desc",
+          },
+          {
+            "id_costeo": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "id_costeo": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_pedido": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "id_orden_trabajo": {
+                "contains": "Estructura",
+                "mode": "insensitive",
+              },
+            },
+            {
+              "pedido": {
+                "cliente": {
+                  "nombre_razon_social": {
+                    "contains": "Estructura",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            },
+            {
+              "orden_trabajo": {
+                "producto": {
+                  "nombre_producto": {
+                    "contains": "Estructura",
+                    "mode": "insensitive",
+                  },
+                },
+              },
+            },
+          ],
+          "fecha_costeo": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "rentabilidad": {
+            "some": {
+              "alerta_bajo_margen": true,
+            },
+          },
+        },
+      },
+      "prisma": "costeo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de costos y rentabilidad",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","searchText":"Estructura","lowMargin":"true"}",
+          "ruta_archivo": "costos_rentabilidad_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de costos y rentabilidad (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Costeo",
+          "Pedido",
+          "Orden",
+          "Cliente",
+          "Producto",
+          "Fecha",
+          "Materiales",
+          "Consumibles",
+          "Mano de obra",
+          "Indirectos",
+          "Costo total",
+          "Precio sugerido",
+          "Precio final",
+          "Ingreso",
+          "Utilidad",
+          "Margen real",
+          "Estado",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_costeo-1",
+            "id_pedido-1",
+            "id_orden_trabajo-1",
+            "nombre_razon_social-1",
+            "nombre_producto-1",
+            "01/07/2026",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+          [
+            "id_costeo-2",
+            "",
+            "",
+            "nombre_razon_social-2",
+            "nombre_producto-2",
+            "02/07/2026",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 22.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "11.50%",
+            "Margen bajo",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Costos y Rentabilidad",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="costos_rentabilidad_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > ventas: excel sin filtros, vendedor 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "cliente": true,
+          "proforma": {
+            "include": {
+              "comprobante_venta": true,
+              "pago_cliente": true,
+            },
+            "orderBy": {
+              "fecha_emision": "desc",
+            },
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_pedido": "desc",
+          },
+          {
+            "id_pedido": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "pedido.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de ventas y cobranzas",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_ventas_cobranzas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de ventas y cobranzas (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Pedido",
+          "Cliente",
+          "Fecha pedido",
+          "Estado pedido",
+          "Monto estimado",
+          "Proforma",
+          "Fecha proforma",
+          "Estado proforma",
+          "Monto proformado",
+          "Adelanto inicial",
+          "Pagos adelanto",
+          "Amortizaciones",
+          "Cancelaciones",
+          "Total cobrado",
+          "Saldo pendiente",
+          "Estado cobranza",
+          "Comprobantes",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_pedido-1",
+            "nombre_razon_social-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 11.50",
+            "con_saldo",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+          [
+            "id_pedido-2",
+            "nombre_razon_social-2",
+            "02/07/2026",
+            "estado-2",
+            "S/ 0.00",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 11.50",
+            "con_saldo",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+        ],
+        "title": "Reporte de Ventas y Cobranzas",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_ventas_cobranzas_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > ventas: filtro por estado de cobranza en memoria 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "cliente": true,
+          "proforma": {
+            "include": {
+              "comprobante_venta": true,
+              "pago_cliente": true,
+            },
+            "orderBy": {
+              "fecha_emision": "desc",
+            },
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_pedido": "desc",
+          },
+          {
+            "id_pedido": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "pedido.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de ventas y cobranzas",
+          "parametros": "{"collectionStatus":"pagado"}",
+          "ruta_archivo": "reporte_ventas_cobranzas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de ventas y cobranzas (excel). Registros: 1.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Pedido",
+          "Cliente",
+          "Fecha pedido",
+          "Estado pedido",
+          "Monto estimado",
+          "Proforma",
+          "Fecha proforma",
+          "Estado proforma",
+          "Monto proformado",
+          "Adelanto inicial",
+          "Pagos adelanto",
+          "Amortizaciones",
+          "Cancelaciones",
+          "Total cobrado",
+          "Saldo pendiente",
+          "Estado cobranza",
+          "Comprobantes",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: collectionStatus=pagado | Total exportado: 1 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "PED00000003",
+            "nombre_razon_social-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 0.00",
+            "pagado",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+        ],
+        "title": "Reporte de Ventas y Cobranzas",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_ventas_cobranzas_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > ventas: los cuatro estados de cobranza 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "cliente": true,
+          "proforma": {
+            "include": {
+              "comprobante_venta": true,
+              "pago_cliente": true,
+            },
+            "orderBy": {
+              "fecha_emision": "desc",
+            },
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_pedido": "desc",
+          },
+          {
+            "id_pedido": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "pedido.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de ventas y cobranzas",
+          "parametros": "{}",
+          "ruta_archivo": "reporte_ventas_cobranzas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de ventas y cobranzas (excel). Registros: 4.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Pedido",
+          "Cliente",
+          "Fecha pedido",
+          "Estado pedido",
+          "Monto estimado",
+          "Proforma",
+          "Fecha proforma",
+          "Estado proforma",
+          "Monto proformado",
+          "Adelanto inicial",
+          "Pagos adelanto",
+          "Amortizaciones",
+          "Cancelaciones",
+          "Total cobrado",
+          "Saldo pendiente",
+          "Estado cobranza",
+          "Comprobantes",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: Sin filtros aplicados | Total exportado: 4 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_pedido-1",
+            "nombre_razon_social-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 46.00",
+            "S/ 11.50",
+            "con_saldo",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+          [
+            "PED00000002",
+            "nombre_razon_social-2",
+            "02/07/2026",
+            "estado-2",
+            "S/ 0.00",
+            "",
+            "",
+            "",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "sin_proforma",
+            "",
+          ],
+          [
+            "PED00000003",
+            "nombre_razon_social-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 0.00",
+            "pagado",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+          [
+            "PED00000004",
+            "nombre_razon_social-2",
+            "02/07/2026",
+            "estado-2",
+            "S/ 0.00",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "sin_pago",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+        ],
+        "title": "Reporte de Ventas y Cobranzas",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_ventas_cobranzas_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > archivos por reporte > ventas: pdf con todos los filtros 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "cliente": true,
+          "proforma": {
+            "include": {
+              "comprobante_venta": true,
+              "pago_cliente": true,
+            },
+            "orderBy": {
+              "fecha_emision": "desc",
+            },
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_pedido": "desc",
+          },
+          {
+            "id_pedido": "desc",
+          },
+        ],
+        "take": 500,
+        "where": {
+          "OR": [
+            {
+              "id_pedido": {
+                "contains": "PF-0001",
+              },
+            },
+            {
+              "proforma": {
+                "some": {
+                  "OR": [
+                    {
+                      "id_proforma": {
+                        "contains": "PF-0001",
+                      },
+                    },
+                    {
+                      "numero_proforma": {
+                        "contains": "PF-0001",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          "estado": "aprobado",
+          "fecha_pedido": {
+            "gte": 2026-07-01T00:00:00.000Z,
+            "lt": 2026-08-01T00:00:00.000Z,
+          },
+          "id_cliente": "CLI00000001",
+        },
+      },
+      "prisma": "pedido.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "pdf",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de ventas y cobranzas",
+          "parametros": "{"dateFrom":"2026-07-01","dateTo":"2026-07-31","clientId":"CLI00000001","orderStatus":"aprobado","searchCode":"pf-0001"}",
+          "ruta_archivo": "reporte_ventas_cobranzas_2026-07-15.pdf",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de ventas y cobranzas (pdf). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Pedido",
+          "Cliente",
+          "Fecha pedido",
+          "Estado pedido",
+          "Monto estimado",
+          "Proforma",
+          "Fecha proforma",
+          "Estado proforma",
+          "Monto proformado",
+          "Adelanto inicial",
+          "Pagos adelanto",
+          "Amortizaciones",
+          "Cancelaciones",
+          "Total cobrado",
+          "Saldo pendiente",
+          "Estado cobranza",
+          "Comprobantes",
+        ],
+        "note": undefined,
+        "rows": [
+          [
+            "id_pedido-1",
+            "nombre_razon_social-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 11.50",
+            "con_saldo",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+          [
+            "id_pedido-2",
+            "nombre_razon_social-2",
+            "02/07/2026",
+            "estado-2",
+            "S/ 0.00",
+            "numero_proforma-1",
+            "01/07/2026",
+            "estado-1",
+            "S/ 11.50",
+            "S/ 11.50",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 0.00",
+            "S/ 11.50",
+            "S/ 11.50",
+            "con_saldo",
+            "numero_comprobante-1 | numero_comprobante-2",
+          ],
+        ],
+        "subtitle": "Sistema de Gestion Integral - Industrias Aceros Peru",
+        "title": "Reporte de Ventas y Cobranzas",
+      },
+      "effect": "buildPdfBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido pdf",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_ventas_cobranzas_2026-07-15.pdf"",
+    "contentType": "application/pdf",
+    "status": 200,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > el alias from/to tambien se valida en un reporte que no lo usa 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "VALIDATION_ERROR",
+          "report": "production",
+          "userId": "USU00000001",
+        },
+        "message": "La fecha inicial no puede ser mayor que la fecha final.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "La fecha inicial no puede ser mayor que la fecha final.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 400,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > fallo de la consulta 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": {
+        "context": {
+          "error": {
+            "message": "conexion perdida",
+            "name": "Error",
+          },
+          "fileFormat": "excel",
+          "report": "production",
+          "userId": "USU00000001",
+        },
+        "message": "Error no controlado.",
+      },
+      "effect": "logger.error",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "Ocurrió un error inesperado. Intente nuevamente.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 500,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > fallo del registro de la exportacion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "historial_pago_operario": true,
+          "operario": true,
+        },
+        "orderBy": [
+          {
+            "fecha_generacion": "desc",
+          },
+          {
+            "id_planilla": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "planilla_pago.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de personal y planillas",
+          "parametros": "{}",
+          "ruta_archivo": "personal_planillas_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "context": {
+          "error": {
+            "message": "restriccion violada",
+            "name": "Error",
+          },
+          "fileFormat": "excel",
+          "report": "staff",
+          "userId": "USU00000001",
+        },
+        "message": "Error no controlado.",
+      },
+      "effect": "logger.error",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "Ocurrió un error inesperado. Intente nuevamente.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 500,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > fecha inicial mayor que la final 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "VALIDATION_ERROR",
+          "report": "production",
+          "userId": "USU00000001",
+        },
+        "message": "La fecha inicial no puede ser mayor que la fecha final.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "La fecha inicial no puede ser mayor que la fecha final.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 400,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > formato no soportado 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "VALIDATION_ERROR",
+          "report": "audit",
+          "userId": "USU00000001",
+        },
+        "message": "Formato de exportación no soportado: "xml".",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "Formato de exportación no soportado: "xml".",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 400,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > maestro de taller en ventas y cobranzas 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "FORBIDDEN",
+          "report": "sales-collections",
+          "role": "WORKSHOP_MASTER",
+          "userId": "USU00000001",
+        },
+        "message": "No tiene permisos suficientes para realizar esta acción.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "No tiene permisos suficientes para realizar esta acción.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 403,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > rango mayor de 366 dias 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "VALIDATION_ERROR",
+          "report": "inventory",
+          "userId": "USU00000001",
+        },
+        "message": "El rango de fechas no puede superar 366 días.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "El rango de fechas no puede superar 366 días.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 400,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > reporte desconocido 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "NOT_FOUND",
+          "report": "ventas",
+          "userId": "USU00000001",
+        },
+        "message": "Reporte no encontrado: "ventas".",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "Reporte no encontrado: "ventas".",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 404,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > reporte desconocido sin sesion no revela que no existe 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "UNAUTHORIZED",
+        },
+        "message": "No autorizado.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "No autorizado.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 401,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > sesion invalidada 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "UNAUTHORIZED",
+        },
+        "message": "No autorizado.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "No autorizado.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 401,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > sin sesion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "UNAUTHORIZED",
+        },
+        "message": "No autorizado.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "No autorizado.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 401,
+  },
+}
+`;
+
+exports[`GET /api/reports/export/[report] > rechazos y errores > vendedor en produccion 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "context": {
+          "code": "FORBIDDEN",
+          "report": "production",
+          "role": "SELLER",
+          "userId": "USU00000001",
+        },
+        "message": "No tiene permisos suficientes para realizar esta acción.",
+      },
+      "effect": "logger.warn",
+    },
+  ],
+  "response": {
+    "body": {
+      "error": "No tiene permisos suficientes para realizar esta acción.",
+    },
+    "cacheControl": null,
+    "contentDisposition": null,
+    "contentType": "application/json",
+    "status": 403,
+  },
+}
+`;
