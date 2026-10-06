@@ -1,0 +1,4404 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`annulWorkOrderAction > anula la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_entrega_real": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Orden de trabajo anulada: OTR00000007",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > anula la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders?toast=work-order-annulled"`;
+
+exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consulta y a la redireccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": " OTR00000007 ",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulada",
+        "fecha_entrega_real": null,
+      },
+      "where": {
+        "id_orden_trabajo": " OTR00000007 ",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Orden de trabajo anulada:  OTR00000007 ",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": " OTR00000007 ",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/ OTR00000007 ",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consulta y a la redireccion > resultado 1`] = `"redirect:/dashboard/production/work-orders?toast=work-order-annulled"`;
+
+exports[`annulWorkOrderAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`annulWorkOrderAction > orden con movimientos de inventario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > orden con movimientos de inventario > resultado 1`] = `"error: No se puede anular una orden con consumos registrados sin reversar inventario."`;
+
+exports[`annulWorkOrderAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > orden finalizada > resultado 1`] = `"error: No se puede anular una orden finalizada desde el listado."`;
+
+exports[`annulWorkOrderAction > orden ya anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_orden_trabajo": true,
+        "movimiento_inventario": {
+          "select": {
+            "id_movimiento": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > orden ya anulada > resultado 1`] = `"error: La orden de trabajo ya esta anulada."`;
+
+exports[`annulWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`annulWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+
+exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 60.5,
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 8,
+      },
+      "where": {
+        "id_requerimiento": "ROM00000002",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_producida": 24,
+        "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "cerrar_materiales",
+      "detalle": "Materiales cerrados. Producido: 24.00. Merma total derivada: 3.82.",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la merma derivada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-closed"`;
+
+exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entregado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entregado > resultado 1`] = `"error: Plancha LAC 1/16: lo consumido (64.00) más lo devuelto (5.00) suma 69.00, que supera lo entregado (68.75)."`;
+
+exports[`closeWorkOrderMaterialsAction > declara un material que no es de la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > declara un material que no es de la orden > resultado 1`] = `"error: Se recibio un material que no pertenece a esta orden."`;
+
+exports[`closeWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados."`;
+
+exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > resultado 1`] = `"error: El cierre debe declarar el consumo de todos los materiales de la orden."`;
+
+exports[`closeWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede cerrar materiales de una orden anulada."`;
+
+exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `"error: Esta orden no tiene requerimiento congelado que conciliar."`;
+
+exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > sin lineas de materiales > resultado 1`] = `"error: La orden no tiene materiales que conciliar."`;
+
+exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": {
+              "select": {
+                "nombre_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 63.75,
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 0,
+      },
+      "where": {
+        "id_requerimiento": "ROM00000002",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_producida": 0,
+        "fecha_cierre_materiales": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "cerrar_materiales",
+      "detalle": "Materiales cerrados. Producido: 0.00. Merma total derivada: 8.57.",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-closed"`;
+
+exports[`createWorkOrderAction > campania inexistente o no activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "select": {
+            "id_producto": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > campania inexistente o no activa > resultado 1`] = `"error: La campaña seleccionada no existe o no está activa."`;
+
+exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "select": {
+            "id_producto": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "orden_trabajo",
+      "prefijo": "OTR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 25,
+        "estado": "pendiente",
+        "fecha_entrega_estimada": 2026-07-31T00:00:00.000Z,
+        "fecha_inicio": 2026-07-20T00:00:00.000Z,
+        "id_campania": "CAM00000001",
+        "id_cliente": null,
+        "id_detalle_pedido": null,
+        "id_orden_trabajo": "OTR00000001",
+        "id_producto": "PRO00000001",
+        "id_ruta": "RUT00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_version_receta": "VRE00000001",
+        "observaciones": null,
+        "prioridad": "alta",
+        "tipo_produccion": "campania",
+      },
+    },
+    "prisma": "orden_trabajo.create",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "requerimiento_orden_material",
+      "prefijo": "ROM",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_por_unidad": Decimal(2.5),
+          "cantidad_requerida": 68.75,
+          "costo_unitario_registrado": Decimal(12.47),
+          "id_material": "MAT00000001",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000001",
+          "merma_estimada_porcentaje": Decimal(10),
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.333),
+          "cantidad_requerida": 8.57,
+          "costo_unitario_registrado": Decimal(8.9),
+          "id_material": "MAT00000002",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000002",
+          "merma_estimada_porcentaje": Decimal(3),
+          "tipo_consumo": "consumible",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.16),
+          "cantidad_requerida": 4,
+          "costo_unitario_registrado": Decimal(31.2),
+          "id_material": "MAT00000003",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000003",
+          "merma_estimada_porcentaje": null,
+          "tipo_consumo": "auxiliar",
+          "unidad_medida": "kg",
+        },
+      ],
+    },
+    "prisma": "requerimiento_orden_material.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Orden de trabajo creada para el producto PRO00000001. Requerimiento congelado: 3 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > campania sin productos registrados: acepta el producto y crea la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+
+exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "campania_detalle": {
+          "select": {
+            "id_producto": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "in": [
+            "planificada",
+            "activa",
+          ],
+        },
+        "id_campania": "CAM00000001",
+      },
+    },
+    "prisma": "campania_produccion.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > campania: el producto no pertenece a sus detalles > resultado 1`] = `"error: El producto seleccionado no pertenece a la campania."`;
+
+exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `"error: La cantidad debe ser mayor a 0."`;
+
+exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > fecha estimada anterior al inicio: lo rechaza la validacion > resultado 1`] = `"error: La fecha estimada de entrega no puede ser anterior a la fecha de inicio."`;
+
+exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido sin detalle: lo rechaza la validacion del formulario > resultado 1`] = `"error: Para una orden por pedido debe seleccionar un detalle de pedido."`;
+
+exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "pedido": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "orden_trabajo",
+      "prefijo": "OTR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 25,
+        "estado": "pendiente",
+        "fecha_entrega_estimada": null,
+        "fecha_inicio": 2026-07-20T00:00:00.000Z,
+        "id_campania": null,
+        "id_cliente": "CLI00000001",
+        "id_detalle_pedido": "DPE00000001",
+        "id_orden_trabajo": "OTR00000001",
+        "id_producto": "PRO00000001",
+        "id_ruta": "RUT00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_version_receta": "VRE00000001",
+        "observaciones": null,
+        "prioridad": "media",
+        "tipo_produccion": "pedido",
+      },
+    },
+    "prisma": "orden_trabajo.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_pedido": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_produccion",
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "requerimiento_orden_material",
+      "prefijo": "ROM",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_por_unidad": Decimal(2.5),
+          "cantidad_requerida": 68.75,
+          "costo_unitario_registrado": Decimal(12.47),
+          "id_material": "MAT00000001",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000001",
+          "merma_estimada_porcentaje": Decimal(10),
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.333),
+          "cantidad_requerida": 8.57,
+          "costo_unitario_registrado": Decimal(8.9),
+          "id_material": "MAT00000002",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000002",
+          "merma_estimada_porcentaje": Decimal(3),
+          "tipo_consumo": "consumible",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.16),
+          "cantidad_requerida": 4,
+          "costo_unitario_registrado": Decimal(31.2),
+          "id_material": "MAT00000003",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000003",
+          "merma_estimada_porcentaje": null,
+          "tipo_consumo": "auxiliar",
+          "unidad_medida": "kg",
+        },
+      ],
+    },
+    "prisma": "requerimiento_orden_material.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Orden de trabajo creada para el producto PRO00000001. Requerimiento congelado: 3 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el del detalle y pasa el pedido a produccion > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+
+exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el elegido > resultado 1`] = `"error: El detalle de pedido pertenece a otro producto."`;
+
+exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `"error: El detalle de pedido seleccionado no existe."`;
+
+exports[`createWorkOrderAction > pedido: si el detalle ya no existe dentro de la transaccion, no actualiza el pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "pedido": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "orden_trabajo",
+      "prefijo": "OTR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 25,
+        "estado": "pendiente",
+        "fecha_entrega_estimada": 2026-07-31T00:00:00.000Z,
+        "fecha_inicio": 2026-07-20T00:00:00.000Z,
+        "id_campania": null,
+        "id_cliente": "CLI00000001",
+        "id_detalle_pedido": "DPE00000001",
+        "id_orden_trabajo": "OTR00000001",
+        "id_producto": "PRO00000001",
+        "id_ruta": "RUT00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_version_receta": "VRE00000001",
+        "observaciones": null,
+        "prioridad": "media",
+        "tipo_produccion": "pedido",
+      },
+    },
+    "prisma": "orden_trabajo.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_pedido": true,
+      },
+      "where": {
+        "id_detalle_pedido": "DPE00000001",
+      },
+    },
+    "prisma": "detalle_pedido.findUnique",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "requerimiento_orden_material",
+      "prefijo": "ROM",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_por_unidad": Decimal(2.5),
+          "cantidad_requerida": 68.75,
+          "costo_unitario_registrado": Decimal(12.47),
+          "id_material": "MAT00000001",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000001",
+          "merma_estimada_porcentaje": Decimal(10),
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.333),
+          "cantidad_requerida": 8.57,
+          "costo_unitario_registrado": Decimal(8.9),
+          "id_material": "MAT00000002",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000002",
+          "merma_estimada_porcentaje": Decimal(3),
+          "tipo_consumo": "consumible",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.16),
+          "cantidad_requerida": 4,
+          "costo_unitario_registrado": Decimal(31.2),
+          "id_material": "MAT00000003",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000003",
+          "merma_estimada_porcentaje": null,
+          "tipo_consumo": "auxiliar",
+          "unidad_medida": "kg",
+        },
+      ],
+    },
+    "prisma": "requerimiento_orden_material.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Orden de trabajo creada para el producto PRO00000001. Requerimiento congelado: 3 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > pedido: si el detalle ya no existe dentro de la transaccion, no actualiza el pedido > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+
+exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > producto inexistente o inactivo > resultado 1`] = `"error: El producto seleccionado no existe o está inactivo."`;
+
+exports[`createWorkOrderAction > receta de otro producto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > receta de otro producto > resultado 1`] = `"error: La receta seleccionada pertenece a otro producto."`;
+
+exports[`createWorkOrderAction > receta tecnica inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > receta tecnica inactiva > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
+
+exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "orden_trabajo",
+      "prefijo": "OTR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 25,
+        "estado": "pendiente",
+        "fecha_entrega_estimada": 2026-07-31T00:00:00.000Z,
+        "fecha_inicio": 2026-07-20T00:00:00.000Z,
+        "id_campania": null,
+        "id_cliente": null,
+        "id_detalle_pedido": null,
+        "id_orden_trabajo": "OTR00000001",
+        "id_producto": "PRO00000001",
+        "id_ruta": "RUT00000001",
+        "id_usuario_registro": "USU00000001",
+        "id_version_receta": "VRE00000001",
+        "observaciones": "Lote para stock de tienda",
+        "prioridad": "media",
+        "tipo_produccion": "reposicion_stock",
+      },
+    },
+    "prisma": "orden_trabajo.create",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "requerimiento_orden_material",
+      "prefijo": "ROM",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad_por_unidad": Decimal(2.5),
+          "cantidad_requerida": 68.75,
+          "costo_unitario_registrado": Decimal(12.47),
+          "id_material": "MAT00000001",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000001",
+          "merma_estimada_porcentaje": Decimal(10),
+          "tipo_consumo": "materia_prima",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.333),
+          "cantidad_requerida": 8.57,
+          "costo_unitario_registrado": Decimal(8.9),
+          "id_material": "MAT00000002",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000002",
+          "merma_estimada_porcentaje": Decimal(3),
+          "tipo_consumo": "consumible",
+          "unidad_medida": "kg",
+        },
+        {
+          "cantidad_por_unidad": Decimal(0.16),
+          "cantidad_requerida": 4,
+          "costo_unitario_registrado": Decimal(31.2),
+          "id_material": "MAT00000003",
+          "id_orden_trabajo": "OTR00000001",
+          "id_requerimiento": "ROM00000003",
+          "merma_estimada_porcentaje": null,
+          "tipo_consumo": "auxiliar",
+          "unidad_medida": "kg",
+        },
+      ],
+    },
+    "prisma": "requerimiento_orden_material.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Orden de trabajo creada para el producto PRO00000001. Requerimiento congelado: 3 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > reposicion de stock: crea la orden y congela el requerimiento > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
+
+exports[`createWorkOrderAction > ruta de otro producto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > ruta de otro producto > resultado 1`] = `"error: La ruta seleccionada pertenece a otro producto."`;
+
+exports[`createWorkOrderAction > ruta inexistente o inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > ruta inexistente o inactiva > resultado 1`] = `"error: La ruta seleccionada no existe, está inactiva o no pertenece al producto."`;
+
+exports[`createWorkOrderAction > ruta sin etapas activas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta seleccionada no tiene etapas activas. Registre etapas antes de crear la orden."`;
+
+exports[`createWorkOrderAction > version de receta inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > version de receta inexistente > resultado 1`] = `"error: La versión de receta seleccionada no existe, no está vigente o no pertenece al producto."`;
+
+exports[`createWorkOrderAction > version de receta no vigente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > version de receta no vigente > resultado 1`] = `"error: La receta seleccionada no esta vigente o activa."`;
+
+exports[`createWorkOrderAction > version sin materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": {
+          "where": {
+            "estado": true,
+          },
+        },
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000001",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_receta": {
+          "include": {
+            "material": {
+              "select": {
+                "costo_unitario_actual": true,
+                "id_material": true,
+              },
+            },
+          },
+          "orderBy": {
+            "id_detalle_receta": "asc",
+          },
+        },
+        "receta_tecnica": true,
+      },
+      "where": {
+        "id_version_receta": "VRE00000001",
+      },
+    },
+    "prisma": "version_receta.findFirst",
+  },
+]
+`;
+
+exports[`createWorkOrderAction > version sin materiales > resultado 1`] = `"error: La versión de receta no tiene materiales registrados. Agregue materiales antes de crear la orden."`;
+
+exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > resultado 1`] = `"error: El material solicitado no pertenece a esta orden."`;
+
+exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > el requerimiento no existe > resultado 1`] = `"error: El material solicitado no pertenece a esta orden."`;
+
+exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y sin tocar alertas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 5.5,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000001",
+        "stock_actual": {
+          "gte": 5.5,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 5.5,
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Entrega adicional a la orden OTR00000007: Se rompio una pieza al cortar",
+        "stock_anterior": 40,
+        "stock_resultante": 34.5,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 5.5,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "accion": "entrega_adicional",
+      "detalle": "Entrega adicional de 5.50 kg de Plancha LAC 1/16. Motivo: Se rompio una pieza al cortar",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y sin tocar alertas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-additional-delivery"`;
+
+exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > material inactivo > resultado 1`] = `"error: No se puede entregar Plancha LAC 1/16: el material esta inactivo."`;
+
+exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados."`;
+
+exports[`deliverAdditionalMaterialAction > motivo demasiado corto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > motivo demasiado corto > resultado 1`] = `"error: Explica por qué se necesita material adicional (mínimo 10 caracteres)."`;
+
+exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > orden anulada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+
+exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > orden finalizada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+
+exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`deliverAdditionalMaterialAction > stock insuficiente > resultado 1`] = `"error: Stock insuficiente para Plancha LAC 1/16: se piden 5.50 y hay 5.25."`;
+
+exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "cantidad": 4,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 48.75,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000001",
+        "stock_actual": {
+          "gte": 48.75,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 48.75,
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Salida por entrega de materiales a la orden OTR00000007",
+        "stock_anterior": 100,
+        "stock_resultante": 51.25,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 48.75,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 51.25,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 8.57,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000002",
+        "stock_actual": {
+          "gte": 8.57,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 8.57,
+        "id_material": "MAT00000002",
+        "id_movimiento": "MVI00000002",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Salida por entrega de materiales a la orden OTR00000007",
+        "stock_anterior": 10,
+        "stock_resultante": 1.43,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 8.57,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000002",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000002",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000001",
+        "id_material": "MAT00000002",
+        "mensaje": "El material Soldadura 6011 quedo en stock critico tras mover la orden OTR00000007.",
+        "stock_detectado": 1.43,
+        "stock_minimo": 5,
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 50,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "stock_actual": {
+          "gte": 50,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 50,
+        "id_material": "MAT00000004",
+        "id_movimiento": "MVI00000003",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Salida por entrega de materiales a la orden OTR00000007",
+        "stock_anterior": 60,
+        "stock_resultante": 10,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 50,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000004",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "mensaje": "El material Tornillo 1/4 quedo en stock critico tras mover la orden OTR00000007.",
+        "stock_detectado": 10,
+        "stock_minimo": 20,
+      },
+      "where": {
+        "id_alerta": "ALE00000004",
+      },
+    },
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 10,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000005",
+        "stock_actual": {
+          "gte": 10,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 10,
+        "id_material": "MAT00000005",
+        "id_movimiento": "MVI00000004",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Salida por entrega de materiales a la orden OTR00000007",
+        "stock_anterior": 100,
+        "stock_resultante": 90,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 10,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000005",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000005",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "accion": "entregar_materiales",
+      "detalle": "Materiales entregados a la orden OTR00000007: 4 material(es).",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock, registra kardex y sincroniza alertas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-delivered"`;
+
+exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la transaccion: se revierte y no revalida > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 68.75,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000001",
+        "stock_actual": {
+          "gte": 68.75,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 68.75,
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Salida por entrega de materiales a la orden OTR00000007",
+        "stock_anterior": 100,
+        "stock_resultante": 31.25,
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_entregada": {
+          "increment": 68.75,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "decrement": 8.57,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000002",
+        "stock_actual": {
+          "gte": 8.57,
+        },
+      },
+    },
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": "Stock insuficiente para Soldadura 6011. La operacion fue cancelada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la transaccion: se revierte y no revalida > resultado 1`] = `"error: Stock insuficiente para Soldadura 6011. La operacion fue cancelada."`;
+
+exports[`deliverWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a todos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a todos > resultado 1`] = `"error: No se puede entregar materiales inactivos: Plancha LAC 1/16, Pintura anticorrosiva."`;
+
+exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."`;
+
+exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > resultado 1`] = `"error: No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material."`;
+
+exports[`deliverWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+
+exports[`deliverWorkOrderMaterialsAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > orden finalizada > resultado 1`] = `"error: No se puede entregar material a una orden anulada o finalizada."`;
+
+exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > resultado 1`] = `"error: Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella."`;
+
+exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+
+exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada material > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "requerimiento_orden_material": {
+          "include": {
+            "material": true,
+          },
+          "orderBy": {
+            "id_requerimiento": "asc",
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada material > resultado 1`] = `"error: Stock insuficiente para entregar la orden: Plancha LAC 1/16 requiere 68.75 y tiene 50.50; Pintura anticorrosiva requiere 4.00 y tiene 3.50."`;
+
+exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > etapas sin terminar > resultado 1`] = `"error: Solo se puede finalizar una orden cuando todas sus etapas estan terminadas."`;
+
+exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_entrega_real": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "finalizar",
+      "detalle": "Orden de trabajo finalizada: OTR00000007",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-finished"`;
+
+exports[`finishWorkOrderAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`finishWorkOrderAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > orden anulada > resultado 1`] = `"error: No se puede finalizar una orden anulada."`;
+
+exports[`finishWorkOrderAction > orden sin avances generados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > orden sin avances generados > resultado 1`] = `"error: La orden no tiene avances generados."`;
+
+exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toast ni escrituras > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toast ni escrituras > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007"`;
+
+exports[`finishWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`finishWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: No se recibio la orden de trabajo."`;
+
+exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_producida": true,
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_producida": true,
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > resultado 1`] = `"error: Los materiales de esta orden no estan cerrados."`;
+
+exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > motivo demasiado corto > resultado 1`] = `"error: Explica por qué se reabre el cierre (mínimo 10 caracteres)."`;
+
+exports[`reopenWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_producida": true,
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > orden anulada > resultado 1`] = `"error: No se puede reabrir el cierre de una orden anulada."`;
+
+exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declarada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_producida": true,
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 0,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "requerimiento_orden_material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_producida": null,
+        "fecha_cierre_materiales": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "reabrir_materiales",
+      "detalle": "Cierre de materiales reabierto. Produccion declarada antes de reabrir: sin declarar. Motivo: Se conto mal la plancha sobrante",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declarada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-reopened"`;
+
+exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produccion declarada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_producida": true,
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_consumida": 0,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "requerimiento_orden_material.updateMany",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_producida": null,
+        "fecha_cierre_materiales": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "reabrir_materiales",
+      "detalle": "Cierre de materiales reabierto. Produccion declarada antes de reabrir: 24.00. Motivo: Se conto mal la plancha sobrante",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produccion declarada > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-reopened"`;
+
+exports[`returnWorkOrderMaterialAction > cantidad no numerica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > cantidad no numerica > resultado 1`] = `"error: La cantidad debe ser numérica."`;
+
+exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue critico: actualiza la alerta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "increment": 3,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3,
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Devolucion de material no usado de la orden OTR00000007",
+        "stock_anterior": 5,
+        "stock_resultante": 8,
+        "tipo_movimiento": "devolucion",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_devuelta": {
+          "increment": 3,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "mensaje": "El material Plancha LAC 1/16 quedo en stock critico tras mover la orden OTR00000007.",
+        "stock_detectado": 8,
+        "stock_minimo": 8,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": {
+      "accion": "devolver_material",
+      "detalle": "Devolucion de 3.00 kg de Plancha LAC 1/16.",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue critico: actualiza la alerta > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned"`;
+
+exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > resultado 1`] = `"error: El material indicado no pertenece a esta orden."`;
+
+exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > el requerimiento no existe > resultado 1`] = `"error: El material indicado no pertenece a esta orden."`;
+
+exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > materiales ya cerrados > resultado 1`] = `"error: Los materiales de esta orden ya fueron cerrados: no se puede mover mas material."`;
+
+exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > no queda nada por devolver > resultado 1`] = `"error: No queda material de Plancha LAC 1/16 por devolver: se entregaron 10.00 y ya se devolvieron 10.00."`;
+
+exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > orden anulada > resultado 1`] = `"error: No se puede devolver material de una orden anulada."`;
+
+exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y atiende la alerta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": {
+          "increment": 2.25,
+        },
+      },
+      "where": {
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 2.25,
+        "id_material": "MAT00000001",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Devolucion de la orden OTR00000007: Sobro una plancha entera",
+        "stock_anterior": 20,
+        "stock_resultante": 22.25,
+        "tipo_movimiento": "devolucion",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_devuelta": {
+          "increment": 2.25,
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_material": "MAT00000001",
+      },
+    },
+    "prisma": "alerta_stock.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+        "mensaje": "El material Plancha LAC 1/16 recupero stock por encima del minimo.",
+        "stock_detectado": 22.25,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": {
+      "accion": "devolver_material",
+      "detalle": "Devolucion de 2.25 kg de Plancha LAC 1/16. Motivo: Sobro una plancha entera",
+      "enTransaccion": true,
+      "entidad_afectada": "orden_trabajo",
+      "id_registro_afectado": "OTR00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y atiende la alerta > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned"`;
+
+exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "orden_trabajo": {
+          "select": {
+            "estado": true,
+            "fecha_cierre_materiales": true,
+            "id_orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_requerimiento": "ROM00000001",
+      },
+    },
+    "prisma": "requerimiento_orden_material.findUnique",
+  },
+]
+`;
+
+exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > resultado 1`] = `"error: No se puede devolver 7.00 de Plancha LAC 1/16: solo quedan 6.00 sin devolver."`;
