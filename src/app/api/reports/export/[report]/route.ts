@@ -33,6 +33,7 @@ import {
   type ExportCell,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportFinancialReport } from "@/modules/reports/financial/exporter";
 import { exportSalesCollectionsReport } from "@/modules/reports/sales-collections/exporter";
 import { exportSuppliersPurchasesReport } from "@/modules/reports/suppliers-purchases/exporter";
 import { exportInventoryReport } from "@/modules/reports/inventory/exporter";
@@ -46,210 +47,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-async function buildFinancialCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom");
-  const dateTo = getExportParam(searchParams, "dateTo");
-  const cashBoxId = getExportParam(searchParams, "cashBoxId");
-  const movementType = getExportParam(searchParams, "movementType");
-  const categoryId = getExportParam(searchParams, "categoryId");
-  const searchText = getExportParam(searchParams, "searchText");
-
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const [
-    cashMovements,
-    cashBalance,
-    collectedPayments,
-    productionCosts,
-    estimatedProfit,
-    receivables,
-    pendingPurchases,
-  ] = await Promise.all([
-    prisma.movimiento_caja.findMany({
-      where: {
-        ...(dateRange ? { fecha_movimiento: dateRange } : {}),
-        ...(cashBoxId ? { id_caja_chica: cashBoxId } : {}),
-        ...(movementType ? { tipo_movimiento: movementType } : {}),
-        ...(categoryId ? { id_categoria_gasto: categoryId } : {}),
-        ...(searchText
-          ? {
-              OR: [
-                {
-                  concepto: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  responsable: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  comprobante: {
-                    contains: searchText,
-                    mode: "insensitive" as const,
-                  },
-                },
-              ],
-            }
-          : {}),
-      },
-      orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento_caja: "desc" }],
-      take: limit,
-      include: {
-        caja_chica: true,
-        categoria_gasto: true,
-        usuario: true,
-      },
-    }),
-
-    prisma.caja_chica.aggregate({
-      where: {
-        estado: "abierta",
-      },
-      _sum: {
-        saldo_actual: true,
-      },
-    }),
-
-    prisma.pago_cliente.aggregate({
-      where: {
-        ...(dateRange ? { fecha_pago: dateRange } : {}),
-      },
-      _sum: {
-        monto_pagado: true,
-      },
-    }),
-
-    prisma.costeo.aggregate({
-      where: {
-        ...(dateRange ? { fecha_costeo: dateRange } : {}),
-      },
-      _sum: {
-        costo_total: true,
-      },
-    }),
-
-    prisma.rentabilidad.aggregate({
-      where: {
-        ...(dateRange ? { fecha_calculo: dateRange } : {}),
-      },
-      _sum: {
-        ingreso_estimado: true,
-        costo_total: true,
-        utilidad_estimada: true,
-      },
-    }),
-
-    prisma.proforma.aggregate({
-      where: {
-        estado: {
-          in: ["vigente", "aceptada"],
-        },
-        saldo: {
-          gt: 0,
-        },
-        ...(dateRange ? { fecha_emision: dateRange } : {}),
-      },
-      _sum: {
-        saldo: true,
-      },
-    }),
-
-    prisma.compra.findMany({
-      where: {
-        estado_pago: {
-          in: ["pendiente", "parcial"],
-        },
-        estado_compra: {
-          not: "anulada",
-        },
-        ...(dateRange ? { fecha_compra: dateRange } : {}),
-      },
-      orderBy: [{ fecha_compra: "desc" }, { id_compra: "desc" }],
-      // No son las filas exportadas (son insumo de un total agregado en
-      // memoria), pero igual se acota: evita cargar todas las compras
-      // pendientes de pago sin limite si la tabla crece mucho.
-      take: limit,
-      include: {
-        proveedor: true,
-        pago_proveedor: true,
-      },
-    }),
-  ]);
-
-  const totalCashIncome = cashMovements.reduce((sum, movement) => {
-    if (movement.tipo_movimiento !== "ingreso") {
-      return sum;
-    }
-
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const totalCashExpense = cashMovements.reduce((sum, movement) => {
-    if (movement.tipo_movimiento !== "egreso") {
-      return sum;
-    }
-
-    return sum + toNumber(movement.monto);
-  }, 0);
-
-  const totalPendingPurchases = pendingPurchases.reduce((sum, purchase) => {
-    const paid = purchase.pago_proveedor.reduce((paymentSum, payment) => {
-      return paymentSum + toNumber(payment.monto_pagado);
-    }, 0);
-
-    return sum + Math.max(toNumber(purchase.monto_total) - paid, 0);
-  }, 0);
-
-  const summaryRows: ExportCell[][] = [
-    ["Resumen", "Saldo caja chica abierta", "", formatMoney(cashBalance._sum.saldo_actual ?? 0), "", "", "", ""],
-    ["Resumen", "Ingresos caja chica", "", formatMoney(totalCashIncome), "", "", "", ""],
-    ["Resumen", "Egresos caja chica", "", formatMoney(totalCashExpense), "", "", "", ""],
-    ["Resumen", "Movimiento neto caja", "", formatMoney(totalCashIncome - totalCashExpense), "", "", "", ""],
-    ["Resumen", "Cobrado a clientes", "", formatMoney(collectedPayments._sum.monto_pagado ?? 0), "", "", "", ""],
-    ["Resumen", "Costo producción", "", formatMoney(productionCosts._sum.costo_total ?? 0), "", "", "", ""],
-    ["Resumen", "Ingreso estimado", "", formatMoney(estimatedProfit._sum.ingreso_estimado ?? 0), "", "", "", ""],
-    ["Resumen", "Costo estimado", "", formatMoney(estimatedProfit._sum.costo_total ?? 0), "", "", "", ""],
-    ["Resumen", "Utilidad estimada", "", formatMoney(estimatedProfit._sum.utilidad_estimada ?? 0), "", "", "", ""],
-    ["Resumen", "Cuentas por cobrar", "", formatMoney(receivables._sum.saldo ?? 0), "", "", "", ""],
-    ["Resumen", "Compras por pagar", "", formatMoney(totalPendingPurchases), "", "", "", ""],
-  ];
-
-  const movementRows: ExportCell[][] = cashMovements.map((movement) => [
-    "Movimiento caja",
-    movement.id_movimiento_caja,
-    movement.concepto,
-    formatMoney(movement.monto),
-    formatDate(movement.fecha_movimiento, { format: "dd/mm/yyyy" }),
-    movement.tipo_movimiento,
-    movement.categoria_gasto?.nombre_categoria ?? "",
-    movement.responsable ?? `${movement.usuario.apellidos}, ${movement.usuario.nombres}`,
-  ]);
-
-  return {
-    filename: `reporte_financiero_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `reporte_financiero_${getExportDateStamp()}.pdf`,
-    title: "Reporte Financiero",
-    headers: [
-      "Sección",
-      "Código / Indicador",
-      "Detalle",
-      "Monto",
-      "Fecha",
-      "Tipo",
-      "Categoría",
-      "Responsable",
-    ],
-    rows: [...summaryRows, ...movementRows],
-  };
-}
 
 async function buildMaintenanceCsv(
   searchParams: URLSearchParams,
@@ -699,7 +496,7 @@ async function buildReport(
       return exportSuppliersPurchasesReport(searchParams, limit);
 
     case "financial":
-      return buildFinancialCsv(searchParams, limit);
+      return exportFinancialReport(searchParams, limit);
 
     case "maintenance":
       return buildMaintenanceCsv(searchParams, limit);
