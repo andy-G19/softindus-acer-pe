@@ -28,10 +28,10 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { getExportHistoryData } from "@/modules/reports/export-history/queries";
 
 const REPORT_MODULE_OPTIONS = [
   "Reporte de producción",
@@ -70,34 +70,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function getFormatLabel(format: string) {
@@ -147,79 +119,15 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
   const userId = getSearchParam(params, "userId");
   const searchText = getSearchParam(params, "searchText").trim();
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-
-  const dateRangeFilter =
-    fromDate || toDate
-      ? {
-          ...(fromDate ? { gte: fromDate } : {}),
-          ...(toDate ? { lt: toDate } : {}),
-        }
-      : undefined;
-
-  const exportWhere = {
-    ...(dateRangeFilter
-      ? {
-          fecha_exportacion: dateRangeFilter,
-        }
-      : {}),
-    ...(reportModule ? { modulo_origen: reportModule } : {}),
-    ...(format ? { formato: format } : {}),
-    ...(status ? { estado: status } : {}),
-    ...(userId ? { id_usuario: userId } : {}),
-    ...(searchText
-      ? {
-          OR: [
-            {
-              modulo_origen: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              ruta_archivo: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-            {
-              parametros: {
-                contains: searchText,
-                mode: "insensitive" as const,
-              },
-            },
-          ],
-        }
-      : {}),
-  };
-
-  const [users, exports] = await Promise.all([
-    prisma.usuario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
-
-    prisma.exportacion_datos.findMany({
-      where: exportWhere,
-      orderBy: {
-        fecha_exportacion: "desc",
-      },
-      take: 150,
-      include: {
-        usuario: true,
-      },
-    }),
-  ]);
+  const { users, exports } = await getExportHistoryData({
+    dateFrom,
+    dateTo,
+    reportModule,
+    format,
+    status,
+    userId,
+    searchText,
+  });
 
   const totalExports = exports.length;
 
