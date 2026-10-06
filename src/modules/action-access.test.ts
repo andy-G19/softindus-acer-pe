@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Pruebas de caracterizacion del control de acceso de las Server Actions de
-// costos, mantenimiento, caja chica, personal y mermas.
+// costos, mantenimiento, caja chica, ordenes de trabajo, personal y mermas.
 //
-// La tabla MODULOS registra, por archivo, los roles que cada accion exige.
+// La tabla MODULOS registra, por archivo, los roles que cada accion exige;
+// rolesPorAccion, las excepciones dentro de un archivo. Las ordenes de trabajo
+// se agregaron en la entrega 6, antes de dividir su archivo de acciones.
 // Se ejecutan las acciones reales: solo se reemplaza auth() de @/auth por una
 // sesion de prueba, redirect() por una senal que corta la ejecucion y Prisma
 // por un doble que registra cualquier acceso. Se simula @/auth y no
@@ -97,6 +99,8 @@ type ModuloDeAcciones = {
   cargar: () => Promise<Record<string, unknown>>;
   roles: Rol[];
   acciones: string[];
+  // Acciones del modulo que exigen otros roles que el resto.
+  rolesPorAccion?: Record<string, Rol[]>;
 };
 
 const MODULOS: ModuloDeAcciones[] = [
@@ -204,6 +208,25 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/petty-cash/movements/actions"),
     roles: SOLO_ADMIN,
     acciones: ["annulPettyCashMovementAction"],
+  },
+  {
+    ruta: "production/work-orders/actions",
+    cargar: () => import("@/modules/production/work-orders/actions"),
+    roles: ADMIN_Y_TALLER,
+    acciones: [
+      "createWorkOrderAction",
+      "deliverWorkOrderMaterialsAction",
+      "deliverAdditionalMaterialAction",
+      "returnWorkOrderMaterialAction",
+      "closeWorkOrderMaterialsAction",
+      "reopenWorkOrderMaterialsAction",
+      "annulWorkOrderAction",
+      "finishWorkOrderAction",
+    ],
+    // El maestro de taller concilia y cierra; solo el administrador reabre.
+    rolesPorAccion: {
+      reopenWorkOrderMaterialsAction: SOLO_ADMIN,
+    },
   },
   {
     ruta: "staff/attendance/actions",
@@ -337,9 +360,6 @@ beforeEach(() => {
 });
 
 describe.each(MODULOS)("$ruta", (modulo) => {
-  const permitidos = modulo.roles;
-  const denegados = ROLES.filter((role) => !permitidos.includes(role));
-
   it("la tabla incluye todas las acciones exportadas", async () => {
     const exports = await modulo.cargar();
     const exported = Object.keys(exports).filter(
@@ -347,9 +367,17 @@ describe.each(MODULOS)("$ruta", (modulo) => {
     );
 
     expect(exported.sort()).toEqual([...modulo.acciones].sort());
+    expect(
+      Object.keys(modulo.rolesPorAccion ?? {}).filter(
+        (name) => !modulo.acciones.includes(name),
+      ),
+    ).toEqual([]);
   });
 
   describe.each(modulo.acciones)("%s", (name) => {
+    const permitidos = modulo.rolesPorAccion?.[name] ?? modulo.roles;
+    const denegados = ROLES.filter((role) => !permitidos.includes(role));
+
     it("sin sesion redirige a /login", async () => {
       const action = await loadAction(modulo, name);
 
