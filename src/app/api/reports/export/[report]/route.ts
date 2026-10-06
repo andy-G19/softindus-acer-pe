@@ -1,6 +1,4 @@
-import { registerAuditLog } from "@/lib/audit";
 import { requireApiAuth, type Role } from "@/lib/authz";
-import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import {
   ForbiddenError,
@@ -19,16 +17,22 @@ import {
   type ExportFormat,
 } from "@/lib/reports/export-limits";
 import {
-  normalizeReportTextParam,
+  buildReportDateRange,
   parseExportFormat,
   parseExportLimit,
+  parseReportDate,
   parseReportKey,
   validateDateRange,
 } from "@/lib/reports/report-filters";
+import { getReportDefinition } from "@/lib/reports/report-registry";
+import { registerExportLog } from "@/modules/reports/export-log";
 import {
-  getReportDefinition,
-  getReportLabel,
-} from "@/lib/reports/report-registry";
+  formatQuantity,
+  getExportDateStamp,
+  getExportParam,
+  type ExportCell,
+  type ExportReport,
+} from "@/modules/reports/export-report";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -38,117 +42,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-type CsvValue = string | number | boolean | Date | null | undefined;
-
-type ExportReport = {
-  filename: string;
-  pdfFilename: string;
-  title: string;
-  headers: string[];
-  rows: CsvValue[][];
-};
-
-function getParam(searchParams: URLSearchParams, key: string) {
-  return normalizeReportTextParam(searchParams.get(key));
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
-}
-
-function buildDateRange(dateFrom: string, dateTo: string) {
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-
-  if (!fromDate && !toDate) {
-    return undefined;
-  }
-
-  return {
-    ...(fromDate ? { gte: fromDate } : {}),
-    ...(toDate ? { lt: toDate } : {}),
-  };
-}
-
-function formatQuantity(value: unknown) {
-  return toNumber(value).toFixed(2);
-}
-
-function getDateStamp() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-async function registerExportLog(data: {
-  userId: string;
-  report: string;
-  filename: string;
-  fileFormat: "excel" | "pdf";
-  searchParams: URLSearchParams;
-  totalExported: number;
-}) {
-  // Filtros resumidos para auditoria: nunca incluye fileFormat/limit (ruido)
-  // ni puede contener datos sensibles, ya que estos parametros son siempre
-  // filtros de negocio (fechas, estado, ids), nunca credenciales.
-  const paramsObject = Object.fromEntries(data.searchParams.entries());
-
-  delete paramsObject.fileFormat;
-  delete paramsObject.limit;
-
-  const label = getReportLabel(data.report);
-
-  await prisma.$transaction(async (tx) => {
-    const id_exportacion = await getNextCorrelativeId(tx, {
-      codigoEntidad: "exportacion_datos",
-      prefijo: "EXP",
-    });
-
-    await tx.exportacion_datos.create({
-      data: {
-        id_exportacion,
-        id_usuario: data.userId,
-        modulo_origen: label,
-        formato: data.fileFormat,
-        parametros: JSON.stringify(paramsObject),
-        estado: "generada",
-        ruta_archivo: data.filename,
-      },
-    });
-
-    await registerAuditLog({
-      userId: data.userId,
-      entidad_afectada: "exportacion_datos",
-      id_registro_afectado: id_exportacion,
-      accion: "crear",
-      detalle: `Reporte exportado: ${label} (${data.fileFormat}). Registros: ${data.totalExported}.`,
-      tx,
-    });
-  });
-}
 
 function getPaymentTotalByType(
   payments: {
@@ -170,13 +63,13 @@ async function buildProductionCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const productId = getParam(searchParams, "productId");
-  const status = getParam(searchParams, "status");
-  const orderId = getParam(searchParams, "orderId").toUpperCase();
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const productId = getExportParam(searchParams, "productId");
+  const status = getExportParam(searchParams, "status");
+  const orderId = getExportParam(searchParams, "orderId").toUpperCase();
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const orders = await prisma.orden_trabajo.findMany({
     where: {
@@ -211,8 +104,8 @@ async function buildProductionCsv(
   });
 
   return {
-    filename: `reporte_produccion_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_produccion_${getDateStamp()}.pdf`,
+    filename: `reporte_produccion_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_produccion_${getExportDateStamp()}.pdf`,
     title: "Reporte de Producción",
     headers: [
       "Orden",
@@ -262,14 +155,14 @@ async function buildInventoryCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const materialId = getParam(searchParams, "materialId");
-  const movementType = getParam(searchParams, "movementType");
-  const userId = getParam(searchParams, "userId");
-  const workOrderId = getParam(searchParams, "workOrderId").toUpperCase();
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const materialId = getExportParam(searchParams, "materialId");
+  const movementType = getExportParam(searchParams, "movementType");
+  const userId = getExportParam(searchParams, "userId");
+  const workOrderId = getExportParam(searchParams, "workOrderId").toUpperCase();
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const movements = await prisma.movimiento_inventario.findMany({
     where: {
@@ -304,8 +197,8 @@ async function buildInventoryCsv(
   });
 
   return {
-    filename: `reporte_inventario_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_inventario_${getDateStamp()}.pdf`,
+    filename: `reporte_inventario_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_inventario_${getExportDateStamp()}.pdf`,
     title: "Reporte de Inventario",
     headers: [
       "Movimiento",
@@ -348,14 +241,14 @@ async function buildSalesCollectionsCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const clientId = getParam(searchParams, "clientId");
-  const orderStatus = getParam(searchParams, "orderStatus");
-  const collectionStatus = getParam(searchParams, "collectionStatus");
-  const searchCode = getParam(searchParams, "searchCode").toUpperCase();
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const clientId = getExportParam(searchParams, "clientId");
+  const orderStatus = getExportParam(searchParams, "orderStatus");
+  const collectionStatus = getExportParam(searchParams, "collectionStatus");
+  const searchCode = getExportParam(searchParams, "searchCode").toUpperCase();
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const orders = await prisma.pedido.findMany({
     where: {
@@ -461,8 +354,8 @@ async function buildSalesCollectionsCsv(
     });
 
   return {
-    filename: `reporte_ventas_cobranzas_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_ventas_cobranzas_${getDateStamp()}.pdf`,
+    filename: `reporte_ventas_cobranzas_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_ventas_cobranzas_${getExportDateStamp()}.pdf`,
     title: "Reporte de Ventas y Cobranzas",
     headers: [
       "Pedido",
@@ -511,15 +404,15 @@ async function buildSuppliersPurchasesCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const supplierId = getParam(searchParams, "supplierId");
-  const materialId = getParam(searchParams, "materialId");
-  const purchaseStatus = getParam(searchParams, "purchaseStatus");
-  const paymentStatus = getParam(searchParams, "paymentStatus");
-  const searchCode = getParam(searchParams, "searchCode").toUpperCase();
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const supplierId = getExportParam(searchParams, "supplierId");
+  const materialId = getExportParam(searchParams, "materialId");
+  const purchaseStatus = getExportParam(searchParams, "purchaseStatus");
+  const paymentStatus = getExportParam(searchParams, "paymentStatus");
+  const searchCode = getExportParam(searchParams, "searchCode").toUpperCase();
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const purchases = await prisma.compra.findMany({
     where: {
@@ -576,8 +469,8 @@ async function buildSuppliersPurchasesCsv(
   });
 
   return {
-    filename: `reporte_proveedores_compras_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_proveedores_compras_${getDateStamp()}.pdf`,
+    filename: `reporte_proveedores_compras_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_proveedores_compras_${getExportDateStamp()}.pdf`,
     title: "Reporte de Proveedores y Compras",
     headers: [
       "Compra",
@@ -651,14 +544,14 @@ async function buildFinancialCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const cashBoxId = getParam(searchParams, "cashBoxId");
-  const movementType = getParam(searchParams, "movementType");
-  const categoryId = getParam(searchParams, "categoryId");
-  const searchText = getParam(searchParams, "searchText");
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const cashBoxId = getExportParam(searchParams, "cashBoxId");
+  const movementType = getExportParam(searchParams, "movementType");
+  const categoryId = getExportParam(searchParams, "categoryId");
+  const searchText = getExportParam(searchParams, "searchText");
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const [
     cashMovements,
@@ -808,7 +701,7 @@ async function buildFinancialCsv(
     return sum + Math.max(toNumber(purchase.monto_total) - paid, 0);
   }, 0);
 
-  const summaryRows: CsvValue[][] = [
+  const summaryRows: ExportCell[][] = [
     ["Resumen", "Saldo caja chica abierta", "", formatMoney(cashBalance._sum.saldo_actual ?? 0), "", "", "", ""],
     ["Resumen", "Ingresos caja chica", "", formatMoney(totalCashIncome), "", "", "", ""],
     ["Resumen", "Egresos caja chica", "", formatMoney(totalCashExpense), "", "", "", ""],
@@ -822,7 +715,7 @@ async function buildFinancialCsv(
     ["Resumen", "Compras por pagar", "", formatMoney(totalPendingPurchases), "", "", "", ""],
   ];
 
-  const movementRows: CsvValue[][] = cashMovements.map((movement) => [
+  const movementRows: ExportCell[][] = cashMovements.map((movement) => [
     "Movimiento caja",
     movement.id_movimiento_caja,
     movement.concepto,
@@ -834,8 +727,8 @@ async function buildFinancialCsv(
   ]);
 
   return {
-    filename: `reporte_financiero_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_financiero_${getDateStamp()}.pdf`,
+    filename: `reporte_financiero_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_financiero_${getExportDateStamp()}.pdf`,
     title: "Reporte Financiero",
     headers: [
       "Sección",
@@ -855,15 +748,15 @@ async function buildMaintenanceCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom");
-  const dateTo = getParam(searchParams, "dateTo");
-  const machineId = getParam(searchParams, "machineId");
-  const failureStatus = getParam(searchParams, "failureStatus");
-  const repairStatus = getParam(searchParams, "repairStatus");
-  const preventiveStatus = getParam(searchParams, "preventiveStatus");
-  const searchText = getParam(searchParams, "searchText");
+  const dateFrom = getExportParam(searchParams, "dateFrom");
+  const dateTo = getExportParam(searchParams, "dateTo");
+  const machineId = getExportParam(searchParams, "machineId");
+  const failureStatus = getExportParam(searchParams, "failureStatus");
+  const repairStatus = getExportParam(searchParams, "repairStatus");
+  const preventiveStatus = getExportParam(searchParams, "preventiveStatus");
+  const searchText = getExportParam(searchParams, "searchText");
 
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const [failures, preventives] = await Promise.all([
     prisma.falla_maquina.findMany({
@@ -948,7 +841,7 @@ async function buildMaintenanceCsv(
     }),
   ]);
 
-  const failureRows: CsvValue[][] = failures.map((failure) => {
+  const failureRows: ExportCell[][] = failures.map((failure) => {
     const repairCost = failure.reparacion.reduce((sum, repair) => {
       return sum + toNumber(repair.costo_total);
     }, 0);
@@ -977,7 +870,7 @@ async function buildMaintenanceCsv(
     ];
   });
 
-  const preventiveRows: CsvValue[][] = preventives.map((maintenance) => [
+  const preventiveRows: ExportCell[][] = preventives.map((maintenance) => [
     "Preventivo",
     maintenance.id_mantenimiento,
     maintenance.maquina.nombre,
@@ -992,8 +885,8 @@ async function buildMaintenanceCsv(
   ]);
 
   return {
-    filename: `reporte_mantenimiento_${getDateStamp()}.xlsx`,
-    pdfFilename: `reporte_mantenimiento_${getDateStamp()}.pdf`,
+    filename: `reporte_mantenimiento_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `reporte_mantenimiento_${getExportDateStamp()}.pdf`,
     title: "Reporte de Mantenimiento",
     headers: [
       "Tipo registro",
@@ -1016,12 +909,12 @@ async function buildProfitabilityCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
-  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
-  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
-  const lowMargin = getParam(searchParams, "lowMargin");
-  const negativeProfit = getParam(searchParams, "negativeProfit");
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
+  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
+  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
+  const lowMargin = getExportParam(searchParams, "lowMargin");
+  const negativeProfit = getExportParam(searchParams, "negativeProfit");
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const costings = await prisma.costeo.findMany({
     where: {
@@ -1092,8 +985,8 @@ async function buildProfitabilityCsv(
   });
 
   return {
-    filename: `costos_rentabilidad_${getDateStamp()}.xlsx`,
-    pdfFilename: `costos_rentabilidad_${getDateStamp()}.pdf`,
+    filename: `costos_rentabilidad_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `costos_rentabilidad_${getExportDateStamp()}.pdf`,
     title: "Reporte de Costos y Rentabilidad",
     headers: [
       "Costeo",
@@ -1147,13 +1040,13 @@ async function buildStaffCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
-  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
-  const operatorId = getParam(searchParams, "operatorId") || getParam(searchParams, "operario");
-  const payrollStatus = getParam(searchParams, "payrollStatus") || getParam(searchParams, "estado");
-  const paymentMode = getParam(searchParams, "paymentMode") || getParam(searchParams, "modalidad");
-  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
+  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
+  const operatorId = getExportParam(searchParams, "operatorId") || getExportParam(searchParams, "operario");
+  const payrollStatus = getExportParam(searchParams, "payrollStatus") || getExportParam(searchParams, "estado");
+  const paymentMode = getExportParam(searchParams, "paymentMode") || getExportParam(searchParams, "modalidad");
+  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const payrolls = await prisma.planilla_pago.findMany({
     where: {
@@ -1181,8 +1074,8 @@ async function buildStaffCsv(
   });
 
   return {
-    filename: `personal_planillas_${getDateStamp()}.xlsx`,
-    pdfFilename: `personal_planillas_${getDateStamp()}.pdf`,
+    filename: `personal_planillas_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `personal_planillas_${getExportDateStamp()}.pdf`,
     title: "Reporte de Personal y Planillas",
     headers: [
       "Planilla",
@@ -1223,13 +1116,13 @@ async function buildAuditCsv(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
-  const dateFrom = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
-  const dateTo = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
-  const userId = getParam(searchParams, "userId") || getParam(searchParams, "usuario");
-  const action = getParam(searchParams, "action") || getParam(searchParams, "accion");
-  const entity = getParam(searchParams, "entity") || getParam(searchParams, "entidad");
-  const searchText = getParam(searchParams, "q") || getParam(searchParams, "searchText");
-  const dateRange = buildDateRange(dateFrom, dateTo);
+  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
+  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
+  const userId = getExportParam(searchParams, "userId") || getExportParam(searchParams, "usuario");
+  const action = getExportParam(searchParams, "action") || getExportParam(searchParams, "accion");
+  const entity = getExportParam(searchParams, "entity") || getExportParam(searchParams, "entidad");
+  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
+  const dateRange = buildReportDateRange(dateFrom, dateTo);
 
   const logs = await prisma.bitacora_operacion.findMany({
     where: {
@@ -1256,8 +1149,8 @@ async function buildAuditCsv(
   });
 
   return {
-    filename: `auditoria_${getDateStamp()}.xlsx`,
-    pdfFilename: `auditoria_${getDateStamp()}.pdf`,
+    filename: `auditoria_${getExportDateStamp()}.xlsx`,
+    pdfFilename: `auditoria_${getExportDateStamp()}.pdf`,
     title: "Reporte de Auditoria",
     headers: [
       "Fecha",
@@ -1320,12 +1213,12 @@ async function buildReport(
 
 /** Lee dateFrom/dateTo o su alias from/to (usado por profitability/staff/audit). */
 function extractReportDateRange(searchParams: URLSearchParams) {
-  const fromRaw = getParam(searchParams, "dateFrom") || getParam(searchParams, "from");
-  const toRaw = getParam(searchParams, "dateTo") || getParam(searchParams, "to");
+  const fromRaw = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
+  const toRaw = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
 
   return {
-    from: parseDateInput(fromRaw),
-    to: parseDateInput(toRaw),
+    from: parseReportDate(fromRaw),
+    to: parseReportDate(toRaw),
   };
 }
 

@@ -80,6 +80,58 @@ export function validateDateRange(
 }
 
 /**
+ * Fecha de un filtro de reporte ("aaaa-mm-dd") a medianoche en la zona del
+ * proceso. No valida el dia: "2026-02-30" pasa al 2 de marzo. Es la regla que
+ * repetian las paginas de reportes y la ruta de exportacion.
+ */
+export function parseReportDate(value: string): Date | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return undefined;
+  }
+
+  return new Date(year, month - 1, day);
+}
+
+/** Como parseReportDate, pero el dia siguiente: limite exclusivo de "hasta". */
+export function parseReportDateAsNextDay(value: string): Date | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return undefined;
+  }
+
+  return new Date(year, month - 1, day + 1);
+}
+
+/**
+ * Rango de un filtro "desde"/"hasta" de reporte: desde el inicio del primer
+ * dia hasta antes del dia siguiente al ultimo. Sin fechas validas no filtra.
+ */
+export function buildReportDateRange(dateFrom: string, dateTo: string) {
+  const fromDate = parseReportDate(dateFrom);
+  const toDate = parseReportDateAsNextDay(dateTo);
+
+  if (!fromDate && !toDate) {
+    return undefined;
+  }
+
+  return {
+    ...(fromDate ? { gte: fromDate } : {}),
+    ...(toDate ? { lt: toDate } : {}),
+  };
+}
+
+/**
  * Parsea el `limit` opcional de la URL y lo acota de forma segura segun el
  * formato de exportacion. Nunca deja pasar un valor enorme, negativo o NaN.
  */

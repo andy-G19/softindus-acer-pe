@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { MAX_DATE_RANGE_DAYS } from "@/lib/reports/export-limits";
 import {
+  buildReportDateRange,
   normalizeReportTextParam,
   parseExportFormat,
   parseExportLimit,
+  parseReportDate,
+  parseReportDateAsNextDay,
   parseReportKey,
   validateDateRange,
 } from "@/lib/reports/report-filters";
@@ -125,5 +128,50 @@ describe("normalizeReportTextParam", () => {
     const longValue = "a".repeat(500);
 
     expect(normalizeReportTextParam(longValue).length).toBeLessThanOrEqual(200);
+  });
+});
+
+// Las fechas esperadas se construyen con new Date(anio, mes, dia), en la zona
+// del proceso como la funcion probada: las pruebas valen en cualquier zona.
+describe("parseReportDate y parseReportDateAsNextDay", () => {
+  it("interpretan aaaa-mm-dd a medianoche, y el dia siguiente", () => {
+    expect(parseReportDate("2026-07-01")).toEqual(new Date(2026, 6, 1));
+    expect(parseReportDateAsNextDay("2026-07-01")).toEqual(new Date(2026, 6, 2));
+    expect(parseReportDateAsNextDay("2026-12-31")).toEqual(new Date(2027, 0, 1));
+  });
+
+  it("no validan el dia ni el mes: los desbordan como Date", () => {
+    expect(parseReportDate("2026-02-30")).toEqual(new Date(2026, 2, 2));
+    expect(parseReportDate("2026-13-01")).toEqual(new Date(2027, 0, 1));
+  });
+
+  it("toleran espacios alrededor de cada parte, como Number", () => {
+    expect(parseReportDate(" 2026-07-01 ")).toEqual(new Date(2026, 6, 1));
+  });
+
+  it("ignoran valores vacios, incompletos o no numericos", () => {
+    for (const value of ["", "abc", "2026-07", "0-07-01", "2026-00-10", "2026-07-0"]) {
+      expect(parseReportDate(value)).toBeUndefined();
+      expect(parseReportDateAsNextDay(value)).toBeUndefined();
+    }
+  });
+});
+
+describe("buildReportDateRange", () => {
+  it("arma el rango con inicio inclusivo y fin exclusivo", () => {
+    expect(buildReportDateRange("2026-07-01", "2026-07-31")).toEqual({
+      gte: new Date(2026, 6, 1),
+      lt: new Date(2026, 7, 1),
+    });
+  });
+
+  it("admite una sola de las dos fechas", () => {
+    expect(buildReportDateRange("2026-07-01", "")).toEqual({ gte: new Date(2026, 6, 1) });
+    expect(buildReportDateRange("", "2026-07-31")).toEqual({ lt: new Date(2026, 7, 1) });
+  });
+
+  it("sin fechas validas no filtra", () => {
+    expect(buildReportDateRange("", "")).toBeUndefined();
+    expect(buildReportDateRange("abc", "2026-07")).toBeUndefined();
   });
 });
