@@ -28,12 +28,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getInventoryReportData } from "@/modules/reports/inventory/queries";
 
 const INVENTORY_MOVEMENT_OPTIONS = [
   { value: "entrada", label: "Entrada" },
@@ -58,34 +58,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function formatQuantity(value: unknown) {
@@ -135,76 +107,14 @@ export default async function InventoryReportPage({
   "pdf",
 );
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-
-  const movementWhere = {
-    ...(fromDate || toDate
-      ? {
-          fecha_movimiento: {
-            ...(fromDate ? { gte: fromDate } : {}),
-            ...(toDate ? { lt: toDate } : {}),
-          },
-        }
-      : {}),
-    ...(materialId ? { id_material: materialId } : {}),
-    ...(movementType ? { tipo_movimiento: movementType } : {}),
-    ...(userId ? { id_usuario_responsable: userId } : {}),
-    ...(workOrderId
-      ? {
-          id_orden_trabajo: {
-            contains: workOrderId.toUpperCase(),
-          },
-        }
-      : {}),
-  };
-
-  const [materials, users, movements] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-    }),
-
-    prisma.usuario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
-
-    prisma.movimiento_inventario.findMany({
-      where: movementWhere,
-      orderBy: {
-        fecha_movimiento: "desc",
-      },
-      take: 100,
-      include: {
-        material: true,
-        usuario: true,
-        orden_trabajo: {
-          include: {
-            producto: true,
-          },
-        },
-        compra: {
-          include: {
-            proveedor: true,
-          },
-        },
-      },
-    }),
-  ]);
+  const { materials, users, movements } = await getInventoryReportData({
+    dateFrom,
+    dateTo,
+    materialId,
+    movementType,
+    userId,
+    workOrderCode: workOrderId.toUpperCase(),
+  });
 
   const totalMovements = movements.length;
 

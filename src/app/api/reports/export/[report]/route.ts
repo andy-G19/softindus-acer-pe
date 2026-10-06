@@ -33,6 +33,7 @@ import {
   type ExportCell,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportInventoryReport } from "@/modules/reports/inventory/exporter";
 import { exportProductionReport } from "@/modules/reports/production/exporter";
 
 export const dynamic = "force-dynamic";
@@ -58,92 +59,6 @@ function getPaymentTotalByType(
 
     return sum + toNumber(payment.monto_pagado);
   }, 0);
-}
-
-async function buildInventoryCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom");
-  const dateTo = getExportParam(searchParams, "dateTo");
-  const materialId = getExportParam(searchParams, "materialId");
-  const movementType = getExportParam(searchParams, "movementType");
-  const userId = getExportParam(searchParams, "userId");
-  const workOrderId = getExportParam(searchParams, "workOrderId").toUpperCase();
-
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const movements = await prisma.movimiento_inventario.findMany({
-    where: {
-      ...(dateRange ? { fecha_movimiento: dateRange } : {}),
-      ...(materialId ? { id_material: materialId } : {}),
-      ...(movementType ? { tipo_movimiento: movementType } : {}),
-      ...(userId ? { id_usuario_responsable: userId } : {}),
-      ...(workOrderId
-        ? {
-            id_orden_trabajo: {
-              contains: workOrderId,
-            },
-          }
-        : {}),
-    },
-    orderBy: [{ fecha_movimiento: "desc" }, { id_movimiento: "desc" }],
-    take: limit,
-    include: {
-      material: true,
-      usuario: true,
-      orden_trabajo: {
-        include: {
-          producto: true,
-        },
-      },
-      compra: {
-        include: {
-          proveedor: true,
-        },
-      },
-    },
-  });
-
-  return {
-    filename: `reporte_inventario_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `reporte_inventario_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Inventario",
-    headers: [
-      "Movimiento",
-      "Material",
-      "Categoría",
-      "Unidad",
-      "Tipo movimiento",
-      "Cantidad",
-      "Stock anterior",
-      "Stock resultante",
-      "Fecha",
-      "Responsable",
-      "Orden de trabajo",
-      "Producto orden",
-      "Compra",
-      "Proveedor",
-      "Motivo",
-    ],
-    rows: movements.map((movement) => [
-      movement.id_movimiento,
-      movement.material.nombre_material,
-      movement.material.categoria,
-      movement.material.unidad_medida,
-      movement.tipo_movimiento,
-      formatQuantity(movement.cantidad),
-      formatQuantity(movement.stock_anterior),
-      formatQuantity(movement.stock_resultante),
-      formatDateTime(movement.fecha_movimiento),
-      `${movement.usuario.apellidos}, ${movement.usuario.nombres}`,
-      movement.orden_trabajo?.id_orden_trabajo ?? "",
-      movement.orden_trabajo?.producto.nombre_producto ?? "",
-      movement.compra?.id_compra ?? "",
-      movement.compra?.proveedor.razon_social ?? "",
-      movement.motivo ?? "",
-    ]),
-  };
 }
 
 async function buildSalesCollectionsCsv(
@@ -1092,7 +1007,7 @@ async function buildReport(
       return exportProductionReport(searchParams, limit);
 
     case "inventory":
-      return buildInventoryCsv(searchParams, limit);
+      return exportInventoryReport(searchParams, limit);
 
     case "sales-collections":
       return buildSalesCollectionsCsv(searchParams, limit);
