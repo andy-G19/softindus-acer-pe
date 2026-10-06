@@ -22,19 +22,8 @@ import {
 } from "@/lib/reports/report-filters";
 import { getReportDefinition } from "@/lib/reports/report-registry";
 import { registerExportLog } from "@/modules/reports/export-log";
-import {
-  getExportParam,
-  type ExportReport,
-} from "@/modules/reports/export-report";
-import { exportAuditReport } from "@/modules/audit/exporter";
-import { exportProfitabilityReport } from "@/modules/reports/profitability/exporter";
-import { exportStaffReport } from "@/modules/reports/staff/exporter";
-import { exportMaintenanceReport } from "@/modules/reports/maintenance/exporter";
-import { exportFinancialReport } from "@/modules/reports/financial/exporter";
-import { exportSalesCollectionsReport } from "@/modules/reports/sales-collections/exporter";
-import { exportSuppliersPurchasesReport } from "@/modules/reports/suppliers-purchases/exporter";
-import { exportInventoryReport } from "@/modules/reports/inventory/exporter";
-import { exportProductionReport } from "@/modules/reports/production/exporter";
+import { REPORT_EXPORTERS } from "@/modules/reports/exporters";
+import { getExportParam } from "@/modules/reports/export-report";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -44,44 +33,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-async function buildReport(
-  report: string,
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport | null> {
-  switch (report) {
-    case "production":
-      return exportProductionReport(searchParams, limit);
-
-    case "inventory":
-      return exportInventoryReport(searchParams, limit);
-
-    case "sales-collections":
-      return exportSalesCollectionsReport(searchParams, limit);
-
-    case "suppliers-purchases":
-      return exportSuppliersPurchasesReport(searchParams, limit);
-
-    case "financial":
-      return exportFinancialReport(searchParams, limit);
-
-    case "maintenance":
-      return exportMaintenanceReport(searchParams, limit);
-
-    case "profitability":
-      return exportProfitabilityReport(searchParams, limit);
-
-    case "staff":
-      return exportStaffReport(searchParams, limit);
-
-    case "audit":
-      return exportAuditReport(searchParams, limit);
-
-    default:
-      return null;
-  }
-}
 
 /** Lee dateFrom/dateTo o su alias from/to (usado por profitability/staff/audit). */
 function extractReportDateRange(searchParams: URLSearchParams) {
@@ -170,14 +121,7 @@ export async function GET(request: Request, context: RouteContext) {
   const limit = parseExportLimit(url.searchParams.get("limit"), fileFormat);
 
   try {
-    const exportReport = await buildReport(report, url.searchParams, limit);
-
-    if (!exportReport) {
-      return toApiErrorResponse(
-        new NotFoundError(`Reporte no encontrado: "${report}".`),
-        { report, userId: session.user.id },
-      );
-    }
+    const exportReport = await REPORT_EXPORTERS[report](url.searchParams, limit);
 
     // Recorte defensivo final: algunos reportes combinan mas de una consulta
     // (ej. financiero = resumen + movimientos, mantenimiento = fallas +
