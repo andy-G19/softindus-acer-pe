@@ -1,0 +1,878 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistencias > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "orderBy": {
+        "fecha_generacion": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "planilla_pago.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+]
+`;
+
+exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistencias > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Personal</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Personal y planillas</h1>
+<p>Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/staff?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/staff?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario" name="q" value=""/>
+</div>
+<div>
+<label for="operario">Operario</label>
+<select id="operario" name="operario">
+<option value="" selected="">Todos los operarios</option>
+<option value="id_operario-1">apellidos-1, nombres-1</option>
+<option value="id_operario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="" selected="">Todas las modalidades</option>
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="pagado">Pagado</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios activos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Operarios habilitados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Registros en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Ausencias registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Marcaciones tardias.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Pendientes: 1</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Neto: S/ 11.50</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Planillas listadas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Planilla</th>
+<th>Operario</th>
+<th>Periodo</th>
+<th>Modalidad</th>
+<th>Neto</th>
+<th>Pagado</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PLA00000001</td>
+<td>apellidos-1, nombres-1</td>
+<td>01/07/2026 - 01/07/2026</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>pendiente</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/staff > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "orderBy": {
+        "fecha_generacion": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "planilla_pago.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+]
+`;
+
+exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Personal</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Personal y planillas</h1>
+<p>Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/staff?fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/staff?fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario" name="q" value=""/>
+</div>
+<div>
+<label for="operario">Operario</label>
+<select id="operario" name="operario">
+<option value="" selected="">Todos los operarios</option>
+<option value="id_operario-1">apellidos-1, nombres-1</option>
+<option value="id_operario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="" selected="">Todas las modalidades</option>
+<option value="semanal">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="pagado">Pagado</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios activos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Operarios habilitados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Ausencias registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Marcaciones tardias.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Pendientes: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Neto: S/ 34.00</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Planillas listadas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Planilla</th>
+<th>Operario</th>
+<th>Periodo</th>
+<th>Modalidad</th>
+<th>Neto</th>
+<th>Pagado</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_planilla-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>01/07/2026 - 01/07/2026</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>estado_pago-1</td>
+</tr>
+<tr>
+<td>id_planilla-2</td>
+<td>apellidos-2, nombres-2</td>
+<td>02/07/2026 - 02/07/2026</td>
+<td>modalidad_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 34.00</td>
+<td>estado_pago-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "operario.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "historial_pago_operario": true,
+        "operario": true,
+      },
+      "orderBy": {
+        "fecha_generacion": "desc",
+      },
+      "take": 100,
+      "where": {
+        "AND": [
+          {
+            "operario": {
+              "OR": [
+                {
+                  "nombres": {
+                    "contains": "Quispe",
+                    "mode": "insensitive",
+                  },
+                },
+                {
+                  "apellidos": {
+                    "contains": "Quispe",
+                    "mode": "insensitive",
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "id_operario": "OPE00000001",
+          },
+          {
+            "modalidad_pago": "semanal",
+          },
+          {
+            "estado_pago": "pagado",
+          },
+          {
+            "periodo_inicio": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "planilla_pago.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lte": 2026-07-31T23:59:59.999Z,
+        },
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "falta": true,
+        "fecha": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lte": 2026-07-31T23:59:59.999Z,
+        },
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lte": 2026-07-31T23:59:59.999Z,
+        },
+        "id_operario": "OPE00000001",
+        "tardanza": true,
+      },
+    },
+    "prisma": "asistencia.count",
+  },
+]
+`;
+
+exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Personal</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Personal y planillas</h1>
+<p>Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel">Exportar Excel</a>
+<a data-variant="default" href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar operario" name="q" value="Quispe"/>
+</div>
+<div>
+<label for="operario">Operario</label>
+<select id="operario" name="operario">
+<option value="">Todos los operarios</option>
+<option value="id_operario-1">apellidos-1, nombres-1</option>
+<option value="id_operario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="modalidad">Modalidad</label>
+<select id="modalidad" name="modalidad">
+<option value="">Todas las modalidades</option>
+<option value="semanal" selected="">Semanal</option>
+<option value="quincenal">Quincenal</option>
+<option value="mensual">Mensual</option>
+</select>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="pagado" selected="">Pagado</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operarios activos</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Operarios habilitados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Asistencias</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Registros en el periodo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Faltas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Ausencias registradas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Tardanzas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Marcaciones tardias.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Planillas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Pendientes: 0</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pagado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.00</p>
+<p>Neto: S/ 34.00</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Planillas listadas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Planilla</th>
+<th>Operario</th>
+<th>Periodo</th>
+<th>Modalidad</th>
+<th>Neto</th>
+<th>Pagado</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_planilla-1</td>
+<td>apellidos-1, nombres-1</td>
+<td>01/07/2026 - 01/07/2026</td>
+<td>modalidad_pago-1</td>
+<td>S/ 11.50</td>
+<td>S/ 34.00</td>
+<td>estado_pago-1</td>
+</tr>
+<tr>
+<td>id_planilla-2</td>
+<td>apellidos-2, nombres-2</td>
+<td>02/07/2026 - 02/07/2026</td>
+<td>modalidad_pago-2</td>
+<td>S/ 22.50</td>
+<td>S/ 34.00</td>
+<td>estado_pago-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

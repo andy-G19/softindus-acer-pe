@@ -1,0 +1,1736 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en memoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "include": {
+            "comprobante_venta": true,
+            "pago_cliente": {
+              "orderBy": {
+                "fecha_pago": "asc",
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/sales-collections > filtro por estado de cobranza en memoria > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ventas y cobranzas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de ventas y cobranzas</h1>
+<p>Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/sales-collections?collectionStatus=sin_pago&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/sales-collections?collectionStatus=sin_pago&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="clientId">Cliente</label>
+<select id="clientId" name="clientId">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado del pedido</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado">Aprobado</option>
+<option value="en_produccion">En producción</option>
+<option value="entregado">Entregado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="collectionStatus">Estado de cobranza</label>
+<select id="collectionStatus" name="collectionStatus">
+<option value="">Todos los estados</option>
+<option value="sin_proforma">Sin proforma</option>
+<option value="sin_pago" selected="">Sin pago</option>
+<option value="con_saldo">Con saldo pendiente</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Pedido o proforma</label>
+<input type="text" id="searchCode" placeholder="Ej: PED00000001 o PF-00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/sales-collections">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos encontrados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Pedidos según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma del monto estimado de pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto proformado</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Suma de proformas emitidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total cobrado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Pedidos con saldo: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pagados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pedidos con proforma sin saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Adelantos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Adelantos iniciales y pagos tipo adelanto.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Amortizaciones</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Estado pedido</th>
+<th>Monto estimado</th>
+<th>Proforma</th>
+<th>Monto proformado</th>
+<th>Adelantos</th>
+<th>Amortizaciones</th>
+<th>Cancelaciones</th>
+<th>Cobrado</th>
+<th>Saldo</th>
+<th>Cobranza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/PED00000004">PED00000004</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_cliente-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>estado-2</td>
+<td>S/ 0.00</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>Sin pago</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad comercial: pedido, cliente, proforma, pagos realizados, saldo pendiente y estado de cobranza. Su precisión depende del registro correcto de proformas, adelantos, amortizaciones y cancelaciones.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "include": {
+            "comprobante_venta": true,
+            "pago_cliente": {
+              "orderBy": {
+                "fecha_pago": "asc",
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/sales-collections > los cuatro estados de cobranza > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ventas y cobranzas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de ventas y cobranzas</h1>
+<p>Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/sales-collections?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/sales-collections?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="clientId">Cliente</label>
+<select id="clientId" name="clientId">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado del pedido</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado">Aprobado</option>
+<option value="en_produccion">En producción</option>
+<option value="entregado">Entregado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="collectionStatus">Estado de cobranza</label>
+<select id="collectionStatus" name="collectionStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="sin_proforma">Sin proforma</option>
+<option value="sin_pago">Sin pago</option>
+<option value="con_saldo">Con saldo pendiente</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Pedido o proforma</label>
+<input type="text" id="searchCode" placeholder="Ej: PED00000001 o PF-00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/sales-collections">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos encontrados</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Pedidos según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Suma del monto estimado de pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto proformado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.50</p>
+<p>Suma de proformas emitidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total cobrado</div>
+</div>
+</div>
+<div>
+<p>S/ 57.50</p>
+<p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Pedidos con saldo: 1.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pagados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Pedidos con proforma sin saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Adelantos</div>
+</div>
+</div>
+<div>
+<p>S/ 34.50</p>
+<p>Adelantos iniciales y pagos tipo adelanto.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Amortizaciones</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Cancelaciones: S/ 11.50.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Estado pedido</th>
+<th>Monto estimado</th>
+<th>Proforma</th>
+<th>Monto proformado</th>
+<th>Adelantos</th>
+<th>Amortizaciones</th>
+<th>Cancelaciones</th>
+<th>Cobrado</th>
+<th>Saldo</th>
+<th>Cobranza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/PED00000001">PED00000001</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_cliente-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>estado-1</td>
+<td>S/ 11.50</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 23.00</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 46.00</td>
+<td>S/ 11.50</td>
+<td>Con saldo pendiente</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/PED00000002">PED00000002</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_cliente-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>estado-2</td>
+<td>S/ 0.00</td>
+<td>-</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>Sin proforma</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/PED00000003">PED00000003</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_cliente-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>estado-1</td>
+<td>S/ 11.50</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>Pagado</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/PED00000004">PED00000004</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_cliente-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>estado-2</td>
+<td>S/ 0.00</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>Sin pago</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad comercial: pedido, cliente, proforma, pagos realizados, saldo pendiente y estado de cobranza. Su precisión depende del registro correcto de proformas, adelantos, amortizaciones y cancelaciones.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "include": {
+            "comprobante_venta": true,
+            "pago_cliente": {
+              "orderBy": {
+                "fecha_pago": "asc",
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/sales-collections > sin filtros, vendedor > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ventas y cobranzas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de ventas y cobranzas</h1>
+<p>Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/sales-collections?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/sales-collections?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="clientId">Cliente</label>
+<select id="clientId" name="clientId">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado del pedido</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado">Aprobado</option>
+<option value="en_produccion">En producción</option>
+<option value="entregado">Entregado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="collectionStatus">Estado de cobranza</label>
+<select id="collectionStatus" name="collectionStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="sin_proforma">Sin proforma</option>
+<option value="sin_pago">Sin pago</option>
+<option value="con_saldo">Con saldo pendiente</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Pedido o proforma</label>
+<input type="text" id="searchCode" placeholder="Ej: PED00000001 o PF-00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/sales-collections">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos encontrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Pedidos según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Suma del monto estimado de pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto proformado</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Suma de proformas emitidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total cobrado</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Pedidos con saldo: 2.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pagados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pedidos con proforma sin saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Adelantos</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Adelantos iniciales y pagos tipo adelanto.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Amortizaciones</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Estado pedido</th>
+<th>Monto estimado</th>
+<th>Proforma</th>
+<th>Monto proformado</th>
+<th>Adelantos</th>
+<th>Amortizaciones</th>
+<th>Cancelaciones</th>
+<th>Cobrado</th>
+<th>Saldo</th>
+<th>Cobranza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/id_pedido-1">id_pedido-1</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_cliente-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>estado-1</td>
+<td>S/ 11.50</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>Con saldo pendiente</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/id_pedido-2">id_pedido-2</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_cliente-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>estado-2</td>
+<td>S/ 0.00</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>Con saldo pendiente</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad comercial: pedido, cliente, proforma, pagos realizados, saldo pendiente y estado de cobranza. Su precisión depende del registro correcto de proformas, adelantos, amortizaciones y cancelaciones.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/sales-collections > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "include": {
+            "comprobante_venta": true,
+            "pago_cliente": {
+              "orderBy": {
+                "fecha_pago": "asc",
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "take": 100,
+      "where": {},
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/sales-collections > sin resultados > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ventas y cobranzas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de ventas y cobranzas</h1>
+<p>Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/sales-collections?fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/sales-collections?fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value=""/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value=""/>
+</div>
+<div>
+<label for="clientId">Cliente</label>
+<select id="clientId" name="clientId">
+<option value="" selected="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado del pedido</label>
+<select id="orderStatus" name="orderStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado">Aprobado</option>
+<option value="en_produccion">En producción</option>
+<option value="entregado">Entregado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="collectionStatus">Estado de cobranza</label>
+<select id="collectionStatus" name="collectionStatus">
+<option value="" selected="">Todos los estados</option>
+<option value="sin_proforma">Sin proforma</option>
+<option value="sin_pago">Sin pago</option>
+<option value="con_saldo">Con saldo pendiente</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Pedido o proforma</label>
+<input type="text" id="searchCode" placeholder="Ej: PED00000001 o PF-00000001" name="searchCode" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/sales-collections">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos encontrados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pedidos según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma del monto estimado de pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto proformado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma de proformas emitidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total cobrado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Pedidos con saldo: 0.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pagados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pedidos con proforma sin saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Adelantos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Adelantos iniciales y pagos tipo adelanto.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Amortizaciones</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<div>
+<p>No se encontraron ventas o cobranzas con los filtros aplicados.</p>
+</div>
+</div>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad comercial: pedido, cliente, proforma, pagos realizados, saldo pendiente y estado de cobranza. Su precisión depende del registro correcto de proformas, adelantos, amortizaciones y cancelaciones.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/sales-collections > todos los filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "include": {
+            "comprobante_venta": true,
+            "pago_cliente": {
+              "orderBy": {
+                "fecha_pago": "asc",
+              },
+            },
+          },
+          "orderBy": {
+            "fecha_emision": "desc",
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_pedido": "desc",
+      },
+      "take": 100,
+      "where": {
+        "OR": [
+          {
+            "id_pedido": {
+              "contains": "PF-0001",
+            },
+          },
+          {
+            "proforma": {
+              "some": {
+                "OR": [
+                  {
+                    "id_proforma": {
+                      "contains": "PF-0001",
+                    },
+                  },
+                  {
+                    "numero_proforma": {
+                      "contains": "PF-0001",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        "estado": "aprobado",
+        "fecha_pedido": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+        "id_cliente": "CLI00000001",
+      },
+    },
+    "prisma": "pedido.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/sales-collections > todos los filtros > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Ventas y cobranzas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de ventas y cobranzas</h1>
+<p>Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.</p>
+</div>
+</div>
+<div>
+<a href="/api/reports/export/sales-collections?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;clientId=CLI00000001&amp;orderStatus=aprobado&amp;collectionStatus=con_saldo&amp;searchCode=pf-0001&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
+<a href="/api/reports/export/sales-collections?dateFrom=2026-07-01&amp;dateTo=2026-07-31&amp;clientId=CLI00000001&amp;orderStatus=aprobado&amp;collectionStatus=con_saldo&amp;searchCode=pf-0001&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros del reporte</div>
+</div>
+<div>
+<form>
+<div>
+<label for="dateFrom">Fecha desde</label>
+<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+</div>
+<div>
+<label for="dateTo">Fecha hasta</label>
+<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
+</div>
+<div>
+<label for="clientId">Cliente</label>
+<select id="clientId" name="clientId">
+<option value="">Todos los clientes</option>
+<option value="id_cliente-1">nombre_razon_social-1</option>
+<option value="id_cliente-2">nombre_razon_social-2</option>
+</select>
+</div>
+<div>
+<label for="orderStatus">Estado del pedido</label>
+<select id="orderStatus" name="orderStatus">
+<option value="">Todos los estados</option>
+<option value="registrado">Registrado</option>
+<option value="aprobado" selected="">Aprobado</option>
+<option value="en_produccion">En producción</option>
+<option value="entregado">Entregado</option>
+<option value="cancelado">Cancelado</option>
+</select>
+</div>
+<div>
+<label for="collectionStatus">Estado de cobranza</label>
+<select id="collectionStatus" name="collectionStatus">
+<option value="">Todos los estados</option>
+<option value="sin_proforma">Sin proforma</option>
+<option value="sin_pago">Sin pago</option>
+<option value="con_saldo" selected="">Con saldo pendiente</option>
+<option value="pagado">Pagado</option>
+</select>
+</div>
+<div>
+<label for="searchCode">Pedido o proforma</label>
+<input type="text" id="searchCode" placeholder="Ej: PED00000001 o PF-00000001" name="searchCode" value="pf-0001"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="outline" href="/dashboard/reports/sales-collections">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos encontrados</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Pedidos según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto estimado</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Suma del monto estimado de pedidos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Monto proformado</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Suma de proformas emitidas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total cobrado</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Adelantos iniciales, adelantos, amortizaciones y cancelaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Saldo pendiente</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Pedidos con saldo: 2.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pedidos pagados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pedidos con proforma sin saldo pendiente.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Adelantos</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Adelantos iniciales y pagos tipo adelanto.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Amortizaciones</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Cancelaciones: S/ 0.00.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Fecha</th>
+<th>Estado pedido</th>
+<th>Monto estimado</th>
+<th>Proforma</th>
+<th>Monto proformado</th>
+<th>Adelantos</th>
+<th>Amortizaciones</th>
+<th>Cancelaciones</th>
+<th>Cobrado</th>
+<th>Saldo</th>
+<th>Cobranza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/id_pedido-1">id_pedido-1</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-1</p>
+<p>tipo_cliente-1</p>
+</div>
+</td>
+<td>01/07/2026</td>
+<td>estado-1</td>
+<td>S/ 11.50</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>Con saldo pendiente</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/commercial/orders/id_pedido-2">id_pedido-2</a>
+</td>
+<td>
+<div>
+<p>nombre_razon_social-2</p>
+<p>tipo_cliente-2</p>
+</div>
+</td>
+<td>02/07/2026</td>
+<td>estado-2</td>
+<td>S/ 0.00</td>
+<td>
+<a href="/dashboard/commercial/quotes/id_proforma-1">
+<span>numero_proforma-1</span>
+<br/>
+<span>estado-1</span>
+</a>
+</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 0.00</td>
+<td>S/ 0.00</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>Con saldo pendiente</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 pedidos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
+</div>
+</div>
+<section>
+<p>Este reporte consolida la trazabilidad comercial: pedido, cliente, proforma, pagos realizados, saldo pendiente y estado de cobranza. Su precisión depende del registro correcto de proformas, adelantos, amortizaciones y cancelaciones.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
