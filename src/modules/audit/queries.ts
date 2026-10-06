@@ -3,10 +3,12 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import type { PaginationParams } from "@/lib/pagination";
+import { buildReportDateRange } from "@/lib/reports/report-filters";
 import { buildDateRangeFilter } from "@/lib/search-params";
 
-// Consultas de lectura de la pagina de Auditoria (bitacora de operaciones). No
-// autorizan: la pagina que las llama ya verifico el rol con requireRole.
+// Consultas de lectura de la pagina de Auditoria (bitacora de operaciones) y
+// de su exportacion. No autorizan: la pagina ya verifico el rol con
+// requireRole y la ruta de exportacion valida el rol del reporte.
 
 export type AuditLogFilters = {
   q: string;
@@ -134,4 +136,49 @@ export async function getAuditLogData(
     distinctUsers,
     distinctEntities,
   };
+}
+
+// Filtro de la exportacion de la bitacora (entrega 5). Difiere del de la
+// pagina: usa un objeto plano, acepta alias de parametros y cierra "hasta"
+// antes del dia siguiente (lt) en lugar de al final del dia (lte).
+// Igualarlos cambia el archivo exportado: es un fix.
+export type AuditLogExportFilters = {
+  dateFrom: string;
+  dateTo: string;
+  userId: string;
+  action: string;
+  entity: string;
+  searchText: string;
+};
+
+export function getAuditLogExportRows(
+  filters: AuditLogExportFilters,
+  limit: number,
+) {
+  const { userId, action, entity, searchText } = filters;
+  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
+
+  return prisma.bitacora_operacion.findMany({
+    where: {
+      ...(dateRange ? { fecha_hora: dateRange } : {}),
+      ...(userId ? { id_usuario: userId } : {}),
+      ...(action ? { accion: action } : {}),
+      ...(entity ? { entidad_afectada: entity } : {}),
+      ...(searchText
+        ? {
+            OR: [
+              { detalle: { contains: searchText, mode: "insensitive" } },
+              { entidad_afectada: { contains: searchText, mode: "insensitive" } },
+              { accion: { contains: searchText, mode: "insensitive" } },
+              { id_registro_afectado: { contains: searchText, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
+    orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
+    take: limit,
+    include: {
+      usuario: true,
+    },
+  });
 }

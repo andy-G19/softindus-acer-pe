@@ -1,5 +1,4 @@
 import { requireApiAuth, type Role } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import {
   ForbiddenError,
   NotFoundError,
@@ -7,7 +6,6 @@ import {
   toApiErrorResponse,
 } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
-import { formatDateTime } from "@/lib/formatters";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import {
   DEFAULT_PDF_DISPLAY_ROWS,
@@ -16,7 +14,6 @@ import {
   type ExportFormat,
 } from "@/lib/reports/export-limits";
 import {
-  buildReportDateRange,
   parseExportFormat,
   parseExportLimit,
   parseReportDate,
@@ -26,10 +23,10 @@ import {
 import { getReportDefinition } from "@/lib/reports/report-registry";
 import { registerExportLog } from "@/modules/reports/export-log";
 import {
-  getExportDateStamp,
   getExportParam,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportAuditReport } from "@/modules/audit/exporter";
 import { exportProfitabilityReport } from "@/modules/reports/profitability/exporter";
 import { exportStaffReport } from "@/modules/reports/staff/exporter";
 import { exportMaintenanceReport } from "@/modules/reports/maintenance/exporter";
@@ -47,67 +44,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-async function buildAuditCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
-  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
-  const userId = getExportParam(searchParams, "userId") || getExportParam(searchParams, "usuario");
-  const action = getExportParam(searchParams, "action") || getExportParam(searchParams, "accion");
-  const entity = getExportParam(searchParams, "entity") || getExportParam(searchParams, "entidad");
-  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const logs = await prisma.bitacora_operacion.findMany({
-    where: {
-      ...(dateRange ? { fecha_hora: dateRange } : {}),
-      ...(userId ? { id_usuario: userId } : {}),
-      ...(action ? { accion: action } : {}),
-      ...(entity ? { entidad_afectada: entity } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { detalle: { contains: searchText, mode: "insensitive" } },
-              { entidad_afectada: { contains: searchText, mode: "insensitive" } },
-              { accion: { contains: searchText, mode: "insensitive" } },
-              { id_registro_afectado: { contains: searchText, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
-    take: limit,
-    include: {
-      usuario: true,
-    },
-  });
-
-  return {
-    filename: `auditoria_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `auditoria_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Auditoria",
-    headers: [
-      "Fecha",
-      "Usuario",
-      "Accion",
-      "Entidad",
-      "Registro",
-      "Detalle",
-      "IP",
-    ],
-    rows: logs.map((log) => [
-      formatDateTime(log.fecha_hora),
-      `${log.usuario.apellidos}, ${log.usuario.nombres}`,
-      log.accion,
-      log.entidad_afectada,
-      log.id_registro_afectado ?? "",
-      log.detalle ?? "",
-      log.ip_origen ?? "",
-    ]),
-  };
-}
 
 async function buildReport(
   report: string,
@@ -140,7 +76,7 @@ async function buildReport(
       return exportStaffReport(searchParams, limit);
 
     case "audit":
-      return buildAuditCsv(searchParams, limit);
+      return exportAuditReport(searchParams, limit);
 
     default:
       return null;
