@@ -7,7 +7,7 @@ import {
   toApiErrorResponse,
 } from "@/lib/errors";
 import { buildExcelBuffer, excelResponse } from "@/lib/excel-export";
-import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
+import { formatDateTime } from "@/lib/formatters";
 import { buildPdfBuffer, pdfResponse } from "@/lib/pdf-export";
 import {
   DEFAULT_PDF_DISPLAY_ROWS,
@@ -26,11 +26,11 @@ import {
 import { getReportDefinition } from "@/lib/reports/report-registry";
 import { registerExportLog } from "@/modules/reports/export-log";
 import {
-  formatQuantity,
   getExportDateStamp,
   getExportParam,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportProfitabilityReport } from "@/modules/reports/profitability/exporter";
 import { exportStaffReport } from "@/modules/reports/staff/exporter";
 import { exportMaintenanceReport } from "@/modules/reports/maintenance/exporter";
 import { exportFinancialReport } from "@/modules/reports/financial/exporter";
@@ -47,137 +47,6 @@ type RouteContext = {
     report: string;
   }>;
 };
-
-async function buildProfitabilityCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
-  const dateTo = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
-  const searchText = getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText");
-  const lowMargin = getExportParam(searchParams, "lowMargin");
-  const negativeProfit = getExportParam(searchParams, "negativeProfit");
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const costings = await prisma.costeo.findMany({
-    where: {
-      ...(dateRange ? { fecha_costeo: dateRange } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { id_costeo: { contains: searchText, mode: "insensitive" } },
-              { id_pedido: { contains: searchText, mode: "insensitive" } },
-              { id_orden_trabajo: { contains: searchText, mode: "insensitive" } },
-              {
-                pedido: {
-                  cliente: {
-                    nombre_razon_social: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-              {
-                orden_trabajo: {
-                  producto: {
-                    nombre_producto: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(lowMargin === "true"
-        ? { rentabilidad: { some: { alerta_bajo_margen: true } } }
-        : {}),
-      ...(negativeProfit === "true"
-        ? { rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } }
-        : {}),
-    },
-    orderBy: [{ fecha_costeo: "desc" }, { id_costeo: "desc" }],
-    take: limit,
-    include: {
-      pedido: {
-        include: {
-          cliente: true,
-        },
-      },
-      orden_trabajo: {
-        include: {
-          producto: true,
-          cliente: true,
-        },
-      },
-      margen_ganancia: {
-        orderBy: {
-          fecha_aplicacion: "desc",
-        },
-        take: 1,
-      },
-      rentabilidad: {
-        orderBy: {
-          fecha_calculo: "desc",
-        },
-        take: 1,
-      },
-    },
-  });
-
-  return {
-    filename: `costos_rentabilidad_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `costos_rentabilidad_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Costos y Rentabilidad",
-    headers: [
-      "Costeo",
-      "Pedido",
-      "Orden",
-      "Cliente",
-      "Producto",
-      "Fecha",
-      "Materiales",
-      "Consumibles",
-      "Mano de obra",
-      "Indirectos",
-      "Costo total",
-      "Precio sugerido",
-      "Precio final",
-      "Ingreso",
-      "Utilidad",
-      "Margen real",
-      "Estado",
-    ],
-    rows: costings.map((costing) => {
-      const margin = costing.margen_ganancia[0];
-      const profitability = costing.rentabilidad[0];
-
-      return [
-        costing.id_costeo,
-        costing.id_pedido ?? "",
-        costing.id_orden_trabajo ?? "",
-        costing.pedido?.cliente.nombre_razon_social ??
-          costing.orden_trabajo?.cliente?.nombre_razon_social ??
-          "",
-        costing.orden_trabajo?.producto.nombre_producto ?? "",
-        formatDate(costing.fecha_costeo, { format: "dd/mm/yyyy" }),
-        formatMoney(costing.costo_materiales),
-        formatMoney(costing.costo_consumibles),
-        formatMoney(costing.costo_mano_obra),
-        formatMoney(costing.costo_indirecto_total),
-        formatMoney(costing.costo_total),
-        formatMoney(margin?.precio_sugerido ?? 0),
-        formatMoney(margin?.precio_final ?? 0),
-        formatMoney(profitability?.ingreso_estimado ?? 0),
-        formatMoney(profitability?.utilidad_estimada ?? 0),
-        `${formatQuantity(profitability?.margen_real)}%`,
-        profitability?.alerta_bajo_margen ? "Margen bajo" : "Sin alerta",
-      ];
-    }),
-  };
-}
 
 async function buildAuditCsv(
   searchParams: URLSearchParams,
@@ -265,7 +134,7 @@ async function buildReport(
       return exportMaintenanceReport(searchParams, limit);
 
     case "profitability":
-      return buildProfitabilityCsv(searchParams, limit);
+      return exportProfitabilityReport(searchParams, limit);
 
     case "staff":
       return exportStaffReport(searchParams, limit);
