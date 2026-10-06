@@ -1,4 +1,4 @@
-import { requireApiAuth, type Role } from "@/lib/authz";
+import { assertRole, requireApiAuth } from "@/lib/authz";
 import {
   ForbiddenError,
   NotFoundError,
@@ -85,8 +85,9 @@ export async function GET(request: Request, context: RouteContext) {
   const report = reportResult.value;
   const definition = getReportDefinition(report);
 
-  // 3) Rol permitido para este reporte especifico.
-  if (!definition || !definition.allowedRoles.includes(session.user.role as Role)) {
+  // 3) Rol permitido para este reporte especifico. assertRole es el chequeo
+  // puro de lib/authz: no vuelve a consultar la sesion.
+  if (!definition || !assertRole(session, definition.allowedRoles)) {
     return toApiErrorResponse(new ForbiddenError(), {
       report,
       userId: session.user.id,
