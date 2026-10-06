@@ -391,7 +391,10 @@ export type Role = "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
 
 export type PrismaCall = { prisma: string; args: unknown };
 export type AuthzCall = { authz: string; roles: unknown };
-export type RecordedCall = PrismaCall | AuthzCall;
+// Efecto simulado por un archivo de prueba (correlativo, bitacora, archivo
+// generado...), registrado en la misma secuencia que las llamadas a Prisma.
+export type EffectCall = { effect: string; args: unknown };
+export type RecordedCall = PrismaCall | AuthzCall | EffectCall;
 
 // Recorta filas escritas a mano segun el select de la llamada, como haria
 // Prisma. Sin select las devuelve completas.
@@ -451,7 +454,11 @@ const PRISMA_METHODS = new Set([
   "groupBy",
 ]);
 
-function createModelDelegate(modelName: string) {
+// Escrituras que admite el cliente de una transaccion simulada. Devuelven el
+// `data` recibido, salvo que el caso sustituya su resultado.
+const WRITE_METHODS = new Set(["create"]);
+
+function createModelDelegate(modelName: string, inTransaction: boolean) {
   return new Proxy(
     {},
     {
@@ -460,7 +467,9 @@ function createModelDelegate(modelName: string) {
           return undefined;
         }
 
-        if (!PRISMA_METHODS.has(method)) {
+        const isWrite = inTransaction && WRITE_METHODS.has(method);
+
+        if (!PRISMA_METHODS.has(method) && !isWrite) {
           throw new Error(
             `prisma.${modelName}.${method} no esta soportado por el arnes: las paginas solo leen.`,
           );
@@ -477,6 +486,10 @@ function createModelDelegate(modelName: string) {
             return typeof override === "function" ? override(args) : override;
           }
 
+          if (isWrite) {
+            return args?.data ?? null;
+          }
+
           return generateResult(getSchema(), modelName, method, args);
         };
       },
@@ -484,27 +497,68 @@ function createModelDelegate(modelName: string) {
   );
 }
 
-export const prismaDouble = new Proxy(
-  {},
-  {
-    get(_target, property) {
-      if (typeof property === "symbol" || property === "then") {
-        return undefined;
-      }
+type PrismaDoubleOptions = {
+  // El cliente admite $transaction (solo lo piden los route handlers).
+  transactions: boolean;
+  // Es el cliente que recibe el callback de $transaction: admite escrituras.
+  inTransaction: boolean;
+};
 
-      if (property.startsWith("$")) {
-        throw new Error(`prisma.${property} no esta soportado por el arnes.`);
-      }
+function createPrismaDouble(options: PrismaDoubleOptions): object {
+  return new Proxy(
+    {},
+    {
+      get(_target, property) {
+        if (typeof property === "symbol" || property === "then") {
+          return undefined;
+        }
 
-      getModelFields(getSchema(), property);
+        if (property === "$transaction" && options.transactions) {
+          return async (callback: (tx: object) => Promise<unknown>) => {
+            state.calls.push({ effect: "prisma.$transaction", args: null });
 
-      return createModelDelegate(property);
+            return callback(transactionDouble);
+          };
+        }
+
+        if (property.startsWith("$")) {
+          throw new Error(`prisma.${property} no esta soportado por el arnes.`);
+        }
+
+        getModelFields(getSchema(), property);
+
+        return createModelDelegate(property, options.inTransaction);
+      },
     },
-  },
-);
+  );
+}
 
-export function dbModuleMock() {
-  return { prisma: prismaDouble };
+export const prismaDouble = createPrismaDouble({
+  transactions: false,
+  inTransaction: false,
+});
+
+const transactionalPrismaDouble = createPrismaDouble({
+  transactions: true,
+  inTransaction: false,
+});
+
+const transactionDouble = createPrismaDouble({
+  transactions: false,
+  inTransaction: true,
+});
+
+// Las paginas usan el doble de solo lectura. Un route handler que escribe
+// dentro de una transaccion pide `{ transactions: true }`: el cliente de la
+// transaccion registra sus escrituras sin aplicarlas.
+export function dbModuleMock(options: { transactions?: boolean } = {}) {
+  return {
+    prisma: options.transactions ? transactionalPrismaDouble : prismaDouble,
+  };
+}
+
+export function recordEffect(effect: string, args: unknown) {
+  state.calls.push({ effect, args });
 }
 
 function createSession() {
@@ -627,12 +681,36 @@ export type PageResult = {
 // snapshots no dependan de la maquina.
 const INTL_SPACES = /[\u00A0\u202F\u2009]/g;
 
+export function normalizeIntlSpaces(text: string) {
+  return text.replace(INTL_SPACES, " ");
+}
+
+// Aplica normalizeIntlSpaces a los textos de arreglos y objetos planos, sin
+// tocar fechas, Decimal ni otras instancias.
+export function normalizeIntlStrings(value: unknown): unknown {
+  if (typeof value === "string") {
+    return normalizeIntlSpaces(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(normalizeIntlStrings);
+  }
+
+  if (value && Object.getPrototypeOf(value) === Object.prototype) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, normalizeIntlStrings(item)]),
+    );
+  }
+
+  return value;
+}
+
 export function normalizeHtml(html: string) {
-  return html
-    .replace(/<svg\b[\s\S]*?<\/svg>/g, "<svg/>")
-    .replace(/ (?:class|style|data-slot|data-size)="[^"]*"/g, "")
-    .replace(INTL_SPACES, " ")
-    .replace(/></g, ">\n<");
+  return normalizeIntlSpaces(
+    html
+      .replace(/<svg\b[\s\S]*?<\/svg>/g, "<svg/>")
+      .replace(/ (?:class|style|data-slot|data-size)="[^"]*"/g, ""),
+  ).replace(/></g, ">\n<");
 }
 
 function toSearchString(searchParams: SearchParams) {
@@ -738,12 +816,27 @@ export async function runWithRejectedAuth(
   });
 }
 
+// Ejecuta cualquier funcion del servidor (por ejemplo, un route handler) con
+// el mismo reloj, zona horaria y registro de llamadas que characterizePage.
+export async function characterizeHandler<T>(
+  run: () => Promise<T>,
+  data: DataOverrides = {},
+): Promise<{ calls: RecordedCall[]; result: T }> {
+  resetState({ name: "handler", data }, "/");
+
+  return withFixedClock(async () => {
+    const result = await run();
+
+    return { calls: [...state.calls], result };
+  });
+}
+
 export function isPrismaCall(call: RecordedCall): call is PrismaCall {
   return "prisma" in call;
 }
 
 export function expectAuthorizesBeforePrisma(calls: RecordedCall[]) {
-  const firstAuthz = calls.findIndex((call) => !isPrismaCall(call));
+  const firstAuthz = calls.findIndex((call) => "authz" in call);
   const firstPrisma = calls.findIndex(isPrismaCall);
 
   expect(firstAuthz).toBeGreaterThanOrEqual(0);
