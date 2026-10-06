@@ -6,7 +6,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: al
     {
       "args": {
         "include": {
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -144,7 +149,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: ex
     {
       "args": {
         "include": {
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -248,7 +258,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: pd
     {
       "args": {
         "include": {
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -402,7 +417,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > compras: comp
           },
           "pago_proveedor": true,
           "proveedor": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -548,7 +568,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > compras: exce
           },
           "pago_proveedor": true,
           "proveedor": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -694,7 +719,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > compras: pdf 
           },
           "pago_proveedor": true,
           "proveedor": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -853,7 +883,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: e
         "include": {
           "caja_chica": true,
           "categoria_gasto": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -1160,7 +1195,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: p
         "include": {
           "caja_chica": true,
           "categoria_gasto": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -1519,7 +1559,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > financiero: t
         "include": {
           "caja_chica": true,
           "categoria_gasto": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -1835,7 +1880,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: e
               "producto": true,
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -1974,7 +2024,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: m
               "producto": true,
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2113,7 +2168,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > inventario: p
               "producto": true,
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2263,7 +2323,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
               },
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2282,7 +2347,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
       "args": {
         "include": {
           "maquina": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2434,7 +2504,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
               },
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2453,7 +2528,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
       "args": {
         "include": {
           "maquina": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2605,7 +2685,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
               },
             },
           },
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -2664,7 +2749,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
       "args": {
         "include": {
           "maquina": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3222,7 +3312,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: e
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3358,7 +3453,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: l
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3494,7 +3594,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: l
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3631,7 +3736,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: l
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3767,7 +3877,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: l
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -3903,7 +4018,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: o
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -4039,7 +4159,12 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: p
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {
@@ -5564,7 +5689,12 @@ exports[`GET /api/reports/export/[report] > rechazos y errores > fallo de la con
           "cliente": true,
           "producto": true,
           "ruta_fabricacion": true,
-          "usuario": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
         },
         "orderBy": [
           {

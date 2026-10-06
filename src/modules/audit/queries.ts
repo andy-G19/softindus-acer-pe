@@ -178,7 +178,12 @@ export function getAuditLogExportRows(
     orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
     take: limit,
     include: {
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
     },
   });
 }

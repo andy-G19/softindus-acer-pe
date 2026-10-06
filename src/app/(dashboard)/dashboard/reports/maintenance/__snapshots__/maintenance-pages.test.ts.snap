@@ -14,6 +14,10 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
       "orderBy": {
         "nombre": "asc",
       },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
     },
     "prisma": "maquina.findMany",
   },
@@ -33,7 +37,12 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
             "fecha_reparacion": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_falla": "desc",
@@ -69,7 +78,12 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_programada": "asc",
@@ -617,6 +631,10 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > llama
       "orderBy": {
         "nombre": "asc",
       },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
     },
     "prisma": "maquina.findMany",
   },
@@ -636,7 +654,12 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > llama
             "fecha_reparacion": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_falla": "desc",
@@ -672,7 +695,12 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > llama
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_programada": "asc",
@@ -1192,6 +1220,10 @@ exports[`/dashboard/reports/maintenance > sin resultados > llamadas 1`] = `
       "orderBy": {
         "nombre": "asc",
       },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
     },
     "prisma": "maquina.findMany",
   },
@@ -1211,7 +1243,12 @@ exports[`/dashboard/reports/maintenance > sin resultados > llamadas 1`] = `
             "fecha_reparacion": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_falla": "desc",
@@ -1247,7 +1284,12 @@ exports[`/dashboard/reports/maintenance > sin resultados > llamadas 1`] = `
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_programada": "asc",
@@ -1588,6 +1630,10 @@ exports[`/dashboard/reports/maintenance > todos los filtros > llamadas 1`] = `
       "orderBy": {
         "nombre": "asc",
       },
+      "select": {
+        "id_maquina": true,
+        "nombre": true,
+      },
     },
     "prisma": "maquina.findMany",
   },
@@ -1607,7 +1653,12 @@ exports[`/dashboard/reports/maintenance > todos los filtros > llamadas 1`] = `
             "fecha_reparacion": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_falla": "desc",
@@ -1700,7 +1751,12 @@ exports[`/dashboard/reports/maintenance > todos los filtros > llamadas 1`] = `
     "args": {
       "include": {
         "maquina": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_programada": "asc",

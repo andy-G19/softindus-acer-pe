@@ -133,6 +133,10 @@ export async function getMaintenanceReportData(filters: MaintenanceReportFilters
         orderBy: {
           nombre: "asc",
         },
+        select: {
+          id_maquina: true,
+          nombre: true,
+        },
       }),
 
       prisma.falla_maquina.findMany({
@@ -143,7 +147,12 @@ export async function getMaintenanceReportData(filters: MaintenanceReportFilters
         take: 100,
         include: {
           maquina: true,
-          usuario: true,
+          usuario: {
+            select: {
+              nombres: true,
+              apellidos: true,
+            },
+          },
           reparacion: {
             orderBy: {
               fecha_reparacion: "desc",
@@ -187,7 +196,12 @@ export async function getMaintenanceReportData(filters: MaintenanceReportFilters
         take: 100,
         include: {
           maquina: true,
-          usuario: true,
+          usuario: {
+            select: {
+              nombres: true,
+              apellidos: true,
+            },
+          },
         },
       }),
     ]);
@@ -211,7 +225,12 @@ export async function getMaintenanceExportData(
       take: limit,
       include: {
         maquina: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
         reparacion: {
           include: {
             detalle_repuesto_reparacion: {
@@ -230,7 +249,12 @@ export async function getMaintenanceExportData(
       take: limit,
       include: {
         maquina: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
   ]);

@@ -18,6 +18,11 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -27,7 +32,13 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
   {
     "args": {
       "include": {
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_exportacion": "desc",
@@ -349,6 +360,11 @@ exports[`/dashboard/reports/export-history > sin filtros > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -358,7 +374,13 @@ exports[`/dashboard/reports/export-history > sin filtros > llamadas 1`] = `
   {
     "args": {
       "include": {
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_exportacion": "desc",
@@ -634,6 +656,11 @@ exports[`/dashboard/reports/export-history > todos los filtros > llamadas 1`] = 
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -643,7 +670,13 @@ exports[`/dashboard/reports/export-history > todos los filtros > llamadas 1`] = 
   {
     "args": {
       "include": {
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "correo": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_exportacion": "desc",

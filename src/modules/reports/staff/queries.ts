@@ -4,6 +4,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
 import { buildDateRangeFilter } from "@/lib/search-params";
+import { findActiveOperators } from "@/modules/staff/operators/queries";
 
 // Consultas del reporte de Personal y planillas. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
@@ -66,15 +67,7 @@ export async function getStaffReportData(filters: StaffReportFilters) {
 
   const [operators, payrolls, attendanceCount, absenceCount, latenessCount] =
     await Promise.all([
-      prisma.operario.findMany({
-        where: {
-          estado: "activo",
-        },
-        orderBy: [
-          { apellidos: "asc" },
-          { nombres: "asc" },
-        ],
-      }),
+      findActiveOperators(),
       prisma.planilla_pago.findMany({
         where: payrollWhere,
         orderBy: {

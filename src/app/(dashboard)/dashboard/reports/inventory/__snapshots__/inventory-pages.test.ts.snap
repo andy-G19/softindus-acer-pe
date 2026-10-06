@@ -14,6 +14,11 @@ exports[`/dashboard/reports/inventory > maestro de taller > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
       "where": {
         "estado": true,
       },
@@ -30,6 +35,11 @@ exports[`/dashboard/reports/inventory > maestro de taller > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -50,7 +60,12 @@ exports[`/dashboard/reports/inventory > maestro de taller > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -344,6 +359,11 @@ exports[`/dashboard/reports/inventory > sin filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
       "where": {
         "estado": true,
       },
@@ -360,6 +380,11 @@ exports[`/dashboard/reports/inventory > sin filtros > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -380,7 +405,12 @@ exports[`/dashboard/reports/inventory > sin filtros > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -674,6 +704,11 @@ exports[`/dashboard/reports/inventory > sin resultados > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
       "where": {
         "estado": true,
       },
@@ -690,6 +725,11 @@ exports[`/dashboard/reports/inventory > sin resultados > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -710,7 +750,12 @@ exports[`/dashboard/reports/inventory > sin resultados > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -930,6 +975,11 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
       "where": {
         "estado": true,
       },
@@ -946,6 +996,11 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -966,7 +1021,12 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -1307,6 +1367,11 @@ exports[`/dashboard/reports/inventory > todos los filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_material": "asc",
       },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+      },
       "where": {
         "estado": true,
       },
@@ -1323,6 +1388,11 @@ exports[`/dashboard/reports/inventory > todos los filtros > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -1343,7 +1413,12 @@ exports[`/dashboard/reports/inventory > todos los filtros > llamadas 1`] = `
             "producto": true,
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",

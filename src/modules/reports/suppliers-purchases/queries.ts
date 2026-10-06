@@ -3,6 +3,8 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
+import { findActiveMaterialFilterOptions } from "@/modules/inventory/materials/queries";
+import { findActiveSupplierOptions } from "@/modules/inventory/suppliers/queries";
 
 // Consultas del reporte de Proveedores y compras. La pantalla y la exportacion
 // comparten el filtro de compras; cada una conserva su limite, su orden y sus
@@ -62,23 +64,9 @@ export async function getSuppliersPurchasesReportData(
   filters: SuppliersPurchasesReportFilters,
 ) {
   const [suppliers, materials, purchases] = await Promise.all([
-    prisma.proveedor.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        razon_social: "asc",
-      },
-    }),
+    findActiveSupplierOptions(),
 
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-    }),
+    findActiveMaterialFilterOptions(),
 
     prisma.compra.findMany({
       where: buildPurchaseWhere(filters),
@@ -88,7 +76,6 @@ export async function getSuppliersPurchasesReportData(
       take: 100,
       include: {
         proveedor: true,
-        usuario: true,
         detalle_compra: {
           include: {
             material: true,
@@ -128,7 +115,12 @@ export function getSuppliersPurchasesExportRows(
     take: limit,
     include: {
       proveedor: true,
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
       detalle_compra: {
         include: {
           material: true,

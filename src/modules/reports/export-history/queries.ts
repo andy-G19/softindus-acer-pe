@@ -3,6 +3,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
+import { findActiveUserOptions } from "@/modules/users/queries";
 
 // Consultas del Historial de exportaciones. No autorizan: la pagina llama a
 // requireRole.
@@ -62,19 +63,7 @@ function buildExportHistoryWhere(
 
 export async function getExportHistoryData(filters: ExportHistoryFilters) {
   const [users, exports] = await Promise.all([
-    prisma.usuario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
+    findActiveUserOptions(),
 
     prisma.exportacion_datos.findMany({
       where: buildExportHistoryWhere(filters),
@@ -83,7 +72,13 @@ export async function getExportHistoryData(filters: ExportHistoryFilters) {
       },
       take: 150,
       include: {
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+            correo: true,
+          },
+        },
       },
     }),
   ]);

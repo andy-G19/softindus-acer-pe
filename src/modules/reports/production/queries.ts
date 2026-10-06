@@ -3,6 +3,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
+import { findActiveProductFilterOptions } from "@/modules/commercial/products/queries";
 
 // Consultas del reporte de Produccion. La pantalla y la exportacion comparten
 // el filtro de ordenes de trabajo; cada una conserva su limite, su orden y sus
@@ -39,14 +40,7 @@ function buildWorkOrderWhere(
 
 export async function getProductionReportData(filters: ProductionReportFilters) {
   const [products, workOrders] = await Promise.all([
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-    }),
+    findActiveProductFilterOptions(),
 
     prisma.orden_trabajo.findMany({
       where: buildWorkOrderWhere(filters),
@@ -92,7 +86,12 @@ export function getProductionExportRows(
       producto: true,
       cliente: true,
       ruta_fabricacion: true,
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
       avance_orden: {
         select: {
           porcentaje_avance: true,

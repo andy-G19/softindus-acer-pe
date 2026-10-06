@@ -13,6 +13,10 @@ exports[`/dashboard/reports/financial > sin filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -20,6 +24,10 @@ exports[`/dashboard/reports/financial > sin filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
       "where": {
         "estado": true,
@@ -32,7 +40,12 @@ exports[`/dashboard/reports/financial > sin filtros > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -524,6 +537,10 @@ exports[`/dashboard/reports/financial > todos los filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -531,6 +548,10 @@ exports[`/dashboard/reports/financial > todos los filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
       "where": {
         "estado": true,
@@ -543,7 +564,12 @@ exports[`/dashboard/reports/financial > todos los filtros > llamadas 1`] = `
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",
@@ -1090,6 +1116,10 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
       "orderBy": {
         "nombre_caja": "asc",
       },
+      "select": {
+        "id_caja_chica": true,
+        "nombre_caja": true,
+      },
     },
     "prisma": "caja_chica.findMany",
   },
@@ -1097,6 +1127,10 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
     "args": {
       "orderBy": {
         "nombre_categoria": "asc",
+      },
+      "select": {
+        "id_categoria_gasto": true,
+        "nombre_categoria": true,
       },
       "where": {
         "estado": true,
@@ -1109,7 +1143,12 @@ exports[`/dashboard/reports/financial > totales vacios y movimientos por tipo > 
       "include": {
         "caja_chica": true,
         "categoria_gasto": true,
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "orderBy": {
         "fecha_movimiento": "desc",

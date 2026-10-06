@@ -115,6 +115,10 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
       orderBy: {
         nombre_caja: "asc",
       },
+      select: {
+        id_caja_chica: true,
+        nombre_caja: true,
+      },
     }),
 
     prisma.categoria_gasto.findMany({
@@ -123,6 +127,10 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
       },
       orderBy: {
         nombre_categoria: "asc",
+      },
+      select: {
+        id_categoria_gasto: true,
+        nombre_categoria: true,
       },
     }),
 
@@ -135,7 +143,12 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
       include: {
         caja_chica: true,
         categoria_gasto: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
 
@@ -242,7 +255,12 @@ export async function getFinancialExportData(
       include: {
         caja_chica: true,
         categoria_gasto: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
       },
     }),
 

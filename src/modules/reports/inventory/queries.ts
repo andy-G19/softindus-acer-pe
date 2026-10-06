@@ -3,6 +3,8 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
+import { findActiveMaterialFilterOptions } from "@/modules/inventory/materials/queries";
+import { findActiveUserOptions } from "@/modules/users/queries";
 
 // Consultas del reporte de Inventario. La pantalla y la exportacion comparten
 // el filtro de movimientos; cada una conserva su limite, su orden y sus
@@ -41,28 +43,9 @@ function buildMovementWhere(
 
 export async function getInventoryReportData(filters: InventoryReportFilters) {
   const [materials, users, movements] = await Promise.all([
-    prisma.material.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_material: "asc",
-      },
-    }),
+    findActiveMaterialFilterOptions(),
 
-    prisma.usuario.findMany({
-      where: {
-        estado: "activo",
-      },
-      orderBy: [
-        {
-          apellidos: "asc",
-        },
-        {
-          nombres: "asc",
-        },
-      ],
-    }),
+    findActiveUserOptions(),
 
     prisma.movimiento_inventario.findMany({
       where: buildMovementWhere(filters),
@@ -72,7 +55,12 @@ export async function getInventoryReportData(filters: InventoryReportFilters) {
       take: 100,
       include: {
         material: true,
-        usuario: true,
+        usuario: {
+          select: {
+            nombres: true,
+            apellidos: true,
+          },
+        },
         orden_trabajo: {
           include: {
             producto: true,
@@ -100,7 +88,12 @@ export function getInventoryExportRows(
     take: limit,
     include: {
       material: true,
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
       orden_trabajo: {
         include: {
           producto: true,

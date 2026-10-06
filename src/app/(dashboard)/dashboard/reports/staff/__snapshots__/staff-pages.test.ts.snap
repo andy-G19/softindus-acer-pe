@@ -18,6 +18,12 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -287,6 +293,12 @@ exports[`/dashboard/reports/staff > sin filtros > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },
@@ -565,6 +577,12 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
       },

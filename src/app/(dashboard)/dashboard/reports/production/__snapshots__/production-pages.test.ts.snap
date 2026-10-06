@@ -14,6 +14,10 @@ exports[`/dashboard/reports/production > maestro de taller > llamadas 1`] = `
       "orderBy": {
         "nombre_producto": "asc",
       },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
       "where": {
         "estado": true,
       },
@@ -284,6 +288,10 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
     "args": {
       "orderBy": {
         "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
       },
       "where": {
         "estado": true,
@@ -557,6 +565,10 @@ exports[`/dashboard/reports/production > sin filtros > llamadas 1`] = `
       "orderBy": {
         "nombre_producto": "asc",
       },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
       "where": {
         "estado": true,
       },
@@ -828,6 +840,10 @@ exports[`/dashboard/reports/production > sin resultados > llamadas 1`] = `
       "orderBy": {
         "nombre_producto": "asc",
       },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
       "where": {
         "estado": true,
       },
@@ -1047,6 +1063,10 @@ exports[`/dashboard/reports/production > todos los filtros > llamadas 1`] = `
     "args": {
       "orderBy": {
         "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
       },
       "where": {
         "estado": true,

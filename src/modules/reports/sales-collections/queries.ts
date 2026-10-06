@@ -3,6 +3,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
+import { findActiveClientOptions } from "@/modules/commercial/clients/queries";
 
 // Consultas del reporte de Ventas y cobranzas. La pantalla y la exportacion
 // comparten el filtro de pedidos; cada una conserva su limite, su orden y sus
@@ -64,14 +65,7 @@ export async function getSalesCollectionsReportData(
   filters: SalesCollectionsReportFilters,
 ) {
   const [clients, orders] = await Promise.all([
-    prisma.cliente.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-    }),
+    findActiveClientOptions(),
 
     prisma.pedido.findMany({
       where: buildOrderWhere(filters),
