@@ -28,12 +28,12 @@ import {
 } from "@/components/ui/table";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { getProductionReportData } from "@/modules/reports/production/queries";
 
 const ACTIVE_WORK_ORDER_STATES = ["pendiente", "en_proceso", "pausada"];
 
@@ -60,34 +60,6 @@ function getSearchParam(
   }
 
   return value ?? "";
-}
-
-function parseDateInput(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day);
-}
-
-function parseDateInputAsNextDay(value: string) {
-  if (!value) {
-    return undefined;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return undefined;
-  }
-
-  return new Date(year, month - 1, day + 1);
 }
 
 function formatQuantity(value: unknown) {
@@ -154,9 +126,6 @@ export default async function ProductionReportPage({
   "pdf",
 );
 
-  const fromDate = parseDateInput(dateFrom);
-  const toDate = parseDateInputAsNextDay(dateTo);
-
   const today = new Date();
   const startOfToday = new Date(
     today.getFullYear(),
@@ -164,60 +133,13 @@ export default async function ProductionReportPage({
     today.getDate(),
   );
 
-  const workOrderWhere = {
-    ...(fromDate || toDate
-      ? {
-          fecha_inicio: {
-            ...(fromDate ? { gte: fromDate } : {}),
-            ...(toDate ? { lt: toDate } : {}),
-          },
-        }
-      : {}),
-    ...(productId ? { id_producto: productId } : {}),
-    ...(status ? { estado: status } : {}),
-    ...(orderId
-      ? {
-          id_orden_trabajo: {
-            contains: orderId.toUpperCase(),
-          },
-        }
-      : {}),
-  };
-
-  const [products, workOrders] = await Promise.all([
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-    }),
-
-    prisma.orden_trabajo.findMany({
-      where: workOrderWhere,
-      orderBy: [
-        {
-          fecha_inicio: "desc",
-        },
-        {
-          fecha_registro: "desc",
-        },
-      ],
-      take: 100,
-      include: {
-        producto: true,
-        cliente: true,
-        ruta_fabricacion: true,
-        avance_orden: {
-          select: {
-            porcentaje_avance: true,
-            estado_etapa: true,
-          },
-        },
-      },
-    }),
-  ]);
+  const { products, workOrders } = await getProductionReportData({
+    dateFrom,
+    dateTo,
+    productId,
+    status,
+    orderCode: orderId.toUpperCase(),
+  });
 
   const totalOrders = workOrders.length;
 

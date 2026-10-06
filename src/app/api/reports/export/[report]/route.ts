@@ -33,6 +33,7 @@ import {
   type ExportCell,
   type ExportReport,
 } from "@/modules/reports/export-report";
+import { exportProductionReport } from "@/modules/reports/production/exporter";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -57,98 +58,6 @@ function getPaymentTotalByType(
 
     return sum + toNumber(payment.monto_pagado);
   }, 0);
-}
-
-async function buildProductionCsv(
-  searchParams: URLSearchParams,
-  limit: number,
-): Promise<ExportReport> {
-  const dateFrom = getExportParam(searchParams, "dateFrom");
-  const dateTo = getExportParam(searchParams, "dateTo");
-  const productId = getExportParam(searchParams, "productId");
-  const status = getExportParam(searchParams, "status");
-  const orderId = getExportParam(searchParams, "orderId").toUpperCase();
-
-  const dateRange = buildReportDateRange(dateFrom, dateTo);
-
-  const orders = await prisma.orden_trabajo.findMany({
-    where: {
-      ...(dateRange ? { fecha_inicio: dateRange } : {}),
-      ...(productId ? { id_producto: productId } : {}),
-      ...(status ? { estado: status } : {}),
-      ...(orderId
-        ? {
-            id_orden_trabajo: {
-              contains: orderId,
-            },
-          }
-        : {}),
-    },
-    orderBy: [
-      { fecha_inicio: "desc" },
-      { fecha_registro: "desc" },
-      { id_orden_trabajo: "desc" },
-    ],
-    take: limit,
-    include: {
-      producto: true,
-      cliente: true,
-      ruta_fabricacion: true,
-      usuario: true,
-      avance_orden: {
-        select: {
-          porcentaje_avance: true,
-        },
-      },
-    },
-  });
-
-  return {
-    filename: `reporte_produccion_${getExportDateStamp()}.xlsx`,
-    pdfFilename: `reporte_produccion_${getExportDateStamp()}.pdf`,
-    title: "Reporte de Producción",
-    headers: [
-      "Orden",
-      "Producto",
-      "Cliente",
-      "Tipo producción",
-      "Cantidad",
-      "Fecha inicio",
-      "Fecha entrega estimada",
-      "Fecha entrega real",
-      "Estado",
-      "Prioridad",
-      "Ruta",
-      "Responsable",
-      "Avance promedio",
-      "Observaciones",
-    ],
-    rows: orders.map((order) => {
-      const averageProgress =
-        order.avance_orden.length === 0
-          ? 0
-          : order.avance_orden.reduce((sum, progress) => {
-              return sum + toNumber(progress.porcentaje_avance);
-            }, 0) / order.avance_orden.length;
-
-      return [
-        order.id_orden_trabajo,
-        order.producto.nombre_producto,
-        order.cliente?.nombre_razon_social ?? "",
-        order.tipo_produccion,
-        formatQuantity(order.cantidad),
-        formatDate(order.fecha_inicio, { format: "dd/mm/yyyy" }),
-        formatDate(order.fecha_entrega_estimada, { format: "dd/mm/yyyy", emptyText: "" }),
-        formatDate(order.fecha_entrega_real, { format: "dd/mm/yyyy", emptyText: "" }),
-        order.estado,
-        order.prioridad,
-        order.ruta_fabricacion?.nombre_ruta ?? "",
-        `${order.usuario.apellidos}, ${order.usuario.nombres}`,
-        `${averageProgress.toFixed(2)}%`,
-        order.observaciones ?? "",
-      ];
-    }),
-  };
 }
 
 async function buildInventoryCsv(
@@ -1180,7 +1089,7 @@ async function buildReport(
 ): Promise<ExportReport | null> {
   switch (report) {
     case "production":
-      return buildProductionCsv(searchParams, limit);
+      return exportProductionReport(searchParams, limit);
 
     case "inventory":
       return buildInventoryCsv(searchParams, limit);
