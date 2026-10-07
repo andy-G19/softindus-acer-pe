@@ -22,6 +22,11 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { requireRole } from "@/lib/authz";
+import {
+  calculateProfitability,
+  calculateSuggestedPrice,
+  estimateMaterialCost,
+} from "@/lib/costing-calculations";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
@@ -96,7 +101,7 @@ function getIndirectCostCategoryLabel(category: string) {
 }
 
 function getSuggestedPrice(totalCost: unknown, marginPercentage: number) {
-  return toNumber(totalCost) * (1 + marginPercentage / 100);
+  return calculateSuggestedPrice(toNumber(totalCost), marginPercentage);
 }
 
 function getProfitabilityReference(
@@ -117,9 +122,11 @@ function getProfitabilityReference(
     };
   }
 
-  const profit = income - cost;
-  const realMargin = (profit / cost) * 100;
-  const lowMarginAlert = realMargin < expected;
+  const { profit, realMargin, lowMarginAlert } = calculateProfitability({
+    income,
+    totalCost: cost,
+    expectedMargin: expected,
+  });
 
   return {
     income,
@@ -151,9 +158,13 @@ export default async function CostingDetailPage({
       const wastePercentage = toNumber(detail.merma_estimada_porcentaje);
       const unitCost = toNumber(detail.material.costo_unitario_actual);
 
-      const requiredBase = quantityPerUnit * quantityToProduce;
-      const requiredWithWaste = requiredBase * (1 + wastePercentage / 100);
-      const estimatedCost = requiredWithWaste * unitCost;
+      const { requiredBase, requiredWithWaste, estimatedCost } =
+        estimateMaterialCost({
+          quantityToProduce,
+          quantityPerUnit,
+          wastePercentage,
+          unitCost,
+        });
 
       return {
         id: detail.id_detalle_receta,
