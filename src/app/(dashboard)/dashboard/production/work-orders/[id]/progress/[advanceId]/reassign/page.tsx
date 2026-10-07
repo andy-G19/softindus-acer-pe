@@ -10,10 +10,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { reassignWorkOrderProgressAction } from "@/modules/production/work-order-progress/actions";
+import { getAdvanceReassignData } from "@/modules/production/work-order-progress/queries";
 import Link from "next/link";
 
 type ReassignWorkOrderProgressPageProps = {
@@ -30,59 +30,17 @@ export default async function ReassignWorkOrderProgressPage({
 
   const { id, advanceId } = await params;
 
-  const advance = await prisma.avance_orden.findFirst({
-    where: {
-      id_avance: advanceId,
-      id_orden_trabajo: id,
-    },
-    include: {
-      etapa_ruta: true,
-      operario: true,
-      orden_trabajo: {
-        include: {
-          producto: true,
-        },
-      },
-      reasignacion_tarea: {
-        include: {
-          operario_reasignacion_tarea_id_operario_anteriorTooperario: true,
-          operario_reasignacion_tarea_id_operario_nuevoTooperario: true,
-          usuario: true,
-        },
-        orderBy: {
-          fecha_reasignacion: "desc",
-        },
-        take: 5,
-      },
-    },
-  });
+  const reassignData = await getAdvanceReassignData(id, advanceId);
 
-  if (!advance) {
+  if (!reassignData) {
     notFound();
   }
+
+  const { advance, operators } = reassignData;
 
   const isClosedOrder = ["finalizada", "anulada"].includes(
     advance.orden_trabajo.estado,
   );
-
-  const operators = await prisma.operario.findMany({
-    where: {
-      estado: "activo",
-      id_operario: advance.id_operario
-        ? {
-            not: advance.id_operario,
-          }
-        : undefined,
-    },
-    orderBy: [
-      {
-        apellidos: "asc",
-      },
-      {
-        nombres: "asc",
-      },
-    ],
-  });
 
   const canReassign = !isClosedOrder && operators.length > 0;
   const operatorItems = operators.map((operator) => ({

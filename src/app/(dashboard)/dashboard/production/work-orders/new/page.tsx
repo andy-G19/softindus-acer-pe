@@ -1,8 +1,8 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { prisma } from "@/lib/db";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { getNewWorkOrderFormData } from "@/modules/production/work-orders/queries";
 import { WorkOrderForm } from "@/modules/production/work-orders/components/work-order-form";
 
 function getTodayInputValue() {
@@ -20,112 +20,8 @@ function toDecimalString(value: unknown) {
 export default async function NewWorkOrderPage() {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const [products, routes, versions, orderDetails, campaigns] =
-    await Promise.all([
-      prisma.producto.findMany({
-        where: {
-          estado: true,
-        },
-        orderBy: [
-          {
-            categoria: "asc",
-          },
-          {
-            nombre_producto: "asc",
-          },
-        ],
-      }),
-
-      prisma.ruta_fabricacion.findMany({
-        where: {
-          estado: true,
-        },
-        include: {
-          producto: true,
-          _count: {
-            select: {
-              etapa_ruta: true,
-            },
-          },
-        },
-        orderBy: [
-          {
-            nombre_ruta: "asc",
-          },
-        ],
-      }),
-
-      prisma.version_receta.findMany({
-        where: {
-          estado: "vigente",
-          receta_tecnica: {
-            estado: "activa",
-          },
-        },
-        include: {
-          receta_tecnica: {
-            include: {
-              producto: true,
-            },
-          },
-          _count: {
-            select: {
-              detalle_receta: true,
-            },
-          },
-        },
-        orderBy: [
-          {
-            fecha_version: "desc",
-          },
-        ],
-      }),
-
-      prisma.detalle_pedido.findMany({
-        where: {
-          pedido: {
-            estado: {
-              in: ["registrado", "aprobado"],
-            },
-          },
-        },
-        include: {
-          producto: true,
-          pedido: {
-            include: {
-              cliente: true,
-            },
-          },
-        },
-        orderBy: [
-          {
-            pedido: {
-              fecha_pedido: "desc",
-            },
-          },
-        ],
-      }),
-
-      prisma.campania_produccion.findMany({
-        where: {
-          estado: {
-            in: ["planificada", "activa"],
-          },
-        },
-        include: {
-          campania_detalle: {
-            select: {
-              id_producto: true,
-            },
-          },
-        },
-        orderBy: [
-          {
-            fecha_inicio: "desc",
-          },
-        ],
-      }),
-    ]);
+  const { products, routes, versions, orderDetails, campaigns } =
+    await getNewWorkOrderFormData();
 
   const canCreateOrder =
     products.length > 0 && routes.length > 0 && versions.length > 0;

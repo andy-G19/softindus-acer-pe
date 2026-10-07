@@ -11,7 +11,6 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/db";
 import { formatDateTime } from "@/lib/formatters";
 import {
   dashboardBreadcrumbs,
@@ -19,6 +18,7 @@ import {
   navigationHrefs,
 } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
+import { getWorkOrderProgress } from "@/modules/production/work-order-progress/queries";
 import {
   generateWorkOrderProgressAction,
   updateWorkOrderProgressAction,
@@ -102,43 +102,7 @@ export default async function WorkOrderProgressPage({
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
 
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: {
-      id_orden_trabajo: id,
-    },
-    include: {
-      producto: true,
-      ruta_fabricacion: {
-        include: {
-          etapa_ruta: {
-            where: {
-              estado: true,
-            },
-            orderBy: {
-              orden_secuencia: "asc",
-            },
-          },
-        },
-      },
-      avance_orden: {
-        include: {
-          etapa_ruta: true,
-          operario: true,
-          usuario: true,
-          reasignacion_tarea: {
-            include: {
-              operario_reasignacion_tarea_id_operario_anteriorTooperario: true,
-              operario_reasignacion_tarea_id_operario_nuevoTooperario: true,
-              usuario: true,
-            },
-            orderBy: {
-              fecha_reasignacion: "desc",
-            },
-          },
-        },
-      },
-    },
-  });
+  const workOrder = await getWorkOrderProgress(id);
 
   if (!workOrder) {
     notFound();
