@@ -217,6 +217,11 @@ export async function getCostingDetail(idCosteo: string) {
   });
 }
 
+// El detalle tal como lo reciben sus secciones.
+export type CostingDetail = NonNullable<
+  Awaited<ReturnType<typeof getCostingDetail>>
+>;
+
 // Ordenes con receta y sin costeo, ultimos costeos y totales de ordenes.
 export async function getCostableWorkOrdersData() {
   const [
