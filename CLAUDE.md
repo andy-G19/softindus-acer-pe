@@ -59,8 +59,8 @@ Roles are `ADMIN`, `SELLER`, `WORKSHOP_MASTER` (constants in [src/lib/permission
 
 A feature is split across three trees, by area (`commercial`, `inventory`, `production`, `costs`, `petty-cash`, `maintenance`, `staff`, `reports`, …):
 
-- `src/app/(dashboard)/dashboard/<area>/<feature>/` — **RSC pages** that read `searchParams` (a `Promise` — must be awaited), enforce auth, load data through the feature's `queries.ts`, and render. `new/`, `[id]/`, `[id]/edit/` subroutes follow. Only the pages in `pagesStillWithPrisma` (costs) still query Prisma directly.
-- `src/modules/<area>/<feature>/actions.ts` — `"use server"` **server actions** + the feature's form components (`*-form.tsx`).
+- `src/app/(dashboard)/dashboard/<area>/<feature>/` — **RSC pages** that read `searchParams` (a `Promise` — must be awaited), enforce auth, load data through the feature's `queries.ts`, and render. `new/`, `[id]/`, `[id]/edit/` subroutes follow. No page queries Prisma directly.
+- `src/modules/<area>/<feature>/actions.ts` — `"use server"` **server actions** + the feature's form components (`*-form.tsx`). When the actions grow, their business rules move to use-case modules next to them (see *Use cases* below).
 - `src/modules/<area>/<feature>/queries.ts` — **read queries for the pages**, with `import "server-only"`. Reference: [src/modules/commercial/clients/queries.ts](src/modules/commercial/clients/queries.ts).
 - `src/schemas/<area>/*.schema.ts` — Zod validation shared by action + form.
 
@@ -70,7 +70,7 @@ A feature is split across three trees, by area (`commercial`, `inventory`, `prod
 - **The page keeps** parsing `searchParams`/`params`, `notFound()`/`redirect()`, presentation derivations and the JSX. **The query owns** everything Prisma: `where` construction (`Prisma.*WhereInput`), `select`/`include`, ordering, pagination arguments and `Promise.all`. It receives parsed values (strings, dates, `{ skip, take }`) and returns Prisma results with the field names unchanged; no DTO mapping, no React, no redirects.
 - Prefer an explicit `select` with the columns the view uses: TypeScript then rejects any access to a column that is not loaded. **Never load full `usuario` rows** (they include `clave_hash`): select only what the view shows. Rows passed to a client component are serialized to the browser, so limit them to the component's prop type.
 - Naming: `get*` returns the data of a page (`getOrderListData`, `getQuoteDetail`); an edit query that depends on the main record returns `null` when it does not exist and the page calls `notFound()`. `find*` returns the Prisma promise unawaited so another module can compose it in its own `Promise.all` without changing the call order: shared options live in the module that owns the entity (`findClientFilterOptions` in `clients/queries.ts`).
-- Pages cannot import `@/lib/db`: an ESLint `no-restricted-imports` rule covers every `src/app/**/page.tsx`, new pages included, except the ones listed in `pagesStillWithPrisma` (`eslint.config.mjs`: costs, migrated in delivery 6). That list may only shrink. In flat config the last block that configures a rule replaces the earlier options for that file, so that block repeats the `@/auth` restriction.
+- Pages cannot import `@/lib/db`: an ESLint `no-restricted-imports` rule covers every `src/app/**/page.tsx`, new pages included, with no exceptions (the last ones, work orders and costs, were migrated in delivery 6). In flat config the last block that configures a rule replaces the earlier options for that file, so that block repeats the `@/auth` restriction.
 - Before moving a page's queries, characterize it with the harness in [src/testing/page-characterization.ts](src/testing/page-characterization.ts): it runs the real page with Prisma, session and navigation mocked, and snapshots the Prisma calls and the normalized HTML. The same snapshots must pass unchanged after the move.
 
 ### Server action pattern (mutations)
@@ -84,6 +84,16 @@ Follow the shape in [src/modules/commercial/clients/actions.ts](src/modules/comm
 5. `revalidatePath(...)` then `redirect(\`${path}?toast=<key></key>\`)`. Toasts are surfaced via the `?toast=` search param and rendered client-side.
 
 Actions used with `useActionState` take `(prevState, formData)` and return a typed `FormState`.
+
+### Use cases (large action files)
+
+When an action file mixes many operations, split it by use case as in [src/modules/production/work-orders/](src/modules/production/work-orders/) (`create-work-order.ts`, `material-movements.ts`, `material-closure.ts`, `work-order-status.ts`):
+
+- `actions.ts` stays the **only `"use server"` surface** of the feature: every exported async function there is a public POST endpoint. Each action keeps the role check, the `FormData`/Zod parsing, the call to the use case, `revalidatePath` and `redirect`.
+- The use case is a `server-only` module grouped by the invariant it protects. It receives the parsed data (the schema's `*Input` type) and the verified user id, applies the rules, owns the transaction and throws the same errors. It never redirects: an outcome that is not an error is returned as a value (`finishWorkOrder` returns `"ya_finalizada"`).
+- Never export a use case from `actions.ts`: [src/modules/action-access.test.ts](src/modules/action-access.test.ts) fails when a module exports a function its table does not list.
+- Before moving an action, characterize it with `characterizeHandler` and `dbModuleMock({ transactions: true, recordTransactionEnd: true })` (reference: [src/modules/production/work-orders/actions.test.ts](src/modules/production/work-orders/actions.test.ts)): the snapshot records the role, reads, writes, transaction end, correlatives, audit log, revalidations and redirect or error. Run mutations: a characterization that would also pass with broken code proves nothing.
+- A formula that a page shows as a preview and an action stores lives in one pure function in `src/lib` (e.g. [src/lib/costing-calculations.ts](src/lib/costing-calculations.ts)); its operation order is part of the contract because amounts are stored as computed.
 
 ## Stack notes
 
