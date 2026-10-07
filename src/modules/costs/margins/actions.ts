@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
+import { calculateSuggestedPrice } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
 import { marginSchema } from "@/schemas/costs/margin.schema";
@@ -55,7 +56,7 @@ export async function createMarginAction(formData: FormData) {
     );
   }
 
-  const suggestedPrice = totalCost * (1 + data.porcentaje_margen / 100);
+  const suggestedPrice = calculateSuggestedPrice(totalCost, data.porcentaje_margen);
   const finalPrice = data.precio_final ?? suggestedPrice;
 
   if (finalPrice < totalCost) {

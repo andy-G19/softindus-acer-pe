@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
+import { calculateProfitability } from "@/lib/costing-calculations";
 import { prisma } from "@/lib/db";
 import { toNumber } from "@/lib/numbers";
 import { profitabilitySchema } from "@/schemas/costs/profitability.schema";
@@ -74,10 +75,16 @@ export async function createProfitabilityAction(formData: FormData) {
     );
   }
 
-  const estimatedProfit = estimatedIncome - totalCost;
-  const realMargin = (estimatedProfit / totalCost) * 100;
   const expectedMargin = toNumber(latestMargin.porcentaje_margen);
-  const lowMarginAlert = realMargin < expectedMargin;
+  const {
+    profit: estimatedProfit,
+    realMargin,
+    lowMarginAlert,
+  } = calculateProfitability({
+    income: estimatedIncome,
+    totalCost,
+    expectedMargin,
+  });
 
   await prisma.$transaction(async (tx) => {
     const idRentabilidad = await getNextCorrelativeId(tx, {
