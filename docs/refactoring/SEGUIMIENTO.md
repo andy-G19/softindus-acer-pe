@@ -1014,10 +1014,11 @@ Pendientes fuera de alcance:
 
 ## Entrega 6 — Órdenes de trabajo y costeo por caso de uso
 
-Fecha: 2026-10-06. Estado: hecha en local el 2026-10-07, con 19 commits de
-`91ad966` a `ffcc683` sobre staging sin push (se publica después de fusionar el
-PR de la entrega 5); falta verificarla en staging. Se divide en cuatro
-sub-entregas para que cada una deje el proyecto comprobable y baje una métrica.
+Fecha: 2026-10-06. Estado: verificada en staging el 2026-10-07, con 19 commits
+de `91ad966` a `ffcc683` y el registro `9369bc1`, publicados después de fusionar
+el PR de la entrega 5; CI #40 en verde. Falta integrarla en `main`. Se divide en
+cuatro sub-entregas para que cada una deje el proyecto comprobable y baje una
+métrica.
 
 | Sub-entrega | Alcance | Resultado |
 |---|---|---|
@@ -1150,14 +1151,53 @@ páginas, 136 formularios y 48 archivos de acciones: los casos de uso no
 agregaron superficies `"use server"`. Los 6 formularios del detalle de costeo
 aparecen ahora en sus secciones de `src/modules`.
 
-Verificación en staging: pendiente. Guion previsto: foto del «antes» con la
-entrega 5 ya desplegada y antes del push (las 9 páginas, solo lectura, con una
-orden y un costeo fijos); después del push, con permiso y datos de prueba,
-crear órdenes por pedido, campaña y reposición, entregar, entrega adicional,
-devolver, cerrar, reabrir (ADMIN), anular y finalizar; generar un costeo,
-ajustar la mano de obra, recalcular, registrar y anular un costo indirecto,
-aplicar un margen y calcular la rentabilidad; WORKSHOP_MASTER no reabre y
-SELLER y WORKSHOP_MASTER no entran a Costos; logs de Vercel.
+### Publicación, CI y verificación en staging
+
+- Push a staging de `9369bc1` después de fusionar el PR #14 de la entrega 5
+  (merge commit `1613819`; CI #38 del PR y CI #39 en `main` en verde). CI #40 en
+  verde (1m 38s) sobre `9369bc1`.
+- No hubo foto del «antes»: el push se hizo antes de verificar. La equivalencia
+  descansa en la caracterización, el código y JSX idénticos a `HEAD` y la
+  comparación diferencial.
+
+Verificación en staging el 2026-10-07 con ADMIN (`USU00000001`), desde el
+navegador integrado y con peticiones secuenciales con pausa de 1,5 s:
+
+| # | Prueba | Resultado |
+|---|---|---|
+| 1 | Prueba de humo de 24 páginas: listado de órdenes con y sin filtros, nueva orden, los 5 detalles y los 5 avances existentes, 2 reasignaciones, panel de costos, costeos sin filtros y con los 3 estados, detalle de `COS00000001` y órdenes por costear | Todas 200, sin redirecciones ni `digest` de error, sin `NaN`, `Invalid Date` ni `undefined`; 0,5 a 1 s por página |
+| 2 | 5 ids inexistentes o ajenos: detalle y avances de `OTR99999999`, reasignar un avance inexistente y uno de otra orden, `COS99999999` | Frontera 404 en todos. En Producción con estado HTTP 200 y en Costos con 404: la página de campañas, que la entrega no tocó, también responde 200 (Producción tiene `error.tsx` y `not-found.tsx` propios y responde por streaming) |
+| 3 | Contenido del detalle de `COS00000001` | Total S/ 1514.20 y unitario S/ 126.18, como en la entrega 3; referencias de 15 y 20 % correctas |
+| 4 | Crear `OTR00000006`: reposición de Rastrillo agrícola, cantidad 1 | Toast; requerimiento congelado de 204.00 de plancha (`MAT00000006`) a S/ 250.00 |
+| 5 | Entregar lo pendiente, entrega adicional de 1 y devolución de 200 | Stock 299.79 → 95.79 → 94.79 → 294.79; kárdex `MVI00000034` a `MVI00000036` encadenado (stock anterior ± cantidad = resultante); toasts |
+| 6 | Cerrar (consumo 4, merma 1), reabrir como ADMIN y cerrar otra vez (consumo 5, merma 0) | Al cerrar desaparecen la entrega y la devolución; reabrir conserva lo entregado y lo devuelto |
+| 7 | Generar `COS00000002`, mano de obra 120, recalcular, costo indirecto `CIN00000004` de 25.50 y anularlo | Total S/ 51,000.00 → 51,120.00 → 51,145.50 → 51,120.00; el recálculo lee la mano de obra recién escrita |
+| 8 | Margen de 17 % y rentabilidad | Sugerido S/ 59,810.40. Lo guardado coincide con la vista previa: utilidad S/ 8,690.40, 17.00 %, rentable (predicho antes con dobles IEEE 754: `17.000000000000004`) |
+| 9 | Crear `OTR00000007` y anularla desde el listado | Toast; deja de ofrecer anular y finalizar |
+| 10 | Bitácora del día | 13 entradas con el detalle esperado: requerimiento congelado, motivos, merma, producción declarada antes de reabrir |
+| 11 | Logs de Vercel (solo se conserva la última media hora: 16:43 a 17:13) | Sin advertencias ni errores durante las pruebas. El único error es de 16:47: una entrega a `OTR00000005` que la regla de stock rechazó, con su mensaje |
+| 12 | SELLER y WORKSHOP_MASTER | Omitida por decisión del responsable. La entrega no cambió `permissions.ts`, `proxy.ts`, `authz.ts` ni `auth.ts`, ni ningún `requireRole` de las 9 páginas y las 8 acciones (comparado con `108ba00`); los permisos los fijan la tabla de `action-access.test.ts`, con `requireRole` real, y la caracterización de páginas |
+
+Hallazgos de la verificación, anteriores a la entrega (no son regresiones):
+
+- H7: la alerta de bajo margen compara números en coma flotante. Las dos
+  rentabilidades de `COS00000001`, con margen aplicado de 20 %, se guardaron como
+  margen bajo: el margen real da `19.999999999999993`, y la pantalla muestra
+  20.00 %. Se corrige en un solo lugar porque la vista previa y la acción
+  comparten `calculateProfitability`.
+- Un rechazo de negocio de una acción (por ejemplo, stock insuficiente) responde
+  500 y muestra la frontera de error genérica, sin el motivo: las acciones lanzan
+  en lugar de devolver un resultado (pista B).
+- Tras la entrega, la tabla de requerimiento del detalle compara el stock que
+  queda con lo ya entregado y marca «insuficiente» (faltante 128.21 en
+  `OTR00000006`). El listado ofrece «Anular» en órdenes con movimientos, que el
+  servidor rechaza. Ambos son de la pista B.
+- La plancha quedó sobre su mínimo y no se abrió alerta de stock: esa rama la
+  cubre la caracterización.
+
+Datos de prueba que quedan en staging: `OTR00000006` (materiales cerrados,
+pendiente), `OTR00000007` (anulada), `COS00000002` (rentable), `CIN00000004`
+(anulado) y la plancha `MAT00000006` con 5 unidades menos (294.79).
 
 Divergencias y defectos encontrados, conservados (cada uno es un `fix`):
 
@@ -1177,10 +1217,12 @@ Divergencias y defectos encontrados, conservados (cada uno es un `fix`):
   `toNonNegativeNumber` sobre la misma fórmula; solo difieren con negativos.
 - La anulación no recorta el id del formulario y la entrega sí (fijado por la
   caracterización).
+- H7: la alerta de bajo margen compara en coma flotante (ver la verificación en
+  staging).
 
 Pendientes fuera de alcance:
 
-- Los `fix` H1 a H6.
+- Los `fix` H1 a H7.
 - `production/work-orders/[id]/page.tsx` (643 líneas) y
   `work-order-progress/actions.ts` (427) no se dividieron.
 - 17 copias locales de `formatDecimal` con dos comportamientos distintos para
@@ -1208,7 +1250,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Hecha en local (18 commits, sin push); falta staging |
-| 6 | A | Órdenes de trabajo y costeo por caso de uso | Hecha en local (20 commits, sin push); falta staging |
+| 6 | A | Órdenes de trabajo y costeo por caso de uso | Verificada en staging (CI #40 verde); falta integrar en `main` |
 | 7 | A | Fachada de notificaciones | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
