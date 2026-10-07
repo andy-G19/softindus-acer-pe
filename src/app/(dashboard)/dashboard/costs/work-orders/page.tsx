@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { createCostingFromWorkOrderAction } from "@/modules/costs/costings/actions";
+import { getCostableWorkOrdersData } from "@/modules/costs/costings/queries";
 
 function formatDecimal(value: unknown) {
   return toNumber(value).toFixed(2);
@@ -50,108 +50,14 @@ function getOrderBadgeVariant(status: string) {
 export default async function CostingWorkOrdersPage() {
   await requireRole([APP_ROLES.ADMIN]);
 
-  const [
+  const {
     workOrdersWithoutCosting,
     latestCostings,
     totalWorkOrders,
     workOrdersWithoutRecipe,
     workOrdersAlreadyCosted,
     anulledWorkOrders,
-  ] = await Promise.all([
-    prisma.orden_trabajo.findMany({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-        id_version_receta: {
-          not: null,
-        },
-        version_receta: {
-          estado: {
-            not: "anulada",
-          },
-        },
-        costeo: {
-          none: {},
-        },
-      },
-      include: {
-        producto: true,
-        cliente: true,
-        campania_produccion: true,
-        ruta_fabricacion: true,
-        detalle_pedido: {
-          include: {
-            pedido: {
-              include: {
-                cliente: true,
-              },
-            },
-          },
-        },
-        version_receta: {
-          include: {
-            receta_tecnica: true,
-            _count: {
-              select: {
-                detalle_receta: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        fecha_registro: "desc",
-      },
-    }),
-
-    prisma.costeo.findMany({
-      take: 5,
-      orderBy: {
-        fecha_costeo: "desc",
-      },
-      include: {
-        orden_trabajo: {
-          include: {
-            producto: true,
-          },
-        },
-        pedido: {
-          include: {
-            cliente: true,
-          },
-        },
-      },
-    }),
-
-    prisma.orden_trabajo.count(),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-        id_version_receta: null,
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-        costeo: {
-          some: {},
-        },
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: "anulada",
-      },
-    }),
-  ]);
+  } = await getCostableWorkOrdersData();
 
   return (
     <main className="space-y-6">

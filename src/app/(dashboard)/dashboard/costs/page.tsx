@@ -24,9 +24,9 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
+import { getCostsOverviewData } from "@/modules/costs/overview/queries";
 
 function formatPercent(value: unknown) {
   if (value === null || value === undefined) {
@@ -43,7 +43,7 @@ export default async function CostsDashboardPage() {
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
-  const [
+  const {
     totalCostings,
     costingsThisMonth,
     totalCostAmount,
@@ -56,147 +56,7 @@ export default async function CostsDashboardPage() {
     workOrdersWithoutCosting,
     latestCostings,
     latestLowMarginCostings,
-  ] = await Promise.all([
-    prisma.costeo.count(),
-
-    prisma.costeo.count({
-      where: {
-        fecha_costeo: {
-          gte: startOfMonth,
-          lt: startOfNextMonth,
-        },
-      },
-    }),
-
-    prisma.costeo.aggregate({
-      _sum: {
-        costo_total: true,
-      },
-    }),
-
-    prisma.costo_indirecto.aggregate({
-      _sum: {
-        monto: true,
-      },
-    }),
-
-    prisma.margen_ganancia.count(),
-
-    prisma.rentabilidad.count(),
-
-    prisma.rentabilidad.count({
-      where: {
-        alerta_bajo_margen: true,
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-        id_version_receta: null,
-      },
-    }),
-
-    prisma.orden_trabajo.count({
-      where: {
-        estado: {
-          not: "anulada",
-        },
-        id_version_receta: {
-          not: null,
-        },
-        costeo: {
-          none: {},
-        },
-      },
-    }),
-
-    prisma.costeo.findMany({
-      orderBy: {
-        fecha_costeo: "desc",
-      },
-      take: 6,
-      include: {
-        pedido: {
-          include: {
-            cliente: true,
-          },
-        },
-        orden_trabajo: {
-          include: {
-            producto: true,
-            cliente: true,
-            detalle_pedido: {
-              include: {
-                pedido: {
-                  include: {
-                    cliente: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        margen_ganancia: {
-          orderBy: {
-            fecha_aplicacion: "desc",
-          },
-          take: 1,
-        },
-        rentabilidad: {
-          orderBy: {
-            fecha_calculo: "desc",
-          },
-          take: 1,
-        },
-      },
-    }),
-
-    prisma.costeo.findMany({
-      where: {
-        rentabilidad: {
-          some: {
-            alerta_bajo_margen: true,
-          },
-        },
-      },
-      orderBy: {
-        fecha_costeo: "desc",
-      },
-      take: 5,
-      include: {
-        pedido: {
-          include: {
-            cliente: true,
-          },
-        },
-        orden_trabajo: {
-          include: {
-            producto: true,
-          },
-        },
-        rentabilidad: {
-          where: {
-            alerta_bajo_margen: true,
-          },
-          orderBy: {
-            fecha_calculo: "desc",
-          },
-          take: 1,
-        },
-      },
-    }),
-  ]);
+  } = await getCostsOverviewData({ startOfMonth, startOfNextMonth });
 
   const totalCost = toNumber(totalCostAmount._sum.costo_total);
   const averageCost = totalCostings > 0 ? totalCost / totalCostings : 0;

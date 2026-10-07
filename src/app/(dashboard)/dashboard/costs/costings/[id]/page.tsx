@@ -24,7 +24,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { requireRole } from "@/lib/authz";
 import { APP_ROLES } from "@/lib/permissions";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { prisma } from "@/lib/db";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/formatters";
 import { toNumber } from "@/lib/numbers";
 import {
@@ -35,6 +34,7 @@ import {
   recalculateCostingAction,
   updateLaborCostAction,
 } from "@/modules/costs/costings/actions";
+import { getCostingDetail } from "@/modules/costs/costings/queries";
 import { createMarginAction } from "@/modules/costs/margins/actions";
 import { createProfitabilityAction } from "@/modules/costs/profitability/actions";
 
@@ -136,62 +136,7 @@ export default async function CostingDetailPage({
 
   const { id } = await params;
 
-  const costing = await prisma.costeo.findUnique({
-    where: {
-      id_costeo: id,
-    },
-    include: {
-      usuario: true,
-      pedido: {
-        include: {
-          cliente: true,
-        },
-      },
-      orden_trabajo: {
-        include: {
-          producto: true,
-          cliente: true,
-          detalle_pedido: {
-            include: {
-              pedido: {
-                include: {
-                  cliente: true,
-                },
-              },
-            },
-          },
-          version_receta: {
-            include: {
-              receta_tecnica: true,
-              detalle_receta: {
-                include: {
-                  material: true,
-                },
-                orderBy: {
-                  id_detalle_receta: "asc",
-                },
-              },
-            },
-          },
-        },
-      },
-      costo_indirecto: {
-        orderBy: {
-          fecha_registro: "desc",
-        },
-      },
-      margen_ganancia: {
-        orderBy: {
-          fecha_aplicacion: "desc",
-        },
-      },
-      rentabilidad: {
-        orderBy: {
-          fecha_calculo: "desc",
-        },
-      },
-    },
-  });
+  const costing = await getCostingDetail(id);
 
   if (!costing) {
     notFound();
