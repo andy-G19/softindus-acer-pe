@@ -8,6 +8,7 @@ import {
   calculateEstimatedLaborCost,
   recalculateCostingTotals,
 } from "@/lib/costing";
+import { estimateMaterialCost } from "@/lib/costing-calculations";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toNonNegativeNumber } from "@/lib/numbers";
@@ -118,9 +119,12 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
     const wastePercentage = toNonNegativeNumber(detail.merma_estimada_porcentaje);
     const unitCost = toNonNegativeNumber(detail.material.costo_unitario_actual);
 
-    const requiredBase = quantityPerUnit * quantityToProduce;
-    const requiredWithWaste = requiredBase * (1 + wastePercentage / 100);
-    const estimatedCost = requiredWithWaste * unitCost;
+    const { estimatedCost } = estimateMaterialCost({
+      quantityToProduce,
+      quantityPerUnit,
+      wastePercentage,
+      unitCost,
+    });
 
     if (detail.tipo_consumo === "materia_prima") {
       materialCost += estimatedCost;

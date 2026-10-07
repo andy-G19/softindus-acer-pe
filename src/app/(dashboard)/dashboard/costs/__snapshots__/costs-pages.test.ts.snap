@@ -1,0 +1,8554 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/costs > con datos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+    },
+    "prisma": "costo_indirecto.aggregate",
+  },
+  {
+    "args": undefined,
+    "prisma": "margen_ganancia.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+          "where": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "rentabilidad": {
+          "some": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/costs > con datos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Controla costeos de producción, costos indirectos, márgenes, precios sugeridos, precios finales, utilidad estimada y alertas de bajo margen.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+<a data-variant="default" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Módulo de costos operativo</span>
+<span>El módulo ya cuenta con información económica para gestionar costeos, márgenes y rentabilidad.</span>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos registrados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>42 generados este mes</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Promedio: S/ 29.39</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos indirectos</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Gastos agregados a costeos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Rentabilidades críticas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes sin receta</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>No pueden costearse aún.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes de costeo</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Rentabilidades calculadas</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Márgenes reales evaluados.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<div>
+<div>Últimos costeos</div>
+<p>Resumen de los registros económicos más recientes.</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings">Ver todos</a>
+</div>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>id_costeo-1 | 01/07/2026</p>
+<p>id_orden_trabajo-1 | nombre_producto-1</p>
+<p>Costo total: S/ 11.50 | Margen: 11.50%</p>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Detalle</a>
+</div>
+</div>
+<div>
+<div>
+<p>id_costeo-2 | 02/07/2026</p>
+<p>id_orden_trabajo-2 | nombre_producto-2</p>
+<p>Costo total: S/ 22.50 | Margen: 11.50%</p>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Detalle</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Alertas recientes</div>
+<p>Costeos con bajo margen de rentabilidad.</p>
+</div>
+<div>
+<div>
+<div>
+<p>id_costeo-1</p>
+<p>id_orden_trabajo-1 | nombre_producto-1</p>
+<p>Margen real: 11.50%</p>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Revisar alerta</a>
+</div>
+<div>
+<p>id_costeo-2</p>
+<p>id_orden_trabajo-2 | nombre_producto-2</p>
+<p>Margen real: 11.50%</p>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Revisar alerta</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs > sin datos: modulo sin informacion economica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+    },
+    "prisma": "costo_indirecto.aggregate",
+  },
+  {
+    "args": undefined,
+    "prisma": "margen_ganancia.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+          "where": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "rentabilidad": {
+          "some": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/costs > sin datos: modulo sin informacion economica > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Controla costeos de producción, costos indirectos, márgenes, precios sugeridos, precios finales, utilidad estimada y alertas de bajo margen.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+<a data-variant="default" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Módulo de costos pendiente de datos</span>
+<span>Para iniciar, crea órdenes de trabajo con receta técnica y luego genera su costeo.</span>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos registrados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>0 generados este mes</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Promedio: S/ 0.00</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos indirectos</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Gastos agregados a costeos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Rentabilidades críticas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>No anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes sin receta</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>No pueden costearse aún.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes de costeo</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Rentabilidades calculadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Márgenes reales evaluados.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<div>
+<div>Últimos costeos</div>
+<p>Resumen de los registros económicos más recientes.</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings">Ver todos</a>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>Aún no hay costeos registrados. Genera uno desde una orden de trabajo con receta técnica.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Alertas recientes</div>
+<p>Costeos con bajo margen de rentabilidad.</p>
+</div>
+<div>
+<div>
+<div>
+<p>No hay alertas de bajo margen registradas.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": undefined,
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "fecha_costeo": {
+          "gte": 2026-07-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "costeo.count",
+  },
+  {
+    "args": {
+      "_sum": {
+        "costo_total": true,
+      },
+    },
+    "prisma": "costeo.aggregate",
+  },
+  {
+    "args": {
+      "_sum": {
+        "monto": true,
+      },
+    },
+    "prisma": "costo_indirecto.aggregate",
+  },
+  {
+    "args": undefined,
+    "prisma": "margen_ganancia.count",
+  },
+  {
+    "args": undefined,
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "alerta_bajo_margen": true,
+      },
+    },
+    "prisma": "rentabilidad.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 6,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+          "where": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+      "where": {
+        "rentabilidad": {
+          "some": {
+            "alerta_bajo_margen": true,
+          },
+        },
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/costs > solo ordenes sin costeo: modulo operativo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costos y rentabilidad</h1>
+<p>Controla costeos de producción, costos indirectos, márgenes, precios sugeridos, precios finales, utilidad estimada y alertas de bajo margen.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+<a data-variant="default" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Módulo de costos operativo</span>
+<span>El módulo ya cuenta con información económica para gestionar costeos, márgenes y rentabilidad.</span>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos registrados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>0 generados este mes</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Promedio: S/ 0.00</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costos indirectos</div>
+</div>
+</div>
+<div>
+<p>S/ 1234.50</p>
+<p>Gastos agregados a costeos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Rentabilidades críticas.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>No anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes sin receta</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>No pueden costearse aún.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes de costeo</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Rentabilidades calculadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Márgenes reales evaluados.</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<div>
+<div>Últimos costeos</div>
+<p>Resumen de los registros económicos más recientes.</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings">Ver todos</a>
+</div>
+</div>
+<div>
+<div>
+<div>
+<p>Aún no hay costeos registrados. Genera uno desde una orden de trabajo con receta técnica.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Alertas recientes</div>
+<p>Costeos con bajo margen de rentabilidad.</p>
+</div>
+<div>
+<div>
+<div>
+<p>No hay alertas de bajo margen registradas.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > estado margen bajo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "rentabilidad": {
+              "some": {
+                "alerta_bajo_margen": true,
+              },
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "rentabilidad": {
+              "some": {
+                "alerta_bajo_margen": true,
+              },
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > estado margen bajo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value=""/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value=""/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="rentable">Rentable</option>
+<option value="margen_bajo" selected="">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>id_costeo-1</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Manual · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>id_costeo-2</div>
+<p>02/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-2 | nombre_producto-2</div>
+<p>Manual · Producto: categoria-2</p>
+</td>
+<td>
+<div>nombre_razon_social-2</div>
+<p>Pedido: id_pedido-2</p>
+</td>
+<td>0.00</td>
+<td>S/ 22.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > estado pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "rentabilidad": {
+              "none": {},
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "rentabilidad": {
+              "none": {},
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > estado pendiente > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value=""/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value=""/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="pendiente" selected="">Pendiente</option>
+<option value="rentable">Rentable</option>
+<option value="margen_bajo">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>id_costeo-1</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Manual · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>id_costeo-2</div>
+<p>02/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-2 | nombre_producto-2</div>
+<p>Manual · Producto: categoria-2</p>
+</td>
+<td>
+<div>nombre_razon_social-2</div>
+<p>Pedido: id_pedido-2</p>
+</td>
+<td>0.00</td>
+<td>S/ 22.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > sin filtros > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > sin filtros > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value=""/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value=""/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="rentable">Rentable</option>
+<option value="margen_bajo">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>id_costeo-1</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Manual · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>id_costeo-2</div>
+<p>02/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-2 | nombre_producto-2</div>
+<p>Manual · Producto: categoria-2</p>
+</td>
+<td>
+<div>nombre_razon_social-2</div>
+<p>Pedido: id_pedido-2</p>
+</td>
+<td>0.00</td>
+<td>S/ 22.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > sin resultados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > sin resultados > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value=""/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value=""/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="rentable">Rentable</option>
+<option value="margen_bajo">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="10">
+<div>
+<div>
+<p>Todavía no hay costeos registrados. Puedes generar uno desde una orden de trabajo.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > todos los filtros, estado rentable > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_costeo": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_orden_trabajo": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                "orden_trabajo": {
+                  "producto": {
+                    "nombre_producto": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                "orden_trabajo": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_pedido": {
+              "contains": "PED00000003",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "id_orden_trabajo": {
+              "contains": "OTR00000007",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "orden_trabajo": {
+              "producto": {
+                "nombre_producto": {
+                  "contains": "Puerta",
+                  "mode": "insensitive",
+                },
+              },
+            },
+          },
+          {
+            "fecha_costeo": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+          {
+            "rentabilidad": {
+              "some": {
+                "alerta_bajo_margen": false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "id_costeo": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_pedido": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "id_orden_trabajo": {
+                  "contains": "puerta",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "pedido": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                "orden_trabajo": {
+                  "producto": {
+                    "nombre_producto": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+              {
+                "orden_trabajo": {
+                  "cliente": {
+                    "nombre_razon_social": {
+                      "contains": "puerta",
+                      "mode": "insensitive",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "id_pedido": {
+              "contains": "PED00000003",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "id_orden_trabajo": {
+              "contains": "OTR00000007",
+              "mode": "insensitive",
+            },
+          },
+          {
+            "orden_trabajo": {
+              "producto": {
+                "nombre_producto": {
+                  "contains": "Puerta",
+                  "mode": "insensitive",
+                },
+              },
+            },
+          },
+          {
+            "fecha_costeo": {
+              "gte": 2026-07-01T00:00:00.000Z,
+              "lte": 2026-07-31T23:59:59.999Z,
+            },
+          },
+          {
+            "rentabilidad": {
+              "some": {
+                "alerta_bajo_margen": false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > todos los filtros, estado rentable > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value="puerta"/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value="PED00000003"/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value="OTR00000007"/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value="Puerta"/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-01"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-31"/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="rentable" selected="">Rentable</option>
+<option value="margen_bajo">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 34.00</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 23.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>id_costeo-1</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Manual · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>id_costeo-2</div>
+<p>02/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-2 | nombre_producto-2</div>
+<p>Manual · Producto: categoria-2</p>
+</td>
+<td>
+<div>nombre_razon_social-2</div>
+<p>Pedido: id_pedido-2</p>
+</td>
+<td>0.00</td>
+<td>S/ 22.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings > un costeo de cada origen > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+        "orden_trabajo": {
+          "include": {
+            "campania_produccion": true,
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 50,
+      "where": {},
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": {
+      "where": {},
+    },
+    "prisma": "costeo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings > un costeo de cada origen > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Costeos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeos</h1>
+<p>Consulta los costeos generados, su origen productivo o comercial, el costo total, margen aplicado, precio final y rentabilidad estimada.</p>
+</div>
+</div>
+<div>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar costeo</a>
+</div>
+</div>
+</section>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Costeo, cliente, pedido" name="q" value=""/>
+</div>
+<div>
+<label for="pedido">Pedido</label>
+<input id="pedido" placeholder="Pedido" name="pedido" value=""/>
+</div>
+<div>
+<label for="orden">Orden de trabajo</label>
+<input id="orden" placeholder="Orden de trabajo" name="orden" value=""/>
+</div>
+<div>
+<label for="producto">Producto</label>
+<input id="producto" placeholder="Producto" name="producto" value=""/>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="rentable">Rentable</option>
+<option value="margen_bajo">Margen bajo</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/costs/costings">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costeos listados</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Últimos 50 registros.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo acumulado</div>
+</div>
+</div>
+<div>
+<p>S/ 68.50</p>
+<p>Suma de costos totales.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Utilidad acumulada</div>
+</div>
+</div>
+<div>
+<p>S/ 46.00</p>
+<p>Según rentabilidades calculadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas de bajo margen</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Rentabilidad crítica.</p>
+</div>
+</div>
+</section>
+<div>
+<table>
+<thead>
+<tr>
+<th>Costeo</th>
+<th>Origen</th>
+<th>Cliente / Pedido</th>
+<th>Cantidad</th>
+<th>Costo total</th>
+<th>Margen</th>
+<th>Precio final</th>
+<th>Utilidad</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>id_costeo-1</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Pedido · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>COS00000003</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Campaña · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>
+<span data-variant="secondary">Pendiente</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/COS00000003">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>COS00000004</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_orden_trabajo-1 | nombre_producto-1</div>
+<p>Stock · Producto: categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/COS00000004">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>COS00000005</div>
+<p>01/07/2026</p>
+</td>
+<td>
+<div>id_pedido-1</div>
+<p>Pedido · Pedido comercial</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Pedido: id_pedido-1</p>
+</td>
+<td>11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/COS00000005">Ver detalle</a>
+</td>
+</tr>
+<tr>
+<td>
+<div>COS00000006</div>
+<p>02/07/2026</p>
+</td>
+<td>
+<div>Costeo manual</div>
+<p>Manual · Sin origen asociado</p>
+</td>
+<td>
+<div>-</div>
+<p>Pedido: -</p>
+</td>
+<td>0.00</td>
+<td>S/ 22.50</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+<td>
+<a data-variant="link" href="/dashboard/costs/costings/COS00000006">Ver detalle</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000003",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_pedido-1 · nombre_razon_social-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="destructive">Margen bajo</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Alerta de bajo margen</span>
+<span>La última rentabilidad calculada está por debajo del margen esperado. Revisa costos, precio final o margen aplicado antes de cerrar la evaluación comercial.</span>
+</div>
+</div>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
+</div>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>motivo_ajuste-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>22.50%</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>22.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > costeo manual > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > costeo manual > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>Costeo manual</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>-</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="destructive">Margen bajo</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Alerta de bajo margen</span>
+<span>La última rentabilidad calculada está por debajo del margen esperado. Revisa costos, precio final o margen aplicado antes de cerrar la evaluación comercial.</span>
+</div>
+</div>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
+</div>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>motivo_ajuste-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>22.50%</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>22.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS99999999",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > inexistente > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista previa usa el precio final > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000001",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista previa usa el precio final > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 1000.00</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>18.00%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 1180.00</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 1250.00</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="destructive">Margen bajo</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Alerta de bajo margen</span>
+<span>La última rentabilidad calculada está por debajo del margen esperado. Revisa costos, precio final o margen aplicado antes de cerrar la evaluación comercial.</span>
+</div>
+</div>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cant. x unidad</th>
+<th>Requerido base</th>
+<th>Merma</th>
+<th>Requerido total</th>
+<th>Costo unitario</th>
+<th>Costo estimado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_material-1</div>
+<p>categoria-1</p>
+</td>
+<td>tipo_consumo-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>132.25 unidad_medida-1</td>
+<td>11.50%</td>
+<td>147.46 unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>S/ 1695.78</td>
+</tr>
+<tr>
+<td>
+<div>nombre_material-2</div>
+<p>categoria-2</p>
+</td>
+<td>tipo_consumo-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>258.75 unidad_medida-2</td>
+<td>0.00%</td>
+<td>258.75 unidad_medida-2</td>
+<td>S/ 22.50</td>
+<td>S/ 5821.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 1000.00</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 1150.00</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 1200.00</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>18.00%</td>
+<td>S/ 1180.00</td>
+<td>S/ 1250.00</td>
+<td>motivo_ajuste-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 1250.00</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 1000.00</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 250.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>25.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="success">Rentable</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>22.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000002",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="destructive">Margen bajo</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Alerta de bajo margen</span>
+<span>La última rentabilidad calculada está por debajo del margen esperado. Revisa costos, precio final o margen aplicado antes de cerrar la evaluación comercial.</span>
+</div>
+</div>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Este costeo no tiene una orden de trabajo con receta técnica asociada.</p>
+</div>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>motivo_ajuste-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>22.50%</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>22.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabilidad con margen bajo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000001",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabilidad con margen bajo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="destructive">Margen bajo</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>Alerta de bajo margen</span>
+<span>La última rentabilidad calculada está por debajo del margen esperado. Revisa costos, precio final o margen aplicado antes de cerrar la evaluación comercial.</span>
+</div>
+</div>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cant. x unidad</th>
+<th>Requerido base</th>
+<th>Merma</th>
+<th>Requerido total</th>
+<th>Costo unitario</th>
+<th>Costo estimado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_material-1</div>
+<p>categoria-1</p>
+</td>
+<td>tipo_consumo-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>132.25 unidad_medida-1</td>
+<td>11.50%</td>
+<td>147.46 unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>S/ 1695.78</td>
+</tr>
+<tr>
+<td>
+<div>nombre_material-2</div>
+<p>categoria-2</p>
+</td>
+<td>tipo_consumo-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>258.75 unidad_medida-2</td>
+<td>0.00%</td>
+<td>258.75 unidad_medida-2</td>
+<td>S/ 22.50</td>
+<td>S/ 5821.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>motivo_ajuste-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>22.50%</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="destructive">Margen bajo</span>
+</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>S/ 22.50</td>
+<td>22.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anulado y sin precio final > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000001",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anulado y sin precio final > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>
+<span data-variant="success">Rentable</span>
+</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cant. x unidad</th>
+<th>Requerido base</th>
+<th>Merma</th>
+<th>Requerido total</th>
+<th>Costo unitario</th>
+<th>Costo estimado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_material-1</div>
+<p>categoria-1</p>
+</td>
+<td>tipo_consumo-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>132.25 unidad_medida-1</td>
+<td>11.50%</td>
+<td>147.46 unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>S/ 1695.78</td>
+</tr>
+<tr>
+<td>
+<div>nombre_material-2</div>
+<p>categoria-2</p>
+</td>
+<td>tipo_consumo-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>258.75 unidad_medida-2</td>
+<td>0.00%</td>
+<td>258.75 unidad_medida-2</td>
+<td>S/ 22.50</td>
+<td>S/ 5821.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+</td>
+<td>Desgaste de maquinaria</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<span>Anulado</span>
+</td>
+</tr>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-nueva</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="CIN00000002"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Ingreso</th>
+<th>Costo</th>
+<th>Utilidad</th>
+<th>Margen real</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>11.50%</td>
+<td>
+<span data-variant="success">Rentable</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilidad > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000001",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilidad > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Unitario: S/ 0.00</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>Pendiente</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cant. x unidad</th>
+<th>Requerido base</th>
+<th>Merma</th>
+<th>Requerido total</th>
+<th>Costo unitario</th>
+<th>Costo estimado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_material-1</div>
+<p>categoria-1</p>
+</td>
+<td>tipo_consumo-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>132.25 unidad_medida-1</td>
+<td>11.50%</td>
+<td>147.46 unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>S/ 1695.78</td>
+</tr>
+<tr>
+<td>
+<div>nombre_material-2</div>
+<p>categoria-2</p>
+</td>
+<td>tipo_consumo-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>258.75 unidad_medida-2</td>
+<td>0.00%</td>
+<td>258.75 unidad_medida-2</td>
+<td>S/ 22.50</td>
+<td>S/ 5821.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Todavía no hay costos indirectos registrados para este costeo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 11.50</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 13.22</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 13.80</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Todavía no hay márgenes aplicados para este costeo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div role="alert">
+<div>Primero debes aplicar un margen de ganancia para obtener un precio sugerido o precio final.</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Todavía no hay cálculos de rentabilidad registrados para este costeo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: margen bajo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "costo_indirecto": {
+          "orderBy": {
+            "fecha_registro": "desc",
+          },
+        },
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+        },
+        "orden_trabajo": {
+          "include": {
+            "cliente": true,
+            "detalle_pedido": {
+              "include": {
+                "pedido": {
+                  "include": {
+                    "cliente": true,
+                  },
+                },
+              },
+            },
+            "producto": true,
+            "version_receta": {
+              "include": {
+                "detalle_receta": {
+                  "include": {
+                    "material": true,
+                  },
+                  "orderBy": {
+                    "id_detalle_receta": "asc",
+                  },
+                },
+                "receta_tecnica": true,
+              },
+            },
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+        "rentabilidad": {
+          "orderBy": {
+            "fecha_calculo": "desc",
+          },
+        },
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000001",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: margen bajo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs/costings">Costeos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Detalle</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Costeo id_costeo-1</h1>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/work-orders">Generar otro costeo</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo materiales</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Materia prima.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo consumibles</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Insumos secundarios.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Mano de obra</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Estimada u operativa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo indirecto total</div>
+</div>
+</div>
+<div>
+<p>S/ 11.50</p>
+<p>Gastos indirectos.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Costo total</div>
+</div>
+</div>
+<div>
+<p>S/ 0.00</p>
+<p>Unitario: S/ 11.50</p>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Datos del costeo</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Fecha de costeo</dt>
+<dd>1 jul. 2026</dd>
+</div>
+<div>
+<dt>Cantidad base</dt>
+<dd>11.50</dd>
+</div>
+<div>
+<dt>Registrado por</dt>
+<dd>nombres-1 apellidos-1</dd>
+</div>
+<div>
+<dt>Cliente</dt>
+<dd>nombre_razon_social-1</dd>
+</div>
+</dl>
+<div>
+<h3>Mano de obra y recálculo</h3>
+<p>La mano de obra inicial se estima desde tareas de operario con horas y tarifa registradas. Puedes ajustarla manualmente si faltan datos operativos.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="costo_mano_obra">Costo de mano de obra</label>
+<input type="number" id="costo_mano_obra" min="0" step="0.01" name="costo_mano_obra" value="11.50"/>
+</div>
+<button data-variant="default" type="submit">Actualizar</button>
+</form>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<button data-variant="outline" type="submit">Recalcular costeo</button>
+</form>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Estado económico</div>
+</div>
+<div>
+<dl>
+<div>
+<dt>Margen aplicado</dt>
+<dd>11.50%</dd>
+</div>
+<div>
+<dt>Precio sugerido</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Precio final</dt>
+<dd>S/ 11.50</dd>
+</div>
+<div>
+<dt>Utilidad estimada</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Margen real</dt>
+<dd>Pendiente</dd>
+</div>
+<div>
+<dt>Estado</dt>
+<dd>Pendiente</dd>
+</div>
+</dl>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Desglose referencial</div>
+<p>Este detalle muestra cómo se calcula el costo desde la receta técnica y el costo unitario actual de cada material.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Tipo</th>
+<th>Cant. x unidad</th>
+<th>Requerido base</th>
+<th>Merma</th>
+<th>Requerido total</th>
+<th>Costo unitario</th>
+<th>Costo estimado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div>nombre_material-1</div>
+<p>categoria-1</p>
+</td>
+<td>tipo_consumo-1</td>
+<td>11.50 unidad_medida-1</td>
+<td>132.25 unidad_medida-1</td>
+<td>11.50%</td>
+<td>147.46 unidad_medida-1</td>
+<td>S/ 11.50</td>
+<td>S/ 1695.78</td>
+</tr>
+<tr>
+<td>
+<div>nombre_material-2</div>
+<p>categoria-2</p>
+</td>
+<td>tipo_consumo-2</td>
+<td>22.50 unidad_medida-2</td>
+<td>258.75 unidad_medida-2</td>
+<td>0.00%</td>
+<td>258.75 unidad_medida-2</td>
+<td>S/ 22.50</td>
+<td>S/ 5821.88</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>Registrar costo indirecto</div>
+<p>Agrega gastos indirectos relacionados con este costeo. El sistema recalculará automáticamente el costo indirecto total, el costo total y el costo unitario.</p>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="concepto">Concepto</label>
+<input type="text" id="concepto" required="" maxLength="100" placeholder="Ejemplo: Consumo de luz del lote" name="concepto"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría</label>
+<select id="categoria" name="categoria" required="">
+<option value="luz" selected="">Luz</option>
+<option value="desgaste_maquinaria">Desgaste de maquinaria</option>
+<option value="transporte">Transporte</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="alquiler">Alquiler</option>
+<option value="mano_obra_indirecta">Mano de obra indirecta</option>
+<option value="otros">Otros</option>
+</select>
+</div>
+<div>
+<label for="monto">Monto</label>
+<input type="number" id="monto" required="" min="0" step="0.01" placeholder="0.00" name="monto"/>
+</div>
+</div>
+<div>
+<div>
+<label for="criterio_prorrateo">Criterio de prorrateo</label>
+<input type="text" id="criterio_prorrateo" maxLength="100" placeholder="Ejemplo: Prorrateado por lote" name="criterio_prorrateo"/>
+</div>
+<div>
+<label for="periodo">Periodo</label>
+<input type="text" id="periodo" maxLength="30" placeholder="Ejemplo: 2026-06" name="periodo"/>
+</div>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="3" placeholder="Detalle adicional del costo indirecto registrado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Registrar costo indirecto</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Costos indirectos registrados</div>
+<p>Historial de gastos indirectos asociados al costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Concepto</th>
+<th>Categoría</th>
+<th>Periodo</th>
+<th>Monto</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01/07/2026</td>
+<td>
+<div>concepto-1</div>
+<p>criterio_prorrateo-1</p>
+</td>
+<td>categoria-1</td>
+<td>periodo-1</td>
+<td>S/ 11.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-1"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>02/07/2026</td>
+<td>
+<div>concepto-2</div>
+</td>
+<td>categoria-2</td>
+<td>-</td>
+<td>S/ 22.50</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costo_indirecto" value="id_costo_indirecto-2"/>
+<button type="submit">Anular</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Aplicar margen de ganancia</div>
+<p>Aplica un margen entre 15% y 20% sobre el costo total. El sistema calculará automáticamente el precio sugerido y permitirá registrar un precio final ajustado.</p>
+</div>
+<div>
+<div>
+<p>Referencia rápida</p>
+<div>
+<div>
+<p>Costo total</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Precio con 15%</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Precio con 20%</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="porcentaje_margen">Margen de ganancia</label>
+<select id="porcentaje_margen" name="porcentaje_margen" required="">
+<option value="15" selected="">15%</option>
+<option value="16">16%</option>
+<option value="17">17%</option>
+<option value="18">18%</option>
+<option value="19">19%</option>
+<option value="20">20%</option>
+</select>
+</div>
+<div>
+<label for="precio_final">Precio final ajustado</label>
+<input type="number" id="precio_final" min="0" step="0.01" placeholder="Opcional. Si lo dejas vacío, se usará el precio sugerido." name="precio_final"/>
+<p>Usa este campo si el administrador decide ajustar manualmente el precio por negociación, redondeo o estrategia comercial.</p>
+</div>
+<div>
+<label for="motivo_ajuste">Motivo de ajuste</label>
+<textarea id="motivo_ajuste" name="motivo_ajuste" rows="3" placeholder="Ejemplo: Se redondea el precio final por negociación con el cliente.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Aplicar margen</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Márgenes aplicados</div>
+<p>Historial de márgenes registrados para este costeo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Margen</th>
+<th>Precio sugerido</th>
+<th>Precio final</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 jun. 2026, 7:00 p. m.</td>
+<td>11.50%</td>
+<td>S/ 11.50</td>
+<td>S/ 11.50</td>
+<td>motivo_ajuste-1</td>
+</tr>
+<tr>
+<td>1 jul. 2026, 7:00 p. m.</td>
+<td>22.50%</td>
+<td>S/ 22.50</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>Calcular rentabilidad</div>
+<p>Calcula la utilidad estimada comparando el ingreso esperado contra el costo total del costeo.</p>
+</div>
+<div>
+<div>
+<p>Vista previa de rentabilidad</p>
+<div>
+<div>
+<p>Ingreso estimado</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Costo total</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Utilidad estimada</p>
+<p>S/ 0.00</p>
+</div>
+<div>
+<p>Margen real</p>
+<p>0.00%</p>
+</div>
+</div>
+<div>
+<span data-variant="destructive">Margen bajo</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_costeo" value="id_costeo-1"/>
+<div>
+<label for="observaciones_rentabilidad">Observaciones</label>
+<textarea id="observaciones_rentabilidad" name="observaciones" rows="3" placeholder="Ejemplo: Rentabilidad aceptable según margen comercial aplicado.">
+</textarea>
+</div>
+<button data-variant="default" type="submit">Calcular rentabilidad</button>
+</form>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de rentabilidad</div>
+<p>Últimos cálculos de utilidad y margen real asociados al costeo.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Todavía no hay cálculos de rentabilidad registrados para este costeo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/work-orders > con ordenes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "campania_produccion": true,
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+        "producto": true,
+        "ruta_fabricacion": true,
+        "version_receta": {
+          "include": {
+            "_count": {
+              "select": {
+                "detalle_receta": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+        "version_receta": {
+          "estado": {
+            "not": "anulada",
+          },
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": undefined,
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "some": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "anulada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/work-orders > con ordenes > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Órdenes de trabajo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Generar costeo desde producción</h1>
+<p>Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total de órdenes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Incluye activas y anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Sin receta técnica</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Deben completarse en producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ya costeadas / anuladas</div>
+</div>
+</div>
+<div>
+<p>42 / 42</p>
+<p>No aparecen como pendientes.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Órdenes disponibles para costeo</div>
+<p>Solo se muestran órdenes no anuladas, con versión de receta y sin costeo previo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Producto</th>
+<th>Origen</th>
+<th>Cantidad</th>
+<th>Receta</th>
+<th>Fecha</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_orden_trabajo-1</td>
+<td>
+<div>nombre_producto-1</div>
+<p>categoria-1</p>
+</td>
+<td>
+<div>Reposición de stock</div>
+<p>Tipo: tipo_produccion-1</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>
+<div>nombre_receta-1</div>
+<p>Versión: numero_version-1 · Materiales: 2</p>
+</td>
+<td>1 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
+<button data-variant="default" type="submit">Generar costeo</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_orden_trabajo-2</td>
+<td>
+<div>nombre_producto-2</div>
+<p>categoria-2</p>
+</td>
+<td>
+<div>Reposición de stock</div>
+<p>Tipo: tipo_produccion-2</p>
+</td>
+<td>22.50 unidad_medida-2</td>
+<td>
+<div>nombre_receta-2</div>
+<p>Versión: numero_version-2 · Materiales: 2</p>
+</td>
+<td>2 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-2"/>
+<button data-variant="default" type="submit">Generar costeo</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Costeos recientes</div>
+<p>Últimos costeos generados desde órdenes de trabajo o pedidos.</p>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>id_costeo-1</p>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+<p>Costo total: S/ 11.50</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</div>
+<div>
+<div>
+<p>id_costeo-2</p>
+<p>id_orden_trabajo-2 · nombre_producto-2</p>
+<p>Costo total: S/ 22.50</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "campania_produccion": true,
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+        "producto": true,
+        "ruta_fabricacion": true,
+        "version_receta": {
+          "include": {
+            "_count": {
+              "select": {
+                "detalle_receta": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+        "version_receta": {
+          "estado": {
+            "not": "anulada",
+          },
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": undefined,
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "some": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "anulada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/work-orders > origenes y una version sin materiales > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Órdenes de trabajo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Generar costeo desde producción</h1>
+<p>Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total de órdenes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Incluye activas y anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Sin receta técnica</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Deben completarse en producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ya costeadas / anuladas</div>
+</div>
+</div>
+<div>
+<p>42 / 42</p>
+<p>No aparecen como pendientes.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Órdenes disponibles para costeo</div>
+<p>Solo se muestran órdenes no anuladas, con versión de receta y sin costeo previo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Producto</th>
+<th>Origen</th>
+<th>Cantidad</th>
+<th>Receta</th>
+<th>Fecha</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_orden_trabajo-1</td>
+<td>
+<div>nombre_producto-1</div>
+<p>categoria-1</p>
+</td>
+<td>
+<div>nombre_razon_social-1</div>
+<p>Tipo: pedido</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>
+<div>nombre_receta-1</div>
+<p>Versión: numero_version-1 · Materiales: 2</p>
+</td>
+<td>1 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_orden_trabajo" value="id_orden_trabajo-1"/>
+<button data-variant="default" type="submit">Generar costeo</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>OTR00000003</td>
+<td>
+<div>nombre_producto-1</div>
+<p>categoria-1</p>
+</td>
+<td>
+<div>nombre_campania-1</div>
+<p>Tipo: campania</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>
+<div>nombre_receta-1</div>
+<p>Versión: numero_version-1 · Materiales: 2</p>
+</td>
+<td>1 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_orden_trabajo" value="OTR00000003"/>
+<button data-variant="default" type="submit">Generar costeo</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>OTR00000004</td>
+<td>
+<div>nombre_producto-1</div>
+<p>categoria-1</p>
+</td>
+<td>
+<div>Pedido</div>
+<p>Tipo: pedido</p>
+</td>
+<td>11.50 unidad_medida-1</td>
+<td>
+<div>nombre_receta-1</div>
+<p>Versión: numero_version-1 · Materiales: 2</p>
+</td>
+<td>1 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-1</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_orden_trabajo" value="OTR00000004"/>
+<button data-variant="default" type="submit">Generar costeo</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>id_orden_trabajo-2</td>
+<td>
+<div>nombre_producto-2</div>
+<p>categoria-2</p>
+</td>
+<td>
+<div>Reposición de stock</div>
+<p>Tipo: reposicion_stock</p>
+</td>
+<td>22.50 unidad_medida-2</td>
+<td>
+<div>nombre_receta-1</div>
+<p>Versión: numero_version-1 · Materiales: 0</p>
+</td>
+<td>2 jul. 2026</td>
+<td>
+<span data-variant="secondary">estado-2</span>
+</td>
+<td>
+<span>Sin materiales</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Costeos recientes</div>
+<p>Últimos costeos generados desde órdenes de trabajo o pedidos.</p>
+</div>
+<div>
+<div>
+<div>
+<div>
+<p>id_costeo-1</p>
+<p>id_orden_trabajo-1 · nombre_producto-1</p>
+<p>Costo total: S/ 11.50</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-1">Ver detalle</a>
+</div>
+<div>
+<div>
+<p>id_costeo-2</p>
+<p>id_orden_trabajo-2 · nombre_producto-2</p>
+<p>Costo total: S/ 22.50</p>
+</div>
+<a data-variant="link" href="/dashboard/costs/costings/id_costeo-2">Ver detalle</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "campania_produccion": true,
+        "cliente": true,
+        "detalle_pedido": {
+          "include": {
+            "pedido": {
+              "include": {
+                "cliente": true,
+              },
+            },
+          },
+        },
+        "producto": true,
+        "ruta_fabricacion": true,
+        "version_receta": {
+          "include": {
+            "_count": {
+              "select": {
+                "detalle_receta": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_registro": "desc",
+      },
+      "where": {
+        "costeo": {
+          "none": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": {
+          "not": null,
+        },
+        "version_receta": {
+          "estado": {
+            "not": "anulada",
+          },
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": {
+          "include": {
+            "producto": true,
+          },
+        },
+        "pedido": {
+          "include": {
+            "cliente": true,
+          },
+        },
+      },
+      "orderBy": {
+        "fecha_costeo": "desc",
+      },
+      "take": 5,
+    },
+    "prisma": "costeo.findMany",
+  },
+  {
+    "args": undefined,
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_version_receta": null,
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "costeo": {
+          "some": {},
+        },
+        "estado": {
+          "not": "anulada",
+        },
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": "anulada",
+      },
+    },
+    "prisma": "orden_trabajo.count",
+  },
+]
+`;
+
+exports[`/dashboard/costs/work-orders > sin ordenes pendientes ni costeos > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/costs">Costos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Órdenes de trabajo</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Generar costeo desde producción</h1>
+<p>Selecciona una orden de trabajo con versión de receta registrada para calcular automáticamente el costo estimado de materiales y consumibles.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a costos">
+<svg/>Volver a costos</button>
+<a data-variant="outline" href="/dashboard/costs/costings">Ver costeos</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes pendientes</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Con receta y sin costeo.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Total de órdenes</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Incluye activas y anuladas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Sin receta técnica</div>
+</div>
+</div>
+<div>
+<p>42</p>
+<p>Deben completarse en producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Ya costeadas / anuladas</div>
+</div>
+</div>
+<div>
+<p>42 / 42</p>
+<p>No aparecen como pendientes.</p>
+</div>
+</div>
+</section>
+<div role="alert">
+<div>
+<span>No hay órdenes disponibles para costeo</span>
+<span>Esto puede ocurrir porque no existen órdenes de trabajo, porque las órdenes no tienen receta técnica, porque ya fueron costeadas o porque están anuladas.</span>
+<span>
+<a data-variant="outline" href="/dashboard/production/work-orders">Revisar órdenes de producción</a>
+<a data-variant="outline" href="/dashboard/production/recipes">Revisar recetas técnicas</a>
+</span>
+</div>
+</div>
+<div>
+<div>
+<div>Órdenes disponibles para costeo</div>
+<p>Solo se muestran órdenes no anuladas, con versión de receta y sin costeo previo.</p>
+</div>
+<div>
+<div>
+<div>
+<p>No hay órdenes pendientes de costeo.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Costeos recientes</div>
+<p>Últimos costeos generados desde órdenes de trabajo o pedidos.</p>
+</div>
+<div>
+<div>
+<div>
+<p>Todavía no hay costeos registrados.</p>
+</div>
+</div>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;

@@ -19,8 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/formatters";
 import {
   createReturnToHref,
@@ -29,6 +27,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { getWorkOrderListData } from "@/modules/production/work-orders/queries";
 import {
   annulWorkOrderAction,
   finishWorkOrderAction,
@@ -119,110 +118,9 @@ export default async function WorkOrdersPage({
   const returnTo = createReturnToHref(navigationHrefs.workOrders, params);
   const fromDate = parseDate(from);
   const toDate = parseDate(to, true);
-  const filters: Prisma.orden_trabajoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        {
-          id_orden_trabajo: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-        {
-          producto: {
-            nombre_producto: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          cliente: {
-            nombre_razon_social: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          detalle_pedido: {
-            pedido: {
-              cliente: {
-                nombre_razon_social: {
-                  contains: q,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (product) {
-    filters.push({
-      id_producto: product,
-    });
-  }
-
-  if (client) {
-    filters.push({
-      OR: [
-        {
-          id_cliente: client,
-        },
-        {
-          detalle_pedido: {
-            pedido: {
-              id_cliente: client,
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (campaign) {
-    filters.push({
-      id_campania: campaign,
-    });
-  }
-
-  if (type) {
-    filters.push({
-      tipo_produccion: type,
-    });
-  }
-
-  if (status) {
-    filters.push({
-      estado: status,
-    });
-  }
-
-  if (priority) {
-    filters.push({
-      prioridad: priority,
-    });
-  }
-
-  if (fromDate || toDate) {
-    filters.push({
-      fecha_inicio: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
-    });
-  }
-
-  const where: Prisma.orden_trabajoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
-  const [
+  const {
     workOrders,
     totalItems,
     totalActive,
@@ -231,97 +129,10 @@ export default async function WorkOrdersPage({
     products,
     clients,
     campaigns,
-  ] = await Promise.all([
-    prisma.orden_trabajo.findMany({
-      where,
-      skip,
-      take,
-      include: {
-        producto: true,
-        cliente: true,
-        campania_produccion: true,
-        ruta_fabricacion: true,
-        version_receta: {
-          include: {
-            receta_tecnica: true,
-          },
-        },
-        detalle_pedido: {
-          include: {
-            pedido: {
-              include: {
-                cliente: true,
-              },
-            },
-          },
-        },
-        _count: {
-          select: {
-            avance_orden: true,
-            movimiento_inventario: true,
-          },
-        },
-      },
-      orderBy: [
-        {
-          fecha_registro: "desc",
-        },
-        {
-          id_orden_trabajo: "desc",
-        },
-      ],
-    }),
-    prisma.orden_trabajo.count({ where }),
-    prisma.orden_trabajo.count({
-      where: {
-        AND: [where, { estado: { in: ["pendiente", "en_proceso", "pausada"] } }],
-      },
-    }),
-    prisma.orden_trabajo.count({
-      where: { AND: [where, { estado: "pendiente" }] },
-    }),
-    prisma.orden_trabajo.count({
-      where: { AND: [where, { estado: "finalizada" }] },
-    }),
-    prisma.producto.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_producto: "asc",
-      },
-      select: {
-        id_producto: true,
-        nombre_producto: true,
-      },
-    }),
-    prisma.cliente.findMany({
-      where: {
-        estado: true,
-      },
-      orderBy: {
-        nombre_razon_social: "asc",
-      },
-      select: {
-        id_cliente: true,
-        nombre_razon_social: true,
-      },
-    }),
-    prisma.campania_produccion.findMany({
-      where: {
-        estado: {
-          in: ["planificada", "activa"],
-        },
-      },
-      orderBy: {
-        nombre_campania: "asc",
-      },
-      select: {
-        id_campania: true,
-        nombre_campania: true,
-      },
-    }),
-  ]);
+  } = await getWorkOrderListData(
+    { q, product, client, campaign, type, status, priority, fromDate, toDate },
+    { skip, take },
+  );
 
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 

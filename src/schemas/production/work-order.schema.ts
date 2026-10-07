@@ -106,3 +106,5 @@ export const workOrderSchema = z
       }
     }
   });
+
+export type WorkOrderInput = z.infer<typeof workOrderSchema>;

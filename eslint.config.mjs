@@ -11,19 +11,11 @@ const authImportRestriction = {
     "Usa los helpers de @/lib/authz (requireRole, getAuthorizedSession, requireApiRole): revalidan el usuario activo y registran los rechazos.",
 };
 
-// Consultas fuera de las paginas (entrega 4): las paginas leen sus datos a
+// Consultas fuera de las paginas (entregas 4 a 6): las paginas leen sus datos a
 // traves de src/modules/<area>/<funcionalidad>/queries.ts. La regla cubre todas
-// las paginas, tambien las nuevas, salvo las que aun consultan Prisma; esa
-// lista solo puede encogerse.
+// las paginas, tambien las nuevas, sin excepciones: las ultimas (ordenes de
+// trabajo y costos) salieron en la entrega 6.
 const pagesWithoutPrisma = ["src/app/**/page.tsx"];
-
-// Pendientes: las ordenes de trabajo y el costeo se migran con su division por
-// caso de uso (entrega 6). Los reportes salieron con sus exportaciones
-// (entrega 5).
-const pagesStillWithPrisma = [
-  "src/app/(dashboard)/dashboard/production/work-orders/**/page.tsx",
-  "src/app/(dashboard)/dashboard/costs/**/page.tsx",
-];
 
 const dbImportRestriction = {
   name: "@/lib/db",
@@ -73,7 +65,6 @@ const eslintConfig = defineConfig([
   // del anterior: este bloque repite la restriccion de @/auth para no perderla.
   {
     files: pagesWithoutPrisma,
-    ignores: pagesStillWithPrisma,
     rules: {
       "no-restricted-imports": [
         "error",

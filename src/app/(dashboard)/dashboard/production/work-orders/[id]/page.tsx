@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import {
   calculatePendingDelivery,
@@ -28,6 +27,7 @@ import {
 import { applyWaste, roundQuantity } from "@/lib/recipe-quantities";
 import { CloseMaterialsForm } from "@/modules/production/work-orders/close-materials-form";
 import { MaterialMovementForm } from "@/modules/production/work-orders/material-movement-form";
+import { getWorkOrderDetail } from "@/modules/production/work-orders/queries";
 import {
   dashboardBreadcrumbs,
   getSafeReturnTo,
@@ -79,61 +79,7 @@ export default async function WorkOrderDetailPage({
   const { id } = await params;
   const queryParams = (await searchParams) ?? {};
 
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: {
-      id_orden_trabajo: id,
-    },
-    include: {
-      producto: true,
-      cliente: true,
-      usuario: true,
-      campania_produccion: true,
-      ruta_fabricacion: {
-        include: {
-          etapa_ruta: {
-            where: {
-              estado: true,
-            },
-            orderBy: {
-              orden_secuencia: "asc",
-            },
-          },
-        },
-      },
-      version_receta: {
-        include: {
-          receta_tecnica: true,
-          detalle_receta: {
-            include: {
-              material: true,
-            },
-            orderBy: {
-              id_detalle_receta: "asc",
-            },
-          },
-        },
-      },
-      detalle_pedido: {
-        include: {
-          pedido: {
-            include: {
-              cliente: true,
-            },
-          },
-        },
-      },
-      avance_orden: true,
-      movimiento_inventario: true,
-      requerimiento_orden_material: {
-        include: {
-          material: true,
-        },
-        orderBy: {
-          id_requerimiento: "asc",
-        },
-      },
-    },
-  });
+  const workOrder = await getWorkOrderDetail(id);
 
   if (!workOrder) {
     notFound();

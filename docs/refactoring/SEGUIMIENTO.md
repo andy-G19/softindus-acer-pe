@@ -1012,6 +1012,231 @@ Pendientes fuera de alcance:
 - Los `include` profundos de los listados de reportes (producto, cliente,
   ruta, material...) siguen cargando filas completas.
 
+## Entrega 6 — Órdenes de trabajo y costeo por caso de uso
+
+Fecha: 2026-10-06. Estado: verificada en staging el 2026-10-07, con 19 commits
+de `91ad966` a `ffcc683` y el registro `9369bc1`, publicados después de fusionar
+el PR de la entrega 5; CI #40 en verde. Falta integrarla en `main`. Se divide en
+cuatro sub-entregas para que cada una deje el proyecto comprobable y baje una
+métrica.
+
+| Sub-entrega | Alcance | Resultado |
+|---|---|---|
+| 6.1 | Acciones de órdenes de trabajo por caso de uso | `actions.ts` de 1.046 a 240 líneas |
+| 6.2 | Las 5 páginas de órdenes de trabajo | Páginas con Prisma de 9 a 4 |
+| 6.3 | Costos: caracterización, consultas, cálculo compartido y secciones | Páginas con Prisma de 4 a 0; detalle de costeo de 1.004 a 110 líneas |
+| 6.4 | Registro | Este apartado e `INVENTARIO.md` |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 91ad966 | test | El doble de la transacción registra `update`, `updateMany` y `createMany`; `recordTransactionEnd` (opcional) registra el commit o el rollback; `decimalSnapshotSerializer`. 4 pruebas. |
+| 37664a8 | test | Las 8 acciones de órdenes de trabajo en la tabla de permisos, con roles por acción (reabrir: solo ADMIN). 41 pruebas. |
+| 7c8e58c | test | 79 casos de las 8 acciones de órdenes de trabajo. |
+| 2d8b3bc | refactor | Piloto: anular y finalizar en `work-order-status.ts`. |
+| abe3821 | refactor | Cierre y reapertura de materiales en `material-closure.ts`. |
+| 6eaace0 | refactor | Creación de la orden en `create-work-order.ts`; `WorkOrderInput` en el esquema. |
+| 163ef50 | refactor | Entrega pendiente, adicional y devolución en `material-movements.ts`. |
+| f2416fe | test | 34 pruebas de las 5 páginas de órdenes de trabajo. |
+| ad860b5 | refactor | Consultas en `work-orders/queries.ts` y `work-order-progress/queries.ts`. |
+| 1914ec6 | refactor | Sin usuarios completos; operarios y productos con `select`. |
+| 514a66f | chore | Órdenes de trabajo fuera de `pagesStillWithPrisma`. |
+| facaae1 | test | 42 casos de las 7 acciones de costos. |
+| 7d35212 | test | 25 pruebas de las 4 páginas de costos. |
+| 410a8e6 | refactor | Consultas en `costs/overview/queries.ts` y `costs/costings/queries.ts`. |
+| 4979f5f | refactor | Cálculo del costeo en `lib/costing-calculations.ts`; el detalle lo usa. 10 pruebas. |
+| 517f3ed | refactor | Las acciones de costeo, margen y rentabilidad usan el mismo cálculo. |
+| d749759 | refactor | El detalle de costeo en 7 secciones, cada formulario junto a su acción. |
+| 513b0f8 | refactor | El detalle de costeo sin el usuario completo. |
+| ffcc683 | chore | `pagesStillWithPrisma` desaparece; `CLAUDE.md` documenta los casos de uso. |
+
+Punto de partida, medido sobre `108ba00`:
+
+- `production/work-orders/actions.ts` tenía 1.046 líneas: 8 acciones que
+  mezclaban autorización, lectura del formulario, reglas, transacción,
+  revalidación y redirección. Mueven stock (entrega pendiente, adicional y
+  devolución, con `material-delivery.ts`) y reservan correlativos (OTR, ROM,
+  MVI y ALE). Ninguna tenía pruebas ni estaba en la tabla de permisos.
+- Las 7 acciones de costos solo tenían la tabla de permisos: ninguna prueba de
+  lo que calculan ni de lo que escriben.
+- El detalle de costeo tenía 1.004 líneas: la consulta, tres fórmulas copiadas
+  de las acciones (desglose de materiales, precio sugerido y rentabilidad) y
+  cinco formularios de cuatro casos de uso.
+- 9 páginas consultaban Prisma; 5 cargaban `usuario` completo.
+
+Decisiones:
+
+- Caracterizar por registro de llamadas y no con una base en memoria. La
+  entrega 1 cambiaba comportamiento y debía demostrar el estado final; esta
+  mueve código y debe demostrar que la secuencia de operaciones no cambia. El
+  registro detecta lo que una base en memoria aceptaría: una validación que
+  entra o sale de la transacción, la bitácora fuera de ella o una revalidación
+  adelantada. `material-delivery.ts` se ejecuta real dentro de las acciones.
+- Acciones delgadas y casos de uso `server-only`, como recomienda la guía de
+  Next.js instalada (`data-security.md`, mutaciones con una capa de acceso a
+  datos). `actions.ts` sigue siendo la única superficie `"use server"`: cada
+  función exportada es un endpoint público, y la tabla de permisos falla si
+  alguien exporta un caso de uso. El caso de uso recibe los datos validados y
+  el id del usuario verificado, abre la transacción, lanza los mismos errores y
+  no redirige: finalizar una orden ya finalizada devuelve `"ya_finalizada"`.
+- Los casos de uso se agrupan por la invariante que protegen: estado,
+  declaraciones de cierre, creación con correlativos y movimientos de stock.
+  Se movieron de lo simple a lo crítico; `material-delivery.ts` no cambió.
+- Los bloques se extrajeron por programa (no a mano), comprobando cuántas
+  sustituciones hacía cada uno, y se compararon contra `HEAD`.
+- Consultas con la convención de la entrega 4. Se reutilizan
+  `findActiveProductFilterOptions` y `findActiveProductsByCategory`; las
+  opciones que no se repiten en otros módulos se quedan en su consulta. Las
+  consultas dependientes conservan su secuencia y devuelven `null` (reasignar
+  no consulta operarios si el avance no existe).
+- Costeo en tres capas. Datos: `costs/costings/queries.ts`. Cálculo:
+  funciones puras en `lib/costing-calculations.ts` que reciben números ya
+  convertidos (el detalle usa `toNumber` y las acciones `toNonNegativeNumber`;
+  no se usa `applyWaste`, que convierte negativos a cero) y cuyo orden de
+  operaciones es parte del contrato, porque los montos se guardan tal como se
+  calculan. Presentación: siete componentes de servidor; cada formulario vive
+  junto a la acción que envía y recibe con `Pick` solo las columnas que usa.
+  `formatDecimal` y `formatPercent` del detalle se comparten como
+  `formatCostingDecimal` y `formatCostingPercent`: muestran `0.00` para un
+  valor ausente y `formatDecimal` de `lib/formatters` muestra `-`.
+
+Evidencia de que el comportamiento no cambió:
+
+1. Caracterización escrita antes de mover: acciones de órdenes de trabajo (79
+   casos, 158 snapshots), acciones de costos (42 casos, 84 snapshots), páginas
+   de órdenes de trabajo (34 pruebas, 58 snapshots) y de costos (25 pruebas, 42
+   snapshots). Cada caso se revisó: llega a la rama que su nombre promete. En
+   los commits que mueven código no cambió ningún snapshot; en los de columnas
+   cambiaron 23 y 9, todos de llamadas y ninguno de HTML.
+2. El código movido es idéntico al de `HEAD` salvo las sustituciones previstas
+   (`session.user.id` por `idUsuario`, `redirect` por un valor devuelto). El JSX
+   de las 9 páginas, desde su último `return`, es idéntico; el de las 7
+   secciones del detalle, sus 5 ayudantes, 2 formatos y 2 derivaciones también,
+   según una verificación independiente del script que los cortó. Esa
+   verificación detectó 4 espacios de sangría de más en el JSX generado, que se
+   corrigieron antes del commit.
+3. Los montos de las acciones de costos se recalcularon aparte con dobles IEEE
+   754 y coinciden hasta el último decimal (por ejemplo, `175.42000000000007`).
+4. Comparación diferencial fuera del repositorio (`tmp/e6-diff`, ignorado):
+   las expresiones originales de `HEAD` y las funciones de
+   `costing-calculations.ts` dan el mismo resultado según `Object.is` en
+   1.544.144 comparaciones (cuadrícula con `0`, `-0`, negativos, `NaN` e
+   infinito, y 200.000 montos aleatorios de dos decimales). Control: con la
+   merma reordenada aparecen 131.267 diferencias.
+
+| Mutación | Resultado |
+|---|---|
+| Reabrir con WORKSHOP_MASTER, anular solo con ADMIN | Falla un caso de permisos cada una. |
+| Bitácora de la anulación fuera de la transacción | Fallan sus 2 casos. |
+| Quitar la guarda `gte` del descuento de stock | Fallan los 3 casos que entregan material. |
+| Escribir el stock con el cliente global fuera de la transacción | Falla la entrega adicional: el doble solo admite escrituras dentro de una transacción. |
+| La acción ignora `"ya_finalizada"` | Falla su caso. |
+| `actions.ts` re-exporta un caso de uso | Falla la tabla de permisos. |
+| Reordenar la merma, el precio sugerido o el margen real | En la primera versión de la caracterización de costos sobrevivieron la merma y el límite `<`/`<=` de la alerta: se agregaron datos que los distinguen. Ahora falla un caso por fórmula, también cuando la fórmula vive en `lib`. |
+| Reordenar la merma en el detalle de costeo | Sobrevive: la página muestra dos decimales. Lo que se guarda lo fijan las acciones. |
+| Quitar una columna de un `select` o de un `Pick` | Error TS2339. |
+| No pasar el último margen a la sección de rentabilidad | Fallan 7 casos del detalle. |
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 981, 1.022, 1.101, 1.135, 1.177, 1.202 y 1.212 pruebas según el
+commit. `/verificar` sobre `ffcc683`: los seis pasos correctos, 91 archivos y
+1.212 pruebas. La regla de ESLint se comprobó por entrada estándar: las páginas
+de costos, de órdenes de trabajo y una página nueva detectan `@/lib/db` y
+`auth`; `queries.ts` puede importar Prisma.
+
+El código de producción cambia en 31 archivos de `src` y `eslint.config.mjs`
+(+3.281 y −2.573: 708 netas por los encabezados, tipos y comentarios de 16
+archivos nuevos); las pruebas y el arnés suman 2.586 líneas, y los snapshots,
+24.215. `npm run refactor:inventory` analiza 518 archivos y mantiene 127
+páginas, 136 formularios y 48 archivos de acciones: los casos de uso no
+agregaron superficies `"use server"`. Los 6 formularios del detalle de costeo
+aparecen ahora en sus secciones de `src/modules`.
+
+### Publicación, CI y verificación en staging
+
+- Push a staging de `9369bc1` después de fusionar el PR #14 de la entrega 5
+  (merge commit `1613819`; CI #38 del PR y CI #39 en `main` en verde). CI #40 en
+  verde (1m 38s) sobre `9369bc1`.
+- No hubo foto del «antes»: el push se hizo antes de verificar. La equivalencia
+  descansa en la caracterización, el código y JSX idénticos a `HEAD` y la
+  comparación diferencial.
+
+Verificación en staging el 2026-10-07 con ADMIN (`USU00000001`), desde el
+navegador integrado y con peticiones secuenciales con pausa de 1,5 s:
+
+| # | Prueba | Resultado |
+|---|---|---|
+| 1 | Prueba de humo de 24 páginas: listado de órdenes con y sin filtros, nueva orden, los 5 detalles y los 5 avances existentes, 2 reasignaciones, panel de costos, costeos sin filtros y con los 3 estados, detalle de `COS00000001` y órdenes por costear | Todas 200, sin redirecciones ni `digest` de error, sin `NaN`, `Invalid Date` ni `undefined`; 0,5 a 1 s por página |
+| 2 | 5 ids inexistentes o ajenos: detalle y avances de `OTR99999999`, reasignar un avance inexistente y uno de otra orden, `COS99999999` | Frontera 404 en todos. En Producción con estado HTTP 200 y en Costos con 404: la página de campañas, que la entrega no tocó, también responde 200 (Producción tiene `error.tsx` y `not-found.tsx` propios y responde por streaming) |
+| 3 | Contenido del detalle de `COS00000001` | Total S/ 1514.20 y unitario S/ 126.18, como en la entrega 3; referencias de 15 y 20 % correctas |
+| 4 | Crear `OTR00000006`: reposición de Rastrillo agrícola, cantidad 1 | Toast; requerimiento congelado de 204.00 de plancha (`MAT00000006`) a S/ 250.00 |
+| 5 | Entregar lo pendiente, entrega adicional de 1 y devolución de 200 | Stock 299.79 → 95.79 → 94.79 → 294.79; kárdex `MVI00000034` a `MVI00000036` encadenado (stock anterior ± cantidad = resultante); toasts |
+| 6 | Cerrar (consumo 4, merma 1), reabrir como ADMIN y cerrar otra vez (consumo 5, merma 0) | Al cerrar desaparecen la entrega y la devolución; reabrir conserva lo entregado y lo devuelto |
+| 7 | Generar `COS00000002`, mano de obra 120, recalcular, costo indirecto `CIN00000004` de 25.50 y anularlo | Total S/ 51,000.00 → 51,120.00 → 51,145.50 → 51,120.00; el recálculo lee la mano de obra recién escrita |
+| 8 | Margen de 17 % y rentabilidad | Sugerido S/ 59,810.40. Lo guardado coincide con la vista previa: utilidad S/ 8,690.40, 17.00 %, rentable (predicho antes con dobles IEEE 754: `17.000000000000004`) |
+| 9 | Crear `OTR00000007` y anularla desde el listado | Toast; deja de ofrecer anular y finalizar |
+| 10 | Bitácora del día | 13 entradas con el detalle esperado: requerimiento congelado, motivos, merma, producción declarada antes de reabrir |
+| 11 | Logs de Vercel (solo se conserva la última media hora: 16:43 a 17:13) | Sin advertencias ni errores durante las pruebas. El único error es de 16:47: una entrega a `OTR00000005` que la regla de stock rechazó, con su mensaje |
+| 12 | SELLER y WORKSHOP_MASTER | Omitida por decisión del responsable. La entrega no cambió `permissions.ts`, `proxy.ts`, `authz.ts` ni `auth.ts`, ni ningún `requireRole` de las 9 páginas y las 8 acciones (comparado con `108ba00`); los permisos los fijan la tabla de `action-access.test.ts`, con `requireRole` real, y la caracterización de páginas |
+
+Hallazgos de la verificación, anteriores a la entrega (no son regresiones):
+
+- H7: la alerta de bajo margen compara números en coma flotante. Las dos
+  rentabilidades de `COS00000001`, con margen aplicado de 20 %, se guardaron como
+  margen bajo: el margen real da `19.999999999999993`, y la pantalla muestra
+  20.00 %. Se corrige en un solo lugar porque la vista previa y la acción
+  comparten `calculateProfitability`.
+- Un rechazo de negocio de una acción (por ejemplo, stock insuficiente) responde
+  500 y muestra la frontera de error genérica, sin el motivo: las acciones lanzan
+  en lugar de devolver un resultado (pista B).
+- Tras la entrega, la tabla de requerimiento del detalle compara el stock que
+  queda con lo ya entregado y marca «insuficiente» (faltante 128.21 en
+  `OTR00000006`). El listado ofrece «Anular» en órdenes con movimientos, que el
+  servidor rechaza. Ambos son de la pista B.
+- La plancha quedó sobre su mínimo y no se abrió alerta de stock: esa rama la
+  cubre la caracterización.
+
+Datos de prueba que quedan en staging: `OTR00000006` (materiales cerrados,
+pendiente), `OTR00000007` (anulada), `COS00000002` (rentable), `CIN00000004`
+(anulado) y la plancha `MAT00000006` con 5 unidades menos (294.79).
+
+Divergencias y defectos encontrados, conservados (cada uno es un `fix`):
+
+- H1: las validaciones de las órdenes (estado, cierre, movimientos) ocurren
+  fuera de la transacción. Una entrega simultánea con una anulación podría
+  dejar una orden anulada con salidas.
+- H2: el kárdex de entregas y devoluciones toma el stock anterior de una
+  lectura previa a la transacción (pendiente de la entrega 1; los snapshots lo
+  muestran).
+- H3: `recalculateCostingTotals` lee, suma en JavaScript y escribe el total sin
+  bloquear el costeo: dos costos indirectos simultáneos pueden dejarlo
+  desactualizado.
+- H4: generar un costeo comprueba fuera de la transacción si la orden ya tiene
+  uno: un doble envío crea dos.
+- H5: crear una orden por pedido lee el mismo detalle de pedido dos veces.
+- H6: el detalle convierte con `toNumber` y las acciones con
+  `toNonNegativeNumber` sobre la misma fórmula; solo difieren con negativos.
+- La anulación no recorta el id del formulario y la entrega sí (fijado por la
+  caracterización).
+- H7: la alerta de bajo margen compara en coma flotante (ver la verificación en
+  staging).
+
+Pendientes fuera de alcance:
+
+- Los `fix` H1 a H7.
+- `production/work-orders/[id]/page.tsx` (643 líneas) y
+  `work-order-progress/actions.ts` (427) no se dividieron.
+- 17 copias locales de `formatDecimal` con dos comportamientos distintos para
+  un valor ausente, además de `formatCostingDecimal`.
+- El desglose y la generación del costeo usan la receta y el costo actual del
+  material, no el requerimiento congelado de la orden (decisión de negocio).
+- Los `include` profundos de los detalles siguen cargando filas completas.
+- El arnés genera el mismo valor para todas las columnas decimales de una
+  fila: confundir dos columnas solo se detecta en los casos que fijan montos
+  a mano.
+- El doble de Prisma no aplica las escrituras: una lectura posterior devuelve
+  los datos del caso. La integración contra una base desechable sigue en la
+  entrega 11.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -1025,7 +1250,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Hecha en local (18 commits, sin push); falta staging |
-| 6 | A | Órdenes de trabajo y costeo por caso de uso | Pendiente |
+| 6 | A | Órdenes de trabajo y costeo por caso de uso | Verificada en staging (CI #40 verde); falta integrar en `main` |
 | 7 | A | Fachada de notificaciones | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
@@ -1040,9 +1265,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Métrica | Línea base | Actual | Entrega que la mueve |
 |---|---|---|---|
 | Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 186 | 5 |
-| `production/work-orders/actions.ts` | 1.055 líneas | 1.046 | 6 |
-| `costs/costings/[id]/page.tsx` | 1.026 líneas | 1.004 | 6 |
-| Páginas con Prisma directo | 117 | 9 | 4, 5 y 6 |
+| `production/work-orders/actions.ts` | 1.055 líneas | 240 | 6 |
+| `costs/costings/[id]/page.tsx` | 1.026 líneas | 110 | 6 |
+| Páginas con Prisma directo | 117 | 0 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
 | Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
@@ -1050,10 +1275,13 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 86 / 977 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 91 / 1.212 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
+| Acciones de órdenes de trabajo y costos caracterizadas | 0 / 15 | 15 / 15 | 6 |
+| Fórmulas de costeo repetidas entre el detalle y las acciones | 3 | 0 | 6 |
+| Cargas de `usuario` completo en órdenes de trabajo y costos | 5 | 0 | 6 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -1075,6 +1303,16 @@ entrega 6), páginas con Prisma directo 9 y pruebas 86 / 977. Las dos filas nuev
 se midieron sobre `e6c8c29`, su línea base. Las demás no cambian: `auth()` directo
 0, copias locales de conversión y formato 0 y `sweetalert2` 2, medidos de nuevo.
 
+Actualizado en la entrega 6 (2026-10-07) con `/verificar` sobre `ffcc683`:
+`work-orders/actions.ts` 240 líneas, detalle de costeo 110, páginas con Prisma
+directo 0 (ni `prisma.` ni `@/lib/db`) y pruebas 91 / 1.212. Las tres filas nuevas
+se midieron sobre `108ba00`, su línea base. Las demás no cambian: `auth()` directo
+0, copias locales de conversión y formato 0 y `sweetalert2` 2, medidos de nuevo.
+Los tres archivos más grandes de `src` son ahora pruebas y el arnés (1.079, 966 y
+901 líneas); los más grandes de producción, las páginas de reporte de
+mantenimiento (696), detalle de orden de trabajo (643) y resumen mensual de caja
+(614).
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -1087,6 +1325,9 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 - `sweetalert2` cuenta los archivos que lo mencionan. Uno es un comentario de
   `lib/security-headers.ts`: el único archivo que lo importa es
   `lib/notifications.ts`.
+- Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
+  `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
+  columna `usuario` dentro de un `select`, que no cargan la fila completa.
 
 Las reglas de negocio permanecen en su implementación actual en la entrega 0.
 La diferencia entre tarifa diaria y horaria sigue siendo una decisión pendiente

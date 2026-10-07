@@ -454,9 +454,25 @@ const PRISMA_METHODS = new Set([
   "groupBy",
 ]);
 
-// Escrituras que admite el cliente de una transaccion simulada. Devuelven el
-// `data` recibido, salvo que el caso sustituya su resultado.
-const WRITE_METHODS = new Set(["create"]);
+// Escrituras que admite el cliente de una transaccion simulada. No se aplican:
+// solo se registran, y devuelven un resultado por defecto salvo que el caso lo
+// sustituya.
+const WRITE_METHODS = new Set(["create", "createMany", "update", "updateMany"]);
+
+// create y update devuelven el `data` recibido. updateMany afecta una fila,
+// que es lo que esperan las guardas que comprueban `count` (un caso simula la
+// guarda que falla con `{ count: 0 }`); createMany, una por elemento.
+function defaultWriteResult(method: string, args: PrismaArgs) {
+  if (method === "updateMany") {
+    return { count: 1 };
+  }
+
+  if (method === "createMany") {
+    return { count: Array.isArray(args?.data) ? args.data.length : 1 };
+  }
+
+  return args?.data ?? null;
+}
 
 function createModelDelegate(modelName: string, inTransaction: boolean) {
   return new Proxy(
@@ -487,7 +503,7 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
           }
 
           if (isWrite) {
-            return args?.data ?? null;
+            return defaultWriteResult(method, args);
           }
 
           return generateResult(getSchema(), modelName, method, args);
@@ -502,6 +518,9 @@ type PrismaDoubleOptions = {
   transactions: boolean;
   // Es el cliente que recibe el callback de $transaction: admite escrituras.
   inTransaction: boolean;
+  // Registra tambien el final de la transaccion: commit, o rollback con el
+  // mensaje del error que la interrumpio.
+  recordTransactionEnd: boolean;
 };
 
 function createPrismaDouble(options: PrismaDoubleOptions): object {
@@ -517,7 +536,24 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
           return async (callback: (tx: object) => Promise<unknown>) => {
             state.calls.push({ effect: "prisma.$transaction", args: null });
 
-            return callback(transactionDouble);
+            if (!options.recordTransactionEnd) {
+              return callback(transactionDouble);
+            }
+
+            try {
+              const result = await callback(transactionDouble);
+
+              state.calls.push({ effect: "prisma.$transaction:commit", args: null });
+
+              return result;
+            } catch (error) {
+              state.calls.push({
+                effect: "prisma.$transaction:rollback",
+                args: error instanceof Error ? error.message : String(error),
+              });
+
+              throw error;
+            }
           };
         }
 
@@ -536,26 +572,56 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
 export const prismaDouble = createPrismaDouble({
   transactions: false,
   inTransaction: false,
+  recordTransactionEnd: false,
 });
 
 const transactionalPrismaDouble = createPrismaDouble({
   transactions: true,
   inTransaction: false,
+  recordTransactionEnd: false,
+});
+
+const transactionalPrismaDoubleWithEnd = createPrismaDouble({
+  transactions: true,
+  inTransaction: false,
+  recordTransactionEnd: true,
 });
 
 const transactionDouble = createPrismaDouble({
   transactions: false,
   inTransaction: true,
+  recordTransactionEnd: false,
 });
 
 // Las paginas usan el doble de solo lectura. Un route handler que escribe
 // dentro de una transaccion pide `{ transactions: true }`: el cliente de la
 // transaccion registra sus escrituras sin aplicarlas.
-export function dbModuleMock(options: { transactions?: boolean } = {}) {
+//
+// Las acciones piden ademas `recordTransactionEnd: true` (entrega 6): con el
+// final de la transaccion registrado, el snapshot distingue una validacion o
+// un efecto hecho dentro de la transaccion de uno hecho despues. Es opcional
+// para no cambiar los snapshots de la exportacion de reportes.
+export function dbModuleMock(
+  options: { transactions?: boolean; recordTransactionEnd?: boolean } = {},
+) {
+  if (!options.transactions) {
+    return { prisma: prismaDouble };
+  }
+
   return {
-    prisma: options.transactions ? transactionalPrismaDouble : prismaDouble,
+    prisma: options.recordTransactionEnd
+      ? transactionalPrismaDoubleWithEnd
+      : transactionalPrismaDouble,
   };
 }
+
+// Los Decimal de Prisma se imprimen en los snapshots como `Decimal(11.5)` y
+// no con su estructura interna (digitos, exponente y signo). Se registra en
+// cada archivo con expect.addSnapshotSerializer.
+export const decimalSnapshotSerializer = {
+  test: (value: unknown) => Prisma.Decimal.isDecimal(value),
+  serialize: (value: unknown) => `Decimal(${String(value)})`,
+};
 
 export function recordEffect(effect: string, args: unknown) {
   state.calls.push({ effect, args });

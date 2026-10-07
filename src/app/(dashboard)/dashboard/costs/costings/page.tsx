@@ -5,7 +5,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
-import type { Prisma } from "@/generated/prisma/client";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,17 +22,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
-import { prisma } from "@/lib/db";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import {
-  buildDateRangeFilter,
   parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { getCostingListData } from "@/modules/costs/costings/queries";
 
 type CostingsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -78,127 +76,18 @@ export default async function CostingsPage({
   const orden = parseStringParam(params, "orden");
   const producto = parseStringParam(params, "producto");
   const estado = parseStringParam(params, "estado");
-  const dateRange = buildDateRangeFilter(
-    parseDateParam(params, "from"),
-    parseDateParam(params, "to"),
-  );
+  const from = parseDateParam(params, "from");
+  const to = parseDateParam(params, "to");
 
-  const filters: Prisma.costeoWhereInput[] = [];
-
-  if (q) {
-    filters.push({
-      OR: [
-        { id_costeo: { contains: q, mode: "insensitive" } },
-        { id_pedido: { contains: q, mode: "insensitive" } },
-        { id_orden_trabajo: { contains: q, mode: "insensitive" } },
-        {
-          pedido: {
-            cliente: {
-              nombre_razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-        {
-          orden_trabajo: {
-            producto: {
-              nombre_producto: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-        {
-          orden_trabajo: {
-            cliente: {
-              nombre_razon_social: { contains: q, mode: "insensitive" },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (pedido) {
-    filters.push({ id_pedido: { contains: pedido, mode: "insensitive" } });
-  }
-
-  if (orden) {
-    filters.push({
-      id_orden_trabajo: { contains: orden, mode: "insensitive" },
-    });
-  }
-
-  if (producto) {
-    filters.push({
-      orden_trabajo: {
-        producto: {
-          nombre_producto: { contains: producto, mode: "insensitive" },
-        },
-      },
-    });
-  }
-
-  if (dateRange) {
-    filters.push({ fecha_costeo: dateRange });
-  }
-
-  if (estado === "pendiente") {
-    filters.push({ rentabilidad: { none: {} } });
-  }
-
-  if (estado === "rentable") {
-    filters.push({ rentabilidad: { some: { alerta_bajo_margen: false } } });
-  }
-
-  if (estado === "margen_bajo") {
-    filters.push({ rentabilidad: { some: { alerta_bajo_margen: true } } });
-  }
-
-  const where: Prisma.costeoWhereInput =
-    filters.length > 0 ? { AND: filters } : {};
-
-  const costings = await prisma.costeo.findMany({
-    where,
-    orderBy: {
-      fecha_costeo: "desc",
-    },
-    take: 50,
-    include: {
-      pedido: {
-        include: {
-          cliente: true,
-        },
-      },
-      orden_trabajo: {
-        include: {
-          producto: true,
-          cliente: true,
-          detalle_pedido: {
-            include: {
-              pedido: {
-                include: {
-                  cliente: true,
-                },
-              },
-            },
-          },
-          campania_produccion: true,
-        },
-      },
-      margen_ganancia: {
-        orderBy: {
-          fecha_aplicacion: "desc",
-        },
-        take: 1,
-      },
-      rentabilidad: {
-        orderBy: {
-          fecha_calculo: "desc",
-        },
-        take: 1,
-      },
-    },
+  const { costings, totalCostings } = await getCostingListData({
+    q,
+    pedido,
+    orden,
+    producto,
+    estado,
+    from,
+    to,
   });
-
-  const totalCostings = await prisma.costeo.count({ where });
 
   const accumulatedCost = costings.reduce((total, item) => {
     return total + toNumber(item.costo_total);

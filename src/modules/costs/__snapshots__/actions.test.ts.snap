@@ -1,0 +1,2310 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`annulIndirectCostAction > anula conservando las observaciones previas y recalcula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_costeo": true,
+        "id_costo_indirecto": true,
+        "monto": true,
+        "observaciones": true,
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "Medidor del taller
+[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 50.25.",
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.update",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 12.4,
+        "costo_total": 1474.3300000000002,
+        "costo_unitario": 58.973200000000006,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Costo indirecto anulado del costeo COS00000004: Consumo de luz del lote.",
+      "enTransaccion": true,
+      "entidad_afectada": "costo_indirecto",
+      "id_registro_afectado": "CIN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > anula conservando las observaciones previas y recalcula > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-annulled"`;
+
+exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_costeo": true,
+        "id_costo_indirecto": true,
+        "monto": true,
+        "observaciones": true,
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "monto": 0,
+        "observaciones": "[ANULADO] 2026-07-15T15:00:00.000Z - Monto original: S/ 7.50.",
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.update",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 0,
+        "costo_total": 1461.93,
+        "costo_unitario": 58.4772,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "anular",
+      "detalle": "Costo indirecto anulado del costeo COS00000004: Consumo de luz del lote.",
+      "enTransaccion": true,
+      "entidad_afectada": "costo_indirecto",
+      "id_registro_afectado": "CIN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > anula un costo sin observaciones > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-annulled"`;
+
+exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_costeo": true,
+        "id_costo_indirecto": true,
+        "monto": true,
+        "observaciones": true,
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.findUnique",
+  },
+  {
+    "args": "El costo indirecto no está asociado a un costeo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > resultado 1`] = `"error: El costo indirecto no está asociado a un costeo."`;
+
+exports[`annulIndirectCostAction > costo indirecto ya anulado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_costeo": true,
+        "id_costo_indirecto": true,
+        "monto": true,
+        "observaciones": true,
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.findUnique",
+  },
+  {
+    "args": "El costo indirecto ya se encuentra anulado.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > costo indirecto ya anulado > resultado 1`] = `"error: El costo indirecto ya se encuentra anulado."`;
+
+exports[`annulIndirectCostAction > el costo indirecto no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "concepto": true,
+        "id_costeo": true,
+        "id_costo_indirecto": true,
+        "monto": true,
+        "observaciones": true,
+      },
+      "where": {
+        "id_costo_indirecto": "CIN00000002",
+      },
+    },
+    "prisma": "costo_indirecto.findUnique",
+  },
+  {
+    "args": "El costo indirecto seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > el costo indirecto no existe > resultado 1`] = `"error: El costo indirecto seleccionado no existe."`;
+
+exports[`annulIndirectCostAction > sin costo indirecto en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`annulIndirectCostAction > sin costo indirecto en el formulario > resultado 1`] = `"error: Debe seleccionar un costo indirecto válido."`;
+
+exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > resultado 1`] = `"error: La cantidad de la orden debe ser mayor que cero."`;
+
+exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, consumibles y mano de obra estimada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": {
+          "select": {
+            "tarifa": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "tarea_operario.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "costeo",
+      "prefijo": "COS",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_base": 25,
+        "costo_consumibles": 248.355275,
+        "costo_indirecto_total": 0,
+        "costo_mano_obra": 157.4375,
+        "costo_materiales": 1762.9375,
+        "costo_total": 2168.730275,
+        "costo_unitario": 86.749211,
+        "id_costeo": "COS00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_pedido": "PED00000003",
+        "id_usuario_registro": "USU00000001",
+        "observaciones": "Costeo generado automáticamente desde orden de trabajo usando la versión de receta guardada en la orden, costo actual de materiales y mano de obra estimada desde tareas de operario.",
+      },
+    },
+    "prisma": "costeo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Costeo creado desde la orden de trabajo OTR00000007. Mano de obra estimada: S/ 157.44.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000001",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, consumibles y mano de obra estimada > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000001?toast=costing-created"`;
+
+exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo seleccionada no existe."`;
+
+exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a ese costeo sin toast > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a ese costeo sin toast > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004"`;
+
+exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > orden anulada > resultado 1`] = `"error: No se puede generar costeo para una orden anulada."`;
+
+exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedido y sin mano de obra > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "include": {
+        "operario": {
+          "select": {
+            "tarifa": true,
+          },
+        },
+      },
+      "where": {
+        "estado": {
+          "not": "anulada",
+        },
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "tarea_operario.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "costeo",
+      "prefijo": "COS",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad_base": 3,
+        "costo_consumibles": 29.802633,
+        "costo_indirecto_total": 0,
+        "costo_mano_obra": 0,
+        "costo_materiales": 211.5525,
+        "costo_total": 241.35513300000002,
+        "costo_unitario": 80.451711,
+        "id_costeo": "COS00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_pedido": null,
+        "id_usuario_registro": "USU00000001",
+        "observaciones": "Costeo generado automáticamente desde orden de trabajo usando la versión de receta guardada en la orden, costo actual de materiales y mano de obra estimada desde tareas de operario.",
+      },
+    },
+    "prisma": "costeo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Costeo creado desde la orden de trabajo OTR00000007. Mano de obra estimada: S/ 0.00.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000001",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedido y sin mano de obra > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000001?toast=costing-created"`;
+
+exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > orden sin version de receta > resultado 1`] = `"error: La orden de trabajo no tiene una versión de receta asociada."`;
+
+exports[`createCostingFromWorkOrderAction > sin orden en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > sin orden en el formulario > resultado 1`] = `"error: Debe seleccionar una orden de trabajo válida."`;
+
+exports[`createCostingFromWorkOrderAction > version de receta anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > version de receta anulada > resultado 1`] = `"error: La versión de receta asociada a la orden está anulada y no puede costearse."`;
+
+exports[`createCostingFromWorkOrderAction > version sin materiales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "costeo.findFirst",
+  },
+  {
+    "args": {
+      "include": {
+        "detalle_pedido": true,
+        "producto": true,
+        "version_receta": {
+          "include": {
+            "detalle_receta": {
+              "include": {
+                "material": true,
+              },
+            },
+            "receta_tecnica": true,
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+]
+`;
+
+exports[`createCostingFromWorkOrderAction > version sin materiales > resultado 1`] = `"error: La versión de receta no tiene materiales registrados para calcular el costeo."`;
+
+exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Zod > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createIndirectCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `"error: El concepto debe tener al menos 3 caracteres. Debe seleccionar una categoría válida. El monto no puede ser negativo."`;
+
+exports[`createIndirectCostAction > el costeo no existe: se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El costeo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createIndirectCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+
+exports[`createIndirectCostAction > registra el costo indirecto y recalcula > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "costo_indirecto",
+      "prefijo": "CIN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "luz",
+        "concepto": "Consumo de luz del lote",
+        "criterio_prorrateo": "Prorrateado por lote",
+        "id_costeo": "COS00000004",
+        "id_costo_indirecto": "CIN00000001",
+        "monto": 37.8,
+        "observaciones": null,
+        "periodo": "2026-07",
+      },
+    },
+    "prisma": "costo_indirecto.create",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Costo indirecto agregado al costeo COS00000004: Consumo de luz del lote.",
+      "enTransaccion": true,
+      "entidad_afectada": "costo_indirecto",
+      "id_registro_afectado": "CIN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createIndirectCostAction > registra el costo indirecto y recalcula > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=indirect-cost-created"`;
+
+exports[`createMarginAction > con precio final ajustado y motivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "margen_ganancia",
+      "prefijo": "MGN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_costeo": "COS00000004",
+        "id_margen": "MGN00000001",
+        "id_usuario_aplica": "USU00000001",
+        "motivo_ajuste": "Redondeo por negociacion con el cliente",
+        "porcentaje_margen": 15,
+        "precio_final": 1800,
+        "precio_sugerido": 1753.2669999999998,
+      },
+    },
+    "prisma": "margen_ganancia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Margen aplicado al costeo COS00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "margen_ganancia",
+      "id_registro_afectado": "MGN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMarginAction > con precio final ajustado y motivo > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+
+exports[`createMarginAction > costo con centimos: fija el orden de la formula del precio sugerido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "margen_ganancia",
+      "prefijo": "MGN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_costeo": "COS00000004",
+        "id_margen": "MGN00000001",
+        "id_usuario_aplica": "USU00000001",
+        "motivo_ajuste": null,
+        "porcentaje_margen": 17,
+        "precio_final": 1171.6028999999999,
+        "precio_sugerido": 1171.6028999999999,
+      },
+    },
+    "prisma": "margen_ganancia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Margen aplicado al costeo COS00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "margen_ganancia",
+      "id_registro_afectado": "MGN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMarginAction > costo con centimos: fija el orden de la formula del precio sugerido > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+
+exports[`createMarginAction > costo total en cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createMarginAction > costo total en cero > resultado 1`] = `"error: No se puede aplicar margen porque el costo total debe ser mayor que cero."`;
+
+exports[`createMarginAction > el costeo no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createMarginAction > el costeo no existe > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+
+exports[`createMarginAction > margen fuera de rango > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMarginAction > margen fuera de rango > resultado 1`] = `"error: El margen máximo permitido es 20%."`;
+
+exports[`createMarginAction > precio final menor que el costo total > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createMarginAction > precio final menor que el costo total > resultado 1`] = `"error: El precio final no puede ser menor que el costo total del producto."`;
+
+exports[`createMarginAction > sin precio final: usa el precio sugerido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "costo_total": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "margen_ganancia",
+      "prefijo": "MGN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_costeo": "COS00000004",
+        "id_margen": "MGN00000001",
+        "id_usuario_aplica": "USU00000001",
+        "motivo_ajuste": null,
+        "porcentaje_margen": 17,
+        "precio_final": 1783.7586,
+        "precio_sugerido": 1783.7586,
+      },
+    },
+    "prisma": "margen_ganancia.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Margen aplicado al costeo COS00000004.",
+      "enTransaccion": true,
+      "entidad_afectada": "margen_ganancia",
+      "id_registro_afectado": "MGN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMarginAction > sin precio final: usa el precio sugerido > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=margin-created"`;
+
+exports[`createProfitabilityAction > costo con centimos: fija el orden de la formula del margen real > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "rentabilidad",
+      "prefijo": "REN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "alerta_bajo_margen": true,
+        "costo_total": 1500.14,
+        "id_costeo": "COS00000004",
+        "id_pedido": "PED00000003",
+        "id_rentabilidad": "REN00000001",
+        "ingreso_estimado": 1700,
+        "margen_real": 13.322756542722672,
+        "observaciones": "Rentabilidad calculada automáticamente usando el último margen aplicado.",
+        "utilidad_estimada": 199.8599999999999,
+      },
+    },
+    "prisma": "rentabilidad.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Rentabilidad calculada para el costeo COS00000004. Utilidad estimada: S/ 199.86.",
+      "enTransaccion": true,
+      "entidad_afectada": "rentabilidad",
+      "id_registro_afectado": "REN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > costo con centimos: fija el orden de la formula del margen real > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+
+exports[`createProfitabilityAction > costo total en cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > costo total en cero > resultado 1`] = `"error: No se puede calcular rentabilidad porque el costo total debe ser mayor que cero."`;
+
+exports[`createProfitabilityAction > el costeo no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > el costeo no existe > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+
+exports[`createProfitabilityAction > ingreso estimado en cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > ingreso estimado en cero > resultado 1`] = `"error: No se puede calcular rentabilidad porque el ingreso estimado debe ser mayor que cero."`;
+
+exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "rentabilidad",
+      "prefijo": "REN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "alerta_bajo_margen": false,
+        "costo_total": 1000,
+        "id_costeo": "COS00000004",
+        "id_pedido": "PED00000003",
+        "id_rentabilidad": "REN00000001",
+        "ingreso_estimado": 1180,
+        "margen_real": 18,
+        "observaciones": "Rentabilidad calculada automáticamente usando el último margen aplicado.",
+        "utilidad_estimada": 180,
+      },
+    },
+    "prisma": "rentabilidad.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Rentabilidad calculada para el costeo COS00000004. Utilidad estimada: S/ 180.00.",
+      "enTransaccion": true,
+      "entidad_afectada": "rentabilidad",
+      "id_registro_afectado": "REN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > margen real igual al esperado: no es margen bajo > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+
+exports[`createProfitabilityAction > precio final bajo el margen esperado: alerta de bajo margen > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "rentabilidad",
+      "prefijo": "REN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "alerta_bajo_margen": true,
+        "costo_total": 1524.58,
+        "id_costeo": "COS00000004",
+        "id_pedido": "PED00000003",
+        "id_rentabilidad": "REN00000001",
+        "ingreso_estimado": 1700,
+        "margen_real": 11.506119718217482,
+        "observaciones": "Rentabilidad calculada automáticamente usando el último margen aplicado.",
+        "utilidad_estimada": 175.42000000000007,
+      },
+    },
+    "prisma": "rentabilidad.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Rentabilidad calculada para el costeo COS00000004. Utilidad estimada: S/ 175.42.",
+      "enTransaccion": true,
+      "entidad_afectada": "rentabilidad",
+      "id_registro_afectado": "REN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > precio final bajo el margen esperado: alerta de bajo margen > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+
+exports[`createProfitabilityAction > sin costeo en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createProfitabilityAction > sin costeo en el formulario > resultado 1`] = `"error: El costeo es obligatorio."`;
+
+exports[`createProfitabilityAction > sin margen aplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > sin margen aplicado > resultado 1`] = `"error: Primero debes aplicar un margen de ganancia antes de calcular la rentabilidad."`;
+
+exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "margen_ganancia": {
+          "orderBy": {
+            "fecha_aplicacion": "desc",
+          },
+          "take": 1,
+        },
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "rentabilidad",
+      "prefijo": "REN",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "alerta_bajo_margen": false,
+        "costo_total": 1524.58,
+        "id_costeo": "COS00000004",
+        "id_pedido": "PED00000003",
+        "id_rentabilidad": "REN00000001",
+        "ingreso_estimado": 1799,
+        "margen_real": 17.99971139592544,
+        "observaciones": "Rentabilidad aceptable",
+        "utilidad_estimada": 274.4200000000001,
+      },
+    },
+    "prisma": "rentabilidad.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Rentabilidad calculada para el costeo COS00000004. Utilidad estimada: S/ 274.42.",
+      "enTransaccion": true,
+      "entidad_afectada": "rentabilidad",
+      "id_registro_afectado": "REN00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProfitabilityAction > sin precio final usa el sugerido: rentable, con observaciones > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=profitability-created"`;
+
+exports[`recalculateCostingAction > cantidad base en cero: el costo unitario queda vacio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 0,
+        "costo_total": 1461.93,
+        "costo_unitario": null,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "recalcular",
+      "detalle": "Costeo recalculado manteniendo materiales, consumibles y mano de obra, y sumando costos indirectos vigentes.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`recalculateCostingAction > cantidad base en cero: el costo unitario queda vacio > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-recalculated"`;
+
+exports[`recalculateCostingAction > el costeo no existe: se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El costeo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`recalculateCostingAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;
+
+exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "recalcular",
+      "detalle": "Costeo recalculado manteniendo materiales, consumibles y mano de obra, y sumando costos indirectos vigentes.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-recalculated"`;
+
+exports[`recalculateCostingAction > sin costeo en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`recalculateCostingAction > sin costeo en el formulario > resultado 1`] = `"error: Debe seleccionar un costeo válido."`;
+
+exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los totales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_mano_obra": 180.5,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "select": {
+        "cantidad_base": true,
+        "costo_consumibles": true,
+        "costo_mano_obra": true,
+        "costo_materiales": true,
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "monto": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costo_indirecto.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_indirecto_total": 62.65,
+        "costo_total": 1524.5800000000002,
+        "costo_unitario": 60.983200000000004,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Costo de mano de obra actualizado a S/ 180.50.",
+      "enTransaccion": true,
+      "entidad_afectada": "costeo",
+      "id_registro_afectado": "COS00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/costs/costings/COS00000004",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los totales > resultado 1`] = `"redirect:/dashboard/costs/costings/COS00000004?toast=costing-updated"`;
+
+exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateLaborCostAction > datos invalidos: une todos los mensajes de Zod > resultado 1`] = `"error: El costeo es obligatorio. El costo de mano de obra no puede ser negativo."`;
+
+exports[`updateLaborCostAction > el costeo no existe: se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_costeo": true,
+      },
+      "where": {
+        "id_costeo": "COS00000004",
+      },
+    },
+    "prisma": "costeo.findUnique",
+  },
+  {
+    "args": "El costeo seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateLaborCostAction > el costeo no existe: se revierte > resultado 1`] = `"error: El costeo seleccionado no existe."`;

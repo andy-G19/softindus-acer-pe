@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 497 |
+| Archivos fuente analizados | 518 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -55,7 +55,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `/dashboard/commercial/quotes/new` | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
 | `/dashboard/commercial/quotes` | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 2 | — |
 | `/dashboard/commercial/receipts` | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 2 | — |
-| `/dashboard/costs/costings/[id]` | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 6 | — |
+| `/dashboard/costs/costings/[id]` | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
 | `/dashboard/costs/costings` | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 1 | — |
 | `/dashboard/costs` | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
 | `/dashboard/costs/work-orders` | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 1 | — |
@@ -178,14 +178,8 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 218 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 56 | `"/dashboard/commercial/receipts"` |
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 156 | `{annulReceiptAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 322 | `{updateLaborCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 347 | `{recalculateCostingAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 532 | `{createIndirectCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 684 | `{annulIndirectCostAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 752 | `{createMarginAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 919 | `{createProfitabilityAction}` |
-| `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 239 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 311 | `{createCostingFromWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 128 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 217 | `{createCostingFromWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 208 | `{attendStockAlertAction}` |
 | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 66 | `"/dashboard/inventory/entries"` |
 | `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 113 | `"/dashboard/inventory/materials"` |
@@ -234,14 +228,14 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 48 | `{createFabricationRouteAction}` |
 | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 177 | `{toggleFabricationRouteStatusAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 317 | `{deliverWorkOrderMaterialsAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 611 | `{reopenWorkOrderMaterialsAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 144 | `{reassignWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 244 | `{generateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 267 | `{updateWorkOrderProgressAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 355 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 575 | `{annulWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 594 | `{finishWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 263 | `{deliverWorkOrderMaterialsAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 557 | `{reopenWorkOrderMaterialsAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 102 | `{reassignWorkOrderProgressAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 208 | `{generateWorkOrderProgressAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 231 | `{updateWorkOrderProgressAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 166 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 386 | `{annulWorkOrderAction}` |
+| `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 405 | `{finishWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 171 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 216 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 189 | `Sin action explícita (revisar filtros/onSubmit)` |
@@ -284,6 +278,12 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/modules/commercial/products/product-category-manager.tsx` | 151 | `{formAction}` |
 | `src/modules/commercial/products/product-category-manager.tsx` | 191 | `{toggleAction}` |
 | `src/modules/commercial/products/product-form.tsx` | 90 | `{formAction}` |
+| `src/modules/costs/costings/costing-data-card.tsx` | 66 | `{updateLaborCostAction}` |
+| `src/modules/costs/costings/costing-data-card.tsx` | 91 | `{recalculateCostingAction}` |
+| `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 75 | `{createIndirectCostAction}` |
+| `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 227 | `{annulIndirectCostAction}` |
+| `src/modules/costs/margins/margins-section.tsx` | 76 | `{createMarginAction}` |
+| `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 98 | `{formAction}` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 170 | `{formAction}` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 226 | `{toggleAction}` |
