@@ -17,11 +17,10 @@ const authImportRestriction = {
 // lista solo puede encogerse.
 const pagesWithoutPrisma = ["src/app/**/page.tsx"];
 
-// Pendientes: las ordenes de trabajo y el costeo se migran con su division por
-// caso de uso (entrega 6). Los reportes salieron con sus exportaciones
-// (entrega 5).
+// Pendientes: el costeo se migra con su division por caso de uso (entrega 6).
+// Los reportes salieron con sus exportaciones (entrega 5) y las ordenes de
+// trabajo, con la division de sus acciones (entrega 6).
 const pagesStillWithPrisma = [
-  "src/app/(dashboard)/dashboard/production/work-orders/**/page.tsx",
   "src/app/(dashboard)/dashboard/costs/**/page.tsx",
 ];
 
