@@ -3034,7 +3034,12 @@ exports[`/dashboard/costs/costings/[id] > costeo de un pedido sin orden > llamad
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000003",
@@ -3600,7 +3605,12 @@ exports[`/dashboard/costs/costings/[id] > costeo manual > llamadas 1`] = `
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000004",
@@ -4166,7 +4176,12 @@ exports[`/dashboard/costs/costings/[id] > inexistente > llamadas 1`] = `
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS99999999",
@@ -4243,7 +4258,12 @@ exports[`/dashboard/costs/costings/[id] > margen con precio final: la vista prev
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000001",
@@ -4841,7 +4861,12 @@ exports[`/dashboard/costs/costings/[id] > orden con cliente directo y sin receta
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000002",
@@ -5407,7 +5432,12 @@ exports[`/dashboard/costs/costings/[id] > orden con receta, margenes y rentabili
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000001",
@@ -6012,7 +6042,12 @@ exports[`/dashboard/costs/costings/[id] > rentable, con un costo indirecto anula
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000001",
@@ -6591,7 +6626,12 @@ exports[`/dashboard/costs/costings/[id] > sin indirectos, margenes ni rentabilid
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000001",
@@ -7061,7 +7101,12 @@ exports[`/dashboard/costs/costings/[id] > vista previa con costo total en cero: 
             "fecha_calculo": "desc",
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
       },
       "where": {
         "id_costeo": "COS00000001",

@@ -164,7 +164,12 @@ export async function getCostingDetail(idCosteo: string) {
       id_costeo: idCosteo,
     },
     include: {
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
       pedido: {
         include: {
           cliente: true,
