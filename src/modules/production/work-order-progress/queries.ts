@@ -29,12 +29,22 @@ export async function getWorkOrderProgress(idOrdenTrabajo: string) {
         include: {
           etapa_ruta: true,
           operario: true,
-          usuario: true,
+          usuario: {
+            select: {
+              nombres: true,
+              apellidos: true,
+            },
+          },
           reasignacion_tarea: {
             include: {
               operario_reasignacion_tarea_id_operario_anteriorTooperario: true,
               operario_reasignacion_tarea_id_operario_nuevoTooperario: true,
-              usuario: true,
+              usuario: {
+                select: {
+                  nombres: true,
+                  apellidos: true,
+                },
+              },
             },
             orderBy: {
               fecha_reasignacion: "desc",
@@ -70,7 +80,12 @@ export async function getAdvanceReassignData(
         include: {
           operario_reasignacion_tarea_id_operario_anteriorTooperario: true,
           operario_reasignacion_tarea_id_operario_nuevoTooperario: true,
-          usuario: true,
+          usuario: {
+            select: {
+              nombres: true,
+              apellidos: true,
+            },
+          },
         },
         orderBy: {
           fecha_reasignacion: "desc",
@@ -101,6 +116,12 @@ export async function getAdvanceReassignData(
         nombres: "asc",
       },
     ],
+    select: {
+      id_operario: true,
+      nombres: true,
+      apellidos: true,
+      cargo: true,
+    },
   });
 
   return { advance, operators };

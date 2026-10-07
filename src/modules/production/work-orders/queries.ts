@@ -2,7 +2,10 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
-import { findActiveProductFilterOptions } from "@/modules/commercial/products/queries";
+import {
+  findActiveProductFilterOptions,
+  findActiveProductsByCategory,
+} from "@/modules/commercial/products/queries";
 
 // Consultas de lectura de las paginas de Ordenes de trabajo y de las opciones
 // de ordenes que usan otras areas. No autorizan: la pagina que las llama ya
@@ -271,19 +274,7 @@ export async function getWorkOrderListData(
 export async function getNewWorkOrderFormData() {
   const [products, routes, versions, orderDetails, campaigns] =
     await Promise.all([
-      prisma.producto.findMany({
-        where: {
-          estado: true,
-        },
-        orderBy: [
-          {
-            categoria: "asc",
-          },
-          {
-            nombre_producto: "asc",
-          },
-        ],
-      }),
+      findActiveProductsByCategory(),
 
       prisma.ruta_fabricacion.findMany({
         where: {
@@ -389,7 +380,12 @@ export async function getWorkOrderDetail(idOrdenTrabajo: string) {
     include: {
       producto: true,
       cliente: true,
-      usuario: true,
+      usuario: {
+        select: {
+          nombres: true,
+          apellidos: true,
+        },
+      },
       campania_produccion: true,
       ruta_fabricacion: {
         include: {

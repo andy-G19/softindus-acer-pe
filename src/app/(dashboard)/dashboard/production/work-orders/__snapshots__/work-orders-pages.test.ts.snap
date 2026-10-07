@@ -3272,7 +3272,12 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -3689,7 +3694,12 @@ exports[`/dashboard/production/work-orders/[id] > inexistente > llamadas 1`] = `
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -3766,7 +3776,12 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -4102,7 +4117,12 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -4424,7 +4444,12 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -4694,7 +4719,12 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -4966,7 +4996,12 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -5292,7 +5327,12 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -5528,7 +5568,12 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
             },
           },
         },
-        "usuario": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
         "version_receta": {
           "include": {
             "detalle_receta": {
@@ -5915,13 +5960,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -6250,13 +6305,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > llamada
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -6585,13 +6650,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > inexistente > llamada
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -6644,13 +6719,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -6977,13 +7062,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -7161,13 +7256,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -7342,13 +7447,23 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
               "include": {
                 "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
                 "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-                "usuario": true,
+                "usuario": {
+                  "select": {
+                    "apellidos": true,
+                    "nombres": true,
+                  },
+                },
               },
               "orderBy": {
                 "fecha_reasignacion": "desc",
               },
             },
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
         },
         "producto": true,
@@ -7529,7 +7644,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "include": {
             "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
             "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_reasignacion": "desc",
@@ -7577,7 +7697,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "include": {
             "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
             "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_reasignacion": "desc",
@@ -7602,6 +7727,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
         "id_operario": undefined,
@@ -7740,7 +7871,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "include": {
             "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
             "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_reasignacion": "desc",
@@ -7765,6 +7901,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
         "id_operario": {
@@ -7919,7 +8061,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "include": {
             "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
             "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_reasignacion": "desc",
@@ -7944,6 +8091,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
         "id_operario": {
@@ -8095,7 +8248,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "include": {
             "operario_reasignacion_tarea_id_operario_anteriorTooperario": true,
             "operario_reasignacion_tarea_id_operario_nuevoTooperario": true,
-            "usuario": true,
+            "usuario": {
+              "select": {
+                "apellidos": true,
+                "nombres": true,
+              },
+            },
           },
           "orderBy": {
             "fecha_reasignacion": "desc",
@@ -8120,6 +8278,12 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
           "nombres": "asc",
         },
       ],
+      "select": {
+        "apellidos": true,
+        "cargo": true,
+        "id_operario": true,
+        "nombres": true,
+      },
       "where": {
         "estado": "activo",
         "id_operario": {
@@ -8270,6 +8434,12 @@ exports[`/dashboard/production/work-orders/new > con opciones > llamadas 1`] = `
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
@@ -8528,6 +8698,12 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > l
           "nombre_producto": "asc",
         },
       ],
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "unidad_medida": true,
+      },
       "where": {
         "estado": true,
       },
