@@ -1265,10 +1265,11 @@ Pendientes fuera de alcance:
 
 ## Entrega 7 — Fachada de notificaciones
 
-Fecha: 2026-10-07. Estado: hecha en local, con 6 commits de `4ac6caa` a
-`3bef5c9` y este registro sobre `27342e3`, sin push. Falta la foto del «antes»
-en staging, la publicación, el CI y la verificación. Pista A: no cambia lo que
-ve el usuario (textos, severidades, toasts ni confirmaciones).
+Fecha: 2026-10-07. Estado: verificada en staging el 2026-10-08. 6 commits de
+`4ac6caa` a `3bef5c9` y el registro `15d6339`, publicados sobre `27342e3` junto
+con los cierres de las entregas 5 y 6 (CI #44 en verde, 2m 33s). Falta
+integrarla en `main`. Pista A: no cambia lo que ve el usuario (textos,
+severidades, toasts ni confirmaciones).
 
 El criterio literal de la sección 16 («ningún módulo importa SweetAlert2 ni
 Toastify») ya se cumplía al empezar, sin que nada lo impusiera: solo los
@@ -1407,11 +1408,42 @@ inglés. Se corrigió en el commit de ESLint junto con la errata `<key></key>`.
 
 ### Publicación, CI y verificación en staging
 
-Pendiente. Guion previsto, todo de solo lectura: antes del push, en staging y
-con ADMIN, visitar `/dashboard?toast=<clave>` con una clave por área, una clave
-desconocida, `?toast=toString` y `?toast=` vacío, anotando el toast y la URL
-final (foto del «antes»); repetirlo después del despliegue y comparar; CI de
-staging y del PR.
+- Foto del «antes» tomada el 2026-10-08 **antes del push**, con staging en
+  `7c90ac2` (el código anterior a la entrega). Las entregas 3 a 6 no la
+  tuvieron.
+- Push a staging de 9 commits (`1799b3b`, `27342e3` y de `4ac6caa` a
+  `15d6339`): CI #44 en verde (2m 33s). Antes de la foto del «después» se
+  comprobó que staging servía el build nuevo: los fragmentos JavaScript de la
+  página cambiaron (de 15 a 13, con nombres nuevos).
+
+Verificación con ADMIN desde el navegador integrado, de solo lectura (ninguna
+URL escribe en la base) y con peticiones secuenciales. En cada URL, navegación
+completa, espera de 1,5 s y lectura del DOM: clase de Toastify, clase
+industrial, HTML del contenido del toast y URL final. El «después» se guardó en
+el navegador y se comparó con el «antes» por SHA-256 de cada observación (el
+«antes» calculado aparte en Python): **14 de 14 idénticas**.
+
+| # | URL | Toast (antes y después) | URL final |
+|---|---|---|---|
+| 1 | `/dashboard?toast=login-success` | success: «Inicio de sesión exitoso» y su descripción | `/dashboard` |
+| 2 | `/dashboard/commercial/clients?toast=client-deactivated` | warning: «Cliente desactivado» | `/dashboard/commercial/clients` |
+| 3 | `/dashboard/commercial/clients?page=1&toast=inventory-movement-created` | success: «Movimiento de inventario registrado» y su descripción | `/dashboard/commercial/clients?page=1` |
+| 4 | `?toast=machine-status-updated` | success: «Estado de máquina actualizado» | `/dashboard` |
+| 5 | `?toast=campaign-status-anulada` (clave construida) | warning: «Campaña anulada» | `/dashboard` |
+| 6 | `?toast=costing-recalculated` | success: «Costeo recalculado correctamente» | `/dashboard` |
+| 7 | `?toast=payroll-annulled` | warning: «Planilla anulada» | `/dashboard` |
+| 8 | `?toast=user-self-deactivate-blocked` | error: «No puedes desactivar tu propio usuario» | `/dashboard` |
+| 9 | `?toast=petty-cash-income-registered` | success: «Ingreso de caja registrado correctamente» | `/dashboard` |
+| 10 | `?toast=reusable-scrap-created` | success: «Retazo reutilizable creado correctamente» | `/dashboard` |
+| 11 | `?toast=work-order-materials-consumed` (sin emisor) | success: «Consumo de materiales registrado» | `/dashboard` |
+| 12 | `?toast=no-existe` | Ninguno | `/dashboard` |
+| 13 | `?toast=toString` (F2) | info vacío | `/dashboard` |
+| 14 | `?toast=` (F3) | Ninguno | `/dashboard?toast=` (no se limpia) |
+
+F2 y F3 se observan en el navegador real, antes y después, tal como los fija la
+caracterización. No se probaron otros roles: la entrega no cambia permisos,
+rutas ni acciones. Tampoco se ejecutaron acciones que escriben: sus claves no
+cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
 
 ## Secuencia de próximas entregas
 
@@ -1427,7 +1459,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
-| 7 | A | Fachada de notificaciones | Hecha en local (6 commits y registro, sin push); falta staging |
+| 7 | A | Fachada de notificaciones | Verificada en staging (CI #44 verde, 14 de 14 URLs idénticas); falta integrar en `main` |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
