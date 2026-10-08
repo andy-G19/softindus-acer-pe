@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { NotificationQueryBridge } from "@/components/notifications/notification-query-bridge";
+import { notificationRegistry } from "@/modules/notification-registry";
 import {
   recordNotificationEffect,
   resetNotificationDoubles,
@@ -158,6 +159,12 @@ beforeEach(() => {
 it("la lista fija tiene las 124 claves sin repetir", () => {
   expect(CLAVES).toHaveLength(124);
   expect(new Set(CLAVES).size).toBe(124);
+});
+
+// Una clave nueva en el registro tambien entra en la lista y en el snapshot:
+// asi cualquier mensaje que muestre el puente queda fijado y revisable.
+it("la lista fija cubre todas las claves del registro", () => {
+  expect([...CLAVES].sort()).toEqual(Object.keys(notificationRegistry).sort());
 });
 
 describe("cada clave del catalogo", () => {

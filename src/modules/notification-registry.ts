@@ -37,6 +37,8 @@ export type NotificationKey = {
 
 // Registro comun: todas las claves en un objeto normal, en el orden de las
 // areas, como el catalogo que reemplaza. Una clave repetida en dos areas se
-// pisaria en silencio con la del area posterior.
+// pisaria en silencio con la del area posterior: notification-registry.test.ts
+// lo impide y comprueba que cada clave este en el catalogo del area que la
+// emite.
 export const notificationRegistry: Record<NotificationKey, NotificationDefinition> =
   Object.assign({}, ...Object.values(notificationCatalogs));
