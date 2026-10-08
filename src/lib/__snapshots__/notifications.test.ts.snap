@@ -1,0 +1,308 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`showConfirm > con textos propios y destructiva marca el boton de confirmar 1`] = `
+[
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Volver",
+      "confirmButtonText": "Confirmar anulación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción anulará la proforma y no se puede deshacer.",
+      "title": "¿Anular proforma?",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showConfirm > no destructiva y con otro icono 1`] = `
+[
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "question",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Verifique la información antes de continuar.",
+      "title": "¿Continuar?",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showConfirm > usa los textos por defecto y devuelve la respuesta del usuario 1`] = `
+[
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Verifique la información antes de continuar.",
+      "title": "Esta acción requiere confirmación",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showDeleteConfirm > nombra la entidad recibida 1`] = `
+[
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar eliminación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción no se puede deshacer. Verifique antes de eliminar proforma.",
+      "title": "¿Eliminar registro?",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showDeleteConfirm > sin entidad nombra un registro 1`] = `
+[
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar eliminación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción no se puede deshacer. Verifique antes de eliminar registro.",
+      "title": "¿Eliminar registro?",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showLoading y closeModal > showLoading abre una ventana sin botones que muestra el indicador al abrirse 1`] = `
+[
+  {
+    "options": {
+      "allowEscapeKey": false,
+      "allowOutsideClick": false,
+      "customClass": {
+        "htmlContainer": "swal2-industrial-html",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "didOpen": [Function],
+      "showConfirmButton": false,
+      "text": "Espere un momento mientras se completa la operación.",
+      "title": "Procesando solicitud",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`showLoading y closeModal > showLoading con titulo y texto propios 1`] = `
+[
+  {
+    "options": {
+      "allowEscapeKey": false,
+      "allowOutsideClick": false,
+      "customClass": {
+        "htmlContainer": "swal2-industrial-html",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "didOpen": [Function],
+      "showConfirmButton": false,
+      "text": "No cierre la ventana.",
+      "title": "Generando planilla",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`toasts > escapa el HTML del mensaje y de la descripcion 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Error &lt;b&gt;grave&lt;/b&gt; &amp; total</p><p class="text-xs leading-relaxed text-muted-foreground">&lt;img src=x onerror=alert(1)&gt;</p></div>",
+    "options": {
+      "className": "toast-industrial-error",
+      "progressClassName": "toast-industrial-progress-error",
+    },
+    "toast": "error",
+  },
+]
+`;
+
+exports[`toasts > showError con mensaje y descripcion 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-error",
+      "progressClassName": "toast-industrial-progress-error",
+    },
+    "toast": "error",
+  },
+]
+`;
+
+exports[`toasts > showError solo con mensaje 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-error",
+      "progressClassName": "toast-industrial-progress-error",
+    },
+    "toast": "error",
+  },
+]
+`;
+
+exports[`toasts > showInfo con mensaje y descripcion 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-info",
+      "progressClassName": "toast-industrial-progress-info",
+    },
+    "toast": "info",
+  },
+]
+`;
+
+exports[`toasts > showInfo solo con mensaje 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-info",
+      "progressClassName": "toast-industrial-progress-info",
+    },
+    "toast": "info",
+  },
+]
+`;
+
+exports[`toasts > showSuccess con mensaje y descripcion 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+]
+`;
+
+exports[`toasts > showSuccess solo con mensaje 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+]
+`;
+
+exports[`toasts > showWarning con mensaje y descripcion 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p><p class="text-xs leading-relaxed text-muted-foreground">Descripcion de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-warning",
+      "progressClassName": "toast-industrial-progress-warning",
+    },
+    "toast": "warning",
+  },
+]
+`;
+
+exports[`toasts > showWarning solo con mensaje 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Mensaje de prueba</p></div>",
+    "options": {
+      "className": "toast-industrial-warning",
+      "progressClassName": "toast-industrial-progress-warning",
+    },
+    "toast": "warning",
+  },
+]
+`;
+
+exports[`toasts > una descripcion vacia no agrega el segundo parrafo 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">No se pudo iniciar sesion</p></div>",
+    "options": {
+      "className": "toast-industrial-error",
+      "progressClassName": "toast-industrial-progress-error",
+    },
+    "toast": "error",
+  },
+]
+`;
