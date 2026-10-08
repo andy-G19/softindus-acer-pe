@@ -4,7 +4,10 @@ import { createElement } from "react";
 import Swal, { type SweetAlertIcon } from "sweetalert2";
 import { toast, type ToastOptions } from "react-toastify";
 
-type NotificationType = "success" | "error" | "warning" | "info";
+import type {
+  NotificationDefinition,
+  NotificationSeverity,
+} from "@/lib/notification-catalog";
 
 type ConfirmOptions = {
   title?: string;
@@ -15,7 +18,7 @@ type ConfirmOptions = {
   destructive?: boolean;
 };
 
-const toastTypeClassNames: Record<NotificationType, string> = {
+const toastTypeClassNames: Record<NotificationSeverity, string> = {
   success: "toast-industrial-success",
   error: "toast-industrial-error",
   warning: "toast-industrial-warning",
@@ -38,7 +41,7 @@ function notificationContent(message: string, description?: string) {
 }
 
 function showToast(
-  type: NotificationType,
+  type: NotificationSeverity,
   message: string,
   description?: string,
 ) {
@@ -64,6 +67,28 @@ export function showWarning(message: string, description?: string) {
 
 export function showInfo(message: string, description?: string) {
   showToast("info", message, description);
+}
+
+// Muestra una definicion del catalogo. Cualquier valor que no sea success,
+// error o warning se muestra como info: el puente ?toast= depende de ello
+// (F2 en notification-query-bridge.test.ts).
+export function notify(definition: NotificationDefinition) {
+  if (definition.type === "success") {
+    showSuccess(definition.message, definition.description);
+    return;
+  }
+
+  if (definition.type === "error") {
+    showError(definition.message, definition.description);
+    return;
+  }
+
+  if (definition.type === "warning") {
+    showWarning(definition.message, definition.description);
+    return;
+  }
+
+  showInfo(definition.message, definition.description);
 }
 
 export async function showConfirm(options: ConfirmOptions = {}) {

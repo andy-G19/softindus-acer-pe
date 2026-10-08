@@ -1,0 +1,171 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HTML > clase de menu 1`] = `"<button type="submit" class="border-destructive/35 text-xs font-medium text-red-200 transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent">Anular</button>"`;
+
+exports[`HTML > clase de tabla 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 hover:bg-destructive/20">Anular</button>"`;
+
+exports[`HTML > deshabilitado 1`] = `"<button type="submit" disabled="" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
+
+exports[`HTML > sin clase 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
+
+exports[`clic > con titulo, como en los 15 usos: confirma con showConfirm destructivo y envia el formulario 1`] = `
+[
+  {
+    "effect": "preventDefault",
+  },
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar cancelación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción cambiará el estado del pedido y no debe ejecutarse sin verificación previa.",
+      "title": "¿Cancelar pedido?",
+    },
+    "swal": "fire",
+  },
+  {
+    "effect": "form.requestSubmit",
+  },
+]
+`;
+
+exports[`clic > si el usuario cancela no envia el formulario 1`] = `
+[
+  {
+    "effect": "preventDefault",
+  },
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar cancelación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción cambiará el estado del pedido y no debe ejecutarse sin verificación previa.",
+      "title": "¿Cancelar pedido?",
+    },
+    "swal": "fire",
+  },
+]
+`;
+
+exports[`clic > sin ninguna propiedad pide eliminar un registro 1`] = `
+[
+  {
+    "effect": "preventDefault",
+  },
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar eliminación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción no se puede deshacer. Verifique antes de eliminar registro.",
+      "title": "¿Eliminar registro?",
+    },
+    "swal": "fire",
+  },
+  {
+    "effect": "form.requestSubmit",
+  },
+]
+`;
+
+exports[`clic > sin textos propios usa showDeleteConfirm con la entidad 1`] = `
+[
+  {
+    "effect": "preventDefault",
+  },
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Confirmar eliminación",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Esta acción no se puede deshacer. Verifique antes de eliminar proforma.",
+      "title": "¿Eliminar registro?",
+    },
+    "swal": "fire",
+  },
+  {
+    "effect": "form.requestSubmit",
+  },
+]
+`;
+
+exports[`clic > sin titulo pero con otro texto propio usa showConfirm con los textos por defecto 1`] = `
+[
+  {
+    "effect": "preventDefault",
+  },
+  {
+    "options": {
+      "buttonsStyling": false,
+      "cancelButtonText": "Cancelar",
+      "confirmButtonText": "Desactivar",
+      "customClass": {
+        "cancelButton": "swal2-industrial-cancel",
+        "confirmButton": "swal2-industrial-confirm swal2-industrial-confirm-destructive",
+        "htmlContainer": "swal2-industrial-html",
+        "icon": "swal2-industrial-icon",
+        "popup": "swal2-industrial-popup",
+        "title": "swal2-industrial-title",
+      },
+      "focusCancel": true,
+      "icon": "warning",
+      "reverseButtons": true,
+      "showCancelButton": true,
+      "text": "Verifique la información antes de continuar.",
+      "title": "Esta acción requiere confirmación",
+    },
+    "swal": "fire",
+  },
+  {
+    "effect": "form.requestSubmit",
+  },
+]
+`;

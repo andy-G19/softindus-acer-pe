@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Spanish-language internal ERP for **Aceros Perú** (a steel fabrication workshop): commercial (clients/quotes/orders/payments), inventory, production, costing, petty cash, maintenance, staff, and reporting. Domain code — Prisma models, columns, enums, UI copy, toast keys — is in **Spanish** (`cliente`, `bitacora_operacion`, `estado`). Keep new domain code Spanish to match; framework/glue code is English.
+Spanish-language internal ERP for **Aceros Perú** (a steel fabrication workshop): commercial (clients/quotes/orders/payments), inventory, production, costing, petty cash, maintenance, staff, and reporting. Domain code — Prisma models, columns, enums, UI copy — is in **Spanish** (`cliente`, `bitacora_operacion`, `estado`). Keep new domain code Spanish to match; framework/glue code is English, and so are the `?toast=` keys (`client-created`).
 
 ## Commands
 
@@ -81,7 +81,7 @@ Follow the shape in [src/modules/commercial/clients/actions.ts](src/modules/comm
 2. `schema.safeParse(rawData)` → on failure return `{ error, fieldErrors: parsed.error.flatten().fieldErrors }`.
 3. Business validation (e.g. duplicate document), then open a `prisma.$transaction`, generate the id with `getNextCorrelativeId(tx, ...)`, and `tx.<model>.create/update` inside that same transaction.
 4. `registerAuditLog({ userId, entidad_afectada, id_registro_afectado, accion, detalle })` — from [src/lib/audit.ts](src/lib/audit.ts); writes to `bitacora_operacion`, swallows its own errors, and accepts a `tx` client to run inside a transaction.
-5. `revalidatePath(...)` then `redirect(\`${path}?toast=<key></key>\`)`. Toasts are surfaced via the `?toast=` search param and rendered client-side.
+5. `revalidatePath(...)` then `redirect(\`${path}?toast=<key>\`)`. Toasts are surfaced via the `?toast=` search param and rendered client-side; the key needs an entry in the catalog of the area that emits it (see *Notifications* in Stack notes).
 
 Actions used with `useActionState` take `(prevState, formData)` and return a typed `FormState`.
 
@@ -98,7 +98,10 @@ When an action file mixes many operations, split it by use case as in [src/modul
 ## Stack notes
 
 - UI: shadcn (style `radix-nova`, base color neutral) in `src/components/ui`, `radix-ui`, `lucide-react`, Tailwind v4 (config-less, via `@tailwindcss/postcss`; theme in `src/app/globals.css`).
-- Notifications: `sweetalert2` (confirm dialogs) + `react-toastify` (toasts) wrapped in [src/lib/notifications.ts](src/lib/notifications.ts) — a `"use client"` module.
+- Notifications: `sweetalert2` (confirm dialogs) + `react-toastify` (toasts) wrapped in [src/lib/notifications.ts](src/lib/notifications.ts) — a `"use client"` module and, with `components/notifications/notification-provider.tsx`, the only file allowed to import them (ESLint `no-restricted-imports`). Code notifies through the facade (`notify(definition)`, `showSuccess`, `showError`, `showConfirm`…).
+  - `?toast=<key>` messages: each key's severity and text live in `src/modules/<area>/notifications.ts` (typed with `satisfies NotificationCatalog` from [src/lib/notification-catalog.ts](src/lib/notification-catalog.ts)), merged in [src/modules/notification-registry.ts](src/modules/notification-registry.ts). `NotificationQueryBridge` is only the compatibility adapter that reads the URL. Keys are English kebab-case (`client-created`).
+  - **Adding a key:** add the entry to the catalog of the area that emits it, then add the key to the fixed list in `notification-query-bridge.test.ts` and accept its new snapshot. [src/modules/notification-registry.test.ts](src/modules/notification-registry.test.ts) reads the source as a TypeScript AST and fails on a key without entry, an entry without emitter (unless listed in `CLAVES_SIN_EMISOR` with its reason), a key in another area's catalog, a duplicate, or a `?toast=` shape it does not recognize.
+  - Known behaviors pinned by the bridge characterization, to be fixed separately: F1 (the same key twice in one mount is not shown again and stays in the URL), F2 (`?toast=toString` shows an empty info toast), F3 (an empty `?toast=` is not cleaned).
 - Exports: `exceljs`, `pdfkit`, and CSV helpers under `src/lib/*-export.ts`. `pdfkit` is in `serverExternalPackages` (next.config.ts) — keep PDF generation server-side.
 - Report exports: `api/reports/export/[report]/route.ts` only does the HTTP part (session, report key, role with `assertRole`, format, date range, limit, export log, file). Each report has an exporter in `src/modules/reports/<report>/exporter.ts` (audit: `src/modules/audit/exporter.ts`) registered in `REPORT_EXPORTERS` (`src/modules/reports/exporters.ts`, typed `Record<ReportKey, ReportExporter>`). The page and the export build their Prisma filter with the same function in the report's `queries.ts`; where they still differ (maintenance search, staff, profitability, audit) the difference is documented next to both — unifying it is a `fix`.
 - Env: `DATABASE_URL` (required), `DIRECT_URL`, `AUTH_SECRET`, `AUTH_URL` — see `.env.example`. DB is Supabase Postgres.

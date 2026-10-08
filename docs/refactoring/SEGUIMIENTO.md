@@ -837,10 +837,11 @@ Pendientes fuera de alcance:
 
 ## Entrega 5 — Exportaciones por reporte
 
-Fecha: 2026-10-05. Estado: hecha en local el 2026-10-05, con 18 commits de
-`60e1830` a `6fc7c11` sobre staging sin push; falta publicarla y verificarla
-en staging. Se divide en cuatro sub-entregas para que cada paso deje el
-proyecto comprobable y se pueda revertir por reporte.
+Fecha: 2026-10-05. Estado: cerrada el 2026-10-07. 18 commits de `60e1830` a
+`6fc7c11` y el registro `108ba00`, publicados en staging el 2026-10-06 (CI #37
+en verde) e integrados en `main` con el PR #14 (merge commit `1613819`, CI #39
+en verde); verificada en producción. Se divide en cuatro sub-entregas para que
+cada paso deje el proyecto comprobable y se pueda revertir por reporte.
 
 | Sub-entrega | Alcance | Resultado |
 |---|---|---|
@@ -985,13 +986,37 @@ suman 1.678. `queries.ts` pasa de 52 a 62. `npm run refactor:inventory` no
 cambia páginas, formularios ni acciones: analiza 497 archivos y desplaza los
 números de línea de los formularios de 9 páginas de reportes.
 
-Verificación en staging: pendiente. Guion previsto: exportar en Excel y PDF los
-9 reportes antes de publicar (foto del «antes», con permiso: cada exportación
-escribe en `exportacion_datos` y en la bitácora) y repetirlo con los mismos
-filtros tras el despliegue, comparando celdas y texto salvo la marca
-«Generado»; prueba de humo secuencial de las 10 páginas; SELLER y
-WORKSHOP_MASTER en sus reportes y exportaciones, con 403 en los ajenos;
-historial de exportaciones y logs de Vercel.
+### Publicación, CI y verificación en producción
+
+- Push a staging de `108ba00` el 2026-10-06: CI #37 en verde (1m 43s). PR #14:
+  CI #38 en verde (2m 5s); merge commit `1613819` en `main`: CI #39 en verde
+  (1m 59s). Después se integró la entrega 6 (PR #15, merge commit `59124e9`).
+- No hubo foto del «antes»: el push se hizo antes de verificar. La
+  equivalencia de los archivos descansa en la caracterización y en la
+  comparación byte a byte.
+- La verificación se hizo en producción el 2026-10-07, por decisión del
+  responsable: el último despliegue era el de `59124e9` (entregas 5 y 6), y la
+  verificación de staging de la entrega 6 no recorrió los reportes.
+
+Verificación en producción el 2026-10-07 con un usuario ADMIN, desde el
+navegador integrado y con peticiones secuenciales con pausa de 1,5 a 2 s:
+
+| # | Prueba | Resultado |
+|---|---|---|
+| 1 | Prueba de humo de 21 peticiones: el panel de reportes, los 8 reportes sin filtros y con filtros (fechas, estados, búsqueda, margen bajo), el historial de exportaciones con y sin formato y la bitácora con y sin rango | Todas 200, sin redirecciones ni `digest` de error, sin `NaN`, `Invalid Date` ni `undefined`; 0,6 a 1,6 s por página (3,4 s el panel en la primera petición) |
+| 2 | Enlaces de exportación de las páginas | Conservan los filtros de la pantalla, como fija la caracterización |
+| 3 | Rechazos de la ruta, que se validan antes de escribir: reporte inexistente, formato `xml` y fecha inicial mayor que la final | 404 y dos 400, con el mismo JSON que fijan las pruebas |
+| 4 | Contenido limitado por la sub-entrega 5.3 | El historial muestra nombre y correo de quien exportó; los filtros de usuario de inventario y del historial listan los 4 usuarios activos con nombre; el responsable de cada movimiento se muestra |
+| 5 | Bitácora con rango del 1 al 7 de octubre | Sin filas: la última entrada de producción es del 8 de agosto |
+| 6 | Exportar Producción sin filtros en Excel y en PDF (autorizado por el responsable) | 200, `no-store`, Excel con firma zip (7.592 bytes) y PDF con firma `%PDF-` (2.902 bytes); `EXP00000038` y `EXP00000039` en el historial y en la bitácora, con 2 registros cada uno |
+| 7 | Logs de Vercel | No revisados: el navegador integrado no pudo abrir vercel.com |
+| 8 | SELLER y WORKSHOP_MASTER | Omitida. La entrega no cambió `permissions.ts`, `proxy.ts`, `auth.ts`, `authz.ts` ni ningún `requireRole` de las páginas; en la ruta, la comparación de rol pasó a `assertRole` con la misma respuesta, que fijan las dos pruebas 403 y su mutación |
+
+Observación: el nombre de los archivos lleva la fecha `2026-10-08` en una
+exportación hecha el 7 de octubre a las 21:08 de Lima, porque el servidor
+formatea en UTC. Es el pendiente de instantes en UTC de la entrega 3, no una
+regresión. Datos que deja la verificación: `EXP00000038` y `EXP00000039`, con
+su entrada en la bitácora de producción.
 
 Pendientes fuera de alcance:
 
@@ -1014,11 +1039,12 @@ Pendientes fuera de alcance:
 
 ## Entrega 6 — Órdenes de trabajo y costeo por caso de uso
 
-Fecha: 2026-10-06. Estado: verificada en staging el 2026-10-07, con 19 commits
-de `91ad966` a `ffcc683` y el registro `9369bc1`, publicados después de fusionar
-el PR de la entrega 5; CI #40 en verde. Falta integrarla en `main`. Se divide en
-cuatro sub-entregas para que cada una deje el proyecto comprobable y baje una
-métrica.
+Fecha: 2026-10-06. Estado: cerrada el 2026-10-07. 19 commits de `91ad966` a
+`ffcc683` y el registro `9369bc1`, publicados después de fusionar el PR de la
+entrega 5 (CI #40 en verde), verificados en staging (cierre `7c90ac2`, CI #41
+en verde) e integrados en `main` con el PR #15 (CI #42 en verde; merge commit
+`59124e9`, CI #43 en verde, 2m 37s). Se divide en cuatro sub-entregas para que
+cada una deje el proyecto comprobable y baje una métrica.
 
 | Sub-entrega | Alcance | Resultado |
 |---|---|---|
@@ -1237,6 +1263,188 @@ Pendientes fuera de alcance:
   los datos del caso. La integración contra una base desechable sigue en la
   entrega 11.
 
+## Entrega 7 — Fachada de notificaciones
+
+Fecha: 2026-10-07. Estado: verificada en staging el 2026-10-08. 6 commits de
+`4ac6caa` a `3bef5c9` y el registro `15d6339`, publicados sobre `27342e3` junto
+con los cierres de las entregas 5 y 6 (CI #44 en verde, 2m 33s). Falta
+integrarla en `main`. Pista A: no cambia lo que ve el usuario (textos,
+severidades, toasts ni confirmaciones).
+
+El criterio literal de la sección 16 («ningún módulo importa SweetAlert2 ni
+Toastify») ya se cumplía al empezar, sin que nada lo impusiera: solo los
+importaban `lib/notifications.ts` y el proveedor de toasts. Se reemplazó por
+cinco criterios medibles tomados de la sección 7 del plan:
+
+| # | Criterio | Al empezar | Al cerrar |
+|---|---|---|---|
+| C1 | Entradas del catálogo embebidas en el puente `?toast=` | 124, en 159 de sus 230 líneas | 0; el puente es un adaptador de 48 líneas |
+| C2 | Catálogos de área tipados reunidos en un registro común | 0 | 10 |
+| C3 | Claves caracterizadas (texto, severidad, clases y HTML) | 0 / 124 | 124 / 124, sin cambios de snapshot tras el movimiento |
+| C4 | Desfase entre claves emitidas y registro detectado por una prueba | Sin control | Prueba activa: 0 claves sin entrada, 1 sin emisor declarada |
+| C5 | Solo la fachada y el proveedor importan las librerías | Se cumplía sin control | Regla de ESLint |
+
+| Sub-entrega | Alcance | Resultado |
+|---|---|---|
+| 7.1 | Caracterización antes de mover | 172 casos de la fachada, el botón de confirmación y el puente |
+| 7.2 | `notify` en la fachada y catálogo por área | Puente de 230 a 48 líneas |
+| 7.3 | Guardas | Prueba de desfase y regla de ESLint |
+| 7.4 | Registro | Este apartado e `INVENTARIO.md` |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4ac6caa | test | Dobles de `react-toastify` y `sweetalert2` en `src/testing/notification-doubles.ts`; 19 casos de la fachada y 12 de `ConfirmDeleteButton`. |
+| 358f15b | test | 141 casos del puente: las 124 claves de una lista fija y los casos de URL, repetición y montaje. |
+| 2cf52df | refactor | Contrato del catálogo en `lib/notification-catalog.ts` (solo tipos); `notify(definition)` en la fachada con el mismo `switch` que tenía el puente. |
+| 805caa7 | refactor | Las 124 entradas en 10 `src/modules/<área>/notifications.ts` con `satisfies NotificationCatalog`, reunidas en `src/modules/notification-registry.ts`; el puente queda como adaptador. |
+| c00ecdd | test | Prueba de desfase que lee el código como árbol sintáctico de TypeScript; la lista fija del puente cubre todo el registro. 6 pruebas. |
+| 3bef5c9 | chore | `no-restricted-imports` para `sweetalert2` y `react-toastify` fuera de la fachada y el proveedor; `CLAUDE.md` documenta la convención. |
+
+Punto de partida, medido sobre `7c90ac2`:
+
+- El código emitía 123 claves con 103 apariciones de `toast=` en 47 archivos:
+  85 literales, 16 ternarios de activar y desactivar (32 claves),
+  `campaign-status-${nextStatus}` (3, con `nextStatus` validado por
+  `includes`) y `detailsPath(…, "recipe-detail-…")` (3). Un `grep` de
+  `toast=[a-z-]+` encuentra 86 cadenas: las 85 literales y el prefijo
+  `campaign-status-`.
+- 0 claves emitidas sin entrada y 1 entrada sin emisor,
+  `work-order-materials-consumed`, desde `5599788` (el consumo todo o nada se
+  reemplazó por la entrega, la devolución y el cierre). Ninguna clave se emite
+  desde un área distinta de su sección del catálogo, lo que permitió partirlo
+  1:1.
+- El catálogo tenía 94 éxitos, 29 advertencias, 1 error y ningún info; 3
+  entradas con descripción.
+- 20 archivos consumían `lib/notifications`: 14 formularios con el mismo error
+  genérico (14 copias del título y 15 de la descripción), 4 con un error
+  propio, el puente y `ConfirmDeleteButton`. Sus 15 usos pasan `title`, así que
+  `entityName` y `showDeleteConfirm` no se usan en la práctica; `onConfirm`
+  tiene 0 usos. `showLoading` y `closeModal` no tienen consumidores.
+- Ninguna prueba cubría las notificaciones.
+
+Diseño: el contrato (`NotificationSeverity`, `NotificationDefinition` y
+`NotificationCatalog`) no depende de ninguna librería; los catálogos y la
+fachada dependen de él. El registro sigue el patrón de `REPORT_EXPORTERS` de la
+entrega 5: una sola lista de áreas (`notificationCatalogs`) de la que se
+derivan `NotificationKey` y `notificationRegistry`, que es un objeto normal con
+el mismo orden de claves para que el puente siga consultando por propiedad.
+
+Evidencia de que el comportamiento no cambió:
+
+1. Caracterización escrita antes de mover, en la frontera con las librerías:
+   los dobles registran cada llamada a Toastify y SweetAlert2 y el HTML de cada
+   toast. 172 casos y 159 snapshots; la lista de las 124 claves está escrita en
+   la prueba para que una entrada borrada falle en lugar de dejar un snapshot
+   obsoleto. Un script aparte cruzó los 124 snapshots con el catálogo: 0
+   diferencias. En los commits 3 a 6 no cambió ningún snapshot.
+2. Scripts de verificación distintos de los que transformaron: el `switch`, el
+   catálogo y el componente del commit 3 son idénticos al original salvo las
+   líneas previstas; en el commit 4 el registro se ejecutó con `tsx` y se
+   comparó con el catálogo de `HEAD`: 124 entradas, mismo orden, misma área y 0
+   diferencias.
+3. Comparación diferencial fuera del repositorio (`tmp/e7-diff`, ignorado,
+   `npx vitest run --config tmp/e7-diff/vitest.config.ts`): el puente de `HEAD`
+   y el nuevo producen las mismas llamadas en 5.881 claves (las 124, los 12
+   nombres de `Object.prototype`, 744 variantes cercanas, 5.000 al azar y la
+   vacía) y en 20.000 secuencias aleatorias de navegación, repeticiones y
+   montajes. Control: detecta un texto, una severidad, una entrada borrada y
+   un registro sin prototipo. La primera versión tomaba las claves del
+   registro nuevo y no detectaba la entrada borrada; ahora las toma del puente
+   de `HEAD`.
+4. TypeScript rechaza en un catálogo una severidad mal escrita (TS2820) y un
+   `message` ausente (TS2741).
+5. La regla de ESLint se comprobó por entrada estándar en 13 casos: módulos,
+   componentes, pruebas, páginas existentes y nuevas, la fachada y el
+   proveedor; `@/auth` sigue restringido en todos.
+
+| Mutación | Resultado |
+|---|---|
+| Fachada y botón (17): clases, severidades, escape de HTML, opciones de SweetAlert2, rama de `title`, cancelar, deshabilitado, `onConfirm` | Todas fallan |
+| Puente (14), incluidos los arreglos de F1, F2 y F3 | Todas fallan |
+| `notify` en la fachada (4); reemplazar su `switch` por `showToast(definition.type, …)` | Fallan; la segunda rompe los casos de F2 |
+| Catálogos y registro (7): texto, severidad, entrada borrada, descripción, clave repetida con otro texto, registro sin prototipo, área quitada | Todas fallan |
+| Clave repetida con el mismo texto y entrada movida de área | Sobreviven a la caracterización (no cambian nada visible); las detecta la prueba de desfase |
+| Prueba de desfase (12), incluida la propia prueba dejando de leer las plantillas | 11 fallan; un `?toast=` en un comentario sobrevive, como debe |
+| ESLint: sin el bloque de excepción; excepción sin `@/auth` | 4 errores en la fachada y el proveedor; la restricción de `@/auth` se pierde en silencio |
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.243, 1.384, 1.384, 1.384, 1.390 y 1.390 pruebas según el commit;
+95 archivos de prueba al final. El código de producción cambia en 14 archivos
+de `src` (+312 y −194), además de `eslint.config.mjs` y `CLAUDE.md`; las
+pruebas, los dobles y los snapshots suman 3.513 líneas. `npm run
+refactor:inventory` analiza 535 archivos (17 nuevos) y mantiene 127 páginas, 136
+formularios y 48 archivos de acciones: los catálogos no agregan superficies
+`"use server"`.
+
+Comportamientos actuales conservados y fijados por la caracterización (cada
+uno es un `fix` o pista B):
+
+- F1: el `useRef` del puente evita repetir una clave mientras siga montado.
+  Una segunda operación igual (dos clientes creados seguidos) no muestra su
+  toast y deja `?toast=` en la URL; al recargar aparece un toast viejo. La
+  sección 7 prevé identificadores de operación.
+- F2: `?toast=toString`, `constructor`, `__proto__` y los demás nombres del
+  prototipo de `Object` muestran un toast info vacío. Lo corrige
+  `Object.hasOwn` en un `fix`.
+- F3: con `?toast=` vacío no se muestra nada y la URL no se limpia.
+- `work-order-materials-consumed` no tiene emisor; se conserva en el catálogo
+  de Producción y en `CLAVES_SIN_EMISOR`. Retirarla es un `fix`.
+
+Pendientes fuera de alcance:
+
+- Pista B: los 14 formularios muestran un toast genérico además de sus errores
+  de campo; alertas persistentes dentro del formulario; mensajes de éxito
+  locales fuera del catálogo (gestores de categorías y catálogos de
+  inventario, proveedor rápido del repuesto); confirmaciones sobre Radix con
+  entidad, consecuencia y verbo, y `ConfirmDeleteButton`, que también anula,
+  cancela y desactiva; retirar SweetAlert2 y con él `showLoading` y
+  `closeModal`.
+- Pista B, sección 8: las acciones devolverán un código de mensaje con el tipo
+  `NotificationKey` en lugar de redirigir con cadenas `?toast=`.
+- Los `fix` F1, F2 y F3 y retirar la clave sin emisor.
+
+`CLAUDE.md` decía que las claves de toast estaban en español: las 124 están en
+inglés. Se corrigió en el commit de ESLint junto con la errata `<key></key>`.
+
+### Publicación, CI y verificación en staging
+
+- Foto del «antes» tomada el 2026-10-08 **antes del push**, con staging en
+  `7c90ac2` (el código anterior a la entrega). Las entregas 3 a 6 no la
+  tuvieron.
+- Push a staging de 9 commits (`1799b3b`, `27342e3` y de `4ac6caa` a
+  `15d6339`): CI #44 en verde (2m 33s). Antes de la foto del «después» se
+  comprobó que staging servía el build nuevo: los fragmentos JavaScript de la
+  página cambiaron (de 15 a 13, con nombres nuevos).
+
+Verificación con ADMIN desde el navegador integrado, de solo lectura (ninguna
+URL escribe en la base) y con peticiones secuenciales. En cada URL, navegación
+completa, espera de 1,5 s y lectura del DOM: clase de Toastify, clase
+industrial, HTML del contenido del toast y URL final. El «después» se guardó en
+el navegador y se comparó con el «antes» por SHA-256 de cada observación (el
+«antes» calculado aparte en Python): **14 de 14 idénticas**.
+
+| # | URL | Toast (antes y después) | URL final |
+|---|---|---|---|
+| 1 | `/dashboard?toast=login-success` | success: «Inicio de sesión exitoso» y su descripción | `/dashboard` |
+| 2 | `/dashboard/commercial/clients?toast=client-deactivated` | warning: «Cliente desactivado» | `/dashboard/commercial/clients` |
+| 3 | `/dashboard/commercial/clients?page=1&toast=inventory-movement-created` | success: «Movimiento de inventario registrado» y su descripción | `/dashboard/commercial/clients?page=1` |
+| 4 | `?toast=machine-status-updated` | success: «Estado de máquina actualizado» | `/dashboard` |
+| 5 | `?toast=campaign-status-anulada` (clave construida) | warning: «Campaña anulada» | `/dashboard` |
+| 6 | `?toast=costing-recalculated` | success: «Costeo recalculado correctamente» | `/dashboard` |
+| 7 | `?toast=payroll-annulled` | warning: «Planilla anulada» | `/dashboard` |
+| 8 | `?toast=user-self-deactivate-blocked` | error: «No puedes desactivar tu propio usuario» | `/dashboard` |
+| 9 | `?toast=petty-cash-income-registered` | success: «Ingreso de caja registrado correctamente» | `/dashboard` |
+| 10 | `?toast=reusable-scrap-created` | success: «Retazo reutilizable creado correctamente» | `/dashboard` |
+| 11 | `?toast=work-order-materials-consumed` (sin emisor) | success: «Consumo de materiales registrado» | `/dashboard` |
+| 12 | `?toast=no-existe` | Ninguno | `/dashboard` |
+| 13 | `?toast=toString` (F2) | info vacío | `/dashboard` |
+| 14 | `?toast=` (F3) | Ninguno | `/dashboard?toast=` (no se limpia) |
+
+F2 y F3 se observan en el navegador real, antes y después, tal como los fija la
+caracterización. No se probaron otros roles: la entrega no cambia permisos,
+rutas ni acciones. Tampoco se ejecutaron acciones que escriben: sus claves no
+cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -1249,9 +1457,9 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
-| 5 | A | Exportaciones por reporte | Hecha en local (18 commits, sin push); falta staging |
-| 6 | A | Órdenes de trabajo y costeo por caso de uso | Verificada en staging (CI #40 verde); falta integrar en `main` |
-| 7 | A | Fachada de notificaciones | Pendiente |
+| 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
+| 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
+| 7 | A | Fachada de notificaciones | Verificada en staging (CI #44 verde, 14 de 14 URLs idénticas); falta integrar en `main` |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
@@ -1274,8 +1482,11 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `toNumber` | 52 | 1 | 3 |
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
-| Archivos que importan `sweetalert2` | 2 | 2 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 91 / 1.212 | todas |
+| Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
+| Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 124 / 124 | 7 |
+| Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 95 / 1.390 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -1313,6 +1524,14 @@ Los tres archivos más grandes de `src` son ahora pruebas y el arnés (1.079, 96
 mantenimiento (696), detalle de orden de trabajo (643) y resumen mensual de caja
 (614).
 
+Actualizado en la entrega 7 (2026-10-07) sobre `3bef5c9`: pruebas 95 / 1.390 y
+las tres filas nuevas de notificaciones, medidas sobre `27342e3`, su línea base
+(desde `7c90ac2` solo cambió `SEGUIMIENTO.md`). La fila de `sweetalert2` pasa a
+contar declaraciones `import` de `sweetalert2` o `react-toastify`: eran y son 2
+(`lib/notifications.ts` y el proveedor de toasts), y desde esta entrega una
+regla de ESLint lo impone. Las demás no cambian: páginas con Prisma directo 0,
+`auth()` directo 0 y copias locales de conversión y formato 0, medidos de nuevo.
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -1322,9 +1541,11 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
   mide `/verificar`, y una regla de ESLint lo mantiene.
 - Contar con grep o ripgrep. En PowerShell, `Select-String -Path` interpreta
   `[id]` y `[report]` como comodines y omite esos archivos sin avisar.
-- `sweetalert2` cuenta los archivos que lo mencionan. Uno es un comentario de
-  `lib/security-headers.ts`: el único archivo que lo importa es
-  `lib/notifications.ts`.
+- Hasta la entrega 6, `sweetalert2` contaba los archivos que lo mencionan (uno
+  era un comentario de `lib/security-headers.ts`). Desde la entrega 7 la fila
+  cuenta declaraciones `import` de `sweetalert2` o `react-toastify`, también
+  por subruta: las pruebas nombran ambas librerías en `vi.mock` y un `grep` de
+  menciones da 6 archivos.
 - Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
   `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
   columna `usuario` dentro de un `select`, que no cargan la fila completa.

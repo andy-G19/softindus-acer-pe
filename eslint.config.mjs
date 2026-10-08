@@ -23,6 +23,27 @@ const dbImportRestriction = {
     "Las paginas no consultan Prisma: mueve la consulta a src/modules/<area>/<funcionalidad>/queries.ts.",
 };
 
+// Fachada de notificaciones (entrega 7): SweetAlert2 y Toastify solo se
+// importan en src/lib/notifications.ts y en el proveedor de toasts. El resto
+// del codigo notifica a traves de la fachada; cambiar de libreria toca un solo
+// archivo.
+const notificationFacadeFiles = [
+  "src/lib/notifications.ts",
+  "src/components/notifications/notification-provider.tsx",
+];
+
+const notificationLibraryMessage =
+  "Usa la fachada @/lib/notifications (notify, showSuccess, showError, showConfirm...): solo ella y el proveedor de toasts importan SweetAlert2 y Toastify.";
+
+const notificationLibraryRestrictions = [
+  { name: "sweetalert2", message: notificationLibraryMessage },
+  { name: "react-toastify", message: notificationLibraryMessage },
+];
+
+const notificationLibraryPatterns = [
+  { group: ["sweetalert2/*", "react-toastify/*"], message: notificationLibraryMessage },
+];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -48,6 +69,7 @@ const eslintConfig = defineConfig([
   // Autorizacion centralizada (entrega 2): la sesion se obtiene solo a traves
   // de los helpers de src/lib/authz.ts, que revalidan el usuario activo y
   // registran los rechazos. signIn, signOut y handlers siguen permitidos.
+  // Tambien restringe las librerias de notificacion (entrega 7).
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: ["src/auth.ts", "src/lib/authz.ts", "src/proxy.ts"],
@@ -55,21 +77,42 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [authImportRestriction],
+          paths: [authImportRestriction, ...notificationLibraryRestrictions],
+          patterns: notificationLibraryPatterns,
         },
       ],
     },
   },
   // Paginas sin Prisma directo (entrega 4). En flat config, si dos bloques
   // configuran la misma regla para un archivo, el ultimo reemplaza las opciones
-  // del anterior: este bloque repite la restriccion de @/auth para no perderla.
+  // del anterior: este bloque repite las restricciones del bloque general para
+  // no perderlas.
   {
     files: pagesWithoutPrisma,
     rules: {
       "no-restricted-imports": [
         "error",
         {
-          paths: [authImportRestriction, dbImportRestriction],
+          paths: [
+            authImportRestriction,
+            dbImportRestriction,
+            ...notificationLibraryRestrictions,
+          ],
+          patterns: notificationLibraryPatterns,
+        },
+      ],
+    },
+  },
+  // La fachada de notificaciones y el proveedor de toasts son los unicos que
+  // importan SweetAlert2 y Toastify. Por la misma regla de reemplazo, este
+  // bloque conserva para ellos solo la restriccion de @/auth.
+  {
+    files: notificationFacadeFiles,
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [authImportRestriction],
         },
       ],
     },
