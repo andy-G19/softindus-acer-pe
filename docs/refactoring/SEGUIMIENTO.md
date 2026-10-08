@@ -837,10 +837,11 @@ Pendientes fuera de alcance:
 
 ## Entrega 5 — Exportaciones por reporte
 
-Fecha: 2026-10-05. Estado: hecha en local el 2026-10-05, con 18 commits de
-`60e1830` a `6fc7c11` sobre staging sin push; falta publicarla y verificarla
-en staging. Se divide en cuatro sub-entregas para que cada paso deje el
-proyecto comprobable y se pueda revertir por reporte.
+Fecha: 2026-10-05. Estado: cerrada el 2026-10-07. 18 commits de `60e1830` a
+`6fc7c11` y el registro `108ba00`, publicados en staging el 2026-10-06 (CI #37
+en verde) e integrados en `main` con el PR #14 (merge commit `1613819`, CI #39
+en verde); verificada en producción. Se divide en cuatro sub-entregas para que
+cada paso deje el proyecto comprobable y se pueda revertir por reporte.
 
 | Sub-entrega | Alcance | Resultado |
 |---|---|---|
@@ -985,13 +986,37 @@ suman 1.678. `queries.ts` pasa de 52 a 62. `npm run refactor:inventory` no
 cambia páginas, formularios ni acciones: analiza 497 archivos y desplaza los
 números de línea de los formularios de 9 páginas de reportes.
 
-Verificación en staging: pendiente. Guion previsto: exportar en Excel y PDF los
-9 reportes antes de publicar (foto del «antes», con permiso: cada exportación
-escribe en `exportacion_datos` y en la bitácora) y repetirlo con los mismos
-filtros tras el despliegue, comparando celdas y texto salvo la marca
-«Generado»; prueba de humo secuencial de las 10 páginas; SELLER y
-WORKSHOP_MASTER en sus reportes y exportaciones, con 403 en los ajenos;
-historial de exportaciones y logs de Vercel.
+### Publicación, CI y verificación en producción
+
+- Push a staging de `108ba00` el 2026-10-06: CI #37 en verde (1m 43s). PR #14:
+  CI #38 en verde (2m 5s); merge commit `1613819` en `main`: CI #39 en verde
+  (1m 59s). Después se integró la entrega 6 (PR #15, merge commit `59124e9`).
+- No hubo foto del «antes»: el push se hizo antes de verificar. La
+  equivalencia de los archivos descansa en la caracterización y en la
+  comparación byte a byte.
+- La verificación se hizo en producción el 2026-10-07, por decisión del
+  responsable: el último despliegue era el de `59124e9` (entregas 5 y 6), y la
+  verificación de staging de la entrega 6 no recorrió los reportes.
+
+Verificación en producción el 2026-10-07 con un usuario ADMIN, desde el
+navegador integrado y con peticiones secuenciales con pausa de 1,5 a 2 s:
+
+| # | Prueba | Resultado |
+|---|---|---|
+| 1 | Prueba de humo de 21 peticiones: el panel de reportes, los 8 reportes sin filtros y con filtros (fechas, estados, búsqueda, margen bajo), el historial de exportaciones con y sin formato y la bitácora con y sin rango | Todas 200, sin redirecciones ni `digest` de error, sin `NaN`, `Invalid Date` ni `undefined`; 0,6 a 1,6 s por página (3,4 s el panel en la primera petición) |
+| 2 | Enlaces de exportación de las páginas | Conservan los filtros de la pantalla, como fija la caracterización |
+| 3 | Rechazos de la ruta, que se validan antes de escribir: reporte inexistente, formato `xml` y fecha inicial mayor que la final | 404 y dos 400, con el mismo JSON que fijan las pruebas |
+| 4 | Contenido limitado por la sub-entrega 5.3 | El historial muestra nombre y correo de quien exportó; los filtros de usuario de inventario y del historial listan los 4 usuarios activos con nombre; el responsable de cada movimiento se muestra |
+| 5 | Bitácora con rango del 1 al 7 de octubre | Sin filas: la última entrada de producción es del 8 de agosto |
+| 6 | Exportar Producción sin filtros en Excel y en PDF (autorizado por el responsable) | 200, `no-store`, Excel con firma zip (7.592 bytes) y PDF con firma `%PDF-` (2.902 bytes); `EXP00000038` y `EXP00000039` en el historial y en la bitácora, con 2 registros cada uno |
+| 7 | Logs de Vercel | No revisados: el navegador integrado no pudo abrir vercel.com |
+| 8 | SELLER y WORKSHOP_MASTER | Omitida. La entrega no cambió `permissions.ts`, `proxy.ts`, `auth.ts`, `authz.ts` ni ningún `requireRole` de las páginas; en la ruta, la comparación de rol pasó a `assertRole` con la misma respuesta, que fijan las dos pruebas 403 y su mutación |
+
+Observación: el nombre de los archivos lleva la fecha `2026-10-08` en una
+exportación hecha el 7 de octubre a las 21:08 de Lima, porque el servidor
+formatea en UTC. Es el pendiente de instantes en UTC de la entrega 3, no una
+regresión. Datos que deja la verificación: `EXP00000038` y `EXP00000039`, con
+su entrada en la bitácora de producción.
 
 Pendientes fuera de alcance:
 
@@ -1249,7 +1274,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 2 | A | Contratos: resultado de acciones y autorización centralizada | Cerrada (CI #25 verde, staging verificado) |
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
-| 5 | A | Exportaciones por reporte | Hecha en local (18 commits, sin push); falta staging |
+| 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Verificada en staging (CI #40 verde); falta integrar en `main` |
 | 7 | A | Fachada de notificaciones | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
