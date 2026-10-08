@@ -3,20 +3,10 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import {
-  showError,
-  showInfo,
-  showSuccess,
-  showWarning,
-} from "@/lib/notifications";
+import type { NotificationCatalog } from "@/lib/notification-catalog";
+import { notify } from "@/lib/notifications";
 
-type ToastDefinition = {
-  type: "success" | "error" | "warning" | "info";
-  message: string;
-  description?: string;
-};
-
-const toastMessages: Record<string, ToastDefinition> = {
+const toastMessages: NotificationCatalog = {
   "login-success": {
     type: "success",
     message: "Inicio de sesión exitoso",
@@ -176,25 +166,6 @@ const toastMessages: Record<string, ToastDefinition> = {
   "reusable-scrap-created": { type: "success", message: "Retazo reutilizable creado correctamente" },
 };
 
-function showToastFromDefinition(definition: ToastDefinition) {
-  if (definition.type === "success") {
-    showSuccess(definition.message, definition.description);
-    return;
-  }
-
-  if (definition.type === "error") {
-    showError(definition.message, definition.description);
-    return;
-  }
-
-  if (definition.type === "warning") {
-    showWarning(definition.message, definition.description);
-    return;
-  }
-
-  showInfo(definition.message, definition.description);
-}
-
 export function NotificationQueryBridge() {
   const pathname = usePathname();
   const router = useRouter();
@@ -213,7 +184,7 @@ export function NotificationQueryBridge() {
     const definition = toastMessages[toastKey];
 
     if (definition) {
-      showToastFromDefinition(definition);
+      notify(definition);
     }
 
     const nextParams = new URLSearchParams(searchParams.toString());
