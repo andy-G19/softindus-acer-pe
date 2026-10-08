@@ -1039,11 +1039,12 @@ Pendientes fuera de alcance:
 
 ## Entrega 6 — Órdenes de trabajo y costeo por caso de uso
 
-Fecha: 2026-10-06. Estado: verificada en staging el 2026-10-07, con 19 commits
-de `91ad966` a `ffcc683` y el registro `9369bc1`, publicados después de fusionar
-el PR de la entrega 5; CI #40 en verde. Falta integrarla en `main`. Se divide en
-cuatro sub-entregas para que cada una deje el proyecto comprobable y baje una
-métrica.
+Fecha: 2026-10-06. Estado: cerrada el 2026-10-07. 19 commits de `91ad966` a
+`ffcc683` y el registro `9369bc1`, publicados después de fusionar el PR de la
+entrega 5 (CI #40 en verde), verificados en staging (cierre `7c90ac2`, CI #41
+en verde) e integrados en `main` con el PR #15 (CI #42 en verde; merge commit
+`59124e9`, CI #43 en verde, 2m 37s). Se divide en cuatro sub-entregas para que
+cada una deje el proyecto comprobable y baje una métrica.
 
 | Sub-entrega | Alcance | Resultado |
 |---|---|---|
@@ -1275,7 +1276,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 3 | A | Conversión y formatos compartidos | Cerrada (CI #29 verde, staging verificado con ADMIN) |
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
-| 6 | A | Órdenes de trabajo y costeo por caso de uso | Verificada en staging (CI #40 verde); falta integrar en `main` |
+| 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
