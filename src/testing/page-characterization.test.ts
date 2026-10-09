@@ -423,6 +423,86 @@ describe("dbModuleMock con transacciones", () => {
   });
 });
 
+describe("cliente global dentro de una transaccion", () => {
+  type Client = {
+    $transaction: <T>(callback: (tx: Client) => Promise<T>) => Promise<T>;
+    cliente: { count: () => Promise<number> };
+  };
+
+  async function attempt(operation: () => Promise<unknown>) {
+    try {
+      await operation();
+
+      return "lo permitio";
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  for (const recordTransactionEnd of [true, false]) {
+    it(`rechaza leer con el cliente global mientras la transaccion sigue abierta (recordTransactionEnd: ${recordTransactionEnd})`, async () => {
+      const prisma = dbModuleMock({ transactions: true, recordTransactionEnd })
+        .prisma as Client;
+
+      const { calls, result } = await characterizeHandler(() =>
+        prisma.$transaction(async (tx) => {
+          await tx.cliente.count();
+
+          return attempt(() => prisma.cliente.count());
+        }),
+      );
+
+      expect(result).toBe(
+        "prisma.cliente.count usa el cliente global dentro de una transaccion: debe usar el cliente de la transaccion.",
+      );
+      expect(calls.filter((call) => "prisma" in call)).toEqual([
+        { prisma: "cliente.count", args: undefined },
+      ]);
+    });
+  }
+
+  it("rechaza abrir otra transaccion con el cliente global", async () => {
+    const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
+      .prisma as Client;
+
+    const { result } = await characterizeHandler(() =>
+      prisma.$transaction(() => attempt(() => prisma.$transaction(async () => 1))),
+    );
+
+    expect(result).toContain("prisma.$transaction usa el cliente global dentro de una transaccion");
+  });
+
+  it("al terminar la transaccion, con commit o con error, el cliente global vuelve a leer", async () => {
+    const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
+      .prisma as Client;
+
+    const { result } = await characterizeHandler(async () => {
+      await prisma.$transaction((tx) => tx.cliente.count());
+      await prisma
+        .$transaction(async () => {
+          throw new Error("Stock insuficiente.");
+        })
+        .catch(() => undefined);
+
+      return prisma.cliente.count();
+    });
+
+    expect(result).toBe(GENERATED_COUNT);
+  });
+
+  it("cada caso empieza sin transacciones abiertas aunque el anterior dejara una pendiente", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+
+    await characterizeHandler(async () => {
+      void prisma.$transaction(() => new Promise<never>(() => {}));
+    });
+
+    const { result } = await characterizeHandler(() => prisma.cliente.count());
+
+    expect(result).toBe(GENERATED_COUNT);
+  });
+});
+
 describe("SQL crudo y bloqueos de fila", () => {
   type RawClient = {
     $queryRaw: (query: unknown) => Promise<unknown>;

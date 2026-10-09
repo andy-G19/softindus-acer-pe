@@ -425,6 +425,9 @@ type HarnessState = {
   pathname: string;
   search: string;
   params: Record<string, string | string[]>;
+  // Transacciones simuladas abiertas: con alguna abierta, el cliente global no
+  // se puede usar (ver rejectGlobalClientInTransaction).
+  openTransactions: number;
 };
 
 const state: HarnessState = {
@@ -435,6 +438,7 @@ const state: HarnessState = {
   pathname: "/",
   search: "",
   params: {},
+  openTransactions: 0,
 };
 
 export class AuthRejected extends Error {
@@ -486,6 +490,18 @@ function overrideFor(key: string, args: PrismaArgs): { value: unknown } | undefi
   return { value: typeof override === "function" ? override(args) : override };
 }
 
+// Con una transaccion abierta, todo debe pasar por su cliente (grupo 1 de
+// fixes). El cliente global usaria otra conexion del pool, fuera de la
+// transaccion: no ve lo que esta escribio, no queda protegido por sus
+// bloqueos y, con un pool de una conexion, espera hasta agotar el plazo.
+function rejectGlobalClientInTransaction(operation: string) {
+  if (state.openTransactions > 0) {
+    throw new Error(
+      `${operation} usa el cliente global dentro de una transaccion: debe usar el cliente de la transaccion.`,
+    );
+  }
+}
+
 function createModelDelegate(modelName: string, inTransaction: boolean) {
   return new Proxy(
     {},
@@ -493,6 +509,10 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
       get(_target, method) {
         if (typeof method === "symbol" || method === "then") {
           return undefined;
+        }
+
+        if (!inTransaction) {
+          rejectGlobalClientInTransaction(`prisma.${modelName}.${method}`);
         }
 
         const isWrite = inTransaction && WRITE_METHODS.has(method);
@@ -546,6 +566,30 @@ async function recordRawQuery(query: unknown) {
   return override ? override.value : [];
 }
 
+async function runTransaction(
+  callback: (tx: object) => Promise<unknown>,
+  recordTransactionEnd: boolean,
+) {
+  if (!recordTransactionEnd) {
+    return callback(transactionDouble);
+  }
+
+  try {
+    const result = await callback(transactionDouble);
+
+    state.calls.push({ effect: "prisma.$transaction:commit", args: null });
+
+    return result;
+  } catch (error) {
+    state.calls.push({
+      effect: "prisma.$transaction:rollback",
+      args: error instanceof Error ? error.message : String(error),
+    });
+
+    throw error;
+  }
+}
+
 type PrismaDoubleOptions = {
   // El cliente admite $transaction (solo lo piden los route handlers).
   transactions: boolean;
@@ -566,26 +610,16 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
         }
 
         if (property === "$transaction" && options.transactions) {
+          rejectGlobalClientInTransaction("prisma.$transaction");
+
           return async (callback: (tx: object) => Promise<unknown>) => {
             state.calls.push({ effect: "prisma.$transaction", args: null });
-
-            if (!options.recordTransactionEnd) {
-              return callback(transactionDouble);
-            }
+            state.openTransactions += 1;
 
             try {
-              const result = await callback(transactionDouble);
-
-              state.calls.push({ effect: "prisma.$transaction:commit", args: null });
-
-              return result;
-            } catch (error) {
-              state.calls.push({
-                effect: "prisma.$transaction:rollback",
-                args: error instanceof Error ? error.message : String(error),
-              });
-
-              throw error;
+              return await runTransaction(callback, options.recordTransactionEnd);
+            } finally {
+              state.openTransactions -= 1;
             }
           };
         }
@@ -865,6 +899,7 @@ function resetState(pageCase: PageCase, pathname: string) {
   state.pathname = pathname;
   state.search = toSearchString(pageCase.searchParams ?? {});
   state.params = pageCase.params ?? {};
+  state.openTransactions = 0;
 }
 
 async function runPage(load: PageLoader, pageCase: PageCase) {
