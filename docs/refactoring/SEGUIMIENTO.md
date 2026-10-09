@@ -1265,11 +1265,12 @@ Pendientes fuera de alcance:
 
 ## Entrega 7 — Fachada de notificaciones
 
-Fecha: 2026-10-07. Estado: verificada en staging el 2026-10-08. 6 commits de
-`4ac6caa` a `3bef5c9` y el registro `15d6339`, publicados sobre `27342e3` junto
-con los cierres de las entregas 5 y 6 (CI #44 en verde, 2m 33s). Falta
-integrarla en `main`. Pista A: no cambia lo que ve el usuario (textos,
-severidades, toasts ni confirmaciones).
+Fecha: 2026-10-07. Estado: cerrada el 2026-10-08. 6 commits de `4ac6caa` a
+`3bef5c9` y el registro `15d6339`, publicados sobre `27342e3` junto con los
+cierres de las entregas 5 y 6 (CI #44 en verde, 2m 33s), verificados en staging
+(cierre `a9eb6f8`, CI #45 en verde) e integrados en `main` con el PR #16 (CI #46
+en verde; merge commit `e20c30a`, CI #47 en verde, 2m 5s). Pista A: no cambia lo
+que ve el usuario (textos, severidades, toasts ni confirmaciones).
 
 El criterio literal de la sección 16 («ningún módulo importa SweetAlert2 ni
 Toastify») ya se cumplía al empezar, sin que nada lo impusiera: solo los
@@ -1459,7 +1460,7 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 4 | A | Consultas fuera de las páginas, por área | Cerrada (CI #36 verde en main, staging verificado) |
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
-| 7 | A | Fachada de notificaciones | Verificada en staging (CI #44 verde, 14 de 14 URLs idénticas); falta integrar en `main` |
+| 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
