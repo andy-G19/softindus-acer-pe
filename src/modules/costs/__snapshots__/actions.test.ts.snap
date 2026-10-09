@@ -42,6 +42,15 @@ exports[`annulIndirectCostAction > anula conservando las observaciones previas y
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "cantidad_base": true,
         "costo_consumibles": true,
@@ -153,6 +162,15 @@ exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1
       },
     },
     "prisma": "costo_indirecto.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1018,6 +1036,15 @@ exports[`createIndirectCostAction > registra el costo indirecto y recalcula > ll
       },
     },
     "prisma": "costo_indirecto.create",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1927,6 +1954,15 @@ exports[`recalculateCostingAction > cantidad base en cero: el costo unitario que
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "cantidad_base": true,
         "costo_consumibles": true,
@@ -2061,6 +2097,15 @@ exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "cantidad_base": true,
         "costo_consumibles": true,
@@ -2184,6 +2229,15 @@ exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los total
       },
     },
     "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {

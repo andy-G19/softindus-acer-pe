@@ -17,7 +17,9 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
+  type PrismaCall,
 } from "@/testing/page-characterization";
 
 // Caracterizacion de las acciones de costos (entrega 6), escrita antes de
@@ -130,7 +132,24 @@ async function runAction(action: Action, actionCase: ActionCase) {
   return { calls, outcome: result };
 }
 
+// Las suites por nombre, para que las pruebas de los fixes repitan los mismos
+// casos sin copiarlos.
+const suites = new Map<string, { action: Action; cases: ActionCase[] }>();
+
+function findCase(suite: string, caseName: string) {
+  const found = suites.get(suite);
+  const actionCase = found?.cases.find((item) => item.name === caseName);
+
+  if (!found || !actionCase) {
+    throw new Error(`No existe el caso "${caseName}" en ${suite}.`);
+  }
+
+  return { action: found.action, actionCase };
+}
+
 function defineActionSuite(name: string, action: Action, cases: ActionCase[]) {
+  suites.set(name, { action, cases });
+
   describe(name, () => {
     for (const actionCase of cases) {
       it(actionCase.name, async () => {
@@ -563,3 +582,50 @@ defineActionSuite("createProfitabilityAction", createProfitabilityAction, [
     },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// H3 (grupo 1 de fixes): el recalculo bloquea el costeo antes de leer sus montos
+// ---------------------------------------------------------------------------
+
+// recalculateCostingTotals lee el costeo y sus costos indirectos, suma en
+// JavaScript y escribe el total. Si otra operacion cambia el total a la vez
+// (anular dos costos indirectos, o la mano de obra y un costo indirecto), la
+// ultima en escribir deja un total calculado con lo que leyo antes de que la
+// otra confirmara. Bloquear la fila del costeo antes de leer pone a las dos en
+// fila. Crear dos costos indirectos a la vez ya quedaba en fila por el
+// correlativo CIN, pero por accidente.
+//
+// La prueba no reproduce la carrera (no hay base de datos): fija el protocolo
+// en los 6 casos que llegan al recalculo.
+function readsCostingAmounts(call: PrismaCall) {
+  const select = (call.args as { select?: Record<string, unknown> } | undefined)?.select;
+
+  return (
+    (call.prisma === "costeo.findUnique" && select?.costo_materiales === true) ||
+    call.prisma === "costo_indirecto.findMany"
+  );
+}
+
+describe("H3: el recalculo bloquea el costeo antes de leer sus montos", () => {
+  const recalculatingCases = [
+    ["updateLaborCostAction", "actualiza la mano de obra y recalcula los totales"],
+    ["recalculateCostingAction", "recalcula con los costos indirectos vigentes"],
+    ["recalculateCostingAction", "cantidad base en cero: el costo unitario queda vacio"],
+    ["createIndirectCostAction", "registra el costo indirecto y recalcula"],
+    ["annulIndirectCostAction", "anula conservando las observaciones previas y recalcula"],
+    ["annulIndirectCostAction", "anula un costo sin observaciones"],
+  ];
+
+  for (const [suite, caseName] of recalculatingCases) {
+    it(`${suite}: ${caseName}`, async () => {
+      const { action, actionCase } = findCase(suite, caseName);
+      const { calls } = await runAction(action, actionCase);
+
+      expectRowLockedBefore(calls, {
+        table: "costeo",
+        id: COSTEO,
+        reads: readsCostingAmounts,
+      });
+    });
+  }
+});

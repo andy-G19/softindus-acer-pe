@@ -2,10 +2,11 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { toNonNegativeNumber } from "@/lib/numbers";
+import { lockCostingRow } from "@/lib/row-locks";
 
 type CostingClient = Pick<
   typeof prisma,
-  "costeo" | "costo_indirecto" | "tarea_operario"
+  "costeo" | "costo_indirecto" | "tarea_operario" | "$queryRaw"
 >;
 
 export async function calculateEstimatedLaborCost(
@@ -41,10 +42,21 @@ export async function calculateEstimatedLaborCost(
   }, 0);
 }
 
+/**
+ * Recalcula los totales del costeo desde sus componentes. Recibe el cliente de la
+ * transaccion que cambio esos componentes.
+ *
+ * Bloquea el costeo antes de leer sus montos (H3): dos operaciones que cambian el total a
+ * la vez (anular dos costos indirectos, o la mano de obra y un costo indirecto) quedan en
+ * fila, y la segunda suma lo que confirmo la primera. Sin el bloqueo, la ultima en escribir
+ * dejaba un total calculado con datos viejos.
+ */
 export async function recalculateCostingTotals(
   client: CostingClient,
   idCosteo: string,
 ) {
+  await lockCostingRow(client, idCosteo);
+
   const costing = await client.costeo.findUnique({
     where: {
       id_costeo: idCosteo,
