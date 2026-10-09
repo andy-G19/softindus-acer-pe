@@ -474,6 +474,18 @@ function defaultWriteResult(method: string, args: PrismaArgs) {
   return args?.data ?? null;
 }
 
+// Resultado que el caso fija para una clave ("modelo.metodo" o "$queryRaw"),
+// si la fija. Una funcion recibe los argumentos de la llamada.
+function overrideFor(key: string, args: PrismaArgs): { value: unknown } | undefined {
+  if (!Object.prototype.hasOwnProperty.call(state.data, key)) {
+    return undefined;
+  }
+
+  const override = state.data[key];
+
+  return { value: typeof override === "function" ? override(args) : override };
+}
+
 function createModelDelegate(modelName: string, inTransaction: boolean) {
   return new Proxy(
     {},
@@ -496,10 +508,10 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
 
           state.calls.push({ prisma: key, args });
 
-          if (Object.prototype.hasOwnProperty.call(state.data, key)) {
-            const override = state.data[key];
+          const override = overrideFor(key, args);
 
-            return typeof override === "function" ? override(args) : override;
+          if (override) {
+            return override.value;
           }
 
           if (isWrite) {
@@ -511,6 +523,27 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
       },
     },
   );
+}
+
+// SQL crudo del cliente de una transaccion (grupo 1 de fixes: bloqueos de
+// fila). No se ejecuta: se registra el texto, con los espacios normalizados y
+// los parametros como $1, y sus valores. Devuelve [] salvo que el caso fije
+// la clave "$queryRaw".
+async function recordRawQuery(query: unknown) {
+  if (!(query instanceof Prisma.Sql)) {
+    throw new Error("El arnes solo admite prisma.$queryRaw con Prisma.sql.");
+  }
+
+  const args = {
+    sql: query.text.replace(/\s+/g, " ").trim(),
+    values: query.values,
+  };
+
+  state.calls.push({ prisma: "$queryRaw", args });
+
+  const override = overrideFor("$queryRaw", args);
+
+  return override ? override.value : [];
 }
 
 type PrismaDoubleOptions = {
@@ -557,6 +590,16 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
           };
         }
 
+        if (property === "$queryRaw") {
+          if (!options.inTransaction) {
+            throw new Error(
+              "prisma.$queryRaw solo se admite dentro de una transaccion: fuera de ella un bloqueo de fila dura una sola sentencia y no protege nada.",
+            );
+          }
+
+          return recordRawQuery;
+        }
+
         if (property.startsWith("$")) {
           throw new Error(`prisma.${property} no esta soportado por el arnes.`);
         }
@@ -601,6 +644,10 @@ const transactionDouble = createPrismaDouble({
 // final de la transaccion registrado, el snapshot distingue una validacion o
 // un efecto hecho dentro de la transaccion de uno hecho despues. Es opcional
 // para no cambiar los snapshots de la exportacion de reportes.
+//
+// Solo el cliente de la transaccion admite `$queryRaw` (grupo 1 de fixes): un
+// bloqueo de fila tomado fuera de una transaccion no protege nada, y el doble
+// lo rechaza.
 export function dbModuleMock(
   options: { transactions?: boolean; recordTransactionEnd?: boolean } = {},
 ) {
@@ -909,6 +956,66 @@ export function expectAuthorizesBeforePrisma(calls: RecordedCall[]) {
 
   if (firstPrisma >= 0) {
     expect(firstAuthz).toBeLessThan(firstPrisma);
+  }
+}
+
+// Una lectura de un modelo (no SQL crudo ni escrituras).
+export function isPrismaRead(call: PrismaCall) {
+  const [, method] = call.prisma.split(".");
+
+  return method !== undefined && PRISMA_METHODS.has(method);
+}
+
+// Bloqueo de fila del grupo 1 de fixes: `SELECT <id> FROM aceros.<tabla>
+// WHERE <id> = $1 FOR NO KEY UPDATE`, con el id como unico valor. El modo es
+// parte del contrato: FOR UPDATE chocaria con el KEY SHARE que toma una clave
+// foranea al insertar una fila hija, y dos operaciones sobre el mismo padre
+// podrian bloquearse mutuamente.
+export function isRowLock(call: RecordedCall, table: string, id: string) {
+  if (!isPrismaCall(call) || call.prisma !== "$queryRaw") {
+    return false;
+  }
+
+  const { sql, values } = call.args as { sql: string; values: unknown[] };
+  const pattern = new RegExp(
+    `^SELECT \\w+ FROM aceros\\.${table} WHERE \\w+ = \\$1 FOR NO KEY UPDATE$`,
+  );
+
+  return pattern.test(sql) && values.length === 1 && values[0] === id;
+}
+
+// Exige el protocolo que pone en fila a dos operaciones simultaneas sobre el
+// mismo registro: la fila se bloquea antes de la primera lectura protegida y
+// la transaccion sigue abierta hasta la ultima. Una prueba unitaria no puede
+// reproducir la carrera; fija que el protocolo se cumple.
+export function expectRowLockedBefore(
+  calls: RecordedCall[],
+  {
+    table,
+    id,
+    reads,
+  }: { table: string; id: string; reads: (call: PrismaCall) => boolean },
+) {
+  const guarded = calls.flatMap((call, index) =>
+    isPrismaCall(call) && reads(call) ? [index] : [],
+  );
+  const lock = calls.findIndex((call) => isRowLock(call, table, id));
+
+  expect(guarded.length, "el caso no llega a ninguna lectura protegida").toBeGreaterThan(0);
+  expect(lock, `no se bloquea la fila ${id} de ${table}`).toBeGreaterThanOrEqual(0);
+  expect(lock, `la fila ${id} de ${table} se bloquea despues de leerla`).toBeLessThan(
+    guarded[0],
+  );
+
+  const end = calls.findIndex(
+    (call, index) =>
+      index > lock && "effect" in call && call.effect.startsWith("prisma.$transaction:"),
+  );
+
+  if (end >= 0) {
+    expect(end, "la transaccion termina antes de la ultima lectura protegida").toBeGreaterThan(
+      guarded[guarded.length - 1],
+    );
   }
 }
 

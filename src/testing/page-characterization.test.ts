@@ -10,8 +10,11 @@ import {
   dbModuleMock,
   decimalSnapshotSerializer,
   describeNavigationError,
+  expectRowLockedBefore,
   generateResult,
   generateRow,
+  isPrismaRead,
+  isRowLock,
   normalizeHtml,
   normalizeIntlStrings,
   parsePrismaSchema,
@@ -417,6 +420,104 @@ describe("dbModuleMock con transacciones", () => {
       { effect: "prisma.$transaction", args: null },
       { prisma: "cliente.count", args: undefined },
     ]);
+  });
+});
+
+describe("SQL crudo y bloqueos de fila", () => {
+  type RawClient = {
+    $queryRaw: (query: unknown) => Promise<unknown>;
+  };
+  type Client = RawClient & {
+    $transaction: <T>(callback: (tx: RawClient) => Promise<T>) => Promise<T>;
+  };
+
+  const ID = "CLI00000001";
+  const lockSql = (table: string, mode = "FOR NO KEY UPDATE") => ({
+    prisma: "$queryRaw",
+    args: {
+      sql: `SELECT id_${table} FROM aceros.${table} WHERE id_${table} = $1 ${mode}`,
+      values: [ID],
+    },
+  });
+  const read = { prisma: "cliente.findUnique", args: { where: { id_cliente: ID } } };
+  const start = { effect: "prisma.$transaction", args: null };
+  const commit = { effect: "prisma.$transaction:commit", args: null };
+  const protectedRead = { table: "cliente", id: ID, reads: isPrismaRead };
+
+  it("registra el SQL de la transaccion normalizado, con sus valores, y devuelve [] o lo que fije el caso", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+    const lock = () =>
+      prisma.$transaction((tx) =>
+        tx.$queryRaw(Prisma.sql`
+          SELECT id_cliente
+          FROM aceros.cliente
+          WHERE id_cliente = ${ID}
+          FOR NO KEY UPDATE
+        `),
+      );
+
+    const { calls, result } = await characterizeHandler(lock);
+
+    expect(result).toEqual([]);
+    expect(calls).toEqual([start, lockSql("cliente")]);
+
+    const fixed = await characterizeHandler(lock, {
+      $queryRaw: (args) => [{ fila: args?.values }],
+    });
+
+    expect(fixed.result).toEqual([{ fila: [ID] }]);
+  });
+
+  it("rechaza el SQL crudo fuera de una transaccion y el que no viene de Prisma.sql", async () => {
+    const readOnly = dbModuleMock().prisma as Client;
+    const transactional = dbModuleMock({ transactions: true }).prisma as Client;
+
+    expect(() => readOnly.$queryRaw).toThrow("solo se admite dentro de una transaccion");
+    expect(() => transactional.$queryRaw).toThrow("solo se admite dentro de una transaccion");
+    await expect(
+      transactional.$transaction((tx) => tx.$queryRaw("SELECT 1")),
+    ).rejects.toThrow("solo admite prisma.$queryRaw con Prisma.sql");
+  });
+
+  it("isPrismaRead distingue las lecturas de las escrituras y del SQL crudo", () => {
+    expect(isPrismaRead(read)).toBe(true);
+    expect(isPrismaRead({ prisma: "cliente.update", args: {} })).toBe(false);
+    expect(isPrismaRead(lockSql("cliente"))).toBe(false);
+  });
+
+  it("isRowLock exige la tabla, el id y FOR NO KEY UPDATE", () => {
+    expect(isRowLock(lockSql("cliente"), "cliente", ID)).toBe(true);
+    expect(isRowLock(lockSql("pedido"), "cliente", ID)).toBe(false);
+    expect(isRowLock(lockSql("cliente"), "cliente", "CLI00000002")).toBe(false);
+    expect(isRowLock(lockSql("cliente", "FOR UPDATE"), "cliente", ID)).toBe(false);
+    expect(isRowLock(read, "cliente", ID)).toBe(false);
+  });
+
+  it("expectRowLockedBefore acepta el bloqueo antes de leer, con la transaccion abierta", () => {
+    expect(() =>
+      expectRowLockedBefore([start, lockSql("cliente"), read, read, commit], protectedRead),
+    ).not.toThrow();
+  });
+
+  it("expectRowLockedBefore rechaza leer sin bloqueo, bloquear despues, cerrar antes o no leer", () => {
+    expect(() => expectRowLockedBefore([read, start, commit], protectedRead)).toThrow(
+      "no se bloquea la fila",
+    );
+    expect(() =>
+      expectRowLockedBefore([start, read, lockSql("cliente"), commit], protectedRead),
+    ).toThrow("se bloquea despues de leerla");
+    expect(() =>
+      expectRowLockedBefore(
+        [start, lockSql("cliente"), read, commit, start, read, commit],
+        protectedRead,
+      ),
+    ).toThrow("la transaccion termina antes");
+    expect(() =>
+      expectRowLockedBefore([start, lockSql("cliente", "FOR UPDATE"), read], protectedRead),
+    ).toThrow("no se bloquea la fila");
+    expect(() => expectRowLockedBefore([start, lockSql("cliente")], protectedRead)).toThrow(
+      "ninguna lectura protegida",
+    );
   });
 });
 
