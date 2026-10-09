@@ -30,3 +30,12 @@ export async function lockCostingRow(tx: RowLockClient, idCosteo: string) {
     FOR NO KEY UPDATE
   `);
 }
+
+export async function lockWorkOrderRow(tx: RowLockClient, idOrdenTrabajo: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_orden_trabajo
+    FROM aceros.orden_trabajo
+    WHERE id_orden_trabajo = ${idOrdenTrabajo}
+    FOR NO KEY UPDATE
+  `);
+}

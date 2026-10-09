@@ -18,6 +18,7 @@ import {
   describeNavigationError,
   expectAuthorizesBeforePrisma,
   expectRowLockedBefore,
+  isPrismaRead,
   type DataOverrides,
   type PrismaCall,
 } from "@/testing/page-characterization";
@@ -626,6 +627,35 @@ describe("H3: el recalculo bloquea el costeo antes de leer sus montos", () => {
         id: COSTEO,
         reads: readsCostingAmounts,
       });
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// H4 (grupo 1 de fixes): generar el costeo decide con la orden bloqueada
+// ---------------------------------------------------------------------------
+
+// Generar el costeo comprobaba fuera de la transaccion si la orden ya tenia
+// uno: con un doble envio, los dos pasaban la comprobacion y el correlativo
+// COS los ponia en fila sin que ninguno volviera a mirar, y la orden quedaba
+// con dos costeos. Ahora la orden se bloquea antes de la primera lectura y
+// todo (la comprobacion, la orden, la mano de obra y la creacion) ocurre en
+// la misma transaccion: el segundo envio espera y encuentra el costeo del
+// primero.
+describe("H4: generar el costeo decide con la orden bloqueada", () => {
+  const casesWithWorkOrder = (suites.get("createCostingFromWorkOrderAction")?.cases ?? []).filter(
+    (actionCase) => actionCase.form.id_orden_trabajo.trim() !== "",
+  );
+
+  it("cubre los 9 casos que llegan a la base", () => {
+    expect(casesWithWorkOrder).toHaveLength(9);
+  });
+
+  for (const actionCase of casesWithWorkOrder) {
+    it(actionCase.name, async () => {
+      const { calls } = await runAction(createCostingFromWorkOrderAction, actionCase);
+
+      expectRowLockedBefore(calls, { table: "orden_trabajo", id: OT, reads: isPrismaRead });
     });
   }
 });
