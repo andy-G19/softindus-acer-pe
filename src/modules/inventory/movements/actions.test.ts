@@ -7,6 +7,8 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaRead,
   type DataOverrides,
   type PrismaArgs,
 } from "@/testing/page-characterization";
@@ -22,10 +24,10 @@ import {
 // su final, el correlativo, la bitacora, las revalidaciones y el resultado:
 // el estado devuelto, la redireccion o el error relanzado.
 //
-// Hoy la orden asociada solo se comprueba que exista: los casos de orden
-// anulada, finalizada o con materiales cerrados terminan en una salida
-// registrada. Sus datos ya traen el estado y el cierre de la orden para que
-// el fix de H9 cambie su resultado a proposito.
+// Hasta el fix de H9 la orden asociada solo se comprobaba, fuera de la
+// transaccion, que existiera, y las ordenes anuladas, finalizadas o con los
+// materiales cerrados recibian la salida. Desde H9 la transaccion bloquea la
+// orden y rechaza esos casos en el campo de la orden.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -115,7 +117,12 @@ async function runAction(actionCase: ActionCase) {
   return { calls, outcome: result };
 }
 
+// Los casos por nombre, para que las pruebas del fix los repitan sin copiarlos.
+const cases: ActionCase[] = [];
+
 function defineCases(actionCases: ActionCase[]) {
+  cases.push(...actionCases);
+
   describe("createInventoryOutputAction", () => {
     for (const actionCase of actionCases) {
       it(actionCase.name, async () => {
@@ -184,7 +191,7 @@ defineCases([
     form: form({ id_material: " ", cantidad: "0", motivo: "ab" }),
   },
   {
-    name: "la orden no existe: error en el campo de la orden, sin transaccion",
+    name: "la orden no existe: error en el campo de la orden y se revierte",
     form: form({ id_orden_trabajo: ` ${OT} ` }),
     data: { "orden_trabajo.findUnique": null },
   },
@@ -217,7 +224,7 @@ defineCases([
     },
   },
   {
-    name: "orden anulada: hoy se registra la salida",
+    name: "orden anulada: rechaza la salida en el campo de la orden",
     form: form({ id_orden_trabajo: OT }),
     data: {
       "orden_trabajo.findUnique": workOrderRow({ estado: "anulada" }),
@@ -225,7 +232,7 @@ defineCases([
     },
   },
   {
-    name: "orden finalizada: hoy se registra la salida",
+    name: "orden finalizada: rechaza la salida en el campo de la orden",
     form: form({ id_orden_trabajo: OT }),
     data: {
       "orden_trabajo.findUnique": workOrderRow({ estado: "finalizada" }),
@@ -233,7 +240,7 @@ defineCases([
     },
   },
   {
-    name: "orden con materiales cerrados: hoy se registra la salida",
+    name: "orden con materiales cerrados: rechaza la salida en el campo de la orden",
     form: form({ id_orden_trabajo: OT }),
     data: {
       "orden_trabajo.findUnique": workOrderRow({
@@ -253,3 +260,60 @@ defineCases([
     },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// H9 (grupo 1 de fixes): la salida a una orden aplica la regla de la entrega
+// ---------------------------------------------------------------------------
+
+// La salida solo comprobaba, fuera de la transaccion, que la orden existiera:
+// aceptaba ordenes anuladas, finalizadas o con los materiales cerrados, y una
+// anulacion simultanea podia colarse. Ahora, si hay orden, la transaccion la
+// bloquea antes de leerla y aplica la misma regla que la entrega desde la
+// orden, con el error en el campo de la orden y sin escribir nada.
+function findCase(name: string) {
+  const actionCase = cases.find((item) => item.name === name);
+
+  if (!actionCase) {
+    throw new Error(`No existe el caso "${name}".`);
+  }
+
+  return actionCase;
+}
+
+describe("H9: la salida a una orden decide con la orden bloqueada", () => {
+  const withWorkOrder = cases.filter((actionCase) => actionCase.form.id_orden_trabajo.trim() !== "");
+
+  it("cubre los 5 casos con orden", () => {
+    expect(withWorkOrder).toHaveLength(5);
+  });
+
+  for (const actionCase of withWorkOrder) {
+    it(actionCase.name, async () => {
+      const { calls } = await runAction(actionCase);
+
+      expectRowLockedBefore(calls, { table: "orden_trabajo", id: OT, reads: isPrismaRead });
+    });
+  }
+});
+
+describe("H9: rechaza la salida a una orden que ya no admite material", () => {
+  const rejected = [
+    ["orden anulada: rechaza la salida en el campo de la orden", "No se puede entregar material a una orden anulada o finalizada."],
+    ["orden finalizada: rechaza la salida en el campo de la orden", "No se puede entregar material a una orden anulada o finalizada."],
+    ["orden con materiales cerrados: rechaza la salida en el campo de la orden", "Los materiales de esta orden ya fueron cerrados."],
+  ];
+
+  for (const [caseName, message] of rejected) {
+    it(caseName, async () => {
+      const { calls, outcome } = await runAction(findCase(caseName));
+      const writes = calls.filter(
+        (call) => "prisma" in call && /\.(create|update)$/.test(call.prisma),
+      );
+
+      expect(outcome).toEqual({
+        estado: { error: message, fieldErrors: { id_orden_trabajo: [message] } },
+      });
+      expect(writes).toEqual([]);
+    });
+  }
+});

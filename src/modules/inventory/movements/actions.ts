@@ -10,6 +10,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 
 type MaterialLockRow = {
   id_material: string;
@@ -36,10 +37,12 @@ async function requireOutputPermission() {
   return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 }
 
-class InventoryOutputValidationError extends Error {
-  field: "id_material" | "cantidad";
+type InventoryOutputField = "id_material" | "id_orden_trabajo" | "cantidad";
 
-  constructor(field: "id_material" | "cantidad", message: string) {
+class InventoryOutputValidationError extends Error {
+  field: InventoryOutputField;
+
+  constructor(field: InventoryOutputField, message: string) {
     super(message);
     this.field = field;
   }
@@ -66,30 +69,50 @@ export async function createInventoryOutputAction(
 
   const data = parsed.data;
 
-  if (data.id_orden_trabajo) {
-    const workOrder = await prisma.orden_trabajo.findUnique({
-      where: {
-        id_orden_trabajo: data.id_orden_trabajo,
-      },
-      select: {
-        id_orden_trabajo: true,
-      },
-    });
-
-    if (!workOrder) {
-      return {
-        error: "La orden de trabajo seleccionada no existe.",
-        fieldErrors: {
-          id_orden_trabajo: ["La orden de trabajo seleccionada no existe."],
-        },
-      };
-    }
-  }
-
   const cantidad = new Prisma.Decimal(data.cantidad);
 
   try {
     await prisma.$transaction(async (tx) => {
+      // H9: la salida a una orden aplica la misma regla que la entrega desde la orden, con
+      // la orden bloqueada antes de leerla y antes del correlativo y del material (el
+      // mismo orden de bloqueos que la entrega). Antes solo se comprobaba, fuera de la
+      // transaccion, que la orden existiera.
+      if (data.id_orden_trabajo) {
+        await lockWorkOrderRow(tx, data.id_orden_trabajo);
+
+        const workOrder = await tx.orden_trabajo.findUnique({
+          where: {
+            id_orden_trabajo: data.id_orden_trabajo,
+          },
+          select: {
+            id_orden_trabajo: true,
+            estado: true,
+            fecha_cierre_materiales: true,
+          },
+        });
+
+        if (!workOrder) {
+          throw new InventoryOutputValidationError(
+            "id_orden_trabajo",
+            "La orden de trabajo seleccionada no existe.",
+          );
+        }
+
+        if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
+          throw new InventoryOutputValidationError(
+            "id_orden_trabajo",
+            "No se puede entregar material a una orden anulada o finalizada.",
+          );
+        }
+
+        if (workOrder.fecha_cierre_materiales) {
+          throw new InventoryOutputValidationError(
+            "id_orden_trabajo",
+            "Los materiales de esta orden ya fueron cerrados.",
+          );
+        }
+      }
+
       const idMovimiento = await getNextCorrelativeId(tx, {
         codigoEntidad: "movimiento_inventario",
         prefijo: "MVI",
