@@ -1448,11 +1448,12 @@ cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
 
 ## Grupo 1 de fixes — Reglas dentro de la transacción y bloqueo de fila
 
-Fecha: 2026-10-09. Estado: verificado en staging el 2026-10-09. 12 commits de
-`d421805` a `bab22eb` y el registro `381de8c`, publicados sobre `40de6b7` (CI #48
-en verde, 2m 29s), con foto del «antes» tomada antes del push: las tres carreras
-se reprodujeron en staging y ninguna se repitió después. Falta integrarlo en
-`main`. Es el primero de los cuatro
+Fecha: 2026-10-09. Estado: cerrado el 2026-10-09. 12 commits de `d421805` a
+`bab22eb` y el registro `381de8c`, publicados sobre `40de6b7` (CI #48 en verde,
+2m 29s), con foto del «antes» tomada antes del push: las tres carreras se
+reprodujeron en staging y ninguna se repitió después. Cierre `bd929bf` (CI #49
+en verde), integrado en `main` con el PR #17 (CI #50 en verde; merge commit
+`8325194`, CI #51 en verde, 2m 32s). Es el primero de los cuatro
 grupos de fixes del bloque de estabilización (ver la secuencia): corrige H1, H3
 y H4 de la entrega 6 y tres hallazgos nuevos de su auditoría, H8, H9 y H10.
 Cada `fix` cambia el comportamiento solo bajo concurrencia, salvo H9, que
@@ -1620,7 +1621,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
-| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Verificado en staging (CI #48 verde; H3, H1 y H4 reproducidos antes y no después); falta integrar en `main` |
+| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Pendiente |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
