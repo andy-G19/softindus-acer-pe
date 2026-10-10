@@ -1446,10 +1446,137 @@ caracterización. No se probaron otros roles: la entrega no cambia permisos,
 rutas ni acciones. Tampoco se ejecutaron acciones que escriben: sus claves no
 cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
 
+## Grupo 1 de fixes — Reglas dentro de la transacción y bloqueo de fila
+
+Fecha: 2026-10-09. Estado: hecho en local, con 12 commits de `d421805` a
+`bab22eb` y este registro sobre `40de6b7`, sin push. Falta la foto del «antes»
+en staging, la publicación, el CI y la verificación. Es el primero de los cuatro
+grupos de fixes del bloque de estabilización (ver la secuencia): corrige H1, H3
+y H4 de la entrega 6 y tres hallazgos nuevos de su auditoría, H8, H9 y H10.
+Cada `fix` cambia el comportamiento solo bajo concurrencia, salvo H9, que
+cambia lo que ve el usuario.
+
+| Hallazgo | Defecto | Arreglo |
+|---|---|---|
+| H3 | `recalculateCostingTotals` leía el costeo y sus costos indirectos, sumaba en JavaScript y escribía el total sin bloquear el costeo. Corrige la descripción de la entrega 6: crear dos costos indirectos a la vez no chocaba, porque el correlativo `CIN` los ponía en fila por accidente; sí chocaban anular ‖ anular, crear ‖ anular, mano de obra ‖ costo indirecto y recalcular ‖ cualquiera. | Bloquea el costeo antes de leer sus montos. Los montos no cambian. |
+| H4 | Generar un costeo comprobaba fuera de la transacción si la orden ya tenía uno: un doble envío creaba dos. | La generación entera en una transacción que empieza bloqueando la orden; el segundo envío encuentra el costeo del primero y redirige a él. |
+| H1 | Los 7 casos de uso de órdenes de trabajo validaban antes de abrir la transacción: anular ‖ entregar dejaba una orden anulada con salidas, un doble envío de la devolución devolvía dos veces (stock fantasma), uno de la entrega pendiente entregaba dos veces y el cierre podía validar contra lo entregado antes de una entrega simultánea. | Cada caso de uso bloquea la orden y lee y valida dentro. |
+| H10 | Dos anulaciones simultáneas del mismo costo indirecto pasaban las dos la comprobación de `[ANULADO]`: dos registros en la bitácora. | Bloquea el costo indirecto antes de leerlo. |
+| H8 | Las acciones de avance validaban fuera de una transacción y actualizar escribía el avance, el estado de la orden y la bitácora por separado: doble juego de etapas, una orden anulada que volvía a «en_proceso» o «pendiente», dos etapas terminadas a la vez que no finalizaban la orden, doble reasignación y actualizaciones a medias. | Cada acción bloquea la orden; actualizar es atómica. |
+| H9 | La salida de inventario solo comprobaba que la orden existiera: aceptaba órdenes anuladas, finalizadas o con los materiales cerrados, sin pasar por su conciliación. El desplegable excluía «cancelada», un estado que no existe, y ofrecía las anuladas. | Bloquea la orden y aplica la regla de la entrega desde la orden, con el error en el campo de la orden; el desplegable ofrece solo las órdenes que admiten material (decisión del responsable). |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| d421805 | test | El doble de Prisma admite `$queryRaw` solo dentro de una transacción y registra el SQL; `isRowLock` y `expectRowLockedBefore` fijan el protocolo. |
+| 7d691c7 | fix | H3: `lockCostingRow` al inicio de `recalculateCostingTotals`. |
+| b7e5554 | fix | H4: `createCostingInTransaction` con `lockWorkOrderRow`. |
+| c9aa13d | test | El doble rechaza el cliente global mientras haya una transacción abierta. |
+| e47b009 | fix | H1: anular y finalizar. |
+| af71df7 | fix | H1: entregar lo pendiente, entrega adicional y devolver. |
+| 905ae40 | fix | H1: cerrar y reabrir materiales. |
+| 93f0fe7 | fix | H10: `lockIndirectCostRow` en la anulación. |
+| fbcfd25 | test | 23 casos de las acciones de avance; opción `writesOutsideTransaction`, que solo activa ese archivo. |
+| df67332 | fix | H8: generar, actualizar y reasignar avances. |
+| 6d65c41 | test | 11 casos de la salida de inventario. |
+| bab22eb | fix | H9: la salida a una orden y el desplegable. |
+
+Diseño:
+
+- Un solo patrón: dentro de la transacción, bloquear la fila padre con
+  `SELECT … FOR NO KEY UPDATE` antes de leer lo que decide. En READ COMMITTED,
+  después de esperar el candado, cada sentencia ve lo que la otra confirmó. Las
+  ayudas viven en `src/lib/row-locks.ts`: orden, costeo y costo indirecto.
+- `FOR NO KEY UPDATE` y no `FOR UPDATE`: insertar una fila hija toma `FOR KEY
+  SHARE` sobre el padre para proteger la clave foránea, y `FOR UPDATE` choca con
+  ese candado. Crear un costo indirecto contra actualizar la mano de obra, o una
+  entrega contra una salida de inventario a la misma orden, podían bloquearse
+  mutuamente. `FOR NO KEY UPDATE` choca consigo mismo y con cualquier `UPDATE`
+  del padre, que son las operaciones que hay que poner en fila.
+- Orden de candados: primero la orden o el costo indirecto; después el
+  correlativo, el material y el costeo. Ningún camino los toma al revés.
+- Actualizar y reasignar un avance reciben el avance: leen solo su
+  `id_orden_trabajo`, que ningún código cambia, y después bloquean la orden.
+- Descartadas: `UPDATE … SET costo_total = (SELECT SUM(…))`, porque en READ
+  COMMITTED la subconsulta conserva la foto anterior al candado y la aritmética
+  pasaría de doble a decimal; `{ increment }`, que sirve para diferencias y no
+  para un total que se recalcula; SERIALIZABLE, que exige reintentar
+  (entrega 11); y un índice único en `costeo.id_orden_trabajo` para H4, que
+  exige una migración y revisar si producción ya tiene duplicados (pendiente).
+
+Evidencia:
+
+1. Prueba roja primero en cada `fix`, sobre los mismos casos de la
+   caracterización: el protocolo con `expectRowLockedBefore` (6 casos de H3, 9
+   de H4, 52 de H1, 5 de H10, 18 de H8 y 5 de H9), la atomicidad de actualizar
+   un avance (4), los rechazos de H9 (3) y su desplegable (1). Todas fallaban
+   antes del arreglo por la razón esperada: no había bloqueo, había escrituras
+   fuera de la transacción o se registraba la salida.
+2. Snapshots verificados con scripts distintos de los que editaron
+   (`tmp/g1-diff`, ignorado): solo cambian snapshots de resultado en los 3
+   rechazos de H9; cada snapshot de llamadas cambiado es idéntico a `HEAD` al
+   quitar la transacción, el bloqueo y las marcas; los 52 de H1 caen
+   exactamente en sus 7 suites; las escrituras marcadas `fueraDeTransaccion`
+   pasan de 8 a 0; en la página de salidas solo cambia el filtro y el HTML no.
+   Los verificadores se probaron alterando snapshots a propósito.
+3. 86 mutaciones distintas: 85 detectadas al primer intento y una que
+   sobrevivió en H4 (leer el costeo existente con el cliente global dentro de
+   la transacción) hasta que la guarda de `c9aa13d` la detectó.
+
+| Mutación | Resultado |
+|---|---|
+| Quitar un bloqueo, en cada caso de uso | Fallan su prueba de protocolo y sus snapshots |
+| Bloquear después de leer | Ídem |
+| `FOR UPDATE` en lugar de `FOR NO KEY UPDATE`, u otro id | Ídem |
+| Leer con el cliente global dentro de la transacción | Falla desde `c9aa13d` |
+| Bitácora o escritura de un avance fuera de la transacción | Falla la prueba de atomicidad |
+| Aceptar en la salida una orden anulada, finalizada o cerrada, o el error en otro campo | Fallan las pruebas de H9 |
+| Volver a «cancelada» o quitar el filtro de cierre en el desplegable | Falla la prueba de la consulta y la página |
+| Arnés: SQL crudo fuera de la transacción, `return` sin `await`, contador sin reiniciar | Fallan sus pruebas |
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.396, 1.402, 1.412, 1.417, 1.431, 1.460, 1.476, 1.482, 1.507,
+1.531, 1.542 y 1.552 pruebas según el commit; 98 archivos de prueba al final. El
+código de producción cambia en 10 archivos de `src` (+733 y −517; +296 y −80
+sin contar la sangría de los bloques que entraron a la transacción); las
+pruebas y el arnés, +1.458 y −25, y los snapshots, +3.304 y −60. `npm run
+refactor:inventory` analiza 539 archivos y mantiene 127 páginas, 136
+formularios y 48 archivos de acciones: el grupo no agregó superficies
+`"use server"`. `work-order-progress/actions.ts` (CRLF) pasa de 427 a 485
+líneas.
+
+### Publicación, CI y verificación en staging
+
+Pendiente. Guion previsto: antes del push, con ADMIN y peticiones de a dos como
+máximo, foto de solo lectura de `COS00000002`, `MAT00000006` y `OTR00000006`, y,
+con autorización del responsable porque escribe datos de prueba, intentar
+reproducir H3 (anular a la vez dos costos indirectos del mismo costeo), H1
+(devolver dos veces a la vez) y H4 (generar dos veces a la vez el costeo de una
+orden nueva). Después del push y del CI: repetir, esperar 0 anomalías y el
+rechazo de la segunda petición, y comprobar H9 en la pantalla de salidas.
+
+Límites y pendientes:
+
+- Las pruebas unitarias fijan el protocolo, no la carrera: la evidencia de la
+  carrera es la de staging y la integración con una base desechable sigue en la
+  entrega 11.
+- Al grupo 2: H2 (el kárdex de entregas y devoluciones toma el stock anterior
+  de una lectura sin bloqueo del material; el bloqueo de la orden no lo
+  cubre), H5, H6 y H7.
+- La segunda petición de una carrera recibe el error de negocio, que hoy se ve
+  como la página de error genérica porque estas acciones lanzan (pista B).
+- Generar avances no deja registro en la bitácora (visto al caracterizar).
+- Índice único para un costeo por orden: migración, previa revisión de
+  duplicados.
+- Una salida de inventario a una orden sigue sin pasar por la conciliación de
+  la orden; quitar esa asociación es de la pista B.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
 Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuario.
+Desde el 2026-10-09, entre la entrega 7 y la pista B va un bloque de
+estabilización: los defectos conservados por las entregas anteriores, en cuatro
+grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 
 | # | Pista | Entrega | Estado |
 |---|---|---|---|
@@ -1461,6 +1588,10 @@ Pista A: estructura sin cambios de comportamiento. Pista B: experiencia de usuar
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
+| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Hecho en local (12 commits y registro, sin push); falta staging |
+| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Pendiente |
+| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
+| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
@@ -1487,13 +1618,15 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 124 / 124 | 7 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 95 / 1.390 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 98 / 1.552 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
 | Acciones de órdenes de trabajo y costos caracterizadas | 0 / 15 | 15 / 15 | 6 |
 | Fórmulas de costeo repetidas entre el detalle y las acciones | 3 | 0 | 6 |
 | Cargas de `usuario` completo en órdenes de trabajo y costos | 5 | 0 | 6 |
+| Operaciones que leen, validan y escriben una orden, un costeo o un costo indirecto sin bloquear su fila | 14 | 0 | G1 |
+| Acciones de avance y salida de inventario caracterizadas | 0 / 4 | 4 / 4 | G1 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -1533,6 +1666,17 @@ contar declaraciones `import` de `sweetalert2` o `react-toastify`: eran y son 2
 regla de ESLint lo impone. Las demás no cambian: páginas con Prisma directo 0,
 `auth()` directo 0 y copias locales de conversión y formato 0, medidos de nuevo.
 
+Actualizado en el grupo 1 de fixes (2026-10-09) sobre `bab22eb`: pruebas 98 /
+1.552 y dos filas nuevas medidas sobre `40de6b7`, su línea base: 14 operaciones
+decidían sin bloquear su fila (los 7 casos de uso de órdenes de trabajo, el
+recálculo y la generación del costeo, la anulación de un costo indirecto, las 3
+acciones de avance y la salida de inventario) y ninguna de esas 4 acciones tenía
+pruebas. Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0 e `import` de las librerías de
+notificaciones 2, medidos de nuevo. Los tres archivos más grandes de `src` son
+pruebas y el arnés (1.156, 1.148 y 901 líneas); los de producción no cambian
+(696, 643 y 614).
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -1547,6 +1691,10 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
   cuenta declaraciones `import` de `sweetalert2` o `react-toastify`, también
   por subruta: las pruebas nombran ambas librerías en `vi.mock` y un `grep` de
   menciones da 6 archivos.
+- Las operaciones sin bloqueo cuentan las funciones que leen un registro,
+  validan con lo leído y escriben sobre él o sus hijos. Desde el grupo 1 cada
+  una llama a una ayuda de `lib/row-locks.ts` dentro de su transacción: 14
+  llamadas en el código de producción, una por operación.
 - Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
   `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
   columna `usuario` dentro de un `select`, que no cargan la fila completa.
