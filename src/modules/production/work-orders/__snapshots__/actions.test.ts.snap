@@ -10,6 +10,19 @@ exports[`annulWorkOrderAction > anula la orden > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -25,10 +38,6 @@ exports[`annulWorkOrderAction > anula la orden > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -88,6 +97,19 @@ exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consult
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        " OTR00000007 ",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -103,10 +125,6 @@ exports[`annulWorkOrderAction > el id no se recorta: viaja tal cual a la consult
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -166,6 +184,19 @@ exports[`annulWorkOrderAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -181,6 +212,10 @@ exports[`annulWorkOrderAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -197,6 +232,19 @@ exports[`annulWorkOrderAction > orden con movimientos de inventario > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -212,6 +260,10 @@ exports[`annulWorkOrderAction > orden con movimientos de inventario > llamadas 1
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede anular una orden con consumos registrados sin reversar inventario.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -228,6 +280,19 @@ exports[`annulWorkOrderAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -243,6 +308,10 @@ exports[`annulWorkOrderAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede anular una orden finalizada desde el listado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -259,6 +328,19 @@ exports[`annulWorkOrderAction > orden ya anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -274,6 +356,10 @@ exports[`annulWorkOrderAction > orden ya anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo ya esta anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3438,6 +3524,19 @@ exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3451,6 +3550,10 @@ exports[`finishWorkOrderAction > etapas sin terminar > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Solo se puede finalizar una orden cuando todas sus etapas estan terminadas.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3467,6 +3570,19 @@ exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3480,10 +3596,6 @@ exports[`finishWorkOrderAction > finaliza con todas las etapas terminadas > llam
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -3543,6 +3655,19 @@ exports[`finishWorkOrderAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3556,6 +3681,10 @@ exports[`finishWorkOrderAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3572,6 +3701,19 @@ exports[`finishWorkOrderAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3585,6 +3727,10 @@ exports[`finishWorkOrderAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede finalizar una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3601,6 +3747,19 @@ exports[`finishWorkOrderAction > orden sin avances generados > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3614,6 +3773,10 @@ exports[`finishWorkOrderAction > orden sin avances generados > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden no tiene avances generados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3630,6 +3793,19 @@ exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": {
@@ -3643,6 +3819,10 @@ exports[`finishWorkOrderAction > orden ya finalizada: vuelve al detalle sin toas
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
