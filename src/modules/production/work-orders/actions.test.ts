@@ -1150,3 +1150,7 @@ const trimmedWorkOrderId = (actionCase: ActionCase) =>
 describeWorkOrderLock("deliverWorkOrderMaterialsAction", 10, trimmedWorkOrderId);
 describeWorkOrderLock("deliverAdditionalMaterialAction", 8, trimmedWorkOrderId);
 describeWorkOrderLock("returnWorkOrderMaterialAction", 8, trimmedWorkOrderId);
+
+// Cerrar y reabrir tambien reciben el id recortado (la accion y el esquema).
+describeWorkOrderLock("closeWorkOrderMaterialsAction", 9, trimmedWorkOrderId);
+describeWorkOrderLock("reopenWorkOrderMaterialsAction", 5, trimmedWorkOrderId);

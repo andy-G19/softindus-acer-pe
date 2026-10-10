@@ -3,6 +3,7 @@ import "server-only";
 import { registerAuditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
 import { validateClosure } from "@/lib/material-reconciliation";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import type {
   CloseMaterialsInput,
   ReopenMaterialsInput,
@@ -12,9 +13,14 @@ import type {
  * Cierre y reapertura de la conciliacion de materiales de una orden de trabajo.
  *
  * Casos de uso, no server actions (ver work-order-status.ts): reciben los datos ya
- * validados por el esquema y el usuario ya verificado, aplican las reglas y abren la
- * transaccion. Solo escriben declaraciones (consumido, producido, fecha de cierre): no
- * mueven stock.
+ * validados por el esquema y el usuario ya verificado, abren la transaccion y aplican las
+ * reglas dentro de ella. Solo escriben declaraciones (consumido, producido, fecha de
+ * cierre): no mueven stock.
+ *
+ * Cada caso de uso bloquea la orden antes de leer (H1), igual que las entregas y las
+ * devoluciones: el cierre valida lo consumido contra lo entregado y devuelto ya
+ * confirmado, y ninguna entrega o devolucion puede entrar despues del cierre. Dos cierres,
+ * o un cierre y una reapertura, tampoco deciden con la misma foto.
  */
 export type CloseWorkOrderMaterialsParams = {
   data: CloseMaterialsInput;
@@ -34,76 +40,78 @@ export async function closeWorkOrderMaterials({
   data,
   idUsuario,
 }: CloseWorkOrderMaterialsParams) {
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: { id_orden_trabajo: data.id_orden_trabajo },
-    include: {
-      requerimiento_orden_material: {
-        include: { material: { select: { nombre_material: true } } },
-        orderBy: { id_requerimiento: "asc" },
-      },
-    },
-  });
-
-  if (!workOrder) {
-    throw new Error("La orden de trabajo no existe.");
-  }
-
-  if (workOrder.estado === "anulada") {
-    throw new Error("No se puede cerrar materiales de una orden anulada.");
-  }
-
-  if (workOrder.fecha_cierre_materiales) {
-    throw new Error("Los materiales de esta orden ya fueron cerrados.");
-  }
-
-  if (workOrder.requerimiento_orden_material.length === 0) {
-    throw new Error("Esta orden no tiene requerimiento congelado que conciliar.");
-  }
-
-  const requirementById = new Map(
-    workOrder.requerimiento_orden_material.map((requirement) => [
-      requirement.id_requerimiento,
-      requirement,
-    ]),
-  );
-
-  if (data.lineas.length !== requirementById.size) {
-    throw new Error(
-      "El cierre debe declarar el consumo de todos los materiales de la orden.",
-    );
-  }
-
-  const closures = data.lineas.map((linea) => {
-    const requirement = requirementById.get(linea.id_requerimiento);
-
-    if (!requirement) {
-      throw new Error("Se recibio un material que no pertenece a esta orden.");
-    }
-
-    const validation = validateClosure(
-      {
-        delivered: requirement.cantidad_entregada,
-        consumed: linea.cantidad_consumida,
-        returned: requirement.cantidad_devuelta,
-      },
-      requirement.material.nombre_material,
-    );
-
-    if (!validation.ok) {
-      throw new Error(validation.error);
-    }
-
-    return {
-      idRequerimiento: requirement.id_requerimiento,
-      consumida: linea.cantidad_consumida,
-      merma: validation.waste,
-      materialName: requirement.material.nombre_material,
-    };
-  });
-
-  const mermaTotal = closures.reduce((total, closure) => total + closure.merma, 0);
-
   await prisma.$transaction(async (tx) => {
+    await lockWorkOrderRow(tx, data.id_orden_trabajo);
+
+    const workOrder = await tx.orden_trabajo.findUnique({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      include: {
+        requerimiento_orden_material: {
+          include: { material: { select: { nombre_material: true } } },
+          orderBy: { id_requerimiento: "asc" },
+        },
+      },
+    });
+
+    if (!workOrder) {
+      throw new Error("La orden de trabajo no existe.");
+    }
+
+    if (workOrder.estado === "anulada") {
+      throw new Error("No se puede cerrar materiales de una orden anulada.");
+    }
+
+    if (workOrder.fecha_cierre_materiales) {
+      throw new Error("Los materiales de esta orden ya fueron cerrados.");
+    }
+
+    if (workOrder.requerimiento_orden_material.length === 0) {
+      throw new Error("Esta orden no tiene requerimiento congelado que conciliar.");
+    }
+
+    const requirementById = new Map(
+      workOrder.requerimiento_orden_material.map((requirement) => [
+        requirement.id_requerimiento,
+        requirement,
+      ]),
+    );
+
+    if (data.lineas.length !== requirementById.size) {
+      throw new Error(
+        "El cierre debe declarar el consumo de todos los materiales de la orden.",
+      );
+    }
+
+    const closures = data.lineas.map((linea) => {
+      const requirement = requirementById.get(linea.id_requerimiento);
+
+      if (!requirement) {
+        throw new Error("Se recibio un material que no pertenece a esta orden.");
+      }
+
+      const validation = validateClosure(
+        {
+          delivered: requirement.cantidad_entregada,
+          consumed: linea.cantidad_consumida,
+          returned: requirement.cantidad_devuelta,
+        },
+        requirement.material.nombre_material,
+      );
+
+      if (!validation.ok) {
+        throw new Error(validation.error);
+      }
+
+      return {
+        idRequerimiento: requirement.id_requerimiento,
+        consumida: linea.cantidad_consumida,
+        merma: validation.waste,
+        materialName: requirement.material.nombre_material,
+      };
+    });
+
+    const mermaTotal = closures.reduce((total, closure) => total + closure.merma, 0);
+
     for (const closure of closures) {
       await tx.requerimiento_orden_material.update({
         where: { id_requerimiento: closure.idRequerimiento },
@@ -152,33 +160,35 @@ export async function reopenWorkOrderMaterials({
   data,
   idUsuario,
 }: ReopenWorkOrderMaterialsParams) {
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: { id_orden_trabajo: data.id_orden_trabajo },
-    select: {
-      id_orden_trabajo: true,
-      estado: true,
-      cantidad_producida: true,
-      fecha_cierre_materiales: true,
-    },
-  });
-
-  if (!workOrder) {
-    throw new Error("La orden de trabajo no existe.");
-  }
-
-  if (!workOrder.fecha_cierre_materiales) {
-    throw new Error("Los materiales de esta orden no estan cerrados.");
-  }
-
-  if (workOrder.estado === "anulada") {
-    throw new Error("No se puede reabrir el cierre de una orden anulada.");
-  }
-
-  const producidaAnterior = workOrder.cantidad_producida
-    ? Number(workOrder.cantidad_producida.toString()).toFixed(2)
-    : "sin declarar";
-
   await prisma.$transaction(async (tx) => {
+    await lockWorkOrderRow(tx, data.id_orden_trabajo);
+
+    const workOrder = await tx.orden_trabajo.findUnique({
+      where: { id_orden_trabajo: data.id_orden_trabajo },
+      select: {
+        id_orden_trabajo: true,
+        estado: true,
+        cantidad_producida: true,
+        fecha_cierre_materiales: true,
+      },
+    });
+
+    if (!workOrder) {
+      throw new Error("La orden de trabajo no existe.");
+    }
+
+    if (!workOrder.fecha_cierre_materiales) {
+      throw new Error("Los materiales de esta orden no estan cerrados.");
+    }
+
+    if (workOrder.estado === "anulada") {
+      throw new Error("No se puede reabrir el cierre de una orden anulada.");
+    }
+
+    const producidaAnterior = workOrder.cantidad_producida
+      ? Number(workOrder.cantidad_producida.toString()).toFixed(2)
+      : "sin declarar";
+
     await tx.requerimiento_orden_material.updateMany({
       where: { id_orden_trabajo: data.id_orden_trabajo },
       data: { cantidad_consumida: 0 },

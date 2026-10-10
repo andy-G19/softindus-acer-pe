@@ -390,6 +390,19 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -410,10 +423,6 @@ exports[`closeWorkOrderMaterialsAction > cierra con el consumo declarado y la me
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -491,6 +500,19 @@ exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entrega
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -511,6 +533,10 @@ exports[`closeWorkOrderMaterialsAction > consumo y devolucion superan lo entrega
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Plancha LAC 1/16: lo consumido (64.00) más lo devuelto (5.00) suma 69.00, que supera lo entregado (68.75).",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -527,6 +553,19 @@ exports[`closeWorkOrderMaterialsAction > declara un material que no es de la ord
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -547,6 +586,10 @@ exports[`closeWorkOrderMaterialsAction > declara un material que no es de la ord
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Se recibio un material que no pertenece a esta orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -563,6 +606,19 @@ exports[`closeWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -583,6 +639,10 @@ exports[`closeWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -599,6 +659,19 @@ exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] =
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -619,6 +692,10 @@ exports[`closeWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`] =
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden ya fueron cerrados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -635,6 +712,19 @@ exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -655,6 +745,10 @@ exports[`closeWorkOrderMaterialsAction > no declara todos los materiales > llama
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "El cierre debe declarar el consumo de todos los materiales de la orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -671,6 +765,19 @@ exports[`closeWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -691,6 +798,10 @@ exports[`closeWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede cerrar materiales de una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -707,6 +818,19 @@ exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -727,6 +851,10 @@ exports[`closeWorkOrderMaterialsAction > orden sin requerimiento congelado > lla
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Esta orden no tiene requerimiento congelado que conciliar.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -757,6 +885,19 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -777,10 +918,6 @@ exports[`closeWorkOrderMaterialsAction > un consumo que no llega vale cero > lla
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -4134,6 +4271,19 @@ exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "cantidad_producida": true,
@@ -4146,6 +4296,10 @@ exports[`reopenWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4161,6 +4315,19 @@ exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "cantidad_producida": true,
@@ -4173,6 +4340,10 @@ exports[`reopenWorkOrderMaterialsAction > materiales no cerrados > llamadas 1`] 
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden no estan cerrados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4201,6 +4372,19 @@ exports[`reopenWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "cantidad_producida": true,
@@ -4213,6 +4397,10 @@ exports[`reopenWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede reabrir el cierre de una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4228,6 +4416,19 @@ exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declar
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "cantidad_producida": true,
@@ -4240,10 +4441,6 @@ exports[`reopenWorkOrderMaterialsAction > reabre un cierre sin produccion declar
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -4309,6 +4506,19 @@ exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produc
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "cantidad_producida": true,
@@ -4321,10 +4531,6 @@ exports[`reopenWorkOrderMaterialsAction > reabre y deja en la bitacora la produc
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
