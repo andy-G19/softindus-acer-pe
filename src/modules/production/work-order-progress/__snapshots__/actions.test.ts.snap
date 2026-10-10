@@ -1,0 +1,1572 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "avance_orden",
+      "prefijo": "AVN",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "estado_etapa": "pendiente",
+          "id_avance": "AVN00000001",
+          "id_etapa_ruta": "ETR00000001",
+          "id_orden_trabajo": "OTR00000007",
+          "id_usuario_actualiza": "USU00000001",
+          "porcentaje_avance": 0,
+        },
+        {
+          "estado_etapa": "pendiente",
+          "id_avance": "AVN00000002",
+          "id_etapa_ruta": "ETR00000002",
+          "id_orden_trabajo": "OTR00000007",
+          "id_usuario_actualiza": "USU00000001",
+          "porcentaje_avance": 0,
+        },
+        {
+          "estado_etapa": "pendiente",
+          "id_avance": "AVN00000003",
+          "id_etapa_ruta": "ETR00000003",
+          "id_orden_trabajo": "OTR00000007",
+          "id_usuario_actualiza": "USU00000001",
+          "porcentaje_avance": 0,
+        },
+      ],
+    },
+    "prisma": "avance_orden.createMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pendiente",
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y deja la orden pendiente, sin bitacora > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-generated"`;
+
+exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > la orden no existe > resultado 1`] = `"error: La orden de trabajo no existe."`;
+
+exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Esta orden ya tiene avances generados.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > la orden ya tiene avances > resultado 1`] = `"error: Esta orden ya tiene avances generados."`;
+
+exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se pueden generar avances para una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+
+exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se pueden generar avances para una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se pueden generar avances para una orden anulada o finalizada."`;
+
+exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden no tiene una ruta de fabricación asociada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > resultado 1`] = `"error: La orden no tiene una ruta de fabricación asociada."`;
+
+exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": true,
+        "ruta_fabricacion": {
+          "include": {
+            "etapa_ruta": {
+              "orderBy": {
+                "orden_secuencia": "asc",
+              },
+              "where": {
+                "estado": true,
+              },
+            },
+          },
+        },
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La ruta asociada no tiene etapas activas.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > ruta sin etapas activas > resultado 1`] = `"error: La ruta asociada no tiene etapas activas."`;
+
+exports[`generateWorkOrderProgressAction > sin orden en el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`generateWorkOrderProgressAction > sin orden en el formulario > resultado 1`] = `"error: No se recibió la orden de trabajo."`;
+
+exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > datos invalidos: sin motivo > resultado 1`] = `"error: El motivo de reasignacion es obligatorio."`;
+
+exports[`reassignWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "El avance seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > el avance no existe > resultado 1`] = `"error: El avance seleccionado no existe."`;
+
+exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000001",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": "El nuevo operario debe ser distinto al operario actual.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > resultado 1`] = `"error: El nuevo operario debe ser distinto al operario actual."`;
+
+exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000004",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": "El nuevo operario no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta inactivo > resultado 1`] = `"error: El nuevo operario no existe o esta inactivo."`;
+
+exports[`reassignWorkOrderProgressAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000004",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": "No se puede reasignar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se puede reasignar el avance de una orden anulada o finalizada."`;
+
+exports[`reassignWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000004",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": "No se puede reasignar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se puede reasignar el avance de una orden anulada o finalizada."`;
+
+exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, cambia el operario y deja bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta": true,
+        "operario": true,
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "apellidos": true,
+        "id_operario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+        "id_operario": "OPE00000004",
+      },
+    },
+    "prisma": "operario.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reasignacion_tarea",
+      "prefijo": "REA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_reasignacion": 2026-07-15T15:00:00.000Z,
+        "id_avance": "AVN00000002",
+        "id_operario_anterior": "OPE00000001",
+        "id_operario_nuevo": "OPE00000004",
+        "id_reasignacion": "REA00000001",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Cambio de turno",
+      },
+    },
+    "prisma": "reasignacion_tarea.create",
+  },
+  {
+    "args": {
+      "data": {
+        "id_operario": "OPE00000004",
+        "id_usuario_actualiza": "USU00000001",
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Avance AVN00000002 reasignado a Huaman, Rosa.",
+      "enTransaccion": true,
+      "entidad_afectada": "reasignacion_tarea",
+      "id_registro_afectado": "REA00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress/AVN00000002/reassign",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, cambia el operario y deja bitacora > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-reassigned"`;
+
+exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer mensaje de Zod sin consultar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > datos invalidos: responde el primer mensaje de Zod sin consultar > resultado 1`] = `"error: El porcentaje no puede ser mayor a 100."`;
+
+exports[`updateWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "El avance seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > el avance no existe > resultado 1`] = `"error: El avance seleccionado no existe."`;
+
+exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el inicio y deja la orden en proceso > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_etapa": "en_proceso",
+        "fecha_fin_etapa": null,
+        "fecha_inicio_etapa": 2026-07-15T15:00:00.000Z,
+        "id_operario": "OPE00000001",
+        "id_usuario_actualiza": "USU00000001",
+        "observaciones": "Corte iniciado",
+        "porcentaje_avance": 1,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.update",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_etapa": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_proceso",
+        "fecha_entrega_real": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Avance actualizado a en_proceso (1%).",
+      "enTransaccion": true,
+      "entidad_afectada": "avance_orden",
+      "id_registro_afectado": "AVN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el inicio y deja la orden en proceso > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+
+exports[`updateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "No se puede modificar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > orden anulada > resultado 1`] = `"error: No se puede modificar el avance de una orden anulada o finalizada."`;
+
+exports[`updateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "No se puede modificar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > orden finalizada > resultado 1`] = `"error: No se puede modificar el avance de una orden anulada o finalizada."`;
+
+exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_etapa": "pausada",
+        "fecha_fin_etapa": null,
+        "fecha_inicio_etapa": 2026-07-01T13:00:00.000Z,
+        "id_operario": "OPE00000001",
+        "id_usuario_actualiza": "USU00000001",
+        "observaciones": null,
+        "porcentaje_avance": 99,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.update",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_etapa": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pausada",
+        "fecha_entrega_real": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Avance actualizado a pausada (99%).",
+      "enTransaccion": true,
+      "entidad_afectada": "avance_orden",
+      "id_registro_afectado": "AVN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la fecha de fin previa y pausa la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+
+exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserva el inicio, fija el fin y finaliza la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_etapa": "terminada",
+        "fecha_fin_etapa": 2026-07-15T15:00:00.000Z,
+        "fecha_inicio_etapa": 2026-07-01T13:00:00.000Z,
+        "id_operario": "OPE00000001",
+        "id_usuario_actualiza": "USU00000001",
+        "observaciones": null,
+        "porcentaje_avance": 100,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.update",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_etapa": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "finalizada",
+        "fecha_entrega_real": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Avance actualizado a terminada (100%).",
+      "enTransaccion": true,
+      "entidad_afectada": "avance_orden",
+      "id_registro_afectado": "AVN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserva el inicio, fija el fin y finaliza la orden > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;
+
+exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y la orden queda pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_etapa": "pendiente",
+        "fecha_fin_etapa": null,
+        "fecha_inicio_etapa": null,
+        "id_operario": "OPE00000001",
+        "id_usuario_actualiza": "USU00000001",
+        "observaciones": null,
+        "porcentaje_avance": 0,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.update",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_etapa": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "avance_orden.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pendiente",
+        "fecha_entrega_real": null,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Avance actualizado a pendiente (0%).",
+      "enTransaccion": true,
+      "entidad_afectada": "avance_orden",
+      "id_registro_afectado": "AVN00000002",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/work-orders/OTR00000007/progress",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y la orden queda pendiente > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000007/progress?toast=work-order-progress-updated"`;

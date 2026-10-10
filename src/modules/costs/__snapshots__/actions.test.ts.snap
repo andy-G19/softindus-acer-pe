@@ -14,6 +14,15 @@ exports[`annulIndirectCostAction > anula conservando las observaciones previas y
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -39,6 +48,15 @@ exports[`annulIndirectCostAction > anula conservando las observaciones previas y
       },
     },
     "prisma": "costo_indirecto.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -129,6 +147,15 @@ exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -153,6 +180,15 @@ exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1
       },
     },
     "prisma": "costo_indirecto.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -243,6 +279,15 @@ exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > llamada
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -279,6 +324,15 @@ exports[`annulIndirectCostAction > costo indirecto ya anulado > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -312,6 +366,15 @@ exports[`annulIndirectCostAction > el costo indirecto no existe > llamadas 1`] =
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -359,6 +422,19 @@ exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -391,6 +467,10 @@ exports[`createCostingFromWorkOrderAction > cantidad de la orden en cero > llama
     },
     "prisma": "orden_trabajo.findUnique",
   },
+  {
+    "args": "La cantidad de la orden debe ser mayor que cero.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -403,6 +483,19 @@ exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, con
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -454,10 +547,6 @@ exports[`createCostingFromWorkOrderAction > genera el costeo con materiales, con
       },
     },
     "prisma": "tarea_operario.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -538,6 +627,19 @@ exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -569,6 +671,10 @@ exports[`createCostingFromWorkOrderAction > la orden no existe > llamadas 1`] = 
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -584,6 +690,19 @@ exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a e
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -593,6 +712,10 @@ exports[`createCostingFromWorkOrderAction > la orden ya tiene costeo: vuelve a e
       },
     },
     "prisma": "costeo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -606,6 +729,19 @@ exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -640,6 +776,10 @@ exports[`createCostingFromWorkOrderAction > orden anulada > llamadas 1`] = `
     },
     "prisma": "orden_trabajo.findUnique",
   },
+  {
+    "args": "No se puede generar costeo para una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -652,6 +792,19 @@ exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedi
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -703,10 +856,6 @@ exports[`createCostingFromWorkOrderAction > orden sin pedido ni tareas: sin pedi
       },
     },
     "prisma": "tarea_operario.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -787,6 +936,19 @@ exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -818,6 +980,10 @@ exports[`createCostingFromWorkOrderAction > orden sin version de receta > llamad
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no tiene una versión de receta asociada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -846,6 +1012,19 @@ exports[`createCostingFromWorkOrderAction > version de receta anulada > llamadas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -877,6 +1056,10 @@ exports[`createCostingFromWorkOrderAction > version de receta anulada > llamadas
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La versión de receta asociada a la orden está anulada y no puede costearse.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -892,6 +1075,19 @@ exports[`createCostingFromWorkOrderAction > version sin materiales > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_costeo": true,
@@ -923,6 +1119,10 @@ exports[`createCostingFromWorkOrderAction > version sin materiales > llamadas 1`
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La versión de receta no tiene materiales registrados para calcular el costeo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1018,6 +1218,15 @@ exports[`createIndirectCostAction > registra el costo indirecto y recalcula > ll
       },
     },
     "prisma": "costo_indirecto.create",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1927,6 +2136,15 @@ exports[`recalculateCostingAction > cantidad base en cero: el costo unitario que
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "cantidad_base": true,
         "costo_consumibles": true,
@@ -2061,6 +2279,15 @@ exports[`recalculateCostingAction > recalcula con los costos indirectos vigentes
   },
   {
     "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "cantidad_base": true,
         "costo_consumibles": true,
@@ -2184,6 +2411,15 @@ exports[`updateLaborCostAction > actualiza la mano de obra y recalcula los total
       },
     },
     "prisma": "costeo.update",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costeo FROM aceros.costeo WHERE id_costeo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "COS00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {

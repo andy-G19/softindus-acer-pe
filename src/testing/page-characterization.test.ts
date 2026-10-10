@@ -10,8 +10,11 @@ import {
   dbModuleMock,
   decimalSnapshotSerializer,
   describeNavigationError,
+  expectRowLockedBefore,
   generateResult,
   generateRow,
+  isPrismaRead,
+  isRowLock,
   normalizeHtml,
   normalizeIntlStrings,
   parsePrismaSchema,
@@ -406,6 +409,38 @@ describe("dbModuleMock con transacciones", () => {
     ]);
   });
 
+  it("con writesOutsideTransaction el cliente global escribe sin transaccion y queda marcado", async () => {
+    const prisma = dbModuleMock({
+      transactions: true,
+      recordTransactionEnd: true,
+      writesOutsideTransaction: true,
+    }).prisma as Client;
+
+    const { calls, result } = await characterizeHandler(async () => ({
+      outside: await prisma.cliente.create({ data: { nombre: "A" } }),
+      inside: await prisma.$transaction((tx) => tx.cliente.create({ data: { nombre: "B" } })),
+    }));
+
+    expect(result).toEqual({ outside: { nombre: "A" }, inside: { nombre: "B" } });
+    expect(calls).toEqual([
+      { prisma: "cliente.create", args: { data: { nombre: "A" } }, fueraDeTransaccion: true },
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.create", args: { data: { nombre: "B" } } },
+      { effect: "prisma.$transaction:commit", args: null },
+    ]);
+  });
+
+  it("con writesOutsideTransaction el cliente global sigue rechazado dentro de una transaccion", async () => {
+    const prisma = dbModuleMock({ transactions: true, writesOutsideTransaction: true })
+      .prisma as Client;
+
+    await expect(
+      characterizeHandler(() =>
+        prisma.$transaction(() => prisma.cliente.create({ data: { nombre: "A" } })),
+      ),
+    ).rejects.toThrow("usa el cliente global dentro de una transaccion");
+  });
+
   it("sin recordTransactionEnd no registra el final, como en la exportacion", async () => {
     const prisma = dbModuleMock({ transactions: true }).prisma as Client;
 
@@ -417,6 +452,184 @@ describe("dbModuleMock con transacciones", () => {
       { effect: "prisma.$transaction", args: null },
       { prisma: "cliente.count", args: undefined },
     ]);
+  });
+});
+
+describe("cliente global dentro de una transaccion", () => {
+  type Client = {
+    $transaction: <T>(callback: (tx: Client) => Promise<T>) => Promise<T>;
+    cliente: { count: () => Promise<number> };
+  };
+
+  async function attempt(operation: () => Promise<unknown>) {
+    try {
+      await operation();
+
+      return "lo permitio";
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  for (const recordTransactionEnd of [true, false]) {
+    it(`rechaza leer con el cliente global mientras la transaccion sigue abierta (recordTransactionEnd: ${recordTransactionEnd})`, async () => {
+      const prisma = dbModuleMock({ transactions: true, recordTransactionEnd })
+        .prisma as Client;
+
+      const { calls, result } = await characterizeHandler(() =>
+        prisma.$transaction(async (tx) => {
+          await tx.cliente.count();
+
+          return attempt(() => prisma.cliente.count());
+        }),
+      );
+
+      expect(result).toBe(
+        "prisma.cliente.count usa el cliente global dentro de una transaccion: debe usar el cliente de la transaccion.",
+      );
+      expect(calls.filter((call) => "prisma" in call)).toEqual([
+        { prisma: "cliente.count", args: undefined },
+      ]);
+    });
+  }
+
+  it("rechaza abrir otra transaccion con el cliente global", async () => {
+    const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
+      .prisma as Client;
+
+    const { result } = await characterizeHandler(() =>
+      prisma.$transaction(() => attempt(() => prisma.$transaction(async () => 1))),
+    );
+
+    expect(result).toContain("prisma.$transaction usa el cliente global dentro de una transaccion");
+  });
+
+  it("al terminar la transaccion, con commit o con error, el cliente global vuelve a leer", async () => {
+    const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
+      .prisma as Client;
+
+    const { result } = await characterizeHandler(async () => {
+      await prisma.$transaction((tx) => tx.cliente.count());
+      await prisma
+        .$transaction(async () => {
+          throw new Error("Stock insuficiente.");
+        })
+        .catch(() => undefined);
+
+      return prisma.cliente.count();
+    });
+
+    expect(result).toBe(GENERATED_COUNT);
+  });
+
+  it("cada caso empieza sin transacciones abiertas aunque el anterior dejara una pendiente", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+
+    await characterizeHandler(async () => {
+      void prisma.$transaction(() => new Promise<never>(() => {}));
+    });
+
+    const { result } = await characterizeHandler(() => prisma.cliente.count());
+
+    expect(result).toBe(GENERATED_COUNT);
+  });
+});
+
+describe("SQL crudo y bloqueos de fila", () => {
+  type RawClient = {
+    $queryRaw: (query: unknown) => Promise<unknown>;
+  };
+  type Client = RawClient & {
+    $transaction: <T>(callback: (tx: RawClient) => Promise<T>) => Promise<T>;
+  };
+
+  const ID = "CLI00000001";
+  const lockSql = (table: string, mode = "FOR NO KEY UPDATE") => ({
+    prisma: "$queryRaw",
+    args: {
+      sql: `SELECT id_${table} FROM aceros.${table} WHERE id_${table} = $1 ${mode}`,
+      values: [ID],
+    },
+  });
+  const read = { prisma: "cliente.findUnique", args: { where: { id_cliente: ID } } };
+  const start = { effect: "prisma.$transaction", args: null };
+  const commit = { effect: "prisma.$transaction:commit", args: null };
+  const protectedRead = { table: "cliente", id: ID, reads: isPrismaRead };
+
+  it("registra el SQL de la transaccion normalizado, con sus valores, y devuelve [] o lo que fije el caso", async () => {
+    const prisma = dbModuleMock({ transactions: true }).prisma as Client;
+    const lock = () =>
+      prisma.$transaction((tx) =>
+        tx.$queryRaw(Prisma.sql`
+          SELECT id_cliente
+          FROM aceros.cliente
+          WHERE id_cliente = ${ID}
+          FOR NO KEY UPDATE
+        `),
+      );
+
+    const { calls, result } = await characterizeHandler(lock);
+
+    expect(result).toEqual([]);
+    expect(calls).toEqual([start, lockSql("cliente")]);
+
+    const fixed = await characterizeHandler(lock, {
+      $queryRaw: (args) => [{ fila: args?.values }],
+    });
+
+    expect(fixed.result).toEqual([{ fila: [ID] }]);
+  });
+
+  it("rechaza el SQL crudo fuera de una transaccion y el que no viene de Prisma.sql", async () => {
+    const readOnly = dbModuleMock().prisma as Client;
+    const transactional = dbModuleMock({ transactions: true }).prisma as Client;
+
+    expect(() => readOnly.$queryRaw).toThrow("solo se admite dentro de una transaccion");
+    expect(() => transactional.$queryRaw).toThrow("solo se admite dentro de una transaccion");
+    await expect(
+      transactional.$transaction((tx) => tx.$queryRaw("SELECT 1")),
+    ).rejects.toThrow("solo admite prisma.$queryRaw con Prisma.sql");
+  });
+
+  it("isPrismaRead distingue las lecturas de las escrituras y del SQL crudo", () => {
+    expect(isPrismaRead(read)).toBe(true);
+    expect(isPrismaRead({ prisma: "cliente.update", args: {} })).toBe(false);
+    expect(isPrismaRead(lockSql("cliente"))).toBe(false);
+  });
+
+  it("isRowLock exige la tabla, el id y FOR NO KEY UPDATE", () => {
+    expect(isRowLock(lockSql("cliente"), "cliente", ID)).toBe(true);
+    expect(isRowLock(lockSql("pedido"), "cliente", ID)).toBe(false);
+    expect(isRowLock(lockSql("cliente"), "cliente", "CLI00000002")).toBe(false);
+    expect(isRowLock(lockSql("cliente", "FOR UPDATE"), "cliente", ID)).toBe(false);
+    expect(isRowLock(read, "cliente", ID)).toBe(false);
+  });
+
+  it("expectRowLockedBefore acepta el bloqueo antes de leer, con la transaccion abierta", () => {
+    expect(() =>
+      expectRowLockedBefore([start, lockSql("cliente"), read, read, commit], protectedRead),
+    ).not.toThrow();
+  });
+
+  it("expectRowLockedBefore rechaza leer sin bloqueo, bloquear despues, cerrar antes o no leer", () => {
+    expect(() => expectRowLockedBefore([read, start, commit], protectedRead)).toThrow(
+      "no se bloquea la fila",
+    );
+    expect(() =>
+      expectRowLockedBefore([start, read, lockSql("cliente"), commit], protectedRead),
+    ).toThrow("se bloquea despues de leerla");
+    expect(() =>
+      expectRowLockedBefore(
+        [start, lockSql("cliente"), read, commit, start, read, commit],
+        protectedRead,
+      ),
+    ).toThrow("la transaccion termina antes");
+    expect(() =>
+      expectRowLockedBefore([start, lockSql("cliente", "FOR UPDATE"), read], protectedRead),
+    ).toThrow("no se bloquea la fila");
+    expect(() => expectRowLockedBefore([start, lockSql("cliente")], protectedRead)).toThrow(
+      "ninguna lectura protegida",
+    );
   });
 });
 

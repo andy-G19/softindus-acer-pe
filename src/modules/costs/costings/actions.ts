@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import {
@@ -12,6 +13,7 @@ import { estimateMaterialCost } from "@/lib/costing-calculations";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { toNonNegativeNumber } from "@/lib/numbers";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import { laborCostSchema } from "@/schemas/costs/labor-cost.schema";
 
 async function requireAdmin() {
@@ -37,16 +39,27 @@ function revalidateCostingPaths(idCosteo?: string) {
   }
 }
 
-export async function createCostingFromWorkOrderAction(formData: FormData) {
-  const session = await requireAdmin();
+type CostingFromWorkOrderResult = {
+  idCosteo: string;
+  existente: boolean;
+};
 
-  const idOrdenTrabajo = normalizeText(formData.get("id_orden_trabajo"));
+/**
+ * Genera el costeo de la orden, o devuelve el que ya tiene, dentro de la transaccion que
+ * recibe. No se exporta: en un modulo "use server" seria un endpoint.
+ *
+ * Bloquea la orden antes de la primera lectura (H4): con un doble envio, el segundo espera
+ * a que el primero confirme y encuentra su costeo, en lugar de crear otro. La comprobacion,
+ * las validaciones de la orden y la creacion conservan el orden que tenian.
+ */
+async function createCostingInTransaction(
+  tx: Prisma.TransactionClient,
+  idOrdenTrabajo: string,
+  idUsuario: string,
+): Promise<CostingFromWorkOrderResult> {
+  await lockWorkOrderRow(tx, idOrdenTrabajo);
 
-  if (!idOrdenTrabajo) {
-    throw new Error("Debe seleccionar una orden de trabajo válida.");
-  }
-
-  const existingCosting = await prisma.costeo.findFirst({
+  const existingCosting = await tx.costeo.findFirst({
     where: {
       id_orden_trabajo: idOrdenTrabajo,
     },
@@ -56,10 +69,10 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
   });
 
   if (existingCosting) {
-    redirect(`/dashboard/costs/costings/${existingCosting.id_costeo}`);
+    return { idCosteo: existingCosting.id_costeo, existente: true };
   }
 
-  const workOrder = await prisma.orden_trabajo.findUnique({
+  const workOrder = await tx.orden_trabajo.findUnique({
     where: {
       id_orden_trabajo: idOrdenTrabajo,
     },
@@ -134,7 +147,7 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
   }
 
   const laborCost = await calculateEstimatedLaborCost(
-    prisma,
+    tx,
     workOrder.id_orden_trabajo,
   );
   const indirectCostTotal = 0;
@@ -142,41 +155,57 @@ export async function createCostingFromWorkOrderAction(formData: FormData) {
     materialCost + consumableCost + laborCost + indirectCostTotal;
   const unitCost = totalCost / quantityToProduce;
 
-  let idCosteo = "";
-
-  await prisma.$transaction(async (tx) => {
-    idCosteo = await getNextCorrelativeId(tx, {
-      codigoEntidad: "costeo",
-      prefijo: "COS",
-    });
-
-    await tx.costeo.create({
-      data: {
-        id_costeo: idCosteo,
-        id_pedido: workOrder.detalle_pedido?.id_pedido ?? null,
-        id_orden_trabajo: workOrder.id_orden_trabajo,
-        id_usuario_registro: session.user.id,
-        costo_materiales: materialCost,
-        costo_consumibles: consumableCost,
-        costo_mano_obra: laborCost,
-        costo_indirecto_total: indirectCostTotal,
-        costo_total: totalCost,
-        costo_unitario: unitCost,
-        cantidad_base: quantityToProduce,
-        observaciones:
-          "Costeo generado automáticamente desde orden de trabajo usando la versión de receta guardada en la orden, costo actual de materiales y mano de obra estimada desde tareas de operario.",
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "costeo",
-      id_registro_afectado: idCosteo,
-      accion: "crear",
-      detalle: `Costeo creado desde la orden de trabajo ${workOrder.id_orden_trabajo}. Mano de obra estimada: S/ ${laborCost.toFixed(2)}.`,
-      tx,
-    });
+  const idCosteo = await getNextCorrelativeId(tx, {
+    codigoEntidad: "costeo",
+    prefijo: "COS",
   });
+
+  await tx.costeo.create({
+    data: {
+      id_costeo: idCosteo,
+      id_pedido: workOrder.detalle_pedido?.id_pedido ?? null,
+      id_orden_trabajo: workOrder.id_orden_trabajo,
+      id_usuario_registro: idUsuario,
+      costo_materiales: materialCost,
+      costo_consumibles: consumableCost,
+      costo_mano_obra: laborCost,
+      costo_indirecto_total: indirectCostTotal,
+      costo_total: totalCost,
+      costo_unitario: unitCost,
+      cantidad_base: quantityToProduce,
+      observaciones:
+        "Costeo generado automáticamente desde orden de trabajo usando la versión de receta guardada en la orden, costo actual de materiales y mano de obra estimada desde tareas de operario.",
+    },
+  });
+
+  await registerAuditLog({
+    userId: idUsuario,
+    entidad_afectada: "costeo",
+    id_registro_afectado: idCosteo,
+    accion: "crear",
+    detalle: `Costeo creado desde la orden de trabajo ${workOrder.id_orden_trabajo}. Mano de obra estimada: S/ ${laborCost.toFixed(2)}.`,
+    tx,
+  });
+
+  return { idCosteo, existente: false };
+}
+
+export async function createCostingFromWorkOrderAction(formData: FormData) {
+  const session = await requireAdmin();
+
+  const idOrdenTrabajo = normalizeText(formData.get("id_orden_trabajo"));
+
+  if (!idOrdenTrabajo) {
+    throw new Error("Debe seleccionar una orden de trabajo válida.");
+  }
+
+  const { idCosteo, existente } = await prisma.$transaction((tx) =>
+    createCostingInTransaction(tx, idOrdenTrabajo, session.user.id),
+  );
+
+  if (existente) {
+    redirect(`/dashboard/costs/costings/${idCosteo}`);
+  }
 
   revalidateCostingPaths(idCosteo);
   revalidatePath("/dashboard/production/work-orders");

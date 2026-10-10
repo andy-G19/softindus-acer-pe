@@ -186,11 +186,13 @@ export async function getInventoryOutputFormOptions() {
         stock_reservado: true,
       },
     }),
+    // Solo las ordenes que admiten material, con la misma regla que valida la salida (H9).
     prisma.orden_trabajo.findMany({
       where: {
         estado: {
-          notIn: ["finalizada", "cancelada"],
+          notIn: ["finalizada", "anulada"],
         },
+        fecha_cierre_materiales: null,
       },
       orderBy: {
         fecha_inicio: "desc",

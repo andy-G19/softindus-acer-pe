@@ -508,9 +508,10 @@ exports[`/dashboard/inventory/outputs/new > formulario > llamadas 1`] = `
         "estado": {
           "notIn": [
             "finalizada",
-            "cancelada",
+            "anulada",
           ],
         },
+        "fecha_cierre_materiales": null,
       },
     },
     "prisma": "orden_trabajo.findMany",
@@ -635,9 +636,10 @@ exports[`/dashboard/inventory/outputs/new > maestro de taller > llamadas 1`] = `
         "estado": {
           "notIn": [
             "finalizada",
-            "cancelada",
+            "anulada",
           ],
         },
+        "fecha_cierre_materiales": null,
       },
     },
     "prisma": "orden_trabajo.findMany",

@@ -1,0 +1,646 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": Decimal(8.75),
+      },
+      "where": {
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 3.75,
+        "id_material": "MAT00000006",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": "OTR00000007",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Corte de prueba",
+        "stock_anterior": Decimal(12.5),
+        "stock_resultante": Decimal(8.75),
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Salida de inventario registrada para orden: OTR00000007",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_inventario",
+      "id_registro_afectado": "MVI00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > con orden en proceso: la asocia al movimiento y a la bitacora > resultado 1`] = `"redirect:/dashboard/inventory/outputs?toast=inventory-movement-created"`;
+
+exports[`createInventoryOutputAction > datos invalidos: devuelve los errores de campo sin consultar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > datos invalidos: devuelve los errores de campo sin consultar > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la salida.",
+    "fieldErrors": {
+      "cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+      "id_material": [
+        "Seleccione un material.",
+      ],
+      "motivo": [
+        "El motivo es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > el material no existe: error en el campo del material y se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": "El material seleccionado no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > el material no existe: error en el campo del material y se revierte > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > la orden no existe: error en el campo de la orden y se revierte > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > la orden no existe: error en el campo de la orden y se revierte > resultado 1`] = `
+{
+  "estado": {
+    "error": "La orden de trabajo seleccionada no existe.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "La orden de trabajo seleccionada no existe.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > material inactivo: error en el campo del material > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": "El material seleccionado no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > material inactivo: error en el campo del material > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el campo de la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > orden anulada: rechaza la salida en el campo de la orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede entregar material a una orden anulada o finalizada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "No se puede entregar material a una orden anulada o finalizada.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la salida en el campo de la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden ya fueron cerrados.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > orden con materiales cerrados: rechaza la salida en el campo de la orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "Los materiales de esta orden ya fueron cerrados.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "Los materiales de esta orden ya fueron cerrados.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el campo de la orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_cierre_materiales": true,
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_orden_trabajo": "OTR00000007",
+      },
+    },
+    "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > orden finalizada: rechaza la salida en el campo de la orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede entregar material a una orden anulada o finalizada.",
+    "fieldErrors": {
+      "id_orden_trabajo": [
+        "No se puede entregar material a una orden anulada o finalizada.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra el kardex y la bitacora con el material > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": Decimal(2.25),
+      },
+      "where": {
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": 10.25,
+        "id_material": "MAT00000006",
+        "id_movimiento": "MVI00000001",
+        "id_orden_trabajo": null,
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Corte de prueba",
+        "stock_anterior": Decimal(12.5),
+        "stock_resultante": Decimal(2.25),
+        "tipo_movimiento": "salida",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Salida de inventario registrada: Plancha LAC 2 mm",
+      "enTransaccion": true,
+      "entidad_afectada": "movimiento_inventario",
+      "id_registro_afectado": "MVI00000001",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/outputs",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > sin orden: descuenta el stock, registra el kardex y la bitacora con el material > resultado 1`] = `"redirect:/dashboard/inventory/outputs?toast=inventory-movement-created"`;
+
+exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta lo reservado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": "No hay stock suficiente para registrar la salida.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > stock disponible insuficiente: descuenta lo reservado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No hay stock suficiente para registrar la salida.",
+    "fieldErrors": {
+      "cantidad": [
+        "No hay stock suficiente para registrar la salida.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createInventoryOutputAction > un error inesperado dentro de la transaccion se relanza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_material, nombre_material, stock_actual, stock_reservado, estado FROM aceros.material WHERE id_material = $1 FOR UPDATE",
+      "values": [
+        "MAT00000006",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "data": {
+        "stock_actual": Decimal(8.75),
+      },
+      "where": {
+        "id_material": "MAT00000006",
+      },
+    },
+    "prisma": "material.update",
+  },
+  {
+    "args": "Conexion interrumpida.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createInventoryOutputAction > un error inesperado dentro de la transaccion se relanza > resultado 1`] = `"error: Conexion interrumpida."`;

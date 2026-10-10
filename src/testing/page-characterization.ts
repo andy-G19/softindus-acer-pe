@@ -389,7 +389,9 @@ export function generatedRow(modelName: string, method: string, args: PrismaArgs
 
 export type Role = "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
 
-export type PrismaCall = { prisma: string; args: unknown };
+// `fueraDeTransaccion` marca una escritura hecha con el cliente global, sin
+// transaccion (solo con la opcion writesOutsideTransaction de dbModuleMock).
+export type PrismaCall = { prisma: string; args: unknown; fueraDeTransaccion?: true };
 export type AuthzCall = { authz: string; roles: unknown };
 // Efecto simulado por un archivo de prueba (correlativo, bitacora, archivo
 // generado...), registrado en la misma secuencia que las llamadas a Prisma.
@@ -425,6 +427,9 @@ type HarnessState = {
   pathname: string;
   search: string;
   params: Record<string, string | string[]>;
+  // Transacciones simuladas abiertas: con alguna abierta, el cliente global no
+  // se puede usar (ver rejectGlobalClientInTransaction).
+  openTransactions: number;
 };
 
 const state: HarnessState = {
@@ -435,6 +440,7 @@ const state: HarnessState = {
   pathname: "/",
   search: "",
   params: {},
+  openTransactions: 0,
 };
 
 export class AuthRejected extends Error {
@@ -474,7 +480,35 @@ function defaultWriteResult(method: string, args: PrismaArgs) {
   return args?.data ?? null;
 }
 
-function createModelDelegate(modelName: string, inTransaction: boolean) {
+// Resultado que el caso fija para una clave ("modelo.metodo" o "$queryRaw"),
+// si la fija. Una funcion recibe los argumentos de la llamada.
+function overrideFor(key: string, args: PrismaArgs): { value: unknown } | undefined {
+  if (!Object.prototype.hasOwnProperty.call(state.data, key)) {
+    return undefined;
+  }
+
+  const override = state.data[key];
+
+  return { value: typeof override === "function" ? override(args) : override };
+}
+
+// Con una transaccion abierta, todo debe pasar por su cliente (grupo 1 de
+// fixes). El cliente global usaria otra conexion del pool, fuera de la
+// transaccion: no ve lo que esta escribio, no queda protegido por sus
+// bloqueos y, con un pool de una conexion, espera hasta agotar el plazo.
+function rejectGlobalClientInTransaction(operation: string) {
+  if (state.openTransactions > 0) {
+    throw new Error(
+      `${operation} usa el cliente global dentro de una transaccion: debe usar el cliente de la transaccion.`,
+    );
+  }
+}
+
+function createModelDelegate(
+  modelName: string,
+  inTransaction: boolean,
+  writesOutsideTransaction: boolean,
+) {
   return new Proxy(
     {},
     {
@@ -483,7 +517,11 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
           return undefined;
         }
 
-        const isWrite = inTransaction && WRITE_METHODS.has(method);
+        if (!inTransaction) {
+          rejectGlobalClientInTransaction(`prisma.${modelName}.${method}`);
+        }
+
+        const isWrite = (inTransaction || writesOutsideTransaction) && WRITE_METHODS.has(method);
 
         if (!PRISMA_METHODS.has(method) && !isWrite) {
           throw new Error(
@@ -494,12 +532,14 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
         return async (args?: PrismaArgs) => {
           const key = `${modelName}.${method}`;
 
-          state.calls.push({ prisma: key, args });
+          state.calls.push(
+            isWrite && !inTransaction ? { prisma: key, args, fueraDeTransaccion: true } : { prisma: key, args },
+          );
 
-          if (Object.prototype.hasOwnProperty.call(state.data, key)) {
-            const override = state.data[key];
+          const override = overrideFor(key, args);
 
-            return typeof override === "function" ? override(args) : override;
+          if (override) {
+            return override.value;
           }
 
           if (isWrite) {
@@ -513,6 +553,51 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
   );
 }
 
+// SQL crudo del cliente de una transaccion (grupo 1 de fixes: bloqueos de
+// fila). No se ejecuta: se registra el texto, con los espacios normalizados y
+// los parametros como $1, y sus valores. Devuelve [] salvo que el caso fije
+// la clave "$queryRaw".
+async function recordRawQuery(query: unknown) {
+  if (!(query instanceof Prisma.Sql)) {
+    throw new Error("El arnes solo admite prisma.$queryRaw con Prisma.sql.");
+  }
+
+  const args = {
+    sql: query.text.replace(/\s+/g, " ").trim(),
+    values: query.values,
+  };
+
+  state.calls.push({ prisma: "$queryRaw", args });
+
+  const override = overrideFor("$queryRaw", args);
+
+  return override ? override.value : [];
+}
+
+async function runTransaction(
+  callback: (tx: object) => Promise<unknown>,
+  recordTransactionEnd: boolean,
+) {
+  if (!recordTransactionEnd) {
+    return callback(transactionDouble);
+  }
+
+  try {
+    const result = await callback(transactionDouble);
+
+    state.calls.push({ effect: "prisma.$transaction:commit", args: null });
+
+    return result;
+  } catch (error) {
+    state.calls.push({
+      effect: "prisma.$transaction:rollback",
+      args: error instanceof Error ? error.message : String(error),
+    });
+
+    throw error;
+  }
+}
+
 type PrismaDoubleOptions = {
   // El cliente admite $transaction (solo lo piden los route handlers).
   transactions: boolean;
@@ -521,6 +606,10 @@ type PrismaDoubleOptions = {
   // Registra tambien el final de la transaccion: commit, o rollback con el
   // mensaje del error que la interrumpio.
   recordTransactionEnd: boolean;
+  // El cliente global admite escrituras fuera de una transaccion y las marca
+  // con `fueraDeTransaccion` (grupo 1 de fixes: caracterizar acciones que
+  // escriben sin transaccion antes de corregirlas).
+  writesOutsideTransaction: boolean;
 };
 
 function createPrismaDouble(options: PrismaDoubleOptions): object {
@@ -533,28 +622,28 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
         }
 
         if (property === "$transaction" && options.transactions) {
+          rejectGlobalClientInTransaction("prisma.$transaction");
+
           return async (callback: (tx: object) => Promise<unknown>) => {
             state.calls.push({ effect: "prisma.$transaction", args: null });
-
-            if (!options.recordTransactionEnd) {
-              return callback(transactionDouble);
-            }
+            state.openTransactions += 1;
 
             try {
-              const result = await callback(transactionDouble);
-
-              state.calls.push({ effect: "prisma.$transaction:commit", args: null });
-
-              return result;
-            } catch (error) {
-              state.calls.push({
-                effect: "prisma.$transaction:rollback",
-                args: error instanceof Error ? error.message : String(error),
-              });
-
-              throw error;
+              return await runTransaction(callback, options.recordTransactionEnd);
+            } finally {
+              state.openTransactions -= 1;
             }
           };
+        }
+
+        if (property === "$queryRaw") {
+          if (!options.inTransaction) {
+            throw new Error(
+              "prisma.$queryRaw solo se admite dentro de una transaccion: fuera de ella un bloqueo de fila dura una sola sentencia y no protege nada.",
+            );
+          }
+
+          return recordRawQuery;
         }
 
         if (property.startsWith("$")) {
@@ -563,7 +652,11 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
 
         getModelFields(getSchema(), property);
 
-        return createModelDelegate(property, options.inTransaction);
+        return createModelDelegate(
+          property,
+          options.inTransaction,
+          options.writesOutsideTransaction,
+        );
       },
     },
   );
@@ -573,24 +666,28 @@ export const prismaDouble = createPrismaDouble({
   transactions: false,
   inTransaction: false,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 const transactionalPrismaDouble = createPrismaDouble({
   transactions: true,
   inTransaction: false,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 const transactionalPrismaDoubleWithEnd = createPrismaDouble({
   transactions: true,
   inTransaction: false,
   recordTransactionEnd: true,
+  writesOutsideTransaction: false,
 });
 
 const transactionDouble = createPrismaDouble({
   transactions: false,
   inTransaction: true,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 // Las paginas usan el doble de solo lectura. Un route handler que escribe
@@ -601,9 +698,33 @@ const transactionDouble = createPrismaDouble({
 // final de la transaccion registrado, el snapshot distingue una validacion o
 // un efecto hecho dentro de la transaccion de uno hecho despues. Es opcional
 // para no cambiar los snapshots de la exportacion de reportes.
+//
+// Solo el cliente de la transaccion admite `$queryRaw` (grupo 1 de fixes): un
+// bloqueo de fila tomado fuera de una transaccion no protege nada, y el doble
+// lo rechaza.
+//
+// `writesOutsideTransaction: true` deja que el cliente global escriba sin
+// transaccion y marca esas escrituras con `fueraDeTransaccion`. Es una
+// excepcion para caracterizar una accion que hoy escribe asi antes de
+// corregirla; por defecto el doble lo sigue rechazando.
 export function dbModuleMock(
-  options: { transactions?: boolean; recordTransactionEnd?: boolean } = {},
+  options: {
+    transactions?: boolean;
+    recordTransactionEnd?: boolean;
+    writesOutsideTransaction?: boolean;
+  } = {},
 ) {
+  if (options.writesOutsideTransaction) {
+    return {
+      prisma: createPrismaDouble({
+        transactions: options.transactions ?? false,
+        inTransaction: false,
+        recordTransactionEnd: options.recordTransactionEnd ?? false,
+        writesOutsideTransaction: true,
+      }),
+    };
+  }
+
   if (!options.transactions) {
     return { prisma: prismaDouble };
   }
@@ -818,6 +939,7 @@ function resetState(pageCase: PageCase, pathname: string) {
   state.pathname = pathname;
   state.search = toSearchString(pageCase.searchParams ?? {});
   state.params = pageCase.params ?? {};
+  state.openTransactions = 0;
 }
 
 async function runPage(load: PageLoader, pageCase: PageCase) {
@@ -909,6 +1031,66 @@ export function expectAuthorizesBeforePrisma(calls: RecordedCall[]) {
 
   if (firstPrisma >= 0) {
     expect(firstAuthz).toBeLessThan(firstPrisma);
+  }
+}
+
+// Una lectura de un modelo (no SQL crudo ni escrituras).
+export function isPrismaRead(call: PrismaCall) {
+  const [, method] = call.prisma.split(".");
+
+  return method !== undefined && PRISMA_METHODS.has(method);
+}
+
+// Bloqueo de fila del grupo 1 de fixes: `SELECT <id> FROM aceros.<tabla>
+// WHERE <id> = $1 FOR NO KEY UPDATE`, con el id como unico valor. El modo es
+// parte del contrato: FOR UPDATE chocaria con el KEY SHARE que toma una clave
+// foranea al insertar una fila hija, y dos operaciones sobre el mismo padre
+// podrian bloquearse mutuamente.
+export function isRowLock(call: RecordedCall, table: string, id: string) {
+  if (!isPrismaCall(call) || call.prisma !== "$queryRaw") {
+    return false;
+  }
+
+  const { sql, values } = call.args as { sql: string; values: unknown[] };
+  const pattern = new RegExp(
+    `^SELECT \\w+ FROM aceros\\.${table} WHERE \\w+ = \\$1 FOR NO KEY UPDATE$`,
+  );
+
+  return pattern.test(sql) && values.length === 1 && values[0] === id;
+}
+
+// Exige el protocolo que pone en fila a dos operaciones simultaneas sobre el
+// mismo registro: la fila se bloquea antes de la primera lectura protegida y
+// la transaccion sigue abierta hasta la ultima. Una prueba unitaria no puede
+// reproducir la carrera; fija que el protocolo se cumple.
+export function expectRowLockedBefore(
+  calls: RecordedCall[],
+  {
+    table,
+    id,
+    reads,
+  }: { table: string; id: string; reads: (call: PrismaCall) => boolean },
+) {
+  const guarded = calls.flatMap((call, index) =>
+    isPrismaCall(call) && reads(call) ? [index] : [],
+  );
+  const lock = calls.findIndex((call) => isRowLock(call, table, id));
+
+  expect(guarded.length, "el caso no llega a ninguna lectura protegida").toBeGreaterThan(0);
+  expect(lock, `no se bloquea la fila ${id} de ${table}`).toBeGreaterThanOrEqual(0);
+  expect(lock, `la fila ${id} de ${table} se bloquea despues de leerla`).toBeLessThan(
+    guarded[0],
+  );
+
+  const end = calls.findIndex(
+    (call, index) =>
+      index > lock && "effect" in call && call.effect.startsWith("prisma.$transaction:"),
+  );
+
+  if (end >= 0) {
+    expect(end, "la transaccion termina antes de la ultima lectura protegida").toBeGreaterThan(
+      guarded[guarded.length - 1],
+    );
   }
 }
 

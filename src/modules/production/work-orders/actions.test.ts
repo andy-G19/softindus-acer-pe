@@ -16,6 +16,8 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaRead,
   type DataOverrides,
   type PrismaArgs,
 } from "@/testing/page-characterization";
@@ -150,7 +152,13 @@ async function runAction(action: Action, actionCase: ActionCase) {
   return { calls, outcome: result };
 }
 
+// Las suites por nombre, para que las pruebas de los fixes repitan los mismos
+// casos sin copiarlos.
+const suites = new Map<string, { action: Action; cases: ActionCase[] }>();
+
 function defineActionSuite(name: string, action: Action, cases: ActionCase[]) {
+  suites.set(name, { action, cases });
+
   describe(name, () => {
     for (const actionCase of cases) {
       it(actionCase.name, async () => {
@@ -1077,3 +1085,72 @@ defineActionSuite("finishWorkOrderAction", finishWorkOrderAction, [
     },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// H1 (grupo 1 de fixes): los casos de uso deciden con la orden bloqueada
+// ---------------------------------------------------------------------------
+
+// Los casos de uso leian la orden y validaban su estado, su cierre y sus
+// movimientos antes de abrir la transaccion. Dos operaciones simultaneas
+// sobre la misma orden decidian con la misma foto: una entrega y una
+// anulacion podian dejar una orden anulada con salidas, y un doble envio de
+// una devolucion devolvia dos veces. Ahora cada caso de uso abre la
+// transaccion, bloquea la orden antes de la primera lectura y decide dentro:
+// el segundo espera al primero y valida con lo que este confirmo. Un bloqueo
+// solo protege si las dos operaciones lo toman.
+//
+// La prueba no reproduce la carrera (no hay base de datos): fija el protocolo
+// en cada caso que llega a la base, con el id tal como lo recibe el caso de
+// uso.
+function describeWorkOrderLock(
+  suite: string,
+  expectedCases: number,
+  idOf: (actionCase: ActionCase) => string,
+) {
+  const found = suites.get(suite);
+
+  if (!found) {
+    throw new Error(`No existe la suite ${suite}.`);
+  }
+
+  const reachingDatabase = found.cases.filter((actionCase) => actionCase.data !== undefined);
+
+  describe(`H1: ${suite} decide con la orden bloqueada`, () => {
+    it(`cubre los ${expectedCases} casos que llegan a la base`, () => {
+      expect(reachingDatabase).toHaveLength(expectedCases);
+    });
+
+    for (const actionCase of reachingDatabase) {
+      it(actionCase.name, async () => {
+        const { calls } = await runAction(found.action, actionCase);
+
+        expectRowLockedBefore(calls, {
+          table: "orden_trabajo",
+          id: idOf(actionCase),
+          reads: isPrismaRead,
+        });
+      });
+    }
+  });
+}
+
+// Anular y finalizar no recortan el id del formulario (divergencia anotada en
+// la entrega 6): el bloqueo usa el mismo id que la consulta.
+const formWorkOrderId = (actionCase: ActionCase) => String(actionCase.form.id_orden_trabajo);
+
+describeWorkOrderLock("annulWorkOrderAction", 6, formWorkOrderId);
+describeWorkOrderLock("finishWorkOrderAction", 6, formWorkOrderId);
+
+// Entregar, entrega adicional y devolver reciben el id recortado (la accion y
+// el esquema lo recortan). Con un requerimiento de otra orden, se bloquea la
+// orden del formulario y el caso de uso rechaza despues, como antes.
+const trimmedWorkOrderId = (actionCase: ActionCase) =>
+  String(actionCase.form.id_orden_trabajo).trim();
+
+describeWorkOrderLock("deliverWorkOrderMaterialsAction", 10, trimmedWorkOrderId);
+describeWorkOrderLock("deliverAdditionalMaterialAction", 8, trimmedWorkOrderId);
+describeWorkOrderLock("returnWorkOrderMaterialAction", 8, trimmedWorkOrderId);
+
+// Cerrar y reabrir tambien reciben el id recortado (la accion y el esquema).
+describeWorkOrderLock("closeWorkOrderMaterialsAction", 9, trimmedWorkOrderId);
+describeWorkOrderLock("reopenWorkOrderMaterialsAction", 5, trimmedWorkOrderId);
