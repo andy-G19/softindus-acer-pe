@@ -409,6 +409,38 @@ describe("dbModuleMock con transacciones", () => {
     ]);
   });
 
+  it("con writesOutsideTransaction el cliente global escribe sin transaccion y queda marcado", async () => {
+    const prisma = dbModuleMock({
+      transactions: true,
+      recordTransactionEnd: true,
+      writesOutsideTransaction: true,
+    }).prisma as Client;
+
+    const { calls, result } = await characterizeHandler(async () => ({
+      outside: await prisma.cliente.create({ data: { nombre: "A" } }),
+      inside: await prisma.$transaction((tx) => tx.cliente.create({ data: { nombre: "B" } })),
+    }));
+
+    expect(result).toEqual({ outside: { nombre: "A" }, inside: { nombre: "B" } });
+    expect(calls).toEqual([
+      { prisma: "cliente.create", args: { data: { nombre: "A" } }, fueraDeTransaccion: true },
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.create", args: { data: { nombre: "B" } } },
+      { effect: "prisma.$transaction:commit", args: null },
+    ]);
+  });
+
+  it("con writesOutsideTransaction el cliente global sigue rechazado dentro de una transaccion", async () => {
+    const prisma = dbModuleMock({ transactions: true, writesOutsideTransaction: true })
+      .prisma as Client;
+
+    await expect(
+      characterizeHandler(() =>
+        prisma.$transaction(() => prisma.cliente.create({ data: { nombre: "A" } })),
+      ),
+    ).rejects.toThrow("usa el cliente global dentro de una transaccion");
+  });
+
   it("sin recordTransactionEnd no registra el final, como en la exportacion", async () => {
     const prisma = dbModuleMock({ transactions: true }).prisma as Client;
 

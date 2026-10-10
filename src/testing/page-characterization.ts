@@ -389,7 +389,9 @@ export function generatedRow(modelName: string, method: string, args: PrismaArgs
 
 export type Role = "ADMIN" | "SELLER" | "WORKSHOP_MASTER";
 
-export type PrismaCall = { prisma: string; args: unknown };
+// `fueraDeTransaccion` marca una escritura hecha con el cliente global, sin
+// transaccion (solo con la opcion writesOutsideTransaction de dbModuleMock).
+export type PrismaCall = { prisma: string; args: unknown; fueraDeTransaccion?: true };
 export type AuthzCall = { authz: string; roles: unknown };
 // Efecto simulado por un archivo de prueba (correlativo, bitacora, archivo
 // generado...), registrado en la misma secuencia que las llamadas a Prisma.
@@ -502,7 +504,11 @@ function rejectGlobalClientInTransaction(operation: string) {
   }
 }
 
-function createModelDelegate(modelName: string, inTransaction: boolean) {
+function createModelDelegate(
+  modelName: string,
+  inTransaction: boolean,
+  writesOutsideTransaction: boolean,
+) {
   return new Proxy(
     {},
     {
@@ -515,7 +521,7 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
           rejectGlobalClientInTransaction(`prisma.${modelName}.${method}`);
         }
 
-        const isWrite = inTransaction && WRITE_METHODS.has(method);
+        const isWrite = (inTransaction || writesOutsideTransaction) && WRITE_METHODS.has(method);
 
         if (!PRISMA_METHODS.has(method) && !isWrite) {
           throw new Error(
@@ -526,7 +532,9 @@ function createModelDelegate(modelName: string, inTransaction: boolean) {
         return async (args?: PrismaArgs) => {
           const key = `${modelName}.${method}`;
 
-          state.calls.push({ prisma: key, args });
+          state.calls.push(
+            isWrite && !inTransaction ? { prisma: key, args, fueraDeTransaccion: true } : { prisma: key, args },
+          );
 
           const override = overrideFor(key, args);
 
@@ -598,6 +606,10 @@ type PrismaDoubleOptions = {
   // Registra tambien el final de la transaccion: commit, o rollback con el
   // mensaje del error que la interrumpio.
   recordTransactionEnd: boolean;
+  // El cliente global admite escrituras fuera de una transaccion y las marca
+  // con `fueraDeTransaccion` (grupo 1 de fixes: caracterizar acciones que
+  // escriben sin transaccion antes de corregirlas).
+  writesOutsideTransaction: boolean;
 };
 
 function createPrismaDouble(options: PrismaDoubleOptions): object {
@@ -640,7 +652,11 @@ function createPrismaDouble(options: PrismaDoubleOptions): object {
 
         getModelFields(getSchema(), property);
 
-        return createModelDelegate(property, options.inTransaction);
+        return createModelDelegate(
+          property,
+          options.inTransaction,
+          options.writesOutsideTransaction,
+        );
       },
     },
   );
@@ -650,24 +666,28 @@ export const prismaDouble = createPrismaDouble({
   transactions: false,
   inTransaction: false,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 const transactionalPrismaDouble = createPrismaDouble({
   transactions: true,
   inTransaction: false,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 const transactionalPrismaDoubleWithEnd = createPrismaDouble({
   transactions: true,
   inTransaction: false,
   recordTransactionEnd: true,
+  writesOutsideTransaction: false,
 });
 
 const transactionDouble = createPrismaDouble({
   transactions: false,
   inTransaction: true,
   recordTransactionEnd: false,
+  writesOutsideTransaction: false,
 });
 
 // Las paginas usan el doble de solo lectura. Un route handler que escribe
@@ -682,9 +702,29 @@ const transactionDouble = createPrismaDouble({
 // Solo el cliente de la transaccion admite `$queryRaw` (grupo 1 de fixes): un
 // bloqueo de fila tomado fuera de una transaccion no protege nada, y el doble
 // lo rechaza.
+//
+// `writesOutsideTransaction: true` deja que el cliente global escriba sin
+// transaccion y marca esas escrituras con `fueraDeTransaccion`. Es una
+// excepcion para caracterizar una accion que hoy escribe asi antes de
+// corregirla; por defecto el doble lo sigue rechazando.
 export function dbModuleMock(
-  options: { transactions?: boolean; recordTransactionEnd?: boolean } = {},
+  options: {
+    transactions?: boolean;
+    recordTransactionEnd?: boolean;
+    writesOutsideTransaction?: boolean;
+  } = {},
 ) {
+  if (options.writesOutsideTransaction) {
+    return {
+      prisma: createPrismaDouble({
+        transactions: options.transactions ?? false,
+        inTransaction: false,
+        recordTransactionEnd: options.recordTransactionEnd ?? false,
+        writesOutsideTransaction: true,
+      }),
+    };
+  }
+
   if (!options.transactions) {
     return { prisma: prismaDouble };
   }
