@@ -1448,9 +1448,11 @@ cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
 
 ## Grupo 1 de fixes — Reglas dentro de la transacción y bloqueo de fila
 
-Fecha: 2026-10-09. Estado: hecho en local, con 12 commits de `d421805` a
-`bab22eb` y este registro sobre `40de6b7`, sin push. Falta la foto del «antes»
-en staging, la publicación, el CI y la verificación. Es el primero de los cuatro
+Fecha: 2026-10-09. Estado: verificado en staging el 2026-10-09. 12 commits de
+`d421805` a `bab22eb` y el registro `381de8c`, publicados sobre `40de6b7` (CI #48
+en verde, 2m 29s), con foto del «antes» tomada antes del push: las tres carreras
+se reprodujeron en staging y ninguna se repitió después. Falta integrarlo en
+`main`. Es el primero de los cuatro
 grupos de fixes del bloque de estabilización (ver la secuencia): corrige H1, H3
 y H4 de la entrega 6 y tres hallazgos nuevos de su auditoría, H8, H9 y H10.
 Cada `fix` cambia el comportamiento solo bajo concurrencia, salvo H9, que
@@ -1546,13 +1548,43 @@ líneas.
 
 ### Publicación, CI y verificación en staging
 
-Pendiente. Guion previsto: antes del push, con ADMIN y peticiones de a dos como
-máximo, foto de solo lectura de `COS00000002`, `MAT00000006` y `OTR00000006`, y,
-con autorización del responsable porque escribe datos de prueba, intentar
-reproducir H3 (anular a la vez dos costos indirectos del mismo costeo), H1
-(devolver dos veces a la vez) y H4 (generar dos veces a la vez el costeo de una
-orden nueva). Después del push y del CI: repetir, esperar 0 anomalías y el
-rechazo de la segunda petición, y comprobar H9 en la pantalla de salidas.
+- Foto del «antes» tomada el 2026-10-09 **antes del push**, con staging en
+  `a9eb6f8` (el código anterior al grupo), con ADMIN desde el navegador
+  integrado. Con autorización del responsable para escribir datos de prueba, las
+  carreras se provocaron con dos peticiones simultáneas al mismo formulario (como
+  dos pestañas o dos usuarios), nunca más de dos.
+- Push de 14 commits (`40de6b7` a `381de8c`): CI #48 en verde (2m 29s). Antes del
+  «después» se comprobó que staging servía el build nuevo: el desplegable de
+  salidas ya no ofrecía la orden anulada `OTR00000007`.
+
+| Hallazgo | Antes (`a9eb6f8`) | Después (`381de8c`) |
+|---|---|---|
+| H3 | Crear `CIN00000005` (1.00) y `CIN00000006` (2.00) y anularlos a la vez: los dos «Anulado», pero indirecto S/ 1.00 y total S/ 51,121.00 en lugar de 51,120.00. Reproducido al primer intento. | «Recalcular» deja `COS00000002` en 51,120.00. Tres repeticiones con `CIN00000007` a `CIN00000012`: indirecto 0.00 y total 51,120.00 en las dos observadas; la intermedia no se pudo leer y la siguiente la recalcula. |
+| H1 | Con 5 por devolver en `OTR00000006`, dos devoluciones de 5 a la vez: entran las dos (`MVI00000040` y `MVI00000041`), devuelto 220 > entregado 215, stock 304.79 (+5 fantasma) y el cierre sugería consumido −5.00. Reproducido al primer intento. | Con 5 por devolver, una devolución entra (`MVI00000043`) y la otra responde 500 después de esperar el bloqueo: entregado 225, devuelto 225, sin stock fantasma. |
+| H4 | Dos «Generar costeo» a la vez para `OTR00000008`, creada para la prueba: dos costeos, `COS00000003` y `COS00000004`. Reproducido al primer intento. | Para `OTR00000009`, creada para la prueba: un solo costeo, `COS00000005`; el segundo envío redirige a él y no consume correlativo. |
+| H9 | El desplegable ofrecía `OTR00000007` (anulada) y órdenes con materiales cerrados. | El desplegable ya no las ofrece; una salida de 0.01 forzada a `OTR00000007` y a `OTR00000001` (materiales cerrados) se rechaza con su mensaje y no deja movimiento. |
+
+H8 y H10 no se reprodujeron en staging: los cubren las pruebas de protocolo,
+las mutaciones y la caracterización. No se probaron otros roles: el grupo no
+cambia permisos, rutas ni `requireRole`. Los logs de Vercel no se revisaron.
+
+Incidente durante el «antes», corregido: el primer intento de H1 registró dos
+entregas adicionales de 5 (`MVI00000037` y `MVI00000038`) en lugar de dos
+devoluciones. El formulario de movimientos pasa de entrega adicional a
+devolución en el cliente, y el campo oculto `$ACTION_ID_…` que el servidor pinta
+para el envío sin JavaScript sigue siendo el de la entrega adicional. Se repuso
+con una devolución de 10 desde la pantalla (`MVI00000039`) y la carrera usó el
+identificador de la acción de devolución leído del JavaScript de la página.
+Esas dos entregas mostraron H2 en vivo: anotaron en el kárdex el mismo stock
+anterior (294.79 → 289.79), y el stock real quedó bien en 284.79.
+
+Datos de prueba que quedan en staging: `OTR00000006` con los materiales
+reabiertos (entregado y devuelto 225); `MAT00000006` en 299.79, que incluye los
+5 de stock fantasma del «antes» (sin ellos serían 294.79; se corrige con un
+ajuste si hace falta); `CIN00000005` a `CIN00000012` anulados en
+`COS00000002`; `OTR00000008` con dos costeos del «antes» y `OTR00000009` con uno.
+La evidencia está en `tmp/g1-diff/staging-antes.json` y `staging-despues.json`
+(ignorados).
 
 Límites y pendientes:
 
@@ -1588,7 +1620,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
-| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Hecho en local (12 commits y registro, sin push); falta staging |
+| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Verificado en staging (CI #48 verde; H3, H1 y H4 reproducidos antes y no después); falta integrar en `main` |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Pendiente |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
