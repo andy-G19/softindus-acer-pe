@@ -1140,3 +1140,13 @@ const formWorkOrderId = (actionCase: ActionCase) => String(actionCase.form.id_or
 
 describeWorkOrderLock("annulWorkOrderAction", 6, formWorkOrderId);
 describeWorkOrderLock("finishWorkOrderAction", 6, formWorkOrderId);
+
+// Entregar, entrega adicional y devolver reciben el id recortado (la accion y
+// el esquema lo recortan). Con un requerimiento de otra orden, se bloquea la
+// orden del formulario y el caso de uso rechaza despues, como antes.
+const trimmedWorkOrderId = (actionCase: ActionCase) =>
+  String(actionCase.form.id_orden_trabajo).trim();
+
+describeWorkOrderLock("deliverWorkOrderMaterialsAction", 10, trimmedWorkOrderId);
+describeWorkOrderLock("deliverAdditionalMaterialAction", 8, trimmedWorkOrderId);
+describeWorkOrderLock("returnWorkOrderMaterialAction", 8, trimmedWorkOrderId);

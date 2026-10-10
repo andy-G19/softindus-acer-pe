@@ -2415,6 +2415,19 @@ exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000008",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2431,6 +2444,10 @@ exports[`deliverAdditionalMaterialAction > el requerimiento es de otra orden > l
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "El material solicitado no pertenece a esta orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2447,6 +2464,19 @@ exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2463,6 +2493,10 @@ exports[`deliverAdditionalMaterialAction > el requerimiento no existe > llamadas
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "El material solicitado no pertenece a esta orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2479,6 +2513,19 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2495,10 +2542,6 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2607,6 +2650,19 @@ exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2623,6 +2679,10 @@ exports[`deliverAdditionalMaterialAction > material inactivo > llamadas 1`] = `
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No se puede entregar Plancha LAC 1/16: el material esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2639,6 +2699,19 @@ exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2655,6 +2728,10 @@ exports[`deliverAdditionalMaterialAction > materiales ya cerrados > llamadas 1`]
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden ya fueron cerrados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2685,6 +2762,19 @@ exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2701,6 +2791,10 @@ exports[`deliverAdditionalMaterialAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2717,6 +2811,19 @@ exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2733,6 +2840,10 @@ exports[`deliverAdditionalMaterialAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2749,6 +2860,19 @@ exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -2766,6 +2890,10 @@ exports[`deliverAdditionalMaterialAction > stock insuficiente > llamadas 1`] = `
     },
     "prisma": "requerimiento_orden_material.findUnique",
   },
+  {
+    "args": "Stock insuficiente para Plancha LAC 1/16: se piden 5.50 y hay 5.25.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -2779,6 +2907,19 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2797,10 +2938,6 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -3133,6 +3270,19 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3149,10 +3299,6 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -3254,6 +3400,19 @@ exports[`deliverWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3270,6 +3429,10 @@ exports[`deliverWorkOrderMaterialsAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3286,6 +3449,19 @@ exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a to
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3302,6 +3478,10 @@ exports[`deliverWorkOrderMaterialsAction > materiales inactivos: los nombra a to
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede entregar materiales inactivos: Plancha LAC 1/16, Pintura anticorrosiva.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3318,6 +3498,19 @@ exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3334,6 +3527,10 @@ exports[`deliverWorkOrderMaterialsAction > materiales ya cerrados > llamadas 1`]
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3350,6 +3547,19 @@ exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3366,6 +3576,10 @@ exports[`deliverWorkOrderMaterialsAction > nada pendiente por entregar > llamada
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No queda nada pendiente por entregar en esta orden. Usa la entrega adicional si produccion necesita mas material.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3382,6 +3596,19 @@ exports[`deliverWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3398,6 +3625,10 @@ exports[`deliverWorkOrderMaterialsAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3414,6 +3645,19 @@ exports[`deliverWorkOrderMaterialsAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3430,6 +3674,10 @@ exports[`deliverWorkOrderMaterialsAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se puede entregar material a una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3446,6 +3694,19 @@ exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3462,6 +3723,10 @@ exports[`deliverWorkOrderMaterialsAction > orden sin requerimiento congelado > l
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Esta orden no tiene requerimiento congelado: se creo antes de que el sistema lo registrara. No es posible entregar material contra ella.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -3492,6 +3757,19 @@ exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada mate
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "requerimiento_orden_material": {
@@ -3508,6 +3786,10 @@ exports[`deliverWorkOrderMaterialsAction > stock insuficiente: detalla cada mate
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Stock insuficiente para entregar la orden: Plancha LAC 1/16 requiere 68.75 y tiene 50.50; Pintura anticorrosiva requiere 4.00 y tiene 3.50.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4123,6 +4405,19 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4139,10 +4434,6 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -4261,6 +4552,19 @@ exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000008",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4277,6 +4581,10 @@ exports[`returnWorkOrderMaterialAction > el requerimiento es de otra orden > lla
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "El material indicado no pertenece a esta orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4293,6 +4601,19 @@ exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4309,6 +4630,10 @@ exports[`returnWorkOrderMaterialAction > el requerimiento no existe > llamadas 1
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "El material indicado no pertenece a esta orden.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4325,6 +4650,19 @@ exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] =
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4341,6 +4679,10 @@ exports[`returnWorkOrderMaterialAction > materiales ya cerrados > llamadas 1`] =
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "Los materiales de esta orden ya fueron cerrados: no se puede mover mas material.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4357,6 +4699,19 @@ exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4373,6 +4728,10 @@ exports[`returnWorkOrderMaterialAction > no queda nada por devolver > llamadas 1
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No queda material de Plancha LAC 1/16 por devolver: se entregaron 10.00 y ya se devolvieron 10.00.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4389,6 +4748,19 @@ exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4405,6 +4777,10 @@ exports[`returnWorkOrderMaterialAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No se puede devolver material de una orden anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -4421,6 +4797,19 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4437,10 +4826,6 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -4561,6 +4946,19 @@ exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "material": true,
@@ -4577,6 +4975,10 @@ exports[`returnWorkOrderMaterialAction > pide devolver mas de lo que queda > lla
       },
     },
     "prisma": "requerimiento_orden_material.findUnique",
+  },
+  {
+    "args": "No se puede devolver 7.00 de Plancha LAC 1/16: solo quedan 6.00 sin devolver.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
