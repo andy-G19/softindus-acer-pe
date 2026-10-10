@@ -2,10 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockWorkOrderRow } from "@/lib/row-locks";
 import {
   reassignWorkOrderProgressSchema,
   updateWorkOrderProgressSchema,
@@ -34,8 +36,13 @@ function normalizeProgressPercentage(
   return porcentajeAvance;
 }
 
-async function syncWorkOrderStatus(idOrdenTrabajo: string) {
-  const advances = await prisma.avance_orden.findMany({
+// Recibe el cliente de la transaccion de quien lo llama, que ya bloqueo la orden (H8):
+// lee los avances y escribe el estado con lo confirmado por las demas operaciones.
+async function syncWorkOrderStatus(
+  tx: Prisma.TransactionClient,
+  idOrdenTrabajo: string,
+) {
+  const advances = await tx.avance_orden.findMany({
     where: {
       id_orden_trabajo: idOrdenTrabajo,
     },
@@ -45,7 +52,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
   });
 
   if (advances.length === 0) {
-    await prisma.orden_trabajo.update({
+    await tx.orden_trabajo.update({
       where: {
         id_orden_trabajo: idOrdenTrabajo,
       },
@@ -71,7 +78,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
   );
 
   if (allFinished) {
-    await prisma.orden_trabajo.update({
+    await tx.orden_trabajo.update({
       where: {
         id_orden_trabajo: idOrdenTrabajo,
       },
@@ -85,7 +92,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
   }
 
   if (hasInProgress) {
-    await prisma.orden_trabajo.update({
+    await tx.orden_trabajo.update({
       where: {
         id_orden_trabajo: idOrdenTrabajo,
       },
@@ -99,7 +106,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
   }
 
   if (hasPaused) {
-    await prisma.orden_trabajo.update({
+    await tx.orden_trabajo.update({
       where: {
         id_orden_trabajo: idOrdenTrabajo,
       },
@@ -112,7 +119,7 @@ async function syncWorkOrderStatus(idOrdenTrabajo: string) {
     return;
   }
 
-  await prisma.orden_trabajo.update({
+  await tx.orden_trabajo.update({
     where: {
       id_orden_trabajo: idOrdenTrabajo,
     },
@@ -132,50 +139,54 @@ export async function generateWorkOrderProgressAction(formData: FormData) {
     throw new Error("No se recibió la orden de trabajo.");
   }
 
-  const workOrder = await prisma.orden_trabajo.findUnique({
-    where: {
-      id_orden_trabajo: idOrdenTrabajo,
-    },
-    include: {
-      ruta_fabricacion: {
-        include: {
-          etapa_ruta: {
-            where: {
-              estado: true,
-            },
-            orderBy: {
-              orden_secuencia: "asc",
+  await prisma.$transaction(async (tx) => {
+    // H8: la orden se bloquea antes de leerla. Un doble envio generaba dos juegos de
+    // etapas, y una anulacion simultanea quedaba pisada por el estado pendiente.
+    await lockWorkOrderRow(tx, idOrdenTrabajo);
+
+    const workOrder = await tx.orden_trabajo.findUnique({
+      where: {
+        id_orden_trabajo: idOrdenTrabajo,
+      },
+      include: {
+        ruta_fabricacion: {
+          include: {
+            etapa_ruta: {
+              where: {
+                estado: true,
+              },
+              orderBy: {
+                orden_secuencia: "asc",
+              },
             },
           },
         },
+        avance_orden: true,
       },
-      avance_orden: true,
-    },
-  });
+    });
 
-  if (!workOrder) {
-    throw new Error("La orden de trabajo no existe.");
-  }
+    if (!workOrder) {
+      throw new Error("La orden de trabajo no existe.");
+    }
 
-  if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
-    throw new Error(
-      "No se pueden generar avances para una orden anulada o finalizada.",
-    );
-  }
+    if (workOrder.estado === "anulada" || workOrder.estado === "finalizada") {
+      throw new Error(
+        "No se pueden generar avances para una orden anulada o finalizada.",
+      );
+    }
 
-  if (!workOrder.ruta_fabricacion) {
-    throw new Error("La orden no tiene una ruta de fabricación asociada.");
-  }
+    if (!workOrder.ruta_fabricacion) {
+      throw new Error("La orden no tiene una ruta de fabricación asociada.");
+    }
 
-  if (workOrder.ruta_fabricacion.etapa_ruta.length === 0) {
-    throw new Error("La ruta asociada no tiene etapas activas.");
-  }
+    if (workOrder.ruta_fabricacion.etapa_ruta.length === 0) {
+      throw new Error("La ruta asociada no tiene etapas activas.");
+    }
 
-  if (workOrder.avance_orden.length > 0) {
-    throw new Error("Esta orden ya tiene avances generados.");
-  }
+    if (workOrder.avance_orden.length > 0) {
+      throw new Error("Esta orden ya tiene avances generados.");
+    }
 
-  await prisma.$transaction(async (tx) => {
     const advanceIds = await getNextCorrelativeIds(tx, {
       codigoEntidad: "avance_orden",
       prefijo: "AVN",
@@ -230,81 +241,107 @@ export async function updateWorkOrderProgressAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const advance = await prisma.avance_orden.findUnique({
-    where: {
-      id_avance: data.id_avance,
-    },
-    include: {
-      orden_trabajo: true,
-    },
-  });
+  // H8: el avance, la sincronizacion del estado de la orden y la bitacora van en una sola
+  // transaccion, con la orden bloqueada. Antes eran escrituras sueltas: una actualizacion
+  // simultanea con una anulacion devolvia la orden a en proceso, y una falla a mitad
+  // dejaba el avance cambiado y la orden sin sincronizar.
+  const idOrdenTrabajo = await prisma.$transaction(async (tx) => {
+    const located = await tx.avance_orden.findUnique({
+      where: {
+        id_avance: data.id_avance,
+      },
+      select: {
+        id_orden_trabajo: true,
+      },
+    });
 
-  if (!advance) {
-    throw new Error("El avance seleccionado no existe.");
-  }
+    if (!located) {
+      throw new Error("El avance seleccionado no existe.");
+    }
 
-  if (
-    advance.orden_trabajo.estado === "anulada" ||
-    advance.orden_trabajo.estado === "finalizada"
-  ) {
-    throw new Error(
-      "No se puede modificar el avance de una orden anulada o finalizada.",
+    // El avance nunca cambia de orden: basta su id para saber que fila bloquear antes
+    // de leer lo que decide.
+    await lockWorkOrderRow(tx, located.id_orden_trabajo);
+
+    const advance = await tx.avance_orden.findUnique({
+      where: {
+        id_avance: data.id_avance,
+      },
+      include: {
+        orden_trabajo: true,
+      },
+    });
+
+    if (!advance) {
+      throw new Error("El avance seleccionado no existe.");
+    }
+
+    if (
+      advance.orden_trabajo.estado === "anulada" ||
+      advance.orden_trabajo.estado === "finalizada"
+    ) {
+      throw new Error(
+        "No se puede modificar el avance de una orden anulada o finalizada.",
+      );
+    }
+
+    const now = new Date();
+    const normalizedPercentage = normalizeProgressPercentage(
+      data.estado_etapa,
+      data.porcentaje_avance,
     );
-  }
 
-  const now = new Date();
-  const normalizedPercentage = normalizeProgressPercentage(
-    data.estado_etapa,
-    data.porcentaje_avance,
-  );
+    const nextStartDate =
+      data.estado_etapa === "en_proceso" ||
+      data.estado_etapa === "pausada" ||
+      data.estado_etapa === "terminada"
+        ? advance.fecha_inicio_etapa ?? now
+        : null;
 
-  const nextStartDate =
-    data.estado_etapa === "en_proceso" ||
-    data.estado_etapa === "pausada" ||
-    data.estado_etapa === "terminada"
-      ? advance.fecha_inicio_etapa ?? now
-      : null;
+    const nextEndDate =
+      data.estado_etapa === "terminada"
+        ? advance.fecha_fin_etapa ?? now
+        : null;
 
-  const nextEndDate =
-    data.estado_etapa === "terminada"
-      ? advance.fecha_fin_etapa ?? now
-      : null;
+    await tx.avance_orden.update({
+      where: {
+        id_avance: data.id_avance,
+      },
+      data: {
+        id_operario: advance.id_operario,
+        estado_etapa: data.estado_etapa,
+        porcentaje_avance: normalizedPercentage,
+        fecha_inicio_etapa: nextStartDate,
+        fecha_fin_etapa: nextEndDate,
+        observaciones: data.observaciones,
+        id_usuario_actualiza: session.user.id,
+      },
+    });
 
-  await prisma.avance_orden.update({
-    where: {
-      id_avance: data.id_avance,
-    },
-    data: {
-      id_operario: advance.id_operario,
-      estado_etapa: data.estado_etapa,
-      porcentaje_avance: normalizedPercentage,
-      fecha_inicio_etapa: nextStartDate,
-      fecha_fin_etapa: nextEndDate,
-      observaciones: data.observaciones,
-      id_usuario_actualiza: session.user.id,
-    },
-  });
+    await syncWorkOrderStatus(tx, advance.id_orden_trabajo);
 
-  await syncWorkOrderStatus(advance.id_orden_trabajo);
+    await registerAuditLog({
+      userId: session.user.id,
+      entidad_afectada: "avance_orden",
+      id_registro_afectado: data.id_avance,
+      accion: "actualizar",
+      detalle: `Avance actualizado a ${data.estado_etapa} (${normalizedPercentage}%).`,
+      tx,
+    });
 
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "avance_orden",
-    id_registro_afectado: data.id_avance,
-    accion: "actualizar",
-    detalle: `Avance actualizado a ${data.estado_etapa} (${normalizedPercentage}%).`,
+    return advance.id_orden_trabajo;
   });
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
-  revalidatePath(`/dashboard/production/work-orders/${advance.id_orden_trabajo}`);
+  revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
   revalidatePath(
-    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress`,
   );
 
   redirect(
-    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress?toast=work-order-progress-updated`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress?toast=work-order-progress-updated`,
   );
 }
 
@@ -323,55 +360,74 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const [advance, newOperator] = await Promise.all([
-    prisma.avance_orden.findUnique({
+  // H8: la reasignacion decide con la orden bloqueada. Un doble envio registraba dos
+  // reasignaciones, y se podia reasignar en una orden que se estaba anulando.
+  const { idOrdenTrabajo, idAvance } = await prisma.$transaction(async (tx) => {
+    const located = await tx.avance_orden.findUnique({
       where: {
         id_avance: data.id_avance,
       },
-      include: {
-        etapa_ruta: true,
-        operario: true,
-        orden_trabajo: true,
-      },
-    }),
-
-    prisma.operario.findFirst({
-      where: {
-        id_operario: data.id_operario_nuevo,
-        estado: "activo",
-      },
       select: {
-        id_operario: true,
-        nombres: true,
-        apellidos: true,
+        id_orden_trabajo: true,
       },
-    }),
-  ]);
+    });
 
-  if (!advance) {
-    throw new Error("El avance seleccionado no existe.");
-  }
+    if (!located) {
+      throw new Error("El avance seleccionado no existe.");
+    }
 
-  if (
-    advance.orden_trabajo.estado === "anulada" ||
-    advance.orden_trabajo.estado === "finalizada"
-  ) {
-    throw new Error(
-      "No se puede reasignar el avance de una orden anulada o finalizada.",
-    );
-  }
+    // El avance nunca cambia de orden: basta su id para saber que fila bloquear antes
+    // de leer lo que decide.
+    await lockWorkOrderRow(tx, located.id_orden_trabajo);
 
-  if (!newOperator) {
-    throw new Error("El nuevo operario no existe o esta inactivo.");
-  }
+    const [advance, newOperator] = await Promise.all([
+      tx.avance_orden.findUnique({
+        where: {
+          id_avance: data.id_avance,
+        },
+        include: {
+          etapa_ruta: true,
+          operario: true,
+          orden_trabajo: true,
+        },
+      }),
 
-  if (advance.id_operario === newOperator.id_operario) {
-    throw new Error("El nuevo operario debe ser distinto al operario actual.");
-  }
+      tx.operario.findFirst({
+        where: {
+          id_operario: data.id_operario_nuevo,
+          estado: "activo",
+        },
+        select: {
+          id_operario: true,
+          nombres: true,
+          apellidos: true,
+        },
+      }),
+    ]);
 
-  const reassignmentDate = new Date();
+    if (!advance) {
+      throw new Error("El avance seleccionado no existe.");
+    }
 
-  await prisma.$transaction(async (tx) => {
+    if (
+      advance.orden_trabajo.estado === "anulada" ||
+      advance.orden_trabajo.estado === "finalizada"
+    ) {
+      throw new Error(
+        "No se puede reasignar el avance de una orden anulada o finalizada.",
+      );
+    }
+
+    if (!newOperator) {
+      throw new Error("El nuevo operario no existe o esta inactivo.");
+    }
+
+    if (advance.id_operario === newOperator.id_operario) {
+      throw new Error("El nuevo operario debe ser distinto al operario actual.");
+    }
+
+    const reassignmentDate = new Date();
+
     const idReasignacion = await getNextCorrelativeId(tx, {
       codigoEntidad: "reasignacion_tarea",
       prefijo: "REA",
@@ -407,21 +463,23 @@ export async function reassignWorkOrderProgressAction(formData: FormData) {
       detalle: `Avance ${advance.id_avance} reasignado a ${newOperator.apellidos}, ${newOperator.nombres}.`,
       tx,
     });
+
+    return { idOrdenTrabajo: advance.id_orden_trabajo, idAvance: advance.id_avance };
   });
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/work-orders");
-  revalidatePath(`/dashboard/production/work-orders/${advance.id_orden_trabajo}`);
+  revalidatePath(`/dashboard/production/work-orders/${idOrdenTrabajo}`);
   revalidatePath(
-    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress`,
   );
   revalidatePath(
-    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress/${advance.id_avance}/reassign`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress/${idAvance}/reassign`,
   );
 
   redirect(
-    `/dashboard/production/work-orders/${advance.id_orden_trabajo}/progress?toast=work-order-progress-reassigned`,
+    `/dashboard/production/work-orders/${idOrdenTrabajo}/progress?toast=work-order-progress-reassigned`,
   );
 }
 

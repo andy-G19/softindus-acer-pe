@@ -11,7 +11,10 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isPrismaRead,
   type DataOverrides,
+  type PrismaCall,
 } from "@/testing/page-characterization";
 
 // Caracterizacion de las acciones de avance de la orden de trabajo (grupo 1
@@ -385,3 +388,100 @@ defineActionSuite("reassignWorkOrderProgressAction", reassignWorkOrderProgressAc
     data: { "avance_orden.findUnique": advanceRow(), "operario.findFirst": newOperator },
   },
 ]);
+
+// ---------------------------------------------------------------------------
+// H8 (grupo 1 de fixes): los avances deciden con la orden bloqueada
+// ---------------------------------------------------------------------------
+
+// Generar, actualizar y reasignar leian la orden y validaban fuera de una
+// transaccion: un doble envio de generar dejaba dos juegos de etapas, y una
+// actualizacion simultanea con una anulacion devolvia la orden a en proceso.
+// Ahora cada accion abre la transaccion y bloquea la orden antes de leer lo
+// que decide. Actualizar y reasignar reciben el avance: primero leen solo su
+// id_orden_trabajo, que ningun codigo cambia, y despues bloquean esa orden.
+//
+// La prueba no reproduce la carrera (no hay base de datos): fija el protocolo
+// en los casos que llegan a la orden.
+function locatesTheOrder(call: PrismaCall) {
+  const select = (call.args as { select?: Record<string, unknown> } | undefined)?.select;
+
+  return (
+    call.prisma === "avance_orden.findUnique" &&
+    JSON.stringify(select) === JSON.stringify({ id_orden_trabajo: true })
+  );
+}
+
+function describeWorkOrderLock(suite: string, caseNames: string[]) {
+  const found = suites.get(suite);
+
+  if (!found) {
+    throw new Error(`No existe la suite ${suite}.`);
+  }
+
+  describe(`H8: ${suite} decide con la orden bloqueada`, () => {
+    for (const caseName of caseNames) {
+      it(caseName, async () => {
+        const actionCase = found.cases.find((item) => item.name === caseName);
+
+        if (!actionCase) {
+          throw new Error(`No existe el caso "${caseName}" en ${suite}.`);
+        }
+
+        const { calls } = await runAction(found.action, actionCase);
+
+        expectRowLockedBefore(calls, {
+          table: "orden_trabajo",
+          id: OT,
+          reads: (call) => isPrismaRead(call) && !locatesTheOrder(call),
+        });
+      });
+    }
+  });
+}
+
+const casesWithDatabase = (suite: string, exclude: string[] = []) =>
+  (suites.get(suite)?.cases ?? [])
+    .filter((actionCase) => actionCase.data !== undefined)
+    .map((actionCase) => actionCase.name)
+    .filter((name) => !exclude.includes(name));
+
+// Si el avance no existe no hay orden que bloquear: esos casos los fija la
+// caracterizacion.
+describeWorkOrderLock("generateWorkOrderProgressAction", casesWithDatabase("generateWorkOrderProgressAction"));
+describeWorkOrderLock(
+  "updateWorkOrderProgressAction",
+  casesWithDatabase("updateWorkOrderProgressAction", ["el avance no existe"]),
+);
+describeWorkOrderLock(
+  "reassignWorkOrderProgressAction",
+  casesWithDatabase("reassignWorkOrderProgressAction", ["el avance no existe"]),
+);
+
+it("H8 cubre 7, 6 y 5 casos de generar, actualizar y reasignar", () => {
+  expect(casesWithDatabase("generateWorkOrderProgressAction")).toHaveLength(7);
+  expect(casesWithDatabase("updateWorkOrderProgressAction", ["el avance no existe"])).toHaveLength(6);
+  expect(casesWithDatabase("reassignWorkOrderProgressAction", ["el avance no existe"])).toHaveLength(5);
+});
+
+// Actualizar escribia el avance, el estado de la orden y la bitacora por
+// separado: una falla a mitad dejaba el avance cambiado y la orden sin
+// sincronizar. Ahora es una sola transaccion.
+describe("H8: actualizar un avance escribe todo en una transaccion", () => {
+  const updates = (suites.get("updateWorkOrderProgressAction")?.cases ?? []).filter(
+    (actionCase) => actionCase.data?.["avance_orden.findMany"] !== undefined,
+  );
+
+  it("cubre las 4 actualizaciones que escriben", () => {
+    expect(updates).toHaveLength(4);
+  });
+
+  for (const actionCase of updates) {
+    it(actionCase.name, async () => {
+      const { calls } = await runAction(updateWorkOrderProgressAction, actionCase);
+      const audit = calls.filter((call) => "effect" in call && call.effect === "registerAuditLog");
+
+      expect(calls.filter((call) => "fueraDeTransaccion" in call)).toEqual([]);
+      expect(audit).toMatchObject([{ args: { enTransaccion: true } }]);
+    });
+  }
+});

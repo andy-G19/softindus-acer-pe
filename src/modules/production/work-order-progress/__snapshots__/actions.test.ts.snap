@@ -10,6 +10,19 @@ exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y d
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -31,10 +44,6 @@ exports[`generateWorkOrderProgressAction > genera un avance por etapa activa y d
       },
     },
     "prisma": "orden_trabajo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -125,6 +134,19 @@ exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -146,6 +168,10 @@ exports[`generateWorkOrderProgressAction > la orden no existe > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden de trabajo no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -162,6 +188,19 @@ exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -183,6 +222,10 @@ exports[`generateWorkOrderProgressAction > la orden ya tiene avances > llamadas 
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "Esta orden ya tiene avances generados.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -199,6 +242,19 @@ exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -220,6 +276,10 @@ exports[`generateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se pueden generar avances para una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -236,6 +296,19 @@ exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -257,6 +330,10 @@ exports[`generateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "No se pueden generar avances para una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -273,6 +350,19 @@ exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -294,6 +384,10 @@ exports[`generateWorkOrderProgressAction > orden sin ruta de fabricacion > llama
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La orden no tiene una ruta de fabricación asociada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -310,6 +404,19 @@ exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "avance_orden": true,
@@ -331,6 +438,10 @@ exports[`generateWorkOrderProgressAction > ruta sin etapas activas > llamadas 1`
       },
     },
     "prisma": "orden_trabajo.findUnique",
+  },
+  {
+    "args": "La ruta asociada no tiene etapas activas.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -375,11 +486,13 @@ exports[`reassignWorkOrderProgressAction > el avance no existe > llamadas 1`] = 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "include": {
-        "etapa_ruta": true,
-        "operario": true,
-        "orden_trabajo": true,
+      "select": {
+        "id_orden_trabajo": true,
       },
       "where": {
         "id_avance": "AVN00000002",
@@ -388,18 +501,8 @@ exports[`reassignWorkOrderProgressAction > el avance no existe > llamadas 1`] = 
     "prisma": "avance_orden.findUnique",
   },
   {
-    "args": {
-      "select": {
-        "apellidos": true,
-        "id_operario": true,
-        "nombres": true,
-      },
-      "where": {
-        "estado": "activo",
-        "id_operario": "OPE00000004",
-      },
-    },
-    "prisma": "operario.findFirst",
+    "args": "El avance seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -414,6 +517,30 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > llama
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -442,6 +569,10 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario es el mismo > llama
     },
     "prisma": "operario.findFirst",
   },
+  {
+    "args": "El nuevo operario debe ser distinto al operario actual.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -455,6 +586,30 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta in
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -482,6 +637,10 @@ exports[`reassignWorkOrderProgressAction > el nuevo operario no existe o esta in
       },
     },
     "prisma": "operario.findFirst",
+  },
+  {
+    "args": "El nuevo operario no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -498,6 +657,30 @@ exports[`reassignWorkOrderProgressAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta": true,
@@ -523,6 +706,10 @@ exports[`reassignWorkOrderProgressAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "operario.findFirst",
+  },
+  {
+    "args": "No se puede reasignar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -539,6 +726,30 @@ exports[`reassignWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta": true,
@@ -564,6 +775,10 @@ exports[`reassignWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "operario.findFirst",
+  },
+  {
+    "args": "No se puede reasignar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -580,6 +795,30 @@ exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, c
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta": true,
@@ -605,10 +844,6 @@ exports[`reassignWorkOrderProgressAction > reasigna: registra la reasignacion, c
       },
     },
     "prisma": "operario.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -711,15 +946,23 @@ exports[`updateWorkOrderProgressAction > el avance no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
     "args": {
-      "include": {
-        "orden_trabajo": true,
+      "select": {
+        "id_orden_trabajo": true,
       },
       "where": {
         "id_avance": "AVN00000002",
       },
     },
     "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "El avance seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -734,6 +977,30 @@ exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -761,7 +1028,6 @@ exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el
         "id_avance": "AVN00000002",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "avance_orden.update",
   },
   {
@@ -785,19 +1051,22 @@ exports[`updateWorkOrderProgressAction > en proceso con 0 %: sube a 1 %, fija el
         "id_orden_trabajo": "OTR00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "orden_trabajo.update",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Avance actualizado a en_proceso (1%).",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "avance_orden",
       "id_registro_afectado": "AVN00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -834,6 +1103,30 @@ exports[`updateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": true,
@@ -843,6 +1136,10 @@ exports[`updateWorkOrderProgressAction > orden anulada > llamadas 1`] = `
       },
     },
     "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "No se puede modificar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -859,6 +1156,30 @@ exports[`updateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": true,
@@ -868,6 +1189,10 @@ exports[`updateWorkOrderProgressAction > orden finalizada > llamadas 1`] = `
       },
     },
     "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": "No se puede modificar el avance de una orden anulada o finalizada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -882,6 +1207,30 @@ exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la 
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -909,7 +1258,6 @@ exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la 
         "id_avance": "AVN00000002",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "avance_orden.update",
   },
   {
@@ -933,19 +1281,22 @@ exports[`updateWorkOrderProgressAction > pausa con 100 %: baja a 99 %, borra la 
         "id_orden_trabajo": "OTR00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "orden_trabajo.update",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Avance actualizado a pausada (99%).",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "avance_orden",
       "id_registro_afectado": "AVN00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -982,6 +1333,30 @@ exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserv
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": true,
@@ -1007,7 +1382,6 @@ exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserv
         "id_avance": "AVN00000002",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "avance_orden.update",
   },
   {
@@ -1031,19 +1405,22 @@ exports[`updateWorkOrderProgressAction > termina la ultima etapa: 100 %, conserv
         "id_orden_trabajo": "OTR00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "orden_trabajo.update",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Avance actualizado a terminada (100%).",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "avance_orden",
       "id_registro_afectado": "AVN00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
@@ -1080,6 +1457,30 @@ exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "select": {
+        "id_orden_trabajo": true,
+      },
+      "where": {
+        "id_avance": "AVN00000002",
+      },
+    },
+    "prisma": "avance_orden.findUnique",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_orden_trabajo FROM aceros.orden_trabajo WHERE id_orden_trabajo = $1 FOR NO KEY UPDATE",
+      "values": [
+        "OTR00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "orden_trabajo": true,
@@ -1105,7 +1506,6 @@ exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y 
         "id_avance": "AVN00000002",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "avance_orden.update",
   },
   {
@@ -1129,19 +1529,22 @@ exports[`updateWorkOrderProgressAction > vuelve a pendiente: 0 %, sin fechas, y 
         "id_orden_trabajo": "OTR00000007",
       },
     },
-    "fueraDeTransaccion": true,
     "prisma": "orden_trabajo.update",
   },
   {
     "args": {
       "accion": "actualizar",
       "detalle": "Avance actualizado a pendiente (0%).",
-      "enTransaccion": false,
+      "enTransaccion": true,
       "entidad_afectada": "avance_orden",
       "id_registro_afectado": "AVN00000002",
       "userId": "USU00000001",
     },
     "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
   {
     "args": "/dashboard",
