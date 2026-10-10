@@ -659,3 +659,33 @@ describe("H4: generar el costeo decide con la orden bloqueada", () => {
     });
   }
 });
+
+// ---------------------------------------------------------------------------
+// H10 (grupo 1 de fixes): anular un costo indirecto lo bloquea antes de leerlo
+// ---------------------------------------------------------------------------
+
+// Dos anulaciones simultaneas del mismo costo indirecto pasaban las dos la
+// comprobacion de [ANULADO]: desde H3 el total queda bien, pero la bitacora
+// registraba dos anulaciones. Ahora la fila del costo indirecto se bloquea
+// antes de leerla y la segunda anulacion la encuentra anulada.
+describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
+  const casesWithIndirectCost = (suites.get("annulIndirectCostAction")?.cases ?? []).filter(
+    (actionCase) => actionCase.form.id_costo_indirecto.trim() !== "",
+  );
+
+  it("cubre los 5 casos que llegan a la base", () => {
+    expect(casesWithIndirectCost).toHaveLength(5);
+  });
+
+  for (const actionCase of casesWithIndirectCost) {
+    it(actionCase.name, async () => {
+      const { calls } = await runAction(annulIndirectCostAction, actionCase);
+
+      expectRowLockedBefore(calls, {
+        table: "costo_indirecto",
+        id: actionCase.form.id_costo_indirecto.trim(),
+        reads: isPrismaRead,
+      });
+    });
+  }
+});

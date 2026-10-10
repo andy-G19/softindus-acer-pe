@@ -39,3 +39,12 @@ export async function lockWorkOrderRow(tx: RowLockClient, idOrdenTrabajo: string
     FOR NO KEY UPDATE
   `);
 }
+
+export async function lockIndirectCostRow(tx: RowLockClient, idCostoIndirecto: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_costo_indirecto
+    FROM aceros.costo_indirecto
+    WHERE id_costo_indirecto = ${idCostoIndirecto}
+    FOR NO KEY UPDATE
+  `);
+}

@@ -7,6 +7,7 @@ import { requireRole } from "@/lib/authz";
 import { recalculateCostingTotals } from "@/lib/costing";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockIndirectCostRow } from "@/lib/row-locks";
 import { indirectCostSchema } from "@/schemas/costs/indirect-cost.schema";
 
 async function requireAdmin() {
@@ -115,6 +116,11 @@ export async function annulIndirectCostAction(formData: FormData) {
   let idCosteo = "";
 
   await prisma.$transaction(async (tx) => {
+    // H10: se bloquea el costo indirecto antes de leerlo. Dos anulaciones simultaneas
+    // pasaban las dos la comprobacion de [ANULADO] y la bitacora registraba dos; ahora la
+    // segunda espera y lo encuentra anulado. Despues, el recalculo bloquea el costeo.
+    await lockIndirectCostRow(tx, idCostoIndirecto);
+
     const indirectCost = await tx.costo_indirecto.findUnique({
       where: {
         id_costo_indirecto: idCostoIndirecto,

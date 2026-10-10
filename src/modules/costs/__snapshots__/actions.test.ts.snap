@@ -14,6 +14,15 @@ exports[`annulIndirectCostAction > anula conservando las observaciones previas y
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -135,6 +144,15 @@ exports[`annulIndirectCostAction > anula un costo sin observaciones > llamadas 1
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -261,6 +279,15 @@ exports[`annulIndirectCostAction > costo indirecto sin costeo asociado > llamada
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -297,6 +324,15 @@ exports[`annulIndirectCostAction > costo indirecto ya anulado > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "concepto": true,
         "id_costeo": true,
@@ -330,6 +366,15 @@ exports[`annulIndirectCostAction > el costo indirecto no existe > llamadas 1`] =
   {
     "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_costo_indirecto FROM aceros.costo_indirecto WHERE id_costo_indirecto = $1 FOR NO KEY UPDATE",
+      "values": [
+        "CIN00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
