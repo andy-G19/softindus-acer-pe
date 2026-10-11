@@ -24,12 +24,11 @@ import {
 // Cualquier otra forma hace fallar la prueba: o se escribe con una de estas o
 // se ensena a la prueba a reconocerla.
 
-// Entradas del registro que ningun archivo emite. Se conservan para no cambiar
-// lo que muestra una URL antigua con esa clave; retirarlas es un fix aparte.
-const CLAVES_SIN_EMISOR: Record<string, string> = {
-  "work-order-materials-consumed":
-    "Sin emisor desde 5599788: el consumo todo o nada se reemplazo por la entrega, la devolucion y el cierre de materiales.",
-};
+// Entradas del registro que ningun archivo emite, cada una con su motivo. Solo
+// se conserva una para no cambiar lo que muestra una URL antigua con esa
+// clave; retirarla es un fix aparte. La ultima, work-order-materials-consumed,
+// se retiro en el grupo 3 de fixes.
+const CLAVES_SIN_EMISOR: Record<string, string> = {};
 
 type Emission = { file: string; key: string };
 

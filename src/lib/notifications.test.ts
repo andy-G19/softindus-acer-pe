@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { NotificationDefinition } from "@/lib/notification-catalog";
 import {
   closeModal,
+  notify,
   showConfirm,
   showDeleteConfirm,
   showError,
@@ -65,6 +67,24 @@ describe("toasts", () => {
     showError("Error <b>grave</b> & total", "<img src=x onerror=alert(1)>");
 
     expect(takeNotificationCalls()).toMatchSnapshot();
+  });
+});
+
+// Hasta el grupo 3 de fixes este caso lo cubrian los casos F2 del puente
+// ?toast=, que pasaban a notify lo que heredaba el registro de Object.
+describe("notify", () => {
+  it("una severidad fuera del contrato se muestra como info", () => {
+    const definition = {
+      type: "otro",
+      message: "Mensaje de prueba",
+      description: "Descripcion de prueba",
+    } as unknown as NotificationDefinition;
+
+    notify(definition);
+    const calls = takeNotificationCalls();
+    showInfo("Mensaje de prueba", "Descripcion de prueba");
+
+    expect(calls).toEqual(takeNotificationCalls());
   });
 });
 

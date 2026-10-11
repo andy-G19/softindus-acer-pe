@@ -1,85 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`F2: claves del prototipo de Object > __proto__ muestra un toast info vacio y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold"></p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
-    "toast": "info",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
-exports[`F2: claves del prototipo de Object > constructor muestra un toast info vacio y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold"></p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
-    "toast": "info",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
-exports[`F2: claves del prototipo de Object > hasOwnProperty muestra un toast info vacio y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold"></p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
-    "toast": "info",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
-exports[`F2: claves del prototipo de Object > toString muestra un toast info vacio y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold"></p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
-    "toast": "info",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
-exports[`F2: claves del prototipo de Object > valueOf muestra un toast info vacio y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold"></p></div>",
-    "options": {
-      "className": "toast-industrial-info",
-      "progressClassName": "toast-industrial-progress-info",
-    },
-    "toast": "info",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
 exports[`URL > con toast repetido muestra el primero y quita todos 1`] = `
 [
   {
@@ -1988,22 +1908,6 @@ exports[`cada clave del catalogo > work-order-materials-closed: muestra su toast
 [
   {
     "html": "<div class="space-y-1"><p class="text-sm font-semibold">Materiales cerrados</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
-    "toast": "success",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
-exports[`cada clave del catalogo > work-order-materials-consumed: muestra su toast y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Consumo de materiales registrado</p></div>",
     "options": {
       "className": "toast-industrial-success",
       "progressClassName": "toast-industrial-progress-success",

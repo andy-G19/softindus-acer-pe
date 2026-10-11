@@ -21,12 +21,13 @@ import {
 // entrada desapareciera, su caso fallaria en lugar de quedar como snapshot
 // obsoleto, que Vitest no marca como error.
 //
-// Comportamientos actuales que se conservan (se corrigen aparte):
-// - F1: el ref evita repetir una clave mientras el puente siga montado. Una
-//   segunda operacion igual no muestra su toast y deja ?toast= en la URL.
-// - F2: las claves del prototipo de Object (toString, constructor...)
-//   encuentran algo y muestran un toast info vacio.
-// - F3: con ?toast= vacio no muestra nada y no limpia la URL.
+// Corregidos en el grupo 3 de fixes:
+// - F1: el ref solo evita repetir una clave mientras la URL la conserve (el
+//   efecto doble del modo estricto). Cuando la URL queda sin ?toast=, la
+//   siguiente clave, aunque sea la misma, es otra operacion y se muestra.
+// - F2: las claves del prototipo de Object (toString, constructor...) son
+//   claves sin entrada: no muestran nada y limpian la URL.
+// - F3: con ?toast= vacio no muestra nada y limpia la URL.
 
 const mocks = vi.hoisted(() => ({
   pathname: "/dashboard",
@@ -79,7 +80,8 @@ function render(pathname: string, search = "") {
   NotificationQueryBridge();
 }
 
-// Las 124 claves del catalogo al empezar la entrega 7, en su orden.
+// Las 124 claves del catalogo al empezar la entrega 7, en su orden, menos
+// work-order-materials-consumed, retirada en el grupo 3 de fixes.
 const CLAVES = [
   "login-success",
 
@@ -113,7 +115,7 @@ const CLAVES = [
   "campaign-created", "campaign-detail-created", "campaign-updated",
   "campaign-status-activa", "campaign-status-finalizada",
   "campaign-status-anulada", "work-order-created",
-  "work-order-materials-consumed", "work-order-annulled",
+  "work-order-annulled",
   "work-order-finished", "route-stage-created", "route-stage-updated",
   "route-stage-activated", "route-stage-deactivated", "route-created",
   "route-updated", "route-activated", "route-deactivated",
@@ -156,9 +158,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 124 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(124);
-  expect(new Set(CLAVES).size).toBe(124);
+it("la lista fija tiene las 123 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(123);
+  expect(new Set(CLAVES).size).toBe(123);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:
@@ -194,7 +196,9 @@ describe("URL", () => {
     expect(takeNotificationCalls()).toMatchSnapshot();
   });
 
-  it.each(["no-existe", "Client-Created", "client-created%20"])(
+  // work-order-materials-consumed se retiro en el grupo 3 de fixes: no tenia
+  // emisor desde 5599788 y mostraba un consumo de materiales que no ocurrio.
+  it.each(["no-existe", "Client-Created", "client-created%20", "work-order-materials-consumed"])(
     "clave sin entrada (%s): no muestra nada y limpia la URL",
     (clave) => {
       render("/dashboard/commercial/clients", `page=2&toast=${clave}`);
@@ -207,20 +211,32 @@ describe("URL", () => {
     },
   );
 
-  it("F3: con ?toast= vacio no muestra nada ni limpia la URL", () => {
-    render("/dashboard", "toast=");
+  // Con toast repetido cuenta el primero, como en el caso anterior.
+  it.each([
+    ["toast=", "/dashboard"],
+    ["toast", "/dashboard"],
+    ["page=2&toast=&q=acero", "/dashboard?page=2&q=acero"],
+    ["toast=&toast=client-created", "/dashboard"],
+  ])("F3: con ?toast= vacio (%s) no muestra nada y limpia la URL", (search, url) => {
+    render("/dashboard", search);
 
-    expect(takeNotificationCalls()).toEqual([]);
+    expect(takeNotificationCalls()).toEqual([
+      { effect: `router.replace ${url} {"scroll":false}` },
+    ]);
   });
 });
 
+// Los 12 nombres propios de Object.prototype (toString, constructor,
+// __proto__...): ninguno es una clave del registro.
 describe("F2: claves del prototipo de Object", () => {
-  it.each(["toString", "constructor", "__proto__", "hasOwnProperty", "valueOf"])(
-    "%s muestra un toast info vacio y limpia la URL",
+  it.each(Object.getOwnPropertyNames(Object.prototype))(
+    "%s: no muestra nada y limpia la URL",
     (clave) => {
       render("/dashboard", `toast=${clave}`);
 
-      expect(takeNotificationCalls()).toMatchSnapshot();
+      expect(takeNotificationCalls()).toEqual([
+        { effect: 'router.replace /dashboard {"scroll":false}' },
+      ]);
     },
   );
 });
@@ -233,14 +249,29 @@ describe("repeticion de claves en un mismo montaje", () => {
     expect(takeNotificationCalls()).toMatchSnapshot();
   });
 
-  it("F1: la misma clave tras limpiar la URL no se muestra y deja ?toast=", () => {
+  // Como desactivar dos clientes seguidos desde el listado filtrado.
+  it("F1: la misma clave tras limpiar la URL se muestra otra vez y limpia la URL", () => {
+    render("/dashboard/commercial/clients", "q=acero&toast=client-deactivated");
+    const primera = takeNotificationCalls();
+    render("/dashboard/commercial/clients", "q=acero");
+
+    render("/dashboard/commercial/clients", "q=acero&toast=client-deactivated");
+
+    expect(primera).toHaveLength(2);
+    expect(takeNotificationCalls()).toEqual(primera);
+  });
+
+  // Como crear dos clientes seguidos: listado, formulario y vuelta al listado.
+  it("F1: la misma clave tras pasar por otra pagina sin toast se muestra otra vez", () => {
     render("/dashboard/commercial/clients", "toast=client-created");
+    const primera = takeNotificationCalls();
     render("/dashboard/commercial/clients");
-    takeNotificationCalls();
+    render("/dashboard/commercial/clients/new");
 
     render("/dashboard/commercial/clients", "toast=client-created");
 
-    expect(takeNotificationCalls()).toEqual([]);
+    expect(primera).toHaveLength(2);
+    expect(takeNotificationCalls()).toEqual(primera);
   });
 
   it("dos claves distintas seguidas se muestran las dos", () => {

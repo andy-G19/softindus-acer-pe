@@ -9,8 +9,9 @@ import { notificationRegistry } from "@/modules/notification-registry";
 
 // Adaptador de compatibilidad: las acciones que redirigen con ?toast=<clave>
 // muestran el mensaje que el registro define para esa clave. Los mensajes
-// viven en src/modules/<area>/notifications.ts. Se consulta por propiedad,
-// como el catalogo que tenia este archivo.
+// viven en src/modules/<area>/notifications.ts. Solo cuentan las claves
+// propias del registro: las heredadas de Object (toString, constructor...)
+// son claves sin entrada.
 const toastMessages: NotificationCatalog = notificationRegistry;
 
 export function NotificationQueryBridge() {
@@ -22,16 +23,24 @@ export function NotificationQueryBridge() {
   useEffect(() => {
     const toastKey = searchParams.get("toast");
 
-    if (!toastKey || displayedToastRef.current === toastKey) {
+    // Sin ?toast= no hay nada que mostrar, y la proxima clave, aunque se
+    // repita, es otra operacion. Un ?toast= vacio no sale aqui: no muestra
+    // nada, pero tambien se limpia.
+    if (toastKey === null) {
+      displayedToastRef.current = null;
+      return;
+    }
+
+    // Evita mostrar dos veces la misma URL, como en el efecto doble del modo
+    // estricto.
+    if (displayedToastRef.current === toastKey) {
       return;
     }
 
     displayedToastRef.current = toastKey;
 
-    const definition = toastMessages[toastKey];
-
-    if (definition) {
-      notify(definition);
+    if (Object.hasOwn(toastMessages, toastKey)) {
+      notify(toastMessages[toastKey]);
     }
 
     const nextParams = new URLSearchParams(searchParams.toString());
