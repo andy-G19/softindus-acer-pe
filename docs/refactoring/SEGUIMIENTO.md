@@ -1769,9 +1769,12 @@ Límites y pendientes:
 
 ## Grupo 3 de fixes — Puente de notificaciones
 
-Fecha: 2026-10-10. Estado: hecho en local; falta publicar y verificar en
-staging. 4 commits de `039b65f` a `7453c57` y este registro, sobre `a564ed7`
-(registro de la integración del G2, que viaja con este grupo). Es el tercero
+Fecha: 2026-10-10. Estado: verificado en staging el 2026-10-10; falta
+integrarlo en `main`. 4 commits de `039b65f` a `7453c57` y el registro
+`803f32e`, publicados sobre `5607085` junto con `a564ed7` (CI #56 en verde,
+2m 32s), con foto del «antes» tomada antes del push y de solo lectura: F1, F2,
+F3 y la clave sin emisor se reprodujeron en staging y ninguno se repitió
+después. Es el tercero
 de los cuatro grupos de fixes del bloque de estabilización: corrige F1, F2 y
 F3 del puente `?toast=` y retira la entrada sin emisor, los cuatro
 comportamientos que la entrega 7 conservó y fijó con su caracterización. Los
@@ -1876,12 +1879,55 @@ formularios y 48 archivos de acciones.
 
 ### Publicación, CI y verificación en staging
 
-Pendiente. Foto del «antes» antes del push, de solo lectura: las 14 URLs de
-la entrega 7 y variantes de F2 y F3, y F1 con `history.pushState`, que Next 16
-integra con `useSearchParams`, de modo que la misma clave llega dos veces al
-puente montado sin escribir datos. Después, push junto con `a564ed7`, CI,
-comprobar que staging sirve el build nuevo (cambia código de cliente, así que
-la huella de fragmentos JavaScript debe cambiar) y foto del «después».
+- Foto del «antes» tomada el 2026-10-10 **antes del push**, con staging en
+  `5607085` (el puente de la entrega 7), con ADMIN desde el navegador integrado
+  y de solo lectura: ninguna URL escribe en la base, y F1 se reprodujo sin
+  escribir datos con `history.pushState`, que Next 16 integra con
+  `useSearchParams` (la misma clave llega dos veces al puente montado, como
+  tras dos operaciones iguales). 23 observaciones secuenciales: las 14 URLs de
+  la entrega 7, cuatro variantes de F2 y F3, la secuencia de F1 (dos
+  `pushState` iguales y una recarga) y un control con dos claves distintas.
+  Método de la entrega 7 (navegación completa, espera de 1,5 s y lectura del
+  DOM); tras cada `pushState`, espera a que la URL se limpie (máximo 6 s) y
+  solo cuenta los toasts nuevos. Cada observación se guardó con su SHA-256 en
+  `sessionStorage`.
+- El «antes» es fiel y comparable: Python recalculó los 23 hashes y el sello
+  del navegador sobre la lista de hashes; las 14 URLs de la entrega 7 dieron
+  los mismos hashes que su foto (`tmp/e7-diff/staging-antes.json`), y la
+  huella de fragmentos JavaScript era la del «después» de la entrega 7. Antes
+  del push, `verify_antes.py` aplicó al «antes» las cuatro reglas del grupo y
+  calculó el hash y el sello esperados del «después»: cambian 9 observaciones
+  y 14 no.
+- Push de 6 commits (`a564ed7` y de `039b65f` a `803f32e`): CI #56 en verde
+  (2m 32s). Esta vez Vercel desplegó solo (estado de `803f32e` pendiente
+  04:17:24 y completado 04:18:40 UTC). Antes del «después» se comprobó que la
+  URL de rama servía el build nuevo: cambiaron el `buildId` y exactamente un
+  fragmento JavaScript de `/dashboard` (`2abf04v5qqx7g.js` →
+  `10w79wvka5nbj.js`), el del puente. El viejo contiene
+  `if(!t||o.current===t)return` y el texto «Consumo de materiales registrado»;
+  el nuevo, `if(null===t){o.current=null;return}` y `Object.hasOwn(s,t)`, sin
+  ese texto.
+- «Después» con el mismo procedimiento: **23 de 23 hashes iguales a los
+  esperados y el mismo sello**; 9 distintas del «antes», exactamente las
+  previstas.
+
+| # | Caso | Antes (`5607085`) | Después (`803f32e`) |
+|---|---|---|---|
+| 11 | `?toast=work-order-materials-consumed` | success: «Consumo de materiales registrado» | Nada; `/dashboard` |
+| 13, 15, 16 | `toString`, `constructor` y `__proto__` (F2) | Toast info vacío | Nada; `/dashboard` |
+| 14, 17 | `?toast=` y `?toast` (F3) | Nada; la URL no se limpia | Nada; `/dashboard` |
+| 18 | `/dashboard/commercial/clients?page=1&toast=` (F3) | Nada; la URL no se limpia | Nada; `?page=1` |
+| 19a | `pushState` a `/dashboard?toast=client-created` | «Cliente guardado correctamente»; URL limpia en 102 ms | Igual (105 ms) |
+| 19b | El mismo `pushState` otra vez (F1) | Ningún toast; la URL se queda en `?toast=client-created` (6 s) | «Cliente guardado correctamente»; URL limpia en 103 ms |
+| 19c | Recargar la página (F1) | Reaparece «Cliente guardado correctamente» | Nada |
+| 1–10, 12, 20a y 20b | Diez claves de la entrega 7, `no-existe` y el control con dos claves distintas | — | Idénticas |
+
+No se probaron otros roles: el grupo no cambia permisos, rutas ni acciones.
+No se escribieron datos, así que no quedan datos de prueba nuevos en staging.
+La evidencia está en `tmp/g3-diff/staging-antes.json`,
+`despues-esperado.json` y `staging-despues.json` (ignorados); el «después» se
+copió por programa de `despues-esperado.json`, porque el navegador confirmó
+sus 23 hashes y su sello.
 
 Límites:
 
@@ -1908,7 +1954,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
-| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | En curso: hecho en local, falta publicar y verificar en staging |
+| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Verificado en staging (CI #56 verde; 23 de 23 observaciones como se predijo); falta integrarlo en `main` |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
