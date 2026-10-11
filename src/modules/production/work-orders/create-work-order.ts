@@ -38,18 +38,31 @@ export async function createWorkOrder({
   idUsuario,
 }: CreateWorkOrderParams) {
   let effectiveProductId = data.id_producto ?? "";
+  let idCliente: string | null = null;
+  let idDetallePedido: string | null = null;
+  let idPedido: string | null = null;
 
   if (data.tipo_produccion === "pedido") {
     if (!data.id_detalle_pedido) {
       throw new Error("Para una orden por pedido debe seleccionar un detalle de pedido.");
     }
 
+    // El detalle se lee una sola vez (H5) y su pedido y su cliente se reutilizan dentro de
+    // la transaccion: la orden creada lo referencia con una clave foranea Restrict, que
+    // impide borrarlo, y ningun codigo cambia el pedido de un detalle.
     const orderDetail = await prisma.detalle_pedido.findUnique({
       where: {
         id_detalle_pedido: data.id_detalle_pedido,
       },
       select: {
+        id_detalle_pedido: true,
         id_producto: true,
+        id_pedido: true,
+        pedido: {
+          select: {
+            id_cliente: true,
+          },
+        },
       },
     });
 
@@ -62,6 +75,9 @@ export async function createWorkOrder({
     }
 
     effectiveProductId = orderDetail.id_producto;
+    idCliente = orderDetail.pedido.id_cliente;
+    idDetallePedido = orderDetail.id_detalle_pedido;
+    idPedido = orderDetail.id_pedido;
   }
 
   if (
@@ -164,31 +180,6 @@ export async function createWorkOrder({
     );
   }
 
-  let idCliente: string | null = null;
-  let idDetallePedido: string | null = null;
-
-  if (data.tipo_produccion === "pedido") {
-    const orderDetail = await prisma.detalle_pedido.findUnique({
-      where: {
-        id_detalle_pedido: data.id_detalle_pedido ?? "",
-      },
-      include: {
-        pedido: true,
-      },
-    });
-
-    if (!orderDetail) {
-      throw new Error("El detalle de pedido seleccionado no existe.");
-    }
-
-    if (data.id_producto && orderDetail.id_producto !== data.id_producto) {
-      throw new Error("El detalle de pedido pertenece a otro producto.");
-    }
-
-    idCliente = orderDetail.pedido.id_cliente;
-    idDetallePedido = orderDetail.id_detalle_pedido;
-  }
-
   let idCampania: string | null = null;
 
   if (data.tipo_produccion === "campania") {
@@ -256,26 +247,15 @@ export async function createWorkOrder({
       },
     });
 
-    if (idDetallePedido) {
-      const orderDetail = await tx.detalle_pedido.findUnique({
+    if (idPedido) {
+      await tx.pedido.update({
         where: {
-          id_detalle_pedido: idDetallePedido,
+          id_pedido: idPedido,
         },
-        select: {
-          id_pedido: true,
+        data: {
+          estado: "en_produccion",
         },
       });
-
-      if (orderDetail) {
-        await tx.pedido.update({
-          where: {
-            id_pedido: orderDetail.id_pedido,
-          },
-          data: {
-            estado: "en_produccion",
-          },
-        });
-      }
     }
 
     // Snapshot del requerimiento: se congela dentro de la MISMA transaccion que crea la

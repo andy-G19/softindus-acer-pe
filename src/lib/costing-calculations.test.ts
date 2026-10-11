@@ -100,3 +100,47 @@ describe("calculateProfitability", () => {
     ).toEqual({ profit: 100, realMargin: Infinity, lowMarginAlert: false });
   });
 });
+
+// H7 (grupo 2 de fixes): la alerta comparaba el margen real en coma flotante,
+// pero margen_real se guarda como Decimal(5, 2) y la pantalla lo muestra con
+// dos decimales. Un margen que se guarda y se ve como 20.00 % quedaba marcado
+// como margen bajo. El margen real se sigue devolviendo sin redondear: es el
+// valor que se guarda y Postgres lo redondea al escribirlo.
+describe("calculateProfitability: la alerta usa el margen que se guarda y se muestra (H7)", () => {
+  it("un margen real a 1e-14 del esperado no es margen bajo (COS00000001 en staging)", () => {
+    expect(
+      calculateProfitability({ income: 1817.04, totalCost: 1514.2, expectedMargin: 20 }),
+    ).toEqual({
+      profit: 302.8399999999999,
+      realMargin: 19.999999999999993,
+      lowMarginAlert: false,
+    });
+  });
+
+  it("el precio sugerido redondeado al centimo no dispara la alerta", () => {
+    // 1000.01 * 1.17 = 1170.0117, que se guarda como 1170.01.
+    const result = calculateProfitability({
+      income: 1170.01,
+      totalCost: 1000.01,
+      expectedMargin: 17,
+    });
+
+    expect(result.realMargin).toBe(16.999830001699983);
+    expect(result.lowMarginAlert).toBe(false);
+  });
+
+  it("un margen de 16.996 % se guarda y se muestra como 17.00 %: no es margen bajo", () => {
+    // Distingue el redondeo a dos decimales del redondeo a tres (16.996).
+    const result = calculateProfitability({ income: 292.49, totalCost: 250, expectedMargin: 17 });
+
+    expect(result.realMargin).toBe(16.996000000000002);
+    expect(result.lowMarginAlert).toBe(false);
+  });
+
+  it("un margen de 16.992 % se muestra como 16.99 %: sigue siendo margen bajo", () => {
+    const result = calculateProfitability({ income: 292.48, totalCost: 250, expectedMargin: 17 });
+
+    expect(result.realMargin).toBe(16.992000000000008);
+    expect(result.lowMarginAlert).toBe(true);
+  });
+});

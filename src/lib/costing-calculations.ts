@@ -6,10 +6,11 @@
  * rentabilidad. Un solo lugar evita que la vista previa y lo que se guarda se separen en
  * silencio.
  *
- * Funciones puras: sin Prisma y sin `server-only`. Reciben numeros ya convertidos porque
- * cada llamador convierte a su manera: el detalle con `toNumber` y las acciones con
- * `toNonNegativeNumber`. Por eso no se usa `applyWaste` de recipe-quantities, que
- * convierte los negativos a cero: cambiaria lo que muestra el detalle.
+ * Funciones puras: sin Prisma y sin `server-only`. Reciben numeros ya convertidos, y la
+ * vista previa y la accion de cada formula convierten igual: el estimado de materiales,
+ * en el desglose del detalle y en la generacion del costeo, con `toNonNegativeNumber`
+ * (H6: el desglose usaba `toNumber` y con un negativo mostraba un costo que no se
+ * guarda); el precio sugerido y la rentabilidad, con `toNumber`.
  *
  * El orden de las operaciones es parte del contrato. `b * (1 + w / 100)` y
  * `b + b * w / 100` son iguales en algebra, pero no siempre dan el mismo numero en coma
@@ -57,6 +58,13 @@ export type ProfitabilityInput = {
  * No protege el costo cero: con costo cero el margen real es infinito o NaN. Cada
  * llamador decide antes: la accion rechaza el calculo y la vista previa del detalle
  * muestra ceros con la alerta.
+ *
+ * La alerta compara el margen real redondeado a dos decimales (H7): es la escala con la
+ * que se guarda (`rentabilidad.margen_real`, Decimal(5, 2)) y con la que se muestra
+ * (`formatCostingPercent`). Comparar el doble sin redondear marcaba como margen bajo un
+ * margen que se guarda y se ve como 20.00 %. `toFixed` redondea el valor binario y
+ * Postgres el decimal: solo difieren en un empate exacto en el tercer decimal.
+ * `realMargin` se devuelve sin redondear, como se guarda.
  */
 export function calculateProfitability({
   income,
@@ -65,7 +73,7 @@ export function calculateProfitability({
 }: ProfitabilityInput) {
   const profit = income - totalCost;
   const realMargin = (profit / totalCost) * 100;
-  const lowMarginAlert = realMargin < expectedMargin;
+  const lowMarginAlert = Number(realMargin.toFixed(2)) < expectedMargin;
 
   return { profit, realMargin, lowMarginAlert };
 }

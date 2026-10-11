@@ -1448,11 +1448,12 @@ cambiaron y la prueba de desfase comprueba que cada una tenga entrada.
 
 ## Grupo 1 de fixes — Reglas dentro de la transacción y bloqueo de fila
 
-Fecha: 2026-10-09. Estado: verificado en staging el 2026-10-09. 12 commits de
-`d421805` a `bab22eb` y el registro `381de8c`, publicados sobre `40de6b7` (CI #48
-en verde, 2m 29s), con foto del «antes» tomada antes del push: las tres carreras
-se reprodujeron en staging y ninguna se repitió después. Falta integrarlo en
-`main`. Es el primero de los cuatro
+Fecha: 2026-10-09. Estado: cerrado el 2026-10-09. 12 commits de `d421805` a
+`bab22eb` y el registro `381de8c`, publicados sobre `40de6b7` (CI #48 en verde,
+2m 29s), con foto del «antes» tomada antes del push: las tres carreras se
+reprodujeron en staging y ninguna se repitió después. Cierre `bd929bf` (CI #49
+en verde), integrado en `main` con el PR #17 (CI #50 en verde; merge commit
+`8325194`, CI #51 en verde, 2m 32s). Es el primero de los cuatro
 grupos de fixes del bloque de estabilización (ver la secuencia): corrige H1, H3
 y H4 de la entrega 6 y tres hallazgos nuevos de su auditoría, H8, H9 y H10.
 Cada `fix` cambia el comportamiento solo bajo concurrencia, salvo H9, que
@@ -1602,6 +1603,169 @@ Límites y pendientes:
 - Una salida de inventario a una orden sigue sin pasar por la conciliación de
   la orden; quitar esa asociación es de la pista B.
 
+## Grupo 2 de fixes — Kárdex, lecturas y cálculo
+
+Fecha: 2026-10-10. Estado: verificado en staging el 2026-10-10; falta
+integrarlo en `main`. 5 commits de `883d629` a `a662913` y el registro
+`e33354a`, publicados sobre `bd929bf` junto con `b9b896f` (CI #52 en verde,
+2m 34s), con foto del «antes» tomada antes del push: H7 y H2 se reprodujeron en
+staging y ninguno se repitió después. Es el segundo de
+los cuatro grupos de fixes del bloque de estabilización: corrige H2, H5, H6 y
+H7 de la entrega 6. Cada `fix` cambia el comportamiento solo en un caso
+límite: H2 bajo concurrencia, H7 cuando el margen real queda a menos de medio
+centésimo del esperado, H6 con datos negativos que la interfaz no deja
+ingresar, y H5 no cambia lo que se ve, solo las lecturas.
+
+| Hallazgo | Defecto | Arreglo |
+|---|---|---|
+| H7 | `calculateProfitability` comparaba el margen real en coma flotante, pero `rentabilidad.margen_real` es `Decimal(5,2)` y la pantalla lo muestra con dos decimales: `COS00000001` (margen de 20 % sobre S/ 1514.20, margen real `19.999999999999993`) quedó guardado con margen 20.00 y alerta de margen bajo a la vez. También lo provoca el precio sugerido redondeado al céntimo (1000.01 al 17 % se guarda como 1170.01: 16.9998 %). | La alerta compara el margen redondeado a dos decimales. El margen se sigue devolviendo y guardando sin redondear; la vista previa y la acción se corrigen en un solo lugar. |
+| H2 | La entrega y la devolución de material anotaban en el kárdex, y usaban para la alerta de stock crítico, el stock que el caso de uso leyó antes de escribir. Precisión: desde el G1 el bloqueo de la orden pone en fila las operaciones de una misma orden, pero no las de otra orden, una compra o una salida sobre el mismo material. El correlativo `MVI` pone en fila a todos los que escriben el kárdex (otro mutex accidental, como `CIN` en H3), pero la lectura ocurría antes de reservarlo. | El descuento usa `updateManyAndReturn` con la misma guarda y la devolución `update` con `select`, como la compra: el kárdex y la alerta usan el stock y el mínimo que devuelve la escritura, y el anterior se calcula en `Decimal`. `DeliveryLine` y `ReturnParams` ya no reciben stock de quien llama. |
+| H6 | El desglose referencial del costeo convertía la receta con `toNumber` y la generación del costeo con `toNonNegativeNumber`, sobre la misma fórmula: con un negativo (la interfaz no lo deja ingresar, pero la base no tiene `CHECK`) mostraba un costo que no se guarda. | El desglose convierte con `toNonNegativeNumber` (decisión del responsable: la vista previa adopta la conversión de lo que se guarda). |
+| H5 | Crear una orden por pedido leía el mismo detalle de pedido tres veces, no dos como anotó la entrega 6: dos fuera de la transacción con la misma validación, la segunda con el pedido completo, y una dentro solo para obtener su pedido, que no podía volver vacía (la orden creada referencia el detalle con una clave foránea `Restrict` y ningún código cambia el pedido de un detalle). | Una sola lectura trae el producto, el pedido y su cliente. |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 883d629 | fix | H7: la alerta de bajo margen compara el margen redondeado a dos decimales. |
+| 9ad8d1b | test | El doble de Prisma admite `updateManyAndReturn` en el cliente de la transacción: por defecto afecta una fila generada según su `select`. |
+| 7b56f2e | fix | H2: el kárdex y la alerta de stock usan lo que devuelve la escritura. |
+| 9f7e08a | fix | H6: el desglose referencial convierte como la generación del costeo. |
+| a662913 | fix | H5: una sola lectura del detalle de pedido. |
+
+Diseño:
+
+- H2 con `RETURNING` y no con un bloqueo: la guarda `gte` ya decide de forma
+  atómica si el stock alcanza; faltaba anotar el antes y el después, y la base
+  los devuelve en la misma sentencia. Es el patrón de compras desde la entrega
+  1. Descartadas: bloquear el material con una ayuda de `row-locks.ts` y
+  leerlo dentro (una consulta y un candado más por línea para un dato que la
+  escritura ya devuelve) y mover la lectura después del correlativo `MVI`
+  (dependería de un mutex accidental).
+- H7 con el margen como se guarda y se muestra. Descartadas: un criterio en
+  dinero (precio ≥ sugerido al céntimo), que podría mostrar «17.00 % · Margen
+  bajo» y repetir la contradicción, y una tolerancia de `1e-9`, que corrige la
+  coma flotante pero no el redondeo del precio. Límite: `toFixed` redondea el
+  valor binario y Postgres el decimal; solo difieren en un empate exacto en el
+  tercer decimal.
+- H5 borra el caso de caracterización «si el detalle ya no existe dentro de la
+  transacción, no actualiza el pedido» (decisión del responsable): su rama ya
+  no existe y lo reemplaza la prueba de H5.
+- H11, encontrado en la auditoría, se registra sin corregir (decisión del
+  responsable): necesita una regla de negocio y toca el área comercial.
+
+Evidencia:
+
+1. Prueba roja primero en cada `fix`. H7: 4 casos de la función y 3 de la
+   acción que leen lo que se escribe en `rentabilidad`; fallaban 5, y los dos
+   de «sigue siendo margen bajo» pasaban, como deben. H2: 3 casos donde la
+   base tiene otro stock al escribir (entrega pendiente, adicional y
+   devolución); fallaban con el stock leído (100, 40 y 5 en lugar de 70, 12 y
+   15) y fijan también la decisión de la alerta, que con la lectura habría
+   atendido una alerta en un material crítico o dejado activa la de uno que
+   salió de crítico. H6: 4 casos, uno por entrada negativa, en
+   `recipe-cost-breakdown.test.ts`. H5: una lectura en lugar de 3. El arnés
+   tuvo la suya: el doble rechazaba el método.
+2. Snapshots verificados con scripts distintos de los que editaron
+   (`tmp/g2-diff`, ignorado). H7, el arnés y H6 no cambian ninguno. H2 cambia
+   5 de llamadas, idénticos a los anteriores al deshacer el método (7), el
+   `select` (9) y `Decimal(x)` en el kárdex (16 = 8 movimientos × 2). H5 cambia
+   3 de llamadas, idénticos salvo la lectura del detalle (15 llamadas iguales
+   en el caso de éxito), y elimina los 2 del caso borrado. Ningún snapshot de
+   resultado cambia. Cada verificador detectó alteraciones hechas a propósito.
+3. 38 mutaciones, todas detectadas al primer intento: 8 de H7, 7 del arnés, 10
+   de H2, 6 de H6 y 7 de H5.
+
+| Mutación | Resultado |
+|---|---|
+| H7: volver al doble; redondear a 1 o 3 decimales o al entero; truncar; `<=`; tolerancia `1e-9`; devolver el margen redondeado | Todas fallan; el caso de 16.996 % separa dos de tres decimales |
+| Arnés: quitar el método de las escrituras; devolver `[]`, `data`, la fila sin arreglo, la fila 2 o sin `select`; tratarlo como `updateMany` | Todas fallan |
+| H2: signo del anterior en la entrega o la devolución; anterior igual al resultante; alerta con el stock anterior; `select` sin el mínimo; devolución sin `select`; sin la guarda `gte`; sin comprobar que la guarda encontró la fila; anterior y resultante intercambiados | Todas fallan; la devolución sin `select` solo por su snapshot, porque Prisma devuelve la fila completa |
+| H6: revertir cada una de las cuatro conversiones; valor absoluto en la merma o el costo | Todas fallan, cada una en su propio caso |
+| H5: actualizar el pedido con el id del detalle; orden sin cliente; no pasar el pedido a producción; `select` sin el pedido; volver a leer el detalle fuera o dentro de la transacción; no comprobar el producto | Todas fallan |
+
+Datos de prueba de H2: el doble no aplica escrituras, así que los 5 casos que
+llegan a escribir el material declaran con `stockInDb` el stock que tiene la
+base (el mismo que leen). El caso «la guarda de stock falla» pasa de fijar
+`material.updateMany` con `count: 0` a «la base tiene 5.00 de soldadura y se
+piden 8.57», con el mismo rollback y el mismo mensaje.
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.559, 1.560, 1.563, 1.568 y 1.568 pruebas según el commit; 99
+archivos de prueba al final. El código de producción cambia en 5 archivos de
+`src` (+85 y −85); las pruebas y el arnés, +474 y −18, y los snapshots, +79 y
+−252. `npm run refactor:inventory` analiza 540 archivos y mantiene 127
+páginas, 136 formularios y 48 archivos de acciones.
+
+### Publicación, CI y verificación en staging
+
+- Foto del «antes» tomada el 2026-10-10 **antes del push**, con staging en
+  `bd929bf` (el código del G1), con ADMIN desde el navegador integrado. Con
+  autorización del responsable para escribir datos de prueba: un margen y una
+  rentabilidad para H7, y carreras de exactamente dos peticiones simultáneas
+  para H2, cada una seguida de dos devoluciones que reponen el stock.
+- `COS00000001` ya no servía para H7: su costo subió de S/ 1414.20 a S/ 1514.20
+  después del último margen, y la vista previa da 12.08 %, un margen bajo de
+  verdad. El defecto sí está en sus dos rentabilidades guardadas («20.00 % ·
+  margen bajo»). Se usó `COS00000002` con un margen de 18 %: sugerido
+  S/ 60,321.60 sobre S/ 51,120.00, margen real `17.999999999999996`.
+- Push de 7 commits (`b9b896f` y de `883d629` a `e33354a`): CI #52 en verde
+  (2m 34s). **Vercel no creó ningún despliegue para ese push** (ni fila en
+  Deployments ni estado en GitHub para `e33354a`); el responsable lo creó a
+  mano con «Create Deployment» sobre la rama `staging` (Preview), y Vercel
+  publicó el estado de `e33354a` (pendiente 02:46:59, completado 02:48:36 UTC).
+  Antes del «después» se comprobó que la URL de rama servía el código nuevo: la
+  vista previa de `COS00000002`, sin cambiar sus datos, pasó de «margen bajo»
+  (02:39 UTC) a «rentable» (02:49 UTC). La huella de fragmentos JavaScript no
+  sirve en este grupo: solo cambió código de servidor (1 de 14 fragmentos
+  cambió).
+
+| Hallazgo | Antes (`bd929bf`) | Después (`e33354a`) |
+|---|---|---|
+| H7 | `COS00000002` al 18 %: vista previa «18.00 % · margen bajo» y rentabilidad guardada igual (9:26 p. m.): el registro dice 18.00 % y margen bajo a la vez. | Con la misma entrada, vista previa y rentabilidad guardada «18.00 % · rentable» (9:49 p. m.); el historial muestra las dos filas juntas. |
+| H2 | Dos entregas adicionales simultáneas de 1.00 de `MAT00000006`, a `OTR00000006` y `OTR00000008`. Primer intento encadenado (`MVI00000044/45`): la segunda leyó después de que la primera confirmó. Reintento con un GET previo a las dos órdenes: `MVI00000048` y `MVI00000049` anotan las dos 299.79 → 298.79 con el stock real en 297.79, y la fila siguiente (`MVI00000050`) parte de 297.79. Reproducido 1 de 2 veces. | La misma carrera, con el GET previo, 3 veces: 3 de 3 encadenadas (`MVI00000052` a `MVI00000063`), todas las peticiones 200 sin error. La cadena del kárdex de `MAT00000006` de `MVI00000043` a `MVI00000063`, verificada por programa: 0 filas incoherentes y solo las 2 rupturas del «antes». |
+
+Con el código nuevo el kárdex encadena por construcción: estas carreras no
+prueban que las transacciones se solaparon, sino que en las condiciones en que
+el código anterior rompió el kárdex el nuevo no lo hizo. H5 y H6 no se
+reproducen en staging (H6 necesitaría escribir un negativo directamente en la
+base y H5 no es visible). No se probaron otros roles: el grupo no cambia
+permisos, rutas ni `requireRole`. Los logs de Vercel no se revisaron.
+
+Datos de prueba que quedan en staging: `COS00000002` con un margen de 18 % y
+dos rentabilidades nuevas (margen bajo antes, rentable después);
+`OTR00000006` y `OTR00000008` con 5 entregas adicionales y 5 devoluciones de
+1.00 cada una (`MVI00000044` a `MVI00000063`); `MAT00000006` sigue en 299.79.
+La evidencia está en `tmp/g2-diff/staging-antes.json` y `staging-despues.json`
+(ignorados).
+
+Hallazgo nuevo de la auditoría, registrado y no corregido:
+
+- H11: crear una orden por pedido no comprueba el estado del pedido y lo pasa
+  a «en_produccion» sin condición. El desplegable solo ofrece detalles de
+  pedidos «registrado» o «aprobado», pero un formulario viejo o manipulado
+  puede crear una orden para un pedido cancelado o entregado y devolverlo a
+  «en producción». Además, `cancelOrderAction` valida fuera de una transacción:
+  cancelar ‖ crear una orden puede dejar un pedido cancelado con orden.
+  Necesita la regla de qué estados de pedido admiten una orden de trabajo.
+
+Límites y pendientes:
+
+- Las pruebas fijan la secuencia, no la carrera: la evidencia de H2 bajo
+  concurrencia es la de staging, y es probabilística (la carrera depende de
+  cuándo llega cada petición); la integración con una base desechable sigue en
+  la entrega 11.
+- Las rentabilidades ya guardadas conservan su alerta (las dos de
+  `COS00000001` en staging): el reporte de rentabilidad mezclará los dos
+  criterios hasta que se recalculen. Corregir esos datos es una decisión
+  aparte.
+- El servidor acepta cantidades de entrega y devolución con más de dos
+  decimales (solo el navegador limita con `step="0.01"`): con ellas el kárdex
+  no puede encadenar exacto, con cualquier arreglo.
+- Las entregas comparan con `stock_actual` y la salida de inventario con
+  `stock_actual − stock_reservado`.
+- Un pedido con varios detalles pasa a «en producción» con la primera orden y
+  el desplegable deja de ofrecer sus otros detalles (regla de negocio, junto
+  con H11).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -1620,8 +1784,8 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 5 | A | Exportaciones por reporte | Cerrada (CI #39 verde en main, verificada en producción) |
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
-| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Verificado en staging (CI #48 verde; H3, H1 y H4 reproducidos antes y no después); falta integrar en `main` |
-| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Pendiente |
+| G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
+| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Verificado en staging (CI #52 verde; H7 y H2 reproducidos antes y no después); falta integrar en `main` |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
@@ -1650,7 +1814,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 124 / 124 | 7 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 98 / 1.552 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 99 / 1.568 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -1659,6 +1823,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Cargas de `usuario` completo en órdenes de trabajo y costos | 5 | 0 | 6 |
 | Operaciones que leen, validan y escriben una orden, un costeo o un costo indirecto sin bloquear su fila | 14 | 0 | G1 |
 | Acciones de avance y salida de inventario caracterizadas | 0 / 4 | 4 / 4 | G1 |
+| Escrituras del kárdex que anotan un stock leído antes de escribir | 2 | 0 | G2 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -1709,6 +1874,18 @@ notificaciones 2, medidos de nuevo. Los tres archivos más grandes de `src` son
 pruebas y el arnés (1.156, 1.148 y 901 líneas); los de producción no cambian
 (696, 643 y 614).
 
+Actualizado en el grupo 2 de fixes (2026-10-10) sobre `a662913`: pruebas 99 /
+1.568 y una fila nueva medida sobre `b9b896f`, su línea base: de las 6
+escrituras de `stock_anterior` en el kárdex, la entrega y la devolución de
+material eran las 2 que anotaban un stock leído antes de escribir; las otras 4
+lo toman de la propia escritura (alta y anulación de compras), de una lectura
+con el material bloqueado (salida de inventario) o parten de cero (material
+nuevo). Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0 e `import` de las librerías de
+notificaciones 2, medidos de nuevo. Los tres archivos más grandes de `src` son
+pruebas y el arnés (1.335, 1.161 y 901 líneas); los de producción no cambian
+(696, 643 y 614).
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -1727,6 +1904,10 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
   validan con lo leído y escriben sobre él o sus hijos. Desde el grupo 1 cada
   una llama a una ayuda de `lib/row-locks.ts` dentro de su transacción: 14
   llamadas en el código de producción, una por operación.
+- Las escrituras del kárdex cuentan los `stock_anterior:` de
+  `movimiento_inventario` en el código de producción (6 desde el grupo 2) y,
+  entre ellas, las que toman el valor de una lectura hecha antes de la
+  escritura sin bloquear el material.
 - Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
   `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
   columna `usuario` dentro de un `select`, que no cargan la fila completa.

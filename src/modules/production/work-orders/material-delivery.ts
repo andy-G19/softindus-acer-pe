@@ -3,6 +3,7 @@ import {
   getNextCorrelativeIds,
   type CorrelativeTransactionClient,
 } from "@/lib/correlatives-core";
+import { toNumber } from "@/lib/numbers";
 
 /**
  * Entrega de material del almacen a una orden de trabajo.
@@ -23,14 +24,16 @@ export type DeliveryTransactionClient = Pick<
 > &
   CorrelativeTransactionClient;
 
+/**
+ * Sin stock: el que anotan el kardex y la alerta sale de la propia escritura (H2), no de
+ * una lectura de quien llama.
+ */
 export type DeliveryLine = {
   idRequerimiento: string;
   idMaterial: string;
   materialName: string;
   /** Cantidad a sacar del almacen en esta entrega. */
   quantity: number;
-  stockActual: number;
-  stockMinimo: number;
 };
 
 export type DeliveryParams = {
@@ -45,9 +48,14 @@ export type DeliveryParams = {
  * Descuenta stock, registra los movimientos, actualiza las alertas de stock critico y
  * acumula lo entregado en el requerimiento congelado.
  *
- * El descuento usa updateMany condicionado a que el stock alcance: si dos entregas corren
- * a la vez, la segunda encuentra count = 0 y aborta la transaccion completa en lugar de
- * dejar el stock en negativo.
+ * El descuento usa updateManyAndReturn condicionado a que el stock alcance: si dos
+ * entregas corren a la vez, la segunda no encuentra la fila y aborta la transaccion
+ * completa en lugar de dejar el stock en negativo.
+ *
+ * El kardex y la alerta usan el stock que devuelve ese mismo descuento (H2), como la
+ * compra. Una lectura previa, aunque sea dentro de la transaccion y con la orden
+ * bloqueada, no ve lo que otra orden, una compra o una salida confirmen antes de esta
+ * escritura, y el kardex quedaria con dos movimientos que parten del mismo stock.
  */
 export async function deliverMaterials(
   tx: DeliveryTransactionClient,
@@ -64,11 +72,7 @@ export async function deliverMaterials(
   });
 
   for (const [index, line] of lines.entries()) {
-    const stockResultante = Number(
-      (line.stockActual - line.quantity).toFixed(2),
-    );
-
-    const materialUpdate = await tx.material.updateMany({
+    const [material] = await tx.material.updateManyAndReturn({
       where: {
         id_material: line.idMaterial,
         stock_actual: {
@@ -80,13 +84,20 @@ export async function deliverMaterials(
           decrement: line.quantity,
         },
       },
+      select: {
+        stock_actual: true,
+        stock_minimo: true,
+      },
     });
 
-    if (materialUpdate.count !== 1) {
+    if (!material) {
       throw new Error(
         `Stock insuficiente para ${line.materialName}. La operacion fue cancelada.`,
       );
     }
+
+    const stockResultante = material.stock_actual;
+    const stockAnterior = stockResultante.plus(line.quantity);
 
     await tx.movimiento_inventario.create({
       data: {
@@ -95,7 +106,7 @@ export async function deliverMaterials(
         id_orden_trabajo: idOrdenTrabajo,
         tipo_movimiento: "salida",
         cantidad: line.quantity,
-        stock_anterior: line.stockActual,
+        stock_anterior: stockAnterior,
         stock_resultante: stockResultante,
         motivo,
         id_usuario_responsable: idUsuario,
@@ -116,14 +127,15 @@ export async function deliverMaterials(
     await syncStockAlert(tx, {
       idMaterial: line.idMaterial,
       materialName: line.materialName,
-      stockResultante,
-      stockMinimo: line.stockMinimo,
+      stockResultante: toNumber(stockResultante),
+      stockMinimo: toNumber(material.stock_minimo),
       idOrdenTrabajo,
       idUsuario,
     });
   }
 }
 
+/** Sin stock, como DeliveryLine: lo devuelve la propia escritura (H2). */
 export type ReturnParams = {
   idOrdenTrabajo: string;
   idUsuario: string;
@@ -131,8 +143,6 @@ export type ReturnParams = {
   idMaterial: string;
   materialName: string;
   quantity: number;
-  stockActual: number;
-  stockMinimo: number;
   motivo: string;
 };
 
@@ -141,23 +151,20 @@ export type ReturnParams = {
  *
  * Es la operacion inversa de la entrega: incrementa stock, registra un movimiento de tipo
  * 'devolucion' y acumula en cantidad_devuelta. No necesita la guarda de concurrencia del
- * descuento porque sumar stock nunca puede dejarlo en negativo.
+ * descuento porque sumar stock nunca puede dejarlo en negativo. El kardex y la alerta usan
+ * el stock que devuelve el incremento (H2).
  */
 export async function returnMaterial(
   tx: DeliveryTransactionClient,
   params: ReturnParams,
 ) {
-  const stockResultante = Number(
-    (params.stockActual + params.quantity).toFixed(2),
-  );
-
   const [idMovimiento] = await getNextCorrelativeIds(tx, {
     codigoEntidad: "movimiento_inventario",
     prefijo: "MVI",
     cantidad: 1,
   });
 
-  await tx.material.update({
+  const material = await tx.material.update({
     where: {
       id_material: params.idMaterial,
     },
@@ -166,7 +173,14 @@ export async function returnMaterial(
         increment: params.quantity,
       },
     },
+    select: {
+      stock_actual: true,
+      stock_minimo: true,
+    },
   });
+
+  const stockResultante = material.stock_actual;
+  const stockAnterior = stockResultante.minus(params.quantity);
 
   await tx.movimiento_inventario.create({
     data: {
@@ -175,7 +189,7 @@ export async function returnMaterial(
       id_orden_trabajo: params.idOrdenTrabajo,
       tipo_movimiento: "devolucion",
       cantidad: params.quantity,
-      stock_anterior: params.stockActual,
+      stock_anterior: stockAnterior,
       stock_resultante: stockResultante,
       motivo: params.motivo,
       id_usuario_responsable: params.idUsuario,
@@ -196,8 +210,8 @@ export async function returnMaterial(
   await syncStockAlert(tx, {
     idMaterial: params.idMaterial,
     materialName: params.materialName,
-    stockResultante,
-    stockMinimo: params.stockMinimo,
+    stockResultante: toNumber(stockResultante),
+    stockMinimo: toNumber(material.stock_minimo),
     idOrdenTrabajo: params.idOrdenTrabajo,
     idUsuario: params.idUsuario,
   });

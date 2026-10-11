@@ -378,6 +378,43 @@ describe("dbModuleMock con transacciones", () => {
     ]);
   });
 
+  // Grupo 2 de fixes (H2): la entrega de material toma el stock que deja su
+  // propia escritura con updateManyAndReturn.
+  it("registra updateManyAndReturn: afecta una fila generada segun su select, o lo que fije el caso", async () => {
+    type ReturningClient = {
+      cliente: { updateManyAndReturn: (args: object) => Promise<unknown> };
+    };
+    const prisma = dbModuleMock({ transactions: true }).prisma as {
+      $transaction: <T>(callback: (tx: ReturningClient) => Promise<T>) => Promise<T>;
+      cliente: ReturningClient["cliente"];
+    };
+    const args = {
+      where: { id_cliente: "CLI00000001", estado: true },
+      data: { estado: false },
+      select: { id_cliente: true, estado: true },
+    };
+
+    expect(() => prisma.cliente.updateManyAndReturn).toThrow("solo leen");
+
+    const generated = await characterizeHandler(() =>
+      prisma.$transaction((tx) => tx.cliente.updateManyAndReturn(args)),
+    );
+
+    expect(generated.result).toEqual([{ id_cliente: "id_cliente-1", estado: true }]);
+    expect(generated.calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.updateManyAndReturn", args },
+    ]);
+
+    // Un caso simula la guarda que no encuentra la fila.
+    const none = await characterizeHandler(
+      () => prisma.$transaction((tx) => tx.cliente.updateManyAndReturn(args)),
+      { "cliente.updateManyAndReturn": [] },
+    );
+
+    expect(none.result).toEqual([]);
+  });
+
   it("con recordTransactionEnd registra el commit, o el rollback con su motivo", async () => {
     const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
       .prisma as Client;
