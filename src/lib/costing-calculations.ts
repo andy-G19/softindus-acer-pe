@@ -57,6 +57,13 @@ export type ProfitabilityInput = {
  * No protege el costo cero: con costo cero el margen real es infinito o NaN. Cada
  * llamador decide antes: la accion rechaza el calculo y la vista previa del detalle
  * muestra ceros con la alerta.
+ *
+ * La alerta compara el margen real redondeado a dos decimales (H7): es la escala con la
+ * que se guarda (`rentabilidad.margen_real`, Decimal(5, 2)) y con la que se muestra
+ * (`formatCostingPercent`). Comparar el doble sin redondear marcaba como margen bajo un
+ * margen que se guarda y se ve como 20.00 %. `toFixed` redondea el valor binario y
+ * Postgres el decimal: solo difieren en un empate exacto en el tercer decimal.
+ * `realMargin` se devuelve sin redondear, como se guarda.
  */
 export function calculateProfitability({
   income,
@@ -65,7 +72,7 @@ export function calculateProfitability({
 }: ProfitabilityInput) {
   const profit = income - totalCost;
   const realMargin = (profit / totalCost) * 100;
-  const lowMarginAlert = realMargin < expectedMargin;
+  const lowMarginAlert = Number(realMargin.toFixed(2)) < expectedMargin;
 
   return { profit, realMargin, lowMarginAlert };
 }

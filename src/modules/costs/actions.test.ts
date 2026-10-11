@@ -18,6 +18,7 @@ import {
   describeNavigationError,
   expectAuthorizesBeforePrisma,
   expectRowLockedBefore,
+  isPrismaCall,
   isPrismaRead,
   type DataOverrides,
   type PrismaCall,
@@ -688,4 +689,67 @@ describe("H10: anular un costo indirecto lo bloquea antes de leerlo", () => {
       });
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// H7 (grupo 2 de fixes): la alerta de bajo margen usa el margen que se guarda
+// ---------------------------------------------------------------------------
+
+// margen_real se guarda como Decimal(5, 2): Postgres redondea el doble al
+// escribirlo. La alerta se decidia con el doble sin redondear, y el registro
+// quedaba con margen 20.00 y alerta de margen bajo a la vez. Lo que se envia
+// como margen_real no cambia; cambia la alerta que lo acompana.
+describe("H7: la alerta de bajo margen usa el margen que se guarda", () => {
+  async function storedProfitability(costing: Row) {
+    const { calls } = await runAction(createProfitabilityAction, {
+      name: "H7",
+      form: { id_costeo: COSTEO, observaciones: "" },
+      data: { "costeo.findUnique": costing },
+    });
+    const create = calls
+      .filter(isPrismaCall)
+      .find((call) => call.prisma === "rentabilidad.create");
+
+    if (!create) {
+      throw new Error("La accion no creo la rentabilidad.");
+    }
+
+    return (create.args as { data: Row }).data;
+  }
+
+  it("COS00000001 en staging: margen 20 % sobre S/ 1514.20 no es margen bajo", async () => {
+    const data = await storedProfitability(
+      costingWithMargin(
+        { porcentaje_margen: D("20.00"), precio_sugerido: D("1817.04") },
+        { costo_total: D("1514.20") },
+      ),
+    );
+
+    expect(data.margen_real).toBe(19.999999999999993);
+    expect(data.alerta_bajo_margen).toBe(false);
+  });
+
+  it("el precio sugerido redondeado al centimo no dispara la alerta", async () => {
+    const data = await storedProfitability(
+      costingWithMargin(
+        { porcentaje_margen: D("17.00"), precio_sugerido: D("1170.01") },
+        { costo_total: D("1000.01") },
+      ),
+    );
+
+    expect(data.margen_real).toBe(16.999830001699983);
+    expect(data.alerta_bajo_margen).toBe(false);
+  });
+
+  it("un precio final que deja 16.99 % sigue siendo margen bajo", async () => {
+    const data = await storedProfitability(
+      costingWithMargin(
+        { porcentaje_margen: D("17.00"), precio_sugerido: D("292.50"), precio_final: D("292.48") },
+        { costo_total: D("250.00") },
+      ),
+    );
+
+    expect(data.margen_real).toBe(16.992000000000008);
+    expect(data.alerta_bajo_margen).toBe(true);
+  });
 });
