@@ -1605,8 +1605,11 @@ Límites y pendientes:
 
 ## Grupo 2 de fixes — Kárdex, lecturas y cálculo
 
-Fecha: 2026-10-10. Estado: hecho en local; falta publicar y verificar en
-staging. 5 commits de `883d629` a `a662913` y este registro. Es el segundo de
+Fecha: 2026-10-10. Estado: verificado en staging el 2026-10-10; falta
+integrarlo en `main`. 5 commits de `883d629` a `a662913` y el registro
+`e33354a`, publicados sobre `bd929bf` junto con `b9b896f` (CI #52 en verde,
+2m 34s), con foto del «antes» tomada antes del push: H7 y H2 se reprodujeron en
+staging y ninguno se repitió después. Es el segundo de
 los cuatro grupos de fixes del bloque de estabilización: corrige H2, H5, H6 y
 H7 de la entrega 6. Cada `fix` cambia el comportamiento solo en un caso
 límite: H2 bajo concurrencia, H7 cuando el margen real queda a menos de medio
@@ -1694,13 +1697,45 @@ páginas, 136 formularios y 48 archivos de acciones.
 
 ### Publicación, CI y verificación en staging
 
-Pendiente. Foto del «antes» antes del push, con staging en `bd929bf` (el
-código del G1): H7 en el detalle de `COS00000001`, de solo lectura; H2 con dos
-entregas adicionales simultáneas del mismo material a dos órdenes distintas,
-que escriben datos y requieren autorización del responsable. Después, push
-junto con `b9b896f`, CI y foto del «después». H5 y H6 no se reproducen en
-staging: H6 necesitaría escribir un negativo directamente en la base y H5 no es
-visible.
+- Foto del «antes» tomada el 2026-10-10 **antes del push**, con staging en
+  `bd929bf` (el código del G1), con ADMIN desde el navegador integrado. Con
+  autorización del responsable para escribir datos de prueba: un margen y una
+  rentabilidad para H7, y carreras de exactamente dos peticiones simultáneas
+  para H2, cada una seguida de dos devoluciones que reponen el stock.
+- `COS00000001` ya no servía para H7: su costo subió de S/ 1414.20 a S/ 1514.20
+  después del último margen, y la vista previa da 12.08 %, un margen bajo de
+  verdad. El defecto sí está en sus dos rentabilidades guardadas («20.00 % ·
+  margen bajo»). Se usó `COS00000002` con un margen de 18 %: sugerido
+  S/ 60,321.60 sobre S/ 51,120.00, margen real `17.999999999999996`.
+- Push de 7 commits (`b9b896f` y de `883d629` a `e33354a`): CI #52 en verde
+  (2m 34s). **Vercel no creó ningún despliegue para ese push** (ni fila en
+  Deployments ni estado en GitHub para `e33354a`); el responsable lo creó a
+  mano con «Create Deployment» sobre la rama `staging` (Preview), y Vercel
+  publicó el estado de `e33354a` (pendiente 02:46:59, completado 02:48:36 UTC).
+  Antes del «después» se comprobó que la URL de rama servía el código nuevo: la
+  vista previa de `COS00000002`, sin cambiar sus datos, pasó de «margen bajo»
+  (02:39 UTC) a «rentable» (02:49 UTC). La huella de fragmentos JavaScript no
+  sirve en este grupo: solo cambió código de servidor (1 de 14 fragmentos
+  cambió).
+
+| Hallazgo | Antes (`bd929bf`) | Después (`e33354a`) |
+|---|---|---|
+| H7 | `COS00000002` al 18 %: vista previa «18.00 % · margen bajo» y rentabilidad guardada igual (9:26 p. m.): el registro dice 18.00 % y margen bajo a la vez. | Con la misma entrada, vista previa y rentabilidad guardada «18.00 % · rentable» (9:49 p. m.); el historial muestra las dos filas juntas. |
+| H2 | Dos entregas adicionales simultáneas de 1.00 de `MAT00000006`, a `OTR00000006` y `OTR00000008`. Primer intento encadenado (`MVI00000044/45`): la segunda leyó después de que la primera confirmó. Reintento con un GET previo a las dos órdenes: `MVI00000048` y `MVI00000049` anotan las dos 299.79 → 298.79 con el stock real en 297.79, y la fila siguiente (`MVI00000050`) parte de 297.79. Reproducido 1 de 2 veces. | La misma carrera, con el GET previo, 3 veces: 3 de 3 encadenadas (`MVI00000052` a `MVI00000063`), todas las peticiones 200 sin error. La cadena del kárdex de `MAT00000006` de `MVI00000043` a `MVI00000063`, verificada por programa: 0 filas incoherentes y solo las 2 rupturas del «antes». |
+
+Con el código nuevo el kárdex encadena por construcción: estas carreras no
+prueban que las transacciones se solaparon, sino que en las condiciones en que
+el código anterior rompió el kárdex el nuevo no lo hizo. H5 y H6 no se
+reproducen en staging (H6 necesitaría escribir un negativo directamente en la
+base y H5 no es visible). No se probaron otros roles: el grupo no cambia
+permisos, rutas ni `requireRole`. Los logs de Vercel no se revisaron.
+
+Datos de prueba que quedan en staging: `COS00000002` con un margen de 18 % y
+dos rentabilidades nuevas (margen bajo antes, rentable después);
+`OTR00000006` y `OTR00000008` con 5 entregas adicionales y 5 devoluciones de
+1.00 cada una (`MVI00000044` a `MVI00000063`); `MAT00000006` sigue en 299.79.
+La evidencia está en `tmp/g2-diff/staging-antes.json` y `staging-despues.json`
+(ignorados).
 
 Hallazgo nuevo de la auditoría, registrado y no corregido:
 
@@ -1715,8 +1750,9 @@ Hallazgo nuevo de la auditoría, registrado y no corregido:
 Límites y pendientes:
 
 - Las pruebas fijan la secuencia, no la carrera: la evidencia de H2 bajo
-  concurrencia será la de staging; la integración con una base desechable
-  sigue en la entrega 11.
+  concurrencia es la de staging, y es probabilística (la carrera depende de
+  cuándo llega cada petición); la integración con una base desechable sigue en
+  la entrega 11.
 - Las rentabilidades ya guardadas conservan su alerta (las dos de
   `COS00000001` en staging): el reporte de rentabilidad mezclará los dos
   criterios hasta que se recalculen. Corregir esos datos es una decisión
@@ -1749,7 +1785,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
-| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | En curso: hecho en local, falta publicar y verificar en staging |
+| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Verificado en staging (CI #52 verde; H7 y H2 reproducidos antes y no después); falta integrar en `main` |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
