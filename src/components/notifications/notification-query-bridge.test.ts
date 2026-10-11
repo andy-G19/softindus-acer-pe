@@ -24,11 +24,11 @@ import {
 // Comportamientos actuales que se conservan (se corrigen aparte):
 // - F1: el ref evita repetir una clave mientras el puente siga montado. Una
 //   segunda operacion igual no muestra su toast y deja ?toast= en la URL.
-// - F3: con ?toast= vacio no muestra nada y no limpia la URL.
 //
 // Corregidos en el grupo 3 de fixes:
 // - F2: las claves del prototipo de Object (toString, constructor...) son
 //   claves sin entrada: no muestran nada y limpian la URL.
+// - F3: con ?toast= vacio no muestra nada y limpia la URL.
 
 const mocks = vi.hoisted(() => ({
   pathname: "/dashboard",
@@ -209,10 +209,18 @@ describe("URL", () => {
     },
   );
 
-  it("F3: con ?toast= vacio no muestra nada ni limpia la URL", () => {
-    render("/dashboard", "toast=");
+  // Con toast repetido cuenta el primero, como en el caso anterior.
+  it.each([
+    ["toast=", "/dashboard"],
+    ["toast", "/dashboard"],
+    ["page=2&toast=&q=acero", "/dashboard?page=2&q=acero"],
+    ["toast=&toast=client-created", "/dashboard"],
+  ])("F3: con ?toast= vacio (%s) no muestra nada y limpia la URL", (search, url) => {
+    render("/dashboard", search);
 
-    expect(takeNotificationCalls()).toEqual([]);
+    expect(takeNotificationCalls()).toEqual([
+      { effect: `router.replace ${url} {"scroll":false}` },
+    ]);
   });
 });
 

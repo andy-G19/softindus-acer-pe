@@ -23,7 +23,8 @@ export function NotificationQueryBridge() {
   useEffect(() => {
     const toastKey = searchParams.get("toast");
 
-    if (!toastKey || displayedToastRef.current === toastKey) {
+    // Un ?toast= vacio no muestra nada, pero tambien se limpia.
+    if (toastKey === null || displayedToastRef.current === toastKey) {
       return;
     }
 
