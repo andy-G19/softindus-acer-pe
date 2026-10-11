@@ -80,7 +80,8 @@ function render(pathname: string, search = "") {
   NotificationQueryBridge();
 }
 
-// Las 124 claves del catalogo al empezar la entrega 7, en su orden.
+// Las 124 claves del catalogo al empezar la entrega 7, en su orden, menos
+// work-order-materials-consumed, retirada en el grupo 3 de fixes.
 const CLAVES = [
   "login-success",
 
@@ -114,7 +115,7 @@ const CLAVES = [
   "campaign-created", "campaign-detail-created", "campaign-updated",
   "campaign-status-activa", "campaign-status-finalizada",
   "campaign-status-anulada", "work-order-created",
-  "work-order-materials-consumed", "work-order-annulled",
+  "work-order-annulled",
   "work-order-finished", "route-stage-created", "route-stage-updated",
   "route-stage-activated", "route-stage-deactivated", "route-created",
   "route-updated", "route-activated", "route-deactivated",
@@ -157,9 +158,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 124 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(124);
-  expect(new Set(CLAVES).size).toBe(124);
+it("la lista fija tiene las 123 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(123);
+  expect(new Set(CLAVES).size).toBe(123);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:
@@ -195,7 +196,9 @@ describe("URL", () => {
     expect(takeNotificationCalls()).toMatchSnapshot();
   });
 
-  it.each(["no-existe", "Client-Created", "client-created%20"])(
+  // work-order-materials-consumed se retiro en el grupo 3 de fixes: no tenia
+  // emisor desde 5599788 y mostraba un consumo de materiales que no ocurrio.
+  it.each(["no-existe", "Client-Created", "client-created%20", "work-order-materials-consumed"])(
     "clave sin entrada (%s): no muestra nada y limpia la URL",
     (clave) => {
       render("/dashboard/commercial/clients", `page=2&toast=${clave}`);

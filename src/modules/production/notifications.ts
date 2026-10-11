@@ -11,10 +11,6 @@ export const productionNotifications = {
   "campaign-status-finalizada": { type: "success", message: "Campaña finalizada" },
   "campaign-status-anulada": { type: "warning", message: "Campaña anulada" },
   "work-order-created": { type: "success", message: "Orden de trabajo creada correctamente" },
-  // Sin emisor desde 5599788: el consumo de materiales todo o nada se
-  // reemplazo por la entrega, la devolucion y el cierre. Se conserva para no
-  // cambiar lo que muestra una URL con esta clave; retirarla es un fix aparte.
-  "work-order-materials-consumed": { type: "success", message: "Consumo de materiales registrado" },
   "work-order-annulled": { type: "warning", message: "Orden de trabajo anulada" },
   "work-order-finished": { type: "success", message: "Orden de trabajo finalizada" },
   "route-stage-created": { type: "success", message: "Etapa de ruta creada correctamente" },
