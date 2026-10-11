@@ -463,14 +463,27 @@ const PRISMA_METHODS = new Set([
 // Escrituras que admite el cliente de una transaccion simulada. No se aplican:
 // solo se registran, y devuelven un resultado por defecto salvo que el caso lo
 // sustituya.
-const WRITE_METHODS = new Set(["create", "createMany", "update", "updateMany"]);
+const WRITE_METHODS = new Set([
+  "create",
+  "createMany",
+  "update",
+  "updateMany",
+  "updateManyAndReturn",
+]);
 
 // create y update devuelven el `data` recibido. updateMany afecta una fila,
 // que es lo que esperan las guardas que comprueban `count` (un caso simula la
 // guarda que falla con `{ count: 0 }`); createMany, una por elemento.
-function defaultWriteResult(method: string, args: PrismaArgs) {
+// updateManyAndReturn tambien afecta una fila y la devuelve generada segun su
+// select, sin aplicar `data` (grupo 2 de fixes): el caso que necesita el valor
+// que dejaria la escritura lo fija, y `[]` simula la guarda que falla.
+function defaultWriteResult(modelName: string, method: string, args: PrismaArgs) {
   if (method === "updateMany") {
     return { count: 1 };
+  }
+
+  if (method === "updateManyAndReturn") {
+    return [generateRow(getSchema(), modelName, args, 1)];
   }
 
   if (method === "createMany") {
@@ -543,7 +556,7 @@ function createModelDelegate(
           }
 
           if (isWrite) {
-            return defaultWriteResult(method, args);
+            return defaultWriteResult(modelName, method, args);
           }
 
           return generateResult(getSchema(), modelName, method, args);
