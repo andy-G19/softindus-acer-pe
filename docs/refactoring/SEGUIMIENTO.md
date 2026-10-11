@@ -1605,11 +1605,12 @@ Límites y pendientes:
 
 ## Grupo 2 de fixes — Kárdex, lecturas y cálculo
 
-Fecha: 2026-10-10. Estado: verificado en staging el 2026-10-10; falta
-integrarlo en `main`. 5 commits de `883d629` a `a662913` y el registro
-`e33354a`, publicados sobre `bd929bf` junto con `b9b896f` (CI #52 en verde,
-2m 34s), con foto del «antes» tomada antes del push: H7 y H2 se reprodujeron en
-staging y ninguno se repitió después. Es el segundo de
+Fecha: 2026-10-10. Estado: cerrado el 2026-10-10. 5 commits de `883d629` a
+`a662913` y el registro `e33354a`, publicados sobre `bd929bf` junto con
+`b9b896f` (CI #52 en verde, 2m 34s), con foto del «antes» tomada antes del
+push: H7 y H2 se reprodujeron en staging y ninguno se repitió después. Cierre
+`5607085` (CI #53 en verde), integrado en `main` con el PR #18 (CI #54 en
+verde; merge commit `4cd66a2`, CI #55 en verde, 2m 31s). Es el segundo de
 los cuatro grupos de fixes del bloque de estabilización: corrige H2, H5, H6 y
 H7 de la entrega 6. Cada `fix` cambia el comportamiento solo en un caso
 límite: H2 bajo concurrencia, H7 cuando el margen real queda a menos de medio
@@ -1785,7 +1786,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 6 | A | Órdenes de trabajo y costeo por caso de uso | Cerrada (CI #43 verde en main, staging verificado con ADMIN) |
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
-| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Verificado en staging (CI #52 verde; H7 y H2 reproducidos antes y no después); falta integrar en `main` |
+| G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
