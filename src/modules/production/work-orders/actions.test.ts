@@ -571,17 +571,6 @@ defineActionSuite("createWorkOrderAction", createWorkOrderAction, [
     data: createData(),
   },
   {
-    name: "pedido: si el detalle ya no existe dentro de la transaccion, no actualiza el pedido",
-    form: orderForm,
-    data: createData({
-      "detalle_pedido.findUnique": (args: PrismaArgs) => {
-        const select = (args?.select ?? {}) as Row;
-
-        return select.id_pedido ? null : orderDetailRow();
-      },
-    }),
-  },
-  {
     name: "campania sin productos registrados: acepta el producto y crea la orden",
     form: { ...campaignForm, prioridad: "alta" },
     data: createData({
@@ -1309,6 +1298,38 @@ describe("H2: el kardex anota el stock que deja la propia escritura", () => {
     // habria dejado activa.
     expect(written(calls, "alerta_stock.update")).toEqual([
       expect.objectContaining({ estado_alerta: "atendida", stock_detectado: 18 }),
+    ]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// H5 (grupo 2 de fixes): crear una orden por pedido lee el detalle una vez
+// ---------------------------------------------------------------------------
+
+// Crear una orden por pedido leia el mismo detalle de pedido tres veces: dos
+// fuera de la transaccion, con la misma validacion repetida, y una dentro solo
+// para obtener su pedido. La tercera no podia volver vacia: la orden ya creada
+// referencia el detalle (clave foranea con onDelete Restrict) y ningun codigo
+// cambia el pedido de un detalle. Ahora se lee una vez y su pedido y su
+// cliente se reutilizan.
+describe("H5: crear una orden por pedido lee el detalle una sola vez", () => {
+  it("lee el detalle una vez y pasa a produccion el pedido de esa lectura", async () => {
+    const { calls, outcome } = await runAction(createWorkOrderAction, {
+      name: "H5",
+      form: orderForm,
+      data: createData(),
+    });
+    const prismaCalls = calls.filter(isPrismaCall);
+    const argsOf = (key: string) =>
+      prismaCalls.filter((call) => call.prisma === key).map((call) => call.args as Row);
+
+    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created");
+    expect(argsOf("detalle_pedido.findUnique")).toHaveLength(1);
+    expect(argsOf("orden_trabajo.create")).toEqual([
+      { data: expect.objectContaining({ id_cliente: CLIENTE, id_detalle_pedido: DETALLE }) },
+    ]);
+    expect(argsOf("pedido.update")).toEqual([
+      { where: { id_pedido: PEDIDO }, data: { estado: "en_produccion" } },
     ]);
   });
 });

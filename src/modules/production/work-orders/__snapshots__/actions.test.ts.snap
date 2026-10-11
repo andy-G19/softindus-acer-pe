@@ -1411,7 +1411,14 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
   {
     "args": {
       "select": {
+        "id_detalle_pedido": true,
+        "id_pedido": true,
         "id_producto": true,
+        "pedido": {
+          "select": {
+            "id_cliente": true,
+          },
+        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
@@ -1473,17 +1480,6 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
     "prisma": "version_receta.findFirst",
   },
   {
-    "args": {
-      "include": {
-        "pedido": true,
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -1515,17 +1511,6 @@ exports[`createWorkOrderAction > pedido sin producto en el formulario: usa el de
       },
     },
     "prisma": "orden_trabajo.create",
-  },
-  {
-    "args": {
-      "select": {
-        "id_pedido": true,
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
   },
   {
     "args": {
@@ -1630,7 +1615,14 @@ exports[`createWorkOrderAction > pedido: el detalle es de otro producto que el e
   {
     "args": {
       "select": {
+        "id_detalle_pedido": true,
+        "id_pedido": true,
         "id_producto": true,
+        "pedido": {
+          "select": {
+            "id_cliente": true,
+          },
+        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
@@ -1655,7 +1647,14 @@ exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
   {
     "args": {
       "select": {
+        "id_detalle_pedido": true,
+        "id_pedido": true,
         "id_producto": true,
+        "pedido": {
+          "select": {
+            "id_cliente": true,
+          },
+        },
       },
       "where": {
         "id_detalle_pedido": "DPE00000001",
@@ -1667,214 +1666,6 @@ exports[`createWorkOrderAction > pedido: el detalle no existe > llamadas 1`] = `
 `;
 
 exports[`createWorkOrderAction > pedido: el detalle no existe > resultado 1`] = `"error: El detalle de pedido seleccionado no existe."`;
-
-exports[`createWorkOrderAction > pedido: si el detalle ya no existe dentro de la transaccion, no actualiza el pedido > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-        "nombre_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000001",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "etapa_ruta": {
-          "where": {
-            "estado": true,
-          },
-        },
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000001",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "detalle_receta": {
-          "include": {
-            "material": {
-              "select": {
-                "costo_unitario_actual": true,
-                "id_material": true,
-              },
-            },
-          },
-          "orderBy": {
-            "id_detalle_receta": "asc",
-          },
-        },
-        "receta_tecnica": true,
-      },
-      "where": {
-        "id_version_receta": "VRE00000001",
-      },
-    },
-    "prisma": "version_receta.findFirst",
-  },
-  {
-    "args": {
-      "include": {
-        "pedido": true,
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "orden_trabajo",
-      "prefijo": "OTR",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad": 25,
-        "estado": "pendiente",
-        "fecha_entrega_estimada": 2026-07-31T00:00:00.000Z,
-        "fecha_inicio": 2026-07-20T00:00:00.000Z,
-        "id_campania": null,
-        "id_cliente": "CLI00000001",
-        "id_detalle_pedido": "DPE00000001",
-        "id_orden_trabajo": "OTR00000001",
-        "id_producto": "PRO00000001",
-        "id_ruta": "RUT00000001",
-        "id_usuario_registro": "USU00000001",
-        "id_version_receta": "VRE00000001",
-        "observaciones": null,
-        "prioridad": "media",
-        "tipo_produccion": "pedido",
-      },
-    },
-    "prisma": "orden_trabajo.create",
-  },
-  {
-    "args": {
-      "select": {
-        "id_pedido": true,
-      },
-      "where": {
-        "id_detalle_pedido": "DPE00000001",
-      },
-    },
-    "prisma": "detalle_pedido.findUnique",
-  },
-  {
-    "args": {
-      "cantidad": 3,
-      "codigoEntidad": "requerimiento_orden_material",
-      "prefijo": "ROM",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": [
-        {
-          "cantidad_por_unidad": Decimal(2.5),
-          "cantidad_requerida": 68.75,
-          "costo_unitario_registrado": Decimal(12.47),
-          "id_material": "MAT00000001",
-          "id_orden_trabajo": "OTR00000001",
-          "id_requerimiento": "ROM00000001",
-          "merma_estimada_porcentaje": Decimal(10),
-          "tipo_consumo": "materia_prima",
-          "unidad_medida": "kg",
-        },
-        {
-          "cantidad_por_unidad": Decimal(0.333),
-          "cantidad_requerida": 8.57,
-          "costo_unitario_registrado": Decimal(8.9),
-          "id_material": "MAT00000002",
-          "id_orden_trabajo": "OTR00000001",
-          "id_requerimiento": "ROM00000002",
-          "merma_estimada_porcentaje": Decimal(3),
-          "tipo_consumo": "consumible",
-          "unidad_medida": "kg",
-        },
-        {
-          "cantidad_por_unidad": Decimal(0.16),
-          "cantidad_requerida": 4,
-          "costo_unitario_registrado": Decimal(31.2),
-          "id_material": "MAT00000003",
-          "id_orden_trabajo": "OTR00000001",
-          "id_requerimiento": "ROM00000003",
-          "merma_estimada_porcentaje": null,
-          "tipo_consumo": "auxiliar",
-          "unidad_medida": "kg",
-        },
-      ],
-    },
-    "prisma": "requerimiento_orden_material.createMany",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Orden de trabajo creada para el producto PRO00000001. Requerimiento congelado: 3 material(es).",
-      "enTransaccion": true,
-      "entidad_afectada": "orden_trabajo",
-      "id_registro_afectado": "OTR00000001",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/work-orders",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`createWorkOrderAction > pedido: si el detalle ya no existe dentro de la transaccion, no actualiza el pedido > resultado 1`] = `"redirect:/dashboard/production/work-orders/OTR00000001?toast=work-order-created"`;
 
 exports[`createWorkOrderAction > producto inexistente o inactivo > llamadas 1`] = `
 [
