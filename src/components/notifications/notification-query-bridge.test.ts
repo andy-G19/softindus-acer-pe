@@ -24,9 +24,11 @@ import {
 // Comportamientos actuales que se conservan (se corrigen aparte):
 // - F1: el ref evita repetir una clave mientras el puente siga montado. Una
 //   segunda operacion igual no muestra su toast y deja ?toast= en la URL.
-// - F2: las claves del prototipo de Object (toString, constructor...)
-//   encuentran algo y muestran un toast info vacio.
 // - F3: con ?toast= vacio no muestra nada y no limpia la URL.
+//
+// Corregidos en el grupo 3 de fixes:
+// - F2: las claves del prototipo de Object (toString, constructor...) son
+//   claves sin entrada: no muestran nada y limpian la URL.
 
 const mocks = vi.hoisted(() => ({
   pathname: "/dashboard",
@@ -214,13 +216,17 @@ describe("URL", () => {
   });
 });
 
+// Los 12 nombres propios de Object.prototype (toString, constructor,
+// __proto__...): ninguno es una clave del registro.
 describe("F2: claves del prototipo de Object", () => {
-  it.each(["toString", "constructor", "__proto__", "hasOwnProperty", "valueOf"])(
-    "%s muestra un toast info vacio y limpia la URL",
+  it.each(Object.getOwnPropertyNames(Object.prototype))(
+    "%s: no muestra nada y limpia la URL",
     (clave) => {
       render("/dashboard", `toast=${clave}`);
 
-      expect(takeNotificationCalls()).toMatchSnapshot();
+      expect(takeNotificationCalls()).toEqual([
+        { effect: 'router.replace /dashboard {"scroll":false}' },
+      ]);
     },
   );
 });

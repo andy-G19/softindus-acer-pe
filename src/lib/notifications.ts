@@ -70,8 +70,7 @@ export function showInfo(message: string, description?: string) {
 }
 
 // Muestra una definicion del catalogo. Cualquier valor que no sea success,
-// error o warning se muestra como info: el puente ?toast= depende de ello
-// (F2 en notification-query-bridge.test.ts).
+// error o warning se muestra como info.
 export function notify(definition: NotificationDefinition) {
   if (definition.type === "success") {
     showSuccess(definition.message, definition.description);
