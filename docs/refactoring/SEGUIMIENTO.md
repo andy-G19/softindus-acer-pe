@@ -1767,6 +1767,127 @@ Límites y pendientes:
   el desplegable deja de ofrecer sus otros detalles (regla de negocio, junto
   con H11).
 
+## Grupo 3 de fixes — Puente de notificaciones
+
+Fecha: 2026-10-10. Estado: hecho en local; falta publicar y verificar en
+staging. 4 commits de `039b65f` a `7453c57` y este registro, sobre `a564ed7`
+(registro de la integración del G2, que viaja con este grupo). Es el tercero
+de los cuatro grupos de fixes del bloque de estabilización: corrige F1, F2 y
+F3 del puente `?toast=` y retira la entrada sin emisor, los cuatro
+comportamientos que la entrega 7 conservó y fijó con su caracterización. Los
+cuatro cambian lo que ve el usuario; solo F1 se nota en el uso normal.
+
+| Hallazgo | Defecto | Arreglo |
+|---|---|---|
+| F2 | El puente consultaba el registro por propiedad: `?toast=toString`, `constructor`, `__proto__` y los demás nombres de `Object.prototype` encontraban algo heredado, y `notify` lo mostraba como un toast info vacío. | Solo cuentan las claves propias del registro (`Object.hasOwn`): esas claves son claves sin entrada, no muestran nada y limpian la URL. |
+| F3 | El puente salía con `!toastKey`, que mezcla un parámetro ausente (`null`) con uno vacío (`""`): con `?toast=` vacío no mostraba nada y tampoco limpiaba la URL. | Sale solo con `toastKey === null`; el vacío se limpia conservando los demás parámetros. Con `toast` repetido sigue contando el primero. |
+| F1 | El ref guardaba la última clave mostrada y nunca se reiniciaba, y como el puente vive en el layout del dashboard esa memoria duraba toda la sesión. Una segunda operación igual (dos clientes creados seguidos) no mostraba su toast y dejaba `?toast=` en la URL; al recargar aparecía un toast viejo. | El ref se reinicia cuando la URL llega sin `?toast=`: solo evita repetir la misma URL, como en el efecto doble del modo estricto. |
+| Clave sin emisor | Ningún archivo emitía `work-order-materials-consumed` desde `5599788` (2026-08-03): una URL antigua mostraba «Consumo de materiales registrado» sin que ocurriera. | Se retira del catálogo de Producción; `CLAVES_SIN_EMISOR` queda vacío y se conserva. |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 039b65f | fix | F2: solo cuentan las claves propias del registro; `notify` gana una prueba directa de su caso por defecto. |
+| b7a1970 | fix | F3: un `?toast=` vacío se limpia. |
+| a727581 | fix | F1: el ref se reinicia cuando la URL llega sin `?toast=`. |
+| 7453c57 | fix | Retira `work-order-materials-consumed`; la lista fija del puente pasa de 124 a 123 claves. |
+
+Diseño:
+
+- Orden F2 → F3 → F1 → clave: de lo más aislado a lo más visible. F1
+  reinicia el ref dentro de la rama `toastKey === null` que F3 deja exacta.
+- F1 sin identificadores de operación en la URL. La sección 7 del plan los
+  prevé, pero ponerlos ahora en los 47 archivos emisores se descartaría en la
+  pista B: la sección 8 lleva el identificador en el resultado tipado de la
+  acción, sin pasar por la URL, y el puente queda como adaptador hasta la
+  entrega 11. El arreglo no cambia el contrato `?toast=<clave>` ni los
+  emisores. La URL limpia marca el límite entre dos operaciones: cada una
+  termina en una navegación nueva (en Next 16 el `redirect` de una Server
+  Action hace `push`) y el puente limpia la URL antes de la siguiente. Límite:
+  dos operaciones iguales que llegaran antes de que termine el
+  `router.replace` de la primera mostrarían un solo toast; lo resuelven los
+  identificadores de la pista B.
+- F3 deja su marca en el ref: `?toast=a`, `?toast=` y otra vez `?toast=a` en
+  el mismo montaje muestran las dos `a`. Es coherente con F1: la URL perdió
+  la clave.
+- F2 en el puente y no en el registro: un registro sin prototipo también lo
+  corrige, pero `Object.hasOwn` deja la regla junto a la consulta con el texto
+  libre de la URL; un consumidor tipado con `NotificationKey` no la necesita.
+  `notify` conserva su caso por defecto (info) y gana una prueba directa:
+  hasta F2 solo lo cubrían los casos F2 del puente.
+- Antes de retirar la clave se confirmó que nada la emite ni la guarda: solo
+  aparecía en el catálogo, las pruebas, su snapshot y este documento. La
+  acción que la emitía registraba en la bitácora `consumir_materiales` con un
+  detalle sin URL (ningún archivo usa hoy esa acción) y ninguna columna del
+  esquema guarda URLs.
+
+Evidencia:
+
+1. Prueba roja primero en cada `fix`. F2: 12 de 12, los 12 nombres propios de
+   `Object.prototype` (antes se probaban 5). F3: 4 de 4, `toast=`, `toast` sin
+   `=`, el vacío entre otros parámetros y el vacío seguido de otra clave. F1:
+   2 de 2, dos operaciones iguales seguidas desde el listado filtrado y
+   pasando por el formulario; cada caso exige que la segunda produzca las
+   mismas llamadas que la primera. La clave: 2 de 2, en los casos de clave sin
+   entrada y con `CLAVES_SIN_EMISOR` vacío. Al retirar la entrada, la lista
+   fija hizo fallar su caso, como diseñó la entrega 7.
+2. Snapshots: F2 borra los 5 que fijaban el toast vacío (80 líneas) y la clave
+   el suyo (16). Ninguno más cambia; el del modo estricto sigue igual en F1.
+3. Comparación diferencial fuera del repositorio (`tmp/g3-diff`, ignorado,
+   `npx vitest run --config tmp/g3-diff/vitest.config.ts`): el puente de
+   `a564ed7`, con el registro de ese commit congelado en JSON, y el puente
+   nuevo se comparan paso a paso, y cada paso distinto debe caer en
+   exactamente una categoría (F1, F2, F3 o la clave retirada). Resultado
+   final: 5.881 claves solas (12 F2, 1 F3, 1 retirada y 5.867 idénticas); una
+   batería de dos operaciones iguales seguidas para 138 claves (1.242 pasos:
+   274 F1, 24 F2, 4 F3, 2 retirada y 938 idénticos, entre ellos todos los
+   renders dobles), y 20.000 secuencias al azar (89.647 pasos: 2.369 F2, 178
+   F3, 594 retirada, 37 F1 y 86.469 idénticos). Cada commit agregó solo su
+   categoría; tras F3 apareció un caso de F1 por un `?toast=` vacío y ninguno
+   por una URL sin toast, como se predijo. Control: detecta un texto, una
+   severidad, el `scroll` y una entrada con emisor borrada.
+4. 22 mutaciones, todas detectadas: 7 de F2, 4 de F3, 6 de F1 y 5 de la clave.
+
+| Mutación | Resultado |
+|---|---|
+| F2: consulta por propiedad; `in`; `Boolean(…)`; condición negada; `notify` con `showToast(definition.type, …)`, por defecto success o sin descripción | Todas fallan |
+| F3: `!toastKey`; comparar con `undefined`; salir también con `""`; limpiar de más | Todas fallan; `undefined` por el snapshot de dos claves distintas seguidas (un `router.replace` de más en cada URL sin toast) |
+| F1: no reiniciar el ref; reiniciarlo en cada render; sin deduplicación; reiniciarlo solo si la URL queda sin parámetros o solo al cambiar de ruta; no guardar la clave mostrada | Todas fallan; la de «sin parámetros» obligó a llevar `q=acero` en un caso |
+| Clave: devolverla a Producción, a Costos o con otro texto; declararla sin entrada; volver a meterla en la lista fija | Todas fallan |
+
+La última mutación agregaba un caso con `toMatchSnapshot` y Vitest escribió su
+snapshot, pero `mutate.py` solo restauraba el archivo mutado. Se vio en el
+diff del snapshot antes del commit (8 líneas en lugar de 16); se limpió y
+`mutate.py` ahora guarda y restaura también el `.snap` de cada prueba.
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.576, 1.579, 1.580 y 1.580 pruebas según el commit; 99 archivos
+de prueba al final. El código de producción cambia en 3 archivos de `src` (+17
+y −13); las pruebas, +78 y −28, y los snapshots, −96. `npm run
+refactor:inventory` analiza 540 archivos y mantiene 127 páginas, 136
+formularios y 48 archivos de acciones.
+
+| Caso | Antes | Después |
+|---|---|---|
+| Dos operaciones iguales seguidas (crear dos clientes) | La segunda no muestra toast y deja `?toast=` en la URL; al recargar aparece un toast viejo | Cada una muestra su toast y la URL queda limpia |
+| `?toast=toString` y los otros 11 nombres de `Object.prototype` | Toast info vacío | Nada; la URL se limpia |
+| `?toast=` vacío | Nada; la URL no se limpia | Nada; la URL se limpia |
+| `?toast=work-order-materials-consumed` | success: «Consumo de materiales registrado» | Nada; la URL se limpia |
+| Las 123 claves, el modo estricto y el remontaje | — | Sin cambios |
+
+### Publicación, CI y verificación en staging
+
+Pendiente. Foto del «antes» antes del push, de solo lectura: las 14 URLs de
+la entrega 7 y variantes de F2 y F3, y F1 con `history.pushState`, que Next 16
+integra con `useSearchParams`, de modo que la misma clave llega dos veces al
+puente montado sin escribir datos. Después, push junto con `a564ed7`, CI,
+comprobar que staging sirve el build nuevo (cambia código de cliente, así que
+la huella de fragmentos JavaScript debe cambiar) y foto del «después».
+
+Límites:
+
+- El modo estricto solo se prueba con el doble de React: staging sirve el
+  build de producción, sin modo estricto, y `npm run dev` necesita la base.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -1787,7 +1908,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
-| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Pendiente |
+| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | En curso: hecho en local, falta publicar y verificar en staging |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
@@ -1813,9 +1934,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 124 / 124 | 7 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 123 / 123 | 7 y G3 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 99 / 1.568 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 99 / 1.580 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -1825,6 +1946,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Operaciones que leen, validan y escriben una orden, un costeo o un costo indirecto sin bloquear su fila | 14 | 0 | G1 |
 | Acciones de avance y salida de inventario caracterizadas | 0 / 4 | 4 / 4 | G1 |
 | Escrituras del kárdex que anotan un stock leído antes de escribir | 2 | 0 | G2 |
+| Defectos del puente `?toast=` fijados por la caracterización / entradas declaradas sin emisor | 3 / 1 | 0 / 0 | G3 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -1886,6 +2008,17 @@ copias locales de conversión y formato 0 e `import` de las librerías de
 notificaciones 2, medidos de nuevo. Los tres archivos más grandes de `src` son
 pruebas y el arnés (1.335, 1.161 y 901 líneas); los de producción no cambian
 (696, 643 y 614).
+
+Actualizado en el grupo 3 de fixes (2026-10-10) sobre `7453c57`: pruebas 99 /
+1.580, claves caracterizadas 123 / 123 (el registro tiene 123 entradas: 93
+éxitos, 29 advertencias y 1 error) y una fila nueva medida sobre `a564ed7`, su
+línea base: F1, F2 y F3, fijados por la caracterización de la entrega 7, y
+`work-order-materials-consumed` en `CLAVES_SIN_EMISOR`. El código sigue
+emitiendo 103 `toast=` en 47 archivos. Las demás no cambian: páginas con
+Prisma directo 0, `auth()` directo 0, copias locales de conversión y formato 0
+e `import` de las librerías de notificaciones 2, medidos de nuevo. Los tres
+archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
+901; 696, 643 y 614).
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
