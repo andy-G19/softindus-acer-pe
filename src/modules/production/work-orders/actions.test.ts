@@ -17,7 +17,9 @@ import {
   describeNavigationError,
   expectAuthorizesBeforePrisma,
   expectRowLockedBefore,
+  isPrismaCall,
   isPrismaRead,
+  projectRows,
   type DataOverrides,
   type PrismaArgs,
 } from "@/testing/page-characterization";
@@ -393,6 +395,46 @@ function workOrderRow(changes: Row = {}) {
   };
 }
 
+// Stock que tiene la base cuando la entrega o la devolucion escriben (grupo 2
+// de fixes, H2). El doble no aplica escrituras: la escritura del material
+// devuelve el stock de esta tabla menos lo que descuenta, o mas lo que
+// devuelve, y respeta la guarda `gte` del descuento. Sin carrera es el mismo
+// stock que leyo el caso de uso; los casos de H2 fijan otro.
+type StockInDb = Record<string, Pick<MaterialSeed, "stock" | "minimo">>;
+
+function stockInDb(changes: StockInDb = {}): DataOverrides {
+  const written = (args: PrismaArgs) => {
+    const where = whereOf(args);
+    const idMaterial = String(where.id_material);
+    const seed = { ...MATERIALES[idMaterial], ...changes[idMaterial] };
+    const change = (args?.data as Row).stock_actual as { decrement?: number; increment?: number };
+    const guard = (where.stock_actual as { gte?: number } | undefined)?.gte;
+    const before = D(seed.stock);
+
+    if (guard !== undefined && before.lessThan(guard)) {
+      return null;
+    }
+
+    const after =
+      change.decrement !== undefined ? before.minus(change.decrement) : before.plus(change.increment ?? 0);
+
+    return { id_material: idMaterial, stock_actual: after, stock_minimo: D(seed.minimo) };
+  };
+
+  return {
+    "material.updateManyAndReturn": (args: PrismaArgs) => {
+      const row = written(args);
+
+      return row ? projectRows([row], args) : [];
+    },
+    "material.update": (args: PrismaArgs) => {
+      const row = written(args);
+
+      return row ? projectRows([row], args)[0] : null;
+    },
+  };
+}
+
 // Alertas activas por material: el caso decide cuales existen.
 function activeAlerts(byMaterial: Record<string, string>) {
   return (args: PrismaArgs) => {
@@ -654,6 +696,7 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
         [PLANCHA]: "ALE00000003",
         [TORNILLO]: "ALE00000004",
       }),
+      ...stockInDb(),
     },
   },
   {
@@ -667,10 +710,9 @@ defineActionSuite("deliverWorkOrderMaterialsAction", deliverWorkOrderMaterialsAc
         ],
       }),
       "alerta_stock.findFirst": null,
-      // Otra entrega se llevo la soldadura entre la lectura y la transaccion.
-      "material.updateMany": (args: PrismaArgs) => ({
-        count: whereOf(args).id_material === SOLDADURA ? 0 : 1,
-      }),
+      // Otra entrega se llevo la soldadura entre la lectura y la transaccion:
+      // la base tiene 5.00 y se piden 8.57.
+      ...stockInDb({ [SOLDADURA]: { stock: "5.00", minimo: "5.00" } }),
     },
   },
 ]);
@@ -767,6 +809,7 @@ defineActionSuite("deliverAdditionalMaterialAction", deliverAdditionalMaterialAc
         material: { stock: "40.00", minimo: "10.00" },
       }),
       "alerta_stock.findFirst": null,
+      ...stockInDb({ [PLANCHA]: { stock: "40.00", minimo: "10.00" } }),
     },
   },
 ]);
@@ -854,6 +897,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         material: { stock: "5.00", minimo: "8.00" },
       }),
       "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      ...stockInDb({ [PLANCHA]: { stock: "5.00", minimo: "8.00" } }),
     },
   },
   {
@@ -867,6 +911,7 @@ defineActionSuite("returnWorkOrderMaterialAction", returnWorkOrderMaterialAction
         { estado: "finalizada" },
       ),
       "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+      ...stockInDb({ [PLANCHA]: { stock: "20.00", minimo: "8.00" } }),
     },
   },
 ]);
@@ -1154,3 +1199,116 @@ describeWorkOrderLock("returnWorkOrderMaterialAction", 8, trimmedWorkOrderId);
 // Cerrar y reabrir tambien reciben el id recortado (la accion y el esquema).
 describeWorkOrderLock("closeWorkOrderMaterialsAction", 9, trimmedWorkOrderId);
 describeWorkOrderLock("reopenWorkOrderMaterialsAction", 5, trimmedWorkOrderId);
+
+// ---------------------------------------------------------------------------
+// H2 (grupo 2 de fixes): el kardex anota el stock que deja la propia escritura
+// ---------------------------------------------------------------------------
+
+// La entrega y la devolucion anotaban en el kardex, y usaban para la alerta de
+// stock critico, el stock que el caso de uso leyo antes de escribir. El
+// bloqueo de la orden (H1) no lo protege: otra orden, una compra o una salida
+// de inventario pueden mover el mismo material entre esa lectura y la
+// escritura, y el kardex queda con dos movimientos que parten del mismo stock
+// anterior (MVI00000037 y MVI00000038 en staging). Ahora la escritura devuelve
+// el stock que dejo, y de ahi salen el kardex y la alerta.
+//
+// Cada caso lee un stock y la base tiene otro al escribir: el que dejo la
+// operacion que se colo en medio.
+describe("H2: el kardex anota el stock que deja la propia escritura", () => {
+  function written(calls: Awaited<ReturnType<typeof runAction>>["calls"], key: string) {
+    return calls
+      .filter(isPrismaCall)
+      .filter((call) => call.prisma === key)
+      .map((call) => (call.args as { data: Row }).data);
+  }
+
+  function expectKardex(data: Row, expected: { anterior: string; cantidad: number; resultante: string }) {
+    expect(String(data.stock_anterior)).toBe(D(expected.anterior).toString());
+    expect(data.cantidad).toBe(expected.cantidad);
+    expect(String(data.stock_resultante)).toBe(D(expected.resultante).toString());
+  }
+
+  it("entrega lo pendiente: otra orden se llevo 30 de plancha despues de la lectura", async () => {
+    const { calls, outcome } = await runAction(deliverWorkOrderMaterialsAction, {
+      name: "H2 entrega pendiente",
+      form: { id_orden_trabajo: OT },
+      data: {
+        "orden_trabajo.findUnique": workOrderRow({
+          requerimiento_orden_material: [
+            // Lee 100.00; pendiente 48.75.
+            requirementRow(REQ_PLANCHA, PLANCHA, { requerida: "68.75", entregada: "20.00" }),
+          ],
+        }),
+        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        ...stockInDb({ [PLANCHA]: { stock: "70.00", minimo: "30.00" } }),
+      },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-materials-delivered");
+
+    const [kardex] = written(calls, "movimiento_inventario.create");
+
+    expectKardex(kardex, { anterior: "70.00", cantidad: 48.75, resultante: "21.25" });
+
+    // 21.25 queda bajo el minimo 30: la alerta sigue activa con el stock real.
+    // Con la lectura, 51.25 la habria dado por atendida.
+    expect(written(calls, "alerta_stock.update")).toEqual([
+      expect.objectContaining({ stock_detectado: 21.25, stock_minimo: 30 }),
+    ]);
+  });
+
+  it("entrega adicional: el stock real deja el material en critico y abre la alerta", async () => {
+    const { calls, outcome } = await runAction(deliverAdditionalMaterialAction, {
+      name: "H2 entrega adicional",
+      form: additionalForm,
+      data: {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          entregada: "68.75",
+          // Lee 40.00, sobre el minimo 10.
+          material: { stock: "40.00", minimo: "10.00" },
+        }),
+        "alerta_stock.findFirst": null,
+        ...stockInDb({ [PLANCHA]: { stock: "12.00", minimo: "10.00" } }),
+      },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-additional-delivery");
+
+    const [kardex] = written(calls, "movimiento_inventario.create");
+
+    expectKardex(kardex, { anterior: "12.00", cantidad: 5.5, resultante: "6.50" });
+    expect(written(calls, "alerta_stock.create")).toEqual([
+      expect.objectContaining({ stock_detectado: 6.5, stock_minimo: 10, estado_alerta: "activa" }),
+    ]);
+  });
+
+  it("devolucion: una compra sumo 10 despues de la lectura y el material sale de critico", async () => {
+    const { calls, outcome } = await runAction(returnWorkOrderMaterialAction, {
+      name: "H2 devolucion",
+      form: returnForm,
+      data: {
+        "requerimiento_orden_material.findUnique": requirementWithOrder(REQ_PLANCHA, PLANCHA, {
+          requerida: "68.75",
+          entregada: "10.00",
+          // Lee 5.00, bajo el minimo 8.
+          material: { stock: "5.00", minimo: "8.00" },
+        }),
+        "alerta_stock.findFirst": activeAlerts({ [PLANCHA]: "ALE00000003" }),
+        ...stockInDb({ [PLANCHA]: { stock: "15.00", minimo: "8.00" } }),
+      },
+    });
+
+    expect(outcome).toBe("redirect:/dashboard/production/work-orders/OTR00000007?toast=work-order-material-returned");
+
+    const [kardex] = written(calls, "movimiento_inventario.create");
+
+    expectKardex(kardex, { anterior: "15.00", cantidad: 3, resultante: "18.00" });
+
+    // 18 supera el minimo 8: la alerta se atiende. Con la lectura, 8.00 la
+    // habria dejado activa.
+    expect(written(calls, "alerta_stock.update")).toEqual([
+      expect.objectContaining({ estado_alerta: "atendida", stock_detectado: 18 }),
+    ]);
+  });
+});

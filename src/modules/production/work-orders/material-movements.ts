@@ -29,9 +29,10 @@ import type {
  * pendiente ya no entrega dos veces, y una anulacion, que bloquea la misma orden, ya no
  * puede colarse entre la validacion y la salida de material.
  *
- * El bloqueo es de la orden, no del material: el stock que el kardex anota como anterior
- * sigue saliendo de una lectura sin bloqueo, y otra orden o una compra pueden moverlo a la
- * vez (H2, pendiente).
+ * El bloqueo es de la orden, no del material: otra orden, una compra o una salida pueden
+ * mover el mismo material a la vez. Por eso el stock que leen estos casos de uso solo
+ * sirve para validar y explicar un rechazo; el que anotan el kardex y la alerta lo
+ * devuelve la escritura en material-delivery.ts (H2).
  */
 export type DeliverPendingMaterialsParams = {
   idOrdenTrabajo: string;
@@ -107,7 +108,6 @@ export async function deliverPendingMaterials({
           materialIsActive: requirement.material.estado,
           quantity: pending,
           stockActual: toNumber(requirement.material.stock_actual),
-          stockMinimo: toNumber(requirement.material.stock_minimo),
         };
       })
       .filter((line) => line.quantity > 0);
@@ -234,8 +234,6 @@ export async function deliverAdditionalMaterial({
           idMaterial: requirement.id_material,
           materialName: requirement.material.nombre_material,
           quantity: data.cantidad,
-          stockActual,
-          stockMinimo: toNumber(requirement.material.stock_minimo),
         },
       ],
       motivo: `Entrega adicional a la orden ${data.id_orden_trabajo}: ${data.motivo}`,
@@ -316,8 +314,6 @@ export async function returnMaterialToWarehouse({
       idMaterial: requirement.id_material,
       materialName: requirement.material.nombre_material,
       quantity: data.cantidad,
-      stockActual: toNumber(requirement.material.stock_actual),
-      stockMinimo: toNumber(requirement.material.stock_minimo),
       motivo: data.motivo
         ? `Devolucion de la orden ${data.id_orden_trabajo}: ${data.motivo}`
         : `Devolucion de material no usado de la orden ${data.id_orden_trabajo}`,

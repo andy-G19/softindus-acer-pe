@@ -2695,6 +2695,10 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
           "decrement": 5.5,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
@@ -2702,7 +2706,7 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -2713,8 +2717,8 @@ exports[`deliverAdditionalMaterialAction > entrega el adicional con su motivo y 
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Entrega adicional a la orden OTR00000007: Se rompio una pieza al cortar",
-        "stock_anterior": 40,
-        "stock_resultante": 34.5,
+        "stock_anterior": Decimal(40),
+        "stock_resultante": Decimal(34.5),
         "tipo_movimiento": "salida",
       },
     },
@@ -3091,6 +3095,10 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
           "decrement": 48.75,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
@@ -3098,7 +3106,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -3109,8 +3117,8 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Salida por entrega de materiales a la orden OTR00000007",
-        "stock_anterior": 100,
-        "stock_resultante": 51.25,
+        "stock_anterior": Decimal(100),
+        "stock_resultante": Decimal(51.25),
         "tipo_movimiento": "salida",
       },
     },
@@ -3163,6 +3171,10 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
           "decrement": 8.57,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
@@ -3170,7 +3182,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -3181,8 +3193,8 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Salida por entrega de materiales a la orden OTR00000007",
-        "stock_anterior": 10,
-        "stock_resultante": 1.43,
+        "stock_anterior": Decimal(10),
+        "stock_resultante": Decimal(1.43),
         "tipo_movimiento": "salida",
       },
     },
@@ -3241,6 +3253,10 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
           "decrement": 50,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000004",
         "stock_actual": {
@@ -3248,7 +3264,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -3259,8 +3275,8 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Salida por entrega de materiales a la orden OTR00000007",
-        "stock_anterior": 60,
-        "stock_resultante": 10,
+        "stock_anterior": Decimal(60),
+        "stock_resultante": Decimal(10),
         "tipo_movimiento": "salida",
       },
     },
@@ -3311,6 +3327,10 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
           "decrement": 10,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000005",
         "stock_actual": {
@@ -3318,7 +3338,7 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -3329,8 +3349,8 @@ exports[`deliverWorkOrderMaterialsAction > entrega lo pendiente: descuenta stock
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Salida por entrega de materiales a la orden OTR00000007",
-        "stock_anterior": 100,
-        "stock_resultante": 90,
+        "stock_anterior": Decimal(100),
+        "stock_resultante": Decimal(90),
         "tipo_movimiento": "salida",
       },
     },
@@ -3452,6 +3472,10 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
           "decrement": 68.75,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000001",
         "stock_actual": {
@@ -3459,7 +3483,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": {
@@ -3470,8 +3494,8 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Salida por entrega de materiales a la orden OTR00000007",
-        "stock_anterior": 100,
-        "stock_resultante": 31.25,
+        "stock_anterior": Decimal(100),
+        "stock_resultante": Decimal(31.25),
         "tipo_movimiento": "salida",
       },
     },
@@ -3509,6 +3533,10 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
           "decrement": 8.57,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000002",
         "stock_actual": {
@@ -3516,7 +3544,7 @@ exports[`deliverWorkOrderMaterialsAction > la guarda de stock falla dentro de la
         },
       },
     },
-    "prisma": "material.updateMany",
+    "prisma": "material.updateManyAndReturn",
   },
   {
     "args": "Stock insuficiente para Soldadura 6011. La operacion fue cancelada.",
@@ -4656,6 +4684,10 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
           "increment": 3,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000001",
       },
@@ -4671,8 +4703,8 @@ exports[`returnWorkOrderMaterialAction > devuelve sin motivo y el material sigue
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Devolucion de material no usado de la orden OTR00000007",
-        "stock_anterior": 5,
-        "stock_resultante": 8,
+        "stock_anterior": Decimal(5),
+        "stock_resultante": Decimal(8),
         "tipo_movimiento": "devolucion",
       },
     },
@@ -5048,6 +5080,10 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
           "increment": 2.25,
         },
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
       "where": {
         "id_material": "MAT00000001",
       },
@@ -5063,8 +5099,8 @@ exports[`returnWorkOrderMaterialAction > orden finalizada: devuelve con motivo y
         "id_orden_trabajo": "OTR00000007",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Devolucion de la orden OTR00000007: Sobro una plancha entera",
-        "stock_anterior": 20,
-        "stock_resultante": 22.25,
+        "stock_anterior": Decimal(20),
+        "stock_resultante": Decimal(22.25),
         "tipo_movimiento": "devolucion",
       },
     },
