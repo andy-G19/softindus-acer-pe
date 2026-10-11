@@ -6,10 +6,11 @@
  * rentabilidad. Un solo lugar evita que la vista previa y lo que se guarda se separen en
  * silencio.
  *
- * Funciones puras: sin Prisma y sin `server-only`. Reciben numeros ya convertidos porque
- * cada llamador convierte a su manera: el detalle con `toNumber` y las acciones con
- * `toNonNegativeNumber`. Por eso no se usa `applyWaste` de recipe-quantities, que
- * convierte los negativos a cero: cambiaria lo que muestra el detalle.
+ * Funciones puras: sin Prisma y sin `server-only`. Reciben numeros ya convertidos, y la
+ * vista previa y la accion de cada formula convierten igual: el estimado de materiales,
+ * en el desglose del detalle y en la generacion del costeo, con `toNonNegativeNumber`
+ * (H6: el desglose usaba `toNumber` y con un negativo mostraba un costo que no se
+ * guarda); el precio sugerido y la rentabilidad, con `toNumber`.
  *
  * El orden de las operaciones es parte del contrato. `b * (1 + w / 100)` y
  * `b + b * w / 100` son iguales en algebra, pero no siempre dan el mismo numero en coma
