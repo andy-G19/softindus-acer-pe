@@ -21,11 +21,10 @@ import {
 // entrada desapareciera, su caso fallaria en lugar de quedar como snapshot
 // obsoleto, que Vitest no marca como error.
 //
-// Comportamientos actuales que se conservan (se corrigen aparte):
-// - F1: el ref evita repetir una clave mientras el puente siga montado. Una
-//   segunda operacion igual no muestra su toast y deja ?toast= en la URL.
-//
 // Corregidos en el grupo 3 de fixes:
+// - F1: el ref solo evita repetir una clave mientras la URL la conserve (el
+//   efecto doble del modo estricto). Cuando la URL queda sin ?toast=, la
+//   siguiente clave, aunque sea la misma, es otra operacion y se muestra.
 // - F2: las claves del prototipo de Object (toString, constructor...) son
 //   claves sin entrada: no muestran nada y limpian la URL.
 // - F3: con ?toast= vacio no muestra nada y limpia la URL.
@@ -247,14 +246,29 @@ describe("repeticion de claves en un mismo montaje", () => {
     expect(takeNotificationCalls()).toMatchSnapshot();
   });
 
-  it("F1: la misma clave tras limpiar la URL no se muestra y deja ?toast=", () => {
+  // Como desactivar dos clientes seguidos desde el listado filtrado.
+  it("F1: la misma clave tras limpiar la URL se muestra otra vez y limpia la URL", () => {
+    render("/dashboard/commercial/clients", "q=acero&toast=client-deactivated");
+    const primera = takeNotificationCalls();
+    render("/dashboard/commercial/clients", "q=acero");
+
+    render("/dashboard/commercial/clients", "q=acero&toast=client-deactivated");
+
+    expect(primera).toHaveLength(2);
+    expect(takeNotificationCalls()).toEqual(primera);
+  });
+
+  // Como crear dos clientes seguidos: listado, formulario y vuelta al listado.
+  it("F1: la misma clave tras pasar por otra pagina sin toast se muestra otra vez", () => {
     render("/dashboard/commercial/clients", "toast=client-created");
+    const primera = takeNotificationCalls();
     render("/dashboard/commercial/clients");
-    takeNotificationCalls();
+    render("/dashboard/commercial/clients/new");
 
     render("/dashboard/commercial/clients", "toast=client-created");
 
-    expect(takeNotificationCalls()).toEqual([]);
+    expect(primera).toHaveLength(2);
+    expect(takeNotificationCalls()).toEqual(primera);
   });
 
   it("dos claves distintas seguidas se muestran las dos", () => {

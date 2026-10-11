@@ -23,8 +23,17 @@ export function NotificationQueryBridge() {
   useEffect(() => {
     const toastKey = searchParams.get("toast");
 
-    // Un ?toast= vacio no muestra nada, pero tambien se limpia.
-    if (toastKey === null || displayedToastRef.current === toastKey) {
+    // Sin ?toast= no hay nada que mostrar, y la proxima clave, aunque se
+    // repita, es otra operacion. Un ?toast= vacio no sale aqui: no muestra
+    // nada, pero tambien se limpia.
+    if (toastKey === null) {
+      displayedToastRef.current = null;
+      return;
+    }
+
+    // Evita mostrar dos veces la misma URL, como en el efecto doble del modo
+    // estricto.
+    if (displayedToastRef.current === toastKey) {
       return;
     }
 
