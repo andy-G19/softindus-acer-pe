@@ -525,6 +525,8 @@ const REPORT_CASES: ExportCase[] = [
 
   // Auditoria
   { name: "auditoria: excel sin filtros", report: "audit" },
+  // Desde el grupo 4 de fixes la exportacion ignora estos nombres: ninguna
+  // pantalla los genera. El archivo sale sin filtros.
   {
     name: "auditoria: pdf con los nombres de la exportacion",
     report: "audit",

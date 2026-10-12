@@ -23,39 +23,51 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: al
         ],
         "take": 1000,
         "where": {
-          "OR": [
+          "AND": [
             {
-              "detalle": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
+              "OR": [
+                {
+                  "detalle": {
+                    "contains": "CLI",
+                    "mode": "insensitive",
+                  },
+                },
+                {
+                  "accion": {
+                    "contains": "CLI",
+                    "mode": "insensitive",
+                  },
+                },
+                {
+                  "entidad_afectada": {
+                    "contains": "CLI",
+                    "mode": "insensitive",
+                  },
+                },
+                {
+                  "id_registro_afectado": {
+                    "contains": "CLI",
+                    "mode": "insensitive",
+                  },
+                },
+              ],
             },
             {
-              "entidad_afectada": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
+              "id_usuario": "USU00000002",
             },
             {
-              "accion": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
+              "accion": "crear",
             },
             {
-              "id_registro_afectado": {
-                "contains": "CLI",
-                "mode": "insensitive",
+              "entidad_afectada": "cliente",
+            },
+            {
+              "fecha_hora": {
+                "gte": 2026-07-01T00:00:00.000Z,
+                "lt": 2026-08-01T00:00:00.000Z,
               },
             },
           ],
-          "accion": "crear",
-          "entidad_afectada": "cliente",
-          "fecha_hora": {
-            "gte": 2026-07-01T00:00:00.000Z,
-            "lt": 2026-08-01T00:00:00.000Z,
-          },
-          "id_usuario": "USU00000002",
         },
       },
       "prisma": "bitacora_operacion.findMany",
@@ -274,41 +286,7 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > auditoria: pd
           },
         ],
         "take": 500,
-        "where": {
-          "OR": [
-            {
-              "detalle": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
-            },
-            {
-              "entidad_afectada": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
-            },
-            {
-              "accion": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
-            },
-            {
-              "id_registro_afectado": {
-                "contains": "CLI",
-                "mode": "insensitive",
-              },
-            },
-          ],
-          "accion": "crear",
-          "entidad_afectada": "cliente",
-          "fecha_hora": {
-            "gte": 2026-07-01T00:00:00.000Z,
-            "lt": 2026-08-01T00:00:00.000Z,
-          },
-          "id_usuario": "USU00000002",
-        },
+        "where": {},
       },
       "prisma": "bitacora_operacion.findMany",
     },

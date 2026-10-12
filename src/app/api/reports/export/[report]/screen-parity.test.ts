@@ -151,7 +151,6 @@ const REPORTS: ParityReport[] = [
     route: "/dashboard/audit",
     load: () => import("@/app/(dashboard)/dashboard/audit/page"),
     mainQueries: ["bitacora_operacion.findMany"],
-    dateField: "fecha_hora",
     cases: [
       { name: "sin filtros", searchParams: {} },
       { name: "rango de fechas", searchParams: { from: "2026-07-01", to: "2026-07-31" } },
@@ -294,6 +293,26 @@ const ALIAS_CASES: AliasCase[] = [
       estado: "pagado",
       modalidad: "semanal",
       q: "Quispe",
+    },
+  },
+  {
+    report: "audit",
+    mainQueries: ["bitacora_operacion.findMany"],
+    retired: {
+      dateFrom: "2026-06-01",
+      dateTo: "2026-06-30",
+      userId: "USU00000003",
+      action: "editar",
+      entity: "pedido",
+      searchText: "PED",
+    },
+    screen: {
+      from: "2026-07-01",
+      to: "2026-07-31",
+      usuario: "USU00000002",
+      accion: "crear",
+      entidad: "cliente",
+      q: "CLI",
     },
   },
 ];

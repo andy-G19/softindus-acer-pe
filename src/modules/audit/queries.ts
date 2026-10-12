@@ -8,6 +8,10 @@ import { buildReportDateRange } from "@/lib/reports/report-filters";
 // Consultas de lectura de la pagina de Auditoria (bitacora de operaciones) y
 // de su exportacion. No autorizan: la pagina ya verifico el rol con
 // requireRole y la ruta de exportacion valida el rol del reporte.
+//
+// La pantalla y la exportacion reciben los mismos filtros, con los nombres de
+// la URL de la pantalla, y comparten el filtro de la bitacora (grupo 4 de
+// fixes). Cada una conserva su paginacion o limite y sus columnas.
 
 export type AuditLogFilters = {
   q: string;
@@ -142,42 +146,12 @@ export async function getAuditLogData(
   };
 }
 
-// Filtro de la exportacion de la bitacora (entrega 5). Difiere del de la
-// pagina: usa un objeto plano y acepta alias de parametros que la pagina no
-// genera. Igualarlos cambia el archivo exportado: es un fix.
-export type AuditLogExportFilters = {
-  dateFrom: string;
-  dateTo: string;
-  userId: string;
-  action: string;
-  entity: string;
-  searchText: string;
-};
-
 export function getAuditLogExportRows(
-  filters: AuditLogExportFilters,
+  filters: AuditLogFilters,
   limit: number,
 ) {
-  const { userId, action, entity, searchText } = filters;
-  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
-
   return prisma.bitacora_operacion.findMany({
-    where: {
-      ...(dateRange ? { fecha_hora: dateRange } : {}),
-      ...(userId ? { id_usuario: userId } : {}),
-      ...(action ? { accion: action } : {}),
-      ...(entity ? { entidad_afectada: entity } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { detalle: { contains: searchText, mode: "insensitive" } },
-              { entidad_afectada: { contains: searchText, mode: "insensitive" } },
-              { accion: { contains: searchText, mode: "insensitive" } },
-              { id_registro_afectado: { contains: searchText, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
+    where: buildAuditLogWhere(filters),
     orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
     take: limit,
     include: {
