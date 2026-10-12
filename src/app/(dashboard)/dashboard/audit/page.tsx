@@ -83,14 +83,14 @@ export default async function AuditPage({ searchParams }: PageProps) {
         actions={
           <>
             <Button variant="outline" asChild>
-              <Link href={buildReportExportHref("audit", exportParams)}>
+              <a href={buildReportExportHref("audit", exportParams)}>
                 Exportar Excel
-              </Link>
+              </a>
             </Button>
             <Button asChild>
-              <Link href={buildReportExportHref("audit", exportParams, "pdf")}>
+              <a href={buildReportExportHref("audit", exportParams, "pdf")}>
                 Exportar PDF
-              </Link>
+              </a>
             </Button>
           </>
         }

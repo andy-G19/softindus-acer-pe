@@ -44,6 +44,9 @@ const notificationLibraryPatterns = [
   { group: ["sweetalert2/*", "react-toastify/*"], message: notificationLibraryMessage },
 ];
 
+const apiLinkMessage =
+  "Un enlace a /api/ (por ejemplo, una exportacion) va en un <a>, no en <Link>: en produccion next/link hace prefetch con un GET que ejecuta la ruta.";
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -119,6 +122,11 @@ const eslintConfig = defineConfig([
   },
   // Conversion y formatos compartidos (entrega 3): habia 153 copias locales con
   // comportamientos distintos bajo el mismo nombre. Cada una vive en un solo lugar.
+  // Tambien prohibe <Link> hacia una ruta de /api/ (grupo 4 de fixes): en el
+  // build de produccion next/link hace prefetch de cada enlace visible con un
+  // GET, y en la exportacion de reportes ese GET registraba una exportacion
+  // que nadie pidio. Va en el mismo bloque porque un segundo bloque con
+  // no-restricted-syntax reemplazaria las opciones de este.
   {
     files: ["src/**/*.{ts,tsx}"],
     ignores: ["src/lib/numbers.ts", "src/lib/formatters.ts"],
@@ -136,6 +144,21 @@ const eslintConfig = defineConfig([
             "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
           message:
             "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.",
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > CallExpression[callee.name='buildReportExportHref']",
+          message: apiLinkMessage,
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > Literal[value=/^\\/api\\//]",
+          message: apiLinkMessage,
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > TemplateLiteral > TemplateElement:first-child[value.raw=/^\\/api\\//]",
+          message: apiLinkMessage,
         },
       ],
     },

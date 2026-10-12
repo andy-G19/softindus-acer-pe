@@ -98,8 +98,8 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/staff?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/staff?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/staff?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/staff?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -373,8 +373,8 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/staff?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/staff?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/staff?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/staff?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -709,8 +709,8 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/staff?q=Quispe&amp;operario=OPE00000001&amp;modalidad=semanal&amp;estado=pagado&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>

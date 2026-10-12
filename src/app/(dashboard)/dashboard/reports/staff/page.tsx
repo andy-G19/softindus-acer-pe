@@ -103,14 +103,14 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
         actions={
           <>
             <Button variant="outline" asChild>
-              <Link href={buildReportExportHref("staff", exportParams)}>
+              <a href={buildReportExportHref("staff", exportParams)}>
                 Exportar Excel
-              </Link>
+              </a>
             </Button>
             <Button asChild>
-              <Link href={buildReportExportHref("staff", exportParams, "pdf")}>
+              <a href={buildReportExportHref("staff", exportParams, "pdf")}>
                 Exportar PDF
-              </Link>
+              </a>
             </Button>
           </>
         }

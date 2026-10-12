@@ -136,8 +136,8 @@ exports[`/dashboard/audit > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/audit?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/audit?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/audit?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/audit?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -605,8 +605,8 @@ exports[`/dashboard/audit > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/audit?q=cliente&amp;usuario=USU00000001&amp;accion=crear&amp;entidad=cliente&amp;from=2026-07-01&amp;to=2026-07-31&amp;fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
