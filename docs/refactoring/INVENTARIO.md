@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 540 |
+| Archivos fuente analizados | 541 |
 | Páginas | 127 |
 | Declaraciones JSX de formulario | 136 |
 | Archivos con directiva use server | 48 |
@@ -167,7 +167,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/audit/page.tsx` | 104 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/audit/page.tsx` | 101 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 106 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
@@ -241,9 +241,9 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 189 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 310 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 201 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 119 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 118 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 288 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 122 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 121 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 234 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 71 | `{createAttendanceAction}` |
 | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 139 | `Sin action explícita (revisar filtros/onSubmit)` |

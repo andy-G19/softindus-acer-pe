@@ -1935,6 +1935,157 @@ Límites:
 - El modo estricto solo se prueba con el doble de React: staging sirve el
   build de producción, sin modo estricto, y `npm run dev` necesita la base.
 
+## Grupo 4 de fixes — Divergencias entre pantalla y exportación
+
+Fecha: 2026-10-12. Estado: hecho en local; falta publicar y verificar en
+staging. 9 commits de `b03ed6d` a `7e7a1d9` y este registro, sobre `6414798`
+(registro de la integración del G3, que viaja con este grupo). Es el último
+de los cuatro grupos de fixes del bloque de estabilización: corrige las
+divergencias entre pantalla y exportación que la entrega 5 conservó y
+documentó junto a ambas consultas (D1, D2 y las diferencias de fechas, forma
+y alias de personal, rentabilidad y auditoría). Desde este grupo, en los
+cuatro reportes la pantalla y su exportación construyen el filtro con la
+misma función y leen los mismos parámetros: los que genera el enlace de la
+pantalla.
+
+| Hallazgo | Defecto | Arreglo |
+|---|---|---|
+| D1 | La búsqueda de fallas de mantenimiento incluía el código interno de la máquina en la pantalla y no en el archivo (opción `includeMachineCode`). | El constructor compartido busca siempre en `codigo_interno`; la opción desaparece. |
+| D2 | Con margen bajo y utilidad negativa a la vez, el objeto plano de la exportación de rentabilidad usaba dos veces la clave `rentabilidad` y la segunda pisaba a la primera: el archivo ignoraba el margen bajo. | Pantalla y exportación usan el mismo constructor, que combina las condiciones con `AND`. |
+| Fechas | Las pantallas de personal, rentabilidad y auditoría leían las fechas con `parseDateParam` y cerraban «hasta» con `lte` a las 23:59:59.999; su exportación y las otras 6 pantallas usan `buildReportDateRange`, que cierra con `lt` el día siguiente. | Las tres pantallas pasan las fechas de la URL y usan `buildReportDateRange`. |
+| Forma | Personal y auditoría exportaban con un objeto plano y la pantalla combinaba con `AND`: el mismo SQL, pero en rentabilidad era la causa de D2. | Un solo constructor por reporte: `buildCostingWhere`, `buildPayrollWhere` y `buildAuditLogWhere`. |
+| Alias | Los exportadores de personal, rentabilidad y auditoría leían primero 15 nombres que ninguna versión de sus páginas generó (`dateFrom`, `searchText`, `operatorId`...) y solo después los de la pantalla, y la ruta validaba el rango con `dateFrom` o `from` en los 9 reportes. Con los dos nombres, el archivo filtraba por el alias y la pantalla por el suyo. | Cada exportador lee solo los nombres de su pantalla; cada reporte declara sus nombres de fecha (`dateParams`) en `lib/reports/report-registry.ts` y la ruta valida solo con ellos. |
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| b03ed6d | fix | D1: mantenimiento exporta buscando también por código interno. Prueba nueva de paridad. |
+| 80ee9aa | fix | D2: rentabilidad comparte el constructor con `AND`; cada lado conserva aún su rango. |
+| 009e24b | fix | Fechas de la pantalla de rentabilidad. |
+| 5c1a01d | fix | Fechas de la pantalla de personal: planillas y conteos de asistencias. |
+| 57a8514 | fix | Fechas de la pantalla de auditoría. |
+| 629a47a | fix | Rentabilidad exporta solo con los parámetros de la pantalla. |
+| d81b746 | fix | Personal exporta con el filtro y los parámetros de la pantalla. |
+| 2d91741 | fix | Auditoría exporta con el filtro y los parámetros de la pantalla. |
+| 7e7a1d9 | fix | La ruta valida el rango con los parámetros de fecha de cada reporte. |
+
+Diseño:
+
+- El lado correcto de cada divergencia se decidió con el responsable: en D1 y
+  D2, la pantalla (muestra el código interno; marcar dos filtros pide su
+  intersección); en las fechas, la exportación (`lt`, ver la demostración);
+  en la forma, `AND` (una condición no puede pisar a otra), y en los
+  parámetros, los de la pantalla.
+- Demostración antes de decidir las fechas, fuera del repositorio
+  (`tmp/g4-diff/pglite`, ignorado): PGlite (Postgres 17 en WASM, que ya trae
+  `prisma dev`, en memoria y sin red), las 20 migraciones, el cliente generado
+  con `adapter-pg` y las funciones reales de pantalla y exportación de los
+  tres reportes, con filas en los bordes del rango. Antes, en UTC (Vercel), la
+  pantalla de auditoría perdía las entradas de 23:59:59.999400 y
+  23:59:59.999999 (`fecha_hora` es `timestamptz(6)` y guarda microsegundos),
+  y personal y rentabilidad (columnas `date`) daban las mismas filas; en la
+  zona de Lima (`npm run dev`), las pantallas de personal y rentabilidad
+  incluían el día siguiente a «hasta», porque Postgres convierte a `date` el
+  parámetro `2026-08-01T04:59:59.999Z`. Después, pantalla y exportación
+  devuelven las mismas filas en los tres reportes y en las dos zonas. El
+  intervalo semiabierto `[desde, día siguiente)` no depende de la precisión
+  del reloj ni del tipo de columna.
+- Alias retirados y no conservados con precedencia de la pantalla: `git log
+  -S` muestra que ninguna versión de las tres páginas generó esos nombres
+  desde que se crearon (`87ccb97`, 2026-07-02), y ningún otro código genera
+  enlaces de exportación (`exportacion_datos.parametros` solo se muestra). El
+  enlace de la pantalla es el contrato de la exportación.
+- Los nombres de fecha viven en el registro y no en cada exportador: la ruta
+  valida antes de llamar al exportador (un 400 no consulta ni escribe), así
+  que necesita conocerlos sin ejecutarlo, y `report-registry` ya guarda los
+  metadatos de cada reporte sin depender de Prisma. Una prueba por reporte
+  exige que su exportador filtre con los nombres que valida la ruta.
+- Orden D1 → D2 → fechas → parámetros → ruta. D2 compartió el constructor
+  antes de igualar las fechas, recibiendo de cada lado su rango, para que
+  cada commit cambiara un solo comportamiento.
+- Cada pantalla y su exportación conservan su límite, su orden y sus columnas:
+  siguen siendo distintos a propósito (la exportación desempata por id).
+
+Evidencia:
+
+1. Prueba roja primero en cada `fix`. La prueba nueva de paridad
+   (`api/reports/export/[report]/screen-parity.test.ts`) ejecuta la página
+   real, toma su enlace «Exportar Excel», lo pasa por la ruta y exige el mismo
+   `where` en la consulta principal; mientras la exportación de personal y
+   auditoría armaba otro filtro, comparó solo la condición de fecha. Fallaban
+   antes de su arreglo: D1 en 2 de 3 casos, D2 en 2 de 3, las fechas en 3, 4
+   y 4, y los parámetros en 2, 6 y 6 (con los dos nombres, el archivo filtraba
+   otro mes, otro operario u otro usuario). La ruta gana 36 pruebas, 4 por
+   reporte; las 18 del registro y de los nombres ajenos fallaban antes.
+2. Snapshots, todos a propósito y clasificados por el diferencial. Ruta: D1
+   (+8 líneas), D2 (uno de forma y uno de D2), alias de rentabilidad (−48),
+   personal y auditoría (uno de forma y uno de alias cada uno) y el caso de la
+   entrega 5 que fijaba el rechazo por el alias, que pasa a los casos de
+   producción con un nombre que describe lo que hace ahora (de 400 a 200).
+   Páginas: una línea en rentabilidad y 4 en personal y en auditoría, de `lte`
+   a `lt`. Ningún HTML cambia.
+3. Comparación diferencial fuera del repositorio (`tmp/g4-diff`, ignorado,
+   `G4_STAGE=<fixes> npx vitest run --config tmp/g4-diff/vitest.config.ts`): la
+   ruta, el registro, los exportadores, las consultas y las cuatro páginas de
+   `6414798` se ejecutan en el mismo proceso que el código nuevo, con los
+   generadores reales de Excel y PDF. Para cada caso se predice la salida
+   nueva aplicando a la línea base las reglas de los fixes activos, y la
+   salida real debe coincidir con la predicción; una diferencia sin explicar
+   hace fallar la prueba. Batería: 613 exportaciones de los 9 reportes (con los
+   nombres de la pantalla, los retirados, mezclados, fechas mal escritas e
+   invertidas, y las consultas exactas de `route.test.ts`) y 134 pantallas.
+   Resultado final: exportaciones, 384 idénticas y 229 explicadas (alias 134,
+   forma 130, ruta 58, D1 12 y D2 2, contando cada combinación en cada una de
+   sus categorías); pantallas, 59 idénticas y 75 de fechas, con el HTML
+   idéntico en las 134. Paridad de los enlaces de las pantallas: de 98
+   distintos, 30 iguales y 6 rechazados a 0 distintos, 128 iguales y 6
+   rechazados. Cada commit agregó solo su categoría y, como control, el
+   diferencial sin el fix de cada commit falla. Los archivos y los efectos son
+   idénticos salvo donde cambia el estado HTTP.
+4. 36 mutaciones, 4 por `fix`, todas detectadas.
+
+| Mutación | Resultado |
+|---|---|
+| D1: quitar el código interno del constructor, excluirlo solo en la exportación, buscarlo sin `mode` o en otra columna | Todas fallan; la primera solo por los snapshots, porque los dos lados lo pierden a la vez |
+| D2: volver al objeto plano, ignorar de nuevo el margen bajo, no aplicar el margen, ignorar la búsqueda | Todas fallan |
+| Fechas (×3): volver a `lte`, ignorar «hasta», cruzar las fechas, recortar o vaciar una fecha | Todas fallan; la de las asistencias de personal solo por el snapshot de la página, porque la exportación no consulta asistencias |
+| Parámetros (×3): volver a aceptar un alias, volver al objeto plano, leer un parámetro con otro nombre, ignorar un parámetro | Todas fallan |
+| Ruta: volver a `dateFrom` o `from`, declarar mal los nombres de personal, leer «hasta» con el nombre de «desde», ignorar el registro | Todas fallan |
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.583, 1.586, 1.589, 1.594, 1.599, 1.601, 1.603, 1.605 y 1.641
+pruebas según el commit; 100 archivos de prueba al final. El código de
+producción cambia en 12 archivos de `src` (+129 y −190); las pruebas, en 2
+(+462 y −5), y los snapshots, en 4 (+283 y −220). `npm run
+refactor:inventory` analiza 541 archivos y mantiene 127 páginas, 136
+formularios y 48 archivos de acciones; desplaza la línea del formulario de
+las tres páginas.
+
+| Caso | Antes | Después |
+|---|---|---|
+| Exportar mantenimiento con una búsqueda | El archivo no incluye las fallas cuya máquina tiene ese código interno | Las incluye, como la pantalla |
+| Exportar rentabilidad con margen bajo y utilidad negativa | El archivo ignora el margen bajo | Aplica los dos, como la pantalla; en datos reales casi nunca cambia filas, porque una utilidad negativa suele traer la alerta |
+| Pantalla de auditoría con «hasta» | Pierde las entradas del último milisegundo del día | Las incluye, como el archivo |
+| Pantallas de personal y rentabilidad con «hasta», en local (Lima) | Incluyen el día siguiente | No lo incluyen; en producción no cambia nada |
+| Fecha mal escrita en la URL de esas tres pantallas (`2026-7-5`) | La pantalla la ignora y el archivo la interpreta | Las dos la interpretan |
+| URL de exportación escrita a mano con `dateFrom`, `operatorId`, `searchText`... en personal, rentabilidad o auditoría | Filtra por esos nombres, antes que por los de la pantalla | No filtran |
+| URL de exportación con un rango invertido en nombres que el reporte no lee | 400 | Se ignoran: 200 |
+| Enlaces de exportación de las pantallas, HTML y permisos | — | Sin cambios |
+
+Hallazgo de la paridad, registrado y no corregido: con «desde» posterior a
+«hasta», una pantalla de reportes muestra la tabla vacía y su enlace de
+exportación responde 400 con un JSON (6 casos de personal en la batería): el
+usuario que exporta ve un error en lugar de un archivo vacío. Es de
+experiencia de usuario y corresponde a la pista B.
+
+Límites:
+
+- Las 14 páginas de listados que no son reportes (pedidos, pagos, compras,
+  asistencias...) siguen con `parseDateParam` y `lte`: tienen el mismo hueco
+  del último milisegundo y, en local, el mismo día de más en columnas `date`,
+  pero no exportan. Queda como pendiente.
+- Los días siguen siendo de UTC en producción: el pendiente de instantes de
+  la entrega 3.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -1956,7 +2107,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
-| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
+| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) | En curso (9 fixes en local; falta publicar y verificar en staging) |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
@@ -1969,7 +2120,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 
 | Métrica | Línea base | Actual | Entrega que la mueve |
 |---|---|---|---|
-| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 186 | 5 |
+| Archivo más grande (`api/reports/export/[report]/route.ts`) | 1.499 líneas | 199 | 5 |
 | `production/work-orders/actions.ts` | 1.055 líneas | 240 | 6 |
 | `costs/costings/[id]/page.tsx` | 1.026 líneas | 110 | 6 |
 | Páginas con Prisma directo | 117 | 0 | 4, 5 y 6 |
@@ -1983,7 +2134,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 123 / 123 | 7 y G3 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 99 / 1.580 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 100 / 1.641 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -1994,6 +2145,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Acciones de avance y salida de inventario caracterizadas | 0 / 4 | 4 / 4 | G1 |
 | Escrituras del kárdex que anotan un stock leído antes de escribir | 2 | 0 | G2 |
 | Defectos del puente `?toast=` fijados por la caracterización / entradas declaradas sin emisor | 3 / 1 | 0 / 0 | G3 |
+| Reportes cuyo enlace de exportación filtra distinto que su pantalla | 4 de 9 | 0 de 9 | G4 |
+| Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -2067,6 +2220,19 @@ e `import` de las librerías de notificaciones 2, medidos de nuevo. Los tres
 archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
 901; 696, 643 y 614).
 
+Actualizado en el grupo 4 de fixes (2026-10-12) sobre `7e7a1d9`: pruebas 100 /
+1.641, `route.ts` 199 líneas (186 antes: la firma y el comentario de
+`extractReportDateRange`) y dos filas nuevas medidas sobre `6414798`, su
+línea base: mantenimiento, rentabilidad, personal y auditoría exportaban con
+otro filtro que su pantalla (98 de los 134 enlaces de la batería del
+diferencial), y la exportación aceptaba 17 nombres que ninguna pantalla
+genera: 15 en los exportadores de personal, rentabilidad y auditoría, y
+`from` y `to` en la validación de la ruta de los otros 6 reportes. Las demás
+no cambian: páginas con Prisma directo 0, `auth()` directo 0, copias locales
+de conversión y formato 0 e `import` de las librerías de notificaciones 2,
+medidos de nuevo. Los tres archivos más grandes de `src` y los de producción
+no cambian (1.335, 1.161 y 901; 696, 643 y 614).
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -2089,6 +2255,13 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
   `movimiento_inventario` en el código de producción (6 desde el grupo 2) y,
   entre ellas, las que toman el valor de una lectura hecha antes de la
   escritura sin bloquear el material.
+- Los reportes que exportan con otro filtro se miden con la paridad: la
+  página real, su enlace «Exportar Excel» y la ruta deben dar el mismo `where`
+  en la consulta principal (`screen-parity.test.ts` para los casos fijos y el
+  diferencial del grupo 4 para la batería). Los nombres aceptados sin
+  pantalla cuentan los parámetros que leen los exportadores y la validación
+  de la ruta y que ninguna versión de la página del reporte genera (`git log
+  -S` sobre la página).
 - Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
   `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
   columna `usuario` dentro de un `select`, que no cargan la fila completa.
