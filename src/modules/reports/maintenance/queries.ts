@@ -21,13 +21,11 @@ export type MaintenanceReportFilters = {
 
 type DateRange = ReturnType<typeof buildReportDateRange>;
 
-// La busqueda de fallas de la pantalla incluye el codigo interno de la
-// maquina; la de la exportacion no. Es una divergencia conocida (entrega 5):
-// igualarlas cambia el archivo exportado, asi que corresponde a un fix.
+// La busqueda de fallas incluye el codigo interno de la maquina, que la
+// pantalla muestra: la exportacion busca igual desde el grupo 4 de fixes (D1).
 function buildFailureWhere(
   filters: MaintenanceReportFilters,
   dateRange: DateRange,
-  { includeMachineCode }: { includeMachineCode: boolean },
 ): Prisma.falla_maquinaWhereInput {
   const searchText = filters.searchText;
 
@@ -73,18 +71,14 @@ function buildFailureWhere(
                 },
               },
             },
-            ...(includeMachineCode
-              ? [
-                  {
-                    maquina: {
-                      codigo_interno: {
-                        contains: searchText,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  },
-                ]
-              : []),
+            {
+              maquina: {
+                codigo_interno: {
+                  contains: searchText,
+                  mode: "insensitive" as const,
+                },
+              },
+            },
           ],
         }
       : {}),
@@ -121,9 +115,7 @@ function buildPreventiveWhere(
 
 export async function getMaintenanceReportData(filters: MaintenanceReportFilters) {
   const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
-  const failureWhere = buildFailureWhere(filters, dateRange, {
-    includeMachineCode: true,
-  });
+  const failureWhere = buildFailureWhere(filters, dateRange);
   const repairWhere = buildRepairWhere(filters, dateRange);
   const preventiveWhere = buildPreventiveWhere(filters, dateRange);
 
@@ -217,7 +209,7 @@ export async function getMaintenanceExportData(
 
   const [failures, preventives] = await Promise.all([
     prisma.falla_maquina.findMany({
-      where: buildFailureWhere(filters, dateRange, { includeMachineCode: false }),
+      where: buildFailureWhere(filters, dateRange),
       orderBy: [{ fecha_falla: "desc" }, { id_falla: "desc" }],
       // La lista final combina fallas + preventivos: se acota cada consulta
       // al limite completo (el total combinado se vuelve a recortar al

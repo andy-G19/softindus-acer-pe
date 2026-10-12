@@ -2729,6 +2729,14 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > mantenimiento
                 },
               },
             },
+            {
+              "maquina": {
+                "codigo_interno": {
+                  "contains": "MAQ-01",
+                  "mode": "insensitive",
+                },
+              },
+            },
           ],
           "estado_atencion": "pendiente",
           "fecha_falla": {
