@@ -1769,12 +1769,13 @@ Límites y pendientes:
 
 ## Grupo 3 de fixes — Puente de notificaciones
 
-Fecha: 2026-10-10. Estado: verificado en staging el 2026-10-10; falta
-integrarlo en `main`. 4 commits de `039b65f` a `7453c57` y el registro
-`803f32e`, publicados sobre `5607085` junto con `a564ed7` (CI #56 en verde,
-2m 32s), con foto del «antes» tomada antes del push y de solo lectura: F1, F2,
-F3 y la clave sin emisor se reprodujeron en staging y ninguno se repitió
-después. Es el tercero
+Fecha: 2026-10-10. Estado: cerrado el 2026-10-10. 4 commits de `039b65f` a
+`7453c57` y el registro `803f32e`, publicados sobre `5607085` junto con
+`a564ed7` (CI #56 en verde, 2m 32s), con foto del «antes» tomada antes del
+push y de solo lectura: F1, F2, F3 y la clave sin emisor se reprodujeron en
+staging y ninguno se repitió después. Cierre `bc5afb1` (CI #57 en verde),
+integrado en `main` con el PR #19 (CI #58 en verde; merge commit `b65d8c9`,
+CI #59 en verde, 2m 30s). Es el tercero
 de los cuatro grupos de fixes del bloque de estabilización: corrige F1, F2 y
 F3 del puente `?toast=` y retira la entrada sin emisor, los cuatro
 comportamientos que la entrega 7 conservó y fijó con su caracterización. Los
@@ -1954,7 +1955,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | 7 | A | Fachada de notificaciones | Cerrada (CI #47 verde en main, staging verificado con ADMIN: 14 de 14 URLs idénticas) |
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
-| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Verificado en staging (CI #56 verde; 23 de 23 observaciones como se predijo); falta integrarlo en `main` |
+| G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 | Pendiente |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
