@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { REPORT_KEYS, REPORT_REGISTRY } from "@/lib/reports/report-registry";
 import {
   characterizeHandler,
   generatedResult,
+  isPrismaCall,
+  isPrismaRead,
   normalizeIntlStrings,
   preloadPages,
   type DataOverrides,
@@ -251,11 +254,6 @@ const ERROR_CASES: ExportCase[] = [
     query: { dateFrom: "2025-01-01", dateTo: "2026-07-01" },
   },
   {
-    name: "el alias from/to tambien se valida en un reporte que no lo usa",
-    report: "production",
-    query: { from: "2026-07-31", to: "2026-07-01" },
-  },
-  {
     name: "fallo de la consulta",
     report: "production",
     data: { "orden_trabajo.findMany": failQuery("conexion perdida") },
@@ -291,6 +289,15 @@ const REPORT_CASES: ExportCase[] = [
         { cliente: null, ruta_fabricacion: null, avance_orden: [] },
       ]),
     },
+  },
+  // Desde el grupo 4 de fixes la ruta valida el rango solo con los nombres de
+  // fecha del reporte: produccion no lee from ni to, asi que no se validan ni
+  // filtran. Hasta entonces este caso era un rechazo 400 ("el alias from/to
+  // tambien se valida en un reporte que no lo usa").
+  {
+    name: "produccion: from y to no son sus nombres de fecha",
+    report: "production",
+    query: { from: "2026-07-31", to: "2026-07-01" },
   },
   {
     name: "produccion: limite pedido",
@@ -554,6 +561,24 @@ const REPORT_CASES: ExportCase[] = [
   },
 ];
 
+// Nombres de fecha que genera la pantalla de cada reporte y lee su exportador
+// (grupo 4 de fixes). La ruta valida el rango solo con ellos.
+const DATE_PARAMS: Record<string, { from: string; to: string }> = {
+  production: { from: "dateFrom", to: "dateTo" },
+  inventory: { from: "dateFrom", to: "dateTo" },
+  "sales-collections": { from: "dateFrom", to: "dateTo" },
+  "suppliers-purchases": { from: "dateFrom", to: "dateTo" },
+  financial: { from: "dateFrom", to: "dateTo" },
+  maintenance: { from: "dateFrom", to: "dateTo" },
+  profitability: { from: "from", to: "to" },
+  staff: { from: "from", to: "to" },
+  audit: { from: "from", to: "to" },
+};
+
+function reads(calls: RecordedCall[]) {
+  return calls.filter((call) => isPrismaCall(call) && isPrismaRead(call));
+}
+
 function effectArgs(calls: RecordedCall[], effect: string) {
   const call = calls.find((item) => "effect" in item && item.effect === effect);
 
@@ -579,6 +604,54 @@ describe("GET /api/reports/export/[report]", () => {
     for (const exportCase of REPORT_CASES) {
       it(exportCase.name, async () => {
         expect(await runExport(exportCase)).toMatchSnapshot();
+      });
+    }
+  });
+
+  describe("rango de fechas con los nombres de cada reporte", () => {
+    for (const report of REPORT_KEYS) {
+      const own = DATE_PARAMS[report];
+      const foreign =
+        own.from === "from" ? { from: "dateFrom", to: "dateTo" } : { from: "from", to: "to" };
+      const range = (names: { from: string; to: string }, from: string, to: string) => ({
+        [names.from]: from,
+        [names.to]: to,
+      });
+
+      it(`${report}: el registro declara los nombres de su pantalla`, () => {
+        expect(REPORT_REGISTRY[report].dateParams).toEqual(own);
+      });
+
+      it(`${report}: rechaza el rango invertido con sus nombres`, async () => {
+        const { response } = await runExport({
+          name: "invertido",
+          report,
+          query: range(own, "2026-07-31", "2026-07-01"),
+        });
+
+        expect(response.status).toBe(400);
+      });
+
+      it(`${report}: no valida nombres de fecha que no lee`, async () => {
+        const { response } = await runExport({
+          name: "ajenos",
+          report,
+          query: range(foreign, "2026-07-31", "2026-07-01"),
+        });
+
+        expect(response.status).toBe(200);
+      });
+
+      it(`${report}: su exportador filtra con los nombres que valida la ruta`, async () => {
+        const filtered = await runExport({
+          name: "con rango",
+          report,
+          query: range(own, "2026-07-01", "2026-07-31"),
+        });
+        const unfiltered = await runExport({ name: "sin rango", report });
+
+        expect(filtered.response.status).toBe(200);
+        expect(reads(filtered.calls)).not.toEqual(reads(unfiltered.calls));
       });
     }
   });

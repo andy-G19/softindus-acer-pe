@@ -3413,6 +3413,147 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: e
 }
 `;
 
+exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: from y to no son sus nombres de fecha 1`] = `
+{
+  "calls": [
+    {
+      "args": {
+        "include": {
+          "avance_orden": {
+            "select": {
+              "porcentaje_avance": true,
+            },
+          },
+          "cliente": true,
+          "producto": true,
+          "ruta_fabricacion": true,
+          "usuario": {
+            "select": {
+              "apellidos": true,
+              "nombres": true,
+            },
+          },
+        },
+        "orderBy": [
+          {
+            "fecha_inicio": "desc",
+          },
+          {
+            "fecha_registro": "desc",
+          },
+          {
+            "id_orden_trabajo": "desc",
+          },
+        ],
+        "take": 1000,
+        "where": {},
+      },
+      "prisma": "orden_trabajo.findMany",
+    },
+    {
+      "args": null,
+      "effect": "prisma.$transaction",
+    },
+    {
+      "args": {
+        "codigoEntidad": "exportacion_datos",
+        "prefijo": "EXP",
+      },
+      "effect": "getNextCorrelativeId",
+    },
+    {
+      "args": {
+        "data": {
+          "estado": "generada",
+          "formato": "excel",
+          "id_exportacion": "EXP00000007",
+          "id_usuario": "USU00000001",
+          "modulo_origen": "Reporte de producción",
+          "parametros": "{"from":"2026-07-31","to":"2026-07-01"}",
+          "ruta_archivo": "reporte_produccion_2026-07-15.xlsx",
+        },
+      },
+      "prisma": "exportacion_datos.create",
+    },
+    {
+      "args": {
+        "accion": "crear",
+        "detalle": "Reporte exportado: Reporte de producción (excel). Registros: 2.",
+        "enTransaccion": true,
+        "entidad_afectada": "exportacion_datos",
+        "id_registro_afectado": "EXP00000007",
+        "userId": "USU00000001",
+      },
+      "effect": "registerAuditLog",
+    },
+    {
+      "args": {
+        "headers": [
+          "Orden",
+          "Producto",
+          "Cliente",
+          "Tipo producción",
+          "Cantidad",
+          "Fecha inicio",
+          "Fecha entrega estimada",
+          "Fecha entrega real",
+          "Estado",
+          "Prioridad",
+          "Ruta",
+          "Responsable",
+          "Avance promedio",
+          "Observaciones",
+        ],
+        "metadata": "Generado: 15/7/2026, 3:00:00 p. m. | Filtros: from=2026-07-31, to=2026-07-01 | Total exportado: 2 | Límite aplicado: 1000",
+        "rows": [
+          [
+            "id_orden_trabajo-1",
+            "nombre_producto-1",
+            "nombre_razon_social-1",
+            "tipo_produccion-1",
+            "11.50",
+            "01/07/2026",
+            "01/07/2026",
+            "01/07/2026",
+            "estado-1",
+            "prioridad-1",
+            "nombre_ruta-1",
+            "apellidos-1, nombres-1",
+            "17.00%",
+            "observaciones-1",
+          ],
+          [
+            "id_orden_trabajo-2",
+            "nombre_producto-2",
+            "nombre_razon_social-2",
+            "tipo_produccion-2",
+            "22.50",
+            "02/07/2026",
+            "",
+            "",
+            "estado-2",
+            "prioridad-2",
+            "nombre_ruta-2",
+            "apellidos-2, nombres-2",
+            "17.00%",
+            "",
+          ],
+        ],
+        "title": "Reporte de Producción",
+      },
+      "effect": "buildExcelBuffer",
+    },
+  ],
+  "response": {
+    "body": "contenido excel",
+    "cacheControl": "no-store",
+    "contentDisposition": "attachment; filename="reporte_produccion_2026-07-15.xlsx"",
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": 200,
+  },
+}
+`;
+
 exports[`GET /api/reports/export/[report] > archivos por reporte > produccion: limite excesivo en excel 1`] = `
 {
   "calls": [
@@ -5593,33 +5734,6 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > ventas: pdf c
     "contentDisposition": "attachment; filename="reporte_ventas_cobranzas_2026-07-15.pdf"",
     "contentType": "application/pdf",
     "status": 200,
-  },
-}
-`;
-
-exports[`GET /api/reports/export/[report] > rechazos y errores > el alias from/to tambien se valida en un reporte que no lo usa 1`] = `
-{
-  "calls": [
-    {
-      "args": {
-        "context": {
-          "code": "VALIDATION_ERROR",
-          "report": "production",
-          "userId": "USU00000001",
-        },
-        "message": "La fecha inicial no puede ser mayor que la fecha final.",
-      },
-      "effect": "logger.warn",
-    },
-  ],
-  "response": {
-    "body": {
-      "error": "La fecha inicial no puede ser mayor que la fecha final.",
-    },
-    "cacheControl": null,
-    "contentDisposition": null,
-    "contentType": "application/json",
-    "status": 400,
   },
 }
 `;
