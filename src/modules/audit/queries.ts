@@ -4,7 +4,6 @@ import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import type { PaginationParams } from "@/lib/pagination";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
-import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas de lectura de la pagina de Auditoria (bitacora de operaciones) y
 // de su exportacion. No autorizan: la pagina ya verifico el rol con
@@ -15,15 +14,20 @@ export type AuditLogFilters = {
   usuario: string;
   accion: string;
   entidad: string;
-  from: Date | null;
-  to: Date | null;
+  // Fechas "aaaa-mm-dd" tal como llegan en la URL.
+  from: string;
+  to: string;
 };
 
 function buildAuditLogWhere(
   filters: AuditLogFilters,
 ): Prisma.bitacora_operacionWhereInput {
   const { q, usuario, accion, entidad, from, to } = filters;
-  const dateRange = buildDateRangeFilter(from, to);
+  // Como la exportacion: "hasta" se cierra antes del dia siguiente (lt). Con
+  // lte a las 23:59:59.999 la pantalla perdia las entradas del ultimo
+  // milisegundo del dia, porque fecha_hora guarda microsegundos (grupo 4 de
+  // fixes).
+  const dateRange = buildReportDateRange(from, to);
   const conditions: Prisma.bitacora_operacionWhereInput[] = [];
 
   if (q) {
@@ -139,9 +143,8 @@ export async function getAuditLogData(
 }
 
 // Filtro de la exportacion de la bitacora (entrega 5). Difiere del de la
-// pagina: usa un objeto plano, acepta alias de parametros y cierra "hasta"
-// antes del dia siguiente (lt) en lugar de al final del dia (lte).
-// Igualarlos cambia el archivo exportado: es un fix.
+// pagina: usa un objeto plano y acepta alias de parametros que la pagina no
+// genera. Igualarlos cambia el archivo exportado: es un fix.
 export type AuditLogExportFilters = {
   dateFrom: string;
   dateTo: string;

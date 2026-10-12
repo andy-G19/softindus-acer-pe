@@ -147,6 +147,31 @@ const REPORTS: ParityReport[] = [
       },
     ],
   },
+  {
+    report: "audit",
+    route: "/dashboard/audit",
+    load: () => import("@/app/(dashboard)/dashboard/audit/page"),
+    mainQueries: ["bitacora_operacion.findMany"],
+    dateField: "fecha_hora",
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      { name: "rango de fechas", searchParams: { from: "2026-07-01", to: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { from: "2026-07-15", to: "2026-07-15" } },
+      { name: "fecha escrita sin ceros", searchParams: { from: "2026-7-5" } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          q: "cliente",
+          usuario: "USU00000001",
+          accion: "crear",
+          entidad: "cliente",
+          from: "2026-07-01",
+          to: "2026-07-31",
+          page: "2",
+        },
+      },
+    ],
+  },
 ];
 
 function exportHref(html: string | null, report: string) {
@@ -183,11 +208,16 @@ function fieldCondition(where: unknown, field: string): unknown {
   return and.map((item) => fieldCondition(item, field)).find(Boolean);
 }
 
+// La primera lectura de cada consulta principal que recibe un where: la
+// bitacora tambien se lee sin filtro para las listas de acciones y entidades.
 function mainWheres(calls: RecordedCall[], mainQueries: string[]) {
   return Object.fromEntries(
     mainQueries.map((name) => {
       const call = calls.find(
-        (item): item is PrismaCall => isPrismaCall(item) && item.prisma === name,
+        (item): item is PrismaCall =>
+          isPrismaCall(item) &&
+          item.prisma === name &&
+          "where" in ((item.args ?? {}) as object),
       );
 
       return [name, (call?.args as { where?: unknown } | undefined)?.where];
