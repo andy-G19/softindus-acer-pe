@@ -3,7 +3,6 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
-import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas del reporte de Costos y rentabilidad. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
@@ -11,17 +10,18 @@ import { buildDateRangeFilter } from "@/lib/search-params";
 // La pantalla y la exportacion comparten el filtro de costeos y lo combinan
 // con AND (grupo 4 de fixes, D2: con un objeto plano, margen bajo y utilidad
 // negativa usaban la misma clave `rentabilidad` y la segunda pisaba a la
-// primera). Todavia difieren en las fechas y los parametros (entrega 5): la
-// pantalla lee las fechas con parseDateParam y cierra "hasta" al final del dia
-// (lte); la exportacion acepta alias de parametros y cierra "hasta" antes del
-// dia siguiente (lt). Igualarlas cambia lo que se ve o se exporta: es un fix.
+// primera). Las dos leen las fechas con buildReportDateRange: "hasta" se cierra
+// antes del dia siguiente (lt), sin el hueco del ultimo milisegundo. Todavia
+// difieren en los parametros (entrega 5): la exportacion acepta alias que la
+// pantalla no genera. Igualarlos cambia lo que se exporta: es un fix.
 
 export type ProfitabilityReportFilters = {
   q: string;
   lowMargin: string;
   negativeProfit: string;
-  from: Date | null;
-  to: Date | null;
+  // Fechas "aaaa-mm-dd" tal como llegan en la URL.
+  from: string;
+  to: string;
 };
 
 type CostingFilters = Pick<
@@ -82,7 +82,7 @@ export function getProfitabilityReportData(filters: ProfitabilityReportFilters) 
   return prisma.costeo.findMany({
     where: buildCostingWhere(
       filters,
-      buildDateRangeFilter(filters.from, filters.to),
+      buildReportDateRange(filters.from, filters.to),
     ),
     orderBy: {
       fecha_costeo: "desc",

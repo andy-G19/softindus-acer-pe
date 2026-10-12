@@ -29,7 +29,6 @@ import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { getProfitabilityReportData } from "@/modules/reports/profitability/queries";
 import {
-  parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
@@ -57,8 +56,8 @@ export default async function ProfitabilityReportPage({
     q,
     lowMargin,
     negativeProfit,
-    from: parseDateParam(params, "from"),
-    to: parseDateParam(params, "to"),
+    from,
+    to,
   });
 
   const totals = costings.reduce(

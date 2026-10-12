@@ -100,6 +100,24 @@ const REPORTS: ParityReport[] = [
         name: "busqueda y margen bajo",
         searchParams: { q: " Estructura ", lowMargin: "true" },
       },
+      {
+        name: "rango de fechas",
+        searchParams: { from: "2026-07-01", to: "2026-07-31" },
+      },
+      {
+        name: "fecha escrita sin ceros",
+        searchParams: { from: "2026-7-5" },
+      },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          q: " Estructura ",
+          from: "2026-07-01",
+          to: "2026-07-31",
+          lowMargin: "true",
+          negativeProfit: "true",
+        },
+      },
     ],
   },
 ];
