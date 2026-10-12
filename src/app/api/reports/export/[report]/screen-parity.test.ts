@@ -128,7 +128,6 @@ const REPORTS: ParityReport[] = [
     route: "/dashboard/reports/staff",
     load: () => import("@/app/(dashboard)/dashboard/reports/staff/page"),
     mainQueries: ["planilla_pago.findMany"],
-    dateField: "periodo_inicio",
     cases: [
       { name: "sin filtros", searchParams: {} },
       { name: "rango de fechas", searchParams: { from: "2026-07-01", to: "2026-07-31" } },
@@ -276,6 +275,26 @@ const ALIAS_CASES: AliasCase[] = [
     mainQueries: ["costeo.findMany"],
     retired: { dateFrom: "2026-06-01", dateTo: "2026-06-30", searchText: "Puerta" },
     screen: { from: "2026-07-01", to: "2026-07-31", q: "Estructura" },
+  },
+  {
+    report: "staff",
+    mainQueries: ["planilla_pago.findMany"],
+    retired: {
+      dateFrom: "2026-06-01",
+      dateTo: "2026-06-30",
+      operatorId: "OPE00000002",
+      payrollStatus: "pendiente",
+      paymentMode: "quincenal",
+      searchText: "Mamani",
+    },
+    screen: {
+      from: "2026-07-01",
+      to: "2026-07-31",
+      operario: "OPE00000001",
+      estado: "pagado",
+      modalidad: "semanal",
+      q: "Quispe",
+    },
   },
 ];
 

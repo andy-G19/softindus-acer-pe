@@ -2925,29 +2925,41 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > personal: ali
         ],
         "take": 1000,
         "where": {
-          "estado_pago": "pagado",
-          "id_operario": "OPE00000001",
-          "modalidad_pago": "semanal",
-          "operario": {
-            "OR": [
-              {
-                "nombres": {
-                  "contains": "Quispe",
-                  "mode": "insensitive",
-                },
+          "AND": [
+            {
+              "operario": {
+                "OR": [
+                  {
+                    "nombres": {
+                      "contains": "Quispe",
+                      "mode": "insensitive",
+                    },
+                  },
+                  {
+                    "apellidos": {
+                      "contains": "Quispe",
+                      "mode": "insensitive",
+                    },
+                  },
+                ],
               },
-              {
-                "apellidos": {
-                  "contains": "Quispe",
-                  "mode": "insensitive",
-                },
+            },
+            {
+              "id_operario": "OPE00000001",
+            },
+            {
+              "modalidad_pago": "semanal",
+            },
+            {
+              "estado_pago": "pagado",
+            },
+            {
+              "periodo_inicio": {
+                "gte": 2026-07-01T00:00:00.000Z,
+                "lt": 2026-08-01T00:00:00.000Z,
               },
-            ],
-          },
-          "periodo_inicio": {
-            "gte": 2026-07-01T00:00:00.000Z,
-            "lt": 2026-08-01T00:00:00.000Z,
-          },
+            },
+          ],
         },
       },
       "prisma": "planilla_pago.findMany",
@@ -3182,31 +3194,7 @@ exports[`GET /api/reports/export/[report] > archivos por reporte > personal: pdf
           },
         ],
         "take": 500,
-        "where": {
-          "estado_pago": "pendiente",
-          "id_operario": "OPE00000001",
-          "modalidad_pago": "semanal",
-          "operario": {
-            "OR": [
-              {
-                "nombres": {
-                  "contains": "Quispe",
-                  "mode": "insensitive",
-                },
-              },
-              {
-                "apellidos": {
-                  "contains": "Quispe",
-                  "mode": "insensitive",
-                },
-              },
-            ],
-          },
-          "periodo_inicio": {
-            "gte": 2026-07-01T00:00:00.000Z,
-            "lt": 2026-08-01T00:00:00.000Z,
-          },
-        },
+        "where": {},
       },
       "prisma": "planilla_pago.findMany",
     },

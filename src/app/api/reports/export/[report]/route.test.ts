@@ -490,6 +490,8 @@ const REPORT_CASES: ExportCase[] = [
 
   // Personal y planillas
   { name: "personal: excel sin filtros", report: "staff" },
+  // Desde el grupo 4 de fixes la exportacion ignora estos nombres: ninguna
+  // pantalla los genera. El archivo sale sin filtros.
   {
     name: "personal: pdf con los nombres de la exportacion",
     report: "staff",

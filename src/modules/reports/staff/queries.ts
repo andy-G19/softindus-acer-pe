@@ -8,12 +8,11 @@ import { findActiveOperators } from "@/modules/staff/operators/queries";
 // Consultas del reporte de Personal y planillas. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
 //
-// La pantalla y la exportacion leen las fechas con buildReportDateRange:
-// "hasta" se cierra antes del dia siguiente (lt), sin el hueco del ultimo
-// milisegundo (grupo 4 de fixes). Todavia filtran las planillas con reglas
-// distintas (entrega 5): la pantalla combina condiciones con AND; la
-// exportacion usa un objeto plano y acepta alias de parametros que la
-// pantalla no genera. Igualarlas cambia lo que se exporta: es un fix.
+// La pantalla y la exportacion reciben los mismos filtros, con los nombres
+// de la URL de la pantalla, y comparten el filtro de planillas (grupo 4 de
+// fixes): combina las condiciones con AND y cierra "hasta" antes del dia
+// siguiente (lt), sin el hueco del ultimo milisegundo. Cada una conserva su
+// limite, su orden y sus columnas.
 
 export type StaffReportFilters = {
   q: string;
@@ -25,7 +24,9 @@ export type StaffReportFilters = {
   to: string;
 };
 
-export async function getStaffReportData(filters: StaffReportFilters) {
+function buildPayrollWhere(
+  filters: StaffReportFilters,
+): Prisma.planilla_pagoWhereInput {
   const { q, operario, modalidad, estado } = filters;
   const dateRange = buildReportDateRange(filters.from, filters.to);
 
@@ -58,8 +59,13 @@ export async function getStaffReportData(filters: StaffReportFilters) {
     payrollFilters.push({ periodo_inicio: dateRange });
   }
 
-  const payrollWhere: Prisma.planilla_pagoWhereInput =
-    payrollFilters.length > 0 ? { AND: payrollFilters } : {};
+  return payrollFilters.length > 0 ? { AND: payrollFilters } : {};
+}
+
+export async function getStaffReportData(filters: StaffReportFilters) {
+  const { operario } = filters;
+  const dateRange = buildReportDateRange(filters.from, filters.to);
+  const payrollWhere = buildPayrollWhere(filters);
 
   const attendanceWhere: Prisma.asistenciaWhereInput = {
     ...(operario ? { id_operario: operario } : {}),
@@ -88,39 +94,12 @@ export async function getStaffReportData(filters: StaffReportFilters) {
   return { operators, payrolls, attendanceCount, absenceCount, latenessCount };
 }
 
-export type StaffExportFilters = {
-  dateFrom: string;
-  dateTo: string;
-  operatorId: string;
-  payrollStatus: string;
-  paymentMode: string;
-  searchText: string;
-};
-
 export function getStaffExportRows(
-  filters: StaffExportFilters,
+  filters: StaffReportFilters,
   limit: number,
 ) {
-  const { operatorId, payrollStatus, paymentMode, searchText } = filters;
-  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
-
   return prisma.planilla_pago.findMany({
-    where: {
-      ...(operatorId ? { id_operario: operatorId } : {}),
-      ...(payrollStatus ? { estado_pago: payrollStatus } : {}),
-      ...(paymentMode ? { modalidad_pago: paymentMode } : {}),
-      ...(dateRange ? { periodo_inicio: dateRange } : {}),
-      ...(searchText
-        ? {
-            operario: {
-              OR: [
-                { nombres: { contains: searchText, mode: "insensitive" } },
-                { apellidos: { contains: searchText, mode: "insensitive" } },
-              ],
-            },
-          }
-        : {}),
-    },
+    where: buildPayrollWhere(filters),
     orderBy: [{ fecha_generacion: "desc" }, { id_planilla: "desc" }],
     take: limit,
     include: {

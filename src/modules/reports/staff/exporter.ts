@@ -13,14 +13,17 @@ export async function exportStaffReport(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
+  // Los mismos nombres que la URL de la pantalla, que genera este enlace
+  // (grupo 4 de fixes: se retiran los alias dateFrom, dateTo, operatorId,
+  // payrollStatus, paymentMode y searchText, que ninguna pantalla genera).
   const payrolls = await getStaffExportRows(
     {
-      dateFrom: getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from"),
-      dateTo: getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to"),
-      operatorId: getExportParam(searchParams, "operatorId") || getExportParam(searchParams, "operario"),
-      payrollStatus: getExportParam(searchParams, "payrollStatus") || getExportParam(searchParams, "estado"),
-      paymentMode: getExportParam(searchParams, "paymentMode") || getExportParam(searchParams, "modalidad"),
-      searchText: getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText"),
+      q: getExportParam(searchParams, "q"),
+      operario: getExportParam(searchParams, "operario"),
+      modalidad: getExportParam(searchParams, "modalidad"),
+      estado: getExportParam(searchParams, "estado"),
+      from: getExportParam(searchParams, "from"),
+      to: getExportParam(searchParams, "to"),
     },
     limit,
   );
