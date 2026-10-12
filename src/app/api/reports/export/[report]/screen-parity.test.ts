@@ -85,6 +85,23 @@ const REPORTS: ParityReport[] = [
       },
     ],
   },
+  {
+    report: "profitability",
+    route: "/dashboard/reports/profitability",
+    load: () => import("@/app/(dashboard)/dashboard/reports/profitability/page"),
+    mainQueries: ["costeo.findMany"],
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      {
+        name: "margen bajo y utilidad negativa a la vez",
+        searchParams: { lowMargin: "true", negativeProfit: "true" },
+      },
+      {
+        name: "busqueda y margen bajo",
+        searchParams: { q: " Estructura ", lowMargin: "true" },
+      },
+    ],
+  },
 ];
 
 function exportHref(html: string | null, report: string) {

@@ -8,13 +8,13 @@ import { buildDateRangeFilter } from "@/lib/search-params";
 // Consultas del reporte de Costos y rentabilidad. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
 //
-// La pantalla y la exportacion filtran los costeos con reglas distintas
-// (entrega 5): la pantalla combina condiciones con AND, lee las fechas con
-// parseDateParam y cierra "hasta" al final del dia (lte); la exportacion usa
-// un objeto plano, acepta alias de parametros y cierra "hasta" antes del dia
-// siguiente (lt). Ademas, con lowMargin y negativeProfit a la vez, la segunda
-// condicion de la exportacion reemplaza la clave `rentabilidad` y se ignora
-// el margen bajo. Igualarlas cambia lo que se ve o se exporta: es un fix.
+// La pantalla y la exportacion comparten el filtro de costeos y lo combinan
+// con AND (grupo 4 de fixes, D2: con un objeto plano, margen bajo y utilidad
+// negativa usaban la misma clave `rentabilidad` y la segunda pisaba a la
+// primera). Todavia difieren en las fechas y los parametros (entrega 5): la
+// pantalla lee las fechas con parseDateParam y cierra "hasta" al final del dia
+// (lte); la exportacion acepta alias de parametros y cierra "hasta" antes del
+// dia siguiente (lt). Igualarlas cambia lo que se ve o se exporta: es un fix.
 
 export type ProfitabilityReportFilters = {
   q: string;
@@ -24,11 +24,18 @@ export type ProfitabilityReportFilters = {
   to: Date | null;
 };
 
+type CostingFilters = Pick<
+  ProfitabilityReportFilters,
+  "q" | "lowMargin" | "negativeProfit"
+>;
+
+type DateRange = Prisma.costeoWhereInput["fecha_costeo"];
+
 function buildCostingWhere(
-  filters: ProfitabilityReportFilters,
+  filters: CostingFilters,
+  dateRange: DateRange,
 ): Prisma.costeoWhereInput {
   const { q, lowMargin, negativeProfit } = filters;
-  const dateRange = buildDateRangeFilter(filters.from, filters.to);
 
   const conditions: Prisma.costeoWhereInput[] = [];
 
@@ -73,7 +80,10 @@ function buildCostingWhere(
 
 export function getProfitabilityReportData(filters: ProfitabilityReportFilters) {
   return prisma.costeo.findMany({
-    where: buildCostingWhere(filters),
+    where: buildCostingWhere(
+      filters,
+      buildDateRangeFilter(filters.from, filters.to),
+    ),
     orderBy: {
       fecha_costeo: "desc",
     },
@@ -119,47 +129,12 @@ export function getProfitabilityExportRows(
   limit: number,
 ) {
   const { searchText, lowMargin, negativeProfit } = filters;
-  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
 
   return prisma.costeo.findMany({
-    where: {
-      ...(dateRange ? { fecha_costeo: dateRange } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { id_costeo: { contains: searchText, mode: "insensitive" } },
-              { id_pedido: { contains: searchText, mode: "insensitive" } },
-              { id_orden_trabajo: { contains: searchText, mode: "insensitive" } },
-              {
-                pedido: {
-                  cliente: {
-                    nombre_razon_social: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-              {
-                orden_trabajo: {
-                  producto: {
-                    nombre_producto: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(lowMargin === "true"
-        ? { rentabilidad: { some: { alerta_bajo_margen: true } } }
-        : {}),
-      ...(negativeProfit === "true"
-        ? { rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } }
-        : {}),
-    },
+    where: buildCostingWhere(
+      { q: searchText, lowMargin, negativeProfit },
+      buildReportDateRange(filters.dateFrom, filters.dateTo),
+    ),
     orderBy: [{ fecha_costeo: "desc" }, { id_costeo: "desc" }],
     take: limit,
     include: {
