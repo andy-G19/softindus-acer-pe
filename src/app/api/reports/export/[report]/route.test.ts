@@ -454,6 +454,8 @@ const REPORT_CASES: ExportCase[] = [
 
   // Costos y rentabilidad
   { name: "rentabilidad: excel sin filtros", report: "profitability" },
+  // Desde el grupo 4 de fixes la exportacion ignora dateFrom, dateTo y
+  // searchText: ninguna pantalla los genera. Solo filtra lowMargin.
   {
     name: "rentabilidad: pdf con los nombres de la exportacion",
     report: "profitability",

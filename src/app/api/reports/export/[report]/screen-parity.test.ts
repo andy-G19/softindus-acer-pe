@@ -225,13 +225,7 @@ function mainWheres(calls: RecordedCall[], mainQueries: string[]) {
   );
 }
 
-async function screenAndExport(parityReport: ParityReport, parityCase: ParityCase) {
-  const page = await characterizePage(
-    parityReport.load,
-    { name: parityCase.name, searchParams: parityCase.searchParams },
-    parityReport.route,
-  );
-  const href = exportHref(page.html, parityReport.report);
+async function runExport(report: string, href: string) {
   const { GET } = await loadRoute();
 
   mocks.session = {
@@ -241,15 +235,60 @@ async function screenAndExport(parityReport: ParityReport, parityCase: ParityCas
 
   const { calls, result } = await characterizeHandler(() =>
     GET(new Request(`http://localhost${href}`), {
-      params: Promise.resolve({ report: parityReport.report }),
+      params: Promise.resolve({ report }),
     }),
   );
 
+  return { status: result.status, calls };
+}
+
+async function screenAndExport(parityReport: ParityReport, parityCase: ParityCase) {
+  const page = await characterizePage(
+    parityReport.load,
+    { name: parityCase.name, searchParams: parityCase.searchParams },
+    parityReport.route,
+  );
+  const { status, calls } = await runExport(
+    parityReport.report,
+    exportHref(page.html, parityReport.report),
+  );
+
   return {
-    status: result.status,
+    status,
     screen: mainWheres(page.calls, parityReport.mainQueries),
     exported: mainWheres(calls, parityReport.mainQueries),
   };
+}
+
+// Parametros que la exportacion aceptaba sin que ninguna pantalla los generara
+// (alias retirados en el grupo 4 de fixes), con valores distintos de los de
+// la pantalla para que un alias que siguiera filtrando se note.
+type AliasCase = {
+  report: string;
+  mainQueries: string[];
+  retired: Record<string, string>;
+  screen: Record<string, string>;
+};
+
+const ALIAS_CASES: AliasCase[] = [
+  {
+    report: "profitability",
+    mainQueries: ["costeo.findMany"],
+    retired: { dateFrom: "2026-06-01", dateTo: "2026-06-30", searchText: "Puerta" },
+    screen: { from: "2026-07-01", to: "2026-07-31", q: "Estructura" },
+  },
+];
+
+async function exportedWheres(aliasCase: AliasCase, query: Record<string, string>) {
+  const search = new URLSearchParams({ ...query, fileFormat: "excel" }).toString();
+  const { status, calls } = await runExport(
+    aliasCase.report,
+    `/api/reports/export/${aliasCase.report}?${search}`,
+  );
+
+  expect(status).toBe(200);
+
+  return mainWheres(calls, aliasCase.mainQueries);
 }
 
 describe("paridad entre pantalla y exportacion", () => {
@@ -282,4 +321,20 @@ describe("paridad entre pantalla y exportacion", () => {
       }
     });
   }
+
+  describe("la exportacion lee solo los parametros que genera la pantalla", () => {
+    for (const aliasCase of ALIAS_CASES) {
+      it(`${aliasCase.report}: los nombres que ninguna pantalla genera no filtran`, async () => {
+        expect(await exportedWheres(aliasCase, aliasCase.retired)).toEqual(
+          await exportedWheres(aliasCase, {}),
+        );
+      });
+
+      it(`${aliasCase.report}: con los dos nombres manda el de la pantalla`, async () => {
+        expect(
+          await exportedWheres(aliasCase, { ...aliasCase.retired, ...aliasCase.screen }),
+        ).toEqual(await exportedWheres(aliasCase, aliasCase.screen));
+      });
+    }
+  });
 });

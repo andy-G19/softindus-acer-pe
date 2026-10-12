@@ -7,13 +7,12 @@ import { buildReportDateRange } from "@/lib/reports/report-filters";
 // Consultas del reporte de Costos y rentabilidad. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
 //
-// La pantalla y la exportacion comparten el filtro de costeos y lo combinan
-// con AND (grupo 4 de fixes, D2: con un objeto plano, margen bajo y utilidad
-// negativa usaban la misma clave `rentabilidad` y la segunda pisaba a la
-// primera). Las dos leen las fechas con buildReportDateRange: "hasta" se cierra
-// antes del dia siguiente (lt), sin el hueco del ultimo milisegundo. Todavia
-// difieren en los parametros (entrega 5): la exportacion acepta alias que la
-// pantalla no genera. Igualarlos cambia lo que se exporta: es un fix.
+// La pantalla y la exportacion reciben los mismos filtros, con los nombres
+// de la URL de la pantalla, y comparten el constructor del where (grupo 4 de
+// fixes): combina las condiciones con AND (D2: con un objeto plano, margen
+// bajo y utilidad negativa usaban la misma clave `rentabilidad` y la segunda
+// pisaba a la primera) y cierra "hasta" antes del dia siguiente (lt). Cada
+// una conserva su limite, su orden y sus columnas.
 
 export type ProfitabilityReportFilters = {
   q: string;
@@ -24,18 +23,11 @@ export type ProfitabilityReportFilters = {
   to: string;
 };
 
-type CostingFilters = Pick<
-  ProfitabilityReportFilters,
-  "q" | "lowMargin" | "negativeProfit"
->;
-
-type DateRange = Prisma.costeoWhereInput["fecha_costeo"];
-
 function buildCostingWhere(
-  filters: CostingFilters,
-  dateRange: DateRange,
+  filters: ProfitabilityReportFilters,
 ): Prisma.costeoWhereInput {
   const { q, lowMargin, negativeProfit } = filters;
+  const dateRange = buildReportDateRange(filters.from, filters.to);
 
   const conditions: Prisma.costeoWhereInput[] = [];
 
@@ -80,10 +72,7 @@ function buildCostingWhere(
 
 export function getProfitabilityReportData(filters: ProfitabilityReportFilters) {
   return prisma.costeo.findMany({
-    where: buildCostingWhere(
-      filters,
-      buildReportDateRange(filters.from, filters.to),
-    ),
+    where: buildCostingWhere(filters),
     orderBy: {
       fecha_costeo: "desc",
     },
@@ -116,25 +105,12 @@ export function getProfitabilityReportData(filters: ProfitabilityReportFilters) 
   });
 }
 
-export type ProfitabilityExportFilters = {
-  dateFrom: string;
-  dateTo: string;
-  searchText: string;
-  lowMargin: string;
-  negativeProfit: string;
-};
-
 export function getProfitabilityExportRows(
-  filters: ProfitabilityExportFilters,
+  filters: ProfitabilityReportFilters,
   limit: number,
 ) {
-  const { searchText, lowMargin, negativeProfit } = filters;
-
   return prisma.costeo.findMany({
-    where: buildCostingWhere(
-      { q: searchText, lowMargin, negativeProfit },
-      buildReportDateRange(filters.dateFrom, filters.dateTo),
-    ),
+    where: buildCostingWhere(filters),
     orderBy: [{ fecha_costeo: "desc" }, { id_costeo: "desc" }],
     take: limit,
     include: {
