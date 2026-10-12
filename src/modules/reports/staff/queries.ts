@@ -3,30 +3,31 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
-import { buildDateRangeFilter } from "@/lib/search-params";
 import { findActiveOperators } from "@/modules/staff/operators/queries";
 
 // Consultas del reporte de Personal y planillas. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
 //
-// La pantalla y la exportacion filtran las planillas con reglas distintas
-// (entrega 5): la pantalla combina condiciones con AND, lee las fechas con
-// parseDateParam y cierra "hasta" al final del dia (lte); la exportacion usa
-// un objeto plano, acepta alias de parametros y cierra "hasta" antes del dia
-// siguiente (lt). Igualarlas cambia lo que se ve o se exporta: es un fix.
+// La pantalla y la exportacion leen las fechas con buildReportDateRange:
+// "hasta" se cierra antes del dia siguiente (lt), sin el hueco del ultimo
+// milisegundo (grupo 4 de fixes). Todavia filtran las planillas con reglas
+// distintas (entrega 5): la pantalla combina condiciones con AND; la
+// exportacion usa un objeto plano y acepta alias de parametros que la
+// pantalla no genera. Igualarlas cambia lo que se exporta: es un fix.
 
 export type StaffReportFilters = {
   q: string;
   operario: string;
   modalidad: string;
   estado: string;
-  from: Date | null;
-  to: Date | null;
+  // Fechas "aaaa-mm-dd" tal como llegan en la URL.
+  from: string;
+  to: string;
 };
 
 export async function getStaffReportData(filters: StaffReportFilters) {
   const { q, operario, modalidad, estado } = filters;
-  const dateRange = buildDateRangeFilter(filters.from, filters.to);
+  const dateRange = buildReportDateRange(filters.from, filters.to);
 
   const payrollFilters: Prisma.planilla_pagoWhereInput[] = [];
 

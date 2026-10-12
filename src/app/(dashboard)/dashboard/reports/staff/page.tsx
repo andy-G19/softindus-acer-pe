@@ -36,7 +36,6 @@ import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import { getStaffReportData } from "@/modules/reports/staff/queries";
 import {
-  parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
@@ -61,8 +60,8 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
       operario,
       modalidad,
       estado,
-      from: parseDateParam(params, "from"),
-      to: parseDateParam(params, "to"),
+      from,
+      to,
     });
 
   const totals = payrolls.reduce(

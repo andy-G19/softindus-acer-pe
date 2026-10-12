@@ -631,7 +631,7 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
           {
             "periodo_inicio": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
@@ -644,7 +644,7 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
       "where": {
         "fecha": {
           "gte": 2026-07-01T00:00:00.000Z,
-          "lte": 2026-07-31T23:59:59.999Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
         "id_operario": "OPE00000001",
       },
@@ -657,7 +657,7 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
         "falta": true,
         "fecha": {
           "gte": 2026-07-01T00:00:00.000Z,
-          "lte": 2026-07-31T23:59:59.999Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
         "id_operario": "OPE00000001",
       },
@@ -669,7 +669,7 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
       "where": {
         "fecha": {
           "gte": 2026-07-01T00:00:00.000Z,
-          "lte": 2026-07-31T23:59:59.999Z,
+          "lt": 2026-08-01T00:00:00.000Z,
         },
         "id_operario": "OPE00000001",
         "tardanza": true,

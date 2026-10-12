@@ -57,6 +57,9 @@ type ParityReport = {
   load: PageLoader;
   // Lecturas principales: las que comparten el filtro de la pantalla.
   mainQueries: string[];
+  // Mientras la exportacion no use el filtro de la pantalla, el caso compara
+  // solo la condicion de este campo de fecha.
+  dateField?: string;
   cases: ParityCase[];
 };
 
@@ -120,6 +123,30 @@ const REPORTS: ParityReport[] = [
       },
     ],
   },
+  {
+    report: "staff",
+    route: "/dashboard/reports/staff",
+    load: () => import("@/app/(dashboard)/dashboard/reports/staff/page"),
+    mainQueries: ["planilla_pago.findMany"],
+    dateField: "periodo_inicio",
+    cases: [
+      { name: "sin filtros", searchParams: {} },
+      { name: "rango de fechas", searchParams: { from: "2026-07-01", to: "2026-07-31" } },
+      { name: "un solo dia", searchParams: { from: "2026-07-15", to: "2026-07-15" } },
+      { name: "fecha escrita sin ceros", searchParams: { from: "2026-7-5" } },
+      {
+        name: "todos los filtros",
+        searchParams: {
+          q: " Quispe ",
+          operario: "OPE00000001",
+          modalidad: "semanal",
+          estado: "pagado",
+          from: "2026-07-01",
+          to: "2026-07-31",
+        },
+      },
+    ],
+  },
 ];
 
 function exportHref(html: string | null, report: string) {
@@ -137,6 +164,23 @@ function exportHref(html: string | null, report: string) {
   }
 
   return excel;
+}
+
+// Condicion de un campo dentro de un where, este en un AND o en el objeto.
+function fieldCondition(where: unknown, field: string): unknown {
+  if (!where || typeof where !== "object") {
+    return undefined;
+  }
+
+  const record = where as Record<string, unknown>;
+
+  if (field in record) {
+    return record[field];
+  }
+
+  const and = Array.isArray(record.AND) ? record.AND : [];
+
+  return and.map((item) => fieldCondition(item, field)).find(Boolean);
 }
 
 function mainWheres(calls: RecordedCall[], mainQueries: string[]) {
@@ -188,7 +232,22 @@ describe("paridad entre pantalla y exportacion", () => {
           const { status, screen, exported } = await screenAndExport(parityReport, parityCase);
 
           expect(status).toBe(200);
-          expect(exported).toEqual(screen);
+
+          const { dateField } = parityReport;
+
+          if (dateField) {
+            const dates = (wheres: Record<string, unknown>) =>
+              Object.fromEntries(
+                Object.entries(wheres).map(([name, where]) => [
+                  name,
+                  fieldCondition(where, dateField),
+                ]),
+              );
+
+            expect(dates(exported)).toEqual(dates(screen));
+          } else {
+            expect(exported).toEqual(screen);
+          }
         });
       }
     });
