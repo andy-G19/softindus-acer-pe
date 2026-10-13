@@ -44,6 +44,16 @@ const notificationLibraryPatterns = [
   { group: ["sweetalert2/*", "react-toastify/*"], message: notificationLibraryMessage },
 ];
 
+// Fuentes alojadas en el repositorio (entrega 8): next/font/google las
+// descargaba en cada build y un fallo de esa descarga rompio un despliegue de
+// produccion. Va en los tres bloques de no-restricted-imports, porque cada
+// bloque reemplaza las opciones del anterior.
+const googleFontImportRestriction = {
+  name: "next/font/google",
+  message:
+    "Usa next/font/local con un archivo de src/app/fonts (ver su README): el build no debe depender de descargar fuentes de Google.",
+};
+
 const apiLinkMessage =
   "Un enlace a /api/ (por ejemplo, una exportacion) va en un <a>, no en <Link>: en produccion next/link hace prefetch con un GET que ejecuta la ruta.";
 
@@ -80,7 +90,11 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          paths: [authImportRestriction, ...notificationLibraryRestrictions],
+          paths: [
+            authImportRestriction,
+            googleFontImportRestriction,
+            ...notificationLibraryRestrictions,
+          ],
           patterns: notificationLibraryPatterns,
         },
       ],
@@ -99,6 +113,7 @@ const eslintConfig = defineConfig([
           paths: [
             authImportRestriction,
             dbImportRestriction,
+            googleFontImportRestriction,
             ...notificationLibraryRestrictions,
           ],
           patterns: notificationLibraryPatterns,
@@ -108,14 +123,14 @@ const eslintConfig = defineConfig([
   },
   // La fachada de notificaciones y el proveedor de toasts son los unicos que
   // importan SweetAlert2 y Toastify. Por la misma regla de reemplazo, este
-  // bloque conserva para ellos solo la restriccion de @/auth.
+  // bloque conserva para ellos las restricciones de @/auth y de las fuentes.
   {
     files: notificationFacadeFiles,
     rules: {
       "no-restricted-imports": [
         "error",
         {
-          paths: [authImportRestriction],
+          paths: [authImportRestriction, googleFontImportRestriction],
         },
       ],
     },
