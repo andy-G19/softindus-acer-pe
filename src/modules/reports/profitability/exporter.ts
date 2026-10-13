@@ -13,13 +13,16 @@ export async function exportProfitabilityReport(
   searchParams: URLSearchParams,
   limit: number,
 ): Promise<ExportReport> {
+  // Los mismos nombres que la URL de la pantalla, que genera este enlace
+  // (grupo 4 de fixes: se retiran los alias dateFrom, dateTo y searchText,
+  // que ninguna pantalla genera).
   const costings = await getProfitabilityExportRows(
     {
-      dateFrom: getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from"),
-      dateTo: getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to"),
-      searchText: getExportParam(searchParams, "q") || getExportParam(searchParams, "searchText"),
+      q: getExportParam(searchParams, "q"),
       lowMargin: getExportParam(searchParams, "lowMargin"),
       negativeProfit: getExportParam(searchParams, "negativeProfit"),
+      from: getExportParam(searchParams, "from"),
+      to: getExportParam(searchParams, "to"),
     },
     limit,
   );

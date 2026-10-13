@@ -20,7 +20,10 @@ import {
   parseReportKey,
   validateDateRange,
 } from "@/lib/reports/report-filters";
-import { getReportDefinition } from "@/lib/reports/report-registry";
+import {
+  getReportDefinition,
+  type ReportDateParams,
+} from "@/lib/reports/report-registry";
 import { registerExportLog } from "@/modules/reports/export-log";
 import { REPORT_EXPORTERS } from "@/modules/reports/exporters";
 import { getExportParam } from "@/modules/reports/export-report";
@@ -34,10 +37,17 @@ type RouteContext = {
   }>;
 };
 
-/** Lee dateFrom/dateTo o su alias from/to (usado por profitability/staff/audit). */
-function extractReportDateRange(searchParams: URLSearchParams) {
-  const fromRaw = getExportParam(searchParams, "dateFrom") || getExportParam(searchParams, "from");
-  const toRaw = getExportParam(searchParams, "dateTo") || getExportParam(searchParams, "to");
+/**
+ * Lee el rango con los nombres de fecha del reporte: los que genera su
+ * pantalla y lee su exportador. Hasta el grupo 4 de fixes aceptaba dateFrom o
+ * from en todos los reportes y rechazaba un rango que el reporte ignoraba.
+ */
+function extractReportDateRange(
+  searchParams: URLSearchParams,
+  dateParams: ReportDateParams,
+) {
+  const fromRaw = getExportParam(searchParams, dateParams.from);
+  const toRaw = getExportParam(searchParams, dateParams.to);
 
   return {
     from: parseReportDate(fromRaw),
@@ -108,7 +118,10 @@ export async function GET(request: Request, context: RouteContext) {
   const fileFormat: ExportFormat = formatResult.value;
 
   // 5) Rango de fechas valido (si se envio).
-  const { from, to } = extractReportDateRange(url.searchParams);
+  const { from, to } = extractReportDateRange(
+    url.searchParams,
+    definition.dateParams,
+  );
   const dateRangeResult = validateDateRange(from, to);
 
   if (!dateRangeResult.ok) {

@@ -4,26 +4,34 @@ import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import type { PaginationParams } from "@/lib/pagination";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
-import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas de lectura de la pagina de Auditoria (bitacora de operaciones) y
 // de su exportacion. No autorizan: la pagina ya verifico el rol con
 // requireRole y la ruta de exportacion valida el rol del reporte.
+//
+// La pantalla y la exportacion reciben los mismos filtros, con los nombres de
+// la URL de la pantalla, y comparten el filtro de la bitacora (grupo 4 de
+// fixes). Cada una conserva su paginacion o limite y sus columnas.
 
 export type AuditLogFilters = {
   q: string;
   usuario: string;
   accion: string;
   entidad: string;
-  from: Date | null;
-  to: Date | null;
+  // Fechas "aaaa-mm-dd" tal como llegan en la URL.
+  from: string;
+  to: string;
 };
 
 function buildAuditLogWhere(
   filters: AuditLogFilters,
 ): Prisma.bitacora_operacionWhereInput {
   const { q, usuario, accion, entidad, from, to } = filters;
-  const dateRange = buildDateRangeFilter(from, to);
+  // Como la exportacion: "hasta" se cierra antes del dia siguiente (lt). Con
+  // lte a las 23:59:59.999 la pantalla perdia las entradas del ultimo
+  // milisegundo del dia, porque fecha_hora guarda microsegundos (grupo 4 de
+  // fixes).
+  const dateRange = buildReportDateRange(from, to);
   const conditions: Prisma.bitacora_operacionWhereInput[] = [];
 
   if (q) {
@@ -138,43 +146,12 @@ export async function getAuditLogData(
   };
 }
 
-// Filtro de la exportacion de la bitacora (entrega 5). Difiere del de la
-// pagina: usa un objeto plano, acepta alias de parametros y cierra "hasta"
-// antes del dia siguiente (lt) en lugar de al final del dia (lte).
-// Igualarlos cambia el archivo exportado: es un fix.
-export type AuditLogExportFilters = {
-  dateFrom: string;
-  dateTo: string;
-  userId: string;
-  action: string;
-  entity: string;
-  searchText: string;
-};
-
 export function getAuditLogExportRows(
-  filters: AuditLogExportFilters,
+  filters: AuditLogFilters,
   limit: number,
 ) {
-  const { userId, action, entity, searchText } = filters;
-  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
-
   return prisma.bitacora_operacion.findMany({
-    where: {
-      ...(dateRange ? { fecha_hora: dateRange } : {}),
-      ...(userId ? { id_usuario: userId } : {}),
-      ...(action ? { accion: action } : {}),
-      ...(entity ? { entidad_afectada: entity } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { detalle: { contains: searchText, mode: "insensitive" } },
-              { entidad_afectada: { contains: searchText, mode: "insensitive" } },
-              { accion: { contains: searchText, mode: "insensitive" } },
-              { id_registro_afectado: { contains: searchText, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
+    where: buildAuditLogWhere(filters),
     orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],
     take: limit,
     include: {

@@ -18,6 +18,13 @@ export const REPORT_KEYS = [
 
 export type ReportKey = (typeof REPORT_KEYS)[number];
 
+export type ReportDateParams = { from: string; to: string };
+
+// Los nombres de fecha de la URL de un reporte: los que genera su pantalla y
+// lee su exportador.
+const DATE_FROM_TO: ReportDateParams = { from: "dateFrom", to: "dateTo" };
+const FROM_TO: ReportDateParams = { from: "from", to: "to" };
+
 export type ReportDefinition = {
   key: ReportKey;
   /** Nombre visible usado en el archivo exportado y en exportacion_datos.modulo_origen. */
@@ -25,6 +32,12 @@ export type ReportDefinition = {
   allowedRoles: AppRole[];
   supportsDateFilter: boolean;
   supportsSearch: boolean;
+  /**
+   * Parametros de fecha de la URL del reporte. La ruta de exportacion valida
+   * el rango solo con ellos (grupo 4 de fixes): un nombre que el reporte no
+   * lee no filtra ni se valida.
+   */
+  dateParams: ReportDateParams;
 };
 
 export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
@@ -34,6 +47,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
     supportsDateFilter: true,
     supportsSearch: false,
+    dateParams: DATE_FROM_TO,
   },
   inventory: {
     key: "inventory",
@@ -41,6 +55,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
     supportsDateFilter: true,
     supportsSearch: false,
+    dateParams: DATE_FROM_TO,
   },
   "sales-collections": {
     key: "sales-collections",
@@ -48,6 +63,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN, APP_ROLES.SELLER],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: DATE_FROM_TO,
   },
   "suppliers-purchases": {
     key: "suppliers-purchases",
@@ -55,6 +71,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: DATE_FROM_TO,
   },
   financial: {
     key: "financial",
@@ -62,6 +79,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: DATE_FROM_TO,
   },
   maintenance: {
     key: "maintenance",
@@ -69,6 +87,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: DATE_FROM_TO,
   },
   profitability: {
     key: "profitability",
@@ -76,6 +95,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: FROM_TO,
   },
   staff: {
     key: "staff",
@@ -83,6 +103,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: FROM_TO,
   },
   audit: {
     key: "audit",
@@ -90,6 +111,7 @@ export const REPORT_REGISTRY: Record<ReportKey, ReportDefinition> = {
     allowedRoles: [APP_ROLES.ADMIN],
     supportsDateFilter: true,
     supportsSearch: true,
+    dateParams: FROM_TO,
   },
 };
 

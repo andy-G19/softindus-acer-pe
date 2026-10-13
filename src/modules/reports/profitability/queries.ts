@@ -3,32 +3,31 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { buildReportDateRange } from "@/lib/reports/report-filters";
-import { buildDateRangeFilter } from "@/lib/search-params";
 
 // Consultas del reporte de Costos y rentabilidad. No autorizan: la pagina
 // llama a requireRole y la ruta de exportacion valida el rol del reporte.
 //
-// La pantalla y la exportacion filtran los costeos con reglas distintas
-// (entrega 5): la pantalla combina condiciones con AND, lee las fechas con
-// parseDateParam y cierra "hasta" al final del dia (lte); la exportacion usa
-// un objeto plano, acepta alias de parametros y cierra "hasta" antes del dia
-// siguiente (lt). Ademas, con lowMargin y negativeProfit a la vez, la segunda
-// condicion de la exportacion reemplaza la clave `rentabilidad` y se ignora
-// el margen bajo. Igualarlas cambia lo que se ve o se exporta: es un fix.
+// La pantalla y la exportacion reciben los mismos filtros, con los nombres
+// de la URL de la pantalla, y comparten el constructor del where (grupo 4 de
+// fixes): combina las condiciones con AND (D2: con un objeto plano, margen
+// bajo y utilidad negativa usaban la misma clave `rentabilidad` y la segunda
+// pisaba a la primera) y cierra "hasta" antes del dia siguiente (lt). Cada
+// una conserva su limite, su orden y sus columnas.
 
 export type ProfitabilityReportFilters = {
   q: string;
   lowMargin: string;
   negativeProfit: string;
-  from: Date | null;
-  to: Date | null;
+  // Fechas "aaaa-mm-dd" tal como llegan en la URL.
+  from: string;
+  to: string;
 };
 
 function buildCostingWhere(
   filters: ProfitabilityReportFilters,
 ): Prisma.costeoWhereInput {
   const { q, lowMargin, negativeProfit } = filters;
-  const dateRange = buildDateRangeFilter(filters.from, filters.to);
+  const dateRange = buildReportDateRange(filters.from, filters.to);
 
   const conditions: Prisma.costeoWhereInput[] = [];
 
@@ -106,60 +105,12 @@ export function getProfitabilityReportData(filters: ProfitabilityReportFilters) 
   });
 }
 
-export type ProfitabilityExportFilters = {
-  dateFrom: string;
-  dateTo: string;
-  searchText: string;
-  lowMargin: string;
-  negativeProfit: string;
-};
-
 export function getProfitabilityExportRows(
-  filters: ProfitabilityExportFilters,
+  filters: ProfitabilityReportFilters,
   limit: number,
 ) {
-  const { searchText, lowMargin, negativeProfit } = filters;
-  const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
-
   return prisma.costeo.findMany({
-    where: {
-      ...(dateRange ? { fecha_costeo: dateRange } : {}),
-      ...(searchText
-        ? {
-            OR: [
-              { id_costeo: { contains: searchText, mode: "insensitive" } },
-              { id_pedido: { contains: searchText, mode: "insensitive" } },
-              { id_orden_trabajo: { contains: searchText, mode: "insensitive" } },
-              {
-                pedido: {
-                  cliente: {
-                    nombre_razon_social: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-              {
-                orden_trabajo: {
-                  producto: {
-                    nombre_producto: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(lowMargin === "true"
-        ? { rentabilidad: { some: { alerta_bajo_margen: true } } }
-        : {}),
-      ...(negativeProfit === "true"
-        ? { rentabilidad: { some: { utilidad_estimada: { lt: 0 } } } }
-        : {}),
-    },
+    where: buildCostingWhere(filters),
     orderBy: [{ fecha_costeo: "desc" }, { id_costeo: "desc" }],
     take: limit,
     include: {

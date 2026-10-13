@@ -75,8 +75,8 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/profitability?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/profitability?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -316,8 +316,8 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/profitability?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/profitability?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -557,8 +557,8 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/profitability?fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/profitability?fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/profitability?fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/profitability?fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -773,7 +773,7 @@ exports[`/dashboard/reports/profitability > todos los filtros > llamadas 1`] = `
           {
             "fecha_costeo": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
           {
@@ -829,8 +829,8 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </div>
 </div>
 <div>
-<a data-variant="outline" href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=excel">Exportar Excel</a>
-<a data-variant="default" href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=pdf">Exportar PDF</a>
+<a href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=excel" data-variant="outline">Exportar Excel</a>
+<a href="/api/reports/export/profitability?q=Estructura&amp;from=2026-07-01&amp;to=2026-07-31&amp;lowMargin=true&amp;negativeProfit=true&amp;fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>

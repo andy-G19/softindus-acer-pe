@@ -29,7 +29,6 @@ import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
 import {
-  parseDateParam,
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
@@ -49,8 +48,6 @@ export default async function AuditPage({ searchParams }: PageProps) {
   const entidad = parseStringParam(params, "entidad");
   const from = parseStringParam(params, "from");
   const to = parseStringParam(params, "to");
-  const fromDate = parseDateParam(params, "from");
-  const toDate = parseDateParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
   const {
@@ -62,7 +59,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
     distinctUsers,
     distinctEntities,
   } = await getAuditLogData(
-    { q, usuario, accion, entidad, from: fromDate, to: toDate },
+    { q, usuario, accion, entidad, from, to },
     { skip, take },
   );
 
@@ -86,14 +83,14 @@ export default async function AuditPage({ searchParams }: PageProps) {
         actions={
           <>
             <Button variant="outline" asChild>
-              <Link href={buildReportExportHref("audit", exportParams)}>
+              <a href={buildReportExportHref("audit", exportParams)}>
                 Exportar Excel
-              </Link>
+              </a>
             </Button>
             <Button asChild>
-              <Link href={buildReportExportHref("audit", exportParams, "pdf")}>
+              <a href={buildReportExportHref("audit", exportParams, "pdf")}>
                 Exportar PDF
-              </Link>
+              </a>
             </Button>
           </>
         }
