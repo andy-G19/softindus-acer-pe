@@ -1937,16 +1937,19 @@ Límites:
 
 ## Grupo 4 de fixes — Divergencias entre pantalla y exportación
 
-Fecha: 2026-10-12. Estado: hecho en local; falta publicar y verificar en
-staging. 9 commits de `b03ed6d` a `7e7a1d9`, el registro `3de09c5`, el fix
-`4b5fbd3` (hallazgo de la foto del «antes») y esta actualización, sobre
-`6414798` (registro de la integración del G3, que viaja con este grupo). Es el
-último de los cuatro grupos de fixes del bloque de estabilización: corrige las
-divergencias entre pantalla y exportación que la entrega 5 conservó y documentó
-junto a ambas consultas (D1, D2 y las diferencias de fechas, forma y alias de
-personal, rentabilidad y auditoría). Desde este grupo, en los cuatro reportes
-la pantalla y su exportación construyen el filtro con la misma función y leen
-los mismos parámetros: los que genera el enlace de la pantalla.
+Fecha: 2026-10-12. Estado: verificado en staging el 2026-10-12; falta
+integrarlo en `main`. 9 commits de `b03ed6d` a `7e7a1d9`, el registro
+`3de09c5`, el fix `4b5fbd3` (hallazgo de la foto del «antes») y su registro
+`5879d91`, publicados sobre `bc5afb1` junto con `6414798` (CI #60 en verde, 2m
+38s), con foto del «antes» tomada antes del push: D1 y las fechas mal escritas
+se reprodujeron en staging y ninguno se repitió después, y la foto descubrió el
+prefetch de las exportaciones. Es el último de los cuatro grupos de fixes del
+bloque de estabilización: corrige las divergencias entre pantalla y exportación
+que la entrega 5 conservó y documentó junto a ambas consultas (D1, D2 y las
+diferencias de fechas, forma y alias de personal, rentabilidad y auditoría).
+Desde este grupo, en los cuatro reportes la pantalla y su exportación
+construyen el filtro con la misma función y leen los mismos parámetros: los que
+genera el enlace de la pantalla.
 
 | Hallazgo | Defecto | Arreglo |
 |---|---|---|
@@ -2120,8 +2123,9 @@ leían. En total, staging tiene 62 exportaciones con `_rsc` de 72, desde
 - Los fantasmas se identifican por `"_rsc"` en `exportacion_datos.parametros`
   (una exportación real nunca lo lleva) y su entrada de bitácora, por
   `entidad_afectada = 'exportacion_datos'` e `id_registro_afectado`; ninguna
-  tabla referencia a `exportacion_datos`. La limpieza de staging y el conteo
-  de producción se deciden en la verificación.
+  tabla referencia a `exportacion_datos`. El responsable decidió conservar
+  los de staging como evidencia; el conteo de producción queda para después
+  de integrar el grupo en `main`.
 
 Límites:
 
@@ -2131,6 +2135,73 @@ Límites:
   pero no exportan. Queda como pendiente.
 - Los días siguen siendo de UTC en producción: el pendiente de instantes de
   la entrega 3.
+
+### Publicación, CI y verificación en staging
+
+- Foto del «antes» tomada el 2026-10-12 **antes del push**, con staging en
+  `bc5afb1` (`buildId` `f-U_VYYmvZk2SYwTWH1px`), con ADMIN desde el navegador
+  integrado. 20 observaciones secuenciales: 16 pantallas de personal,
+  rentabilidad, auditoría y mantenimiento (sin filtros, rangos cerrados en el
+  pasado, un día, y por reporte una referencia con la fecha bien escrita y
+  una señal con la fecha mal escrita) y 4 rechazos de la ruta por `fetch`
+  (rangos invertidos, que la ruta rechaza antes de escribir). Método de la
+  entrega 7: navegación completa, lectura del DOM cuando el texto deja de
+  cambiar y SHA-256 del texto de la página con sus tablas y, aparte, de sus
+  enlaces de exportación, guardados en `sessionStorage`. Auditoría usa rangos
+  cerrados hasta el 11/10 para que una exportación de ese día no la mueva.
+- El «antes» es fiel y coherente: Python recalculó el sello del navegador
+  (`b69604…`) y los hashes de los rechazos, y las fechas mal escritas se
+  ignoraban (las señales de personal y rentabilidad tenían el hash de la
+  pantalla sin filtros). Antes del push, `verify_antes.py` aplicó las reglas
+  del grupo y calculó el sello esperado del «después» (`9d3515b2…`): cambian
+  las 3 señales y nada más. Los dos rechazos con nombres de fecha ajenos al
+  reporte (producción con `from` y `to`, personal con `dateFrom` y `dateTo`)
+  no se repiten, porque con el código nuevo exportarían.
+- La foto descubrió el defecto del prefetch (ver el hallazgo corregido en
+  `4b5fbd3`): 45 exportaciones fantasma, `EXP00000027` a `EXP00000071`. Las
+  observaciones no se invalidan: auditoría usa rangos cerrados hasta el 11/10
+  y las exportaciones no tocan planillas ni costeos.
+- D1 se reprodujo con una exportación autorizada (`EXP00000072`):
+  `searchText=HRS8745`, el código interno de la Prensa Hidráulica, que no
+  aparece en su nombre ni en las descripciones. La pantalla muestra
+  `FAL00000001` y `FAL00000002`; el Excel, leído dentro del navegador
+  (`fetch` y `DecompressionStream`, sin descargar), tenía 0 filas.
+- Push de 13 commits (de `6414798` a `5879d91`): CI #60 en verde (2m 38s).
+  Vercel desplegó solo (estado de `5879d91` pendiente 00:05:57 y completado
+  00:07:42 UTC). Antes de abrir las pantallas se comprobó, con el HTML
+  obtenido por `fetch` (que no ejecuta JavaScript ni hace prefetch), que la
+  URL de rama servía el build nuevo: cambió el `buildId`
+  (`Vw5EaevsPDIYvVqvIJ3w6`), los enlaces de exportación tenían el orden de
+  atributos de un `<a>` y `staff?from=2026-7-5` ya no contenía `PLA00000001`.
+- «Después» con el mismo procedimiento: **18 de 18 hashes iguales a los
+  esperados y el mismo sello**; las 3 señales cambiaron a la pantalla de su
+  fecha bien escrita y nada más. El historial siguió en `EXP00000072` tras
+  recorrer las tres pantallas: abrirlas ya no registra exportaciones.
+- D1 después, con una segunda exportación autorizada (`EXP00000073`): el
+  Excel trae 2 filas, `FAL00000002` y `FAL00000001`, con los mismos
+  encabezados. El archivo es igual a la pantalla.
+
+| # | Caso | Antes (`bc5afb1`) | Después (`5879d91`) |
+|---|---|---|---|
+| S1 | `staff?from=2026-7-5` | Como sin filtros: la planilla `PLA00000001` | Como `from=2026-07-05`: sin planillas |
+| S2 | `profitability?from=2026-10-8` | Como sin filtros: 5 costeos | Como `from=2026-10-08`: 3 costeos |
+| S3 | `audit?from=2026-10-9&to=2026-10-11` | Desde el inicio hasta el 11/10 | Como `from=2026-10-09&to=2026-10-11` |
+| D1 | Exportar mantenimiento con `searchText=HRS8745` | `EXP00000072`: 0 filas | `EXP00000073`: 2 filas, las de la pantalla |
+| — | Recorrer personal, rentabilidad y auditoría | 45 exportaciones fantasma | Ninguna |
+| P1–P13, R1 y R2 | Pantallas con fechas válidas o sin fechas y rechazos con los nombres propios | — | Idénticas |
+
+No se probaron otros roles: el grupo no cambia permisos, rutas ni acciones.
+Datos que deja la verificación en staging: `EXP00000072` y `EXP00000073`
+(autorizadas) y las 45 exportaciones fantasma de `EXP00000027` a `EXP00000071`,
+que el responsable decidió conservar como evidencia junto con las 17 anteriores
+(62 de 73, cada una con su entrada de bitácora). Se reconocen por `"_rsc"` en
+`parametros`: `tmp/g4-diff/limpieza-fantasmas-staging.sql` las borraría con una
+guarda de conteo, y `conteo-fantasmas-produccion.sql` cuenta, solo leyendo, las
+de producción después de integrar el grupo en `main`. La evidencia está en
+`tmp/g4-diff/staging-antes.json`, `despues-esperado.json`,
+`staging-despues.json` y `staging-exportaciones.json` (ignorados); el «después»
+se copió por programa de `despues-esperado.json`, porque el navegador confirmó
+su sello.
 
 ## Secuencia de próximas entregas
 
@@ -2153,7 +2224,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
-| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | En curso (10 fixes en local; falta publicar y verificar en staging) |
+| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Verificado en staging (CI #60 verde; 18 de 18 observaciones como se predijo, D1 reproducido antes y no después); falta integrarlo en `main` |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
