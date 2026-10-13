@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { APP_ROLES, canAccessDashboardRoute } from "@/lib/permissions";
+import { APP_ROLES, canAccessDashboardRoute, getMenuForRole } from "@/lib/permissions";
 
 describe("canAccessDashboardRoute", () => {
   it("permite a ADMIN acceder a rutas de todos los modulos", () => {
@@ -79,5 +79,24 @@ describe("canAccessDashboardRoute", () => {
 
   it("normaliza barras finales sin cambiar el resultado", () => {
     expect(canAccessDashboardRoute(APP_ROLES.SELLER, "/dashboard/commercial/")).toBe(true);
+  });
+});
+
+describe("galeria de componentes", () => {
+  it("solo ADMIN entra, aunque /dashboard este abierto a todos los roles", () => {
+    expect(canAccessDashboardRoute(APP_ROLES.ADMIN, "/dashboard/gallery")).toBe(true);
+    expect(canAccessDashboardRoute(APP_ROLES.SELLER, "/dashboard/gallery")).toBe(false);
+    expect(canAccessDashboardRoute(APP_ROLES.WORKSHOP_MASTER, "/dashboard/gallery")).toBe(
+      false,
+    );
+    expect(canAccessDashboardRoute(APP_ROLES.SELLER, "/dashboard/gallery/")).toBe(false);
+  });
+
+  it("no aparece en el menu de ningun rol", () => {
+    for (const role of Object.values(APP_ROLES)) {
+      expect(getMenuForRole(role).map((route) => route.href)).not.toContain(
+        "/dashboard/gallery",
+      );
+    }
   });
 });
