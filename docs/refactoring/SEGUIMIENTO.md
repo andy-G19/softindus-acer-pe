@@ -1937,13 +1937,15 @@ Límites:
 
 ## Grupo 4 de fixes — Divergencias entre pantalla y exportación
 
-Fecha: 2026-10-12. Estado: verificado en staging el 2026-10-12; falta
-integrarlo en `main`. 9 commits de `b03ed6d` a `7e7a1d9`, el registro
-`3de09c5`, el fix `4b5fbd3` (hallazgo de la foto del «antes») y su registro
-`5879d91`, publicados sobre `bc5afb1` junto con `6414798` (CI #60 en verde, 2m
-38s), con foto del «antes» tomada antes del push: D1 y las fechas mal escritas
-se reprodujeron en staging y ninguno se repitió después, y la foto descubrió el
-prefetch de las exportaciones. Es el último de los cuatro grupos de fixes del
+Fecha: 2026-10-12. Estado: cerrado el 2026-10-12. 9 commits de `b03ed6d` a
+`7e7a1d9`, el registro `3de09c5`, el fix `4b5fbd3` (hallazgo de la foto del
+«antes») y su registro `5879d91`, publicados sobre `bc5afb1` junto con
+`6414798` (CI #60 en verde, 2m 38s), con foto del «antes» tomada antes del
+push: D1 y las fechas mal escritas se reprodujeron en staging y ninguno se
+repitió después, y la foto descubrió el prefetch de las exportaciones. Cierre
+`3d10c09` (CI #61 en verde), integrado en `main` con el PR #20 (CI #62 en
+verde; merge commit `19a0bf4`, CI #63 en verde, 2m 27s). Es el último de los
+cuatro grupos de fixes del
 bloque de estabilización: corrige las divergencias entre pantalla y exportación
 que la entrega 5 conservó y documentó junto a ambas consultas (D1, D2 y las
 diferencias de fechas, forma y alias de personal, rentabilidad y auditoría).
@@ -2203,6 +2205,30 @@ de producción después de integrar el grupo en `main`. La evidencia está en
 se copió por programa de `despues-esperado.json`, porque el navegador confirmó
 su sello.
 
+### Integración en `main` y conteo de producción
+
+- El primer despliegue de producción del merge commit `19a0bf4` falló en
+  Vercel (estado «Vercel» `failure` a las 00:37:35 UTC): `next/font/google` no
+  pudo descargar Oswald durante el build. El árbol de `19a0bf4` es idéntico al
+  de `3d10c09` (`147a21ef`), que staging desplegó bien, y el CI #63 compiló en
+  verde: la causa fue la descarga de la fuente, no el código. El responsable lo
+  redesplegó dos veces y los dos despliegues terminaron en `success` (04:12:52
+  y 04:13:55 UTC). La solución de fondo, alojar las fuentes con
+  `next/font/local`, va en la entrega 8.
+- Conteo de exportaciones fantasma en producción, ejecutado por el responsable
+  el 2026-10-12 después del redespliegue con
+  `tmp/g4-diff/conteo-fantasmas-produccion.sql` (solo lectura): 33 fantasmas y
+  6 exportaciones reales de 39. El primer fantasma es del 2026-07-13 23:54:36
+  UTC y el último del 2026-08-01 18:36:51 UTC: ninguno desde entonces. Por
+  reporte: auditoría 15 en Excel y 9 en PDF, personal y planillas 5 en Excel y
+  4 en PDF, y rentabilidad 0. La bitácora tiene 33 entradas asociadas, una por
+  fantasma.
+- El responsable decidió conservarlos y documentarlos, como los 62 de staging:
+  la bitácora de producción es de solo agregar y los fantasmas se identifican
+  con precisión por `"_rsc"` en `parametros`. Si la pista B necesita mostrar
+  limpio el historial de exportaciones, se marcarán o se filtrarán con su
+  propio plan y prueba, nunca con un borrado manual.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -2224,7 +2250,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
-| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Verificado en staging (CI #60 verde; 18 de 18 observaciones como se predijo, D1 reproducido antes y no después); falta integrarlo en `main` |
+| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
