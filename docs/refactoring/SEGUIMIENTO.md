@@ -1938,15 +1938,15 @@ Límites:
 ## Grupo 4 de fixes — Divergencias entre pantalla y exportación
 
 Fecha: 2026-10-12. Estado: hecho en local; falta publicar y verificar en
-staging. 9 commits de `b03ed6d` a `7e7a1d9` y este registro, sobre `6414798`
-(registro de la integración del G3, que viaja con este grupo). Es el último
-de los cuatro grupos de fixes del bloque de estabilización: corrige las
-divergencias entre pantalla y exportación que la entrega 5 conservó y
-documentó junto a ambas consultas (D1, D2 y las diferencias de fechas, forma
-y alias de personal, rentabilidad y auditoría). Desde este grupo, en los
-cuatro reportes la pantalla y su exportación construyen el filtro con la
-misma función y leen los mismos parámetros: los que genera el enlace de la
-pantalla.
+staging. 9 commits de `b03ed6d` a `7e7a1d9`, el registro `3de09c5`, el fix
+`4b5fbd3` (hallazgo de la foto del «antes») y esta actualización, sobre
+`6414798` (registro de la integración del G3, que viaja con este grupo). Es el
+último de los cuatro grupos de fixes del bloque de estabilización: corrige las
+divergencias entre pantalla y exportación que la entrega 5 conservó y documentó
+junto a ambas consultas (D1, D2 y las diferencias de fechas, forma y alias de
+personal, rentabilidad y auditoría). Desde este grupo, en los cuatro reportes
+la pantalla y su exportación construyen el filtro con la misma función y leen
+los mismos parámetros: los que genera el enlace de la pantalla.
 
 | Hallazgo | Defecto | Arreglo |
 |---|---|---|
@@ -1967,6 +1967,7 @@ pantalla.
 | d81b746 | fix | Personal exporta con el filtro y los parámetros de la pantalla. |
 | 2d91741 | fix | Auditoría exporta con el filtro y los parámetros de la pantalla. |
 | 7e7a1d9 | fix | La ruta valida el rango con los parámetros de fecha de cada reporte. |
+| 4b5fbd3 | fix | Los botones de exportación de personal, rentabilidad y auditoría pasan de `<Link>` a `<a>`: el prefetch de Next registraba exportaciones (hallazgo de la verificación). |
 
 Diseño:
 
@@ -2035,13 +2036,16 @@ Evidencia:
    invertidas, y las consultas exactas de `route.test.ts`) y 134 pantallas.
    Resultado final: exportaciones, 384 idénticas y 229 explicadas (alias 134,
    forma 130, ruta 58, D1 12 y D2 2, contando cada combinación en cada una de
-   sus categorías); pantallas, 59 idénticas y 75 de fechas, con el HTML
-   idéntico en las 134. Paridad de los enlaces de las pantallas: de 98
+   sus categorías); pantallas, 75 de fechas y 59 con las mismas consultas,
+   con el HTML idéntico en las 134 salvo el orden de los atributos de los
+   enlaces de exportación de las 3 pantallas que pasan a `<a>` (categoría
+   «L» desde `4b5fbd3`). Paridad de los enlaces de las pantallas: de 98
    distintos, 30 iguales y 6 rechazados a 0 distintos, 128 iguales y 6
    rechazados. Cada commit agregó solo su categoría y, como control, el
    diferencial sin el fix de cada commit falla. Los archivos y los efectos son
    idénticos salvo donde cambia el estado HTTP.
-4. 36 mutaciones, 4 por `fix`, todas detectadas.
+4. 38 mutaciones, todas detectadas: 4 por cada uno de los 9 primeros `fix`
+   y 2 del de prefetch.
 
 | Mutación | Resultado |
 |---|---|
@@ -2050,13 +2054,15 @@ Evidencia:
 | Fechas (×3): volver a `lte`, ignorar «hasta», cruzar las fechas, recortar o vaciar una fecha | Todas fallan; la de las asistencias de personal solo por el snapshot de la página, porque la exportación no consulta asistencias |
 | Parámetros (×3): volver a aceptar un alias, volver al objeto plano, leer un parámetro con otro nombre, ignorar un parámetro | Todas fallan |
 | Ruta: volver a `dateFrom` o `from`, declarar mal los nombres de personal, leer «hasta» con el nombre de «desde», ignorar el registro | Todas fallan |
+| Prefetch: volver a `<Link>`, `<Link prefetch={false}>` | Ambas fallan |
 
 Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
-en Windows: 1.583, 1.586, 1.589, 1.594, 1.599, 1.601, 1.603, 1.605 y 1.641
-pruebas según el commit; 100 archivos de prueba al final. El código de
-producción cambia en 12 archivos de `src` (+129 y −190); las pruebas, en 2
-(+462 y −5), y los snapshots, en 4 (+283 y −220). `npm run
-refactor:inventory` analiza 541 archivos y mantiene 127 páginas, 136
+en Windows: 1.583, 1.586, 1.589, 1.594, 1.599, 1.601, 1.603, 1.605, 1.641
+y 1.650 pruebas según el commit; 101 archivos de prueba al final. El código
+de producción cambia en 12 archivos de `src` (+141 y −202) y en
+`eslint.config.mjs` (+23); las pruebas, en 3 (+532 y −5), y los snapshots,
+en 4 (+301 y −238). `npm run refactor:inventory` analiza 542 archivos y
+mantiene 127 páginas, 136
 formularios y 48 archivos de acciones; desplaza la línea del formulario de
 las tres páginas.
 
@@ -2069,13 +2075,53 @@ las tres páginas.
 | Fecha mal escrita en la URL de esas tres pantallas (`2026-7-5`) | La pantalla la ignora y el archivo la interpreta | Las dos la interpretan |
 | URL de exportación escrita a mano con `dateFrom`, `operatorId`, `searchText`... en personal, rentabilidad o auditoría | Filtra por esos nombres, antes que por los de la pantalla | No filtran |
 | URL de exportación con un rango invertido en nombres que el reporte no lee | 400 | Se ignoran: 200 |
-| Enlaces de exportación de las pantallas, HTML y permisos | — | Sin cambios |
+| Abrir la pantalla de personal, rentabilidad o auditoría (build de producción) | Registra exportaciones fantasma con `_rsc` en `exportacion_datos` y en la bitácora | No registra nada |
+| Clic en «Exportar» de esas pantallas | Dos registros: uno con `_rsc` y la descarga real | Uno |
+| Enlaces de exportación de las pantallas, aspecto y permisos | — | Sin cambios (el HTML solo cambia el orden de los atributos de esos enlaces) |
 
 Hallazgo de la paridad, registrado y no corregido: con «desde» posterior a
 «hasta», una pantalla de reportes muestra la tabla vacía y su enlace de
 exportación responde 400 con un JSON (6 casos de personal en la batería): el
 usuario que exporta ve un error en lugar de un archivo vacío. Es de
 experiencia de usuario y corresponde a la pista B.
+
+Hallazgo de la foto del «antes», corregido en `4b5fbd3`: las pantallas de
+personal, rentabilidad y auditoría no eran de solo lectura. Sus botones de
+exportación eran `<Link>` de `next/link` (desde `87ccb97`, 2026-07-02), y en
+el build de producción Next hace prefetch de cada `<Link>` visible con un GET
+a su URL (`?_rsc=…`). Como esa URL es la ruta de exportación, cada visita
+registraba exportaciones en `exportacion_datos` y en la bitácora y generaba
+los archivos, y un clic en «Exportar» registraba dos: el GET con `_rsc` de la
+navegación de cliente y la descarga real. Las otras 6 pantallas usan `<a>`.
+Nadie lo había visto: `npm run dev` no hace prefetch automático, el HTML de
+un `<Link>` es igual al de un `<a>` y la verificación de la entrega 5 en
+producción leyó el HTML con `fetch`, que no ejecuta JavaScript. La foto del
+«antes» de este grupo, tomada recorriendo esas pantallas en el navegador,
+registró 45 exportaciones fantasma en staging (`EXP00000027` a
+`EXP00000071`) sin autorización, porque se suponía que esas pantallas solo
+leían. En total, staging tiene 62 exportaciones con `_rsc` de 72, desde
+`EXP00000001`; producción tiene el mismo defecto desde julio.
+
+- Arreglo: los botones pasan a `<a>`, como en los otros 6 reportes; «Limpiar»
+  sigue en `<Link>` porque lleva a una página. `<Link prefetch={false}>` no
+  basta: el clic también hace el GET con `_rsc`.
+- Prueba: `reports/export-links.test.ts` renderiza las 9 pantallas de
+  reportes con un doble de `next/link` que marca sus enlaces y exige que
+  ningún enlace a `/api/` sea un `<Link>`; fallaba en las 3.
+- Regla de ESLint: `no-restricted-syntax` prohíbe `<Link>` con
+  `buildReportExportHref`, con un literal o con una plantilla que empieza por
+  `/api/`. Vive en el mismo bloque que la regla de la entrega 3, porque un
+  segundo bloque la reemplazaría. Se comprobó por entrada estándar: 5 de 5
+  casos y los 2 botones de la página anterior.
+- Snapshots: 9 de HTML, 18 líneas, solo el orden de los atributos de los
+  enlaces de exportación (comprobado por programa ordenando los atributos).
+  El diferencial lo clasifica como «L» en las 3 pantallas.
+- 2 mutaciones detectadas: volver a `<Link>` y `<Link prefetch={false}>`.
+- Los fantasmas se identifican por `"_rsc"` en `exportacion_datos.parametros`
+  (una exportación real nunca lo lleva) y su entrada de bitácora, por
+  `entidad_afectada = 'exportacion_datos'` e `id_registro_afectado`; ninguna
+  tabla referencia a `exportacion_datos`. La limpieza de staging y el conteo
+  de producción se deciden en la verificación.
 
 Límites:
 
@@ -2107,7 +2153,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G1 | Fix | Reglas dentro de la transacción y bloqueo de fila (H1, H3, H4, H8, H9, H10) | Cerrado (CI #51 verde en main; H3, H1 y H4 reproducidos antes y no después en staging) |
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
-| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) | En curso (9 fixes en local; falta publicar y verificar en staging) |
+| G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | En curso (10 fixes en local; falta publicar y verificar en staging) |
 | 8 | B | Base visual y galería | Pendiente |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
@@ -2134,7 +2180,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 123 / 123 | 7 y G3 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 100 / 1.641 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 101 / 1.650 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -2147,6 +2193,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Defectos del puente `?toast=` fijados por la caracterización / entradas declaradas sin emisor | 3 / 1 | 0 / 0 | G3 |
 | Reportes cuyo enlace de exportación filtra distinto que su pantalla | 4 de 9 | 0 de 9 | G4 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
+| Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -2220,14 +2267,16 @@ e `import` de las librerías de notificaciones 2, medidos de nuevo. Los tres
 archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
 901; 696, 643 y 614).
 
-Actualizado en el grupo 4 de fixes (2026-10-12) sobre `7e7a1d9`: pruebas 100 /
-1.641, `route.ts` 199 líneas (186 antes: la firma y el comentario de
-`extractReportDateRange`) y dos filas nuevas medidas sobre `6414798`, su
+Actualizado en el grupo 4 de fixes (2026-10-12) sobre `4b5fbd3`: pruebas 101 /
+1.650, `route.ts` 199 líneas (186 antes: la firma y el comentario de
+`extractReportDateRange`) y tres filas nuevas medidas sobre `6414798`, su
 línea base: mantenimiento, rentabilidad, personal y auditoría exportaban con
 otro filtro que su pantalla (98 de los 134 enlaces de la batería del
 diferencial), y la exportación aceptaba 17 nombres que ninguna pantalla
 genera: 15 en los exportadores de personal, rentabilidad y auditoría, y
-`from` y `to` en la validación de la ruta de los otros 6 reportes. Las demás
+`from` y `to` en la validación de la ruta de los otros 6 reportes; y 6
+enlaces a `/api/` usaban `next/link`: los dos botones de exportación de
+personal, rentabilidad y auditoría. Las demás
 no cambian: páginas con Prisma directo 0, `auth()` directo 0, copias locales
 de conversión y formato 0 e `import` de las librerías de notificaciones 2,
 medidos de nuevo. Los tres archivos más grandes de `src` y los de producción
@@ -2255,6 +2304,9 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
   `movimiento_inventario` en el código de producción (6 desde el grupo 2) y,
   entre ellas, las que toman el valor de una lectura hecha antes de la
   escritura sin bloquear el material.
+- Los enlaces a `/api/` con `next/link` cuentan las aperturas de `<Link>` cuyo
+  `href` es una llamada a `buildReportExportHref` o una URL que empieza por
+  `/api/`; desde el grupo 4 lo impone una regla de ESLint.
 - Los reportes que exportan con otro filtro se miden con la paridad: la
   página real, su enlace «Exportar Excel» y la ruta deben dar el mismo `where`
   en la consulta principal (`screen-parity.test.ts` para los casos fijos y el
