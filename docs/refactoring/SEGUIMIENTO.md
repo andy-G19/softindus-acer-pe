@@ -2229,6 +2229,249 @@ su sello.
   limpio el historial de exportaciones, se marcarán o se filtrarán con su
   propio plan y prueba, nunca con un borrado manual.
 
+## Entrega 8 — Base visual y galería
+
+Fecha: 2026-10-13 y 2026-10-14. Estado: en curso. Hechos C0 a C12, 13 commits
+de `0ad4150` a `aada765`. Las tandas 1 (C0 a C3) y 2 (C4 a C7) están
+publicadas y verificadas en staging: CI #64 y #65 en verde, y 10 de 10 y 24 de
+24 huellas visuales como se predijo. Falta la tanda 3 (C8 a C13): foto del
+«antes», publicación y «después», recorrido de teclado y móvil de la galería,
+aprobación del aspecto de cada componente nuevo y pruebas con los 3 roles; su
+evidencia y el cierre van en el commit siguiente. Es la primera entrega de la
+pista B: construye la base visual y la prueba en una galería interna sin
+cambiar ninguna pantalla; las pantallas la adoptan en las entregas 9 y 10.
+
+Decisiones del responsable:
+
+- Ninguna pantalla existente cambia en esta entrega: la base se construye y
+  se prueba en la galería.
+- La galería es solo para ADMIN y no aparece en el menú.
+- El rango de fechas invertido de los reportes (hallazgo del grupo 4) se
+  corrige en la entrega 10; esta solo crea `DateRangeFields`.
+- Fuentes solo del subconjunto latino, alojadas con su licencia OFL.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 0ad4150 | docs | Integración del grupo 4 en `main` y conteo de exportaciones fantasma de producción. |
+| d3cc557 | fix | Fuentes con `next/font/local`: los mismos archivos que servía Google (el build de producción del grupo 4 falló al descargar Oswald). |
+| 9268a6f | test | Caracterización del HTML completo, con clases, de 64 casos de las primitivas y 4 superficies. |
+| 7546379 | feat | Galería `/dashboard/gallery`, solo ADMIN y fuera del menú. |
+| fee8ee1 | refactor | `globals.css` se separa en 7 hojas de `src/styles`; el CSS compilado es idéntico byte a byte. |
+| b30aa08 | refactor | Se retiran 24 de las 49 reglas `industrial-dark` y 2 selectores de una regla viva: ningún elemento podía recibirlas. |
+| 667eb70 | refactor | Tokens semánticos definidos una sola vez: sin el `.dark` duplicado, con estados, sombras, capas y movimiento. |
+| 9102e3b | refactor | Los 25 colores literales de 11 componentes pasan a tokens; una regla de ESLint los prohíbe en los `.tsx`. |
+| b588465 | feat | `Button` con estado pendiente, tipos que exigen `aria-label` en los tamaños de icono, `Spinner` y `SubmitButton`. |
+| 259c618 | feat | `Field`, `FieldError` compartido y estilos de solo lectura. |
+| 3fb247d | feat | `Skeleton`, `LoadingState`, `AlertDialog` y `ConfirmDialog`. |
+| 0aae1d5 | feat | `Dialog` y `Sheet` con cuerpo desplazable y pie fijo. |
+| aada765 | feat | `FilterBar`, `DateRangeFields` y filas de carga para tablas. |
+
+Diseño:
+
+- Fuentes. Geist, Oswald y JetBrains Mono viven en `src/app/fonts` con los
+  mismos `.woff2` del subconjunto latino que servía Google, copiados del build
+  local sin volver a descargarlos, con su licencia OFL y un README de
+  procedencia. `next/font/local` toma el nombre de la familia de la constante
+  que la declara; `declarations: font-family` cambiaría la regla `@font-face`
+  pero no la variable CSS. Oswald es variable: conserva una cara por peso
+  sobre el mismo archivo para que el 650 siga resolviendo en 700. Una prueba
+  fija el hash de cada archivo y su licencia, y una regla de ESLint prohíbe
+  volver a `next/font/google`.
+- Hoja global. `globals.css` solo importa, en orden: `tokens`, `base`,
+  `brand`, los adaptadores de Toastify y SweetAlert2, `patterns` y el
+  adaptador temporal `legacy-industrial-dark`. El orden de las importaciones
+  es el de las reglas y decide su prioridad: `global-stylesheet.test.ts` lo
+  fija e impide hojas sin importar.
+- Tokens. `tokens.css` define cada token una vez en `:root` (la aplicación es
+  solo oscura; la clase `.dark` solo activa las variantes `dark:` de shadcn) y
+  `@theme inline` expone a Tailwind los que se usan como utilidades. Los
+  estados (`--success`, `--warning`, `--info`) dan significado a la paleta de
+  marca. `tokens.test.ts` exige definición única, que cada `var()` apunte a un
+  token y que fuera de `tokens.css` no haya colores literales.
+- Galería. Una muestra rotulada por estado de cada componente compartido, con
+  datos ficticios. `gallery-page.test.ts` fija su contrato: solo ADMIN, sin
+  Prisma, sin acciones del servidor (ningún formulario con `action` de
+  función), sin enlaces a `/api/` y fuera del menú. La ruta tiene su propia
+  entrada en `dashboardRoutes`: sin ella heredaría los permisos de
+  `/dashboard`.
+- Botones (C8). `pending` deshabilita, marca `aria-busy` y muestra un
+  `Spinner` decorativo. Los atributos pendientes van después de las props: sin
+  `pending` el HTML no cambia y con él ganan a un `disabled={false}` del
+  formulario. Los tipos son uniones discriminadas: un tamaño de icono sin
+  `aria-label` o un enlace (`asChild`) con `pending` no compilan.
+  `SubmitButton` toma el estado de `useFormStatus`; su `DistributiveOmit`
+  evita que un `Omit` simple pierda el `aria-label` obligatorio.
+- Campos (C9). `Field` entrega el control a una función hija con `id`,
+  `required`, `disabled`, `readOnly`, `aria-invalid` (solo con error) y
+  `aria-describedby` (solo la ayuda y el error que existen); con `Slot` o
+  `cloneElement`, un `aria-describedby` propio del hijo borraría en silencio
+  la asociación. El obligatorio es un asterisco `aria-hidden` más `required`
+  en el control. `FieldError` reproduce el HTML de las 14 copias locales y,
+  con `size="sm"`, el de las 2 de los catálogos. Solo lectura usa el
+  atributo (`[&[readonly]]`): en Chromium 152, `:read-only` (la variante
+  `read-only:` de Tailwind) coincide con todo `<select>` y con los `input`
+  deshabilitados, de archivo y casillas. Un `<select>` no admite solo lectura:
+  se muestra la opción en un campo de solo lectura y el valor viaja en un
+  `input` oculto, como ya hacía `user-form`.
+- Carga y confirmación (C10). `Skeleton` repite las clases de
+  `production/loading.tsx` y es decorativo; `LoadingState` se anuncia con
+  `role="status"`. `ConfirmDialog`, sobre el `AlertDialog` de Radix, exige en
+  los tipos la entidad, la consecuencia y el verbo; si `onConfirm` devuelve
+  una promesa, espera con el botón pendiente y no deja cancelar. `showConfirm`
+  y `ConfirmDeleteButton` siguen con SweetAlert2 hasta la entrega 11. El token
+  `--overlay` es el velo que pone hoy SweetAlert2. Las animaciones de
+  `tw-animate-css` no miran `prefers-reduced-motion` y sus variantes
+  `data-open:` van después de `motion-reduce:` en el CSS, así que
+  `motion-reduce:animate-none!` lleva `!important`.
+- Ventanas (C11). `Dialog` y `Sheet` (el mismo Dialog de Radix anclado a un
+  lado, que reutiliza sus piezas) tienen encabezado y pie fijos y solo
+  desplazan el cuerpo; en el teléfono ocupan la pantalla. La X de cerrar va
+  al final del DOM para que el foco inicial caiga en el primer campo. Un
+  formulario envuelve cuerpo y pie (`flex min-h-0 flex-1 flex-col`) para que
+  `SubmitButton` funcione.
+- Listados (C12). `FilterBar` es un formulario GET con `role="search"` y una
+  rejilla `auto-fit` de columnas de 12rem; como contenedor de consultas
+  (`@container`), el rango ocupa dos columnas solo si la barra tiene sitio,
+  aunque esté dentro de un panel. `DateRangeFields` conserva los nombres de la
+  URL de cada pantalla (`from`/`to`, `dateFrom`/`dateTo`, `desde`/`hasta`) y,
+  con «desde» posterior a «hasta», muestra el mensaje de la ruta de
+  exportación (`src/lib/date-range.ts`, que también usa `validateDateRange`)
+  y bloquea el envío con `setCustomValidity`. «Hasta» lleva `min`; «Desde» no
+  lleva `max`, porque el navegador lo marcaría inválido con su mensaje
+  genérico. `TableLoadingRows` anuncia la carga con un `LoadingState` oculto
+  dentro de la primera celda: un `role="status"` en una fila rompería la
+  tabla.
+- Pruebas sin navegador. Radix no renderiza portales en el servidor: un doble
+  de `radix-ui` vuelve el `Portal` un paso directo y abre la ventana, y así se
+  prueban en Node el `role`, las asociaciones, el orden de los botones y el
+  estado pendiente. El foco, Esc, la devolución del foco y la validación al
+  escribir se prueban a mano en la galería; si conviene Playwright se decide
+  en la entrega 9.
+
+Evidencia:
+
+1. Caracterización con clases (C2). El arnés de páginas quita `class`,
+   `style` y `data-slot`, así que ninguna prueba protegía el aspecto.
+   `primitives.test.ts` y `app-surfaces.test.ts` fijan el HTML completo, una
+   etiqueta por línea: 64 casos de las primitivas (89 al final de C12) y 4
+   superficies. Cada cambio de un snapshot fue a propósito: C7 en 33 líneas,
+   todas con solo el reemplazo previsto; C9 en 11 entradas que solo insertan
+   los tokens de clase nuevos (`verify_snap_c9.py` falla con cualquier otro
+   cambio), y C8, C10, C11 y C12 solo agregan entradas. Los snapshots de las
+   páginas no cambian en ningún commit.
+2. CSS compilado, commit a commit (`tmp/e8-diff`, ignorado): C1, idéntico
+   salvo las reglas de fuentes (`css_diff.py --sin-fuentes`); C3 solo gana las
+   8 utilidades de la galería; C4, idéntico byte a byte; C5 pierde
+   exactamente los 94 selectores; en C6 cada declaración conserva su valor al
+   resolver `var()` con los tokens (`css_resolve_diff.py`); de C8 a C12 solo
+   se agregan 4, 2, 37, 38 y 4 entradas (`css_added.py`, que exige que el CSS
+   anterior sea una subsecuencia del nuevo a nivel de declaración, porque
+   Tailwind v4 agrupa las utilidades en un `@layer`; se comprobó que falla
+   entre C6 y C7).
+3. Mutaciones: C8, 11 de 11; C9, 15 de 15; C10, 10 de 10; C11, 9 de 9 (la X
+   sin nombre la rechaza `tsc` por los tipos de C8); C12, 10 de 10. Dos
+   sobreviven a propósito porque necesitan eventos del navegador y se prueban
+   a mano: Esc durante el pendiente de `ConfirmDialog` y la validación al
+   escribir de `DateRangeFields`. Una de C12 mostró un hueco que ya no existe:
+   cambiar el texto del rango invertido de la ruta de exportación solo lo
+   detecta la prueba nueva de `date-range`. De C1 a C6 se mutaron copias de
+   3, 2, 3, 1, 1 y 3 archivos (`tmp/e8-diff/mut-c1` a `mut-c6`); su conteo
+   no quedó registrado.
+4. Huella visual en staging, antes y después de cada tanda (abajo).
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.650, 1.658, 1.726, 1.735, 1.738, 1.741, 1.745, 1.745, 1.764,
+1.788, 1.808, 1.820 y 1.847 pruebas; de 101 a 116 archivos de prueba. De
+`3d10c09` a `aada765`, el código de producción de `src` cambia en 43 archivos
+(+2.539 y −49), las hojas en 8 (+751 y −856), `eslint.config.mjs` (+81 y
+−30), las pruebas en 16 (+1.782 y −1) y los snapshots en 6 (+3.468 y −4), y
+se agregan 7 archivos de fuentes y licencias. `npm run refactor:inventory`
+analiza 583 archivos y cuenta 128 páginas (la galería), 138 formularios
+(`FilterBar` y la ventana de ejemplo) y 48 archivos de acciones.
+
+### Huella visual
+
+- `tmp/e8-diff/huella.js` (ignorado) se pega entero en cada página desde el
+  navegador integrado: la CSP impide `eval` y `X-Frame-Options: DENY`, los
+  iframes. Por cada elemento mide su geometría, ~55 propiedades calculadas
+  (`getComputedStyle`) y su texto propio, guarda la captura comprimida en
+  IndexedDB y devuelve su SHA-256; en el «después» enumera los elementos y
+  propiedades distintos.
+- Normaliza el nombre de la familia de fuente (cambia con `next/font/local`),
+  excluye `<vercel-*>` (la barra de comentarios de Vercel cambia de alto
+  recién iniciada su sesión), marca como variable la geometría de los
+  elementos animados y no mide si el puntero está sobre la página, porque un
+  `:hover` cambiaría la captura. La galería se mide por sección, con la
+  geometría relativa a la sección.
+- Cada página se mide a 1281 px (1280 × 800, `dpr` 1,19) y a 376 px (el
+  preset móvil, `dpr` 2), con ADMIN salvo el login.
+- La evidencia son los hashes de `tmp/e8-diff/staging-*-t*.json`, con su
+  sello recalculado en Python: si se cierra el panel del navegador se pierden
+  la sesión de Vercel y la IndexedDB.
+- Corrección pendiente para la tanda 3 (v3): los elementos sin caja (una
+  `<option>` de un select cerrado, un `input` oculto) se registrarán como
+  «sin caja», no con coordenadas que solo siguen a su sección.
+
+### Publicación, CI y verificación en staging
+
+Tanda 1 (C0 a C3):
+
+- «Antes» el 2026-10-13, de 20:38 a 20:43 UTC, sobre `3d10c09` (`buildId`
+  `YBnn0mxDYWrXZJus4_F-a`): 10 huellas (inicio, clientes, cliente nuevo,
+  materiales, `OTR00000006`, resumen de caja y reporte de mantenimiento a
+  1281; inicio, clientes y `OTR00000006` a 376) con el sello `0a3202a2…`, y
+  tres controles: dos páginas medidas otra vez dan el mismo hash y una
+  mutación de la fuente lo cambia.
+- Push de 4 commits (`0ad4150` a `7546379`): CI #64 en verde (2m 17s).
+  Vercel desplegó solo (23:42:38 UTC) y cambió el `buildId`
+  (`xcp2HtyY9nkvR-8OFtM89`).
+- «Después»: 10 de 10 huellas iguales y el mismo sello. La primera de
+  `/dashboard` difirió solo en `<vercel-live-feedback>`, que medía 15,13 px de
+  alto recién iniciada la sesión de Vercel; la repetición dio el hash del
+  «antes», y la v2 de la huella excluye esa barra. Las tres fuentes se sirven
+  con el mismo SHA-256, con otro nombre de archivo. La galería responde 200,
+  no aparece en el menú, no enlaza a `/api/` y no desborda en el teléfono; la
+  consola solo muestra errores *report-only* de la CSP por `vercel.live`,
+  ninguno de la aplicación.
+
+Tanda 2 (C4 a C7):
+
+- «Antes» con la huella v2 sobre `7546379`: 22 capturas con sesión (las 10
+  pantallas y las 6 secciones de la galería a las dos anchuras) con el sello
+  `dd3444ec…`, y 2 del login sin sesión. Dos capturas del login se
+  descartaron porque se tomaron en producción: con sesión del ERP activa,
+  `/login` de staging redirige a `/dashboard` con el host de `AUTH_URL` y de
+  ahí al login de producción (solo lectura).
+- Predicción escrita antes del push: las 10 pantallas idénticas; en la
+  galería cambia solo «Fundamentos» (C6); en el login cambia un solo
+  elemento, el velo `bg-background/45`, de un `lab()` que precalculaba el
+  minificador a un `oklab()` que calcula el navegador, con el mismo color.
+- Push de 4 commits (`fee8ee1` a `9102e3b`): CI #65 en verde (2m 32s).
+  Vercel desplegó solo (03:08:11 UTC del 2026-10-14) y cambió el `buildId`
+  (`6CyuJKcZl8zsdZxaMKzQT`).
+- «Después»: 24 de 24 como se predijo. Las 10 pantallas, idénticas. En la
+  galería, «Fundamentos» crece de 1.003 a 1.443 px de alto y de 149 a 210
+  elementos; las otras 5 secciones no tienen diferencias de propiedades, solo
+  elementos sin caja que siguen a su sección y redondeos de hasta 0,01 px. En
+  el login, 1 elemento de 57 y 1 propiedad, exactamente la predicha;
+  pintados en un canvas dan los mismos píxeles (`[9, 11, 13, 115]` al 45 %).
+
+Tanda 3 (C8 a C13): pendiente; su evidencia va en el cierre.
+
+Lo que queda:
+
+| Pendiente | Dónde |
+|---|---|
+| 16 copias locales de `FieldError` (14 iguales a la compartida y 2 a su tamaño `sm`) | Entregas 9 y 10 |
+| 113 páginas con un `<main>` dentro del `<main>` del shell, y `production/loading.tsx` | Entregas 9 y 10 |
+| `user-form` nombra con `Label htmlFor="rol"` un control que no existe cuando el usuario se edita a sí mismo; 10 páginas de producción ponen `*` en el texto del `Label` y no tienen `htmlFor` | Entregas 9 y 10, con `Field` |
+| 43 formularios GET (41 barras de filtros y 2 de parámetros) con 27 combinaciones de clases; con el rango invertido, las pantallas de reportes muestran la tabla vacía sin aviso y su exportación responde 400 con un JSON (grupo 4) | Entrega 10, con `FilterBar` y `DateRangeFields` |
+| Elegir la etiqueta de estado: `StatusBadge` o `Badge` (la galería las muestra lado a lado con los mismos colores) | Responsable, en la tanda 3; se adopta en la entrega 10 |
+| Elegir el botón destructivo de las confirmaciones: el suave de las pantallas o el sólido de SweetAlert2 | Responsable, en la tanda 3 |
+| Un botón con foco que pasa a deshabilitado pierde el foco (también hoy, con `disabled={isPending}`); decidir `aria-disabled` | Entrega 9 |
+| Integrar `ConfirmDialog` con formularios y `useActionState`; decidir Playwright para foco y teclado | Entrega 9 |
+| SweetAlert2 (`showConfirm`, `showLoading`, `ConfirmDeleteButton`), el adaptador `legacy-industrial-dark` y `dropdown-menu.tsx`, que no tiene consumidores | Entrega 11 |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -2251,7 +2494,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
-| 8 | B | Base visual y galería | Pendiente |
+| 8 | B | Base visual y galería | En curso (C0 a C12 hechos; tandas 1 y 2 verificadas en staging, CI #64 y #65: 10 de 10 y 24 de 24 huellas como se predijo) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
@@ -2277,7 +2520,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 123 / 123 | 7 y G3 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 101 / 1.650 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 116 / 1.847 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -2291,6 +2534,14 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reportes cuyo enlace de exportación filtra distinto que su pantalla | 4 de 9 | 0 de 9 | G4 |
 | Nombres de parámetro que la exportación acepta sin que ninguna pantalla los genere | 17 | 0 | G4 |
 | Enlaces a `/api/` con `next/link` (su prefetch ejecuta la ruta) | 6 | 0 | G4 |
+| Colores literales en los `.tsx` de la interfaz | 25 | 0 (regla de ESLint) | 8 |
+| Colores literales en las hojas, fuera de `tokens.css` | 27 | 0 (prueba) | 8 |
+| Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
+| Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
+| Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
+| Copias locales de `FieldError` | 16 | 16 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 113 | 9 y 10 |
+| Combinaciones de clases distintas en los 43 formularios GET | 27 | 27 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -2379,6 +2630,18 @@ de conversión y formato 0 e `import` de las librerías de notificaciones 2,
 medidos de nuevo. Los tres archivos más grandes de `src` y los de producción
 no cambian (1.335, 1.161 y 901; 696, 643 y 614).
 
+Actualizado en la entrega 8 (2026-10-14) sobre `aada765`: pruebas 116 /
+1.847 y ocho filas nuevas medidas sobre `3d10c09`, su línea base. Los 27
+colores literales de las hojas bajan a 18 en `b30aa08`, porque 9 estaban en
+las reglas `industrial-dark` sin consumidores, y a 0 en `667eb70`; los 25 de
+los componentes, a 0 en `9102e3b`. Las tres últimas filas no se mueven en
+esta entrega: las cuentan para las entregas 9 y 10, que adoptan los
+componentes nuevos en las pantallas. Las demás no cambian: páginas con Prisma
+directo 0, `auth()` directo 0, copias locales de conversión y formato 0 e
+`import` de las librerías de notificaciones 2, medidos de nuevo. Los tres
+archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
+901; 696, 643 y 614).
+
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
 - Las definiciones de `toNumber`, `formatMoney` y `formatDate` cuentan
@@ -2414,6 +2677,25 @@ Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 - Las cargas de `usuario` completo cuentan la relación `usuario: true` bajo un
   `include`. Un `grep` de `usuario: true` también encuentra `id_usuario` y la
   columna `usuario` dentro de un `select`, que no cargan la fila completa.
+- Los colores literales de los `.tsx` usan el patrón de la regla de ESLint
+  (`colorLiteralPattern` en `eslint.config.mjs`: clases de la paleta de
+  Tailwind, `bg-white` y `bg-black`, hexadecimales y funciones de color). Los
+  de las hojas usan el de `tokens.test.ts` fuera de los bloques que definen
+  tokens (`:root`, `.dark` y `@theme`) y sin contar `tokens.css`;
+  `tmp/e8-diff/count_sheet_literals.py` los cuenta en cualquier commit.
+- El adaptador `industrial-dark` cuenta sus reglas de primer nivel y sus
+  selectores que empiezan por `.industrial-dark`.
+- Los `<main>` anidados cuentan los `page.tsx` del grupo `(dashboard)` que
+  contienen `<main`: todos se renderizan dentro del `<main>` de
+  `dashboard-shell.tsx`.
+- Los formularios GET cuentan los `<form>` sin `action` de función ni
+  `method="POST"`, fuera de la galería y de las líneas de comentario, y sus
+  `className` distintos (`tmp/e8-diff/audit_filters_c12.py`): 41 son barras
+  de filtros y 2 piden parámetros (el mes del resumen de caja y la cantidad a
+  fabricar de los requerimientos). El mensaje de `aada765` y la nota de la
+  galería de ese commit decían 46 y 28: la auditoría contaba 4 menciones de
+  `<form>` en comentarios de `submit-button.tsx` y `dialog.tsx`. La nota se
+  corrigió en un commit aparte.
 
 Las reglas de negocio permanecen en su implementación actual en la entrega 0.
 La diferencia entre tarifa diaria y horaria sigue siendo una decisión pendiente
