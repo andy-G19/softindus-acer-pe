@@ -65,6 +65,8 @@
   --shadow-menu: var(--shadow-menu);
   --shadow-sidebar: var(--shadow-sidebar);
   --shadow-hairline: var(--shadow-hairline);
+  --shadow-dialog: var(--shadow-dialog);
+  --color-overlay: var(--overlay);
 }
 
 :root {
@@ -148,6 +150,8 @@
   --z-sidebar: 30;
   --z-header: 40;
   --z-overlay: 50;
+  /* Velo bajo las ventanas: el mismo que pone hoy SweetAlert2. */
+  --overlay: rgba(0, 0, 0, 0.4);
 
   /* Movimiento. Las animaciones se detienen con prefers-reduced-motion. */
   --motion-fast: 150ms;

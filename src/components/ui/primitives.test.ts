@@ -34,9 +34,11 @@ import { ErrorState } from "@/components/ui/error-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { Label } from "@/components/ui/label";
+import { LoadingState } from "@/components/ui/loading-state";
 import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -304,6 +306,15 @@ describe("Presentacion", () => {
       "estado de error completo",
       h(ErrorState, { title: "No se pudo cargar", description: "Intenta de nuevo.", detail: "Tiempo de espera agotado", actions: h(Button, null, "Reintentar") }),
     ],
+  ]);
+});
+
+describe("Carga", () => {
+  characterize([
+    ["carga en bloque", h(LoadingState, { label: "Cargando materiales..." })],
+    ["carga en linea", h(LoadingState, { variant: "inline", label: "Buscando clientes..." })],
+    ["carga solo para el lector", h(LoadingState, { variant: "inline", className: "sr-only" })],
+    ["esqueleto", h(Skeleton, { className: "h-4 w-32" })],
   ]);
 });
 

@@ -4,6 +4,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
+import { LoadingState } from "@/components/ui/loading-state";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ConfirmDialogDemo } from "@/modules/gallery/confirm-dialog-demo";
 import { FeedbackDemo } from "@/modules/gallery/feedback-demo";
 import {
   GalleryNote,
@@ -23,7 +26,7 @@ export function MessagesSection() {
   return (
     <GallerySection
       id="mensajes"
-      description="Alertas persistentes, avisos temporales, confirmaciones y estados vacío y de error."
+      description="Alertas persistentes, avisos temporales, confirmaciones y estados vacío, de error y de carga."
     >
       <div className="grid gap-4 lg:grid-cols-2">
         {ALERTS.map(({ variant, icon: Icon, title, text }) => (
@@ -40,10 +43,16 @@ export function MessagesSection() {
       <GallerySample label="Avisos temporales, confirmaciones y carga (fachada de notificaciones)">
         <FeedbackDemo />
       </GallerySample>
+      <GallerySample label="Confirmaciones accesibles (ConfirmDialog), para comparar">
+        <ConfirmDialogDemo />
+      </GallerySample>
       <GalleryNote>
-        Los avisos usan Toastify y las confirmaciones y la ventana de carga usan
-        SweetAlert2, siempre a través de la fachada. Las confirmaciones accesibles
-        sobre la base de Radix llegan en la sub-entrega de feedback y ventanas.
+        Los avisos usan Toastify y las confirmaciones de la fachada usan
+        SweetAlert2 hasta la entrega 11. ConfirmDialog, sobre el AlertDialog de
+        Radix, nombra la entidad, la consecuencia y el verbo de la acción.
+        Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc
+        la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la
+        acción muestra su estado pendiente y no se puede cancelar.
       </GalleryNote>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -78,13 +87,31 @@ export function MessagesSection() {
         />
       </GallerySample>
 
-      <GallerySample label="Carga">
-        <GalleryNote>
-          Sin componente compartido: solo Producción tiene un loading.tsx propio.
-          Los estados de carga comunes llegan en la sub-entrega de feedback y
-          ventanas.
-        </GalleryNote>
-      </GallerySample>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <GallerySample label="Carga en bloque" className="block">
+          <LoadingState label="Cargando materiales..." />
+        </GallerySample>
+
+        <GallerySample label="Carga en línea">
+          <LoadingState variant="inline" label="Buscando clientes..." />
+        </GallerySample>
+
+        <GallerySample label="Pantalla de esqueletos" className="block">
+          <div className="space-y-3 rounded-xl border border-border/80 bg-card p-5">
+            <LoadingState variant="inline" label="Cargando indicadores..." className="sr-only" />
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </GallerySample>
+      </div>
+      <GalleryNote>
+        LoadingState se anuncia con role=status sin mover el foco. Los bloques
+        de Skeleton son decorativos: en una pantalla de esqueletos, un
+        LoadingState oculto a la vista anuncia la carga. El pulso y el giro se
+        detienen si el sistema pide reducir el movimiento.
+      </GalleryNote>
     </GallerySection>
   );
 }

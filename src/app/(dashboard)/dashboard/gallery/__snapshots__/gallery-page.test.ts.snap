@@ -840,7 +840,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <section id="mensajes" aria-labelledby="mensajes-titulo">
 <header>
 <h2 id="mensajes-titulo">Mensajes y estados</h2>
-<p>Alertas persistentes, avisos temporales, confirmaciones y estados vacío y de error.</p>
+<p>Alertas persistentes, avisos temporales, confirmaciones y estados vacío, de error y de carga.</p>
 </header>
 <div>
 <figure>
@@ -908,7 +908,16 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Los avisos usan Toastify y las confirmaciones y la ventana de carga usan SweetAlert2, siempre a través de la fachada. Las confirmaciones accesibles sobre la base de Radix llegan en la sub-entrega de feedback y ventanas.</p>
+<figure>
+<figcaption>Confirmaciones accesibles (ConfirmDialog), para comparar</figcaption>
+<div>
+<div>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Confirmación accesible</button>
+<button data-variant="destructive" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Anulación accesible</button>
+</div>
+</div>
+</figure>
+<p>Los avisos usan Toastify y las confirmaciones de la fachada usan SweetAlert2 hasta la entrega 11. ConfirmDialog, sobre el AlertDialog de Radix, nombra la entidad, la consecuencia y el verbo de la acción. Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la acción muestra su estado pendiente y no se puede cancelar.</p>
 <div>
 <figure>
 <figcaption>Vacío</figcaption>
@@ -957,12 +966,46 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </section>
 </div>
 </figure>
-<figure>
-<figcaption>Carga</figcaption>
 <div>
-<p>Sin componente compartido: solo Producción tiene un loading.tsx propio. Los estados de carga comunes llegan en la sub-entrega de feedback y ventanas.</p>
+<figure>
+<figcaption>Carga en bloque</figcaption>
+<div>
+<div role="status">
+<svg/>
+<span>Cargando materiales...</span>
+</div>
 </div>
 </figure>
+<figure>
+<figcaption>Carga en línea</figcaption>
+<div>
+<div role="status">
+<svg/>
+<span>Buscando clientes...</span>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Pantalla de esqueletos</figcaption>
+<div>
+<div>
+<div role="status">
+<svg/>
+<span>Cargando indicadores...</span>
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>LoadingState se anuncia con role=status sin mover el foco. Los bloques de Skeleton son decorativos: en una pantalla de esqueletos, un LoadingState oculto a la vista anuncia la carga. El pulso y el giro se detienen si el sistema pide reducir el movimiento.</p>
 </section>
 <section id="presentacion" aria-labelledby="presentacion-titulo">
 <header>
