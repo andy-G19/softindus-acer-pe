@@ -1,0 +1,129 @@
+/* Tokens de la identidad visual: variables de color, radios y fuentes que
+   Tailwind expone como utilidades (@theme inline). La aplicacion es solo
+   oscura y :root ya tiene esos valores; .dark los repite. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-heading: var(--font-oswald);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #0a0b0d;
+  --foreground: #f4f4f5;
+  --card: #15181d;
+  --card-foreground: #f4f4f5;
+  --popover: #1c2027;
+  --popover-foreground: #f4f4f5;
+  --primary: #f2941f;
+  --primary-foreground: #1a1300;
+  --secondary: #1c2027;
+  --secondary-foreground: #f4f4f5;
+  --muted: #1c2027;
+  --muted-foreground: #8b93a0;
+  --accent: #262a31;
+  --accent-foreground: #f8fafc;
+  --destructive: #e5484d;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.03);
+  --ring: #f2941f;
+  --accent-steel: #4a6fa5;
+  --accent-ember: #ff7a1a;
+  --accent-forge: #4f9142;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-hover: #0891b2;
+  --accent-cyan-active: #0e7490;
+  --chart-1: #f2941f;
+  --chart-2: #4a6fa5;
+  --chart-3: #4f9142;
+  --chart-4: #ff7a1a;
+  --chart-5: #94a3b8;
+  --radius: 0.625rem;
+  --sidebar: #15181d;
+  --sidebar-foreground: #e5e7eb;
+  --sidebar-primary: #f2941f;
+  --sidebar-primary-foreground: #1a1300;
+  --sidebar-accent: #1c2027;
+  --sidebar-accent-foreground: #f4f4f5;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #f2941f;
+}
+
+.dark {
+  --background: #0a0b0d;
+  --foreground: #f4f4f5;
+  --card: #15181d;
+  --card-foreground: #f4f4f5;
+  --popover: #1c2027;
+  --popover-foreground: #f4f4f5;
+  --primary: #f2941f;
+  --primary-foreground: #1a1300;
+  --secondary: #1c2027;
+  --secondary-foreground: #f4f4f5;
+  --muted: #1c2027;
+  --muted-foreground: #8b93a0;
+  --accent: #262a31;
+  --accent-foreground: #f8fafc;
+  --destructive: #e5484d;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.03);
+  --ring: #f2941f;
+  --accent-steel: #4a6fa5;
+  --accent-ember: #ff7a1a;
+  --accent-forge: #4f9142;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-hover: #0891b2;
+  --accent-cyan-active: #0e7490;
+  --chart-1: #f2941f;
+  --chart-2: #4a6fa5;
+  --chart-3: #4f9142;
+  --chart-4: #ff7a1a;
+  --chart-5: #94a3b8;
+  --sidebar: #15181d;
+  --sidebar-foreground: #e5e7eb;
+  --sidebar-primary: #f2941f;
+  --sidebar-primary-foreground: #1a1300;
+  --sidebar-accent: #1c2027;
+  --sidebar-accent-foreground: #f4f4f5;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #f2941f;
+}

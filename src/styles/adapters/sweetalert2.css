@@ -1,0 +1,93 @@
+/* Adaptador de SweetAlert2 a la identidad visual. Temporal: SweetAlert2 se
+   retira cuando sus consumidores pasen a las confirmaciones accesibles. */
+@layer utilities {
+  .swal2-popup,
+  .swal2-industrial-popup {
+    border: 1px solid var(--border);
+    border-radius: 0.875rem;
+    background: linear-gradient(180deg, var(--card), var(--popover));
+    color: var(--foreground);
+    box-shadow: 0 34px 90px -34px rgba(0, 0, 0, 0.85);
+  }
+
+  .swal2-title,
+  .swal2-industrial-title {
+    color: var(--foreground);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .swal2-html-container,
+  .swal2-industrial-html {
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .swal2-confirm,
+  .swal2-industrial-confirm {
+    border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent);
+    border-radius: 0.5rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--primary) 86%, white 14%),
+      var(--primary)
+    );
+    color: var(--primary-foreground);
+    padding: 0.625rem 1rem;
+    font-weight: 650;
+    box-shadow: 0 14px 28px -16px color-mix(in srgb, var(--primary) 70%, transparent);
+  }
+
+  .swal2-industrial-confirm-destructive {
+    border-color: color-mix(in srgb, var(--destructive) 46%, transparent);
+    background: color-mix(in srgb, var(--destructive) 88%, black 12%);
+    color: #fff1f2;
+    box-shadow: 0 14px 28px -16px color-mix(in srgb, var(--destructive) 70%, transparent);
+  }
+
+  .swal2-cancel,
+  .swal2-industrial-cancel {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--secondary);
+    color: var(--foreground);
+    padding: 0.625rem 1rem;
+    font-weight: 600;
+  }
+
+  .swal2-confirm:focus-visible,
+  .swal2-cancel:focus-visible,
+  .swal2-industrial-confirm:focus-visible,
+  .swal2-industrial-cancel:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  .swal2-icon,
+  .swal2-industrial-icon {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .swal2-icon.swal2-error {
+    border-color: var(--destructive);
+    color: var(--destructive);
+  }
+
+  .swal2-icon.swal2-success {
+    border-color: var(--accent-forge);
+    color: var(--accent-forge);
+  }
+
+  .swal2-icon.swal2-info {
+    border-color: var(--accent-steel);
+    color: var(--accent-steel);
+  }
+
+  .swal2-icon.swal2-warning {
+    border-color: var(--accent-ember);
+    color: var(--accent-ember);
+  }
+}

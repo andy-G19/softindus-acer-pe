@@ -1,0 +1,25 @@
+/* Estilos base de los elementos HTML. */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    color-scheme: dark;
+  }
+  html {
+    @apply font-sans;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 35%, transparent);
+    color: var(--foreground);
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f4f4f5;
+    box-shadow: 0 0 0 1000px #1c2027 inset;
+    caret-color: #f4f4f5;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
