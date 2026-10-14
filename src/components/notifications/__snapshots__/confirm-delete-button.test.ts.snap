@@ -1,12 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`HTML > clase de menu 1`] = `"<button type="submit" class="border-destructive/35 text-xs font-medium text-red-200 transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent">Anular</button>"`;
+exports[`HTML > clase de menu 1`] = `"<button type="submit" class="border-destructive/35 text-xs font-medium text-destructive-foreground transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 rounded-none border-0 bg-transparent px-0 py-0 hover:bg-transparent">Anular</button>"`;
 
-exports[`HTML > clase de tabla 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 hover:bg-destructive/20">Anular</button>"`;
+exports[`HTML > clase de tabla 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive-foreground transition hover:border-destructive/55 disabled:cursor-not-allowed disabled:opacity-60 hover:bg-destructive/20">Anular</button>"`;
 
-exports[`HTML > deshabilitado 1`] = `"<button type="submit" disabled="" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
+exports[`HTML > deshabilitado 1`] = `"<button type="submit" disabled="" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive-foreground transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
 
-exports[`HTML > sin clase 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
+exports[`HTML > sin clase 1`] = `"<button type="submit" class="rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive-foreground transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60">Anular</button>"`;
 
 exports[`clic > con titulo, como en los 15 usos: confirma con showConfirm destructivo y envia el formulario 1`] = `
 [

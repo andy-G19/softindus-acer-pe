@@ -1,0 +1,83 @@
+/* Patrones compartidos: tonos de etiquetas y alertas por estado, y enlaces
+   de la barra lateral. */
+@layer utilities {
+  .badge-state-success {
+    border-color: color-mix(in srgb, var(--success) 32%, transparent);
+    background-color: color-mix(in srgb, var(--success) 14%, transparent);
+    color: color-mix(in srgb, var(--success) 78%, var(--foreground) 22%);
+  }
+
+  .badge-state-info {
+    border-color: color-mix(in srgb, var(--info) 32%, transparent);
+    background-color: color-mix(in srgb, var(--info) 14%, transparent);
+    color: color-mix(in srgb, var(--info) 72%, var(--foreground) 28%);
+  }
+
+  .badge-state-active {
+    border-color: color-mix(in srgb, var(--primary) 32%, transparent);
+    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
+    color: color-mix(in srgb, var(--primary) 82%, var(--foreground) 18%);
+  }
+
+  .badge-state-warning {
+    border-color: color-mix(in srgb, var(--warning) 32%, transparent);
+    background-color: color-mix(in srgb, var(--warning) 14%, transparent);
+    color: color-mix(in srgb, var(--warning) 78%, var(--foreground) 22%);
+  }
+
+  .badge-state-danger {
+    border-color: color-mix(in srgb, var(--destructive) 32%, transparent);
+    background-color: color-mix(in srgb, var(--destructive) 14%, transparent);
+    color: color-mix(in srgb, var(--destructive) 72%, var(--foreground) 28%);
+  }
+
+  .alert-state-success {
+    border-color: color-mix(in srgb, var(--success) 35%, transparent);
+    background-color: color-mix(in srgb, var(--success) 12%, transparent);
+    color: color-mix(in srgb, var(--success) 80%, var(--foreground) 20%);
+  }
+
+  .alert-state-success [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--success) 55%, var(--foreground) 45%);
+  }
+
+  .alert-state-warning {
+    border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+    background-color: color-mix(in srgb, var(--warning) 12%, transparent);
+    color: color-mix(in srgb, var(--warning) 80%, var(--foreground) 20%);
+  }
+
+  .alert-state-warning [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--warning) 55%, var(--foreground) 45%);
+  }
+
+  .alert-state-info {
+    border-color: color-mix(in srgb, var(--info) 40%, transparent);
+    background-color: color-mix(in srgb, var(--info) 12%, transparent);
+    color: color-mix(in srgb, var(--info) 78%, var(--foreground) 22%);
+  }
+
+  .alert-state-info [data-slot="alert-description"] {
+    color: color-mix(in srgb, var(--info) 55%, var(--foreground) 45%);
+  }
+
+  .sidebar-nav-link {
+    color: color-mix(in srgb, var(--foreground) 68%, transparent);
+  }
+
+  .sidebar-nav-link:hover {
+    background-color: color-mix(in srgb, var(--card) 92%, white 3%);
+    color: var(--foreground);
+  }
+
+  .sidebar-nav-link-active {
+    border-left-color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+  }
+
+  .sidebar-nav-link-active:hover {
+    background-color: color-mix(in srgb, var(--primary) 16%, transparent);
+    color: var(--primary);
+  }
+}

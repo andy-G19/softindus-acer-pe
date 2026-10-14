@@ -1,0 +1,72 @@
+/* Adaptador de react-toastify a la identidad visual. Lo usa la fachada de
+   notificaciones (src/lib/notifications.ts). */
+@layer utilities {
+  .Toastify__toast {
+    min-height: 72px;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, var(--card), var(--popover));
+    color: var(--foreground);
+    box-shadow: var(--shadow-toast);
+  }
+
+  .Toastify__toast-body {
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.25rem 0.125rem;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  .Toastify__toast-icon {
+    margin-top: 0.125rem;
+  }
+
+  .Toastify__close-button {
+    color: var(--muted-foreground);
+    opacity: 0.85;
+    transition: color var(--motion-fast) ease;
+  }
+
+  .Toastify__close-button:hover {
+    color: var(--foreground);
+    opacity: 1;
+  }
+
+  .Toastify__progress-bar,
+  .toast-industrial-progress {
+    background: var(--primary);
+  }
+
+  .toast-industrial-success {
+    border-color: color-mix(in srgb, var(--success) 32%, transparent);
+  }
+
+  .toast-industrial-error {
+    border-color: color-mix(in srgb, var(--destructive) 35%, transparent);
+  }
+
+  .toast-industrial-warning {
+    border-color: color-mix(in srgb, var(--warning) 34%, transparent);
+  }
+
+  .toast-industrial-info {
+    border-color: color-mix(in srgb, var(--info) 34%, transparent);
+  }
+
+  .toast-industrial-progress-success {
+    background: var(--success);
+  }
+
+  .toast-industrial-progress-error {
+    background: var(--destructive);
+  }
+
+  .toast-industrial-progress-warning {
+    background: var(--warning);
+  }
+
+  .toast-industrial-progress-info {
+    background: var(--info);
+  }
+}

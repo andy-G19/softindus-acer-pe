@@ -143,6 +143,15 @@ export const dashboardRoutes: DashboardRoute[] = [
     roles: [APP_ROLES.ADMIN],
     showInMenu: false,
   },
+  // Galeria de componentes (entrega 8): herramienta interna de la base visual.
+  // Necesita su propia entrada: sin ella heredaria los permisos de /dashboard,
+  // abiertos a todos los roles.
+  {
+    title: "Galería de componentes",
+    href: "/dashboard/gallery",
+    roles: [APP_ROLES.ADMIN],
+    showInMenu: false,
+  },
   {
     title: "Acceso denegado",
     href: "/dashboard/access-denied",

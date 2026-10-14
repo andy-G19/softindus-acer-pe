@@ -1,0 +1,558 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`superficies de la aplicacion > formulario de login 1`] = `
+"<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x"/>
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, var(--card), var(--popover));box-shadow:var(--shadow-login)">
+<div class="heat-bar w-full" aria-hidden="true">
+</div>
+<div class="px-6 py-7 sm:px-9 sm:py-9">
+<div class="mb-7 flex items-center justify-between gap-4">
+<div class="flex min-w-0 items-center gap-3">
+<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
+<div class="min-w-0 leading-tight">
+<p class="truncate text-sm font-semibold text-foreground">Aceros Perú</p>
+<p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sistema de gestión</p>
+</div>
+</div>
+<span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+<span class="h-1.5 w-1.5 rounded-full bg-primary shadow-sm">
+</span>Acceso seguro</span>
+</div>
+<p class="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">Panel administrativo</p>
+<h1 class="text-2xl font-semibold tracking-normal text-foreground">Acceso al sistema</h1>
+<p class="mt-2 text-sm leading-relaxed text-muted-foreground">Ingresa tus credenciales para entrar al Sistema de Gestión Integral. El acceso queda registrado por motivos de seguridad.</p>
+<div class="my-6 h-px bg-border">
+</div>
+<form class="space-y-5" action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div class="space-y-2">
+<label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-semibold" for="email">Correo electrónico</label>
+<div class="group relative">
+<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<rect x="2" y="4" width="20" height="16" rx="2.5">
+</rect>
+<path d="M2 6.5l10 7 10-7">
+</path>
+</svg>
+</span>
+<input type="email" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted login-field-input pl-10 pr-3" id="email" placeholder="Ingrese su correo electrónico" autoComplete="email" required="" name="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-semibold" for="password">Contraseña</label>
+<div class="group relative">
+<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<rect x="4" y="10.5" width="16" height="10" rx="2">
+</rect>
+<path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5">
+</path>
+</svg>
+</span>
+<input type="password" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted login-field-input pl-10 pr-11" id="password" placeholder="Ingrese su contraseña" autoComplete="current-password" required="" name="password"/>
+<button type="button" aria-label="Mostrar contraseña" class="login-password-toggle absolute right-2 top-1/2 inline-flex -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground">
+<svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z">
+</path>
+<circle cx="12" cy="12" r="3">
+</circle>
+</svg>
+</button>
+</div>
+</div>
+<button data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 forge-button-gradient hover:bg-primary px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 mt-1 h-11 w-full gap-2 bg-primary text-primary-foreground shadow-md transition active:translate-y-px focus-visible:ring-primary/45" type="submit">Ingresar<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+<path d="M5 12h14M13 6l6 6-6 6">
+</path>
+</svg>
+</button>
+</form>
+<p class="mt-6 text-center text-xs leading-relaxed text-muted-foreground/80">© 2026 Industrias Aceros Perú. Sistema interno de gestión.<br/>Acceso restringido a personal autorizado.</p>
+</div>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`superficies de la aplicacion > pantalla de login sin sesion 1`] = `
+"<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=3840&amp;q=75 3840w" imageSizes="100vw"/>
+<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x"/>
+<main class="industrial-dark dark login-industrial-bg relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 text-foreground">
+<img alt="" decoding="async" data-nimg="fill" class="absolute inset-0 z-0 scale-105 object-cover opacity-65 blur-[1px] saturate-125" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="100vw" srcSet="/_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=3840&amp;q=75"/>
+<div class="absolute inset-0 z-0 bg-background/45" aria-hidden="true">
+</div>
+<div class="login-brushed-metal absolute inset-0 z-0" aria-hidden="true">
+</div>
+<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--login-overlay-strong)_0%,var(--login-overlay-soft)_34%,transparent_68%)]" aria-hidden="true">
+</div>
+<div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+<span class="login-ember" style="left:8%;animation-duration:8s;animation-delay:0s">
+</span>
+<span class="login-ember" style="left:22%;animation-duration:10s;animation-delay:1.5s">
+</span>
+<span class="login-ember" style="left:63%;animation-duration:11s;animation-delay:2.2s">
+</span>
+<span class="login-ember" style="left:78%;animation-duration:8.5s;animation-delay:3s">
+</span>
+<span class="login-ember" style="left:90%;animation-duration:7s;animation-delay:0.8s">
+</span>
+</div>
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, var(--card), var(--popover));box-shadow:var(--shadow-login)">
+<div class="heat-bar w-full" aria-hidden="true">
+</div>
+<div class="px-6 py-7 sm:px-9 sm:py-9">
+<div class="mb-7 flex items-center justify-between gap-4">
+<div class="flex min-w-0 items-center gap-3">
+<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
+<div class="min-w-0 leading-tight">
+<p class="truncate text-sm font-semibold text-foreground">Aceros Perú</p>
+<p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sistema de gestión</p>
+</div>
+</div>
+<span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+<span class="h-1.5 w-1.5 rounded-full bg-primary shadow-sm">
+</span>Acceso seguro</span>
+</div>
+<p class="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">Panel administrativo</p>
+<h1 class="text-2xl font-semibold tracking-normal text-foreground">Acceso al sistema</h1>
+<p class="mt-2 text-sm leading-relaxed text-muted-foreground">Ingresa tus credenciales para entrar al Sistema de Gestión Integral. El acceso queda registrado por motivos de seguridad.</p>
+<div class="my-6 h-px bg-border">
+</div>
+<form class="space-y-5" action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div class="space-y-2">
+<label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-semibold" for="email">Correo electrónico</label>
+<div class="group relative">
+<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<rect x="2" y="4" width="20" height="16" rx="2.5">
+</rect>
+<path d="M2 6.5l10 7 10-7">
+</path>
+</svg>
+</span>
+<input type="email" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted login-field-input pl-10 pr-3" id="email" placeholder="Ingrese su correo electrónico" autoComplete="email" required="" name="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-semibold" for="password">Contraseña</label>
+<div class="group relative">
+<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<rect x="4" y="10.5" width="16" height="10" rx="2">
+</rect>
+<path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5">
+</path>
+</svg>
+</span>
+<input type="password" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted login-field-input pl-10 pr-11" id="password" placeholder="Ingrese su contraseña" autoComplete="current-password" required="" name="password"/>
+<button type="button" aria-label="Mostrar contraseña" class="login-password-toggle absolute right-2 top-1/2 inline-flex -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground">
+<svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z">
+</path>
+<circle cx="12" cy="12" r="3">
+</circle>
+</svg>
+</button>
+</div>
+</div>
+<button data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 forge-button-gradient hover:bg-primary px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 mt-1 h-11 w-full gap-2 bg-primary text-primary-foreground shadow-md transition active:translate-y-px focus-visible:ring-primary/45" type="submit">Ingresar<svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+<path d="M5 12h14M13 6l6 6-6 6">
+</path>
+</svg>
+</button>
+</form>
+<p class="mt-6 text-center text-xs leading-relaxed text-muted-foreground/80">© 2026 Industrias Aceros Perú. Sistema interno de gestión.<br/>Acceso restringido a personal autorizado.</p>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN 1`] = `
+"<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 2x"/>
+<div class="industrial-dark dark min-h-screen bg-shell text-foreground">
+<header class="sticky top-0 z-(--z-header) border-b border-border/80 bg-card/95 backdrop-blur">
+<div class="nav-progress-track" aria-hidden="true">
+<div class="nav-progress-fill" data-active="false" style="width:0%">
+</div>
+</div>
+<div class="flex w-full flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+<div class="flex min-w-0 items-center gap-3">
+<img alt="Logo de Industrias Aceros Perú" width="44" height="44" decoding="async" data-nimg="1" class="size-11 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75"/>
+<div class="min-w-0 space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h1 class="font-heading text-xl font-bold text-foreground">Industrias Aceros Perú</h1>
+<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-success [a]:hover:bg-muted text-[10.5px]">Sistema activo</span>
+</div>
+<p class="text-sm text-muted-foreground">Sistema de Gestión Integral</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-3 sm:justify-end">
+<div class="min-w-0 text-left sm:text-right">
+<p class="truncate text-sm font-medium text-foreground">Ana Torres</p>
+<div class="mt-1 flex sm:justify-end">
+<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20 text-[10.5px]">Administrador</span>
+</div>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<button data-slot="button" data-variant="destructive" data-size="default" class="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" type="submit">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out" aria-hidden="true">
+<path d="m16 17 5-5-5-5">
+</path>
+<path d="M21 12H9">
+</path>
+<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+</path>
+</svg>Cerrar sesión</button>
+</form>
+</div>
+</div>
+</header>
+<aside class="group/sidebar hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-(--z-sidebar) md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar md:transition-[width] md:duration-200 md:ease-out md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar md:focus-within:w-64 md:focus-within:overflow-visible">
+<div class="h-full overflow-y-auto pt-24">
+<div class="px-3 pb-3">
+<p class="text-xs font-semibold uppercase text-muted-foreground hidden md:group-hover/sidebar:block md:group-focus-within/sidebar:block">Navegación</p>
+</div>
+<nav aria-label="Navegación principal" class="flex flex-col gap-1 px-2">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard size-4 shrink-0" aria-hidden="true">
+<rect width="7" height="9" x="3" y="3" rx="1">
+</rect>
+<rect width="7" height="5" x="14" y="3" rx="1">
+</rect>
+<rect width="7" height="9" x="14" y="12" rx="1">
+</rect>
+<rect width="7" height="5" x="3" y="16" rx="1">
+</rect>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Dashboard</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/users">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users size-4 shrink-0" aria-hidden="true">
+<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+</path>
+<path d="M16 3.128a4 4 0 0 1 0 7.744">
+</path>
+<path d="M22 21v-2a4 4 0 0 0-3-3.87">
+</path>
+<circle cx="9" cy="7" r="4">
+</circle>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Usuarios</span>
+</a>
+<a aria-current="page" class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start sidebar-nav-link-active" href="/dashboard/commercial">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart size-4 shrink-0" aria-hidden="true">
+<circle cx="8" cy="21" r="1">
+</circle>
+<circle cx="19" cy="21" r="1">
+</circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Comercial</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/inventory">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4 shrink-0" aria-hidden="true">
+<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
+</path>
+<path d="M12 22V12">
+</path>
+<polyline points="3.29 7 12 12 20.71 7">
+</polyline>
+<path d="m7.5 4.27 9 5.15">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Inventario</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/production">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-factory size-4 shrink-0" aria-hidden="true">
+<path d="M12 16h.01">
+</path>
+<path d="M16 16h.01">
+</path>
+<path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z">
+</path>
+<path d="M8 16h.01">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Producción</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/waste-scrap">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle size-4 shrink-0" aria-hidden="true">
+<path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5">
+</path>
+<path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12">
+</path>
+<path d="m14 16-3 3 3 3">
+</path>
+<path d="M8.293 13.596 7.196 9.5 3.1 10.598">
+</path>
+<path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843">
+</path>
+<path d="m13.378 9.633 4.096 1.098 1.097-4.096">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Mermas y chatarra</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/costs">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator size-4 shrink-0" aria-hidden="true">
+<rect width="16" height="20" x="4" y="2" rx="2">
+</rect>
+<line x1="8" x2="16" y1="6" y2="6">
+</line>
+<line x1="16" x2="16" y1="14" y2="18">
+</line>
+<path d="M16 10h.01">
+</path>
+<path d="M12 10h.01">
+</path>
+<path d="M8 10h.01">
+</path>
+<path d="M12 14h.01">
+</path>
+<path d="M8 14h.01">
+</path>
+<path d="M12 18h.01">
+</path>
+<path d="M8 18h.01">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Costos</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/petty-cash">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet-cards size-4 shrink-0" aria-hidden="true">
+<path d="M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21">
+</path>
+<path d="M3 7h18">
+</path>
+<rect x="3" y="3" width="18" height="18" rx="2">
+</rect>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Caja chica</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/staff">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-check size-4 shrink-0" aria-hidden="true">
+<path d="M2 21a8 8 0 0 1 13.292-6">
+</path>
+<circle cx="10" cy="8" r="5">
+</circle>
+<path d="m16 19 2 2 4-4">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Personal</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/maintenance">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench size-4 shrink-0" aria-hidden="true">
+<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Mantenimiento</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 justify-center md:group-hover/sidebar:justify-start md:group-focus-within/sidebar:justify-start" href="/dashboard/reports">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column size-4 shrink-0" aria-hidden="true">
+<path d="M3 3v16a2 2 0 0 0 2 2h16">
+</path>
+<path d="M18 17V9">
+</path>
+<path d="M13 17V5">
+</path>
+<path d="M8 17v-3">
+</path>
+</svg>
+<span class="truncate hidden md:group-hover/sidebar:inline md:group-focus-within/sidebar:inline">Reportes</span>
+</a>
+</nav>
+</div>
+</aside>
+<div class="px-4 py-6 sm:pr-6 lg:pr-8 md:pl-27">
+<div class="mb-6 md:hidden">
+<p class="mb-2 px-1 text-xs font-semibold uppercase text-muted-foreground">Navegación</p>
+<div class="rounded-xl border border-sidebar-border/80 bg-sidebar p-2">
+<div class="relative">
+<nav aria-label="Navegación principal" class="flex gap-2 overflow-x-auto pb-1">
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard size-4 shrink-0" aria-hidden="true">
+<rect width="7" height="9" x="3" y="3" rx="1">
+</rect>
+<rect width="7" height="5" x="14" y="3" rx="1">
+</rect>
+<rect width="7" height="9" x="14" y="12" rx="1">
+</rect>
+<rect width="7" height="5" x="3" y="16" rx="1">
+</rect>
+</svg>
+<span class="truncate">Dashboard</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/users">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users size-4 shrink-0" aria-hidden="true">
+<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+</path>
+<path d="M16 3.128a4 4 0 0 1 0 7.744">
+</path>
+<path d="M22 21v-2a4 4 0 0 0-3-3.87">
+</path>
+<circle cx="9" cy="7" r="4">
+</circle>
+</svg>
+<span class="truncate">Usuarios</span>
+</a>
+<a aria-current="page" class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max sidebar-nav-link-active" href="/dashboard/commercial">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart size-4 shrink-0" aria-hidden="true">
+<circle cx="8" cy="21" r="1">
+</circle>
+<circle cx="19" cy="21" r="1">
+</circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12">
+</path>
+</svg>
+<span class="truncate">Comercial</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/inventory">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package size-4 shrink-0" aria-hidden="true">
+<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
+</path>
+<path d="M12 22V12">
+</path>
+<polyline points="3.29 7 12 12 20.71 7">
+</polyline>
+<path d="m7.5 4.27 9 5.15">
+</path>
+</svg>
+<span class="truncate">Inventario</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/production">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-factory size-4 shrink-0" aria-hidden="true">
+<path d="M12 16h.01">
+</path>
+<path d="M16 16h.01">
+</path>
+<path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z">
+</path>
+<path d="M8 16h.01">
+</path>
+</svg>
+<span class="truncate">Producción</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/waste-scrap">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-recycle size-4 shrink-0" aria-hidden="true">
+<path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5">
+</path>
+<path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12">
+</path>
+<path d="m14 16-3 3 3 3">
+</path>
+<path d="M8.293 13.596 7.196 9.5 3.1 10.598">
+</path>
+<path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843">
+</path>
+<path d="m13.378 9.633 4.096 1.098 1.097-4.096">
+</path>
+</svg>
+<span class="truncate">Mermas y chatarra</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/costs">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator size-4 shrink-0" aria-hidden="true">
+<rect width="16" height="20" x="4" y="2" rx="2">
+</rect>
+<line x1="8" x2="16" y1="6" y2="6">
+</line>
+<line x1="16" x2="16" y1="14" y2="18">
+</line>
+<path d="M16 10h.01">
+</path>
+<path d="M12 10h.01">
+</path>
+<path d="M8 10h.01">
+</path>
+<path d="M12 14h.01">
+</path>
+<path d="M8 14h.01">
+</path>
+<path d="M12 18h.01">
+</path>
+<path d="M8 18h.01">
+</path>
+</svg>
+<span class="truncate">Costos</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/petty-cash">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet-cards size-4 shrink-0" aria-hidden="true">
+<path d="M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21">
+</path>
+<path d="M3 7h18">
+</path>
+<rect x="3" y="3" width="18" height="18" rx="2">
+</rect>
+</svg>
+<span class="truncate">Caja chica</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/staff">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-check size-4 shrink-0" aria-hidden="true">
+<path d="M2 21a8 8 0 0 1 13.292-6">
+</path>
+<circle cx="10" cy="8" r="5">
+</circle>
+<path d="m16 19 2 2 4-4">
+</path>
+</svg>
+<span class="truncate">Personal</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/maintenance">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench size-4 shrink-0" aria-hidden="true">
+<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z">
+</path>
+</svg>
+<span class="truncate">Mantenimiento</span>
+</a>
+<a class="sidebar-nav-link flex items-center gap-2 rounded-l-none rounded-r-lg border-l-[3px] border-l-transparent px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/35 min-w-max" href="/dashboard/reports">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column size-4 shrink-0" aria-hidden="true">
+<path d="M3 3v16a2 2 0 0 0 2 2h16">
+</path>
+<path d="M18 17V9">
+</path>
+<path d="M13 17V5">
+</path>
+<path d="M8 17v-3">
+</path>
+</svg>
+<span class="truncate">Reportes</span>
+</a>
+</nav>
+<div aria-hidden="true" class="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-sidebar to-transparent">
+</div>
+</div>
+</div>
+</div>
+<main class="min-w-0 w-full pb-8">
+<p>Contenido de la pagina</p>
+</main>
+</div>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`superficies de la aplicacion > tarjeta de sesion del dashboard 1`] = `
+"<section>
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl rounded-xl border border-border/80 bg-card shadow-raised [--card-spacing:20px]">
+<div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
+<div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-heading text-[19px] font-semibold leading-tight text-foreground">Sesión actual</div>
+</div>
+<div data-slot="card-content" class="px-(--card-spacing) flex flex-wrap items-center gap-x-6 gap-y-3">
+<div class="min-w-0">
+<p class="text-xs font-medium text-muted-foreground">Usuario</p>
+<p class="truncate text-sm font-medium text-foreground">Ana Torres</p>
+</div>
+<div class="min-w-0">
+<p class="text-xs font-medium text-muted-foreground">Correo</p>
+<p class="truncate font-mono text-sm text-foreground">ana.torres@acerosperu.test</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-muted-foreground">Rol</span>
+<span data-slot="badge" data-variant="default" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-active [a]:hover:bg-primary/20">Vendedor</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-muted-foreground">Estado</span>
+<span data-slot="badge" data-variant="success" class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-[0.05em] whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3! badge-state-success [a]:hover:bg-muted">Activo</span>
+</div>
+</div>
+</div>
+</section>"
+`;

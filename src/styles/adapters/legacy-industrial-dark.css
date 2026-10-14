@@ -1,0 +1,145 @@
+/* Adaptador temporal de las pantallas antiguas al tema oscuro: estila
+   elementos (campos, tablas, titulos) y bloques con borde que no usan los
+   componentes compartidos. Sus reglas se retiran cuando migran sus
+   consumidores; legacy-industrial-dark.test.ts impide reglas sin consumidor
+   y que el adaptador crezca. */
+@layer utilities {
+  .industrial-dark :where(a, button, [role="button"], input, select, textarea):focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--ring) 72%, transparent);
+    outline-offset: 2px;
+  }
+
+  .industrial-dark form.rounded-lg.border,
+  .industrial-dark form.rounded-xl.border {
+    background-color: var(--card);
+    border-color: var(--border);
+  }
+
+  .industrial-dark label {
+    color: var(--foreground);
+  }
+
+  .industrial-dark input,
+  .industrial-dark select,
+  .industrial-dark textarea {
+    background-color: var(--input);
+    border-color: var(--border);
+    color: var(--foreground);
+    transition-property: color, background-color, border-color, box-shadow;
+    transition-duration: var(--motion-fast);
+  }
+
+  .industrial-dark input:focus,
+  .industrial-dark select:focus,
+  .industrial-dark textarea:focus,
+  .industrial-dark input:focus-visible,
+  .industrial-dark select:focus-visible,
+  .industrial-dark textarea:focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 18%, transparent);
+    outline: none;
+  }
+
+  .industrial-dark input:disabled,
+  .industrial-dark select:disabled,
+  .industrial-dark textarea:disabled {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    opacity: 1;
+  }
+
+  .industrial-dark input::placeholder,
+  .industrial-dark textarea::placeholder {
+    color: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
+  }
+
+  .industrial-dark select option {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+  }
+
+  .industrial-dark :is(section, div).overflow-hidden:has(table) {
+    overflow-x: auto;
+  }
+
+  .industrial-dark table {
+    min-width: max-content;
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .industrial-dark thead {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark th {
+    border-color: var(--border);
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  .industrial-dark td {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+  }
+
+  .industrial-dark tbody tr {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+    transition-property: background-color;
+    transition-duration: var(--motion-fast);
+  }
+
+  .industrial-dark tbody tr:hover {
+    background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
+  }
+
+  .industrial-dark tfoot {
+    background-color: var(--secondary);
+    color: var(--foreground);
+  }
+
+  .industrial-dark caption {
+    color: var(--muted-foreground);
+  }
+
+  .industrial-dark td[colspan] {
+    color: var(--muted-foreground);
+  }
+
+  .industrial-dark main h1 {
+    color: var(--foreground);
+    font-family: var(--font-heading);
+    font-weight: 650;
+    line-height: 1.15;
+  }
+
+  .industrial-dark main h2,
+  .industrial-dark main h3 {
+    color: var(--foreground);
+    font-family: var(--font-heading);
+  }
+
+  .industrial-dark :is(section, div, article, form).rounded-lg.border,
+  .industrial-dark :is(section, div, article, form).rounded-xl.border {
+    border-color: var(--border);
+  }
+
+  .industrial-dark :is(section, div, article).shadow-sm {
+    box-shadow: var(--shadow-raised);
+  }
+
+  .industrial-dark :is(section, div, article).border-dashed {
+    background-color: color-mix(in srgb, var(--card) 78%, transparent);
+    border-color: color-mix(in srgb, var(--border) 70%, transparent);
+  }
+
+  .industrial-dark :is(section, div, article).rounded-xl.border:has(> h2),
+  .industrial-dark :is(section, div, article).rounded-lg.border:has(> h2) {
+    background-color: var(--card);
+  }
+
+  .industrial-dark :is(section, div, article).rounded-xl.border:has(table),
+  .industrial-dark :is(section, div, article).rounded-lg.border:has(table) {
+    background-color: var(--card);
+  }
+}

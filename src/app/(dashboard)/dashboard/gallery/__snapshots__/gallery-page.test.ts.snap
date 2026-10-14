@@ -1,0 +1,1588 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/dashboard/gallery > catalogo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/gallery > catalogo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Galería de componentes</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Galería de componentes</h1>
+<p>Catálogo interno de la base visual del ERP: cada componente compartido con sus estados, para revisarlos en escritorio, móvil y teclado antes de usarlos en las pantallas.</p>
+</div>
+</div>
+</div>
+</section>
+<div role="alert">
+<svg/>
+<div>Datos de ejemplo</div>
+<div>Todo lo que aparece aquí es ficticio: ningún botón ni formulario de esta página guarda información.</div>
+</div>
+<nav aria-label="Secciones de la galería">
+<a href="#fundamentos">Fundamentos</a>
+<a href="#botones">Botones</a>
+<a href="#campos">Campos</a>
+<a href="#mensajes">Mensajes y estados</a>
+<a href="#ventanas">Ventanas</a>
+<a href="#presentacion">Presentación</a>
+<a href="#listados">Listados y navegación</a>
+</nav>
+<section id="fundamentos" aria-labelledby="fundamentos-titulo">
+<header>
+<h2 id="fundamentos-titulo">Fundamentos</h2>
+<p>Tokens de la identidad actual (src/styles/tokens.css): colores, tipografía, radios, sombras, capas y movimiento. Cada componente de la galería se construye con ellos.</p>
+</header>
+<figure>
+<figcaption>Colores</figcaption>
+<div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Fondo</span>
+<span>--background</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Fondo del panel</span>
+<span>--shell</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Texto</span>
+<span>--foreground</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Superficie</span>
+<span>--card</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Superficie elevada</span>
+<span>--popover</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Secundario</span>
+<span>--secondary</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Atenuado</span>
+<span>--muted</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Texto atenuado</span>
+<span>--muted-foreground</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Acento</span>
+<span>--accent</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Borde</span>
+<span>--border</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Campo</span>
+<span>--input</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Primario</span>
+<span>--primary</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Foco</span>
+<span>--ring</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Éxito</span>
+<span>--success</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Advertencia</span>
+<span>--warning</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Información</span>
+<span>--info</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Peligro</span>
+<span>--destructive</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Texto sobre peligro</span>
+<span>--destructive-foreground</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Forja (marca)</span>
+<span>--accent-forge</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Brasa (marca)</span>
+<span>--accent-ember</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Acero (marca)</span>
+<span>--accent-steel</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Limpiar (cian)</span>
+<span>--accent-cyan</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Texto sobre cian</span>
+<span>--accent-cyan-foreground</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Barra lateral</span>
+<span>--sidebar</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Gráfico 1</span>
+<span>--chart-1</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Gráfico 2</span>
+<span>--chart-2</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Gráfico 3</span>
+<span>--chart-3</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Gráfico 4</span>
+<span>--chart-4</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Gráfico 5</span>
+<span>--chart-5</span>
+</span>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Texto (Geist)</figcaption>
+<div>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+</div>
+</figure>
+<figure>
+<figcaption>Títulos (Oswald 500, 600, 650 y 700)</figcaption>
+<div>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+<p>Industrias Aceros Perú · ¿Año? ¡Sí! Ñandú 0123456789 S/ 1 234,50</p>
+</div>
+</figure>
+<p>Oswald se declara con los pesos 500, 600 y 700: el 650 de los títulos de página se resuelve en 700, como cuando la fuente venía de Google.</p>
+<figure>
+<figcaption>Códigos y cifras (JetBrains Mono 500)</figcaption>
+<div>
+<p>CLI00000001 · OTR00000006 · 1 234,50</p>
+</div>
+</figure>
+<figure>
+<figcaption>Radios</figcaption>
+<div>
+<span>rounded-sm</span>
+<span>rounded-md</span>
+<span>rounded-lg</span>
+<span>rounded-xl</span>
+<span>rounded-2xl</span>
+</div>
+</figure>
+<figure>
+<figcaption>Sombras</figcaption>
+<div>
+<div>
+<span>Tarjeta</span>
+<span>--shadow-raised</span>
+</div>
+<div>
+<span>Indicador al pasar</span>
+<span>--shadow-raised-hover</span>
+</div>
+<div>
+<span>Módulo al pasar</span>
+<span>--shadow-card-hover</span>
+</div>
+<div>
+<span>Panel de error</span>
+<span>--shadow-panel</span>
+</div>
+<div>
+<span>Lista desplegable</span>
+<span>--shadow-menu</span>
+</div>
+<div>
+<span>Barra lateral abierta</span>
+<span>--shadow-sidebar</span>
+</div>
+<div>
+<span>Aviso</span>
+<span>--shadow-toast</span>
+</div>
+<div>
+<span>Confirmación</span>
+<span>--shadow-dialog</span>
+</div>
+<div>
+<span>Contorno fino</span>
+<span>--shadow-hairline</span>
+</div>
+</div>
+</figure>
+<p>Capas (--z-*): barra lateral 30, cabecera 40 y ventanas 50. Movimiento (--motion-*): 150, 200 y 250 ms para transiciones y 6 s para la barra térmica, que se detiene con la preferencia de movimiento reducido. El espaciado y la escala tipográfica son los de Tailwind.</p>
+</section>
+<section id="botones" aria-labelledby="botones-titulo">
+<header>
+<h2 id="botones-titulo">Botones</h2>
+<p>Cada variante en sus tamaños de texto y de solo icono, y los estados que usan las pantallas.</p>
+</header>
+<div>
+<figure>
+<figcaption>default · Acción principal: guardar, filtrar, nuevo registro</figcaption>
+<div>
+<button data-variant="default" type="button">Guardar xs</button>
+<button data-variant="default" type="button">Guardar sm</button>
+<button data-variant="default" type="button">Guardar default</button>
+<button data-variant="default" type="button">Guardar lg</button>
+<button data-variant="default" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="default" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="default" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="default" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>outline · Acción secundaria y paginación</figcaption>
+<div>
+<button data-variant="outline" type="button">Guardar xs</button>
+<button data-variant="outline" type="button">Guardar sm</button>
+<button data-variant="outline" type="button">Guardar default</button>
+<button data-variant="outline" type="button">Guardar lg</button>
+<button data-variant="outline" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="outline" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="outline" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="outline" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>secondary · Acción neutra</figcaption>
+<div>
+<button data-variant="secondary" type="button">Guardar xs</button>
+<button data-variant="secondary" type="button">Guardar sm</button>
+<button data-variant="secondary" type="button">Guardar default</button>
+<button data-variant="secondary" type="button">Guardar lg</button>
+<button data-variant="secondary" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="secondary" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="secondary" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="secondary" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>ghost · Acciones por fila (editar)</figcaption>
+<div>
+<button data-variant="ghost" type="button">Guardar xs</button>
+<button data-variant="ghost" type="button">Guardar sm</button>
+<button data-variant="ghost" type="button">Guardar default</button>
+<button data-variant="ghost" type="button">Guardar lg</button>
+<button data-variant="ghost" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>destructive · Anular, inactivar, cerrar sesión</figcaption>
+<div>
+<button data-variant="destructive" type="button">Guardar xs</button>
+<button data-variant="destructive" type="button">Guardar sm</button>
+<button data-variant="destructive" type="button">Guardar default</button>
+<button data-variant="destructive" type="button">Guardar lg</button>
+<button data-variant="destructive" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="destructive" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="destructive" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="destructive" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>link · Acción con aspecto de enlace</figcaption>
+<div>
+<button data-variant="link" type="button">Guardar xs</button>
+<button data-variant="link" type="button">Guardar sm</button>
+<button data-variant="link" type="button">Guardar default</button>
+<button data-variant="link" type="button">Guardar lg</button>
+<button data-variant="link" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="link" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="link" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="link" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>clear · Limpiar filtros</figcaption>
+<div>
+<button data-variant="clear" type="button">Guardar xs</button>
+<button data-variant="clear" type="button">Guardar sm</button>
+<button data-variant="clear" type="button">Guardar default</button>
+<button data-variant="clear" type="button">Guardar lg</button>
+<button data-variant="clear" type="button" aria-label="Agregar (icon-xs)">
+<svg/>
+</button>
+<button data-variant="clear" type="button" aria-label="Agregar (icon-sm)">
+<svg/>
+</button>
+<button data-variant="clear" type="button" aria-label="Agregar (icon)">
+<svg/>
+</button>
+<button data-variant="clear" type="button" aria-label="Agregar (icon-lg)">
+<svg/>
+</button>
+</div>
+</figure>
+</div>
+<div>
+<figure>
+<figcaption>Deshabilitado</figcaption>
+<div>
+<button data-variant="default" type="button" disabled="">Guardar</button>
+<button data-variant="outline" type="button" disabled="">Anterior</button>
+<button data-variant="destructive" type="button" disabled="">Anular</button>
+</div>
+</figure>
+<figure>
+<figcaption>Con icono</figcaption>
+<div>
+<button data-variant="default" type="button">
+<svg/>Nuevo registro</button>
+<button data-variant="outline" type="button">Siguiente<svg/>
+</button>
+<button data-variant="destructive" type="button">
+<svg/>Eliminar</button>
+</div>
+</figure>
+<figure>
+<figcaption>Como enlace</figcaption>
+<div>
+<a data-variant="default" href="#botones">Nuevo cliente</a>
+<a data-variant="clear" href="#botones">Limpiar filtros</a>
+</div>
+</figure>
+<figure>
+<figcaption>Pendiente</figcaption>
+<div>
+<button data-variant="default" type="button" disabled="" aria-busy="true">
+<svg/>Guardando...</button>
+<button data-variant="outline" type="button" disabled="" aria-busy="true">
+<svg/>Exportar</button>
+<button data-variant="destructive" type="button" disabled="" aria-busy="true">
+<svg/>Anulando...</button>
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-xs)" disabled="" aria-busy="true">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-sm)" disabled="" aria-busy="true">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon)" disabled="" aria-busy="true">
+<svg/>
+</button>
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-lg)" disabled="" aria-busy="true">
+<svg/>
+</button>
+</div>
+</figure>
+<figure>
+<figcaption>Pendiente al pulsar</figcaption>
+<div>
+<div>
+<button data-variant="default" type="button">Guardar (simula 2 s)</button>
+<button data-variant="outline" type="button">Exportar (simula 2 s)</button>
+<button data-variant="destructive" type="button" aria-label="Eliminar (simula 2 s)">
+<svg/>
+</button>
+</div>
+<p>En las pantallas, SubmitButton (src/components/forms) es un Button de envío que toma este estado del formulario con useFormStatus, sin que el formulario le pase isPending. Aquí se simula con un temporizador: un formulario real llamaría al servidor.</p>
+</div>
+</figure>
+</div>
+<p>Teclado: recorre los botones con Tab; cada uno debe mostrar su indicador de foco y activarse con Enter o Espacio. Un botón pendiente queda deshabilitado y lo anuncia con aria-busy; el spinner se detiene si el sistema pide reducir el movimiento.</p>
+</section>
+<section id="campos" aria-labelledby="campos-titulo">
+<header>
+<h2 id="campos-titulo">Campos</h2>
+<p>Campos de texto, listas, áreas de texto, interruptores y búsqueda, en sus estados. Nada de lo que se escribe aquí se envía.</p>
+</header>
+<div>
+<figure>
+<figcaption>Texto</figcaption>
+<div>
+<label for="galeria-nombre">Nombre o razón social</label>
+<input id="galeria-nombre" placeholder="Ej.: Metalmecánica Lima S.A.C."/>
+</div>
+</figure>
+<figure>
+<figcaption>Con valor</figcaption>
+<div>
+<label for="galeria-documento">Número de documento</label>
+<input id="galeria-documento" value="20123456789"/>
+</div>
+</figure>
+<figure>
+<figcaption>Deshabilitado</figcaption>
+<div>
+<label for="galeria-codigo">Código</label>
+<input id="galeria-codigo" disabled="" value="CLI00000001"/>
+</div>
+</figure>
+<figure>
+<figcaption>Con error</figcaption>
+<div>
+<label for="galeria-correo">Correo</label>
+<input id="galeria-correo" aria-invalid="true" value="ventas@"/>
+<p>Ingrese un correo válido.</p>
+</div>
+</figure>
+<figure>
+<figcaption>Fecha</figcaption>
+<div>
+<label for="galeria-fecha">Fecha de entrega</label>
+<input type="date" id="galeria-fecha" value="2026-10-13"/>
+</div>
+</figure>
+<figure>
+<figcaption>Número</figcaption>
+<div>
+<label for="galeria-cantidad">Cantidad</label>
+<input type="number" id="galeria-cantidad" step="0.01" value="12.50"/>
+</div>
+</figure>
+<figure>
+<figcaption>Lista</figcaption>
+<div>
+<label for="galeria-tipo">Tipo</label>
+<select id="galeria-tipo">
+<option value="" selected="">Todos los tipos</option>
+<option value="empresa">Empresa</option>
+<option value="persona">Persona natural</option>
+</select>
+</div>
+</figure>
+<figure>
+<figcaption>Lista deshabilitada</figcaption>
+<div>
+<label for="galeria-estado">Estado</label>
+<select id="galeria-estado" disabled="">
+<option value="activo" selected="">Activo</option>
+</select>
+</div>
+</figure>
+<figure>
+<figcaption>Archivo</figcaption>
+<div>
+<label for="galeria-archivo">Adjunto</label>
+<input type="file" id="galeria-archivo"/>
+</div>
+</figure>
+<figure>
+<figcaption>Área de texto</figcaption>
+<div>
+<label for="galeria-observaciones">Observaciones</label>
+<textarea id="galeria-observaciones" placeholder="Detalle adicional">
+</textarea>
+</div>
+</figure>
+<figure>
+<figcaption>Área de texto con error</figcaption>
+<div>
+<label for="galeria-motivo">Motivo de anulación</label>
+<textarea id="galeria-motivo" aria-invalid="true">
+</textarea>
+<p>El motivo es obligatorio.</p>
+</div>
+</figure>
+<figure>
+<figcaption>Interruptor</figcaption>
+<div>
+<button type="button" role="switch" aria-checked="true" data-state="checked" value="on" id="galeria-activo" aria-label="Activo">
+<span data-state="checked">
+</span>
+</button>
+<input type="checkbox" aria-hidden="true" tabindex="-1" checked="" value="on"/>
+<button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" id="galeria-inactivo" aria-label="Inactivo">
+<span data-state="unchecked">
+</span>
+</button>
+<input type="checkbox" aria-hidden="true" tabindex="-1" value="on"/>
+<button type="button" role="switch" aria-checked="false" data-state="unchecked" data-disabled="" disabled="" value="on" id="galeria-bloqueado" aria-label="Deshabilitado">
+<span data-state="unchecked" data-disabled="">
+</span>
+</button>
+<input type="checkbox" aria-hidden="true" disabled="" tabindex="-1" value="on"/>
+</div>
+</figure>
+<figure>
+<figcaption>Búsqueda</figcaption>
+<div>
+<div>
+<label for="galeria_cliente-_R_mj6_">Cliente</label>
+<input type="hidden" name="galeria_cliente" value=""/>
+<div>
+<input id="galeria_cliente-_R_mj6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente-_R_mj6_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Búsqueda con valor y obligatoria</figcaption>
+<div>
+<div>
+<label for="galeria_cliente_obligatorio-_R_n36_">Cliente *</label>
+<input type="hidden" name="galeria_cliente_obligatorio" value="CLI00000002"/>
+<div>
+<input id="galeria_cliente_obligatorio-_R_n36_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_obligatorio-_R_n36_-listbox" aria-expanded="false" required="" placeholder="Buscar..." value="Taller Arequipa"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Búsqueda deshabilitada</figcaption>
+<div>
+<div>
+<label for="galeria_cliente_bloqueado-_R_nj6_">Cliente</label>
+<input type="hidden" name="galeria_cliente_bloqueado" value=""/>
+<div>
+<input id="galeria_cliente_bloqueado-_R_nj6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_bloqueado-_R_nj6_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." value=""/>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>Campo completo (Field): une la etiqueta, la ayuda y el error con su control. El lector de pantalla anuncia el error y la ayuda al llegar al campo (aria-describedby), lo marca como inválido (aria-invalid) y dice «obligatorio» por el required; el asterisco es solo visual.</p>
+<div>
+<figure>
+<figcaption>Campo con ayuda</figcaption>
+<div>
+<div>
+<label for="galeria-field-correo">Correo</label>
+<input type="email" id="galeria-field-correo" aria-describedby="galeria-field-correo-ayuda" placeholder="ventas@empresa.pe"/>
+<p id="galeria-field-correo-ayuda">Se usa para enviar la proforma.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo obligatorio</figcaption>
+<div>
+<div>
+<label for="galeria-field-nombre">Nombre o razón social<span aria-hidden="true">*</span>
+</label>
+<input id="galeria-field-nombre" required="" placeholder="Ej.: Metalmecánica Lima S.A.C."/>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-ruc">RUC<span aria-hidden="true">*</span>
+</label>
+<input id="galeria-field-ruc" required="" aria-invalid="true" aria-describedby="galeria-field-ruc-ayuda galeria-field-ruc-error" inputMode="numeric" value="2012345"/>
+<p id="galeria-field-ruc-ayuda">11 dígitos.</p>
+<p id="galeria-field-ruc-error">El RUC debe tener 11 dígitos.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Lista con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-tipo">Tipo de cliente<span aria-hidden="true">*</span>
+</label>
+<select id="galeria-field-tipo" required="" aria-invalid="true" aria-describedby="galeria-field-tipo-error">
+<option value="" selected="">Seleccione</option>
+<option value="empresa">Empresa</option>
+<option value="persona">Persona natural</option>
+</select>
+<p id="galeria-field-tipo-error">Seleccione un tipo de cliente.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Área de texto con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-motivo">Motivo de anulación<span aria-hidden="true">*</span>
+</label>
+<textarea id="galeria-field-motivo" required="" aria-invalid="true" aria-describedby="galeria-field-motivo-ayuda galeria-field-motivo-error">
+</textarea>
+<p id="galeria-field-motivo-ayuda">Queda registrado en la bitácora.</p>
+<p id="galeria-field-motivo-error">El motivo es obligatorio.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo deshabilitado</figcaption>
+<div>
+<div data-disabled="true">
+<label for="galeria-field-codigo">Código</label>
+<input id="galeria-field-codigo" disabled="" aria-describedby="galeria-field-codigo-ayuda" value="CLI00000001"/>
+<p id="galeria-field-codigo-ayuda">No se envía con el formulario.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo de solo lectura</figcaption>
+<div>
+<div>
+<label for="galeria-field-registro">Código de registro</label>
+<input id="galeria-field-registro" readOnly="" aria-describedby="galeria-field-registro-ayuda" value="CLI00000001"/>
+<p id="galeria-field-registro-ayuda">Lo asigna el sistema; se puede copiar y se envía.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Lista de solo lectura</figcaption>
+<div>
+<div>
+<label for="galeria-field-rol">Rol</label>
+<input id="galeria-field-rol" readOnly="" aria-describedby="galeria-field-rol-ayuda" value="Vendedor"/>
+<input type="hidden" name="galeria_rol" value="SELLER"/>
+<p id="galeria-field-rol-ayuda">No puedes cambiar tu propio rol.</p>
+</div>
+</div>
+</figure>
+</div>
+<p>Solo lectura y deshabilitado no son lo mismo: un campo de solo lectura se lee a contraste completo, recibe el foco, se puede copiar y se envía; uno deshabilitado se atenúa, se salta con Tab y no se envía. HTML no admite solo lectura en una lista: se muestra la opción elegida en un campo de solo lectura y su valor viaja en un input oculto. Las 16 copias locales del mensaje de error se reemplazan por FieldError en las entregas 9 y 10. Teclado: en la búsqueda, las flechas recorren las opciones, Enter elige y Escape cierra.</p>
+</section>
+<section id="mensajes" aria-labelledby="mensajes-titulo">
+<header>
+<h2 id="mensajes-titulo">Mensajes y estados</h2>
+<p>Alertas persistentes, avisos temporales, confirmaciones y estados vacío, de error y de carga.</p>
+</header>
+<div>
+<figure>
+<figcaption>Alerta default</figcaption>
+<div>
+<div role="alert">
+<svg/>
+<div>Aviso general</div>
+<div>Información persistente dentro de una pantalla.</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Alerta info</figcaption>
+<div>
+<div role="alert">
+<svg/>
+<div>Información</div>
+<div>El pedido no tiene comprobante emitido.</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Alerta success</figcaption>
+<div>
+<div role="alert">
+<svg/>
+<div>Operación correcta</div>
+<div>La planilla quedó cerrada.</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Alerta warning</figcaption>
+<div>
+<div role="alert">
+<svg/>
+<div>Advertencia</div>
+<div>El stock del material está por debajo del mínimo.</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Alerta destructive</figcaption>
+<div>
+<div role="alert">
+<svg/>
+<div>Error</div>
+<div>No se pudo registrar el pago. Revise los datos.</div>
+</div>
+</div>
+</figure>
+</div>
+<figure>
+<figcaption>Avisos temporales, confirmaciones y carga (fachada de notificaciones)</figcaption>
+<div>
+<div>
+<button data-variant="outline" type="button">Aviso de éxito</button>
+<button data-variant="outline" type="button">Aviso de error</button>
+<button data-variant="outline" type="button">Aviso de advertencia</button>
+<button data-variant="outline" type="button">Aviso de información</button>
+<button data-variant="secondary" type="button">Confirmación</button>
+<button data-variant="destructive" type="button">Confirmación de eliminación</button>
+<button data-variant="secondary" type="button">Ventana de carga (1,5 s)</button>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Confirmaciones accesibles (ConfirmDialog), para comparar</figcaption>
+<div>
+<div>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Confirmación accesible</button>
+<button data-variant="destructive" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Anulación accesible</button>
+</div>
+</div>
+</figure>
+<p>Los avisos usan Toastify y las confirmaciones de la fachada usan SweetAlert2 hasta la entrega 11. ConfirmDialog, sobre el AlertDialog de Radix, nombra la entidad, la consecuencia y el verbo de la acción. Teclado: al abrir, el foco va a Cancelar; Tab no sale de la ventana; Esc la cierra y el foco vuelve al botón que la abrió. Mientras confirma, la acción muestra su estado pendiente y no se puede cancelar.</p>
+<div>
+<figure>
+<figcaption>Vacío</figcaption>
+<div>
+<div>
+<div>
+<p>No se encontraron clientes con los filtros aplicados.</p>
+</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Vacío con icono y acción</figcaption>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>
+<p>Todavía no hay materiales</p>
+<p>Registra el primero para empezar a controlar su stock.</p>
+</div>
+<button data-variant="default" type="button">Nuevo material</button>
+</div>
+</div>
+</figure>
+</div>
+<figure>
+<figcaption>Error de pantalla</figcaption>
+<div>
+<section>
+<span>
+<svg/>
+</span>
+<div>
+<h1>No se pudo cargar la información</h1>
+<p>Ocurrió un problema al consultar los datos. Intenta de nuevo en unos segundos.</p>
+</div>
+<div>
+<p>Detalle técnico:</p>
+<p>Ejemplo de la galería: tiempo de espera agotado.</p>
+</div>
+<div>
+<button data-variant="outline" type="button">Reintentar</button>
+</div>
+</section>
+</div>
+</figure>
+<div>
+<figure>
+<figcaption>Carga en bloque</figcaption>
+<div>
+<div role="status">
+<svg/>
+<span>Cargando materiales...</span>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Carga en línea</figcaption>
+<div>
+<div role="status">
+<svg/>
+<span>Buscando clientes...</span>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Pantalla de esqueletos</figcaption>
+<div>
+<div>
+<div role="status">
+<svg/>
+<span>Cargando indicadores...</span>
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+<div aria-hidden="true">
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>LoadingState se anuncia con role=status sin mover el foco. Los bloques de Skeleton son decorativos: en una pantalla de esqueletos, un LoadingState oculto a la vista anuncia la carga. El pulso y el giro se detienen si el sistema pide reducir el movimiento.</p>
+</section>
+<section id="ventanas" aria-labelledby="ventanas-titulo">
+<header>
+<h2 id="ventanas-titulo">Ventanas</h2>
+<p>Ventanas y paneles laterales con encabezado y pie fijos y cuerpo desplazable. En el teléfono ocupan la pantalla completa.</p>
+</header>
+<figure>
+<figcaption>Ventana (Dialog) y panel lateral (Sheet)</figcaption>
+<div>
+<div>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Ventana con formulario</button>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Ventana con contenido largo</button>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Panel derecho (filtros)</button>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Panel izquierdo (sin descripción)</button>
+</div>
+</div>
+</figure>
+<p>Teclado: al abrir, el foco va al primer campo (o a la X si no hay campos); Tab no sale de la ventana; Esc o un clic en el velo la cierran y el foco vuelve al botón que la abrió. En la ventana larga, el cuerpo se desplaza con la rueda, el dedo o las flechas, y el pie sigue visible. Mientras se registra el pago no se puede cerrar. En el teléfono, la ventana y los paneles ocupan la pantalla y los botones del pie se apilan.</p>
+</section>
+<section id="presentacion" aria-labelledby="presentacion-titulo">
+<header>
+<h2 id="presentacion-titulo">Presentación</h2>
+<p>Etiquetas, tarjetas, indicadores y separadores.</p>
+</header>
+<figure>
+<figcaption>Etiqueta (Badge) en cada variante</figcaption>
+<div>
+<span data-variant="default">default</span>
+<span data-variant="success">success</span>
+<span data-variant="warning">warning</span>
+<span data-variant="info">info</span>
+<span data-variant="secondary">secondary</span>
+<span data-variant="destructive">destructive</span>
+<span data-variant="outline">outline</span>
+<span data-variant="ghost">ghost</span>
+<span data-variant="link">link</span>
+</div>
+</figure>
+<figure>
+<figcaption>Etiqueta de estado comercial (StatusBadge)</figcaption>
+<div>
+<span>Registrado</span>
+<span>Vigente</span>
+<span>Pagada</span>
+<span>Entregado</span>
+<span>Pendiente</span>
+<span>Parcial</span>
+<span>En producción</span>
+<span>Anulado</span>
+<span>desconocido</span>
+</div>
+</figure>
+<p>Hay dos aspectos para las etiquetas de estado: Badge, que usan la mayoría de los módulos, y StatusBadge, que usa Comercial. Unificarlos es una decisión visible que se tomará al migrar los listados.</p>
+<div>
+<figure>
+<figcaption>Tarjeta completa</figcaption>
+<div>
+<div>
+<div>
+<div>Resumen del pedido</div>
+<div>PED00000012 · Metalmecánica Lima</div>
+<div>
+<button data-variant="outline" type="button">Ver</button>
+</div>
+</div>
+<div>Total: S/ 12 450,00</div>
+<div>Actualizado el 13/10/2026</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Tarjeta con barra térmica</figcaption>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<div>Producción del día</div>
+</div>
+<div>3 órdenes en curso</div>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Tarjeta pequeña</figcaption>
+<div>
+<div>
+<div>
+<div>Caja chica</div>
+</div>
+<div>Saldo: S/ 350,00</div>
+</div>
+</div>
+</figure>
+</div>
+<figure>
+<figcaption>Indicadores (KpiCard)</figcaption>
+<div>
+<div>
+<div>
+<div>
+<div>Pedidos</div>
+</div>
+</div>
+<div>
+<p>12</p>
+<p>Pendientes de entrega</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<div>Cobranzas</div>
+</div>
+</div>
+<div>
+<p>S/ 8 300</p>
+<p>Cobradas este mes</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<div>Stock bajo</div>
+</div>
+</div>
+<div>
+<p>3</p>
+<p>Materiales bajo el mínimo</p>
+</div>
+</div>
+<a href="#presentacion">
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes</div>
+</div>
+</div>
+<div>
+<p>5</p>
+<p>Con enlace e icono</p>
+</div>
+</div>
+</a>
+</div>
+</figure>
+<figure>
+<figcaption>Acceso a módulo (ModuleAccessCard)</figcaption>
+<div>
+<a href="#presentacion">
+<div>
+<span aria-hidden="true">01</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Clientes</div>
+</div>
+<div>
+<p>Registro y consulta de clientes.</p>
+</div>
+</div>
+</a>
+<a href="#presentacion">
+<div>
+<span aria-hidden="true">02</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Materiales</div>
+</div>
+<div>
+<p>Catálogo y stock.</p>
+</div>
+</div>
+</a>
+<a href="#presentacion">
+<div>
+<span aria-hidden="true">03</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Almacén</div>
+</div>
+<div>
+<p>Movimientos de inventario.</p>
+</div>
+</div>
+</a>
+<a href="#presentacion">
+<div>
+<div>
+<div>
+<svg/>
+</div>
+<div>Sin icono</div>
+</div>
+<div>
+<p>Muestra el icono genérico.</p>
+</div>
+</div>
+</a>
+</div>
+</figure>
+<figure>
+<figcaption>Separadores</figcaption>
+<div>
+<span>Horizontal</span>
+<div data-orientation="horizontal" role="none">
+</div>
+<div data-orientation="vertical" role="none">
+</div>
+<span>Vertical</span>
+</div>
+</figure>
+</section>
+<section id="listados" aria-labelledby="listados-titulo">
+<header>
+<h2 id="listados-titulo">Listados y navegación</h2>
+<p>Barra de filtros con rango de fechas, tabla con acciones por fila, carga, etiquetas de estado, resultados vacíos, paginación y navegación, como en el listado de clientes.</p>
+</header>
+<figure>
+<figcaption>Barra de filtros (FilterBar) con rango de fechas</figcaption>
+<div>
+<form role="search" aria-label="Filtros de ejemplo" action="/dashboard/gallery#listados" method="GET">
+<div>
+<label for="galeria-listado-q">Búsqueda general</label>
+<input id="galeria-listado-q" placeholder="Nombre, documento o teléfono" name="q"/>
+</div>
+<div>
+<label for="galeria-listado-estado">Estado</label>
+<select id="galeria-listado-estado" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+</div>
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="galeria-listado-rango-desde">Desde</label>
+<input type="date" id="galeria-listado-rango-desde" name="from" value=""/>
+</div>
+<div>
+<label for="galeria-listado-rango-hasta">Hasta</label>
+<input type="date" id="galeria-listado-rango-hasta" name="to" value=""/>
+</div>
+</fieldset>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/gallery#listados">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</figure>
+<figure>
+<figcaption>Rango invertido (llega así en la URL)</figcaption>
+<div>
+<form role="search" aria-label="Filtros con rango invertido" action="/dashboard/gallery#listados" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="galeria-listado-invertido-desde">Desde</label>
+<input type="date" id="galeria-listado-invertido-desde" name="dateFrom" value="2026-10-13"/>
+</div>
+<div>
+<label for="galeria-listado-invertido-hasta">Hasta</label>
+<input type="date" id="galeria-listado-invertido-hasta" aria-invalid="true" aria-describedby="galeria-listado-invertido-hasta-error" min="2026-10-13" name="dateTo" value="2026-10-01"/>
+<p id="galeria-listado-invertido-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+</div>
+</fieldset>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/gallery#listados">Limpiar filtros</a>
+</div>
+</form>
+</div>
+</figure>
+<p>Hay 43 formularios GET de filtros y parámetros con 27 combinaciones de clases distintas; FilterBar usa una sola rejilla que se adapta al ancho, y el rango ocupa dos columnas solo si la barra tiene sitio. DateRangeFields conserva los nombres de la URL de cada pantalla (from/to, dateFrom/dateTo, desde/hasta). Si «Desde» es posterior a «Hasta», muestra el mismo mensaje que la exportación y Filtrar no envía nada. Teclado: escribe en «Hasta» una fecha anterior a «Desde» y pulsa Filtrar.</p>
+<figure>
+<figcaption>Tabla con acciones por fila</figcaption>
+<div>
+<p>Resultados encontrados: 3</p>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Tipo</th>
+<th>Teléfono</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLI00000001</td>
+<td>Metalmecánica Lima S.A.C.</td>
+<td>Empresa</td>
+<td>014567890</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="#listados">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
+</div>
+</td>
+</tr>
+<tr>
+<td>CLI00000002</td>
+<td>Taller Arequipa</td>
+<td>Persona natural</td>
+<td>-</td>
+<td>
+<span data-variant="success">Activo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="#listados">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
+</div>
+</td>
+</tr>
+<tr>
+<td>CLI00000003</td>
+<td>Estructuras del Sur</td>
+<td>Empresa</td>
+<td>054223344</td>
+<td>
+<span data-variant="outline">Inactivo</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="#listados">Editar</a>
+<button data-variant="ghost" type="button">Activar</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 45 clientes · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/gallery?page=2">Siguiente</a>
+</div>
+</div>
+</div>
+</figure>
+<p>«Activar» e «Inactivar» se muestran con el aspecto de RowToggleStatusButton, pero aquí no envían nada: ese componente exige una acción del servidor y la galería no ejecuta ninguna.</p>
+<figure>
+<figcaption>Tabla cargando (TableLoadingRows)</figcaption>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+<th>Tipo</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div role="status">
+<svg/>
+<span>Cargando clientes...</span>
+</div>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+<td>
+<div aria-hidden="true">
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Etiquetas de estado: StatusBadge (Comercial) y Badge, lado a lado</figcaption>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>StatusBadge</th>
+<th>Badge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pagada</td>
+<td>
+<span>Pagada</span>
+</td>
+<td>
+<span data-variant="success">Pagada</span>
+</td>
+</tr>
+<tr>
+<td>aprobado</td>
+<td>
+<span>Aprobado</span>
+</td>
+<td>
+<span data-variant="info">Aprobado</span>
+</td>
+</tr>
+<tr>
+<td>pendiente</td>
+<td>
+<span>Pendiente</span>
+</td>
+<td>
+<span data-variant="default">Pendiente</span>
+</td>
+</tr>
+<tr>
+<td>en_produccion</td>
+<td>
+<span>En producción</span>
+</td>
+<td>
+<span data-variant="default">En producción</span>
+</td>
+</tr>
+<tr>
+<td>sin proforma</td>
+<td>
+<span>Sin proforma</span>
+</td>
+<td>
+<span data-variant="default">Sin proforma</span>
+</td>
+</tr>
+<tr>
+<td>anulado</td>
+<td>
+<span>Anulado</span>
+</td>
+<td>
+<span data-variant="destructive">Anulado</span>
+</td>
+</tr>
+<tr>
+<td>desconocido</td>
+<td>
+<span>desconocido</span>
+</td>
+<td>
+<span data-variant="outline">desconocido</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+<p>Las dos usan los mismos colores (las clases badge-state-*); solo cambia la forma: StatusBadge es redondeada, en minúsculas y traduce el estado; Badge es más compacta y en mayúsculas. En la entrega 10 se adopta una sola para todas las pantallas.</p>
+<figure>
+<figcaption>Tabla sin resultados</figcaption>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cliente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="2">
+<div>
+<div>
+<p>No se encontraron clientes con los filtros aplicados.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+<div>
+<figure>
+<figcaption>Migas de pan</figcaption>
+<div>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="#listados">Comercial</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Clientes</span>
+</li>
+</ol>
+</nav>
+</div>
+</figure>
+<figure>
+<figcaption>Volver</figcaption>
+<div>
+<button type="button" aria-label="Volver">
+<svg/>Volver</button>
+</div>
+</figure>
+</div>
+<p>La cabecera de esta página es el componente compartido PageHeader, con migas de pan y descripción.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;

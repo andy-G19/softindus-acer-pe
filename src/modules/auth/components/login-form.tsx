@@ -113,9 +113,8 @@ export function LoginForm() {
     <Card
       className="relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl"
       style={{
-        background: "linear-gradient(180deg, #15181d, #1c2027)",
-        boxShadow:
-          "0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2)",
+        background: "linear-gradient(180deg, var(--card), var(--popover))",
+        boxShadow: "var(--shadow-login)",
       }}
     >
       <div className="heat-bar w-full" aria-hidden="true" />
@@ -128,7 +127,7 @@ export function LoginForm() {
               alt="Logo de Aceros Perú"
               width={80}
               height={80}
-              className="h-10 w-10 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+              className="h-10 w-10 shrink-0 rounded-full shadow-hairline"
               priority
             />
             <div className="min-w-0 leading-tight">
@@ -164,9 +163,9 @@ export function LoginForm() {
           {state.error ? (
             <Alert
               variant="destructive"
-              className="border-red-400/30 bg-red-950/30 text-red-200"
+              className="border-destructive-outline/30 bg-destructive-surface/30 text-destructive-foreground"
             >
-              <AlertDescription className="text-red-200/90">
+              <AlertDescription className="text-destructive-foreground/90">
                 {state.error}
               </AlertDescription>
             </Alert>

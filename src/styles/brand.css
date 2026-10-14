@@ -1,0 +1,161 @@
+/* Identidad de Aceros Peru: login, barra termica, progreso de navegacion,
+   riel templado, boton de forja y foco de los campos. */
+@layer utilities {
+  .login-industrial-bg {
+    background:
+      radial-gradient(1100px 700px at 78% 15%, var(--login-glow-steel), transparent 60%),
+      radial-gradient(900px 600px at 15% 90%, var(--login-glow-amber), transparent 60%),
+      var(--background);
+  }
+
+  .login-brushed-metal {
+    background-image: repeating-linear-gradient(
+      115deg,
+      var(--metal-brush) 0,
+      var(--metal-brush) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  .heat-bar,
+  .login-heat-bar {
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-steel) 0%,
+      var(--primary) 55%,
+      var(--accent-ember) 100%
+    );
+    background-size: 200% 100%;
+    animation: temper var(--motion-temper) ease-in-out infinite;
+  }
+
+  .nav-progress-track {
+    height: 3px;
+    overflow: hidden;
+  }
+
+  .nav-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent-forge);
+    box-shadow: 0 0 8px 1px color-mix(in srgb, var(--accent-forge) 55%, transparent);
+    opacity: 0;
+    transition:
+      width var(--motion-slow) ease-out,
+      opacity var(--motion-fast) ease-out;
+  }
+
+  .nav-progress-fill[data-active="true"] {
+    opacity: 1;
+  }
+
+  .tempered-rail {
+    width: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(
+      180deg,
+      var(--accent-steel) 0%,
+      var(--primary) 55%,
+      var(--accent-ember) 100%
+    );
+    background-size: 200% 200%;
+    animation: temper var(--motion-temper) ease-in-out infinite;
+  }
+
+  .login-ember {
+    position: absolute;
+    bottom: -10px;
+    width: 3px;
+    height: 3px;
+    border-radius: 9999px;
+    background: var(--accent-ember);
+    box-shadow: 0 0 6px 1px var(--ember-glow);
+    opacity: 0;
+    animation-name: login-ember-rise;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes temper {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes login-ember-rise {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.6;
+    }
+    90% {
+      opacity: 0.12;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(20px);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .heat-bar,
+    .login-heat-bar,
+    .tempered-rail,
+    .login-ember {
+      animation: none;
+    }
+  }
+
+  .forge-button-gradient {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--primary) 85%, white 15%),
+      var(--primary)
+    );
+    box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--primary) 50%, transparent);
+  }
+
+  .forge-button-gradient:hover {
+    filter: brightness(1.06);
+  }
+
+  .input-forge-focus:focus-visible {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+
+  .login-field-input {
+    height: 2.75rem;
+    border-color: var(--login-field-border);
+    background-color: var(--login-field-bg);
+    color: var(--foreground);
+  }
+
+  .login-field-input::placeholder {
+    color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+  }
+
+  .login-field-input:hover {
+    border-color: var(--login-field-border-hover);
+  }
+
+  .login-field-input:focus-visible {
+    border-color: var(--primary);
+    background-color: var(--login-field-bg);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+
+  .login-password-toggle:focus-visible {
+    color: var(--foreground);
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
