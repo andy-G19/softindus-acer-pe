@@ -3,16 +3,16 @@
 @layer utilities {
   .login-industrial-bg {
     background:
-      radial-gradient(1100px 700px at 78% 15%, rgba(74, 111, 165, 0.1), transparent 60%),
-      radial-gradient(900px 600px at 15% 90%, rgba(245, 158, 11, 0.08), transparent 60%),
-      #0a0b0d;
+      radial-gradient(1100px 700px at 78% 15%, var(--login-glow-steel), transparent 60%),
+      radial-gradient(900px 600px at 15% 90%, var(--login-glow-amber), transparent 60%),
+      var(--background);
   }
 
   .login-brushed-metal {
     background-image: repeating-linear-gradient(
       115deg,
-      rgba(255, 255, 255, 0.015) 0,
-      rgba(255, 255, 255, 0.015) 1px,
+      var(--metal-brush) 0,
+      var(--metal-brush) 1px,
       transparent 1px,
       transparent 3px
     );
@@ -28,7 +28,7 @@
       var(--accent-ember) 100%
     );
     background-size: 200% 100%;
-    animation: temper 6s ease-in-out infinite;
+    animation: temper var(--motion-temper) ease-in-out infinite;
   }
 
   .nav-progress-track {
@@ -43,8 +43,8 @@
     box-shadow: 0 0 8px 1px color-mix(in srgb, var(--accent-forge) 55%, transparent);
     opacity: 0;
     transition:
-      width 250ms ease-out,
-      opacity 150ms ease-out;
+      width var(--motion-slow) ease-out,
+      opacity var(--motion-fast) ease-out;
   }
 
   .nav-progress-fill[data-active="true"] {
@@ -61,7 +61,7 @@
       var(--accent-ember) 100%
     );
     background-size: 200% 200%;
-    animation: temper 6s ease-in-out infinite;
+    animation: temper var(--motion-temper) ease-in-out infinite;
   }
 
   .login-ember {
@@ -70,8 +70,8 @@
     width: 3px;
     height: 3px;
     border-radius: 9999px;
-    background: #ff7a1a;
-    box-shadow: 0 0 6px 1px rgba(255, 122, 26, 0.55);
+    background: var(--accent-ember);
+    box-shadow: 0 0 6px 1px var(--ember-glow);
     opacity: 0;
     animation-name: login-ember-rise;
     animation-timing-function: linear;
@@ -134,8 +134,8 @@
 
   .login-field-input {
     height: 2.75rem;
-    border-color: rgb(255 255 255 / 0.1);
-    background-color: rgb(255 255 255 / 0.05);
+    border-color: var(--login-field-border);
+    background-color: var(--login-field-bg);
     color: var(--foreground);
   }
 
@@ -144,12 +144,12 @@
   }
 
   .login-field-input:hover {
-    border-color: rgb(255 255 255 / 0.2);
+    border-color: var(--login-field-border-hover);
   }
 
   .login-field-input:focus-visible {
     border-color: var(--primary);
-    background-color: rgb(255 255 255 / 0.05);
+    background-color: var(--login-field-bg);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
   }
 

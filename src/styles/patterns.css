@@ -2,15 +2,15 @@
    de la barra lateral. */
 @layer utilities {
   .badge-state-success {
-    border-color: color-mix(in srgb, var(--accent-forge) 32%, transparent);
-    background-color: color-mix(in srgb, var(--accent-forge) 14%, transparent);
-    color: color-mix(in srgb, var(--accent-forge) 78%, var(--foreground) 22%);
+    border-color: color-mix(in srgb, var(--success) 32%, transparent);
+    background-color: color-mix(in srgb, var(--success) 14%, transparent);
+    color: color-mix(in srgb, var(--success) 78%, var(--foreground) 22%);
   }
 
   .badge-state-info {
-    border-color: color-mix(in srgb, var(--accent-steel) 32%, transparent);
-    background-color: color-mix(in srgb, var(--accent-steel) 14%, transparent);
-    color: color-mix(in srgb, var(--accent-steel) 72%, var(--foreground) 28%);
+    border-color: color-mix(in srgb, var(--info) 32%, transparent);
+    background-color: color-mix(in srgb, var(--info) 14%, transparent);
+    color: color-mix(in srgb, var(--info) 72%, var(--foreground) 28%);
   }
 
   .badge-state-active {
@@ -20,9 +20,9 @@
   }
 
   .badge-state-warning {
-    border-color: color-mix(in srgb, var(--accent-ember) 32%, transparent);
-    background-color: color-mix(in srgb, var(--accent-ember) 14%, transparent);
-    color: color-mix(in srgb, var(--accent-ember) 78%, var(--foreground) 22%);
+    border-color: color-mix(in srgb, var(--warning) 32%, transparent);
+    background-color: color-mix(in srgb, var(--warning) 14%, transparent);
+    color: color-mix(in srgb, var(--warning) 78%, var(--foreground) 22%);
   }
 
   .badge-state-danger {
@@ -32,33 +32,33 @@
   }
 
   .alert-state-success {
-    border-color: color-mix(in srgb, var(--accent-forge) 35%, transparent);
-    background-color: color-mix(in srgb, var(--accent-forge) 12%, transparent);
-    color: color-mix(in srgb, var(--accent-forge) 80%, var(--foreground) 20%);
+    border-color: color-mix(in srgb, var(--success) 35%, transparent);
+    background-color: color-mix(in srgb, var(--success) 12%, transparent);
+    color: color-mix(in srgb, var(--success) 80%, var(--foreground) 20%);
   }
 
   .alert-state-success [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--accent-forge) 55%, var(--foreground) 45%);
+    color: color-mix(in srgb, var(--success) 55%, var(--foreground) 45%);
   }
 
   .alert-state-warning {
-    border-color: color-mix(in srgb, var(--accent-ember) 35%, transparent);
-    background-color: color-mix(in srgb, var(--accent-ember) 12%, transparent);
-    color: color-mix(in srgb, var(--accent-ember) 80%, var(--foreground) 20%);
+    border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+    background-color: color-mix(in srgb, var(--warning) 12%, transparent);
+    color: color-mix(in srgb, var(--warning) 80%, var(--foreground) 20%);
   }
 
   .alert-state-warning [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--accent-ember) 55%, var(--foreground) 45%);
+    color: color-mix(in srgb, var(--warning) 55%, var(--foreground) 45%);
   }
 
   .alert-state-info {
-    border-color: color-mix(in srgb, var(--accent-steel) 40%, transparent);
-    background-color: color-mix(in srgb, var(--accent-steel) 12%, transparent);
-    color: color-mix(in srgb, var(--accent-steel) 78%, var(--foreground) 22%);
+    border-color: color-mix(in srgb, var(--info) 40%, transparent);
+    background-color: color-mix(in srgb, var(--info) 12%, transparent);
+    color: color-mix(in srgb, var(--info) 78%, var(--foreground) 22%);
   }
 
   .alert-state-info [data-slot="alert-description"] {
-    color: color-mix(in srgb, var(--accent-steel) 55%, var(--foreground) 45%);
+    color: color-mix(in srgb, var(--info) 55%, var(--foreground) 45%);
   }
 
   .sidebar-nav-link {

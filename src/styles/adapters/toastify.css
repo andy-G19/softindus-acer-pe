@@ -7,7 +7,7 @@
     border-radius: 0.75rem;
     background: linear-gradient(180deg, var(--card), var(--popover));
     color: var(--foreground);
-    box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+    box-shadow: var(--shadow-toast);
   }
 
   .Toastify__toast-body {
@@ -25,7 +25,7 @@
   .Toastify__close-button {
     color: var(--muted-foreground);
     opacity: 0.85;
-    transition: color 150ms ease;
+    transition: color var(--motion-fast) ease;
   }
 
   .Toastify__close-button:hover {
@@ -39,7 +39,7 @@
   }
 
   .toast-industrial-success {
-    border-color: color-mix(in srgb, var(--accent-forge) 32%, transparent);
+    border-color: color-mix(in srgb, var(--success) 32%, transparent);
   }
 
   .toast-industrial-error {
@@ -47,15 +47,15 @@
   }
 
   .toast-industrial-warning {
-    border-color: color-mix(in srgb, var(--accent-ember) 34%, transparent);
+    border-color: color-mix(in srgb, var(--warning) 34%, transparent);
   }
 
   .toast-industrial-info {
-    border-color: color-mix(in srgb, var(--accent-steel) 34%, transparent);
+    border-color: color-mix(in srgb, var(--info) 34%, transparent);
   }
 
   .toast-industrial-progress-success {
-    background: var(--accent-forge);
+    background: var(--success);
   }
 
   .toast-industrial-progress-error {
@@ -63,10 +63,10 @@
   }
 
   .toast-industrial-progress-warning {
-    background: var(--accent-ember);
+    background: var(--warning);
   }
 
   .toast-industrial-progress-info {
-    background: var(--accent-steel);
+    background: var(--info);
   }
 }

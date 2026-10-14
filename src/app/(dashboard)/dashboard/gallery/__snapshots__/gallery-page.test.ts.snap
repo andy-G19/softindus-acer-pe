@@ -53,7 +53,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <section id="fundamentos" aria-labelledby="fundamentos-titulo">
 <header>
 <h2 id="fundamentos-titulo">Fundamentos</h2>
-<p>Colores, tipografía y radios de la identidad actual. Cada componente de la galería se construye con ellos.</p>
+<p>Tokens de la identidad actual (src/styles/tokens.css): colores, tipografía, radios, sombras, capas y movimiento. Cada componente de la galería se construye con ellos.</p>
 </header>
 <figure>
 <figcaption>Colores</figcaption>
@@ -64,6 +64,14 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>
 <span>Fondo</span>
 <span>--background</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Fondo del panel</span>
+<span>--shell</span>
 </span>
 </div>
 <div>
@@ -158,6 +166,30 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <span>
+<span>Éxito</span>
+<span>--success</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Advertencia</span>
+<span>--warning</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Información</span>
+<span>--info</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
 <span>Peligro</span>
 <span>--destructive</span>
 </span>
@@ -166,7 +198,15 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <span>
-<span>Éxito (forja)</span>
+<span>Texto sobre peligro</span>
+<span>--destructive-foreground</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Forja (marca)</span>
 <span>--accent-forge</span>
 </span>
 </div>
@@ -174,7 +214,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <span>
-<span>Advertencia (brasa)</span>
+<span>Brasa (marca)</span>
 <span>--accent-ember</span>
 </span>
 </div>
@@ -182,7 +222,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span aria-hidden="true">
 </span>
 <span>
-<span>Información (acero)</span>
+<span>Acero (marca)</span>
 <span>--accent-steel</span>
 </span>
 </div>
@@ -192,6 +232,14 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>
 <span>Limpiar (cian)</span>
 <span>--accent-cyan</span>
+</span>
+</div>
+<div>
+<span aria-hidden="true">
+</span>
+<span>
+<span>Texto sobre cian</span>
+<span>--accent-cyan-foreground</span>
 </span>
 </div>
 <div>
@@ -279,6 +327,48 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>rounded-2xl</span>
 </div>
 </figure>
+<figure>
+<figcaption>Sombras</figcaption>
+<div>
+<div>
+<span>Tarjeta</span>
+<span>--shadow-raised</span>
+</div>
+<div>
+<span>Indicador al pasar</span>
+<span>--shadow-raised-hover</span>
+</div>
+<div>
+<span>Módulo al pasar</span>
+<span>--shadow-card-hover</span>
+</div>
+<div>
+<span>Panel de error</span>
+<span>--shadow-panel</span>
+</div>
+<div>
+<span>Lista desplegable</span>
+<span>--shadow-menu</span>
+</div>
+<div>
+<span>Barra lateral abierta</span>
+<span>--shadow-sidebar</span>
+</div>
+<div>
+<span>Aviso</span>
+<span>--shadow-toast</span>
+</div>
+<div>
+<span>Confirmación</span>
+<span>--shadow-dialog</span>
+</div>
+<div>
+<span>Contorno fino</span>
+<span>--shadow-hairline</span>
+</div>
+</div>
+</figure>
+<p>Capas (--z-*): barra lateral 30, cabecera 40 y ventanas 50. Movimiento (--motion-*): 150, 200 y 250 ms para transiciones y 6 s para la barra térmica, que se detiene con la preferencia de movimiento reducido. El espaciado y la escala tipográfica son los de Tailwind.</p>
 </section>
 <section id="botones" aria-labelledby="botones-titulo">
 <header>

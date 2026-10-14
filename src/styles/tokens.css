@@ -1,6 +1,11 @@
-/* Tokens de la identidad visual: variables de color, radios y fuentes que
-   Tailwind expone como utilidades (@theme inline). La aplicacion es solo
-   oscura y :root ya tiene esos valores; .dark los repite. */
+/* Tokens de la identidad visual, definidos una sola vez en :root: fondo,
+   superficies, texto, borde, primario, estados, foco (--ring), radios,
+   sombras, capas y movimiento. @theme inline expone a Tailwind los que se usan
+   como utilidades (bg-success, shadow-raised...). La aplicacion es solo oscura:
+   :root ya tiene los valores oscuros y la clase .dark solo activa las
+   variantes dark: de los componentes de shadcn. Fuera de este archivo, las
+   hojas no escriben colores literales (global-stylesheet.test.ts). La escala
+   de espaciado y la tipografica son las de Tailwind. */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -45,6 +50,19 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-shell: var(--shell);
+  --color-accent-cyan-foreground: var(--accent-cyan-foreground);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-raised-hover: var(--shadow-raised-hover);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-panel: var(--shadow-panel);
+  --shadow-menu: var(--shadow-menu);
+  --shadow-sidebar: var(--shadow-sidebar);
+  --shadow-hairline: var(--shadow-hairline);
 }
 
 :root {
@@ -86,44 +104,51 @@
   --sidebar-accent-foreground: #f4f4f5;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #f2941f;
+
+  /* Estados: significado sobre la paleta de marca (forja, brasa y acero). Las
+     etiquetas, alertas y avisos usan estos nombres, no los de la marca. */
+  --success: var(--accent-forge);
+  --warning: var(--accent-ember);
+  --info: var(--accent-steel);
+  --destructive-foreground: oklch(88.5% 0.062 18.334);
+  --destructive-contrast: #fff1f2;
+
+  /* Superficies y textos propios de la identidad. */
+  --shell: #0f1011;
+  --accent-cyan-foreground: #04252b;
+
+  /* Sombras: cada valor es el que ya usaba su componente. */
+  --shadow-raised: 0 14px 35px rgba(0, 0, 0, 0.18);
+  --shadow-raised-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 16px 34px rgba(0, 0, 0, 0.24);
+  --shadow-panel: 0 24px 60px -28px rgba(0, 0, 0, 0.55);
+  --shadow-menu: 0 18px 42px rgba(0, 0, 0, 0.35);
+  --shadow-sidebar: 8px 0 32px rgba(0, 0, 0, 0.45);
+  --shadow-hairline: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-toast: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  --shadow-dialog: 0 34px 90px -34px rgba(0, 0, 0, 0.85);
+  --shadow-login: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+  /* Pantalla de login. */
+  --login-glow-steel: rgba(74, 111, 165, 0.1);
+  --login-glow-amber: rgba(245, 158, 11, 0.08);
+  --login-overlay-strong: rgba(15, 16, 17, 0.62);
+  --login-overlay-soft: rgba(15, 16, 17, 0.34);
+  --login-field-border: rgb(255 255 255 / 0.1);
+  --login-field-border-hover: rgb(255 255 255 / 0.2);
+  --login-field-bg: rgb(255 255 255 / 0.05);
+  --metal-brush: rgba(255, 255, 255, 0.015);
+  --ember-glow: rgba(255, 122, 26, 0.55);
+
+  /* Capas: barra lateral bajo la cabecera; ventanas sobre ambas. */
+  --z-sidebar: 30;
+  --z-header: 40;
+  --z-overlay: 50;
+
+  /* Movimiento. Las animaciones se detienen con prefers-reduced-motion. */
+  --motion-fast: 150ms;
+  --motion-base: 200ms;
+  --motion-slow: 250ms;
+  --motion-temper: 6s;
 }
 
-.dark {
-  --background: #0a0b0d;
-  --foreground: #f4f4f5;
-  --card: #15181d;
-  --card-foreground: #f4f4f5;
-  --popover: #1c2027;
-  --popover-foreground: #f4f4f5;
-  --primary: #f2941f;
-  --primary-foreground: #1a1300;
-  --secondary: #1c2027;
-  --secondary-foreground: #f4f4f5;
-  --muted: #1c2027;
-  --muted-foreground: #8b93a0;
-  --accent: #262a31;
-  --accent-foreground: #f8fafc;
-  --destructive: #e5484d;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.03);
-  --ring: #f2941f;
-  --accent-steel: #4a6fa5;
-  --accent-ember: #ff7a1a;
-  --accent-forge: #4f9142;
-  --accent-cyan: #06b6d4;
-  --accent-cyan-hover: #0891b2;
-  --accent-cyan-active: #0e7490;
-  --chart-1: #f2941f;
-  --chart-2: #4a6fa5;
-  --chart-3: #4f9142;
-  --chart-4: #ff7a1a;
-  --chart-5: #94a3b8;
-  --sidebar: #15181d;
-  --sidebar-foreground: #e5e7eb;
-  --sidebar-primary: #f2941f;
-  --sidebar-primary-foreground: #1a1300;
-  --sidebar-accent: #1c2027;
-  --sidebar-accent-foreground: #f4f4f5;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #f2941f;
-}
