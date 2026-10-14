@@ -54,6 +54,8 @@
   --color-warning: var(--warning);
   --color-info: var(--info);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-outline: var(--destructive-outline);
+  --color-destructive-surface: var(--destructive-surface);
   --color-shell: var(--shell);
   --color-accent-cyan-foreground: var(--accent-cyan-foreground);
   --shadow-raised: var(--shadow-raised);
@@ -111,6 +113,8 @@
   --warning: var(--accent-ember);
   --info: var(--accent-steel);
   --destructive-foreground: oklch(88.5% 0.062 18.334);
+  --destructive-outline: oklch(70.4% 0.191 22.216);
+  --destructive-surface: oklch(25.8% 0.092 26.042);
   --destructive-contrast: #fff1f2;
 
   /* Superficies y textos propios de la identidad. */

@@ -244,7 +244,7 @@ export function SearchableSelect({
           <div
             id={listboxId}
             role="listbox"
-            className="absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-[0_18px_42px_rgba(0,0,0,0.35)]"
+            className="absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-menu"
           >
             {filteredItems.length > 0 ? (
               filteredItems.map((item, index) => (

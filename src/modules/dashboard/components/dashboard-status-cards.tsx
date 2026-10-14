@@ -11,7 +11,7 @@ type DashboardStatusCardsProps = {
 export function DashboardStatusCards({ session }: DashboardStatusCardsProps) {
   return (
     <section>
-      <Card className="rounded-xl border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)] [--card-spacing:20px]">
+      <Card className="rounded-xl border border-border/80 bg-card shadow-raised [--card-spacing:20px]">
         <CardHeader className="pb-2">
           <CardTitle className="font-heading text-[19px] font-semibold leading-tight text-foreground">
             Sesión actual

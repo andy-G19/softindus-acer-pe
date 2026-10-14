@@ -29,9 +29,9 @@ type KpiCardProps = {
 };
 
 const kpiToneVariables = {
-  success: "var(--accent-forge)",
-  warning: "var(--accent-ember)",
-  info: "var(--accent-steel)",
+  success: "var(--success)",
+  warning: "var(--warning)",
+  info: "var(--info)",
 } satisfies Record<NonNullable<KpiCardProps["tone"]>, string>;
 
 export function KpiCard({
@@ -50,9 +50,9 @@ export function KpiCard({
         } as CSSProperties & Record<"--kpi-tone", string>
       }
       className={cn(
-        "relative h-full border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)] transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]",
+        "relative h-full border border-border/80 bg-card shadow-raised transition duration-150 ease-out [--card-spacing:20px] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[var(--kpi-tone)]",
         href &&
-          "hover:-translate-y-[2px] hover:border-border hover:bg-secondary hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.4)]"
+          "hover:-translate-y-[2px] hover:border-border hover:bg-secondary hover:shadow-raised-hover"
       )}
     >
       <CardHeader className="pb-1">

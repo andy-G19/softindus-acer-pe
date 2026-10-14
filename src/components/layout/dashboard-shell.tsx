@@ -23,13 +23,13 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
   const menuItems = getMenuForRole(session.user.role);
 
   return (
-    <div className="industrial-dark dark min-h-screen bg-[#0f1011] text-foreground">
+    <div className="industrial-dark dark min-h-screen bg-shell text-foreground">
       <SessionIdleGuard />
       <Suspense fallback={null}>
         <NotificationQueryBridge />
       </Suspense>
 
-      <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
+      <header className="sticky top-0 z-(--z-header) border-b border-border/80 bg-card/95 backdrop-blur">
         <Suspense fallback={<div className="heat-bar" aria-hidden="true" />}>
           <TopProgressBar />
         </Suspense>
@@ -40,7 +40,7 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
               alt="Logo de Industrias Aceros Perú"
               width={44}
               height={44}
-              className="size-11 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+              className="size-11 shrink-0 rounded-full shadow-hairline"
               priority
             />
             <div className="min-w-0 space-y-1">
@@ -78,10 +78,10 @@ export function DashboardShell({ session, children }: DashboardShellProps) {
       <aside
         className={cn(
           "group/sidebar hidden md:block",
-          "md:fixed md:inset-y-0 md:left-0 md:z-30",
+          "md:fixed md:inset-y-0 md:left-0 md:z-(--z-sidebar)",
           "md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar",
           "md:transition-[width] md:duration-200 md:ease-out",
-          "md:hover:w-64 md:hover:overflow-visible md:hover:shadow-[8px_0_32px_rgba(0,0,0,0.45)]",
+          "md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar",
           "md:focus-within:w-64 md:focus-within:overflow-visible",
         )}
       >

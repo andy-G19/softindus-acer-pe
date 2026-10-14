@@ -21,13 +21,13 @@ export default async function LoginPage() {
         sizes="100vw"
         className="absolute inset-0 z-0 scale-105 object-cover opacity-65 blur-[1px] saturate-125"
       />
-      <div className="absolute inset-0 z-0 bg-[#0a0b0d]/45" aria-hidden="true" />
+      <div className="absolute inset-0 z-0 bg-background/45" aria-hidden="true" />
       <div
         className="login-brushed-metal absolute inset-0 z-0"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(15,16,17,0.62)_0%,rgba(15,16,17,0.34)_34%,transparent_68%)]"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--login-overlay-strong)_0%,var(--login-overlay-soft)_34%,transparent_68%)]"
         aria-hidden="true"
       />
       <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">

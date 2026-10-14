@@ -2,13 +2,13 @@
 
 exports[`superficies de la aplicacion > formulario de login 1`] = `
 "<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x"/>
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, #15181d, #1c2027);box-shadow:0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2)">
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, var(--card), var(--popover));box-shadow:var(--shadow-login)">
 <div class="heat-bar w-full" aria-hidden="true">
 </div>
 <div class="px-6 py-7 sm:px-9 sm:py-9">
 <div class="mb-7 flex items-center justify-between gap-4">
 <div class="flex min-w-0 items-center gap-3">
-<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
+<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
 <div class="min-w-0 leading-tight">
 <p class="truncate text-sm font-semibold text-foreground">Aceros Perú</p>
 <p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sistema de gestión</p>
@@ -77,11 +77,11 @@ exports[`superficies de la aplicacion > pantalla de login sin sesion 1`] = `
 <link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x"/>
 <main class="industrial-dark dark login-industrial-bg relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 text-foreground">
 <img alt="" decoding="async" data-nimg="fill" class="absolute inset-0 z-0 scale-105 object-cover opacity-65 blur-[1px] saturate-125" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="100vw" srcSet="/_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=828&amp;q=75 828w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=3840&amp;q=75 3840w" src="/_next/image?url=%2Fimages%2Flogin-image.webp&amp;w=3840&amp;q=75"/>
-<div class="absolute inset-0 z-0 bg-[#0a0b0d]/45" aria-hidden="true">
+<div class="absolute inset-0 z-0 bg-background/45" aria-hidden="true">
 </div>
 <div class="login-brushed-metal absolute inset-0 z-0" aria-hidden="true">
 </div>
-<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(15,16,17,0.62)_0%,rgba(15,16,17,0.34)_34%,transparent_68%)]" aria-hidden="true">
+<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--login-overlay-strong)_0%,var(--login-overlay-soft)_34%,transparent_68%)]" aria-hidden="true">
 </div>
 <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
 <span class="login-ember" style="left:8%;animation-duration:8s;animation-delay:0s">
@@ -95,13 +95,13 @@ exports[`superficies de la aplicacion > pantalla de login sin sesion 1`] = `
 <span class="login-ember" style="left:90%;animation-duration:7s;animation-delay:0.8s">
 </span>
 </div>
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, #15181d, #1c2027);box-shadow:0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.2)">
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) bg-card text-sm ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl relative z-10 w-full max-w-md overflow-hidden rounded-xl border border-border py-0 text-card-foreground shadow-2xl" style="background:linear-gradient(180deg, var(--card), var(--popover));box-shadow:var(--shadow-login)">
 <div class="heat-bar w-full" aria-hidden="true">
 </div>
 <div class="px-6 py-7 sm:px-9 sm:py-9">
 <div class="mb-7 flex items-center justify-between gap-4">
 <div class="flex min-w-0 items-center gap-3">
-<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
+<img alt="Logo de Aceros Perú" width="80" height="80" decoding="async" data-nimg="1" class="h-10 w-10 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=256&amp;q=75"/>
 <div class="min-w-0 leading-tight">
 <p class="truncate text-sm font-semibold text-foreground">Aceros Perú</p>
 <p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sistema de gestión</p>
@@ -168,15 +168,15 @@ exports[`superficies de la aplicacion > pantalla de login sin sesion 1`] = `
 
 exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN 1`] = `
 "<link rel="preload" as="image" imageSrcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 2x"/>
-<div class="industrial-dark dark min-h-screen bg-[#0f1011] text-foreground">
-<header class="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur">
+<div class="industrial-dark dark min-h-screen bg-shell text-foreground">
+<header class="sticky top-0 z-(--z-header) border-b border-border/80 bg-card/95 backdrop-blur">
 <div class="nav-progress-track" aria-hidden="true">
 <div class="nav-progress-fill" data-active="false" style="width:0%">
 </div>
 </div>
 <div class="flex w-full flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
 <div class="flex min-w-0 items-center gap-3">
-<img alt="Logo de Industrias Aceros Perú" width="44" height="44" decoding="async" data-nimg="1" class="size-11 shrink-0 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75"/>
+<img alt="Logo de Industrias Aceros Perú" width="44" height="44" decoding="async" data-nimg="1" class="size-11 shrink-0 rounded-full shadow-hairline" style="color:transparent" srcSet="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75 2x" src="/_next/image?url=%2Fimages%2Flogo-160.png&amp;w=96&amp;q=75"/>
 <div class="min-w-0 space-y-1">
 <div class="flex flex-wrap items-center gap-2">
 <h1 class="font-heading text-xl font-bold text-foreground">Industrias Aceros Perú</h1>
@@ -206,7 +206,7 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 </div>
 </div>
 </header>
-<aside class="group/sidebar hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-30 md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar md:transition-[width] md:duration-200 md:ease-out md:hover:w-64 md:hover:overflow-visible md:hover:shadow-[8px_0_32px_rgba(0,0,0,0.45)] md:focus-within:w-64 md:focus-within:overflow-visible">
+<aside class="group/sidebar hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-(--z-sidebar) md:w-19 md:overflow-hidden md:border-r md:border-sidebar-border/80 md:bg-sidebar md:transition-[width] md:duration-200 md:ease-out md:hover:w-64 md:hover:overflow-visible md:hover:shadow-sidebar md:focus-within:w-64 md:focus-within:overflow-visible">
 <div class="h-full overflow-y-auto pt-24">
 <div class="px-3 pb-3">
 <p class="text-xs font-semibold uppercase text-muted-foreground hidden md:group-hover/sidebar:block md:group-focus-within/sidebar:block">Navegación</p>
@@ -531,7 +531,7 @@ exports[`superficies de la aplicacion > shell del dashboard con el menu de ADMIN
 
 exports[`superficies de la aplicacion > tarjeta de sesion del dashboard 1`] = `
 "<section>
-<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl rounded-xl border border-border/80 bg-card shadow-[0_14px_35px_rgba(0,0,0,0.18)] [--card-spacing:20px]">
+<div data-slot="card" data-size="default" class="group/card flex flex-col gap-(--card-spacing) overflow-hidden py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl rounded-xl border border-border/80 bg-card shadow-raised [--card-spacing:20px]">
 <div data-slot="card-header" class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) pb-2">
 <div data-slot="card-title" class="group-data-[size=sm]/card:text-sm font-heading text-[19px] font-semibold leading-tight text-foreground">Sesión actual</div>
 </div>

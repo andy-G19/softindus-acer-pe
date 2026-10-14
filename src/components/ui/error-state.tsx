@@ -23,7 +23,7 @@ export function ErrorState({
   return (
     <section
       className={cn(
-        "mx-auto flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-border bg-card p-8 text-center shadow-[0_24px_60px_-28px_rgba(0,0,0,0.55)]",
+        "mx-auto flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-border bg-card p-8 text-center shadow-panel",
         className
       )}
     >

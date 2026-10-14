@@ -57,6 +57,56 @@ const googleFontImportRestriction = {
 const apiLinkMessage =
   "Un enlace a /api/ (por ejemplo, una exportacion) va en un <a>, no en <Link>: en produccion next/link hace prefetch con un GET que ejecuta la ruta.";
 
+const sharedHelperMessage =
+  "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.";
+
+const sharedHelperSelectors = [
+  {
+    selector:
+      "FunctionDeclaration[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+    message: sharedHelperMessage,
+  },
+  {
+    selector:
+      "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
+    message: sharedHelperMessage,
+  },
+];
+
+const apiLinkSelectors = [
+  {
+    selector:
+      "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > CallExpression[callee.name='buildReportExportHref']",
+    message: apiLinkMessage,
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > Literal[value=/^\\/api\\//]",
+    message: apiLinkMessage,
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > TemplateLiteral > TemplateElement:first-child[value.raw=/^\\/api\\//]",
+    message: apiLinkMessage,
+  },
+];
+
+// Colores literales (entrega 8): clases de la paleta de Tailwind (text-red-200,
+// bg-white...), hexadecimales (#0f1011, tambien en bg-[#...]) y funciones de
+// color (rgba(), oklch()...).
+const colorLiteralPattern = String.raw`(^|[^\w-])(bg|text|border|ring|shadow|from|to|via|fill|stroke|outline|divide|placeholder|caret|accent|decoration)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-[0-9]|(^|[^\w-])(bg|text|border|ring|fill|stroke|outline)-(white|black)([^\w-]|$)|#[0-9a-fA-F]{3,8}([^\w-]|$)|(rgba?|hsla?|oklch|oklab)\(`;
+
+const colorLiteralMessage =
+  "Usa un token de src/styles/tokens.css (bg-shell, text-destructive-foreground, shadow-raised, var(--success)...) en lugar de un color literal; si falta, agregalo alli con su nombre y su papel.";
+
+const colorLiteralSelectors = [
+  { selector: `Literal[value=/${colorLiteralPattern}/]`, message: colorLiteralMessage },
+  {
+    selector: `TemplateElement[value.raw=/${colorLiteralPattern}/]`,
+    message: colorLiteralMessage,
+  },
+];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -146,35 +196,21 @@ const eslintConfig = defineConfig([
     files: ["src/**/*.{ts,tsx}"],
     ignores: ["src/lib/numbers.ts", "src/lib/formatters.ts"],
     rules: {
+      "no-restricted-syntax": ["error", ...sharedHelperSelectors, ...apiLinkSelectors],
+    },
+  },
+  // Colores literales en la interfaz (entrega 8): los componentes usan los
+  // tokens de src/styles/tokens.css. Solo cubre .tsx: los colores de los PDF y
+  // Excel (src/lib/*-export.ts) no son de la interfaz. Por la regla de
+  // reemplazo, este bloque repite las restricciones del bloque anterior.
+  {
+    files: ["src/**/*.tsx"],
+    rules: {
       "no-restricted-syntax": [
         "error",
-        {
-          selector:
-            "FunctionDeclaration[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
-          message:
-            "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.",
-        },
-        {
-          selector:
-            "VariableDeclarator[id.name=/^(toNumber|toNonNegativeNumber|formatMoney|formatDate)$/]",
-          message:
-            "Importa toNumber y toNonNegativeNumber de @/lib/numbers, y formatMoney y formatDate de @/lib/formatters, en lugar de definir una copia local.",
-        },
-        {
-          selector:
-            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > CallExpression[callee.name='buildReportExportHref']",
-          message: apiLinkMessage,
-        },
-        {
-          selector:
-            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > Literal[value=/^\\/api\\//]",
-          message: apiLinkMessage,
-        },
-        {
-          selector:
-            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > TemplateLiteral > TemplateElement:first-child[value.raw=/^\\/api\\//]",
-          message: apiLinkMessage,
-        },
+        ...sharedHelperSelectors,
+        ...apiLinkSelectors,
+        ...colorLiteralSelectors,
       ],
     },
   },

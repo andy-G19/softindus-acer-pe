@@ -66,7 +66,7 @@ export function ConfirmDeleteButton({
       type="submit"
       disabled={disabled}
       className={cn(
-        "rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60",
+        "rounded-md border border-destructive/35 bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive-foreground transition hover:border-destructive/55 hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-60",
         className,
       )}
       onClick={handleClick}
