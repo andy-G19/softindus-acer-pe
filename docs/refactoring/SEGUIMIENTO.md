@@ -2231,15 +2231,14 @@ su sello.
 
 ## Entrega 8 — Base visual y galería
 
-Fecha: 2026-10-13 y 2026-10-14. Estado: en curso. Hechos C0 a C12, 13 commits
-de `0ad4150` a `aada765`. Las tandas 1 (C0 a C3) y 2 (C4 a C7) están
-publicadas y verificadas en staging: CI #64 y #65 en verde, y 10 de 10 y 24 de
-24 huellas visuales como se predijo. Falta la tanda 3 (C8 a C13): foto del
-«antes», publicación y «después», recorrido de teclado y móvil de la galería,
-aprobación del aspecto de cada componente nuevo y pruebas con los 3 roles; su
-evidencia y el cierre van en el commit siguiente. Es la primera entrega de la
-pista B: construye la base visual y la prueba en una galería interna sin
-cambiar ninguna pantalla; las pantallas la adoptan en las entregas 9 y 10.
+Fecha: 2026-10-13 y 2026-10-14. Estado: verificada en staging el 2026-10-14;
+falta integrarla en `main`. 15 commits, de `0ad4150` a `7150d10`, más este
+cierre, publicados en tres tandas y verificadas las tres en staging: CI #64,
+#65 y #66 en verde, y 10 de 10, 24 de 24 y 26 de 26 huellas visuales como se
+predijo (en la tercera, 2 con redondeos de 0,01 px que la predicción no
+anticipó). Es la primera entrega de la pista B: construye la base visual y la
+prueba en una galería interna sin cambiar ninguna pantalla; las pantallas la
+adoptan en las entregas 9 y 10.
 
 Decisiones del responsable:
 
@@ -2265,6 +2264,8 @@ Decisiones del responsable:
 | 3fb247d | feat | `Skeleton`, `LoadingState`, `AlertDialog` y `ConfirmDialog`. |
 | 0aae1d5 | feat | `Dialog` y `Sheet` con cuerpo desplazable y pie fijo. |
 | aada765 | feat | `FilterBar`, `DateRangeFields` y filas de carga para tablas. |
+| 7dd295f | fix | La nota de «Listados» de la galería pasa de 46 barras y 28 rejillas a 43 formularios GET y 27 combinaciones de clases. |
+| 7150d10 | docs | Registro de la entrega: esta sección, `CLAUDE.md` e inventario. |
 
 Diseño:
 
@@ -2408,9 +2409,13 @@ analiza 583 archivos y cuenta 128 páginas (la galería), 138 formularios
 - La evidencia son los hashes de `tmp/e8-diff/staging-*-t*.json`, con su
   sello recalculado en Python: si se cierra el panel del navegador se pierden
   la sesión de Vercel y la IndexedDB.
-- Corrección pendiente para la tanda 3 (v3): los elementos sin caja (una
-  `<option>` de un select cerrado, un `input` oculto) se registrarán como
-  «sin caja», no con coordenadas que solo siguen a su sección.
+- La v3, de la tanda 3 (`tmp/e8-diff/huella.js`; la v2 queda en
+  `huella-v2.js`), registra los elementos sin caja (una `<option>` de un
+  select cerrado, un `input` oculto) como «sin caja», no con coordenadas que
+  solo siguen a su sección; se niega a medir fuera del origen de staging, y
+  descubre las secciones de la galería del DOM. Las diferencias de una
+  captura se clasifican por elemento: «subpíxel» es solo geometría con
+  diferencia de hasta 0,02 px.
 
 ### Publicación, CI y verificación en staging
 
@@ -2456,19 +2461,92 @@ Tanda 2 (C4 a C7):
   el login, 1 elemento de 57 y 1 propiedad, exactamente la predicha;
   pintados en un canvas dan los mismos píxeles (`[9, 11, 13, 115]` al 45 %).
 
-Tanda 3 (C8 a C13): pendiente; su evidencia va en el cierre.
+Tanda 3 (C8 a C13):
+
+- «Antes» el 2026-10-14 sobre `9102e3b` (`buildId` `6CyuJKcZl8zsdZxaMKzQT`)
+  con la huella v3 («sin caja», que se niega a medir fuera del origen de
+  staging y descubre las secciones de la galería del DOM): 22 capturas con
+  ADMIN (las 10 pantallas y las 6 secciones de la galería a las dos anchuras)
+  y 2 del login sin sesión, con el sello `97679a36…`, más tres controles (dos
+  repeticiones con el mismo hash y una mutación de `letter-spacing` que lo
+  cambia). Con el panel oculto, Chrome frena los temporizadores (las esperas
+  de 100 ms duraban ~670 ms) y cada captura tardó unos 6 s.
+- Predicción escrita a las 14:32 UTC, antes del push
+  (`staging-antes-t3.json`): idénticas las 10 pantallas, el login y las
+  secciones «Fundamentos» y «Presentación»; cambian «Botones», «Campos»,
+  «Mensajes» y «Listados»; «Ventanas» es nueva.
+- Push de 7 commits (`b588465` a `7150d10`). Los primeros intentos fallaron
+  con `Failed to connect to github.com port 443`: el DNS resolvía, GitHub no
+  declaraba incidentes y Google respondía siempre, pero entre las 14:46 y las
+  14:51 UTC la mayoría de las conexiones TCP a sus IP (`140.82.112-114.x`)
+  no se establecían. Fue la ruta entre el proveedor de internet y GitHub, no
+  el repositorio: un vigía con `curl` esperó 5 conexiones seguidas y el push
+  pasó después. El remoto siguió en `9102e3b` hasta entonces.
+- CI #66 en verde (2m 26s). Vercel desplegó solo (15:13:02 UTC) y cambió el
+  `buildId` (`uxKz4bI4ct3DnwZx8Pua6`), comprobado también dentro de cada
+  página medida.
+- «Después»: 26 capturas, sello `3e3a1974…` (recalculado en Python). 14
+  idénticas como se predijo; 8 cambian como se predijo, y en «Botones» y
+  «Campos» todos los elementos anteriores a las muestras nuevas son
+  idénticos, también los `Input`, `Textarea` y `NativeSelect` que ganaron
+  clases en C9; «Ventanas», nueva a las dos anchuras. «Presentación» no salió
+  idéntica, como predije, sino con 2 elementos a 0,01 px y ninguna propiedad
+  distinta: las secciones de arriba crecieron, la sección bajó y la posición
+  relativa redondeada a centésimas cayó al otro lado, el mismo fenómeno de la
+  tanda 2. A 376 px, la descripción nueva de «Mensajes» y «Listados» ocupa
+  una línea más (+20 px) y desplaza la sección. Nada quedó sin explicar.
+- No se probaron SELLER ni WORKSHOP_MASTER, por decisión del responsable: la
+  entrega no cambia permisos ni pantallas de esos roles, y
+  `gallery-page.test.ts` exige que los dos sean rechazados en la galería.
+
+Recorrido de teclado y móvil en la galería de staging, con teclas reales (un
+`KeyboardEvent` creado con JavaScript no cierra las ventanas de Radix: no
+sirve como prueba de teclado) y `document.activeElement` leído en cada paso:
+
+| # | Qué | Resultado |
+|---|---|---|
+| K1 | Botón pendiente | `aria-busy`, deshabilitado y spinner girando. El foco sigue en el botón al pulsar, pasa a `body` en ~1 s (corrección de foco de Chromium 152) y no vuelve al terminar |
+| K2 | `ConfirmDialog` | Foco inicial en Cancelar; Tab no sale de la ventana; Esc cierra y devuelve el foco al disparador; durante el pendiente, Esc no cierra (la mutación que sobrevivió en C10) |
+| K3 | Ventana con formulario | Foco en el primer campo (`required`, con su ayuda en `aria-describedby`); Mayús+Tab desde él va a la X; Enter envía sin navegar, queda pendiente y Esc no cierra |
+| K4 | Ventana larga | Mide `100dvh − 4rem` × `max-w-lg` y el pie sigue visible, pero el cuerpo no recibe el foco y no se desplaza con el teclado (hallazgo, abajo) |
+| K5 | Paneles | Anclados a su lado (448 px), foco inicial, Esc y devolución del foco; el izquierdo no tiene `aria-describedby`, a propósito |
+| K6 | `DateRangeFields` | La URL invertida se marca desde el principio; un «Hasta» anterior muestra el mensaje y marca solo «Hasta»; Enter en «Filtrar» no navega y lleva el foco al campo inválido (la mutación que sobrevivió en C12); corregido, el formulario es válido |
+| K7 | Solo lectura | `[readonly]` coincide con el `readOnly=""` de React; fondo `--muted`, texto a contraste completo, enfocable; el deshabilitado no lo es |
+| M1 | 376 px | Sin desbordamiento horizontal; la ventana ocupa la pantalla (376 × 813, sin redondeo) con los botones del pie apilados; `FilterBar` y el rango a una columna |
+
+`prefers-reduced-motion` no se puede emular en el navegador integrado: queda
+verificado en el CSS compilado (C8, C10 y C11). En el panel izquierdo, el foco
+inicial va a la X y no al primer enlace: Radix evita a propósito dar el foco
+inicial a un enlace.
+
+Hallazgo de la verificación, no corregido en esta entrega (decisión del
+responsable): en una ventana cuyo cuerpo desplazable no tiene nada enfocable
+(la ventana larga de la galería), el cuerpo no se alcanza con Tab y ni las
+flechas ni AvPág lo mueven, porque la trampa de foco de Radix calcula sus
+propios elementos tabulables y deja fuera la zona desplazable que Chrome sí
+haría enfocable. Con teclado no se leen las líneas que no caben (WCAG 2.1.1).
+Ninguna pantalla usa `Dialog`; se corrige con el primer commit de la entrega
+9, cuyo piloto usa ventanas.
+
+Decisiones del responsable en la tanda 3: la etiqueta de estado de la entrega
+10 es `Badge`; las confirmaciones destructivas usan el botón destructivo suave
+de las pantallas, no el sólido de SweetAlert2; aprueba el aspecto de los
+componentes nuevos y de la galería, y propondrá más adelante otros estilos.
+
+Evidencia en `tmp/e8-diff/staging-antes-t3.json`, `staging-despues-t3.json`
+y `t3-registro.tsv` (ignorados), con los sellos recalculados en Python.
 
 Lo que queda:
 
 | Pendiente | Dónde |
 |---|---|
+| El cuerpo de una ventana sin nada enfocable no se alcanza con el teclado (hallazgo de la tanda 3) | Primer commit de la entrega 9 |
 | 16 copias locales de `FieldError` (14 iguales a la compartida y 2 a su tamaño `sm`) | Entregas 9 y 10 |
 | 113 páginas con un `<main>` dentro del `<main>` del shell, y `production/loading.tsx` | Entregas 9 y 10 |
 | `user-form` nombra con `Label htmlFor="rol"` un control que no existe cuando el usuario se edita a sí mismo; 10 páginas de producción ponen `*` en el texto del `Label` y no tienen `htmlFor` | Entregas 9 y 10, con `Field` |
 | 43 formularios GET (41 barras de filtros y 2 de parámetros) con 27 combinaciones de clases; con el rango invertido, las pantallas de reportes muestran la tabla vacía sin aviso y su exportación responde 400 con un JSON (grupo 4) | Entrega 10, con `FilterBar` y `DateRangeFields` |
-| Elegir la etiqueta de estado: `StatusBadge` o `Badge` (la galería las muestra lado a lado con los mismos colores) | Responsable, en la tanda 3; se adopta en la entrega 10 |
-| Elegir el botón destructivo de las confirmaciones: el suave de las pantallas o el sólido de SweetAlert2 | Responsable, en la tanda 3 |
-| Un botón con foco que pasa a deshabilitado pierde el foco (también hoy, con `disabled={isPending}`); decidir `aria-disabled` | Entrega 9 |
+| Adoptar `Badge` para las etiquetas de estado (`StatusBadge` se usa en 14 archivos) | Entrega 10 |
+| Un botón con foco que pasa a deshabilitado pierde el foco a `body` en ~1 s y no lo recupera (también hoy, con `disabled={isPending}`); decidir `aria-disabled` | Entrega 9 |
 | Integrar `ConfirmDialog` con formularios y `useActionState`; decidir Playwright para foco y teclado | Entrega 9 |
 | SweetAlert2 (`showConfirm`, `showLoading`, `ConfirmDeleteButton`), el adaptador `legacy-industrial-dark` y `dropdown-menu.tsx`, que no tiene consumidores | Entrega 11 |
 
@@ -2494,7 +2572,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
-| 8 | B | Base visual y galería | En curso (C0 a C12 hechos; tandas 1 y 2 verificadas en staging, CI #64 y #65: 10 de 10 y 24 de 24 huellas como se predijo) |
+| 8 | B | Base visual y galería | Verificada en staging (CI #64, #65 y #66; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción); falta integrarla en `main` |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
