@@ -1290,7 +1290,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </form>
 </div>
 </figure>
-<p>Había 46 barras de filtros con 28 rejillas distintas; FilterBar usa una sola que se adapta al ancho, y el rango ocupa dos columnas solo si la barra tiene sitio. DateRangeFields conserva los nombres de la URL de cada pantalla (from/to, dateFrom/dateTo, desde/hasta). Si «Desde» es posterior a «Hasta», muestra el mismo mensaje que la exportación y Filtrar no envía nada. Teclado: escribe en «Hasta» una fecha anterior a «Desde» y pulsa Filtrar.</p>
+<p>Hay 43 formularios GET de filtros y parámetros con 27 combinaciones de clases distintas; FilterBar usa una sola rejilla que se adapta al ancho, y el rango ocupa dos columnas solo si la barra tiene sitio. DateRangeFields conserva los nombres de la URL de cada pantalla (from/to, dateFrom/dateTo, desde/hasta). Si «Desde» es posterior a «Hasta», muestra el mismo mensaje que la exportación y Filtrar no envía nada. Teclado: escribe en «Hasta» una fecha anterior a «Desde» y pulsa Filtrar.</p>
 <figure>
 <figcaption>Tabla con acciones por fila</figcaption>
 <div>
