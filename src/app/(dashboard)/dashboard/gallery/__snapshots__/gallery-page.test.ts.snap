@@ -47,6 +47,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <a href="#botones">Botones</a>
 <a href="#campos">Campos</a>
 <a href="#mensajes">Mensajes y estados</a>
+<a href="#ventanas">Ventanas</a>
 <a href="#presentacion">Presentación</a>
 <a href="#listados">Listados y navegación</a>
 </nav>
@@ -1006,6 +1007,24 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </figure>
 </div>
 <p>LoadingState se anuncia con role=status sin mover el foco. Los bloques de Skeleton son decorativos: en una pantalla de esqueletos, un LoadingState oculto a la vista anuncia la carga. El pulso y el giro se detienen si el sistema pide reducir el movimiento.</p>
+</section>
+<section id="ventanas" aria-labelledby="ventanas-titulo">
+<header>
+<h2 id="ventanas-titulo">Ventanas</h2>
+<p>Ventanas y paneles laterales con encabezado y pie fijos y cuerpo desplazable. En el teléfono ocupan la pantalla completa.</p>
+</header>
+<figure>
+<figcaption>Ventana (Dialog) y panel lateral (Sheet)</figcaption>
+<div>
+<div>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Ventana con formulario</button>
+<button data-variant="outline" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Ventana con contenido largo</button>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Panel derecho (filtros)</button>
+<button data-variant="secondary" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Panel izquierdo (sin descripción)</button>
+</div>
+</div>
+</figure>
+<p>Teclado: al abrir, el foco va al primer campo (o a la X si no hay campos); Tab no sale de la ventana; Esc o un clic en el velo la cierran y el foco vuelve al botón que la abrió. En la ventana larga, el cuerpo se desplaza con la rueda, el dedo o las flechas, y el pie sigue visible. Mientras se registra el pago no se puede cerrar. En el teléfono, la ventana y los paneles ocupan la pantalla y los botones del pie se apilan.</p>
 </section>
 <section id="presentacion" aria-labelledby="presentacion-titulo">
 <header>

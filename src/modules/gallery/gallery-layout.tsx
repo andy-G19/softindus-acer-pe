@@ -12,6 +12,7 @@ export const GALLERY_SECTIONS = [
   { id: "botones", title: "Botones" },
   { id: "campos", title: "Campos" },
   { id: "mensajes", title: "Mensajes y estados" },
+  { id: "ventanas", title: "Ventanas" },
   { id: "presentacion", title: "Presentación" },
   { id: "listados", title: "Listados y navegación" },
 ] as const;

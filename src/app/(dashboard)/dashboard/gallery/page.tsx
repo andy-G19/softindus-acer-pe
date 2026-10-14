@@ -11,6 +11,7 @@ import { FoundationsSection } from "@/modules/gallery/sections/foundations-secti
 import { ListingSection } from "@/modules/gallery/sections/listing-section";
 import { MessagesSection } from "@/modules/gallery/sections/messages-section";
 import { PresentationSection } from "@/modules/gallery/sections/presentation-section";
+import { WindowsSection } from "@/modules/gallery/sections/windows-section";
 
 // Galeria de componentes (entrega 8): catalogo interno de la base visual, solo
 // para ADMIN y fuera del menu. Usa datos ficticios: no consulta la base, no
@@ -41,6 +42,7 @@ export default async function GalleryPage() {
       <ButtonsSection />
       <FieldsSection />
       <MessagesSection />
+      <WindowsSection />
       <PresentationSection />
       <ListingSection />
     </div>
