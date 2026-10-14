@@ -1,16 +1,16 @@
 /**
- * Ubicación destino: src/components/ui/button.tsx (reemplaza el archivo actual)
+ * Boton compartido (shadcn) con las variantes de la marca. La variante "clear"
+ * (limpiar filtros) usa los tokens --accent-cyan, --accent-cyan-hover y
+ * --accent-cyan-active; su tamano se pasa como className en cada pantalla.
  *
- * Único cambio: se agrega la variante "clear" (usa los tokens nuevos
- * --accent-cyan / --accent-cyan-hover / --accent-cyan-active de globals.css).
- * El tamaño (44px, padding, radius 12px) NO se mete en esta variante —
- * se pasa como className en cada call site, porque es un tamaño
- * específico de este botón, no un size reutilizable del sistema.
+ * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
+ * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
  */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
+import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -53,18 +53,70 @@ const buttonVariants = cva(
   }
 )
 
+type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>
+
+// Los tamanos cuyo nombre empieza por "icon" no muestran texto.
+type IconButtonSize = Extract<ButtonSize, `icon${string}`>
+
+// Un boton de solo icono no tiene texto visible: sin aria-label, el lector de
+// pantalla solo diria "boton".
+type ButtonSizeProps =
+  | { size?: Exclude<ButtonSize, IconButtonSize> | null }
+  | { size: IconButtonSize; "aria-label": string }
+
+// El estado pendiente es de un <button> propio: un enlace (asChild) no se
+// envia ni se deshabilita.
+type ButtonPendingProps =
+  | {
+      asChild?: false
+      /** Deshabilita el boton, marca aria-busy y muestra el spinner. */
+      pending?: boolean
+      /** Texto mientras esta pendiente ("Guardando..."); si falta, se conserva el contenido. */
+      pendingText?: React.ReactNode
+    }
+  | { asChild: true; pending?: never; pendingText?: never }
+
+type ButtonProps = React.ComponentProps<"button"> &
+  Pick<VariantProps<typeof buttonVariants>, "variant"> &
+  ButtonSizeProps &
+  ButtonPendingProps
+
+const pendingAttributes = { disabled: true, "aria-busy": true } as const
+
+function isIconSize(size: ButtonSize | null): size is IconButtonSize {
+  return size?.startsWith("icon") ?? false
+}
+
 function Button({
   className,
   variant = "default",
   size = "default",
   asChild = false,
+  pending = false,
+  pendingText,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
+  const showPending = pending && !asChild
 
+  // Pendiente: en solo icono el spinner reemplaza al icono (el aria-label se
+  // mantiene); con texto, va al inicio como un icono inline-start.
+  let content = children
+  if (showPending) {
+    content = isIconSize(size) ? (
+      <Spinner />
+    ) : (
+      <>
+        <Spinner data-icon="inline-start" />
+        {pendingText ?? children}
+      </>
+    )
+  }
+
+  // Los atributos pendientes van despues de props: ganan a un disabled={false}
+  // del formulario y, sin pending, no se agrega nada, asi que el orden de los
+  // atributos de cada pantalla no cambia.
   return (
     <Comp
       data-slot="button"
@@ -72,8 +124,11 @@ function Button({
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+      {...(showPending ? pendingAttributes : undefined)}
+    >
+      {content}
+    </Comp>
   )
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, type ButtonProps }

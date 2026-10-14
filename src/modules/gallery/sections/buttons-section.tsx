@@ -7,6 +7,7 @@ import {
   GallerySample,
   GallerySection,
 } from "@/modules/gallery/gallery-layout";
+import { PendingDemo } from "@/modules/gallery/pending-demo";
 
 const VARIANTS = [
   { variant: "default", use: "Acción principal: guardar, filtrar, nuevo registro" },
@@ -82,17 +83,39 @@ export function ButtonsSection() {
         </GallerySample>
 
         <GallerySample label="Pendiente">
+          <Button type="button" pending pendingText="Guardando...">
+            Guardar
+          </Button>
+          <Button type="button" variant="outline" pending>
+            Exportar
+          </Button>
+          <Button type="button" variant="destructive" pending pendingText="Anulando...">
+            <Trash2 data-icon="inline-start" />
+            Anular
+          </Button>
+          {ICON_SIZES.map((size) => (
+            <Button key={size} type="button" variant="ghost" size={size} pending aria-label={`Eliminar (${size})`}>
+              <Trash2 />
+            </Button>
+          ))}
+        </GallerySample>
+
+        <GallerySample label="Pendiente al pulsar" className="block space-y-3">
+          <PendingDemo />
           <GalleryNote>
-            Sin componente compartido: hoy cada formulario cambia su texto a
-            «Guardando...» por su cuenta. El estado pendiente común llega en la
-            sub-entrega de botones y campos.
+            En las pantallas, SubmitButton (src/components/forms) es un Button de
+            envío que toma este estado del formulario con useFormStatus, sin que
+            el formulario le pase isPending. Aquí se simula con un temporizador:
+            un formulario real llamaría al servidor.
           </GalleryNote>
         </GallerySample>
       </div>
 
       <GalleryNote>
         Teclado: recorre los botones con Tab; cada uno debe mostrar su indicador
-        de foco y activarse con Enter o Espacio.
+        de foco y activarse con Enter o Espacio. Un botón pendiente queda
+        deshabilitado y lo anuncia con aria-busy; el spinner se detiene si el
+        sistema pide reducir el movimiento.
       </GalleryNote>
     </GallerySection>
   );

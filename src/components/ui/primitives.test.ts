@@ -101,12 +101,19 @@ const buttonSizes = [
   "icon-lg",
 ] as const;
 
+type ButtonSize = (typeof buttonSizes)[number];
+
+// Los tamanos de solo icono exigen aria-label: el guardian se lo dice a los tipos.
+function isIconSize(size: ButtonSize): size is Extract<ButtonSize, `icon${string}`> {
+  return size.startsWith("icon");
+}
+
 describe("Button", () => {
   characterize([
     ...buttonVariants.map((variant): Case => [
       `variante ${variant} en cada tamano`,
       buttonSizes.map((size) =>
-        size.startsWith("icon")
+        isIconSize(size)
           ? h(Button, { key: size, variant, size, "aria-label": "Agregar" }, h(Plus))
           : h(Button, { key: size, variant, size }, "Guardar"),
       ),
@@ -122,6 +129,20 @@ describe("Button", () => {
     ],
     ["como enlace (asChild)", h(Button, { asChild: true }, h(Link, { href: "/dashboard/commercial/clients/new" }, "Nuevo cliente"))],
     ["limpiar filtros como enlace", h(Button, { variant: "clear", asChild: true }, h(Link, { href: "/dashboard/commercial/clients" }, "Limpiar filtros"))],
+    ["pendiente con texto pendiente", h(Button, { type: "submit", pending: true, pendingText: "Guardando..." }, "Guardar")],
+    ["pendiente sin texto pendiente", h(Button, { variant: "outline", pending: true }, "Exportar")],
+    [
+      "pendiente con icono propio y texto pendiente",
+      h(Button, { variant: "destructive", pending: true, pendingText: "Anulando..." }, h(Plus, { "data-icon": "inline-start" } as LucideProps), "Anular"),
+    ],
+    [
+      "pendiente de solo icono",
+      (["icon-xs", "icon"] as const).map((size) =>
+        h(Button, { key: size, size, variant: "ghost", pending: true, "aria-label": "Eliminar" }, h(Plus)),
+      ),
+    ],
+    ["pendiente y deshabilitado", h(Button, { disabled: true, pending: true, pendingText: "Guardando..." }, "Guardar")],
+    ["no pendiente", h(Button, { pending: false, pendingText: "Guardando..." }, "Guardar")],
   ]);
 });
 
