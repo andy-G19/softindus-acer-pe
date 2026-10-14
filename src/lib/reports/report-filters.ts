@@ -1,3 +1,4 @@
+import { DATE_RANGE_INVERTED_MESSAGE } from "@/lib/date-range";
 import {
   MAX_DATE_RANGE_DAYS,
   clampExportLimit,
@@ -62,7 +63,7 @@ export function validateDateRange(
     if (from.getTime() > to.getTime()) {
       return {
         ok: false,
-        error: "La fecha inicial no puede ser mayor que la fecha final.",
+        error: DATE_RANGE_INVERTED_MESSAGE,
       };
     }
 

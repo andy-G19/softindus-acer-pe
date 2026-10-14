@@ -5,7 +5,9 @@ import { Info, Package, Plus, TriangleAlert, type LucideProps } from "lucide-rea
 import Link from "next/link";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field, FieldError, type FieldControlProps } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { BackButton } from "@/components/navigation/back-button";
@@ -17,6 +19,7 @@ import {
   RowEditLink,
   RowToggleStatusButton,
 } from "@/components/table/row-actions";
+import { TableLoadingRows } from "@/components/table/table-loading-rows";
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -315,6 +318,32 @@ describe("Carga", () => {
     ["carga en linea", h(LoadingState, { variant: "inline", label: "Buscando clientes..." })],
     ["carga solo para el lector", h(LoadingState, { variant: "inline", className: "sr-only" })],
     ["esqueleto", h(Skeleton, { className: "h-4 w-32" })],
+  ]);
+});
+
+describe("Listados compartidos", () => {
+  characterize([
+    [
+      "barra de filtros",
+      h(
+        FilterBar,
+        {
+          action: "/dashboard/commercial/clients",
+          label: "Filtros de clientes",
+          clearHref: "/dashboard/commercial/clients",
+          children: h(
+            Fragment,
+            null,
+            h(Field, { id: "q", label: "Busqueda general", children: (control: FieldControlProps) => h(Input, { ...control, name: "q" }) }),
+            h(DateRangeFields, { id: "rango" }),
+          ),
+        },
+      ),
+    ],
+    ["rango en orden", h(DateRangeFields, { id: "rango", defaultFrom: "2026-10-01", defaultTo: "2026-10-13" })],
+    ["rango invertido", h(DateRangeFields, { id: "rango", defaultFrom: "2026-10-13", defaultTo: "2026-10-01" })],
+    ["rango con los nombres de los reportes", h(DateRangeFields, { id: "rango", fromName: "dateFrom", toName: "dateTo" })],
+    ["tabla cargando", h(Table, null, h(TableBody, null, h(TableLoadingRows, { columns: 3, rows: 2, label: "Cargando clientes..." })))],
   ]);
 });
 
