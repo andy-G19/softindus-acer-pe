@@ -2231,14 +2231,15 @@ su sello.
 
 ## Entrega 8 — Base visual y galería
 
-Fecha: 2026-10-13 y 2026-10-14. Estado: verificada en staging el 2026-10-14;
-falta integrarla en `main`. 15 commits, de `0ad4150` a `7150d10`, más este
-cierre, publicados en tres tandas y verificadas las tres en staging: CI #64,
-#65 y #66 en verde, y 10 de 10, 24 de 24 y 26 de 26 huellas visuales como se
-predijo (en la tercera, 2 con redondeos de 0,01 px que la predicción no
-anticipó). Es la primera entrega de la pista B: construye la base visual y la
-prueba en una galería interna sin cambiar ninguna pantalla; las pantallas la
-adoptan en las entregas 9 y 10.
+Fecha: 2026-10-13 y 2026-10-14. Estado: cerrada el 2026-10-14. 15 commits,
+de `0ad4150` a `7150d10`, más el cierre `bbc3259` (CI #67 en verde),
+publicados en tres tandas y verificadas las tres en staging: CI #64, #65 y #66
+en verde, y 10 de 10, 24 de 24 y 26 de 26 huellas visuales como se predijo
+(en la tercera, 2 con redondeos de 0,01 px que la predicción no anticipó).
+Integrada en `main` con el PR #21 (CI #68 en verde; merge commit `a945a5a`,
+CI #69 en verde, 2m 7s). Es la primera entrega de la pista B:
+construye la base visual y la prueba en una galería interna sin cambiar
+ninguna pantalla; las pantallas la adoptan en las entregas 9 y 10.
 
 Decisiones del responsable:
 
@@ -2550,6 +2551,22 @@ Lo que queda:
 | Integrar `ConfirmDialog` con formularios y `useActionState`; decidir Playwright para foco y teclado | Entrega 9 |
 | SweetAlert2 (`showConfirm`, `showLoading`, `ConfirmDeleteButton`), el adaptador `legacy-industrial-dark` y `dropdown-menu.tsx`, que no tiene consumidores | Entrega 11 |
 
+### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-14 y comparados con git:
+
+- PR #21, abierto a las 17:13:04 UTC y fusionado con merge commit a las
+  17:16:33 UTC del 2026-10-14: 16 commits, de `0ad4150` a `bbc3259`. Su CI,
+  el #68, sobre `bbc3259`, terminó en verde (3m 4s).
+- El merge commit `a945a5a` tiene como padres `19a0bf4` (`main`) y `bbc3259`
+  (`staging`), y su árbol es el de `bbc3259` (`2fdcc4ca`): `main` y `staging`
+  tienen el mismo contenido. CI #69 en verde (2m 7s).
+- Vercel desplegó `a945a5a` en producción al primer intento (estado «Vercel»
+  `pending` a las 17:16:37 UTC y `success` a las 17:18:13 UTC). Es el primer
+  despliegue de producción con las fuentes locales de `d3cc557`: el build ya
+  no descarga fuentes de Google, la causa del fallo del merge del grupo 4, y
+  esta vez no hizo falta redesplegar.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -2572,7 +2589,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
-| 8 | B | Base visual y galería | Verificada en staging (CI #64, #65 y #66; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción); falta integrarla en `main` |
+| 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
