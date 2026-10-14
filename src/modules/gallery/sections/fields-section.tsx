@@ -1,3 +1,4 @@
+import { Field } from "@/components/forms/field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -118,11 +119,108 @@ export function FieldsSection() {
       </div>
 
       <GalleryNote>
-        El mensaje de error es hoy un párrafo suelto, copiado en 16 formularios y
-        sin asociación accesible con su campo. El campo compartido con etiqueta,
-        ayuda, obligatorio y error asociado llega en la sub-entrega de botones y
-        campos. Teclado: en la búsqueda, las flechas recorren las opciones, Enter
-        elige y Escape cierra.
+        Campo completo (Field): une la etiqueta, la ayuda y el error con su
+        control. El lector de pantalla anuncia el error y la ayuda al llegar al
+        campo (aria-describedby), lo marca como inválido (aria-invalid) y dice
+        «obligatorio» por el required; el asterisco es solo visual.
+      </GalleryNote>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <GallerySample label="Campo con ayuda" className="block">
+          <Field
+            id="galeria-field-correo"
+            label="Correo"
+            description="Se usa para enviar la proforma."
+          >
+            {(control) => <Input {...control} type="email" placeholder="ventas@empresa.pe" />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Campo obligatorio" className="block">
+          <Field id="galeria-field-nombre" label="Nombre o razón social" required>
+            {(control) => <Input {...control} placeholder="Ej.: Metalmecánica Lima S.A.C." />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Campo con error" className="block">
+          <Field
+            id="galeria-field-ruc"
+            label="RUC"
+            description="11 dígitos."
+            errors={["El RUC debe tener 11 dígitos."]}
+            required
+          >
+            {(control) => <Input {...control} defaultValue="2012345" inputMode="numeric" />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Lista con error" className="block">
+          <Field id="galeria-field-tipo" label="Tipo de cliente" errors={["Seleccione un tipo de cliente."]} required>
+            {(control) => (
+              <NativeSelect {...control} defaultValue="">
+                <option value="">Seleccione</option>
+                <option value="empresa">Empresa</option>
+                <option value="persona">Persona natural</option>
+              </NativeSelect>
+            )}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Área de texto con error" className="block">
+          <Field
+            id="galeria-field-motivo"
+            label="Motivo de anulación"
+            description="Queda registrado en la bitácora."
+            errors={["El motivo es obligatorio."]}
+            required
+          >
+            {(control) => <Textarea {...control} />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Campo deshabilitado" className="block">
+          <Field id="galeria-field-codigo" label="Código" description="No se envía con el formulario." disabled>
+            {(control) => <Input {...control} defaultValue="CLI00000001" />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Campo de solo lectura" className="block">
+          <Field
+            id="galeria-field-registro"
+            label="Código de registro"
+            description="Lo asigna el sistema; se puede copiar y se envía."
+            readOnly
+          >
+            {(control) => <Input {...control} defaultValue="CLI00000001" />}
+          </Field>
+        </GallerySample>
+
+        <GallerySample label="Lista de solo lectura" className="block">
+          <Field
+            id="galeria-field-rol"
+            label="Rol"
+            description="No puedes cambiar tu propio rol."
+            readOnly
+          >
+            {(control) => (
+              <>
+                <Input {...control} defaultValue="Vendedor" />
+                <input type="hidden" name="galeria_rol" value="SELLER" />
+              </>
+            )}
+          </Field>
+        </GallerySample>
+      </div>
+
+      <GalleryNote>
+        Solo lectura y deshabilitado no son lo mismo: un campo de solo lectura se
+        lee a contraste completo, recibe el foco, se puede copiar y se envía; uno
+        deshabilitado se atenúa, se salta con Tab y no se envía. HTML no admite
+        solo lectura en una lista: se muestra la opción elegida en un campo de
+        solo lectura y su valor viaja en un input oculto. Las 16 copias locales
+        del mensaje de error se reemplazan por FieldError en las entregas 9 y 10.
+        Teclado: en la búsqueda, las flechas recorren las opciones, Enter elige y
+        Escape cierra.
       </GalleryNote>
     </GallerySection>
   );

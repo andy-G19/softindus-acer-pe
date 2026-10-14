@@ -707,10 +707,10 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Búsqueda</figcaption>
 <div>
 <div>
-<label for="galeria_cliente-_R_bb6_">Cliente</label>
+<label for="galeria_cliente-_R_mj6_">Cliente</label>
 <input type="hidden" name="galeria_cliente" value=""/>
 <div>
-<input id="galeria_cliente-_R_bb6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente-_R_bb6_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+<input id="galeria_cliente-_R_mj6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente-_R_mj6_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>
 </div>
@@ -719,10 +719,10 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Búsqueda con valor y obligatoria</figcaption>
 <div>
 <div>
-<label for="galeria_cliente_obligatorio-_R_bj6_">Cliente *</label>
+<label for="galeria_cliente_obligatorio-_R_n36_">Cliente *</label>
 <input type="hidden" name="galeria_cliente_obligatorio" value="CLI00000002"/>
 <div>
-<input id="galeria_cliente_obligatorio-_R_bj6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_obligatorio-_R_bj6_-listbox" aria-expanded="false" required="" placeholder="Buscar..." value="Taller Arequipa"/>
+<input id="galeria_cliente_obligatorio-_R_n36_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_obligatorio-_R_n36_-listbox" aria-expanded="false" required="" placeholder="Buscar..." value="Taller Arequipa"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
@@ -732,16 +732,110 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figcaption>Búsqueda deshabilitada</figcaption>
 <div>
 <div>
-<label for="galeria_cliente_bloqueado-_R_br6_">Cliente</label>
+<label for="galeria_cliente_bloqueado-_R_nj6_">Cliente</label>
 <input type="hidden" name="galeria_cliente_bloqueado" value=""/>
 <div>
-<input id="galeria_cliente_bloqueado-_R_br6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_bloqueado-_R_br6_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." value=""/>
+<input id="galeria_cliente_bloqueado-_R_nj6_" type="text" role="combobox" aria-autocomplete="list" aria-controls="galeria_cliente_bloqueado-_R_nj6_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." value=""/>
 </div>
 </div>
 </div>
 </figure>
 </div>
-<p>El mensaje de error es hoy un párrafo suelto, copiado en 16 formularios y sin asociación accesible con su campo. El campo compartido con etiqueta, ayuda, obligatorio y error asociado llega en la sub-entrega de botones y campos. Teclado: en la búsqueda, las flechas recorren las opciones, Enter elige y Escape cierra.</p>
+<p>Campo completo (Field): une la etiqueta, la ayuda y el error con su control. El lector de pantalla anuncia el error y la ayuda al llegar al campo (aria-describedby), lo marca como inválido (aria-invalid) y dice «obligatorio» por el required; el asterisco es solo visual.</p>
+<div>
+<figure>
+<figcaption>Campo con ayuda</figcaption>
+<div>
+<div>
+<label for="galeria-field-correo">Correo</label>
+<input type="email" id="galeria-field-correo" aria-describedby="galeria-field-correo-ayuda" placeholder="ventas@empresa.pe"/>
+<p id="galeria-field-correo-ayuda">Se usa para enviar la proforma.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo obligatorio</figcaption>
+<div>
+<div>
+<label for="galeria-field-nombre">Nombre o razón social<span aria-hidden="true">*</span>
+</label>
+<input id="galeria-field-nombre" required="" placeholder="Ej.: Metalmecánica Lima S.A.C."/>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-ruc">RUC<span aria-hidden="true">*</span>
+</label>
+<input id="galeria-field-ruc" required="" aria-invalid="true" aria-describedby="galeria-field-ruc-ayuda galeria-field-ruc-error" inputMode="numeric" value="2012345"/>
+<p id="galeria-field-ruc-ayuda">11 dígitos.</p>
+<p id="galeria-field-ruc-error">El RUC debe tener 11 dígitos.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Lista con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-tipo">Tipo de cliente<span aria-hidden="true">*</span>
+</label>
+<select id="galeria-field-tipo" required="" aria-invalid="true" aria-describedby="galeria-field-tipo-error">
+<option value="" selected="">Seleccione</option>
+<option value="empresa">Empresa</option>
+<option value="persona">Persona natural</option>
+</select>
+<p id="galeria-field-tipo-error">Seleccione un tipo de cliente.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Área de texto con error</figcaption>
+<div>
+<div>
+<label for="galeria-field-motivo">Motivo de anulación<span aria-hidden="true">*</span>
+</label>
+<textarea id="galeria-field-motivo" required="" aria-invalid="true" aria-describedby="galeria-field-motivo-ayuda galeria-field-motivo-error">
+</textarea>
+<p id="galeria-field-motivo-ayuda">Queda registrado en la bitácora.</p>
+<p id="galeria-field-motivo-error">El motivo es obligatorio.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo deshabilitado</figcaption>
+<div>
+<div data-disabled="true">
+<label for="galeria-field-codigo">Código</label>
+<input id="galeria-field-codigo" disabled="" aria-describedby="galeria-field-codigo-ayuda" value="CLI00000001"/>
+<p id="galeria-field-codigo-ayuda">No se envía con el formulario.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Campo de solo lectura</figcaption>
+<div>
+<div>
+<label for="galeria-field-registro">Código de registro</label>
+<input id="galeria-field-registro" readOnly="" aria-describedby="galeria-field-registro-ayuda" value="CLI00000001"/>
+<p id="galeria-field-registro-ayuda">Lo asigna el sistema; se puede copiar y se envía.</p>
+</div>
+</div>
+</figure>
+<figure>
+<figcaption>Lista de solo lectura</figcaption>
+<div>
+<div>
+<label for="galeria-field-rol">Rol</label>
+<input id="galeria-field-rol" readOnly="" aria-describedby="galeria-field-rol-ayuda" value="Vendedor"/>
+<input type="hidden" name="galeria_rol" value="SELLER"/>
+<p id="galeria-field-rol-ayuda">No puedes cambiar tu propio rol.</p>
+</div>
+</div>
+</figure>
+</div>
+<p>Solo lectura y deshabilitado no son lo mismo: un campo de solo lectura se lee a contraste completo, recibe el foco, se puede copiar y se envía; uno deshabilitado se atenúa, se salta con Tab y no se envía. HTML no admite solo lectura en una lista: se muestra la opción elegida en un campo de solo lectura y su valor viaja en un input oculto. Las 16 copias locales del mensaje de error se reemplazan por FieldError en las entregas 9 y 10. Teclado: en la búsqueda, las flechas recorren las opciones, Enter elige y Escape cierra.</p>
 </section>
 <section id="mensajes" aria-labelledby="mensajes-titulo">
 <header>

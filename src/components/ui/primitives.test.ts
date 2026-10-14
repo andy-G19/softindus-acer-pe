@@ -5,6 +5,7 @@ import { Info, Package, Plus, TriangleAlert, type LucideProps } from "lucide-rea
 import Link from "next/link";
 
 import { StatusBadge } from "@/components/commercial/status-badge";
+import { Field, FieldError, type FieldControlProps } from "@/components/forms/field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { BackButton } from "@/components/navigation/back-button";
@@ -193,6 +194,9 @@ describe("Campos", () => {
     ["textarea", h(Textarea, { placeholder: "Observaciones" })],
     ["textarea deshabilitado", h(Textarea, { disabled: true })],
     ["textarea invalido", h(Textarea, { "aria-invalid": true })],
+    ["input de solo lectura", h(Input, { readOnly: true, defaultValue: "CLI00000001" })],
+    ["textarea de solo lectura", h(Textarea, { readOnly: true, defaultValue: "Registrado por el sistema" })],
+    ["select nativo invalido", h(NativeSelect, { "aria-invalid": true, defaultValue: "" }, h("option", { value: "" }, "Seleccione"))],
     ["interruptor encendido", h(Switch, { checked: true, "aria-label": "Activo" })],
     ["interruptor apagado", h(Switch, { checked: false, "aria-label": "Activo" })],
     ["interruptor deshabilitado", h(Switch, { disabled: true, "aria-label": "Activo" })],
@@ -223,6 +227,43 @@ describe("Campos", () => {
     [
       "filtro de busqueda",
       h(SearchableSelectFilter, { name: "client", label: "Cliente", items: [{ id: "CLI00000001", label: "Metalmecanica Lima" }], value: "CLI00000001" }),
+    ],
+  ]);
+});
+
+describe("Campo compartido", () => {
+  characterize([
+    ["error", h(FieldError, { messages: ["Ingrese un correo valido."] })],
+    ["error con id", h(FieldError, { id: "correo-error", messages: ["Ingrese un correo valido."] })],
+    ["error pequeno", h(FieldError, { messages: ["Requerido"], size: "sm" })],
+    [
+      "campo completo con error",
+      h(Field, {
+        id: "correo",
+        label: "Correo",
+        description: "Se usa para enviar la proforma.",
+        errors: ["Ingrese un correo valido."],
+        required: true,
+        children: (control: FieldControlProps) => h(Input, { ...control, name: "correo", defaultValue: "ventas@" }),
+      }),
+    ],
+    [
+      "campo deshabilitado",
+      h(Field, { id: "codigo", label: "Codigo", disabled: true, children: (control: FieldControlProps) => h(Input, { ...control, defaultValue: "CLI00000001" }) }),
+    ],
+    [
+      "campo de solo lectura",
+      h(Field, { id: "codigo", label: "Codigo", readOnly: true, children: (control: FieldControlProps) => h(Input, { ...control, defaultValue: "CLI00000001" }) }),
+    ],
+    [
+      "lista con error",
+      h(Field, {
+        id: "tipo",
+        label: "Tipo de cliente",
+        errors: ["Seleccione un tipo."],
+        required: true,
+        children: (control: FieldControlProps) => h(NativeSelect, { ...control, name: "tipo", defaultValue: "" }, h("option", { value: "" }, "Seleccione")),
+      }),
     ],
   ]);
 });

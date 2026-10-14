@@ -447,6 +447,47 @@ exports[`Button > variante secondary en cada tamano 1`] = `
 </button>"
 `;
 
+exports[`Campo compartido > campo completo con error 1`] = `
+"<div data-slot="field" class="group space-y-2">
+<label data-slot="label" class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-1" for="correo">Correo<span aria-hidden="true" class="text-destructive">*</span>
+</label>
+<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" id="correo" required="" aria-invalid="true" aria-describedby="correo-ayuda correo-error" name="correo" value="ventas@"/>
+<p id="correo-ayuda" class="text-xs text-muted-foreground">Se usa para enviar la proforma.</p>
+<p id="correo-error" class="text-sm text-destructive">Ingrese un correo valido.</p>
+</div>"
+`;
+
+exports[`Campo compartido > campo de solo lectura 1`] = `
+"<div data-slot="field" class="group space-y-2">
+<label data-slot="label" class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-1" for="codigo">Codigo</label>
+<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" id="codigo" readOnly="" value="CLI00000001"/>
+</div>"
+`;
+
+exports[`Campo compartido > campo deshabilitado 1`] = `
+"<div data-slot="field" data-disabled="true" class="group space-y-2">
+<label data-slot="label" class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-1" for="codigo">Codigo</label>
+<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" id="codigo" disabled="" value="CLI00000001"/>
+</div>"
+`;
+
+exports[`Campo compartido > error 1`] = `"<p class="text-sm text-destructive">Ingrese un correo valido.</p>"`;
+
+exports[`Campo compartido > error con id 1`] = `"<p id="correo-error" class="text-sm text-destructive">Ingrese un correo valido.</p>"`;
+
+exports[`Campo compartido > error pequeno 1`] = `"<p class="text-xs text-destructive">Requerido</p>"`;
+
+exports[`Campo compartido > lista con error 1`] = `
+"<div data-slot="field" class="group space-y-2">
+<label data-slot="label" class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-1" for="tipo">Tipo de cliente<span aria-hidden="true" class="text-destructive">*</span>
+</label>
+<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" id="tipo" required="" aria-invalid="true" aria-describedby="tipo-error" name="tipo">
+<option value="" selected="">Seleccione</option>
+</select>
+<p id="tipo-error" class="text-sm text-destructive">Seleccione un tipo.</p>
+</div>"
+`;
+
 exports[`Campos > busqueda con lista 1`] = `
 "<div class="space-y-2">
 <label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
@@ -491,13 +532,15 @@ exports[`Campos > filtro de busqueda 1`] = `
 </div>"
 `;
 
-exports[`Campos > input 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" id="nombre" placeholder="Nombre o razon social" name="nombre"/>"`;
+exports[`Campos > input 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" id="nombre" placeholder="Nombre o razon social" name="nombre"/>"`;
 
-exports[`Campos > input de archivo 1`] = `"<input type="file" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"/>"`;
+exports[`Campos > input de archivo 1`] = `"<input type="file" data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted"/>"`;
 
-exports[`Campos > input deshabilitado 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" disabled="" value="CLI00000001"/>"`;
+exports[`Campos > input de solo lectura 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" readOnly="" value="CLI00000001"/>"`;
 
-exports[`Campos > input invalido 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" aria-invalid="true" value="x"/>"`;
+exports[`Campos > input deshabilitado 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" disabled="" value="CLI00000001"/>"`;
+
+exports[`Campos > input invalido 1`] = `"<input data-slot="input" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" aria-invalid="true" value="x"/>"`;
 
 exports[`Campos > interruptor apagado 1`] = `
 "<button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" data-slot="switch" class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-border transition-colors outline-none data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=unchecked]:bg-muted focus-visible:ring-2 focus-visible:ring-ring/45 disabled:cursor-not-allowed disabled:opacity-50" aria-label="Activo">
@@ -524,30 +567,38 @@ exports[`Campos > interruptor encendido 1`] = `
 `;
 
 exports[`Campos > select nativo 1`] = `
-"<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30" id="estado" name="estado">
+"<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" id="estado" name="estado">
 <option value="" selected="">Todos</option>
 <option value="activo">Activo</option>
 </select>"
 `;
 
 exports[`Campos > select nativo deshabilitado 1`] = `
-"<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30" disabled="">
+"<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" disabled="">
 <option>Unico</option>
 </select>"
 `;
 
+exports[`Campos > select nativo invalido 1`] = `
+"<select data-slot="native-select" class="input-forge-focus h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" aria-invalid="true">
+<option value="" selected="">Seleccione</option>
+</select>"
+`;
+
 exports[`Campos > textarea 1`] = `
-"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" placeholder="Observaciones">
+"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" placeholder="Observaciones">
 </textarea>"
 `;
 
+exports[`Campos > textarea de solo lectura 1`] = `"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" readOnly="">Registrado por el sistema</textarea>"`;
+
 exports[`Campos > textarea deshabilitado 1`] = `
-"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" disabled="">
+"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" disabled="">
 </textarea>"
 `;
 
 exports[`Campos > textarea invalido 1`] = `
-"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" aria-invalid="true">
+"<textarea data-slot="textarea" class="flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;[readonly]]:cursor-default [&amp;[readonly]]:bg-muted dark:[&amp;[readonly]]:bg-muted" aria-invalid="true">
 </textarea>"
 `;
 
