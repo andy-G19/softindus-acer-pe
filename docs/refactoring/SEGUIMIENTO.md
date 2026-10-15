@@ -2569,8 +2569,8 @@ Datos leídos de la API de GitHub el 2026-10-14 y comparados con git:
 
 ## Entrega 9 — Piloto Clientes y categoría en ventanas
 
-Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada en staging el 2026-10-15; falta
-integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
+Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada el 2026-10-15. 14 commits, de
+`543ff6e` a `498533d`, más el cierre `e81299e` (CI #73 en verde):
 
 - El paso 0 (`543ff6e`).
 - El paso 1, el fix K4 (`01ca73c` y `1812fff`), verificado en staging con el
@@ -2582,7 +2582,9 @@ integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
 
 Los tres CI terminaron en verde. En staging, 15 de las 18 huellas salieron como
 se predijo y las otras 3 tienen explicación; el CSS servido fue el predicho byte
-a byte, y las tareas T1 a T5 se midieron antes y después.
+a byte, y las tareas T1 a T5 se midieron antes y después. Integrada en `main`
+con el PR #22 (CI #74 en verde; merge commit `e38d633`, CI #75 en verde,
+2m 58s).
 
 Es la segunda entrega de la pista B: las primeras pantallas adoptan la base
 visual de la entrega 8 y prueban dos variantes del alta y la edición, un panel
@@ -2630,7 +2632,7 @@ Decisiones del responsable:
 | 5261489 | feat | Categorías de producto: alta y edición en una ventana modal; sus dos acciones autorizan con `getAuthorizedSession`. |
 | ef477f2 | docs | Registro de la entrega: esta sección, una trampa de Tailwind en `CLAUDE.md` e inventario. |
 | 498533d | fix | La galería respondía 500 en staging: `Button` pendiente pone la guarda de clic solo si es de envío o tiene un `onClick` propio, así que un componente de servidor puede pintarlo. |
-| este | docs | Cierre con la verificación del piloto en staging. |
+| e81299e | docs | Cierre con la verificación del piloto en staging. |
 
 Diseño:
 
@@ -3041,6 +3043,26 @@ De la lista de la entrega 8 quedan resueltos:
 De `FieldError` se migran 2 de las 16 copias, y del `<main>` anidado, 4 de las
 113 páginas.
 
+### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-15 y comparados con git:
+
+- PR #22, abierto a las 19:40:31 UTC y fusionado con merge commit a las
+  19:43:43 UTC del 2026-10-15: 15 commits, de `543ff6e` a `e81299e`. Su CI,
+  el #74, sobre `e81299e`, terminó en verde (2m 56s).
+- El merge commit `e38d633` tiene como padres `a945a5a` (`main`) y `e81299e`
+  (`staging`), y su árbol es el de `e81299e` (`f87a9cc0`): `main` y `staging`
+  tienen el mismo contenido. CI #75 en verde (2m 58s).
+- Vercel desplegó `e38d633` en producción al primer intento (estado «Vercel»
+  `pending` a las 19:43:46 UTC y `success` a las 19:45:20 UTC). La entrega no
+  trae migraciones.
+- El asunto del cierre `e81299e` («Commit de cierre de la entrega 9: Clientes
+  panel y categorias») no sigue Conventional Commits: se escribió sin los
+  comandos preparados. No se reescribe: ya está en `staging` y en `main`, y
+  cambiar el mensaje cambia el hash del commit y del merge, lo que obligaría a
+  forzar el push de las dos ramas. Desde la entrega 10, los comandos de cada
+  commit se escriben antes de la pregunta que cierra el turno.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3064,7 +3086,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
-| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada en staging (CI #72 verde; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después); falta integrarla en `main` |
+| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
