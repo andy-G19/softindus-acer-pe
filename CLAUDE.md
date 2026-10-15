@@ -30,7 +30,7 @@ npm run check          # FULL gate: db:generate → db:validate → lint → typ
 npm run refactor:inventory  # regenerates docs/refactoring/INVENTARIO.md
 ```
 
-Tests use **Vitest** (`vitest.config.ts`): files `*.test.ts` next to the code they test (`src/**`, `scripts/**`). Tests are pure unit tests: they must not read a real `.env` nor connect to Supabase. `postinstall` runs `prisma generate` automatically.
+Tests use **Vitest** (`vitest.config.ts`): files `*.test.ts` next to the code they test (`src/**`, `scripts/**`). Tests are pure unit tests: they must not read a real `.env` nor connect to Supabase. The default environment is `node`; a test that needs a DOM (effects, focus, the real Radix behavior) opts in per file with a first-line `// @vitest-environment jsdom` comment and fakes the layout jsdom does not compute (reference: [src/components/ui/dialog-focus.test.ts](src/components/ui/dialog-focus.test.ts)). `postinstall` runs `prisma generate` automatically.
 
 **`npm run check` must pass before any commit.** If it fails, fix the cause; never skip, disable or weaken a check to make it pass.
 
