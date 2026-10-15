@@ -1,4 +1,4 @@
-import { createElement as h, type ComponentProps, type ReactNode } from "react";
+import { createElement as h, type ComponentProps, type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -33,7 +33,8 @@ afterEach(() => {
   radixDouble.open = true;
 });
 
-type Props = ComponentProps<typeof ConfirmDialog>;
+// La variante con disparador: Partial sobre la union mezclaria los dos modos.
+type Props = Extract<ComponentProps<typeof ConfirmDialog>, { trigger: ReactElement }>;
 
 const base: Props = {
   trigger: h(Button, { type: "button", variant: "secondary" }, "Cerrar orden"),
@@ -132,5 +133,38 @@ describe("ConfirmDialog", () => {
     expect(() => h(ConfirmDialog, { ...rest, title, confirmText })).not.toThrow();
     // @ts-expect-error: ni sin la pregunta con la entidad
     expect(() => h(ConfirmDialog, { ...rest, description, confirmText })).not.toThrow();
+  });
+});
+
+// Modo controlado (entrega 9): sin disparador; la abre quien la usa, por
+// ejemplo al intentar cerrar un formulario con cambios.
+describe("ConfirmDialog controlada", () => {
+  const withoutTrigger = { ...base, trigger: undefined };
+
+  function renderControlled(open: boolean) {
+    radixDouble.open = false;
+    return renderToStaticMarkup(h(ConfirmDialog, { ...withoutTrigger, open, onOpenChange: () => {} }));
+  }
+
+  it("cerrada no pinta nada: no tiene disparador", () => {
+    expect(renderControlled(false)).toBe("");
+  });
+
+  it("abierta pinta la confirmacion sin disparador", () => {
+    const html = renderControlled(true);
+
+    expect(html).toContain('role="alertdialog"');
+    expect(html).not.toContain('aria-haspopup="dialog"');
+    expect(html.indexOf(">Cancelar</button>")).toBeLessThan(html.indexOf(">Cerrar orden</button>"));
+  });
+
+  it("los tipos exigen disparador u open con onOpenChange, nunca los dos", () => {
+    // Comprobacion de tipos: la verifica typecheck, no la ejecucion.
+    // @ts-expect-error: o disparador o open, no los dos
+    expect(() => h(ConfirmDialog, { ...base, open: true, onOpenChange: () => {} })).not.toThrow();
+    // @ts-expect-error: open sin onOpenChange no se puede cerrar
+    expect(() => h(ConfirmDialog, { ...withoutTrigger, open: true })).not.toThrow();
+    // @ts-expect-error: sin disparador ni open nadie la abre
+    expect(() => h(ConfirmDialog, withoutTrigger)).not.toThrow();
   });
 });
