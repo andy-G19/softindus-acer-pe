@@ -786,13 +786,26 @@ function createGuard(name: string, checksRole: boolean) {
   };
 }
 
+// getAuthorizedSession no redirige: devuelve null y la accion contesta con su
+// FormState de error (entrega 9). Un doble que lanzara no caracterizaria esa
+// rama.
+async function getAuthorizedSessionDouble(roles: Role[]) {
+  state.calls.push({ authz: "getAuthorizedSession", roles });
+
+  if (state.rejectAuth || !roles.includes(state.role)) {
+    return null;
+  }
+
+  return createSession();
+}
+
 export function authzModuleMock() {
   return {
     requireRole: createGuard("requireRole", true),
     requireAuth: createGuard("requireAuth", false),
     requireActiveUser: createGuard("requireActiveUser", false),
     getActiveUserSession: createGuard("getActiveUserSession", false),
-    getAuthorizedSession: createGuard("getAuthorizedSession", true),
+    getAuthorizedSession: getAuthorizedSessionDouble,
     assertRole: () => true,
   };
 }
@@ -1018,12 +1031,14 @@ export async function runWithRejectedAuth(
 }
 
 // Ejecuta cualquier funcion del servidor (por ejemplo, un route handler) con
-// el mismo reloj, zona horaria y registro de llamadas que characterizePage.
+// el mismo reloj, zona horaria y registro de llamadas que characterizePage. El
+// rol de la sesion es ADMIN salvo que el caso pida otro.
 export async function characterizeHandler<T>(
   run: () => Promise<T>,
   data: DataOverrides = {},
+  options: { role?: Role } = {},
 ): Promise<{ calls: RecordedCall[]; result: T }> {
-  resetState({ name: "handler", data }, "/");
+  resetState({ name: "handler", data, role: options.role }, "/");
 
   return withFixedClock(async () => {
     const result = await run();
