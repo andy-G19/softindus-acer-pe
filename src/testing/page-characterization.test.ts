@@ -4,8 +4,10 @@ import { notFound, redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 
 import {
+  AuthRejected,
   FIXED_NOW,
   GENERATED_COUNT,
+  authzModuleMock,
   characterizeHandler,
   dbModuleMock,
   decimalSnapshotSerializer,
@@ -277,6 +279,50 @@ describe("characterizeHandler", () => {
     expect(first.result).toBe(7);
     expect(second.result).toBe(GENERATED_COUNT);
     expect(second.calls).toEqual([{ prisma: "cliente.count", args: undefined }]);
+  });
+
+  it("ejecuta con el rol que pide el caso (ADMIN si no pide ninguno)", async () => {
+    const authz = authzModuleMock();
+
+    const seller = await characterizeHandler(() => authz.requireRole(["ADMIN", "SELLER"]), {}, { role: "SELLER" });
+    const admin = await characterizeHandler(() => authz.requireRole(["ADMIN"]));
+
+    expect(seller.result.user.role).toBe("SELLER");
+    expect(admin.result.user.role).toBe("ADMIN");
+  });
+});
+
+describe("authzModuleMock", () => {
+  // Cada doble rechaza como el original: requireRole redirige (aqui lanza) y
+  // getAuthorizedSession devuelve null para que la accion conteste con su
+  // FormState de error (entrega 9).
+  it("getAuthorizedSession devuelve null si el rol no esta permitido y registra los roles pedidos", async () => {
+    const authz = authzModuleMock();
+
+    const { calls, result } = await characterizeHandler(
+      () => authz.getAuthorizedSession(["ADMIN", "SELLER"]),
+      {},
+      { role: "WORKSHOP_MASTER" },
+    );
+
+    expect(result).toBeNull();
+    expect(calls).toEqual([{ authz: "getAuthorizedSession", roles: ["ADMIN", "SELLER"] }]);
+  });
+
+  it("getAuthorizedSession devuelve la sesion si el rol esta permitido", async () => {
+    const authz = authzModuleMock();
+
+    const { result } = await characterizeHandler(() => authz.getAuthorizedSession(["ADMIN", "SELLER"]), {}, { role: "SELLER" });
+
+    expect(result?.user.role).toBe("SELLER");
+  });
+
+  it("requireRole sigue lanzando si el rol no esta permitido", async () => {
+    const authz = authzModuleMock();
+
+    await expect(
+      characterizeHandler(() => authz.requireRole(["ADMIN"]), {}, { role: "SELLER" }),
+    ).rejects.toBeInstanceOf(AuthRejected);
   });
 });
 

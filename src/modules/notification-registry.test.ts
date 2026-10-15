@@ -20,7 +20,10 @@ import {
 // - variable validada en el mismo archivo con ["a", "b"].includes(variable),
 //   tambien tras un prefijo: `?toast=campaign-status-${nextStatus}`;
 // - parametro de una funcion del mismo archivo: cada llamada debe pasar un
-//   literal, como detailsPath(..., "recipe-detail-created").
+//   literal, como detailsPath(..., "recipe-detail-created");
+// - el catalogo de un area con una clave literal, para los formularios que no
+//   redirigen y dan el aviso con el resultado de la accion (entrega 9):
+//   commercialNotifications["client-created"].
 // Cualquier otra forma hace fallar la prueba: o se escribe con una de estas o
 // se ensena a la prueba a reconocerla.
 
@@ -30,7 +33,18 @@ import {
 // se retiro en el grupo 3 de fixes.
 const CLAVES_SIN_EMISOR: Record<string, string> = {};
 
-type Emission = { file: string; key: string };
+// catalogo: un formulario que da el aviso con el resultado de la accion (entrega 9),
+// con el atributo JSX que lo recibe (successNotification...).
+type Emission = { file: string; key: string; catalogo?: string };
+
+// Nombres de los catalogos de cada area (commercialNotifications...), leidos de
+// notification-registry.ts: un acceso con clave literal a uno de ellos emite.
+const CATALOG_NAMES = new Set(
+  [...readFileSync("src/modules/notification-registry.ts", "utf8").matchAll(/import \{ (\w+Notifications) \}/g)].map(
+    (match) => match[1] as string,
+  ),
+);
+const CATALOG_ACCESS = new RegExp(`\\b(${[...CATALOG_NAMES].join("|")})\\[`);
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -161,7 +175,7 @@ function scan() {
   for (const file of sourceFiles("src")) {
     const text = readFileSync(file, "utf8");
 
-    if (!text.includes("toast=")) {
+    if (!text.includes("toast=") && !CATALOG_ACCESS.test(text)) {
       continue;
     }
 
@@ -193,6 +207,22 @@ function scan() {
     };
 
     const visit = (node: ts.Node) => {
+      if (
+        ts.isElementAccessExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        CATALOG_NAMES.has(node.expression.text)
+      ) {
+        if (ts.isStringLiteral(node.argumentExpression)) {
+          const attribute =
+            ts.isJsxExpression(node.parent) && ts.isJsxAttribute(node.parent.parent)
+              ? node.parent.parent.name.getText(source)
+              : "sin atributo";
+          emissions.push({ file, key: node.argumentExpression.text, catalogo: attribute });
+        } else {
+          problems.push(`${where(node)}: ${node.getText(source)} debe usar una clave literal`);
+        }
+      }
+
       if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
         inspect(node, node.text, null);
       } else if (ts.isTemplateExpression(node)) {
@@ -248,6 +278,20 @@ describe("claves ?toast= emitidas", () => {
     });
 
     expect(misplaced).toEqual([]);
+  });
+});
+
+// La pagina pasa al formulario el aviso con su clave y ese prop no llega al
+// HTML: sin este snapshot, cambiar client-created por client-updated en una
+// pagina no lo detectaria ninguna prueba.
+describe("avisos dados con el resultado de la accion", () => {
+  it("cada archivo emite sus claves del catalogo", () => {
+    const pairs = emissions
+      .filter((emission) => emission.catalogo)
+      .map(({ file, key, catalogo }) => `${file} [${catalogo}] -> ${key}`)
+      .sort();
+
+    expect(pairs).toMatchSnapshot();
   });
 });
 

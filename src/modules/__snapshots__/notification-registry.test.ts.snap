@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`avisos dados con el resultado de la accion > cada archivo emite sus claves del catalogo 1`] = `
+[
+  "src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)[id]/edit/page.tsx [successNotification] -> client-updated",
+  "src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)new/page.tsx [successNotification] -> client-created",
+  "src/app/(dashboard)/dashboard/commercial/clients/[id]/edit/page.tsx [successNotification] -> client-updated",
+  "src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx [successNotification] -> client-created",
+  "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [successNotification] -> product-category-created",
+  "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [updateNotification] -> product-category-updated",
+]
+`;

@@ -1,6 +1,12 @@
-import { createElement as h, type ComponentProps, type ReactNode } from "react";
+import {
+  createElement as h,
+  type ComponentProps,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,19 +23,30 @@ function render(node: ReactNode) {
 const SPINNER = /<svg[^>]*class="[^"]*lucide-loader-circle[^"]*"[^>]*>/;
 
 describe("Button pendiente", () => {
-  it("se deshabilita, marca aria-busy y muestra el texto pendiente", () => {
+  // Entrega 9: pendiente es aria-disabled, no disabled. Un boton disabled deja
+  // de ser enfocable y Chromium manda el foco a body (K1 de la entrega 8).
+  it("queda aria-disabled sin disabled, marca aria-busy y muestra el texto pendiente", () => {
     const html = render(h(Button, { pending: true, pendingText: "Guardando..." }, "Guardar"));
 
-    expect(html).toMatch(/^<button [^>]*disabled=""/);
+    expect(html).toMatch(/^<button [^>]*aria-disabled="true"/);
+    expect(html).not.toMatch(/^<button [^>]*disabled=""/);
     expect(html).toMatch(/^<button [^>]*aria-busy="true"/);
     expect(html).toContain("Guardando...");
     expect(html).not.toContain("Guardar<");
   });
 
-  it("un disabled={false} del formulario no lo rehabilita mientras esta pendiente", () => {
+  it("se ve inactivo como un boton deshabilitado y no recibe clics del puntero", () => {
+    const classes = render(h(Button, { pending: true }, "Guardar")).match(/^<button [^>]*class="([^"]*)"/)?.[1] ?? "";
+
+    // Clases sueltas: disabled:opacity-50 no cuenta, solo actua con disabled.
+    expect(classes.split(" ")).toContain("opacity-50");
+    expect(classes.split(" ")).toContain("pointer-events-none");
+  });
+
+  it("un disabled={false} del formulario no lo reactiva mientras esta pendiente", () => {
     const html = render(h(Button, { disabled: false, pending: true }, "Guardar"));
 
-    expect(html).toMatch(/^<button [^>]*disabled=""/);
+    expect(html).toMatch(/^<button [^>]*aria-disabled="true"/);
   });
 
   it("conserva el contenido si no hay texto pendiente", () => {
@@ -71,6 +88,48 @@ describe("Button pendiente", () => {
     const props = { asChild: true, pending: true } as unknown as ComponentProps<typeof Button>;
 
     expect(render(h(Button, props, link))).toBe(render(h(Button, { asChild: true }, link)));
+  });
+});
+
+// Verificacion del piloto en staging (entrega 9): la galeria pinta
+// <Button pending> desde un componente de servidor, y React Server Components
+// no admite funciones en un elemento que llega del servidor (la pagina daba
+// 500). renderToStaticMarkup ignora los manejadores, asi que aqui se miran las
+// props del elemento que devuelve Button.
+function element(props: ComponentProps<typeof Button>) {
+  return Button(props) as ReactElement<ComponentProps<"button">>;
+}
+
+function click() {
+  const preventDefault = vi.fn();
+
+  return { event: { preventDefault } as unknown as MouseEvent<HTMLButtonElement>, preventDefault };
+}
+
+describe("guarda de clic del boton pendiente", () => {
+  it("de tipo button y sin onClick no lleva manejadores: un componente de servidor puede pintarlo", () => {
+    expect(element({ type: "button", pending: true, children: "Guardar" }).props.onClick).toBeUndefined();
+  });
+
+  it("de envio, tambien sin type, cancela el clic (y con el, el envio)", () => {
+    for (const type of ["submit", undefined] as const) {
+      const { onClick } = element({ type, pending: true, children: "Guardar" }).props;
+      const { event, preventDefault } = click();
+
+      expect(onClick).toBeTypeOf("function");
+      onClick?.(event);
+      expect(preventDefault).toHaveBeenCalledOnce();
+    }
+  });
+
+  it("con un onClick propio no lo llama mientras esta pendiente", () => {
+    const own = vi.fn();
+    const { onClick } = element({ type: "button", pending: true, onClick: own, children: "Guardar" }).props;
+    const { event, preventDefault } = click();
+
+    onClick?.(event);
+    expect(own).not.toHaveBeenCalled();
+    expect(preventDefault).toHaveBeenCalledOnce();
   });
 });
 

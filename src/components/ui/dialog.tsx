@@ -101,11 +101,98 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
+// Hallazgo K4 (entrega 8): la trampa de foco de Radix solo cuenta los elementos
+// con tabIndex >= 0, asi que un cuerpo que desplaza sin nada enfocable dentro
+// quedaba fuera del Tab y no se movia con flechas ni AvPag (WCAG 2.1.1). Con la
+// regla que Chrome aplica a las zonas desplazables, ese cuerpo entra en el
+// orden de Tab y, como es el primer tabulable, recibe el foco inicial. Con un
+// campo dentro no entra: el foco inicial sigue yendo al primer campo.
+
+// Misma regla que getTabbableCandidates y findVisible de la trampa de Radix.
+function isTabbable(element: HTMLElement, scope: HTMLElement) {
+  const isHiddenInput = element instanceof HTMLInputElement && element.type === "hidden"
+  if (element.tabIndex < 0 || (element as { disabled?: boolean }).disabled || element.hidden || isHiddenInput) {
+    return false
+  }
+  if (getComputedStyle(element).visibility === "hidden") {
+    return false
+  }
+  for (let node: HTMLElement | null = element; node && node !== scope; node = node.parentElement) {
+    if (getComputedStyle(node).display === "none") {
+      return false
+    }
+  }
+  return true
+}
+
+function needsKeyboardScroll(body: HTMLElement) {
+  if (body.scrollHeight <= body.clientHeight) {
+    return false
+  }
+  for (const element of body.querySelectorAll<HTMLElement>("*")) {
+    if (isTabbable(element, body)) {
+      return false
+    }
+  }
+  return true
+}
+
+// Atributos que pueden volver tabulable o no un descendiente.
+const tabbabilityAttributes = ["class", "disabled", "hidden", "href", "style", "tabindex", "type"]
+
+// El tabindex se escribe en el DOM desde un efecto de layout: queda puesto
+// antes de cualquier efecto pasivo, como el que usa Radix para el foco inicial,
+// sin depender de en que render lo hace Radix. Solo se escribe si cambia: cada
+// escritura es una mutacion que el propio observador volveria a recibir.
+function useKeyboardScrollRegion(ref: React.RefObject<HTMLDivElement | null>) {
+  React.useLayoutEffect(() => {
+    const body = ref.current
+    if (!body) {
+      return
+    }
+
+    const update = () => {
+      const focusable = needsKeyboardScroll(body)
+      if (focusable && body.getAttribute("tabindex") !== "0") {
+        body.setAttribute("tabindex", "0")
+      } else if (!focusable && body.hasAttribute("tabindex")) {
+        body.removeAttribute("tabindex")
+      }
+    }
+
+    update()
+    const resizeObserver = new ResizeObserver(update)
+    resizeObserver.observe(body)
+    const mutationObserver = new MutationObserver(update)
+    mutationObserver.observe(body, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributeFilter: tabbabilityAttributes,
+    })
+
+    return () => {
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
+    }
+  }, [ref])
+}
+
+// Sin ref ni tabIndex desde fuera: el cuerpo usa su propia ref y decide su
+// tabIndex (React no gestiona ese atributo). El anillo va hacia dentro para no
+// montarse sobre los bordes del encabezado y del pie.
+function DialogBody({ className, ...props }: Omit<React.ComponentProps<"div">, "ref" | "tabIndex">) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  useKeyboardScrollRegion(ref)
+
   return (
     <div
+      ref={ref}
       data-slot="dialog-body"
-      className={cn("min-h-0 flex-1 overflow-y-auto px-6 py-4", className)}
+      className={cn(
+        "min-h-0 flex-1 overflow-y-auto px-6 py-4 outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/50",
+        className
+      )}
       {...props}
     />
   )

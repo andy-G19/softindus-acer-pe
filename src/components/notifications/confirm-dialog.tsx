@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactElement, type ReactNode } from "react";
+import { useRef, useState, type ReactElement, type ReactNode } from "react";
 import { TriangleAlert } from "lucide-react";
 
 import {
@@ -16,9 +16,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type ConfirmDialogProps = {
-  /** Boton que abre la confirmacion. */
-  trigger: ReactElement;
+// Quien la abre: su propio disparador o, en modo controlado (entrega 9), el
+// componente que la usa, por ejemplo al intentar cerrar un formulario con
+// cambios. Los tipos impiden mezclar los dos modos.
+type ConfirmDialogOpenProps =
+  | {
+      /** Boton que abre la confirmacion. */
+      trigger: ReactElement;
+      open?: never;
+      onOpenChange?: never;
+    }
+  | {
+      trigger?: never;
+      /** Modo controlado: abierta o cerrada desde fuera, sin disparador. */
+      open: boolean;
+      /** Recibe false al cancelar, con Esc y cuando termina la accion. */
+      onOpenChange: (open: boolean) => void;
+    };
+
+type ConfirmDialogProps = ConfirmDialogOpenProps & {
   /** Pregunta con la entidad: "¿Anular el pedido PED00000012?". */
   title: string;
   /** Consecuencia: que pasa y si se puede deshacer. */
@@ -41,6 +57,8 @@ type ConfirmDialogProps = {
 // Si onConfirm falla, la ventana queda abierta y el error sigue su curso.
 export function ConfirmDialog({
   trigger,
+  open: controlledOpen,
+  onOpenChange,
   title,
   description,
   confirmText,
@@ -50,8 +68,14 @@ export function ConfirmDialog({
   pending = false,
   pendingText,
 }: ConfirmDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [running, setRunning] = useState(false);
+  const controlled = controlledOpen !== undefined;
+  const open = controlled ? controlledOpen : uncontrolledOpen;
+  // Al cerrar, Radix devuelve el foco a su disparador; sin disparador lo
+  // perderia (iria a body). En modo controlado se devuelve al elemento que
+  // tenia el foco al abrir.
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   const busy = pending || running;
   const destructive = variant === "destructive";
 
@@ -65,6 +89,14 @@ export function ConfirmDialog({
     }
   }
 
+  function setOpen(next: boolean) {
+    if (controlled) {
+      onOpenChange?.(next);
+    } else {
+      setUncontrolledOpen(next);
+    }
+  }
+
   // Esc y Cancelar piden cerrar por aqui: mientras esta pendiente se ignora.
   function changeOpen(next: boolean) {
     if (!busy) {
@@ -74,8 +106,18 @@ export function ConfirmDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={changeOpen}>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
-      <AlertDialogContent>
+      {trigger ? <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger> : null}
+      <AlertDialogContent
+        onOpenAutoFocus={() => {
+          returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        }}
+        onCloseAutoFocus={(event) => {
+          if (controlled) {
+            event.preventDefault();
+            returnFocusRef.current?.focus();
+          }
+        }}
+      >
         <AlertDialogHeader className="items-center sm:flex-row sm:items-start sm:gap-4">
           <span
             className={cn(

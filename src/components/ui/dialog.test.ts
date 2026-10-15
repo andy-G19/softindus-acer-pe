@@ -26,8 +26,8 @@ import {
 // Ventana y panel lateral (entrega 8). Como en confirm-dialog.test.ts, el doble
 // de Radix vuelve el Portal un paso directo y abre la ventana para fijar en
 // Node lo que recibe el lector de pantalla y la estructura que mantiene el pie
-// fijo. La trampa de foco, Esc, la devolucion del foco y el desplazamiento con
-// teclado se prueban a mano en la galeria.
+// fijo. El foco inicial se prueba con el Radix real en dialog-focus.test.ts;
+// Esc, la devolucion del foco y el teclado real, a mano en la galeria.
 
 vi.mock("radix-ui", async (importOriginal) => {
   const radix = await importOriginal<typeof import("radix-ui")>();
@@ -112,6 +112,14 @@ describe("Dialog", () => {
     expect(classOf(html, "dialog-header")).toContain("shrink-0");
     expect(classOf(html, "dialog-footer")).toContain("shrink-0");
     expect(classOf(html, "dialog-content")).toMatch(/\bflex\b.*\bflex-col\b/);
+  });
+
+  it("el cuerpo, cuando entra en el orden de Tab, muestra un anillo de foco hacia dentro", () => {
+    const body = classOf(render(dialog()), "dialog-body");
+
+    for (const token of ["outline-none", "focus-visible:ring-3", "focus-visible:ring-inset", "focus-visible:ring-ring/50"]) {
+      expect(body.split(" ")).toContain(token);
+    }
   });
 
   it("la X de cerrar tiene nombre y va al final, despues del pie", () => {

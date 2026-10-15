@@ -23,6 +23,21 @@ vi.mock("next/navigation", async (importOriginal) =>
     await importOriginal(),
   ),
 );
+// Radix no renderiza portales en el servidor: para ver el panel lateral en el
+// HTML, el portal del Dialog (Sheet) pasa directo. Ninguna otra pagina de este
+// archivo usa Dialog.
+vi.mock("radix-ui", async (importOriginal) => {
+  const radix = await importOriginal<typeof import("radix-ui")>();
+  const { createElement, Fragment } = await import("react");
+
+  return {
+    ...radix,
+    Dialog: {
+      ...radix.Dialog,
+      Portal: ({ children }: { children?: unknown }) => createElement(Fragment, null, children as never),
+    },
+  };
+});
 
 // Caracterizacion de las paginas de Clientes (entrega 4.1). Se escribio antes
 // de mover sus consultas a modules/commercial/clients/queries.ts: los mismos
@@ -31,8 +46,11 @@ vi.mock("next/navigation", async (importOriginal) =>
 const LIST_ROUTE = "/dashboard/commercial/clients";
 const loadList = () => import("./page");
 const loadEdit = () => import("./[id]/edit/page");
+const loadNew = () => import("./new/page");
+const loadNewPanel = () => import("./@panel/(.)new/page");
+const loadEditPanel = () => import("./@panel/(.)[id]/edit/page");
 
-preloadPages(loadList, loadEdit);
+preloadPages(loadList, loadEdit, loadNew, loadNewPanel, loadEditPanel);
 
 const CLIENT_ROWS = [
   {
@@ -279,5 +297,144 @@ describe("edicion de cliente", () => {
     );
 
     expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+});
+
+// Entrega 9: el alta vuelve al returnTo validado, como la edicion.
+describe("alta de cliente", () => {
+  const NEW_ROUTE = `${LIST_ROUTE}/new`;
+
+  it("muestra el formulario vacio sin consultar Prisma y vuelve al listado", async () => {
+    const result = await characterizePage(loadNew, { name: "nuevo" }, NEW_ROUTE);
+
+    expect(prismaCalls(result.calls)).toEqual([]);
+    expect(result.html).toMatchSnapshot();
+  });
+
+  it("vuelve al listado con sus filtros e ignora un regreso externo", async () => {
+    const withFilters = await characterizePage(
+      loadNew,
+      { name: "nuevo con regreso", searchParams: { returnTo: `${LIST_ROUTE}?status=inactivo&page=2` } },
+      NEW_ROUTE,
+    );
+    const external = await characterizePage(
+      loadNew,
+      { name: "nuevo con regreso externo", searchParams: { returnTo: "https://example.com/phishing" } },
+      NEW_ROUTE,
+    );
+    const hrefs = (html: string | null) => [...(html ?? "").matchAll(/href="([^"]*clients[^"]*)"/g)].map((match) => match[1]);
+
+    expect(hrefs(withFilters.html)).toContain(`${LIST_ROUTE}?status=inactivo&amp;page=2`);
+    expect(hrefs(external.html)).not.toContain("https://example.com/phishing");
+    expect(external.html).not.toContain("example.com");
+  });
+
+  it("un acceso rechazado no consulta Prisma", async () => {
+    const calls = await runWithRejectedAuth(loadNew, { name: "rechazo" }, NEW_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+});
+
+// Entrega 9: alta y edicion en panel lateral (rutas interceptadas desde el
+// listado). Mismos permisos, misma consulta y mismo formulario que las paginas
+// completas; la URL directa o la recarga no pasan por aqui.
+describe("panel lateral de clientes", () => {
+  it("el alta en panel autoriza igual que la pagina, no consulta Prisma y muestra el formulario en el panel", async () => {
+    const result = await characterizePage(loadNewPanel, { name: "panel nuevo" }, `${LIST_ROUTE}/new`);
+
+    expect(result.calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+    expect(result.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel", async () => {
+    const panel = await characterizePage(
+      loadEditPanel,
+      { name: "panel editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+    const page = await characterizePage(
+      loadEdit,
+      { name: "editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(prismaCalls(panel.calls)).toEqual(prismaCalls(page.calls));
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel responde notFound si el cliente no existe", async () => {
+    const result = await characterizePage(
+      loadEditPanel,
+      { name: "panel inexistente", params: { id: "CLI99999999" }, data: { "cliente.findUnique": null } },
+      `${LIST_ROUTE}/CLI99999999/edit`,
+    );
+
+    expect(result.outcome).toBe("notFound");
+  });
+
+  it.each([
+    ["alta", loadNewPanel, {}],
+    ["edicion", loadEditPanel, { params: { id: "CLI00000003" } }],
+  ] as const)("un acceso rechazado al panel de %s no consulta Prisma", async (_name, load, extra) => {
+    const calls = await runWithRejectedAuth(load, { name: "rechazo", ...extra }, LIST_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+
+  it("fuera del alta y la edicion interceptadas, la ranura del panel no muestra nada", async () => {
+    const { default: PanelDefault } = await import("./@panel/default");
+    const { default: PanelOnList } = await import("./@panel/page");
+
+    expect(PanelDefault()).toBeNull();
+    expect(PanelOnList()).toBeNull();
+  });
+});
+
+// Entrega 9: el listado adopta FilterBar y Field sin cambiar los nombres de la
+// URL, el alta lleva el regreso al listado filtrado (para el aviso y la pagina
+// completa) y ninguna pagina de Clientes anida un <main> dentro del del shell.
+describe("listado de clientes con la base visual", () => {
+  const FILTERED = { q: "andina", status: "activo", page: "2" };
+
+  async function renderList() {
+    const result = await characterizePage(loadList, { name: "con datos", searchParams: FILTERED, data: WITH_DATA }, LIST_ROUTE);
+
+    return result.html ?? "";
+  }
+
+  it("la barra de filtros es una busqueda con nombre que envia los mismos parametros al listado", async () => {
+    const html = await renderList();
+    const form = html.match(/<form [^>]*role="search"[^>]*>/)?.[0] ?? "";
+    const formHtml = html.slice(html.indexOf(form), html.indexOf("</form>", html.indexOf(form)));
+    const names = [...formHtml.matchAll(/<(?:input|select)[^>]* name="([^"]+)"/g)].map((match) => match[1]);
+
+    expect(form).toContain('aria-label="Filtros de clientes"');
+    expect(form).toContain(`action="${LIST_ROUTE}"`);
+    expect(form).toMatch(/method="get"/i);
+    expect(new Set(names)).toEqual(new Set(["client", "q", "type", "status", "origin"]));
+  });
+
+  it("Nuevo cliente lleva el regreso al listado con sus filtros y su pagina", async () => {
+    const html = await renderList();
+    const link = html.match(/<a [^>]*>Nuevo cliente<\/a>/)?.[0] ?? "";
+    const returnTo = encodeURIComponent(`${LIST_ROUTE}?q=andina&status=activo&page=2`);
+
+    expect(link).toContain(`href="${LIST_ROUTE}/new?returnTo=${returnTo}"`);
+  });
+
+  it("ninguna pagina de Clientes anida un <main> dentro del del shell", async () => {
+    const list = await renderList();
+    const newPage = await characterizePage(loadNew, { name: "nuevo" }, `${LIST_ROUTE}/new`);
+    const edit = await characterizePage(
+      loadEdit,
+      { name: "editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+
+    for (const html of [list, newPage.html ?? "", edit.html ?? ""]) {
+      expect(html).not.toContain("<main");
+    }
   });
 });

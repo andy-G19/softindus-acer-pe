@@ -6,9 +6,9 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 583 |
-| Páginas | 128 |
-| Declaraciones JSX de formulario | 138 |
+| Archivos fuente analizados | 601 |
+| Páginas | 131 |
+| Declaraciones JSX de formulario | 135 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -19,7 +19,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | access-denied | 1 |
 | audit | 1 |
 | auth | 1 |
-| commercial | 17 |
+| commercial | 20 |
 | costs | 4 |
 | gallery | 1 |
 | inicio | 2 |
@@ -39,9 +39,12 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `/login` | `src/app/(auth)/login/page.tsx` | 0 | LoginForm |
 | `/dashboard/access-denied` | `src/app/(dashboard)/dashboard/access-denied/page.tsx` | 0 | — |
 | `/dashboard/audit` | `src/app/(dashboard)/dashboard/audit/page.tsx` | 1 | — |
+| `/dashboard/commercial/clients/@panel/edit` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)[id]/edit/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients/@panel` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)new/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients/@panel` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/page.tsx` | 0 | — |
 | `/dashboard/commercial/clients/[id]/edit` | `src/app/(dashboard)/dashboard/commercial/clients/[id]/edit/page.tsx` | 0 | ClientForm |
 | `/dashboard/commercial/clients/new` | `src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx` | 0 | ClientForm |
-| `/dashboard/commercial/clients` | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 1 | — |
+| `/dashboard/commercial/clients` | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 0 | — |
 | `/dashboard/commercial/orders/[id]/edit` | `src/app/(dashboard)/dashboard/commercial/orders/[id]/edit/page.tsx` | 0 | OrderForm |
 | `/dashboard/commercial/orders/[id]` | `src/app/(dashboard)/dashboard/commercial/orders/[id]/page.tsx` | 0 | — |
 | `/dashboard/commercial/orders/new` | `src/app/(dashboard)/dashboard/commercial/orders/new/page.tsx` | 0 | OrderForm |
@@ -170,7 +173,6 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | Fuente | Línea | Acción |
 | --- | --- | --- |
 | `src/app/(dashboard)/dashboard/audit/page.tsx` | 101 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 106 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
 | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 66 | `"/dashboard/commercial/payments"` |
@@ -270,16 +272,14 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
 | `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |
+| `src/components/forms/action-form.tsx` | 48 | `{action}` |
 | `src/components/forms/filter-bar.tsx` | 35 | `{action}` |
 | `src/components/inventory/purchase-form.tsx` | 142 | `{createPurchaseAction}` |
 | `src/components/inventory/supplier-payment-form.tsx` | 31 | `{createSupplierPaymentAction}` |
 | `src/components/table/row-actions.tsx` | 37 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
-| `src/modules/commercial/clients/client-form.tsx` | 94 | `{formAction}` |
-| `src/modules/commercial/products/product-category-manager.tsx` | 84 | `{formAction}` |
-| `src/modules/commercial/products/product-category-manager.tsx` | 151 | `{formAction}` |
-| `src/modules/commercial/products/product-category-manager.tsx` | 191 | `{toggleAction}` |
+| `src/modules/commercial/products/product-category-manager.tsx` | 84 | `{toggleAction}` |
 | `src/modules/commercial/products/product-form.tsx` | 90 | `{formAction}` |
 | `src/modules/costs/costings/costing-data-card.tsx` | 66 | `{updateLaborCostAction}` |
 | `src/modules/costs/costings/costing-data-card.tsx` | 91 | `{recalculateCostingAction}` |
@@ -287,7 +287,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 227 | `{annulIndirectCostAction}` |
 | `src/modules/costs/margins/margins-section.tsx` | 76 | `{createMarginAction}` |
 | `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
-| `src/modules/gallery/dialog-demo.tsx` | 80 | `Sin action explícita (revisar filtros/onSubmit)` |
+| `src/modules/gallery/dialog-demo.tsx` | 98 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 98 | `{formAction}` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 170 | `{formAction}` |
 | `src/modules/inventory/components/inventory-catalog-manager.tsx` | 226 | `{toggleAction}` |

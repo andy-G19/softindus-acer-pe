@@ -944,6 +944,22 @@ exports[`cada clave del catalogo > product-category-activated: muestra su toast 
 ]
 `;
 
+exports[`cada clave del catalogo > product-category-created: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría creada correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
 exports[`cada clave del catalogo > product-category-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
@@ -953,6 +969,22 @@ exports[`cada clave del catalogo > product-category-deactivated: muestra su toas
       "progressClassName": "toast-industrial-progress-warning",
     },
     "toast": "warning",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
+exports[`cada clave del catalogo > product-category-updated: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Categoría actualizada correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
   },
   {
     "effect": "router.replace /dashboard {"scroll":false}",

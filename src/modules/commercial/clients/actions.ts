@@ -6,17 +6,30 @@ import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, type Role } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import { clientSchema } from "@/schemas/commercial/client.schema";
 
-export type ClientFormState = ActionErrorState;
+/** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
+export type ClientFormValues = {
+  tipo_cliente: string;
+  nombre_razon_social: string;
+  tipo_documento: string;
+  numero_documento: string;
+  telefono: string;
+  correo: string;
+  direccion: string;
+  lugar_origen: string;
+  observaciones: string;
+};
+
+// Entrega 9: el alta y la edicion no redirigen; devuelven el resultado y el
+// formulario da el aviso y vuelve al listado.
+export type ClientFormState = FormActionState<ClientFormValues, { id_cliente: string }>;
 
 const CLIENTS_PATH = "/dashboard/commercial/clients";
-const CLIENT_CREATED_PATH = `${CLIENTS_PATH}?toast=client-created`;
-const CLIENT_UPDATED_PATH = `${CLIENTS_PATH}?toast=client-updated`;
 const ALLOWED_CLIENT_ROLES: Role[] = ["ADMIN", "SELLER"];
-const initialErrorState: ClientFormState = { error: "" };
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -25,6 +38,30 @@ function emptyToNull(value: FormDataEntryValue | null) {
 
 async function requireCommercialClientPermission() {
   return getAuthorizedSession(ALLOWED_CLIENT_ROLES);
+}
+
+function getClientFormValues(formData: FormData): ClientFormValues {
+  const text = (name: keyof ClientFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    tipo_cliente: text("tipo_cliente"),
+    nombre_razon_social: text("nombre_razon_social"),
+    tipo_documento: text("tipo_documento"),
+    numero_documento: text("numero_documento"),
+    telefono: text("telefono"),
+    correo: text("correo"),
+    direccion: text("direccion"),
+    lugar_origen: text("lugar_origen"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function clientError(values: ClientFormValues, error: string, fieldErrors?: FieldErrors): ClientFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function clientSaved(values: ClientFormValues, idCliente: string): ClientFormState {
+  return { status: "success", data: { id_cliente: idCliente }, values, operationId: newOperationId() };
 }
 
 function getClientFormData(formData: FormData) {
@@ -80,12 +117,11 @@ export async function createClientAction(
   _prevState: ClientFormState,
   formData: FormData,
 ): Promise<ClientFormState> {
+  const values = getClientFormValues(formData);
   const session = await requireCommercialClientPermission();
 
   if (!session) {
-    return {
-      error: "No tienes permisos para registrar clientes.",
-    };
+    return clientError(values, "No tienes permisos para registrar clientes.");
   }
 
   const rawData = getClientFormData(formData);
@@ -93,10 +129,7 @@ export async function createClientAction(
   const parsed = clientSchema.safeParse(rawData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del cliente.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return clientError(values, "Revisa los datos del cliente.", parsed.error.flatten().fieldErrors);
   }
 
   const numeroDocumento = emptyToNull(formData.get("numero_documento"));
@@ -104,14 +137,9 @@ export async function createClientAction(
     await validateDuplicateClientDocument(numeroDocumento);
 
   if (hasDuplicateDocument) {
-    return {
-      error: "Ya existe un cliente con ese número de documento.",
-      fieldErrors: {
-        numero_documento: [
-          "Ya existe un cliente con ese número de documento.",
-        ],
-      },
-    };
+    return clientError(values, "Ya existe un cliente con ese número de documento.", {
+      numero_documento: ["Ya existe un cliente con ese número de documento."],
+    });
   }
 
   let id_cliente = "";
@@ -154,39 +182,35 @@ export async function createClientAction(
       "Ya existe un cliente con ese número de documento.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe un cliente con ese número de documento."
-          ? { numero_documento: [errorMessage] }
-          : undefined,
-    };
+    return clientError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe un cliente con ese número de documento."
+        ? { numero_documento: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(CLIENTS_PATH);
-  redirect(CLIENT_CREATED_PATH);
 
-  return initialErrorState;
+  return clientSaved(values, id_cliente);
 }
 
 export async function updateClientAction(
   _prevState: ClientFormState,
   formData: FormData,
 ): Promise<ClientFormState> {
+  const values = getClientFormValues(formData);
   const session = await requireCommercialClientPermission();
 
   if (!session) {
-    return {
-      error: "No tienes permisos para actualizar clientes.",
-    };
+    return clientError(values, "No tienes permisos para actualizar clientes.");
   }
 
   const idCliente = formData.get("id_cliente")?.toString();
 
   if (!idCliente) {
-    return {
-      error: "El cliente no existe.",
-    };
+    return clientError(values, "El cliente no existe.");
   }
 
   const client = await prisma.cliente.findUnique({
@@ -199,19 +223,14 @@ export async function updateClientAction(
   });
 
   if (!client) {
-    return {
-      error: "El cliente no existe.",
-    };
+    return clientError(values, "El cliente no existe.");
   }
 
   const rawData = getClientFormData(formData);
   const parsed = clientSchema.safeParse(rawData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del cliente.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return clientError(values, "Revisa los datos del cliente.", parsed.error.flatten().fieldErrors);
   }
 
   const numeroDocumento = emptyToNull(formData.get("numero_documento"));
@@ -221,14 +240,9 @@ export async function updateClientAction(
   );
 
   if (hasDuplicateDocument) {
-    return {
-      error: "Ya existe otro cliente con ese número de documento.",
-      fieldErrors: {
-        numero_documento: [
-          "Ya existe otro cliente con ese número de documento.",
-        ],
-      },
-    };
+    return clientError(values, "Ya existe otro cliente con ese número de documento.", {
+      numero_documento: ["Ya existe otro cliente con ese número de documento."],
+    });
   }
 
   try {
@@ -254,14 +268,13 @@ export async function updateClientAction(
       "Ya existe otro cliente con ese número de documento.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage ===
-        "Ya existe otro cliente con ese número de documento."
-          ? { numero_documento: [errorMessage] }
-          : undefined,
-    };
+    return clientError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otro cliente con ese número de documento."
+        ? { numero_documento: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -273,9 +286,8 @@ export async function updateClientAction(
   });
 
   revalidatePath(CLIENTS_PATH);
-  redirect(CLIENT_UPDATED_PATH);
 
-  return initialErrorState;
+  return clientSaved(values, idCliente);
 }
 
 export async function toggleClientStatusAction(formData: FormData) {

@@ -1,45 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
+import { ActionForm } from "@/components/forms/action-form";
+import { useRouteSheet } from "@/components/navigation/route-sheet";
+import { Field } from "@/components/forms/field";
+import { SubmitButton } from "@/components/forms/submit-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { SheetBody, SheetFooter } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { showError } from "@/lib/notifications";
-import type { ClientFormState } from "@/modules/commercial/clients/actions";
-
-type ClientFormValues = {
-  id_cliente?: string;
-  tipo_cliente: string;
-  nombre_razon_social: string;
-  tipo_documento: string;
-  numero_documento: string;
-  telefono: string;
-  correo: string;
-  direccion: string;
-  lugar_origen: string;
-  observaciones: string;
-};
+import { hasListFilters } from "@/lib/navigation";
+import type { NotificationDefinition } from "@/lib/notification-catalog";
+import { notify } from "@/lib/notifications";
+import type { ClientFormState, ClientFormValues } from "@/modules/commercial/clients/actions";
 
 type ClientFormProps = {
-  action: (
-    prevState: ClientFormState,
-    formData: FormData,
-  ) => Promise<ClientFormState>;
-  defaultValues?: Partial<ClientFormValues>;
+  action: (prevState: ClientFormState, formData: FormData) => Promise<ClientFormState>;
+  /** Valores del cliente que se edita; en el alta, vacios. */
+  defaultValues?: Partial<ClientFormValues> & { id_cliente?: string };
   submitLabel: string;
-  cancelHref?: string;
-  cancelLabel?: string;
-  showCancelAction?: boolean;
+  /**
+   * Aviso que se da al guardar, del catalogo de Comercial. La pagina lo pasa
+   * con su clave literal (commercialNotifications["client-created"]) para que
+   * notification-registry.test.ts vea quien emite cada clave.
+   */
+  successNotification: NotificationDefinition;
+  /** Listado al que vuelve al guardar o cancelar; la pagina ya lo valido. */
+  returnTo: string;
 };
 
-const initialState: ClientFormState = {
-  error: "",
-};
+const initialState: ClientFormState = { status: "idle" };
+
+const FILTER_HINT = "Puede no aparecer con los filtros activos del listado.";
 
 const clientTypeOptions = [
   { value: "cliente_final", label: "Cliente final" },
@@ -56,179 +53,159 @@ const documentTypeOptions = [
   { value: "otro", label: "Otro" },
 ];
 
-function getValue(
-  defaultValues: Partial<ClientFormValues> | undefined,
-  field: keyof ClientFormValues,
-) {
-  return defaultValues?.[field] ?? "";
-}
+const emptyValues: ClientFormValues = {
+  tipo_cliente: "cliente_final",
+  nombre_razon_social: "",
+  tipo_documento: "",
+  numero_documento: "",
+  telefono: "",
+  correo: "",
+  direccion: "",
+  lugar_origen: "",
+  observaciones: "",
+};
 
-function FieldError({ messages }: { messages?: string[] }) {
-  if (!messages?.length) {
-    return null;
-  }
+// Formulario de alta y edicion de clientes (entrega 9). La accion devuelve un
+// resultado: con error, ActionForm vuelve a mostrar lo enviado y enfoca el
+// primer campo invalido, y el mensaje general queda dentro del formulario, sin
+// toast; con exito, se da un solo aviso y se vuelve al listado con sus filtros.
+// Los ids son los name de los campos (useId cambiaria con los hermanos).
+//
+// Dentro de un RouteSheet (el panel de las rutas interceptadas) los campos van
+// en el cuerpo desplazable y los botones en el pie fijo; Cancelar pide cerrar
+// el panel (con confirmacion si hay cambios), guardar lo cierra volviendo atras
+// y, mientras la accion esta pendiente, el panel no se cierra. En la pagina
+// completa, Cancelar es un enlace al returnTo y guardar navega a el.
+export function ClientForm({ action, defaultValues, submitLabel, successNotification, returnTo }: ClientFormProps) {
+  const router = useRouter();
+  const panel = useRouteSheet();
+  const [state, formAction, pending] = useActionState(action, initialState);
 
-  return <p className="text-sm text-destructive">{messages[0]}</p>;
-}
-
-export function ClientForm({
-  action,
-  defaultValues,
-  submitLabel,
-  cancelHref = "/dashboard/commercial/clients",
-  cancelLabel = "Cancelar",
-  showCancelAction = true,
-}: ClientFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const values = state.status === "idle" ? { ...emptyValues, ...defaultValues } : state.values;
+  const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
   useEffect(() => {
-    if (state.error) {
-      showError(
-        "No se pudo completar la operación",
-        "Revise los datos ingresados e inténtelo nuevamente.",
-      );
-    }
-  }, [state.error]);
+    panel?.setBusy(pending);
+  }, [panel, pending]);
 
-  return (
-    <form
-      action={formAction}
-      className="space-y-4 rounded-lg border border-border/80 bg-card p-6"
-    >
+  // Cada respuesta es un estado nuevo: el aviso sale una vez por operacion. Los
+  // controles del panel son estables, asi que no repiten el efecto.
+  useEffect(() => {
+    if (state.status !== "success") {
+      return;
+    }
+
+    notify(hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification);
+
+    if (panel) {
+      panel.closeAfterSave();
+    } else {
+      router.push(returnTo);
+    }
+  }, [state, successNotification, returnTo, router, panel]);
+
+  const resultKey = state.status === "idle" ? undefined : state.operationId;
+
+  const fields = (
+    <>
       {defaultValues?.id_cliente ? (
-        <input
-          type="hidden"
-          name="id_cliente"
-          value={defaultValues.id_cliente}
-        />
+        <input type="hidden" name="id_cliente" value={defaultValues.id_cliente} />
       ) : null}
 
-      {state.error ? (
+      {state.status === "error" ? (
         <Alert variant="destructive" role="alert" aria-live="polite">
           <AlertDescription>{state.error}</AlertDescription>
         </Alert>
       ) : null}
 
-      <div className="space-y-2">
-        <Label htmlFor="tipo_cliente">Tipo de cliente</Label>
-        <NativeSelect
-          id="tipo_cliente"
-          name="tipo_cliente"
-          defaultValue={getValue(defaultValues, "tipo_cliente") || "cliente_final"}
-          required
-        >
-          {clientTypeOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </NativeSelect>
-        <FieldError messages={state.fieldErrors?.tipo_cliente} />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="nombre_razon_social">Nombre o razón social</Label>
-        <Input
-          id="nombre_razon_social"
-          name="nombre_razon_social"
-          defaultValue={getValue(defaultValues, "nombre_razon_social")}
-          required
-        />
-        <FieldError messages={state.fieldErrors?.nombre_razon_social} />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="tipo_documento">Tipo de documento</Label>
-          <NativeSelect
-            id="tipo_documento"
-            name="tipo_documento"
-            defaultValue={getValue(defaultValues, "tipo_documento")}
-          >
-            {documentTypeOptions.map((option) => (
+      <Field id="tipo_cliente" label="Tipo de cliente" required errors={fieldErrors?.tipo_cliente}>
+        {(control) => (
+          <NativeSelect {...control} name="tipo_cliente" defaultValue={values.tipo_cliente || "cliente_final"}>
+            {clientTypeOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </NativeSelect>
-          <FieldError messages={state.fieldErrors?.tipo_documento} />
-        </div>
+        )}
+      </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="numero_documento">Número de documento</Label>
-          <Input
-            id="numero_documento"
-            name="numero_documento"
-            defaultValue={getValue(defaultValues, "numero_documento")}
-          />
-          <FieldError messages={state.fieldErrors?.numero_documento} />
-        </div>
+      <Field id="nombre_razon_social" label="Nombre o razón social" required errors={fieldErrors?.nombre_razon_social}>
+        {(control) => <Input {...control} name="nombre_razon_social" defaultValue={values.nombre_razon_social} />}
+      </Field>
+
+      <div className="grid gap-4 @md:grid-cols-2">
+        <Field id="tipo_documento" label="Tipo de documento" errors={fieldErrors?.tipo_documento}>
+          {(control) => (
+            <NativeSelect {...control} name="tipo_documento" defaultValue={values.tipo_documento}>
+              {documentTypeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="numero_documento" label="Número de documento" errors={fieldErrors?.numero_documento}>
+          {(control) => <Input {...control} name="numero_documento" defaultValue={values.numero_documento} />}
+        </Field>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="telefono">Teléfono</Label>
-          <Input
-            id="telefono"
-            name="telefono"
-            defaultValue={getValue(defaultValues, "telefono")}
-          />
-          <FieldError messages={state.fieldErrors?.telefono} />
-        </div>
+      <div className="grid gap-4 @md:grid-cols-2">
+        <Field id="telefono" label="Teléfono" errors={fieldErrors?.telefono}>
+          {(control) => <Input {...control} name="telefono" defaultValue={values.telefono} />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="correo">Correo</Label>
-          <Input
-            id="correo"
-            type="email"
-            name="correo"
-            defaultValue={getValue(defaultValues, "correo")}
-          />
-          <FieldError messages={state.fieldErrors?.correo} />
-        </div>
+        <Field id="correo" label="Correo" errors={fieldErrors?.correo}>
+          {(control) => <Input {...control} type="email" name="correo" defaultValue={values.correo} />}
+        </Field>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="direccion">Dirección</Label>
-        <Input
-          id="direccion"
-          name="direccion"
-          defaultValue={getValue(defaultValues, "direccion")}
-        />
-        <FieldError messages={state.fieldErrors?.direccion} />
-      </div>
+      <Field id="direccion" label="Dirección" errors={fieldErrors?.direccion}>
+        {(control) => <Input {...control} name="direccion" defaultValue={values.direccion} />}
+      </Field>
 
-      <div className="space-y-2">
-        <Label htmlFor="lugar_origen">Lugar de origen</Label>
-        <Input
-          id="lugar_origen"
-          name="lugar_origen"
-          defaultValue={getValue(defaultValues, "lugar_origen")}
-        />
-        <FieldError messages={state.fieldErrors?.lugar_origen} />
-      </div>
+      <Field id="lugar_origen" label="Lugar de origen" errors={fieldErrors?.lugar_origen}>
+        {(control) => <Input {...control} name="lugar_origen" defaultValue={values.lugar_origen} />}
+      </Field>
 
-      <div className="space-y-2">
-        <Label htmlFor="observaciones">Observaciones</Label>
-        <Textarea
-          id="observaciones"
-          name="observaciones"
-          defaultValue={getValue(defaultValues, "observaciones")}
-        />
-        <FieldError messages={state.fieldErrors?.observaciones} />
-      </div>
+      <Field id="observaciones" label="Observaciones" errors={fieldErrors?.observaciones}>
+        {(control) => <Textarea {...control} name="observaciones" defaultValue={values.observaciones} />}
+      </Field>
+    </>
+  );
+
+  if (panel) {
+    return (
+      <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="flex min-h-0 flex-1 flex-col">
+        <SheetBody className="@container space-y-4">{fields}</SheetBody>
+        <SheetFooter>
+          <Button type="button" variant="outline" onClick={panel.requestClose}>
+            Cancelar
+          </Button>
+          <SubmitButton pendingText="Guardando...">{submitLabel}</SubmitButton>
+        </SheetFooter>
+      </ActionForm>
+    );
+  }
+
+  return (
+    <ActionForm
+      action={formAction}
+      pending={pending}
+      resultKey={resultKey}
+      className="@container space-y-4 rounded-lg border border-border/80 bg-card p-6"
+    >
+      {fields}
 
       <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Guardando..." : submitLabel}
-        </Button>
+        <SubmitButton pendingText="Guardando...">{submitLabel}</SubmitButton>
 
-        {showCancelAction ? (
-          <Button variant="outline" asChild>
-            <Link href={cancelHref}>{cancelLabel}</Link>
-          </Button>
-        ) : null}
+        <Button variant="outline" asChild>
+          <Link href={returnTo}>Cancelar</Link>
+        </Button>
       </div>
-    </form>
+    </ActionForm>
   );
 }

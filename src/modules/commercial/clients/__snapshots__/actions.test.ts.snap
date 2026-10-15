@@ -1,0 +1,1297 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createClientAction > ADMIN crea un cliente con todos los datos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "cliente",
+      "prefijo": "CLI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "estado": true,
+        "id_cliente": "CLI00000008",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+    },
+    "prisma": "cliente.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Cliente creado: Ferreteria Andina SAC",
+      "enTransaccion": true,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createClientAction > ADMIN crea un cliente con todos los datos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > SELLER tambien puede crear > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "cliente",
+      "prefijo": "CLI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "estado": true,
+        "id_cliente": "CLI00000008",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+    },
+    "prisma": "cliente.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Cliente creado: Ferreteria Andina SAC",
+      "enTransaccion": true,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createClientAction > SELLER tambien puede crear > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > WORKSHOP_MASTER no tiene permiso y no toca Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createClientAction > WORKSHOP_MASTER no tiene permiso y no toca Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar clientes.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createClientAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del cliente.",
+    "fieldErrors": {
+      "correo": [
+        "Correo inválido.",
+      ],
+      "nombre_razon_social": [
+        "El nombre o razón social es obligatorio.",
+      ],
+      "tipo_cliente": [
+        "Invalid option: expected one of "ferreteria"|"distribuidora"|"constructora"|"cliente_final"|"otro"",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "no-es-correo",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "A",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "mayorista",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > documento de otro cliente: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`createClientAction > documento de otro cliente: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un cliente con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe un cliente con ese número de documento.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "cliente",
+      "prefijo": "CLI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "estado": true,
+        "id_cliente": "CLI00000008",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+    },
+    "prisma": "cliente.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createClientAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el cliente. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > sin documento no busca duplicados y guarda null en los opcionales vacios > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "cliente",
+      "prefijo": "CLI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": null,
+        "direccion": null,
+        "estado": true,
+        "id_cliente": "CLI00000008",
+        "lugar_origen": null,
+        "nombre_razon_social": "Juan Perez",
+        "numero_documento": null,
+        "observaciones": null,
+        "telefono": null,
+        "tipo_cliente": "cliente_final",
+        "tipo_documento": null,
+      },
+    },
+    "prisma": "cliente.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Cliente creado: Juan Perez",
+      "enTransaccion": true,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createClientAction > sin documento no busca duplicados y guarda null en los opcionales vacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "",
+      "direccion": "",
+      "lugar_origen": "",
+      "nombre_razon_social": "Juan Perez",
+      "numero_documento": "",
+      "observaciones": "",
+      "telefono": "  ",
+      "tipo_cliente": "cliente_final",
+      "tipo_documento": "",
+    },
+  },
+}
+`;
+
+exports[`createClientAction > una carrera por el documento (P2002 al crear) revierte y marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "cliente",
+      "prefijo": "CLI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "estado": true,
+        "id_cliente": "CLI00000008",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+    },
+    "prisma": "cliente.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`numero_documento\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createClientAction > una carrera por el documento (P2002 al crear) revierte y marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un cliente con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe un cliente con ese número de documento.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > ADMIN actualiza un cliente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Cliente actualizado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateClientAction > ADMIN actualiza un cliente > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > SELLER tambien puede actualizar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Cliente actualizado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateClientAction > SELLER tambien puede actualizar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > WORKSHOP_MASTER no tiene permiso y no toca Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateClientAction > WORKSHOP_MASTER no tiene permiso y no toca Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar clientes.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > conservar su propio documento no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Cliente actualizado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateClientAction > conservar su propio documento no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > datos invalidos devuelven los errores por campo despues de comprobar el cliente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`updateClientAction > datos invalidos devuelven los errores por campo despues de comprobar el cliente > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del cliente.",
+    "fieldErrors": {
+      "correo": [
+        "Correo inválido.",
+      ],
+      "nombre_razon_social": [
+        "El nombre o razón social es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "no-es-correo",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "A",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > el cliente no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`updateClientAction > el cliente no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > el documento es de otro cliente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`updateClientAction > el documento es de otro cliente > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro cliente con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe otro cliente con ese número de documento.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+]
+`;
+
+exports[`updateClientAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el cliente. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > quitar el documento y vaciar los opcionales guarda null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": null,
+        "direccion": null,
+        "lugar_origen": null,
+        "nombre_razon_social": "Juan Perez",
+        "numero_documento": null,
+        "observaciones": null,
+        "telefono": null,
+        "tipo_cliente": "cliente_final",
+        "tipo_documento": null,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Cliente actualizado: Juan Perez",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateClientAction > quitar el documento y vaciar los opcionales guarda null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_cliente": "CLI00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "correo": "",
+      "direccion": "",
+      "lugar_origen": "",
+      "nombre_razon_social": "Juan Perez",
+      "numero_documento": "",
+      "observaciones": "",
+      "telefono": "  ",
+      "tipo_cliente": "cliente_final",
+      "tipo_documento": "",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > sin id de cliente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateClientAction > sin id de cliente > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`updateClientAction > una carrera por el documento (P2002 al actualizar) marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_cliente": true,
+      },
+      "where": {
+        "numero_documento": "20123456789",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "correo": "compras@andina.pe",
+        "direccion": "Av. Industrial 123",
+        "lugar_origen": "Arequipa",
+        "nombre_razon_social": "Ferreteria Andina SAC",
+        "numero_documento": "20123456789",
+        "observaciones": "Paga al contado",
+        "telefono": "987654321",
+        "tipo_cliente": "ferreteria",
+        "tipo_documento": "ruc",
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+]
+`;
+
+exports[`updateClientAction > una carrera por el documento (P2002 al actualizar) marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro cliente con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe otro cliente con ese número de documento.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "correo": "compras@andina.pe",
+      "direccion": "Av. Industrial 123",
+      "lugar_origen": "Arequipa",
+      "nombre_razon_social": "Ferreteria Andina SAC",
+      "numero_documento": "20123456789",
+      "observaciones": "Paga al contado",
+      "telefono": "987654321",
+      "tipo_cliente": "ferreteria",
+      "tipo_documento": "ruc",
+    },
+  },
+}
+`;

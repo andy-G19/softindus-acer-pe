@@ -81,7 +81,8 @@ function render(pathname: string, search = "") {
 }
 
 // Las 124 claves del catalogo al empezar la entrega 7, en su orden, menos
-// work-order-materials-consumed, retirada en el grupo 3 de fixes.
+// work-order-materials-consumed, retirada en el grupo 3 de fixes, mas las dos
+// de la ventana modal de categorias de producto (entrega 9).
 const CLAVES = [
   "login-success",
 
@@ -89,7 +90,8 @@ const CLAVES = [
   "client-created", "client-updated", "client-activated", "client-deactivated",
   "product-created", "product-updated", "product-activated",
   "product-deactivated", "product-category-activated",
-  "product-category-deactivated", "order-created", "order-updated",
+  "product-category-deactivated", "product-category-created",
+  "product-category-updated", "order-created", "order-updated",
   "order-cancelled", "quote-created", "quote-annulled", "receipt-created",
   "receipt-annulled", "payment-registered",
 
@@ -158,9 +160,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 123 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(123);
-  expect(new Set(CLAVES).size).toBe(123);
+it("la lista fija tiene las 125 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(125);
+  expect(new Set(CLAVES).size).toBe(125);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:

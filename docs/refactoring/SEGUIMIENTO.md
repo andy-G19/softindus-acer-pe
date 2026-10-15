@@ -2231,14 +2231,15 @@ su sello.
 
 ## Entrega 8 — Base visual y galería
 
-Fecha: 2026-10-13 y 2026-10-14. Estado: verificada en staging el 2026-10-14;
-falta integrarla en `main`. 15 commits, de `0ad4150` a `7150d10`, más este
-cierre, publicados en tres tandas y verificadas las tres en staging: CI #64,
-#65 y #66 en verde, y 10 de 10, 24 de 24 y 26 de 26 huellas visuales como se
-predijo (en la tercera, 2 con redondeos de 0,01 px que la predicción no
-anticipó). Es la primera entrega de la pista B: construye la base visual y la
-prueba en una galería interna sin cambiar ninguna pantalla; las pantallas la
-adoptan en las entregas 9 y 10.
+Fecha: 2026-10-13 y 2026-10-14. Estado: cerrada el 2026-10-14. 15 commits,
+de `0ad4150` a `7150d10`, más el cierre `bbc3259` (CI #67 en verde),
+publicados en tres tandas y verificadas las tres en staging: CI #64, #65 y #66
+en verde, y 10 de 10, 24 de 24 y 26 de 26 huellas visuales como se predijo
+(en la tercera, 2 con redondeos de 0,01 px que la predicción no anticipó).
+Integrada en `main` con el PR #21 (CI #68 en verde; merge commit `a945a5a`,
+CI #69 en verde, 2m 7s). Es la primera entrega de la pista B:
+construye la base visual y la prueba en una galería interna sin cambiar
+ninguna pantalla; las pantallas la adoptan en las entregas 9 y 10.
 
 Decisiones del responsable:
 
@@ -2550,6 +2551,496 @@ Lo que queda:
 | Integrar `ConfirmDialog` con formularios y `useActionState`; decidir Playwright para foco y teclado | Entrega 9 |
 | SweetAlert2 (`showConfirm`, `showLoading`, `ConfirmDeleteButton`), el adaptador `legacy-industrial-dark` y `dropdown-menu.tsx`, que no tiene consumidores | Entrega 11 |
 
+### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-14 y comparados con git:
+
+- PR #21, abierto a las 17:13:04 UTC y fusionado con merge commit a las
+  17:16:33 UTC del 2026-10-14: 16 commits, de `0ad4150` a `bbc3259`. Su CI,
+  el #68, sobre `bbc3259`, terminó en verde (3m 4s).
+- El merge commit `a945a5a` tiene como padres `19a0bf4` (`main`) y `bbc3259`
+  (`staging`), y su árbol es el de `bbc3259` (`2fdcc4ca`): `main` y `staging`
+  tienen el mismo contenido. CI #69 en verde (2m 7s).
+- Vercel desplegó `a945a5a` en producción al primer intento (estado «Vercel»
+  `pending` a las 17:16:37 UTC y `success` a las 17:18:13 UTC). Es el primer
+  despliegue de producción con las fuentes locales de `d3cc557`: el build ya
+  no descarga fuentes de Google, la causa del fallo del merge del grupo 4, y
+  esta vez no hizo falta redesplegar.
+
+## Entrega 9 — Piloto Clientes y categoría en ventanas
+
+Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada en staging el 2026-10-15; falta
+integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
+
+- El paso 0 (`543ff6e`).
+- El paso 1, el fix K4 (`01ca73c` y `1812fff`), verificado en staging con el
+  CI #70.
+- El piloto (de `490034e` a `5261489`) y su registro (`ef477f2`), publicados
+  con el CI #71.
+- Un fix que encontró la verificación del piloto (`498533d`), publicado con el
+  CI #72.
+
+Los tres CI terminaron en verde. En staging, 15 de las 18 huellas salieron como
+se predijo y las otras 3 tienen explicación; el CSS servido fue el predicho byte
+a byte, y las tareas T1 a T5 se midieron antes y después.
+
+Es la segunda entrega de la pista B: las primeras pantallas adoptan la base
+visual de la entrega 8 y prueban dos variantes del alta y la edición, un panel
+lateral con URL para una entidad relevante (Clientes) y una ventana modal sin
+URL para un catálogo breve (categorías de producto). Esa comparación calibra la
+entrega 10.
+
+Decisiones del responsable:
+
+- El paso 0 registra la integración de la entrega 8 en `main`. El paso 1
+  corrige K4 antes del piloto, que usa ventanas, y se registra aquí con la
+  entrega.
+- Clientes se edita en un panel lateral con rutas interceptadas y paralelas; la
+  recarga o la URL directa sirven la página completa.
+- La categoría del piloto es la de producto, en una ventana modal sin URL:
+  tiene la misma área y los mismos roles que Clientes, así que una sola matriz
+  de 3 roles cubre el piloto.
+- El botón pendiente usa `aria-disabled` y el formulario, una guarda de envío;
+  `disabled` queda para «no permitido».
+- `ConfirmDialog` gana un modo controlado para confirmar el descarte de
+  cambios. Confirmar antes de enviar se hará en la entrega 10 con
+  `startTransition` y el `pending` externo. Nunca dos ventanas apiladas, salvo
+  la confirmación.
+- Playwright se pospone a la entrega 11, cuando el CI tenga una base
+  desechable: toda página exige sesión y la sesión exige base. La batería queda
+  escrita abajo.
+- El commit 8 se divide en 8a (caracterización) y 8b (la ventana modal), por la
+  regla 6.
+- Las pruebas con SELLER y WORKSHOP_MASTER en staging se omiten (2026-10-15).
+  Las cubren las pruebas automáticas; el detalle está abajo.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 543ff6e | docs | Integración de la entrega 8 en `main` (paso 0). |
+| 01ca73c | test | Foco de las ventanas con el Radix real en jsdom (`jsdom` 29.1.1 como dependencia de desarrollo) y 4 guardas del foco inicial. |
+| 1812fff | fix | K4: el cuerpo desplazable de una ventana sin nada enfocable entra en el orden de Tab. |
+| 490034e | fix | `returnTo` se valida resolviendo la ruta y sin decodificarla dos veces. |
+| e0d6d91 | feat | `Button` pendiente con `aria-disabled` y `ActionForm`, que cancela el segundo envío, remonta los campos y enfoca el primero inválido. |
+| 6d08d2e | feat | `ConfirmDialog` controlada, que devuelve el foco sin disparador. |
+| 012a71c | test | Caracterización del alta y la edición de clientes (19 casos). |
+| 8a2dc82 | feat | Clientes guarda con `FormActionState`: conserva lo escrito al fallar, da un solo aviso y vuelve al listado con sus filtros. |
+| 762bd5a | feat | El alta y la edición de clientes se abren en un panel lateral con rutas interceptadas (`RouteSheet`). |
+| 61fa23e | feat | El listado de clientes usa `FilterBar` y `Field`, sin `<main>` anidado, y «Nuevo cliente» lleva `returnTo`. |
+| 4914163 | test | Caracterización del alta y la edición de categorías de producto (19 casos). |
+| 5261489 | feat | Categorías de producto: alta y edición en una ventana modal; sus dos acciones autorizan con `getAuthorizedSession`. |
+| ef477f2 | docs | Registro de la entrega: esta sección, una trampa de Tailwind en `CLAUDE.md` e inventario. |
+| 498533d | fix | La galería respondía 500 en staging: `Button` pendiente pone la guarda de clic solo si es de envío o tiene un `onClick` propio, así que un componente de servidor puede pintarlo. |
+| este | docs | Cierre con la verificación del piloto en staging. |
+
+Diseño:
+
+- Foco en jsdom (1a). Un archivo de prueba elige jsdom con su primera línea
+  (`// @vitest-environment jsdom`) y usa el Radix real. jsdom no calcula la
+  disposición: la prueba simula `scrollHeight` y `clientHeight` con atributos
+  `data-test-*` y un doble de `ResizeObserver`. Cuatro guardas fijan el foco
+  inicial que el arreglo no debe cambiar: con formulario, el primer campo; sin
+  campos, el primer botón del pie; en un panel con campos, el primer campo, y
+  con solo enlaces, la X (Radix no da el foco inicial a un enlace).
+- K4 (1b). `DialogBody` (y `SheetBody`) entra en el orden de Tab
+  (`tabindex="0"`) solo si desborda y no tiene nada tabulable dentro, la regla
+  que Chrome aplica a las zonas desplazables. Lo recalcula con un
+  `ResizeObserver` y un `MutationObserver` y lo escribe desde un efecto de
+  layout, antes del foco inicial de Radix. Con un campo dentro, el foco inicial
+  sigue yendo al primer campo. Con el teclado muestra un anillo hacia dentro.
+  `DialogBody` ya no acepta `ref` ni `tabIndex`.
+- `returnTo` (C1). `getSafeReturnTo` resuelve el valor con `new URL` contra un
+  origen ficticio, exige ese mismo origen y una ruta bajo `/dashboard`, y
+  devuelve la ruta normalizada con su consulta y su fragmento. `hasListFilters`
+  dice si la lista tenía filtros, además de la paginación.
+- Pendiente y envío (C2). Con `pending`, `Button` pone `aria-disabled` y
+  `aria-busy`, cancela el clic y se atenúa (`pointer-events-none opacity-50`):
+  el foco no se pierde (K1 de la entrega 8). Desde `498533d`, el clic solo se
+  cancela si el botón envía (también sin `type`) o tiene un `onClick` propio. `ActionForm` es el `<form>` de una
+  acción con `useActionState`: cancela un segundo envío mientras está pendiente
+  (Enter en un campo lo encolaba). Con `resultKey` remonta los campos para que
+  tomen como `defaultValue` los valores que devuelve la acción, y después
+  enfoca el primer campo con `aria-invalid`.
+- Confirmación controlada (C3). `ConfirmDialog` acepta `trigger`, o bien `open`
+  con `onOpenChange`; los tipos impiden mezclarlos. En modo controlado guarda
+  el elemento con foco al abrir y lo devuelve al cerrar. La demo de la galería
+  pide descartar los cambios.
+- Contrato de resultado (C5). `FormActionState` (`src/lib/action-result.ts`)
+  es `idle`; `error`, con `fieldErrors` y los `values` enviados; o `success`,
+  con los datos mínimos. Cada respuesta lleva un `operationId` nuevo, que el
+  formulario usa como `resultKey` y para no repetir el aviso, sin ocultar dos
+  operaciones iguales seguidas. Las acciones de Clientes ya no redirigen:
+  hacen las mismas lecturas, la misma transacción, la misma bitácora y el mismo
+  `revalidatePath`, y devuelven el resultado.
+- Formulario de Clientes (C5). Usa `ActionForm`, `Field` (con ids iguales al
+  `name`), `SubmitButton` y una rejilla por consultas de contenedor: dentro del
+  panel, un punto de corte del viewport daría dos columnas apretadas. El error
+  general queda dentro del formulario, sin toast; antes salían la alerta y un
+  toast. Al guardar da un solo aviso, con «Puede no aparecer con los filtros
+  activos del listado.» si la lista tenía filtros, y vuelve al `returnTo` que
+  validó la página.
+- Panel sobre la lista (C6). `clients/layout.tsx` pinta `{children}{panel}`.
+  La ranura `@panel` tiene `default.tsx` y `page.tsx` en `null` y las rutas
+  interceptadas `(.)new` y `(.)[id]/edit`, que autorizan con los mismos roles y
+  hacen la misma consulta que las páginas completas. `RouteSheet` funciona así:
+  - Cierra con `router.back()`: Atrás cierra el panel y Adelante lo reabre.
+  - Si hubo algún `input`, pide confirmar el descarte; al recargar, avisa con
+    `beforeunload`.
+  - Tras guardar, cierra sin preguntar y llama a `router.refresh()` en el
+    `popstate`, porque Next reutiliza las páginas al ir atrás.
+  - Mientras guarda, no se cierra.
+  - Devuelve el foco al enlace que lo abrió.
+  - Sus controles son estables: si cambiaran con el estado, el efecto de éxito
+    se repetiría (dos avisos y dos `back()`).
+  - Mide 576 px de ancho (`sm:max-w-xl`).
+- Listado (C7). `FilterBar` con `Field` y los mismos nombres en la URL (`q`,
+  `type`, `status` y `origin`), sin `<main>` anidado. «Nuevo cliente» lleva el
+  `returnTo` de la lista, así que el alta vuelve con los filtros.
+- Ventana modal de categorías (C8b). La tabla es de solo lectura. «Nueva
+  categoría» (en el encabezado, solo ADMIN) y «Editar» abren
+  `ProductCategoryDialog` desde su propio disparador, al que Radix devuelve el
+  foco. La ventana tiene el mismo contrato, el descarte, la guarda de ocupado y
+  un solo aviso. SELLER ve «Solo lectura» en lugar de formularios
+  deshabilitados. Las dos acciones autorizan con `getAuthorizedSession` y, ante
+  otro rol, responden con un error en lugar de redirigir: la desviación conocida
+  queda corregida para ellas.
+- Registro de notificaciones (C5 y C8b). Reconoce como emisión el acceso
+  `xxxNotifications["clave"]` y lee los nombres de los catálogos del propio
+  `notification-registry.ts`. Desde C8b fija en un snapshot «archivo [atributo
+  JSX] → clave» para cada acceso. Las claves nuevas `product-category-created`
+  y `product-category-updated` llevan los textos que ya daba el gestor; el
+  puente pasa de 123 a 125 claves.
+
+Evidencia:
+
+1. Caracterización antes de mover (C4 y C8a): 19 casos por feature. Cubren los
+   roles, la validación, los duplicados, las carreras con P2002, los fallos y
+   si la bitácora va dentro de la transacción. Los commits siguientes conservan
+   las lecturas, las escrituras, el correlativo, la bitácora y las
+   revalidaciones. Cambian solo el final (la redirección pasa a ser el
+   resultado) y, en las categorías, el nombre de la autorización.
+2. Prueba roja antes de cada arreglo: `tmp/e9-diff/rojo-1b.txt`, `rojo-c1.txt`
+   (6 casos), `rojo-c2.txt`, `rojo-c3.txt`, `rojo-c5.txt` y
+   `rojo-c7.txt`. En C8b, la prueba de la ventana falló sin el componente.
+3. CSS compilado, commit a commit (`css_added.py` de la entrega 8): el 1b
+   agrega `focus-visible:ring-inset`, C2 `opacity-50` y C6 `sm:max-w-xl`. Los
+   demás commits lo dejan idéntico byte a byte, también C4 y C8a, que solo
+   traen pruebas.
+4. Mutaciones (`tmp/e9-diff/mut_*.txt`): 1a, 3 de 3; 1b, 12 de 13; C1, 7 de 7;
+   C2, 9 de 9; C3, 5 de 6; C4, 10 de 10; C5, 11 de 11; C6, 14 de 14; C7, 7 de
+   7; C8a, 8 de 8, y C8b, 11 de 11. En total, 97 de 99. Las dos que sobreviven
+   son equivalentes:
+   - 1b M7, contar como enfocable un `input` oculto: la hoja del navegador ya
+     le da `display: none !important`.
+   - C3 M4, dejar que Radix devuelva el foco: en modo controlado no hay
+     disparador y el foco devuelto se queda.
+
+   Las mutaciones M10 y M11 de C8b, que intercambian los avisos, solo las
+   detecta el snapshot nuevo del registro. El fix de la verificación
+   (`498533d`) detecta 5 de 5 (`mut_fix_galeria.txt`); entre ellas está M1,
+   que es exactamente el código de C2. Su prueba roja está en
+   `rojo-fix-galeria.txt`.
+
+Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
+en Windows: 1.851, 1.860, 1.877, 1.883, 1.890, 1.913, 1.921, 1.941, 1.944,
+1.963 y 1.972 pruebas, de 117 a 125 archivos de prueba, y 1.975 con el fix
+`498533d`. El paso 1
+(`543ff6e..1812fff`) cambia 9 archivos (+948 y −15). En el piloto
+(`1812fff..5261489`) cambian el código de producción (24 archivos, +1.186 y
+−618), las pruebas (15, +2.020 y −19), los snapshots (9, +2.705 y −105) y
+`CLAUDE.md`. `npm run refactor:inventory` analiza 601 archivos y cuenta:
+
+- 131 páginas, por las 3 de la ranura del panel.
+- 135 formularios JSX: `ActionForm` reemplaza al de Clientes y a los dos de la
+  tabla de categorías, y la barra GET del listado pasa a `FilterBar`.
+- 48 archivos de acciones.
+
+Tiempo de preparación, desde la petición de cada commit hasta tenerlo listo
+para el commit (según las marcas de la sesión, sin contar las revisiones del
+responsable):
+
+| Commit | 1a | 1b | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8a | C8b |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Minutos | 8 | 32 | 9 | 12 | 11 | 12 | 22 | 14 | 11 | 4 | 10 |
+
+El piloto suma unos 105 minutos. Para estimar la entrega 10: el catálogo breve
+en ventana modal (C8a y C8b) costó 14 minutos, y Clientes con su panel (de C4 a
+C7), 59, sin contar los cimientos de C1 a C3.
+
+La verificación del piloto en staging llevó unos 57 minutos de trabajo, sin
+contar las esperas del CI, de Vercel ni de los inicios de sesión:
+
+| Tramo | Scripts | «Antes» | «Después» con el diagnóstico de la galería | Fix | Galería |
+|---|---|---|---|---|---|
+| Minutos | 4 | 18 | 24 | 6 | 5 |
+
+### Paso 1: publicación y verificación en staging (K4)
+
+- «Antes» el 2026-10-15, de 03:35 a 03:49 UTC, sobre `bbc3259` (`buildId`
+  `14LcIxR7bhCtAO5Ba9eJc`) y con la huella v4. Se tomaron 10 capturas con
+  ADMIN: las 7 secciones de la galería, clientes e inicio a 1281 px, y
+  «Ventanas» a 376 px. El sello es `d48c8e55…`, recalculado en Python. Como
+  controles, cuatro repeticiones dieron el mismo hash (una con un spinner
+  girando) y una mutación de `letter-spacing` lo cambió.
+- K4, reproducido con teclas reales. En la ventana larga, el foco inicial va al
+  «Cerrar» del pie y el cuerpo no tiene `tabindex`. AvPág, las flechas y Fin no
+  lo mueven: `scrollTop` sigue en 0, con 1.299 px de contenido y 584 visibles.
+  Sobre la página, AvPág sí desplaza 700 px.
+- La v4 de la huella (`tmp/e9-diff/huella.js`) marca como variable la
+  geometría de lo que hay dentro de un elemento animado. Con la v3, «Botones»,
+  «Mensajes» y «Listados» diferían del «después» de la entrega 8 solo en los
+  `<path>` de spinners que giran. Las secciones sin animación dan el mismo hash
+  con la v3, con la v4 y en el «después» de la entrega 8.
+- El CSS del «antes» es igual byte a byte al compilado en Windows, salvo por un
+  redondeo de Linux en el `lab()` de `--destructive-outline` (`60.745` frente a
+  `60.7449`); corregido, da el SHA del local. Con eso se predijo el SHA exacto
+  del CSS del «después».
+- Push de 3 commits (`543ff6e` a `1812fff`): CI #70 en verde (2m 52s). Vercel
+  desplegó `1812fff` (`pending` a las 04:04:36 y `success` a las 04:05:39 UTC)
+  y cambió el `buildId` (`wyC-IlwpQ7SEoPI7yl80L`).
+- «Después», de 04:08 a 04:14 UTC, con el sello `1a5b1159…`. El CSS servido es
+  el predicho byte a byte (`1daf024b…`). Hay 8 de 10 capturas idénticas.
+  «Ventanas» cambia como se predijo: a 376 px, la nota y su sección crecen
+  58,49 px con el texto nuevo, y nada más; a 1281 px cambia solo el texto de la
+  nota. Única desviación: la predicción decía que a 1281 px también crecerían la
+  nota y la sección, pero el texto nuevo ocupa las mismas líneas.
+- Teclado, con teclas reales y `document.activeElement` leído en cada paso.
+  Todo salió como se predijo:
+  - En la ventana larga, el foco inicial va al cuerpo (`tabindex="0"`).
+  - AvPág lo baja a 510 px, tres flechas a 629 y Fin a 715, que es el final
+    (1.299 − 584).
+  - Tras usar el teclado se ve el anillo de 3 px hacia dentro; tras un clic,
+    no. Abierta con Enter, el anillo se ve desde el principio.
+  - Mayús+Tab va a la X, Tab vuelve al cuerpo y después al «Cerrar» del pie.
+  - Esc cierra y devuelve el foco al disparador.
+  - Donde hay campos nada cambia: la ventana con formulario enfoca su primer
+    campo, y su cuerpo, que no desborda, no entra en el orden; los paneles se
+    comportan como en la entrega 8.
+  - A 376 px, la ventana ocupa la pantalla (376 × 813), el cuerpo recibe el
+    foco y no hay desplazamiento horizontal.
+- No se probaron SELLER ni WORKSHOP_MASTER: el arreglo no cambia permisos y la
+  galería es solo para ADMIN.
+
+Evidencia en `tmp/e9-diff/staging-antes-e9.json`, `staging-despues-e9.json` y
+`e9-registro.tsv` (ignorados), con los sellos recalculados en Python.
+
+### Publicación, CI y verificación del piloto en staging
+
+Método:
+
+- Huella: la v4 con su propia base (`e9p-huella`) y etiquetas `p9/`
+  (`tmp/e9-diff/huella-piloto.js`).
+- Medidor de tareas (`tmp/e9-diff/medidor.js`). Con el reloj del navegador,
+  anota en `sessionStorage` los clics, las navegaciones suaves y las cargas de
+  documento, los avisos, el momento en que el campo está listo, el
+  desplazamiento y el foco.
+- Clics y teclas reales; el `<select>`, con `form_input`.
+- A 376 px no hay barra de desplazamiento donde dejar el puntero. Queda en el
+  margen derecho del shell (`div.industrial-dark` > `div.px-4.py-6`, sin
+  `:hover`); la captura de inicio a 376 px da el mismo hash que en la entrega 8.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-15, de 16:53 a 17:08 UTC, sobre `1812fff` (`buildId`
+  `wyC-IlwpQ7SEoPI7yl80L`): 18 capturas con ADMIN, con el sello `4b47c8cc…`,
+  igual en Python. Las 9 que se pueden comparar con mediciones anteriores dan el
+  mismo hash que en el paso 1 o en la tanda 3 de la entrega 8.
+- Datos de prueba, con autorización del responsable, todos «PRUEBA E9» y
+  editados una vez: `CLI00000008` y `CPR00000010` en el «antes», y
+  `CLI00000009` y `CPR00000011` en el «después». T3 y T4 no escriben.
+- Predicción escrita antes del push (`piloto-antes.json`).
+- Push de 10 commits (`490034e` a `ef477f2`): CI #71 en verde (2m 54s). Vercel
+  desplegó `ef477f2` (`success` a las 17:27:30 UTC) y cambió el `buildId`
+  (`b5G58zIOVKJPdKq72MOEh`). El CSS servido es el predicho byte a byte (113.899
+  bytes, `5a0081d3…`).
+- «Después», de 17:33 a 17:48 UTC. La galería respondía 500 (abajo).
+
+T1 a T5, con los mismos pasos en las dos fases. Los tiempos son del navegador,
+del clic o el envío al evento:
+
+| Tarea | Antes (`1812fff`) | Después (`ef477f2`) |
+|---|---|---|
+| T1 Alta desde `?status=activo&pageSize=3&page=2` | 4 pasos; formulario listo en 677 ms; aviso a los 1.386 ms; vuelve a `/clients` sin filtros ni página; foco en `body` | 4 pasos; panel listo en 1.027 ms; aviso a los 1.499 ms, con la nota de filtros; vuelve a la misma URL y la lista se refresca; foco en «Nuevo cliente» |
+| T2 Edición desde `?q=PRUEBA+E9&status=activo&pageSize=3` | 4 pasos; 556 ms y 1.104 ms; pierde los filtros aunque el enlace llevaba `returnTo` | 4 pasos; 723 ms y 1.280 ms; vuelve a la lista filtrada; foco en el «Editar» de la fila |
+| T3 Error (nombre «A», tipo Ferretería y una observación) | Se pierde todo lo escrito, también el tipo; foco en `body`, sin `aria-invalid`; alerta y toast | Se conserva todo; foco en el nombre, con `aria-invalid` y su error asociado; una alerta y ningún toast |
+| T4 Cancelar con cambios | Sale sin preguntar y pierde los filtros | Pide confirmar «¿Descartar el cliente nuevo?»; Esc vuelve con lo escrito; descartar vuelve a la lista filtrada; no escribe nada |
+| T5 Categoría | Alta en 5 pasos (1.217 ms) y edición en la fila en 4 (1.114 ms) | Alta en 5 pasos (1.062 ms) y edición en 5 (982 ms); la ventana abre en 23 ms con el foco en el nombre, y el foco vuelve al botón que la abrió |
+
+Notas sobre T1 a T5:
+
+- En las dos fases todo ocurre en un solo documento, con un aviso por guardado.
+- Para la entrega 10: el panel con URL tarda unos 350 ms más que la página
+  completa en estar listo, porque pide la ruta del panel; la ventana sin URL
+  abre al instante.
+- La predicción decía 6 pasos para el alta de categoría: el foco inicial ya
+  está en el nombre y sobra el clic.
+- El texto de la confirmación de T4 es el que fijó C6, no el de la predicción.
+
+Teclado y 376 px:
+
+- Teclado a 1281 px, con teclas reales:
+  - Enter en «Nuevo cliente» abre el panel con el foco en el primer campo.
+  - Mayús+Tab va a la X y Tab vuelve al campo.
+  - Esc sin cambios cierra sin preguntar y devuelve el foco al enlace, con su
+    anillo.
+  - Atrás cierra el panel en el mismo documento y Adelante lo reabre.
+- A 376 px:
+  - El panel y la ventana de categoría ocupan la pantalla (376 × 813), con los
+    botones del pie apilados y sin desbordamiento horizontal.
+  - El cuerpo del panel desborda, pero no entra en el orden de Tab porque tiene
+    campos (la regla de K4).
+  - Ninguna página medida desborda.
+
+La regresión de la galería:
+
+- `/dashboard/gallery` respondía 500.
+- Causa: desde C2, `Button` pendiente agregaba siempre un `onClick`. `Button`
+  no es un componente de cliente, y la sección «Botones» de la galería, que es
+  un componente de servidor, pinta botones pendientes. React Server Components
+  no admite manejadores en un elemento que llega del servidor.
+- Se reprodujo con el renderizador RSC de Next
+  (`tmp/e9-diff/repro-rsc-button.tsx`).
+- Solo afectaba a la galería: las pantallas usan el pendiente desde componentes
+  de cliente.
+- El fix `498533d` (prueba roja y 5 de 5 mutaciones) pone la guarda solo cuando
+  hay algo que cancelar. CI #72 en verde (2m 48s); Vercel `success` a las
+  19:17:29 UTC; `buildId` `NKujz1QVyzsB6uj6JEElm`. Sirve el mismo CSS y la
+  galería responde 200.
+- La galería se midió a las 19:22 UTC. El panel del navegador se había cerrado
+  al reiniciarse la sesión y se perdió su base, así que la comparación es por
+  hash contra `piloto-registro.tsv`.
+
+Huella, 18 de 18 (sello del «después» `58d089d2…`, calculado en Python):
+
+- Idénticas, 8: inicio a 1281 y a 376 px, materiales, `OTR00000006`, y las
+  secciones «Fundamentos», «Botones», «Campos» y «Mensajes».
+- Cambian como se predijo, 8:
+  - la lista de clientes: la barra de filtros y una fila más por los datos;
+  - la lista filtrada a las dos anchuras: la barra y la posición de lo que la
+    sigue, con las mismas filas;
+  - «Nuevo cliente» a las dos anchuras: los primeros 194 elementos (el shell y
+    el encabezado) son iguales;
+  - categorías a las dos anchuras: de 427 a 384 elementos;
+  - «Ventanas»: de 13 a 14 elementos, por la nota de `RouteSheet`.
+- En total, 15 salieron como se predijo. En una, la lista filtrada a 1281 px,
+  hubo además un efecto que no anticipé: la página pasa a medir 800,83 px,
+  menos que la ventana; desaparece la barra de desplazamiento y todo se
+  ensancha 15,12 px.
+- Las 3 desviaciones, explicadas:
+  - «Botones» sale idéntica, aunque se predijo que cambiaría su nota. La nota
+    nueva está desplegada, pero cambia a partir del carácter 120, y la huella
+    guarda solo los 120 primeros de cada texto. Los botones pendientes se ven
+    como el deshabilitado anterior: opacidad 0,5 y cursor `default`.
+  - «Presentación» y «Listados» cambian de hash con los mismos elementos. Se
+    devolvió «Ventanas» a su texto anterior en el DOM de la pestaña, y las tres
+    secciones dieron los hashes del «antes» (`fae2709e…`, `bce406a5…` y
+    `51687c82…`). «Ventanas» creció 101,98 px, y la geometría relativa de lo
+    que hay debajo, redondeada a centésimas, cayó al otro lado, como en las
+    tandas 2 y 3 de la entrega 8.
+
+Roles: no se probaron SELLER ni WORKSHOP_MASTER en staging, por decisión del
+responsable. Los cubren las pruebas automáticas:
+
+- Las páginas y las ranuras del panel exigen ADMIN o SELLER, y un rol sin
+  permiso es rechazado antes de tocar Prisma.
+- Las acciones de Clientes aceptan a SELLER y rechazan a WORKSHOP_MASTER.
+- Las de categorías rechazan a SELLER y a WORKSHOP_MASTER con un error.
+- La página de categorías muestra «Solo lectura» a SELLER.
+
+Evidencia en `tmp/e9-diff/piloto-antes.json`, `piloto-despues.json` y
+`piloto-registro.tsv` (ignorados).
+
+Batería E2E escrita para la entrega 11 (Playwright con una base desechable):
+
+| # | Caso | Esperado |
+|---|---|---|
+| E1 | Clic en «Nuevo cliente» o «Editar» desde la lista filtrada | Panel sobre la lista con la URL `/clients/new` o `/clients/<id>/edit`; la lista, sus filtros, la página y el desplazamiento siguen debajo |
+| E2 | Recarga, URL directa o pestaña nueva | Página completa con el mismo formulario |
+| E3 | Atrás con el panel abierto, y después Adelante | Cierra el panel y lo reabre |
+| E4 | Guardar en el panel | Un aviso; el panel se cierra; la lista muestra el cambio en el mismo punto; el foco vuelve al enlace |
+| E5 | Cancelar, X, Esc o el velo con cambios | Confirmación de descarte; seguir editando conserva lo escrito |
+| E6 | Recargar con cambios | Aviso del navegador |
+| E7 | Error del servidor | Se conserva lo escrito, el foco va al primer campo inválido y no sale un toast |
+| E8 | Enter repetido o doble clic durante el envío | Un solo envío |
+| E9 | Ventana modal de categoría | Foco en el primer campo, Esc, descarte y foco devuelto al botón |
+| E10 | Roles | ADMIN gestiona todo; SELLER gestiona clientes y solo consulta categorías; WORKSHOP_MASTER, acceso denegado en las dos |
+| E11 | Atrás del navegador con cambios en el panel | Cierra sin preguntar (limitación conocida); si Next llega a permitir interceptarlo, el caso cambia |
+| E12 | Cargar cada página, galería incluida, en un build de producción | 200 y ningún error de servidor: la regresión de la galería solo apareció en staging (hallazgo 8) |
+
+Hallazgos:
+
+1. Tailwind v4 genera una utilidad por cada palabra con forma de clase que
+   encuentra en los archivos que git no ignora, también en los `.md` y en los
+   nombres de variables. En el 1b, el primer intento agregaba 3 utilidades
+   muertas por un parámetro de `dialog.tsx` y dos nombres de la prueba, que se
+   renombraron. Desde los registros de la entrega 8, el CSS de staging y
+   producción lleva `.text-red-200`, `.bg-black` y `.max-w-lg` sin
+   consumidores, sacadas de `CLAUDE.md` y de este archivo. No cambia nada
+   visible. Se corrige con `@source not` en un commit propio; mientras tanto,
+   cada registro se comprueba compilando: con este, el CSS no cambia.
+2. Los defectos de `returnTo` estaban en producción:
+   - Decodificaba dos veces: un `&` o un `%` dentro de un filtro rompía la
+     lista al volver.
+   - No normalizaba la ruta: `/dashboard/../api/reports/export/audit` pasaba
+     la validación, y «Volver» habría ejecutado una exportación.
+   - Aceptaba cualquier ruta que empezara por las letras `/dashboard`, aunque
+     no fuera ese segmento.
+3. Al cerrarse, un `Dialog` o `AlertDialog` modal de Radix enfoca su
+   disparador; sin disparador, el foco cae en `body`. `ConfirmDialog`
+   controlada y `RouteSheet` guardan el foco y lo devuelven a mano.
+4. React 19 reinicia los campos de un `<form action>` al terminar la acción,
+   aunque esta devuelva un error; un `<select>` no toma un `defaultValue` nuevo,
+   y `useActionState` encola un segundo envío. Lo comprobó una exploración en
+   jsdom (`tmp/e9-diff/explore-form.test.ts`), y el «antes» de T3 lo confirmó
+   en staging: Clientes perdía todo lo escrito, también el tipo elegido en el
+   `<select>`.
+5. Antes de C8b, ninguna prueba detectaba un aviso intercambiado: el aviso
+   viaja como prop de un componente de cliente y no aparece en el HTML. Lo
+   detecta ahora el snapshot del registro.
+6. Un `aria-describedby={undefined}` explícito borra la descripción que Radix
+   asocia. Se escribió dos veces (en el panel y en la ventana modal); solo debe
+   ir cuando no hay descripción, y ahora lo cubren pruebas.
+7. El inventario no entiende las ranuras ni las rutas interceptadas: cuenta
+   bien las páginas, pero las nombra `/dashboard/commercial/clients/@panel` y
+   `…/@panel/edit`.
+8. Las pruebas no aplican las reglas de React Server Components:
+   `renderToStaticMarkup` ignora los manejadores, así que un componente de
+   servidor que pasa una función a un elemento solo falla en un build real. Así
+   llegó a staging la galería con 500 (fix `498533d`). La batería de la entrega
+   11 debe cargar cada página en un build de producción (caso E12).
+9. La huella guarda solo los primeros 120 caracteres del texto de cada
+   elemento: un cambio de texto más allá no cambia el hash si la geometría no
+   cambia («Botones»). Para la entrega 10, guardar el hash del texto completo.
+10. Si el panel del navegador integrado se cierra (por ejemplo, al reiniciarse
+    la sesión), se pierden la sesión de Vercel y la base de la huella. La
+    evidencia queda en los hashes de `tmp/e9-diff`.
+
+Lo que queda:
+
+| Pendiente | Dónde |
+|---|---|
+| Integrar la entrega en `main` (PR que abre el responsable) | Paso 0 de la entrega 10 |
+| Extraer un diálogo de formulario compartido: el descarte y la guarda de ocupado viven en la demo de la galería, en `RouteSheet` y en la ventana de categorías | Entrega 10, con el siguiente catálogo |
+| Acciones de `useActionState` que redirigen al negar el permiso (la desviación conocida: productos y el resto de la lista de `CLAUDE.md`) | Entrega 10, al migrar cada formulario |
+| Confirmar antes de enviar (`startTransition` con el `pending` externo) y confirmar al inactivar | Entrega 10 |
+| El Atrás del navegador con cambios en el panel cierra sin preguntar: el App Router no permite interceptarlo | Documentado; caso E11 de la batería |
+| Utilidades muertas que Tailwind saca de los `.md` (hallazgo 1) | Commit propio con `@source not`, cuando lo decida el responsable |
+| 14 copias locales de `FieldError`, 109 páginas con `<main>` anidado y 42 formularios GET con 26 combinaciones de clases | Entrega 10 |
+| El inventario nombra mal las rutas de ranuras e interceptadas (hallazgo 7) | Con el siguiente cambio de `scripts/refactoring-inventory.mjs` |
+| Hash del texto completo en la huella visual (hallazgo 9) | Entrega 10, antes de su primera verificación en staging |
+| Batería E2E con Playwright, con el caso E12 (hallazgo 8) | Entrega 11 |
+| SweetAlert2 restante y el adaptador `legacy-industrial-dark` | Entrega 11 |
+
+De la lista de la entrega 8 quedan resueltos:
+
+- K4, en el paso 1.
+- `aria-disabled`, decidido y aplicado en C2.
+- `ConfirmDialog` con formularios y `useActionState`, en C3, con el patrón de
+  confirmar antes de enviar para la entrega 10.
+- Playwright, decidido para la entrega 11.
+
+De `FieldError` se migran 2 de las 16 copias, y del `<main>` anidado, 4 de las
+113 páginas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -2572,8 +3063,8 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G2 | Fix | Kárdex, lecturas y cálculo (H2, H5, H6, H7) | Cerrado (CI #55 verde en main; H7 y H2 reproducidos antes y no después en staging) |
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
-| 8 | B | Base visual y galería | Verificada en staging (CI #64, #65 y #66; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción); falta integrarla en `main` |
-| 9 | B | Piloto Clientes y categoría en ventanas | Pendiente |
+| 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
+| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada en staging (CI #72 verde; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después); falta integrarla en `main` |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
@@ -2590,15 +3081,15 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Páginas con Prisma directo | 117 | 0 | 4, 5 y 6 |
 | Archivos de `src/modules` con `auth()` directo | 23 | 0 | 2 |
 | Acciones de `src/modules` que comparan el rol a mano | 41 | 0 | 2 |
-| Definiciones de la forma de estado de formulario | 18 | 1 | 2 |
+| Definiciones de la forma de estado de formulario | 18 | 2 (`ActionErrorState` y `FormActionState`, el contrato de la pista B) | 2 y 9 |
 | Definiciones locales de `toNumber` | 52 | 1 | 3 |
 | Definiciones locales de `formatMoney` | 49 | 1 | 3 |
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 123 / 123 | 7 y G3 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 125 / 125 | 7, G3 y 9 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 116 / 1.847 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 125 / 1.975 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -2617,9 +3108,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 16 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 113 | 9 y 10 |
-| Combinaciones de clases distintas en los 43 formularios GET | 27 | 27 | 10 |
+| Copias locales de `FieldError` | 16 | 14 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 109 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 26 (42 formularios) | 9 y 10 |
+| Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -2719,6 +3211,31 @@ directo 0, `auth()` directo 0, copias locales de conversión y formato 0 e
 `import` de las librerías de notificaciones 2, medidos de nuevo. Los tres
 archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
 901; 696, 643 y 614).
+
+Actualizado en la entrega 9 (2026-10-15) sobre `5261489`:
+
+- Pruebas: 125 / 1.972 al registrarla, y 125 / 1.975 con el fix de la
+  verificación (`498533d`), que no mueve ninguna otra fila.
+- La forma de estado de formulario pasa de 1 a 2, a propósito.
+  `FormActionState` (`src/lib/action-result.ts`) es el contrato de la pista B,
+  con `values` y `operationId`, y convive con `ActionErrorState`
+  (`src/lib/errors.ts`) mientras los demás formularios no migren.
+- Claves caracterizadas: 125 / 125, por las dos de la ventana de categorías.
+  Las 4 claves del piloto ya no viajan por `?toast=`: las da el formulario con
+  el resultado de la acción, y el registro las reconoce por el acceso al
+  catálogo con su clave literal. El puente sigue caracterizando todas las
+  entradas del catálogo.
+- `FieldError` baja a 14, el `<main>` anidado a 109 y los formularios GET a 42,
+  con 26 combinaciones de clases: son las pantallas de Clientes y de categorías.
+- La fila nueva se midió sobre `1812fff`, su línea base: ni las acciones de
+  Clientes ni las de categorías tenían pruebas.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0, copias
+locales de conversión y formato 0 e `import` de las librerías de notificaciones
+en 2 archivos, medidos de nuevo. Los tres archivos más grandes de `src` miden
+1.335, 1.176 (el arnés, +15) y 901 líneas. Los de producción miden 696, 643 y
+632: `commercial/products/actions.ts` (606 antes, +26 por el contrato de las
+categorías) supera al resumen mensual de caja (614).
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

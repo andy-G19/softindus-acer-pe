@@ -5,6 +5,12 @@
  *
  * Entrega 8: estado pendiente (pending) y tipos que exigen aria-label en los
  * tamanos de solo icono. Sin pending, el HTML es el mismo de antes.
+ *
+ * Entrega 9: pendiente es aria-disabled, no disabled. Un boton disabled deja
+ * de ser enfocable y Chromium manda el foco a body (K1 de la entrega 8); con
+ * aria-disabled el foco se queda y el clic se ignora. Ojo: un disabled tambien
+ * impedia que Enter en un campo enviara el formulario; esa guarda la pone
+ * ActionForm.
  */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -69,7 +75,7 @@ type ButtonSizeProps =
 type ButtonPendingProps =
   | {
       asChild?: false
-      /** Deshabilita el boton, marca aria-busy y muestra el spinner. */
+      /** Marca aria-disabled y aria-busy, ignora el clic y muestra el spinner; conserva el foco. */
       pending?: boolean
       /** Texto mientras esta pendiente ("Guardando..."); si falta, se conserva el contenido. */
       pendingText?: React.ReactNode
@@ -81,7 +87,20 @@ type ButtonProps = React.ComponentProps<"button"> &
   ButtonSizeProps &
   ButtonPendingProps
 
-const pendingAttributes = { disabled: true, "aria-busy": true } as const
+// Pendiente se ve como deshabilitado (las mismas clases que disabled:) pero
+// sigue siendo enfocable.
+const pendingAttributes = { "aria-disabled": true, "aria-busy": true } as const
+
+// La guarda de clic solo va cuando hay algo que cancelar: un envio (submit es
+// el tipo por defecto; preventDefault cancela tambien el envio) o un onClick
+// propio. Un pendiente de tipo button sin onClick no lleva funciones, asi que
+// un componente de servidor puede pintarlo: React Server Components no admite
+// manejadores en un elemento que llega del servidor (la galeria daba 500).
+const pendingClickGuard = {
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault(),
+} as const
+
+const pendingClasses = "pointer-events-none opacity-50"
 
 function isIconSize(size: ButtonSize | null): size is IconButtonSize {
   return size?.startsWith("icon") ?? false
@@ -99,6 +118,7 @@ function Button({
 }: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
   const showPending = pending && !asChild
+  const needsClickGuard = props.type !== "button" || props.onClick !== undefined
 
   // Pendiente: en solo icono el spinner reemplaza al icono (el aria-label se
   // mantiene); con texto, va al inicio como un icono inline-start.
@@ -114,17 +134,18 @@ function Button({
     )
   }
 
-  // Los atributos pendientes van despues de props: ganan a un disabled={false}
-  // del formulario y, sin pending, no se agrega nada, asi que el orden de los
-  // atributos de cada pantalla no cambia.
+  // Los atributos pendientes van despues de props: ganan a un onClick o a un
+  // aria-disabled={false} del formulario y, sin pending, no se agrega nada,
+  // asi que el HTML de cada pantalla no cambia.
   return (
     <Comp
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, className }), showPending && pendingClasses)}
       {...props}
       {...(showPending ? pendingAttributes : undefined)}
+      {...(showPending && needsClickGuard ? pendingClickGuard : undefined)}
     >
       {content}
     </Comp>

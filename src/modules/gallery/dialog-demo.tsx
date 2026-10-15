@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Field } from "@/components/forms/field";
+import { ConfirmDialog } from "@/components/notifications/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -42,10 +43,14 @@ const LINEAS = Array.from({ length: 24 }, (_, index) => ({
 
 // Ventana con un formulario: el <form> envuelve cuerpo y pie para que el boton
 // de envio quede dentro. Aqui el envio solo espera en el navegador; en una
-// pantalla seria la accion del formulario con SubmitButton.
+// pantalla seria la accion del formulario con SubmitButton. Si se escribio
+// algo, cerrar (Cancelar, X, Esc o el velo) pide confirmar el descarte con
+// ConfirmDialog controlada (entrega 9).
 function FormDialogDemo() {
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -55,16 +60,29 @@ function FormDialogDemo() {
     setPending(true);
     timer.current = window.setTimeout(() => {
       setPending(false);
+      setDirty(false);
       setOpen(false);
       showInfo("Pago de ejemplo registrado", DEMO_NOTE);
     }, PENDING_MS);
   }
 
-  // Mientras se registra, Esc, el velo y la X no cierran.
+  // Mientras se registra, Esc, el velo y la X no cierran; con cambios, piden
+  // confirmar el descarte.
   function changeOpen(next: boolean) {
-    if (!pending) {
-      setOpen(next);
+    if (pending) {
+      return;
     }
+    if (!next && dirty) {
+      setConfirmOpen(true);
+      return;
+    }
+    setDirty(false);
+    setOpen(next);
+  }
+
+  function discard() {
+    setDirty(false);
+    setOpen(false);
   }
 
   return (
@@ -77,7 +95,7 @@ function FormDialogDemo() {
           <DialogTitle>Registrar pago</DialogTitle>
           <DialogDescription>Pedido PED00000099 · saldo S/ 1,250.00</DialogDescription>
         </DialogHeader>
-        <form method="get" onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
+        <form method="get" onSubmit={submit} onInput={() => setDirty(true)} className="flex min-h-0 flex-1 flex-col">
           <DialogBody className="space-y-4">
             <Field id="galeria-pago-monto" label="Monto" description="En soles." required>
               {(control) => <Input {...control} type="number" step="0.01" min="0" defaultValue="500.00" />}
@@ -106,6 +124,15 @@ function FormDialogDemo() {
           </DialogFooter>
         </form>
       </DialogContent>
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        variant="destructive"
+        title="¿Descartar el pago de ejemplo?"
+        description="Se perderán los datos que escribiste en esta ventana. Es un ejemplo: no se guardó nada."
+        confirmText="Descartar cambios"
+        onConfirm={discard}
+      />
     </Dialog>
   );
 }
