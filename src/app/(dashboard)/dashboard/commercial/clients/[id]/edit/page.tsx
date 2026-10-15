@@ -10,6 +10,7 @@ import {
 import { updateClientAction } from "@/modules/commercial/clients/actions";
 import { ClientForm } from "@/modules/commercial/clients/client-form";
 import { getClientForEdit } from "@/modules/commercial/clients/queries";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 
 type EditClientPageProps = {
   params: Promise<{
@@ -52,6 +53,8 @@ export default async function EditClientPage({
       <ClientForm
         action={updateClientAction}
         submitLabel="Guardar cambios"
+        successNotification={commercialNotifications["client-updated"]}
+        returnTo={backHref}
         defaultValues={{
           id_cliente: client.id_cliente,
           tipo_cliente: client.tipo_cliente,

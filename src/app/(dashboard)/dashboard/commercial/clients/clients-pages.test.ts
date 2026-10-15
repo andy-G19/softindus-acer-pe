@@ -31,8 +31,9 @@ vi.mock("next/navigation", async (importOriginal) =>
 const LIST_ROUTE = "/dashboard/commercial/clients";
 const loadList = () => import("./page");
 const loadEdit = () => import("./[id]/edit/page");
+const loadNew = () => import("./new/page");
 
-preloadPages(loadList, loadEdit);
+preloadPages(loadList, loadEdit, loadNew);
 
 const CLIENT_ROWS = [
   {
@@ -277,6 +278,42 @@ describe("edicion de cliente", () => {
       { name: "rechazo", params: { id: "CLI00000003" } },
       EDIT_ROUTE,
     );
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+});
+
+// Entrega 9: el alta vuelve al returnTo validado, como la edicion.
+describe("alta de cliente", () => {
+  const NEW_ROUTE = `${LIST_ROUTE}/new`;
+
+  it("muestra el formulario vacio sin consultar Prisma y vuelve al listado", async () => {
+    const result = await characterizePage(loadNew, { name: "nuevo" }, NEW_ROUTE);
+
+    expect(prismaCalls(result.calls)).toEqual([]);
+    expect(result.html).toMatchSnapshot();
+  });
+
+  it("vuelve al listado con sus filtros e ignora un regreso externo", async () => {
+    const withFilters = await characterizePage(
+      loadNew,
+      { name: "nuevo con regreso", searchParams: { returnTo: `${LIST_ROUTE}?status=inactivo&page=2` } },
+      NEW_ROUTE,
+    );
+    const external = await characterizePage(
+      loadNew,
+      { name: "nuevo con regreso externo", searchParams: { returnTo: "https://example.com/phishing" } },
+      NEW_ROUTE,
+    );
+    const hrefs = (html: string | null) => [...(html ?? "").matchAll(/href="([^"]*clients[^"]*)"/g)].map((match) => match[1]);
+
+    expect(hrefs(withFilters.html)).toContain(`${LIST_ROUTE}?status=inactivo&amp;page=2`);
+    expect(hrefs(external.html)).not.toContain("https://example.com/phishing");
+    expect(external.html).not.toContain("example.com");
+  });
+
+  it("un acceso rechazado no consulta Prisma", async () => {
+    const calls = await runWithRejectedAuth(loadNew, { name: "rechazo" }, NEW_ROUTE);
 
     expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
   });

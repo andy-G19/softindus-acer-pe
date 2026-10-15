@@ -96,6 +96,17 @@ export function getSafeReturnTo(
   return `${url.pathname}${url.search}${url.hash}`;
 }
 
+// Parametros de un listado que no filtran: cambian la pagina, no los datos.
+const PAGINATION_PARAMS = new Set(["page", "pageSize"]);
+
+// Indica si la URL de un listado (un returnTo ya validado) lleva filtros: un
+// registro recien guardado puede no aparecer al volver.
+export function hasListFilters(href: string) {
+  const { searchParams } = new URL(href, RETURN_TO_ORIGIN);
+
+  return [...searchParams].some(([key, value]) => value !== "" && !PAGINATION_PARAMS.has(key));
+}
+
 export function withReturnTo(href: string, returnTo?: string) {
   if (!returnTo) {
     return href;

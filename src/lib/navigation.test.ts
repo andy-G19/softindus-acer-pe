@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createReturnToHref, getSafeReturnTo, withReturnTo } from "@/lib/navigation";
+import { createReturnToHref, getSafeReturnTo, hasListFilters, withReturnTo } from "@/lib/navigation";
 
 const CLIENTS = "/dashboard/commercial/clients";
 const FALLBACK = "/dashboard/fallback";
@@ -64,5 +64,15 @@ describe("getSafeReturnTo", () => {
 
   it("normaliza los segmentos . y .. que se quedan dentro del panel", () => {
     expect(getSafeReturnTo("/dashboard/./commercial/x/../clients?q=a", FALLBACK)).toBe(`${CLIENTS}?q=a`);
+  });
+});
+
+describe("hasListFilters", () => {
+  it("detecta filtros en la URL del listado, sin contar la paginacion", () => {
+    expect(hasListFilters(`${CLIENTS}?status=inactivo&page=2`)).toBe(true);
+    expect(hasListFilters(`${CLIENTS}?q=andina`)).toBe(true);
+    expect(hasListFilters(`${CLIENTS}?page=2&pageSize=50`)).toBe(false);
+    expect(hasListFilters(CLIENTS)).toBe(false);
+    expect(hasListFilters(`${CLIENTS}?q=`)).toBe(false);
   });
 });

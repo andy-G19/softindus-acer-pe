@@ -86,6 +86,8 @@ Follow the shape in [src/modules/commercial/clients/actions.ts](src/modules/comm
 
 Actions used with `useActionState` take `(prevState, formData)` and return a typed `FormState`.
 
+**Track B forms (delivery 9 pilot: Clients).** A migrated form's action does not redirect: it returns a `FormActionState` from [src/lib/action-result.ts](src/lib/action-result.ts) (`idle` | `error` with `fieldErrors` and the submitted `values` | `success` with minimal `data`, plus an `operationId` on every response) and keeps the same reads, transaction, audit log and `revalidatePath`. The form (`ActionForm` + `useActionState`, `resultKey={state.operationId}`) keeps general errors inside the form with no toast, gives the single success notification and navigates to the `returnTo` its page validated with `getSafeReturnTo`. The page passes the catalog entry with a literal key (`successNotification={commercialNotifications["client-created"]}`): `notification-registry.test.ts` counts that access as the key's emitter. Reference: [src/modules/commercial/clients/client-form.tsx](src/modules/commercial/clients/client-form.tsx).
+
 ### Use cases (large action files)
 
 When an action file mixes many operations, split it by use case as in [src/modules/production/work-orders/](src/modules/production/work-orders/) (`create-work-order.ts`, `material-movements.ts`, `material-closure.ts`, `work-order-status.ts`):
