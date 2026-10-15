@@ -59,35 +59,41 @@ export function createReturnToHref(
   return queryString ? `${pathname}?${queryString}` : pathname;
 }
 
+// Origen ficticio para resolver el returnTo como lo haria el navegador.
+const RETURN_TO_ORIGIN = "https://return-to.invalid";
+
+// Valida un returnTo que llega de searchParams, que Next ya decodifico: no se
+// decodifica otra vez (rompia filtros con & o %). La ruta se resuelve con URL,
+// igual que el navegador, y despues se comprueba: asi una barra invertida, un
+// // o un .. no sacan al usuario del origen ni del panel (/dashboard/../api
+// apuntaba a la ruta de exportacion).
 export function getSafeReturnTo(
   value: string | string[] | undefined,
   fallbackHref: string,
 ) {
   const candidate = Array.isArray(value) ? value[0] : value;
 
-  if (!candidate) {
+  if (!candidate?.startsWith("/")) {
     return fallbackHref;
   }
 
+  let url: URL;
+
   try {
-    const decoded = decodeURIComponent(candidate);
-
-    if (!decoded.startsWith("/dashboard")) {
-      return fallbackHref;
-    }
-
-    if (decoded.startsWith("//")) {
-      return fallbackHref;
-    }
-
-    if (decoded.includes("://")) {
-      return fallbackHref;
-    }
-
-    return decoded;
+    url = new URL(candidate, RETURN_TO_ORIGIN);
   } catch {
     return fallbackHref;
   }
+
+  if (url.origin !== RETURN_TO_ORIGIN) {
+    return fallbackHref;
+  }
+
+  if (url.pathname !== "/dashboard" && !url.pathname.startsWith("/dashboard/")) {
+    return fallbackHref;
+  }
+
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 export function withReturnTo(href: string, returnTo?: string) {
