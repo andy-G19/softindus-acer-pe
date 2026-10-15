@@ -88,10 +88,15 @@ type ButtonProps = React.ComponentProps<"button"> &
   ButtonPendingProps
 
 // Pendiente se ve como deshabilitado (las mismas clases que disabled:) pero
-// sigue siendo enfocable. preventDefault cancela tambien el envio de un submit.
-const pendingAttributes = {
-  "aria-disabled": true,
-  "aria-busy": true,
+// sigue siendo enfocable.
+const pendingAttributes = { "aria-disabled": true, "aria-busy": true } as const
+
+// La guarda de clic solo va cuando hay algo que cancelar: un envio (submit es
+// el tipo por defecto; preventDefault cancela tambien el envio) o un onClick
+// propio. Un pendiente de tipo button sin onClick no lleva funciones, asi que
+// un componente de servidor puede pintarlo: React Server Components no admite
+// manejadores en un elemento que llega del servidor (la galeria daba 500).
+const pendingClickGuard = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault(),
 } as const
 
@@ -113,6 +118,7 @@ function Button({
 }: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
   const showPending = pending && !asChild
+  const needsClickGuard = props.type !== "button" || props.onClick !== undefined
 
   // Pendiente: en solo icono el spinner reemplaza al icono (el aria-label se
   // mantiene); con texto, va al inicio como un icono inline-start.
@@ -139,6 +145,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }), showPending && pendingClasses)}
       {...props}
       {...(showPending ? pendingAttributes : undefined)}
+      {...(showPending && needsClickGuard ? pendingClickGuard : undefined)}
     >
       {content}
     </Comp>

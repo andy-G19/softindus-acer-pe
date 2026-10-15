@@ -1,6 +1,12 @@
-import { createElement as h, type ComponentProps, type ReactNode } from "react";
+import {
+  createElement as h,
+  type ComponentProps,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -82,6 +88,48 @@ describe("Button pendiente", () => {
     const props = { asChild: true, pending: true } as unknown as ComponentProps<typeof Button>;
 
     expect(render(h(Button, props, link))).toBe(render(h(Button, { asChild: true }, link)));
+  });
+});
+
+// Verificacion del piloto en staging (entrega 9): la galeria pinta
+// <Button pending> desde un componente de servidor, y React Server Components
+// no admite funciones en un elemento que llega del servidor (la pagina daba
+// 500). renderToStaticMarkup ignora los manejadores, asi que aqui se miran las
+// props del elemento que devuelve Button.
+function element(props: ComponentProps<typeof Button>) {
+  return Button(props) as ReactElement<ComponentProps<"button">>;
+}
+
+function click() {
+  const preventDefault = vi.fn();
+
+  return { event: { preventDefault } as unknown as MouseEvent<HTMLButtonElement>, preventDefault };
+}
+
+describe("guarda de clic del boton pendiente", () => {
+  it("de tipo button y sin onClick no lleva manejadores: un componente de servidor puede pintarlo", () => {
+    expect(element({ type: "button", pending: true, children: "Guardar" }).props.onClick).toBeUndefined();
+  });
+
+  it("de envio, tambien sin type, cancela el clic (y con el, el envio)", () => {
+    for (const type of ["submit", undefined] as const) {
+      const { onClick } = element({ type, pending: true, children: "Guardar" }).props;
+      const { event, preventDefault } = click();
+
+      expect(onClick).toBeTypeOf("function");
+      onClick?.(event);
+      expect(preventDefault).toHaveBeenCalledOnce();
+    }
+  });
+
+  it("con un onClick propio no lo llama mientras esta pendiente", () => {
+    const own = vi.fn();
+    const { onClick } = element({ type: "button", pending: true, onClick: own, children: "Guardar" }).props;
+    const { event, preventDefault } = click();
+
+    onClick?.(event);
+    expect(own).not.toHaveBeenCalled();
+    expect(preventDefault).toHaveBeenCalledOnce();
   });
 });
 
