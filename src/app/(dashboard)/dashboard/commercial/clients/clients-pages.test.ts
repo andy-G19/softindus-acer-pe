@@ -23,6 +23,21 @@ vi.mock("next/navigation", async (importOriginal) =>
     await importOriginal(),
   ),
 );
+// Radix no renderiza portales en el servidor: para ver el panel lateral en el
+// HTML, el portal del Dialog (Sheet) pasa directo. Ninguna otra pagina de este
+// archivo usa Dialog.
+vi.mock("radix-ui", async (importOriginal) => {
+  const radix = await importOriginal<typeof import("radix-ui")>();
+  const { createElement, Fragment } = await import("react");
+
+  return {
+    ...radix,
+    Dialog: {
+      ...radix.Dialog,
+      Portal: ({ children }: { children?: unknown }) => createElement(Fragment, null, children as never),
+    },
+  };
+});
 
 // Caracterizacion de las paginas de Clientes (entrega 4.1). Se escribio antes
 // de mover sus consultas a modules/commercial/clients/queries.ts: los mismos
@@ -32,8 +47,10 @@ const LIST_ROUTE = "/dashboard/commercial/clients";
 const loadList = () => import("./page");
 const loadEdit = () => import("./[id]/edit/page");
 const loadNew = () => import("./new/page");
+const loadNewPanel = () => import("./@panel/(.)new/page");
+const loadEditPanel = () => import("./@panel/(.)[id]/edit/page");
 
-preloadPages(loadList, loadEdit, loadNew);
+preloadPages(loadList, loadEdit, loadNew, loadNewPanel, loadEditPanel);
 
 const CLIENT_ROWS = [
   {
@@ -316,5 +333,61 @@ describe("alta de cliente", () => {
     const calls = await runWithRejectedAuth(loadNew, { name: "rechazo" }, NEW_ROUTE);
 
     expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+});
+
+// Entrega 9: alta y edicion en panel lateral (rutas interceptadas desde el
+// listado). Mismos permisos, misma consulta y mismo formulario que las paginas
+// completas; la URL directa o la recarga no pasan por aqui.
+describe("panel lateral de clientes", () => {
+  it("el alta en panel autoriza igual que la pagina, no consulta Prisma y muestra el formulario en el panel", async () => {
+    const result = await characterizePage(loadNewPanel, { name: "panel nuevo" }, `${LIST_ROUTE}/new`);
+
+    expect(result.calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+    expect(result.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel", async () => {
+    const panel = await characterizePage(
+      loadEditPanel,
+      { name: "panel editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+    const page = await characterizePage(
+      loadEdit,
+      { name: "editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(prismaCalls(panel.calls)).toEqual(prismaCalls(page.calls));
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel responde notFound si el cliente no existe", async () => {
+    const result = await characterizePage(
+      loadEditPanel,
+      { name: "panel inexistente", params: { id: "CLI99999999" }, data: { "cliente.findUnique": null } },
+      `${LIST_ROUTE}/CLI99999999/edit`,
+    );
+
+    expect(result.outcome).toBe("notFound");
+  });
+
+  it.each([
+    ["alta", loadNewPanel, {}],
+    ["edicion", loadEditPanel, { params: { id: "CLI00000003" } }],
+  ] as const)("un acceso rechazado al panel de %s no consulta Prisma", async (_name, load, extra) => {
+    const calls = await runWithRejectedAuth(load, { name: "rechazo", ...extra }, LIST_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ["ADMIN", "SELLER"] }]);
+  });
+
+  it("fuera del alta y la edicion interceptadas, la ranura del panel no muestra nada", async () => {
+    const { default: PanelDefault } = await import("./@panel/default");
+    const { default: PanelOnList } = await import("./@panel/page");
+
+    expect(PanelDefault()).toBeNull();
+    expect(PanelOnList()).toBeNull();
   });
 });

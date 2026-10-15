@@ -28,6 +28,17 @@ export function WindowsSection() {
         estaba. En el teléfono, la
         ventana y los paneles ocupan la pantalla y los botones del pie se apilan.
       </GalleryNote>
+
+      <GalleryNote>
+        RouteSheet (src/components/navigation) es el panel lateral de una ruta
+        interceptada y no se puede abrir aquí, porque cerrarlo es volver atrás
+        en el historial. Lo usa Clientes: «Nuevo cliente» y «Editar» abren el
+        formulario en un panel sobre la lista, que conserva sus filtros, su
+        página y su desplazamiento; Atrás lo cierra y Adelante lo reabre; con
+        cambios, cerrarlo pide confirmar el descarte, y al cerrarlo el foco
+        vuelve al enlace que lo abrió. Una recarga o la URL directa muestran el
+        formulario a página completa.
+      </GalleryNote>
     </GallerySection>
   );
 }

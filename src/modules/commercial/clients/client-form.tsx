@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
 import { ActionForm } from "@/components/forms/action-form";
+import { useRouteSheet } from "@/components/navigation/route-sheet";
 import { Field } from "@/components/forms/field";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
+import { SheetBody, SheetFooter } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { hasListFilters } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
@@ -68,30 +70,44 @@ const emptyValues: ClientFormValues = {
 // primer campo invalido, y el mensaje general queda dentro del formulario, sin
 // toast; con exito, se da un solo aviso y se vuelve al listado con sus filtros.
 // Los ids son los name de los campos (useId cambiaria con los hermanos).
+//
+// Dentro de un RouteSheet (el panel de las rutas interceptadas) los campos van
+// en el cuerpo desplazable y los botones en el pie fijo; Cancelar pide cerrar
+// el panel (con confirmacion si hay cambios), guardar lo cierra volviendo atras
+// y, mientras la accion esta pendiente, el panel no se cierra. En la pagina
+// completa, Cancelar es un enlace al returnTo y guardar navega a el.
 export function ClientForm({ action, defaultValues, submitLabel, successNotification, returnTo }: ClientFormProps) {
   const router = useRouter();
+  const panel = useRouteSheet();
   const [state, formAction, pending] = useActionState(action, initialState);
 
   const values = state.status === "idle" ? { ...emptyValues, ...defaultValues } : state.values;
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
-  // Cada respuesta es un estado nuevo: el aviso sale una vez por operacion.
+  useEffect(() => {
+    panel?.setBusy(pending);
+  }, [panel, pending]);
+
+  // Cada respuesta es un estado nuevo: el aviso sale una vez por operacion. Los
+  // controles del panel son estables, asi que no repiten el efecto.
   useEffect(() => {
     if (state.status !== "success") {
       return;
     }
 
     notify(hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification);
-    router.push(returnTo);
-  }, [state, successNotification, returnTo, router]);
 
-  return (
-    <ActionForm
-      action={formAction}
-      pending={pending}
-      resultKey={state.status === "idle" ? undefined : state.operationId}
-      className="@container space-y-4 rounded-lg border border-border/80 bg-card p-6"
-    >
+    if (panel) {
+      panel.closeAfterSave();
+    } else {
+      router.push(returnTo);
+    }
+  }, [state, successNotification, returnTo, router, panel]);
+
+  const resultKey = state.status === "idle" ? undefined : state.operationId;
+
+  const fields = (
+    <>
       {defaultValues?.id_cliente ? (
         <input type="hidden" name="id_cliente" value={defaultValues.id_cliente} />
       ) : null}
@@ -157,6 +173,31 @@ export function ClientForm({ action, defaultValues, submitLabel, successNotifica
       <Field id="observaciones" label="Observaciones" errors={fieldErrors?.observaciones}>
         {(control) => <Textarea {...control} name="observaciones" defaultValue={values.observaciones} />}
       </Field>
+    </>
+  );
+
+  if (panel) {
+    return (
+      <ActionForm action={formAction} pending={pending} resultKey={resultKey} className="flex min-h-0 flex-1 flex-col">
+        <SheetBody className="@container space-y-4">{fields}</SheetBody>
+        <SheetFooter>
+          <Button type="button" variant="outline" onClick={panel.requestClose}>
+            Cancelar
+          </Button>
+          <SubmitButton pendingText="Guardando...">{submitLabel}</SubmitButton>
+        </SheetFooter>
+      </ActionForm>
+    );
+  }
+
+  return (
+    <ActionForm
+      action={formAction}
+      pending={pending}
+      resultKey={resultKey}
+      className="@container space-y-4 rounded-lg border border-border/80 bg-card p-6"
+    >
+      {fields}
 
       <div className="flex flex-wrap items-center gap-3">
         <SubmitButton pendingText="Guardando...">{submitLabel}</SubmitButton>

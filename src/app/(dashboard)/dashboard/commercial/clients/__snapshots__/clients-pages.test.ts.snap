@@ -1024,3 +1024,157 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </main>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;
+
+exports[`panel lateral de clientes > el alta en panel autoriza igual que la pagina, no consulta Prisma y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Nuevo cliente</h2>
+<p id="radix-_R_1H2_">Registra los datos comerciales del cliente.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_cliente" required="" name="tipo_cliente">
+<option value="cliente_final" selected="">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_razon_social" required="" name="nombre_razon_social" value=""/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="" selected="">Sin documento</option>
+<option value="dni">DNI</option>
+<option value="ruc">RUC</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" name="numero_documento" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" name="telefono" value=""/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" name="direccion" value=""/>
+</div>
+<div>
+<label for="lugar_origen">Lugar de origen</label>
+<input id="lugar_origen" name="lugar_origen" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones">
+</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cliente</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de clientes > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar cliente</h2>
+<p id="radix-_R_1H2_">Metalmecanica Andina SAC · CLI00000003</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_cliente" value="CLI00000003"/>
+<div>
+<label for="tipo_cliente">Tipo de cliente<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_cliente" required="" name="tipo_cliente">
+<option value="cliente_final">Cliente final</option>
+<option value="ferreteria">Ferretería</option>
+<option value="distribuidora">Distribuidora</option>
+<option value="constructora">Constructora</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="nombre_razon_social">Nombre o razón social<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_razon_social" required="" name="nombre_razon_social" value="Metalmecanica Andina SAC"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="">Sin documento</option>
+<option value="dni">DNI</option>
+<option value="ruc">RUC</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" name="numero_documento" value="20123456789"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" name="telefono" value="987654321"/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" name="correo" value="compras@andina.pe"/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" name="direccion" value="Av. Industrial 123"/>
+</div>
+<div>
+<label for="lugar_origen">Lugar de origen</label>
+<input id="lugar_origen" name="lugar_origen" value="Arequipa"/>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones">Cliente frecuente</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
