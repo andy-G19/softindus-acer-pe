@@ -2569,11 +2569,21 @@ Datos leídos de la API de GitHub el 2026-10-14 y comparados con git:
 
 ## Entrega 9 — Piloto Clientes y categoría en ventanas
 
-Fecha: 2026-10-14 y 2026-10-15. Estado: en verificación. 12 commits, de
-`543ff6e` a `5261489`, más este registro. El paso 1 (el fix K4: `01ca73c` y
-`1812fff`, publicados con `543ff6e`) está verificado en staging: CI #70 en
-verde y huellas y teclado como se predijo. El piloto (de `490034e` a
-`5261489`) está solo en local; su verificación en staging cierra la entrega.
+Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada en staging el 2026-10-15; falta
+integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
+
+- El paso 0 (`543ff6e`).
+- El paso 1, el fix K4 (`01ca73c` y `1812fff`), verificado en staging con el
+  CI #70.
+- El piloto (de `490034e` a `5261489`) y su registro (`ef477f2`), publicados
+  con el CI #71.
+- Un fix que encontró la verificación del piloto (`498533d`), publicado con el
+  CI #72.
+
+Los tres CI terminaron en verde. En staging, 15 de las 18 huellas salieron como
+se predijo y las otras 3 tienen explicación; el CSS servido fue el predicho byte
+a byte, y las tareas T1 a T5 se midieron antes y después.
+
 Es la segunda entrega de la pista B: las primeras pantallas adoptan la base
 visual de la entrega 8 y prueban dos variantes del alta y la edición, un panel
 lateral con URL para una entidad relevante (Clientes) y una ventana modal sin
@@ -2601,6 +2611,8 @@ Decisiones del responsable:
   escrita abajo.
 - El commit 8 se divide en 8a (caracterización) y 8b (la ventana modal), por la
   regla 6.
+- Las pruebas con SELLER y WORKSHOP_MASTER en staging se omiten (2026-10-15).
+  Las cubren las pruebas automáticas; el detalle está abajo.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -2616,7 +2628,9 @@ Decisiones del responsable:
 | 61fa23e | feat | El listado de clientes usa `FilterBar` y `Field`, sin `<main>` anidado, y «Nuevo cliente» lleva `returnTo`. |
 | 4914163 | test | Caracterización del alta y la edición de categorías de producto (19 casos). |
 | 5261489 | feat | Categorías de producto: alta y edición en una ventana modal; sus dos acciones autorizan con `getAuthorizedSession`. |
-| este | docs | Registro de la entrega: esta sección, una trampa de Tailwind en `CLAUDE.md` e inventario. |
+| ef477f2 | docs | Registro de la entrega: esta sección, una trampa de Tailwind en `CLAUDE.md` e inventario. |
+| 498533d | fix | La galería respondía 500 en staging: `Button` pendiente pone la guarda de clic solo si es de envío o tiene un `onClick` propio, así que un componente de servidor puede pintarlo. |
+| este | docs | Cierre con la verificación del piloto en staging. |
 
 Diseño:
 
@@ -2640,7 +2654,8 @@ Diseño:
   dice si la lista tenía filtros, además de la paginación.
 - Pendiente y envío (C2). Con `pending`, `Button` pone `aria-disabled` y
   `aria-busy`, cancela el clic y se atenúa (`pointer-events-none opacity-50`):
-  el foco no se pierde (K1 de la entrega 8). `ActionForm` es el `<form>` de una
+  el foco no se pierde (K1 de la entrega 8). Desde `498533d`, el clic solo se
+  cancela si el botón envía (también sin `type`) o tiene un `onClick` propio. `ActionForm` es el `<form>` de una
   acción con `useActionState`: cancela un segundo envío mientras está pendiente
   (Enter en un campo lo encolaba). Con `resultKey` remonta los campos para que
   tomen como `defaultValue` los valores que devuelve la acción, y después
@@ -2720,11 +2735,15 @@ Evidencia:
      disparador y el foco devuelto se queda.
 
    Las mutaciones M10 y M11 de C8b, que intercambian los avisos, solo las
-   detecta el snapshot nuevo del registro.
+   detecta el snapshot nuevo del registro. El fix de la verificación
+   (`498533d`) detecta 5 de 5 (`mut_fix_galeria.txt`); entre ellas está M1,
+   que es exactamente el código de C2. Su prueba roja está en
+   `rojo-fix-galeria.txt`.
 
 Comprobaciones: `npm run check` terminó con código 0 después de cada commit,
 en Windows: 1.851, 1.860, 1.877, 1.883, 1.890, 1.913, 1.921, 1.941, 1.944,
-1.963 y 1.972 pruebas, de 117 a 125 archivos de prueba. El paso 1
+1.963 y 1.972 pruebas, de 117 a 125 archivos de prueba, y 1.975 con el fix
+`498533d`. El paso 1
 (`543ff6e..1812fff`) cambia 9 archivos (+948 y −15). En el piloto
 (`1812fff..5261489`) cambian el código de producción (24 archivos, +1.186 y
 −618), las pruebas (15, +2.020 y −19), los snapshots (9, +2.705 y −105) y
@@ -2746,6 +2765,13 @@ responsable):
 El piloto suma unos 105 minutos. Para estimar la entrega 10: el catálogo breve
 en ventana modal (C8a y C8b) costó 14 minutos, y Clientes con su panel (de C4 a
 C7), 59, sin contar los cimientos de C1 a C3.
+
+La verificación del piloto en staging llevó unos 57 minutos de trabajo, sin
+contar las esperas del CI, de Vercel ni de los inicios de sesión:
+
+| Tramo | Scripts | «Antes» | «Después» con el diagnóstico de la galería | Fix | Galería |
+|---|---|---|---|---|---|
+| Minutos | 4 | 18 | 24 | 6 | 5 |
 
 ### Paso 1: publicación y verificación en staging (K4)
 
@@ -2797,29 +2823,131 @@ C7), 59, sin contar los cimientos de C1 a C3.
 Evidencia en `tmp/e9-diff/staging-antes-e9.json`, `staging-despues-e9.json` y
 `e9-registro.tsv` (ignorados), con los sellos recalculados en Python.
 
-### Verificación del piloto en staging (pendiente)
+### Publicación, CI y verificación del piloto en staging
 
-Protocolo escrito antes de medir. Staging sigue en `1812fff`, con el flujo
-anterior de Clientes y categorías: el «antes» se toma ahí, antes del push de
-`490034e` a `5261489`.
+Método:
 
-| Tarea | Desde dónde | Qué se mide |
+- Huella: la v4 con su propia base (`e9p-huella`) y etiquetas `p9/`
+  (`tmp/e9-diff/huella-piloto.js`).
+- Medidor de tareas (`tmp/e9-diff/medidor.js`). Con el reloj del navegador,
+  anota en `sessionStorage` los clics, las navegaciones suaves y las cargas de
+  documento, los avisos, el momento en que el campo está listo, el
+  desplazamiento y el foco.
+- Clics y teclas reales; el `<select>`, con `form_input`.
+- A 376 px no hay barra de desplazamiento donde dejar el puntero. Queda en el
+  margen derecho del shell (`div.industrial-dark` > `div.px-4.py-6`, sin
+  `:hover`); la captura de inicio a 376 px da el mismo hash que en la entrega 8.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-15, de 16:53 a 17:08 UTC, sobre `1812fff` (`buildId`
+  `wyC-IlwpQ7SEoPI7yl80L`): 18 capturas con ADMIN, con el sello `4b47c8cc…`,
+  igual en Python. Las 9 que se pueden comparar con mediciones anteriores dan el
+  mismo hash que en el paso 1 o en la tanda 3 de la entrega 8.
+- Datos de prueba, con autorización del responsable, todos «PRUEBA E9» y
+  editados una vez: `CLI00000008` y `CPR00000010` en el «antes», y
+  `CLI00000009` y `CPR00000011` en el «después». T3 y T4 no escriben.
+- Predicción escrita antes del push (`piloto-antes.json`).
+- Push de 10 commits (`490034e` a `ef477f2`): CI #71 en verde (2m 54s). Vercel
+  desplegó `ef477f2` (`success` a las 17:27:30 UTC) y cambió el `buildId`
+  (`b5G58zIOVKJPdKq72MOEh`). El CSS servido es el predicho byte a byte (113.899
+  bytes, `5a0081d3…`).
+- «Después», de 17:33 a 17:48 UTC. La galería respondía 500 (abajo).
+
+T1 a T5, con los mismos pasos en las dos fases. Los tiempos son del navegador,
+del clic o el envío al evento:
+
+| Tarea | Antes (`1812fff`) | Después (`ef477f2`) |
 |---|---|---|
-| T1 Alta de cliente | Lista filtrada, paginada y desplazada (`?type=…&pageSize=3&page=2`) | Pasos; cargas de documento frente a navegaciones suaves; tiempo hasta el formulario listo y del envío a la lista con su aviso; si se conservan los filtros, la página, el desplazamiento y el foco; número de avisos |
-| T2 Edición de cliente | Igual | Igual |
-| T3 Error y corrección | Nombre «A», que rechaza el servidor | Si se conserva lo escrito, adónde va el foco y número de avisos |
-| T4 Cancelar con cambios | Panel o página | Que no escriba nada y que proteja los cambios |
-| T5 Alta y edición de categoría | Categorías de producto | Pasos, tiempo y avisos |
+| T1 Alta desde `?status=activo&pageSize=3&page=2` | 4 pasos; formulario listo en 677 ms; aviso a los 1.386 ms; vuelve a `/clients` sin filtros ni página; foco en `body` | 4 pasos; panel listo en 1.027 ms; aviso a los 1.499 ms, con la nota de filtros; vuelve a la misma URL y la lista se refresca; foco en «Nuevo cliente» |
+| T2 Edición desde `?q=PRUEBA+E9&status=activo&pageSize=3` | 4 pasos; 556 ms y 1.104 ms; pierde los filtros aunque el enlace llevaba `returnTo` | 4 pasos; 723 ms y 1.280 ms; vuelve a la lista filtrada; foco en el «Editar» de la fila |
+| T3 Error (nombre «A», tipo Ferretería y una observación) | Se pierde todo lo escrito, también el tipo; foco en `body`, sin `aria-invalid`; alerta y toast | Se conserva todo; foco en el nombre, con `aria-invalid` y su error asociado; una alerta y ningún toast |
+| T4 Cancelar con cambios | Sale sin preguntar y pierde los filtros | Pide confirmar «¿Descartar el cliente nuevo?»; Esc vuelve con lo escrito; descartar vuelve a la lista filtrada; no escribe nada |
+| T5 Categoría | Alta en 5 pasos (1.217 ms) y edición en la fila en 4 (1.114 ms) | Alta en 5 pasos (1.062 ms) y edición en 5 (982 ms); la ventana abre en 23 ms con el foco en el nombre, y el foco vuelve al botón que la abrió |
 
-- Los tiempos los toma un script en la página (`performance.now` y un
-  `MutationObserver`).
-- T1, T2 y T5 escriben en staging: unos 2 clientes y 2 categorías por fase, con
-  el prefijo «PRUEBA E9» y con autorización del responsable en su momento. T3 y
-  T4 no escriben.
-- «Después»: predicción escrita antes del push; CI y Vercel (estado del commit
-  y cambio de `buildId`); huella de las pantallas que no deben cambiar; T1 a
-  T5; teclado y 376 px; y los 3 roles. SELLER gestiona clientes y solo
-  consulta categorías; WORKSHOP_MASTER no entra en ninguna de las dos.
+Notas sobre T1 a T5:
+
+- En las dos fases todo ocurre en un solo documento, con un aviso por guardado.
+- Para la entrega 10: el panel con URL tarda unos 350 ms más que la página
+  completa en estar listo, porque pide la ruta del panel; la ventana sin URL
+  abre al instante.
+- La predicción decía 6 pasos para el alta de categoría: el foco inicial ya
+  está en el nombre y sobra el clic.
+- El texto de la confirmación de T4 es el que fijó C6, no el de la predicción.
+
+Teclado y 376 px:
+
+- Teclado a 1281 px, con teclas reales:
+  - Enter en «Nuevo cliente» abre el panel con el foco en el primer campo.
+  - Mayús+Tab va a la X y Tab vuelve al campo.
+  - Esc sin cambios cierra sin preguntar y devuelve el foco al enlace, con su
+    anillo.
+  - Atrás cierra el panel en el mismo documento y Adelante lo reabre.
+- A 376 px:
+  - El panel y la ventana de categoría ocupan la pantalla (376 × 813), con los
+    botones del pie apilados y sin desbordamiento horizontal.
+  - El cuerpo del panel desborda, pero no entra en el orden de Tab porque tiene
+    campos (la regla de K4).
+  - Ninguna página medida desborda.
+
+La regresión de la galería:
+
+- `/dashboard/gallery` respondía 500.
+- Causa: desde C2, `Button` pendiente agregaba siempre un `onClick`. `Button`
+  no es un componente de cliente, y la sección «Botones» de la galería, que es
+  un componente de servidor, pinta botones pendientes. React Server Components
+  no admite manejadores en un elemento que llega del servidor.
+- Se reprodujo con el renderizador RSC de Next
+  (`tmp/e9-diff/repro-rsc-button.tsx`).
+- Solo afectaba a la galería: las pantallas usan el pendiente desde componentes
+  de cliente.
+- El fix `498533d` (prueba roja y 5 de 5 mutaciones) pone la guarda solo cuando
+  hay algo que cancelar. CI #72 en verde (2m 48s); Vercel `success` a las
+  19:17:29 UTC; `buildId` `NKujz1QVyzsB6uj6JEElm`. Sirve el mismo CSS y la
+  galería responde 200.
+- La galería se midió a las 19:22 UTC. El panel del navegador se había cerrado
+  al reiniciarse la sesión y se perdió su base, así que la comparación es por
+  hash contra `piloto-registro.tsv`.
+
+Huella, 18 de 18 (sello del «después» `58d089d2…`, calculado en Python):
+
+- Idénticas, 8: inicio a 1281 y a 376 px, materiales, `OTR00000006`, y las
+  secciones «Fundamentos», «Botones», «Campos» y «Mensajes».
+- Cambian como se predijo, 8:
+  - la lista de clientes: la barra de filtros y una fila más por los datos;
+  - la lista filtrada a las dos anchuras: la barra y la posición de lo que la
+    sigue, con las mismas filas;
+  - «Nuevo cliente» a las dos anchuras: los primeros 194 elementos (el shell y
+    el encabezado) son iguales;
+  - categorías a las dos anchuras: de 427 a 384 elementos;
+  - «Ventanas»: de 13 a 14 elementos, por la nota de `RouteSheet`.
+- En total, 15 salieron como se predijo. En una, la lista filtrada a 1281 px,
+  hubo además un efecto que no anticipé: la página pasa a medir 800,83 px,
+  menos que la ventana; desaparece la barra de desplazamiento y todo se
+  ensancha 15,12 px.
+- Las 3 desviaciones, explicadas:
+  - «Botones» sale idéntica, aunque se predijo que cambiaría su nota. La nota
+    nueva está desplegada, pero cambia a partir del carácter 120, y la huella
+    guarda solo los 120 primeros de cada texto. Los botones pendientes se ven
+    como el deshabilitado anterior: opacidad 0,5 y cursor `default`.
+  - «Presentación» y «Listados» cambian de hash con los mismos elementos. Se
+    devolvió «Ventanas» a su texto anterior en el DOM de la pestaña, y las tres
+    secciones dieron los hashes del «antes» (`fae2709e…`, `bce406a5…` y
+    `51687c82…`). «Ventanas» creció 101,98 px, y la geometría relativa de lo
+    que hay debajo, redondeada a centésimas, cayó al otro lado, como en las
+    tandas 2 y 3 de la entrega 8.
+
+Roles: no se probaron SELLER ni WORKSHOP_MASTER en staging, por decisión del
+responsable. Los cubren las pruebas automáticas:
+
+- Las páginas y las ranuras del panel exigen ADMIN o SELLER, y un rol sin
+  permiso es rechazado antes de tocar Prisma.
+- Las acciones de Clientes aceptan a SELLER y rechazan a WORKSHOP_MASTER.
+- Las de categorías rechazan a SELLER y a WORKSHOP_MASTER con un error.
+- La página de categorías muestra «Solo lectura» a SELLER.
+
+Evidencia en `tmp/e9-diff/piloto-antes.json`, `piloto-despues.json` y
+`piloto-registro.tsv` (ignorados).
 
 Batería E2E escrita para la entrega 11 (Playwright con una base desechable):
 
@@ -2836,6 +2964,7 @@ Batería E2E escrita para la entrega 11 (Playwright con una base desechable):
 | E9 | Ventana modal de categoría | Foco en el primer campo, Esc, descarte y foco devuelto al botón |
 | E10 | Roles | ADMIN gestiona todo; SELLER gestiona clientes y solo consulta categorías; WORKSHOP_MASTER, acceso denegado en las dos |
 | E11 | Atrás del navegador con cambios en el panel | Cierra sin preguntar (limitación conocida); si Next llega a permitir interceptarlo, el caso cambia |
+| E12 | Cargar cada página, galería incluida, en un build de producción | 200 y ningún error de servidor: la regresión de la galería solo apareció en staging (hallazgo 8) |
 
 Hallazgos:
 
@@ -2861,8 +2990,9 @@ Hallazgos:
 4. React 19 reinicia los campos de un `<form action>` al terminar la acción,
    aunque esta devuelva un error; un `<select>` no toma un `defaultValue` nuevo,
    y `useActionState` encola un segundo envío. Lo comprobó una exploración en
-   jsdom (`tmp/e9-diff/explore-form.test.ts`); el «antes» de T3 dirá si Clientes
-   perdía lo escrito en staging.
+   jsdom (`tmp/e9-diff/explore-form.test.ts`), y el «antes» de T3 lo confirmó
+   en staging: Clientes perdía todo lo escrito, también el tipo elegido en el
+   `<select>`.
 5. Antes de C8b, ninguna prueba detectaba un aviso intercambiado: el aviso
    viaja como prop de un componente de cliente y no aparece en el HTML. Lo
    detecta ahora el snapshot del registro.
@@ -2872,12 +3002,23 @@ Hallazgos:
 7. El inventario no entiende las ranuras ni las rutas interceptadas: cuenta
    bien las páginas, pero las nombra `/dashboard/commercial/clients/@panel` y
    `…/@panel/edit`.
+8. Las pruebas no aplican las reglas de React Server Components:
+   `renderToStaticMarkup` ignora los manejadores, así que un componente de
+   servidor que pasa una función a un elemento solo falla en un build real. Así
+   llegó a staging la galería con 500 (fix `498533d`). La batería de la entrega
+   11 debe cargar cada página en un build de producción (caso E12).
+9. La huella guarda solo los primeros 120 caracteres del texto de cada
+   elemento: un cambio de texto más allá no cambia el hash si la geometría no
+   cambia («Botones»). Para la entrega 10, guardar el hash del texto completo.
+10. Si el panel del navegador integrado se cierra (por ejemplo, al reiniciarse
+    la sesión), se pierden la sesión de Vercel y la base de la huella. La
+    evidencia queda en los hashes de `tmp/e9-diff`.
 
 Lo que queda:
 
 | Pendiente | Dónde |
 |---|---|
-| Verificación del piloto en staging (T1 a T5, huella, teclado, 376 px y 3 roles) y cierre de la entrega | Commit de cierre de esta entrega |
+| Integrar la entrega en `main` (PR que abre el responsable) | Paso 0 de la entrega 10 |
 | Extraer un diálogo de formulario compartido: el descarte y la guarda de ocupado viven en la demo de la galería, en `RouteSheet` y en la ventana de categorías | Entrega 10, con el siguiente catálogo |
 | Acciones de `useActionState` que redirigen al negar el permiso (la desviación conocida: productos y el resto de la lista de `CLAUDE.md`) | Entrega 10, al migrar cada formulario |
 | Confirmar antes de enviar (`startTransition` con el `pending` externo) y confirmar al inactivar | Entrega 10 |
@@ -2885,7 +3026,8 @@ Lo que queda:
 | Utilidades muertas que Tailwind saca de los `.md` (hallazgo 1) | Commit propio con `@source not`, cuando lo decida el responsable |
 | 14 copias locales de `FieldError`, 109 páginas con `<main>` anidado y 42 formularios GET con 26 combinaciones de clases | Entrega 10 |
 | El inventario nombra mal las rutas de ranuras e interceptadas (hallazgo 7) | Con el siguiente cambio de `scripts/refactoring-inventory.mjs` |
-| Batería E2E con Playwright | Entrega 11 |
+| Hash del texto completo en la huella visual (hallazgo 9) | Entrega 10, antes de su primera verificación en staging |
+| Batería E2E con Playwright, con el caso E12 (hallazgo 8) | Entrega 11 |
 | SweetAlert2 restante y el adaptador `legacy-industrial-dark` | Entrega 11 |
 
 De la lista de la entrega 8 quedan resueltos:
@@ -2922,7 +3064,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
-| 9 | B | Piloto Clientes y categoría en ventanas | En verificación (paso 1 verificado en staging con CI #70; piloto pendiente de staging) |
+| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada en staging (CI #72 verde; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después); falta integrarla en `main` |
 | 10 | B | Catálogos, listados y resto de dominios | Pendiente |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
@@ -2947,7 +3089,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 125 / 125 | 7, G3 y 9 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 125 / 1.972 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 125 / 1.975 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3072,7 +3214,8 @@ archivos más grandes de `src` y los de producción no cambian (1.335, 1.161 y
 
 Actualizado en la entrega 9 (2026-10-15) sobre `5261489`:
 
-- Pruebas: 125 / 1.972.
+- Pruebas: 125 / 1.972 al registrarla, y 125 / 1.975 con el fix de la
+  verificación (`498533d`), que no mueve ninguna otra fila.
 - La forma de estado de formulario pasa de 1 a 2, a propósito.
   `FormActionState` (`src/lib/action-result.ts`) es el contrato de la pista B,
   con `values` y `operationId`, y convive con `ActionErrorState`
