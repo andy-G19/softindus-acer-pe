@@ -94,7 +94,10 @@ describe("ConfirmDialog", () => {
     const html = render({ pending: true, pendingText: "Cerrando..." });
     const action = tag(html, /<button [^>]*aria-busy="true"[^>]*>/);
 
-    expect(action).toContain('disabled=""');
+    // La accion conserva el foco mientras espera (aria-disabled, entrega 9);
+    // Cancelar se deshabilita de verdad.
+    expect(action).toContain('aria-disabled="true"');
+    expect(action).not.toContain('disabled=""');
     expect(html).toContain("Cerrando...</button>");
     expect(tag(html, /<button [^>]*>Cancelar/)).toContain('disabled=""');
   });

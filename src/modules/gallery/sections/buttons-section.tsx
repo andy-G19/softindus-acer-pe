@@ -114,8 +114,9 @@ export function ButtonsSection() {
       <GalleryNote>
         Teclado: recorre los botones con Tab; cada uno debe mostrar su indicador
         de foco y activarse con Enter o Espacio. Un botón pendiente queda
-        deshabilitado y lo anuncia con aria-busy; el spinner se detiene si el
-        sistema pide reducir el movimiento.
+        inactivo con aria-disabled, conserva el foco, ignora el clic y lo
+        anuncia con aria-busy; el spinner se detiene si el sistema pide reducir
+        el movimiento.
       </GalleryNote>
     </GallerySection>
   );

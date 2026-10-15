@@ -17,19 +17,30 @@ function render(node: ReactNode) {
 const SPINNER = /<svg[^>]*class="[^"]*lucide-loader-circle[^"]*"[^>]*>/;
 
 describe("Button pendiente", () => {
-  it("se deshabilita, marca aria-busy y muestra el texto pendiente", () => {
+  // Entrega 9: pendiente es aria-disabled, no disabled. Un boton disabled deja
+  // de ser enfocable y Chromium manda el foco a body (K1 de la entrega 8).
+  it("queda aria-disabled sin disabled, marca aria-busy y muestra el texto pendiente", () => {
     const html = render(h(Button, { pending: true, pendingText: "Guardando..." }, "Guardar"));
 
-    expect(html).toMatch(/^<button [^>]*disabled=""/);
+    expect(html).toMatch(/^<button [^>]*aria-disabled="true"/);
+    expect(html).not.toMatch(/^<button [^>]*disabled=""/);
     expect(html).toMatch(/^<button [^>]*aria-busy="true"/);
     expect(html).toContain("Guardando...");
     expect(html).not.toContain("Guardar<");
   });
 
-  it("un disabled={false} del formulario no lo rehabilita mientras esta pendiente", () => {
+  it("se ve inactivo como un boton deshabilitado y no recibe clics del puntero", () => {
+    const classes = render(h(Button, { pending: true }, "Guardar")).match(/^<button [^>]*class="([^"]*)"/)?.[1] ?? "";
+
+    // Clases sueltas: disabled:opacity-50 no cuenta, solo actua con disabled.
+    expect(classes.split(" ")).toContain("opacity-50");
+    expect(classes.split(" ")).toContain("pointer-events-none");
+  });
+
+  it("un disabled={false} del formulario no lo reactiva mientras esta pendiente", () => {
     const html = render(h(Button, { disabled: false, pending: true }, "Guardar"));
 
-    expect(html).toMatch(/^<button [^>]*disabled=""/);
+    expect(html).toMatch(/^<button [^>]*aria-disabled="true"/);
   });
 
   it("conserva el contenido si no hay texto pendiente", () => {

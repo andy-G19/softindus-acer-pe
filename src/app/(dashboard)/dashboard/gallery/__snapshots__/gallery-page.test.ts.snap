@@ -555,22 +555,22 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <figure>
 <figcaption>Pendiente</figcaption>
 <div>
-<button data-variant="default" type="button" disabled="" aria-busy="true">
+<button data-variant="default" type="button" aria-disabled="true" aria-busy="true">
 <svg/>Guardando...</button>
-<button data-variant="outline" type="button" disabled="" aria-busy="true">
+<button data-variant="outline" type="button" aria-disabled="true" aria-busy="true">
 <svg/>Exportar</button>
-<button data-variant="destructive" type="button" disabled="" aria-busy="true">
+<button data-variant="destructive" type="button" aria-disabled="true" aria-busy="true">
 <svg/>Anulando...</button>
-<button data-variant="ghost" type="button" aria-label="Eliminar (icon-xs)" disabled="" aria-busy="true">
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-xs)" aria-disabled="true" aria-busy="true">
 <svg/>
 </button>
-<button data-variant="ghost" type="button" aria-label="Eliminar (icon-sm)" disabled="" aria-busy="true">
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-sm)" aria-disabled="true" aria-busy="true">
 <svg/>
 </button>
-<button data-variant="ghost" type="button" aria-label="Eliminar (icon)" disabled="" aria-busy="true">
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon)" aria-disabled="true" aria-busy="true">
 <svg/>
 </button>
-<button data-variant="ghost" type="button" aria-label="Eliminar (icon-lg)" disabled="" aria-busy="true">
+<button data-variant="ghost" type="button" aria-label="Eliminar (icon-lg)" aria-disabled="true" aria-busy="true">
 <svg/>
 </button>
 </div>
@@ -589,7 +589,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </figure>
 </div>
-<p>Teclado: recorre los botones con Tab; cada uno debe mostrar su indicador de foco y activarse con Enter o Espacio. Un botón pendiente queda deshabilitado y lo anuncia con aria-busy; el spinner se detiene si el sistema pide reducir el movimiento.</p>
+<p>Teclado: recorre los botones con Tab; cada uno debe mostrar su indicador de foco y activarse con Enter o Espacio. Un botón pendiente queda inactivo con aria-disabled, conserva el foco, ignora el clic y lo anuncia con aria-busy; el spinner se detiene si el sistema pide reducir el movimiento.</p>
 </section>
 <section id="campos" aria-labelledby="campos-titulo">
 <header>
