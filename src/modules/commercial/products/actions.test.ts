@@ -31,6 +31,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Entrega 9: cada respuesta lleva un operationId aleatorio; en los snapshots,
+// uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -92,7 +98,7 @@ type CategoryAction = (
 ) => Promise<ProductCategoryFormState>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState = { error: "" } as ProductCategoryFormState;
+const initialState: ProductCategoryFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();

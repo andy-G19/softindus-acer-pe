@@ -3,7 +3,7 @@
 exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale del nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -78,7 +78,15 @@ exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale d
 exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale del nombre > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id_categoria_producto": "CPR00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -86,7 +94,7 @@ exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale d
 exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -94,12 +102,25 @@ exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma
 ]
 `;
 
-exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de producto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
+  },
+}
+`;
 
 exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -107,12 +128,25 @@ exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de toc
 ]
 `;
 
-exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de producto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
+  },
+}
+`;
 
 exports[`createProductCategoryAction > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -187,7 +221,15 @@ exports[`createProductCategoryAction > la descripcion vacia o con espacios se gu
 exports[`createProductCategoryAction > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id_categoria_producto": "CPR00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "   ",
+      "nombre": "Soldadura",
+    },
   },
 }
 `;
@@ -195,7 +237,7 @@ exports[`createProductCategoryAction > la descripcion vacia o con espacios se gu
 exports[`createProductCategoryAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -253,6 +295,12 @@ exports[`createProductCategoryAction > otro fallo al crear revierte con el mensa
   "estado": {
     "error": "No se pudo guardar el registro. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -260,7 +308,7 @@ exports[`createProductCategoryAction > otro fallo al crear revierte con el mensa
 exports[`createProductCategoryAction > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -277,6 +325,12 @@ exports[`createProductCategoryAction > un nombre demasiado corto devuelve el err
         "El nombre de la categoría es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "nombre": "A",
+    },
   },
 }
 `;
@@ -284,7 +338,7 @@ exports[`createProductCategoryAction > un nombre demasiado corto devuelve el err
 exports[`createProductCategoryAction > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -319,6 +373,12 @@ exports[`createProductCategoryAction > un nombre o slug repetido devuelve el err
         "Ya existe una categoría de producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -326,7 +386,7 @@ exports[`createProductCategoryAction > un nombre o slug repetido devuelve el err
 exports[`createProductCategoryAction > un nombre sin letras ni numeros no da slug > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -343,6 +403,12 @@ exports[`createProductCategoryAction > un nombre sin letras ni numeros no da slu
         "El nombre de la categoría debe incluir letras o números.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "nombre": "!!!",
+    },
   },
 }
 `;
@@ -350,7 +416,7 @@ exports[`createProductCategoryAction > un nombre sin letras ni numeros no da slu
 exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -412,6 +478,12 @@ exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) 
         "Ya existe una categoría de producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -419,7 +491,7 @@ exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) 
 exports[`updateProductCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -492,7 +564,15 @@ exports[`updateProductCategoryAction > ADMIN actualiza una categoria > llamadas 
 exports[`updateProductCategoryAction > ADMIN actualiza una categoria > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id_categoria_producto": "CPR00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -500,7 +580,7 @@ exports[`updateProductCategoryAction > ADMIN actualiza una categoria > resultado
 exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -508,12 +588,25 @@ exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma
 ]
 `;
 
-exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de producto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
+  },
+}
+`;
 
 exports[`updateProductCategoryAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -586,7 +679,15 @@ exports[`updateProductCategoryAction > conservar su propio nombre no es un dupli
 exports[`updateProductCategoryAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id_categoria_producto": "CPR00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -594,7 +695,7 @@ exports[`updateProductCategoryAction > conservar su propio nombre no es un dupli
 exports[`updateProductCategoryAction > el nombre o slug es de otra categoria > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -640,6 +741,12 @@ exports[`updateProductCategoryAction > el nombre o slug es de otra categoria > r
         "Ya existe otra categoría de producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -647,7 +754,7 @@ exports[`updateProductCategoryAction > el nombre o slug es de otra categoria > r
 exports[`updateProductCategoryAction > la categoria no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -670,6 +777,13 @@ exports[`updateProductCategoryAction > la categoria no existe > resultado 1`] = 
 {
   "estado": {
     "error": "La categoría no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -677,7 +791,7 @@ exports[`updateProductCategoryAction > la categoria no existe > resultado 1`] = 
 exports[`updateProductCategoryAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -733,6 +847,12 @@ exports[`updateProductCategoryAction > otro fallo al actualizar devuelve el mens
   "estado": {
     "error": "No se pudo guardar el registro. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -740,7 +860,7 @@ exports[`updateProductCategoryAction > otro fallo al actualizar devuelve el mens
 exports[`updateProductCategoryAction > sin id de categoria > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -752,6 +872,13 @@ exports[`updateProductCategoryAction > sin id de categoria > resultado 1`] = `
 {
   "estado": {
     "error": "La categoría no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
+    },
   },
 }
 `;
@@ -759,7 +886,7 @@ exports[`updateProductCategoryAction > sin id de categoria > resultado 1`] = `
 exports[`updateProductCategoryAction > un nombre demasiado corto devuelve el error despues de comprobar la categoria > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -787,6 +914,12 @@ exports[`updateProductCategoryAction > un nombre demasiado corto devuelve el err
         "El nombre de la categoría es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "nombre": "A",
+    },
   },
 }
 `;
@@ -794,7 +927,7 @@ exports[`updateProductCategoryAction > un nombre demasiado corto devuelve el err
 exports[`updateProductCategoryAction > un nombre sin letras ni numeros no da slug > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -822,6 +955,12 @@ exports[`updateProductCategoryAction > un nombre sin letras ni numeros no da slu
         "El nombre de la categoría debe incluir letras o números.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "nombre": "!!!",
+    },
   },
 }
 `;
@@ -829,7 +968,7 @@ exports[`updateProductCategoryAction > un nombre sin letras ni numeros no da slu
 exports[`updateProductCategoryAction > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -888,6 +1027,12 @@ exports[`updateProductCategoryAction > una carrera por el slug (P2002 al actuali
       "nombre": [
         "Ya existe otra categoría de producto con ese nombre.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Uso interno de la categoría.",
+      "nombre": "Herramientas agrícolas",
     },
   },
 }

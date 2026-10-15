@@ -33,7 +33,9 @@ import {
 // se retiro en el grupo 3 de fixes.
 const CLAVES_SIN_EMISOR: Record<string, string> = {};
 
-type Emission = { file: string; key: string };
+// catalogo: un formulario que da el aviso con el resultado de la accion (entrega 9),
+// con el atributo JSX que lo recibe (successNotification...).
+type Emission = { file: string; key: string; catalogo?: string };
 
 // Nombres de los catalogos de cada area (commercialNotifications...), leidos de
 // notification-registry.ts: un acceso con clave literal a uno de ellos emite.
@@ -211,7 +213,11 @@ function scan() {
         CATALOG_NAMES.has(node.expression.text)
       ) {
         if (ts.isStringLiteral(node.argumentExpression)) {
-          emissions.push({ file, key: node.argumentExpression.text });
+          const attribute =
+            ts.isJsxExpression(node.parent) && ts.isJsxAttribute(node.parent.parent)
+              ? node.parent.parent.name.getText(source)
+              : "sin atributo";
+          emissions.push({ file, key: node.argumentExpression.text, catalogo: attribute });
         } else {
           problems.push(`${where(node)}: ${node.getText(source)} debe usar una clave literal`);
         }
@@ -272,6 +278,20 @@ describe("claves ?toast= emitidas", () => {
     });
 
     expect(misplaced).toEqual([]);
+  });
+});
+
+// La pagina pasa al formulario el aviso con su clave y ese prop no llega al
+// HTML: sin este snapshot, cambiar client-created por client-updated en una
+// pagina no lo detectaria ninguna prueba.
+describe("avisos dados con el resultado de la accion", () => {
+  it("cada archivo emite sus claves del catalogo", () => {
+    const pairs = emissions
+      .filter((emission) => emission.catalogo)
+      .map(({ file, key, catalogo }) => `${file} [${catalogo}] -> ${key}`)
+      .sort();
+
+    expect(pairs).toMatchSnapshot();
   });
 });
 

@@ -1,7 +1,8 @@
 import type { NotificationCatalog } from "@/lib/notification-catalog";
 
 // Mensajes que el puente ?toast= muestra tras las acciones de Comercial que
-// redirigen con ?toast=<clave>. El registro comun los reune en
+// redirigen con ?toast=<clave>, y los que dan los formularios de la pista B con
+// el resultado de la accion (entrega 9). El registro comun los reune en
 // src/modules/notification-registry.ts.
 export const commercialNotifications = {
   "client-created": { type: "success", message: "Cliente guardado correctamente" },
@@ -14,6 +15,9 @@ export const commercialNotifications = {
   "product-deactivated": { type: "warning", message: "Producto desactivado" },
   "product-category-activated": { type: "success", message: "Categoría de producto activada" },
   "product-category-deactivated": { type: "warning", message: "Categoría de producto desactivada" },
+  // Ventana modal de categorias (entrega 9): los textos que ya daba el gestor.
+  "product-category-created": { type: "success", message: "Categoría creada correctamente" },
+  "product-category-updated": { type: "success", message: "Categoría actualizada correctamente" },
   "order-created": { type: "success", message: "Pedido creado correctamente" },
   "order-updated": { type: "success", message: "Pedido actualizado correctamente" },
   "order-cancelled": { type: "warning", message: "Pedido cancelado" },

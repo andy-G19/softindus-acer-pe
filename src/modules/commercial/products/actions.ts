@@ -4,22 +4,34 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { ActionErrorState, FieldErrors } from "@/lib/errors";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
 export type ProductFormState = ActionErrorState;
 
-export type ProductCategoryFormState = ActionErrorState;
+/** Lo que el formulario de categoria envio, tal cual, para volver a mostrarlo. */
+export type ProductCategoryFormValues = {
+  nombre: string;
+  descripcion: string;
+};
+
+// Entrega 9: el alta y la edicion de categorias se usan desde una ventana
+// modal y devuelven el resultado en lugar del estado de error suelto; sin
+// permiso responden con un error, no redirigen.
+export type ProductCategoryFormState = FormActionState<
+  ProductCategoryFormValues,
+  { id_categoria_producto: string }
+>;
 
 const PRODUCTS_PATH = "/dashboard/commercial/products";
 const PRODUCT_CATEGORIES_PATH = "/dashboard/commercial/product-categories";
 const initialProductState: ProductFormState = { error: "" };
-const initialCategoryState: ProductCategoryFormState = { error: "" };
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -38,6 +50,30 @@ function slugify(value: string) {
 
 async function requireAdminProductPermission() {
   return requireRole(["ADMIN"]);
+}
+
+function getCategoryFormValues(formData: FormData): ProductCategoryFormValues {
+  return {
+    nombre: formData.get("nombre")?.toString() ?? "",
+    descripcion: formData.get("descripcion")?.toString() ?? "",
+  };
+}
+
+function categoryError(
+  values: ProductCategoryFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): ProductCategoryFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function categorySaved(values: ProductCategoryFormValues, idCategoriaProducto: string): ProductCategoryFormState {
+  return {
+    status: "success",
+    data: { id_categoria_producto: idCategoriaProducto },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 function getProductFormData(formData: FormData) {
@@ -345,29 +381,29 @@ export async function createProductCategoryAction(
   _prevState: ProductCategoryFormState,
   formData: FormData,
 ): Promise<ProductCategoryFormState> {
-  const session = await requireAdminProductPermission();
+  const values = getCategoryFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return categoryError(values, "No tienes permisos para gestionar categorías de producto.");
+  }
+
   const parsed = productCategorySchema.safeParse({
     nombre: formData.get("nombre")?.toString(),
     descripcion: formData.get("descripcion")?.toString() ?? "",
   });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la categoría.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return categoryError(values, "Revisa los datos de la categoría.", parsed.error.flatten().fieldErrors);
   }
 
   const categoryName = parsed.data.nombre;
   const slug = slugify(categoryName);
 
   if (!slug) {
-    return {
-      error: "El nombre de la categoría debe incluir letras o números.",
-      fieldErrors: {
-        nombre: ["El nombre de la categoría debe incluir letras o números."],
-      },
-    };
+    return categoryError(values, "El nombre de la categoría debe incluir letras o números.", {
+      nombre: ["El nombre de la categoría debe incluir letras o números."],
+    });
   }
 
   const existingCategory = await prisma.categoria_producto.findFirst({
@@ -380,12 +416,9 @@ export async function createProductCategoryAction(
   });
 
   if (existingCategory) {
-    return {
-      error: "Ya existe una categoría de producto con ese nombre.",
-      fieldErrors: {
-        nombre: ["Ya existe una categoría de producto con ese nombre."],
-      },
-    };
+    return categoryError(values, "Ya existe una categoría de producto con ese nombre.", {
+      nombre: ["Ya existe una categoría de producto con ese nombre."],
+    });
   }
 
   let idCategoriaProducto = "";
@@ -422,34 +455,38 @@ export async function createProductCategoryAction(
       "Ya existe una categoría de producto con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe una categoría de producto con ese nombre."
-          ? { nombre: [errorMessage] }
-          : undefined,
-    };
+    return categoryError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe una categoría de producto con ese nombre."
+        ? { nombre: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(PRODUCT_CATEGORIES_PATH);
   revalidatePath(PRODUCTS_PATH);
 
-  return initialCategoryState;
+  return categorySaved(values, idCategoriaProducto);
 }
 
 export async function updateProductCategoryAction(
   _prevState: ProductCategoryFormState,
   formData: FormData,
 ): Promise<ProductCategoryFormState> {
-  const session = await requireAdminProductPermission();
+  const values = getCategoryFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return categoryError(values, "No tienes permisos para gestionar categorías de producto.");
+  }
+
   const idCategoriaProducto = formData
     .get("id_categoria_producto")
     ?.toString();
 
   if (!idCategoriaProducto) {
-    return {
-      error: "La categoría no existe.",
-    };
+    return categoryError(values, "La categoría no existe.");
   }
 
   const category = await prisma.categoria_producto.findUnique({
@@ -462,9 +499,7 @@ export async function updateProductCategoryAction(
   });
 
   if (!category) {
-    return {
-      error: "La categoría no existe.",
-    };
+    return categoryError(values, "La categoría no existe.");
   }
 
   const parsed = productCategorySchema.safeParse({
@@ -473,22 +508,16 @@ export async function updateProductCategoryAction(
   });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la categoría.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return categoryError(values, "Revisa los datos de la categoría.", parsed.error.flatten().fieldErrors);
   }
 
   const categoryName = parsed.data.nombre;
   const slug = slugify(categoryName);
 
   if (!slug) {
-    return {
-      error: "El nombre de la categoría debe incluir letras o números.",
-      fieldErrors: {
-        nombre: ["El nombre de la categoría debe incluir letras o números."],
-      },
-    };
+    return categoryError(values, "El nombre de la categoría debe incluir letras o números.", {
+      nombre: ["El nombre de la categoría debe incluir letras o números."],
+    });
   }
 
   const existingCategory = await prisma.categoria_producto.findFirst({
@@ -504,12 +533,9 @@ export async function updateProductCategoryAction(
     existingCategory &&
     existingCategory.id_categoria_producto !== idCategoriaProducto
   ) {
-    return {
-      error: "Ya existe otra categoría de producto con ese nombre.",
-      fieldErrors: {
-        nombre: ["Ya existe otra categoría de producto con ese nombre."],
-      },
-    };
+    return categoryError(values, "Ya existe otra categoría de producto con ese nombre.", {
+      nombre: ["Ya existe otra categoría de producto con ese nombre."],
+    });
   }
 
   try {
@@ -529,13 +555,13 @@ export async function updateProductCategoryAction(
       "Ya existe otra categoría de producto con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe otra categoría de producto con ese nombre."
-          ? { nombre: [errorMessage] }
-          : undefined,
-    };
+    return categoryError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otra categoría de producto con ese nombre."
+        ? { nombre: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -549,7 +575,7 @@ export async function updateProductCategoryAction(
   revalidatePath(PRODUCT_CATEGORIES_PATH);
   revalidatePath(PRODUCTS_PATH);
 
-  return initialCategoryState;
+  return categorySaved(values, idCategoriaProducto);
 }
 
 export async function toggleProductCategoryStatusAction(formData: FormData) {
