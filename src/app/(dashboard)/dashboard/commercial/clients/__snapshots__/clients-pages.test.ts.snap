@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vuelve al listado 1`] = `
-"<main>
+"<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -97,12 +97,12 @@ exports[`alta de cliente > muestra el formulario vacio sin consultar Prisma y vu
 <a data-variant="outline" href="/dashboard/commercial/clients">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;
 
 exports[`edicion de cliente > consulta el cliente y muestra el formulario con el regreso al listado > html 1`] = `
-"<main>
+"<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -198,7 +198,7 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 <a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;page=2">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;
 
@@ -235,7 +235,7 @@ exports[`edicion de cliente > consulta el cliente y muestra el formulario con el
 `;
 
 exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ignora un regreso externo 1`] = `
-"<main>
+"<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -332,7 +332,7 @@ exports[`edicion de cliente > muestra vacios los campos opcionales ausentes e ig
 <a data-variant="outline" href="/dashboard/commercial/clients">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;
 
@@ -784,7 +784,7 @@ exports[`listado de clientes > filtro: todos los filtros 1`] = `
 `;
 
 exports[`listado de clientes > muestra el estado vacio 1`] = `
-"<main>
+"<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -811,16 +811,16 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/clients/new">Nuevo cliente</a>
+<a data-variant="default" href="/dashboard/commercial/clients/new?returnTo=%2Fdashboard%2Fcommercial%2Fclients">Nuevo cliente</a>
 </div>
 </div>
 </section>
-<form method="GET">
+<form role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
 <div>
-<label for="client-_R_a_">Cliente</label>
+<label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div>
-<input id="client-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+<input id="client-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_1a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>
 <div>
@@ -886,11 +886,11 @@ exports[`listado de clientes > muestra el estado vacio 1`] = `
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>"
+</div>"
 `;
 
 exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`] = `
-"<main>
+"<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -917,16 +917,16 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/clients/new">Nuevo cliente</a>
+<a data-variant="default" href="/dashboard/commercial/clients/new?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Nuevo cliente</a>
 </div>
 </div>
 </section>
-<form method="GET">
+<form role="search" aria-label="Filtros de clientes" action="/dashboard/commercial/clients" method="GET">
 <div>
-<label for="client-_R_a_">Cliente</label>
+<label for="client-_R_1a_">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div>
-<input id="client-_R_a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
+<input id="client-_R_1a_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_1a_-listbox" aria-expanded="false" placeholder="Buscar cliente por nombre o código" value=""/>
 </div>
 </div>
 <div>
@@ -1021,7 +1021,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <a data-variant="outline" href="/dashboard/commercial/clients?q=andina&amp;status=activo&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;
 

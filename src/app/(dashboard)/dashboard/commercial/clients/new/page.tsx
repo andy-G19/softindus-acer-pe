@@ -21,7 +21,7 @@ export default async function NewClientPage({ searchParams }: NewClientPageProps
   const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.clients);
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader
         title="Nuevo cliente"
         description="Registra los datos comerciales del cliente."
@@ -40,6 +40,6 @@ export default async function NewClientPage({ searchParams }: NewClientPageProps
         successNotification={commercialNotifications["client-created"]}
         returnTo={backHref}
       />
-    </main>
+    </div>
   );
 }

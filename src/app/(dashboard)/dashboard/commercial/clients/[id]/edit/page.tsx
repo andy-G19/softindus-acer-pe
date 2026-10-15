@@ -37,7 +37,7 @@ export default async function EditClientPage({
   const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.clients);
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader
         title="Editar cliente"
         description="Actualiza los datos comerciales del cliente."
@@ -68,6 +68,6 @@ export default async function EditClientPage({
           observaciones: client.observaciones ?? "",
         }}
       />
-    </main>
+    </div>
   );
 }

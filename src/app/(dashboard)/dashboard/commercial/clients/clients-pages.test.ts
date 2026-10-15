@@ -391,3 +391,50 @@ describe("panel lateral de clientes", () => {
     expect(PanelOnList()).toBeNull();
   });
 });
+
+// Entrega 9: el listado adopta FilterBar y Field sin cambiar los nombres de la
+// URL, el alta lleva el regreso al listado filtrado (para el aviso y la pagina
+// completa) y ninguna pagina de Clientes anida un <main> dentro del del shell.
+describe("listado de clientes con la base visual", () => {
+  const FILTERED = { q: "andina", status: "activo", page: "2" };
+
+  async function renderList() {
+    const result = await characterizePage(loadList, { name: "con datos", searchParams: FILTERED, data: WITH_DATA }, LIST_ROUTE);
+
+    return result.html ?? "";
+  }
+
+  it("la barra de filtros es una busqueda con nombre que envia los mismos parametros al listado", async () => {
+    const html = await renderList();
+    const form = html.match(/<form [^>]*role="search"[^>]*>/)?.[0] ?? "";
+    const formHtml = html.slice(html.indexOf(form), html.indexOf("</form>", html.indexOf(form)));
+    const names = [...formHtml.matchAll(/<(?:input|select)[^>]* name="([^"]+)"/g)].map((match) => match[1]);
+
+    expect(form).toContain('aria-label="Filtros de clientes"');
+    expect(form).toContain(`action="${LIST_ROUTE}"`);
+    expect(form).toMatch(/method="get"/i);
+    expect(new Set(names)).toEqual(new Set(["client", "q", "type", "status", "origin"]));
+  });
+
+  it("Nuevo cliente lleva el regreso al listado con sus filtros y su pagina", async () => {
+    const html = await renderList();
+    const link = html.match(/<a [^>]*>Nuevo cliente<\/a>/)?.[0] ?? "";
+    const returnTo = encodeURIComponent(`${LIST_ROUTE}?q=andina&status=activo&page=2`);
+
+    expect(link).toContain(`href="${LIST_ROUTE}/new?returnTo=${returnTo}"`);
+  });
+
+  it("ninguna pagina de Clientes anida un <main> dentro del del shell", async () => {
+    const list = await renderList();
+    const newPage = await characterizePage(loadNew, { name: "nuevo" }, `${LIST_ROUTE}/new`);
+    const edit = await characterizePage(
+      loadEdit,
+      { name: "editar", params: { id: "CLI00000003" }, data: { "cliente.findUnique": CLIENT_ROWS[0] } },
+      `${LIST_ROUTE}/CLI00000003/edit`,
+    );
+
+    for (const html of [list, newPage.html ?? "", edit.html ?? ""]) {
+      expect(html).not.toContain("<main");
+    }
+  });
+});

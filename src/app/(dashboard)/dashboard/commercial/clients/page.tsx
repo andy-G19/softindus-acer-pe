@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
@@ -13,7 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -88,7 +89,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   ).sort();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Clientes"
         description="Lista de clientes registrados en el sistema."
@@ -98,15 +99,12 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/commercial/clients/new">Nuevo cliente</Link>
+            <Link href={withReturnTo(`${navigationHrefs.clients}/new`, returnTo)}>Nuevo cliente</Link>
           </Button>
         }
       />
 
-      <form
-        method="GET"
-        className="grid gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-3 xl:grid-cols-5"
-      >
+      <FilterBar action={navigationHrefs.clients} label="Filtros de clientes" clearHref={navigationHrefs.clients}>
         <SearchableSelectFilter
           key={client}
           name="client"
@@ -117,57 +115,45 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
           emptyMessage="No se encontraron clientes."
         />
 
-        <div className="space-y-2">
-          <Label htmlFor="q">Búsqueda general</Label>
-          <Input
-            id="q"
-            name="q"
-            type="text"
-            defaultValue={q}
-            placeholder="Buscar por nombre, documento, teléfono o correo"
-          />
-        </div>
+        <Field id="q" label="Búsqueda general">
+          {(control) => (
+            <Input
+              {...control}
+              name="q"
+              type="text"
+              defaultValue={q}
+              placeholder="Buscar por nombre, documento, teléfono o correo"
+            />
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo</Label>
-          <NativeSelect id="type" name="type" defaultValue={type}>
-            <option value="">Todos los tipos</option>
-            {clientTypes.map((clientType) => (
-              <option key={clientType} value={clientType}>
-                {clientType}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="type" label="Tipo">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Todos los tipos</option>
+              {clientTypes.map((clientType) => (
+                <option key={clientType} value={clientType}>
+                  {clientType}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="activo">Activo</option>
-            <option value="inactivo">Inactivo</option>
-          </NativeSelect>
-        </div>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="origin">Origen</Label>
-          <Input
-            id="origin"
-            name="origin"
-            type="text"
-            defaultValue={origin}
-            placeholder="Origen"
-          />
-        </div>
-
-        <div className="flex flex-wrap items-end gap-2 md:col-span-3 xl:col-span-5">
-          <Button type="submit">Filtrar</Button>
-
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/commercial/clients">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="origin" label="Origen">
+          {(control) => <Input {...control} name="origin" type="text" defaultValue={origin} placeholder="Origen" />}
+        </Field>
+      </FilterBar>
 
       <p className="text-sm text-muted-foreground">
         Resultados encontrados: {totalItems}
@@ -239,6 +225,6 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         searchParams={params}
         itemLabel="clientes"
       />
-    </main>
+    </div>
   );
 }
