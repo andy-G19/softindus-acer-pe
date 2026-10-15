@@ -114,6 +114,14 @@ describe("Dialog", () => {
     expect(classOf(html, "dialog-content")).toMatch(/\bflex\b.*\bflex-col\b/);
   });
 
+  it("el cuerpo, cuando entra en el orden de Tab, muestra un anillo de foco hacia dentro", () => {
+    const body = classOf(render(dialog()), "dialog-body");
+
+    for (const token of ["outline-none", "focus-visible:ring-3", "focus-visible:ring-inset", "focus-visible:ring-ring/50"]) {
+      expect(body.split(" ")).toContain(token);
+    }
+  });
+
   it("la X de cerrar tiene nombre y va al final, despues del pie", () => {
     const html = render(dialog());
     const close = tag(html, /<button [^>]*aria-label="Cerrar"[^>]*>/);

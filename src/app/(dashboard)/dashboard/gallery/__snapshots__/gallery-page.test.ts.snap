@@ -1024,7 +1024,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Teclado: al abrir, el foco va al primer campo (o a la X si no hay campos); Tab no sale de la ventana; Esc o un clic en el velo la cierran y el foco vuelve al botón que la abrió. En la ventana larga, el cuerpo se desplaza con la rueda, el dedo o las flechas, y el pie sigue visible. Mientras se registra el pago no se puede cerrar. En el teléfono, la ventana y los paneles ocupan la pantalla y los botones del pie se apilan.</p>
+<p>Teclado: al abrir, el foco va al primer campo. En la ventana larga, sin campos, va al cuerpo, que entra en el orden de Tab y se desplaza con las flechas y AvPág; en el panel de enlaces, a la X, porque Radix no da el foco inicial a un enlace. Tab no sale de la ventana; Esc o un clic en el velo la cierran y el foco vuelve al botón que la abrió. En la ventana larga, el cuerpo también se desplaza con la rueda o el dedo, y el pie sigue visible. Mientras se registra el pago no se puede cerrar. En el teléfono, la ventana y los paneles ocupan la pantalla y los botones del pie se apilan.</p>
 </section>
 <section id="presentacion" aria-labelledby="presentacion-titulo">
 <header>

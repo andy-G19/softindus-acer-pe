@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { act, createElement as h, type ReactNode } from "react";
+import { act, createElement as h, useLayoutEffect, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,14 +37,43 @@ function heightFromAttribute(name: string): PropertyDescriptor {
   };
 }
 
+// jsdom no trae ResizeObserver: el doble guarda cada observador para que una
+// prueba simule un cambio de tamano.
+let resizeObservers: ResizeObserverDouble[] = [];
+
+class ResizeObserverDouble {
+  readonly callback: ResizeObserverCallback;
+
+  constructor(callback: ResizeObserverCallback) {
+    this.callback = callback;
+    resizeObservers.push(this);
+  }
+
+  observe() {}
+
+  unobserve() {}
+
+  disconnect() {
+    resizeObservers = resizeObservers.filter((observer) => observer !== this);
+  }
+}
+
+function resizeAll() {
+  for (const observer of [...resizeObservers]) {
+    observer.callback([], observer as unknown as ResizeObserver);
+  }
+}
+
 beforeAll(() => {
   Object.defineProperty(HTMLElement.prototype, "scrollHeight", heightFromAttribute("data-test-scroll-height"));
   Object.defineProperty(HTMLElement.prototype, "clientHeight", heightFromAttribute("data-test-client-height"));
+  vi.stubGlobal("ResizeObserver", ResizeObserverDouble);
 });
 
 afterAll(() => {
   Reflect.deleteProperty(HTMLElement.prototype, "scrollHeight");
   Reflect.deleteProperty(HTMLElement.prototype, "clientHeight");
+  vi.unstubAllGlobals();
 });
 
 let host: HTMLDivElement;
@@ -64,6 +93,16 @@ afterEach(async () => {
 async function open(node: ReactNode) {
   await act(async () => {
     root.render(node);
+  });
+}
+
+// Solo los bordes: la trampa de Radix mueve el foco con Tab desde el ultimo
+// tabulable y con Mayus+Tab desde el primero; entre medias, el Tab lo hace el
+// navegador, que jsdom no simula.
+async function pressTab(options: { shiftKey?: boolean } = {}) {
+  const target = document.activeElement ?? document.body;
+  await act(async () => {
+    target.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true, ...options }));
   });
 }
 
@@ -166,5 +205,135 @@ describe("foco inicial de Sheet con Radix real", () => {
 
     expect(document.activeElement).toBe(closeX());
     expect(slot("dialog-body").hasAttribute("tabindex")).toBe(false);
+  });
+});
+
+// Hallazgo K4 de la entrega 8: un cuerpo desplazable sin nada enfocable quedaba
+// fuera de la trampa de foco de Radix, que solo cuenta los elementos con
+// tabIndex >= 0; no se alcanzaba con Tab ni se desplazaba con el teclado
+// (WCAG 2.1.1).
+const orderLines = Array.from({ length: 24 }, (_, index) =>
+  h("p", { key: index }, `PRD${String(index + 1).padStart(8, "0")} Plancha de acero ${index + 1}`),
+);
+
+// Lee el tabIndex del cuerpo en su propio efecto de layout, despues del de
+// DialogBody (los efectos de hermanos corren en orden) y antes de cualquier
+// efecto pasivo, como el que usa Radix para el foco inicial.
+function TabIndexAtLayout({ onRead }: { onRead: (tabIndex: number) => void }) {
+  useLayoutEffect(() => {
+    onRead(slot("dialog-body").tabIndex);
+  }, [onRead]);
+  return null;
+}
+
+describe("cuerpo desplazable sin enfocables (hallazgo K4)", () => {
+  it("entra en el orden de Tab y recibe el foco inicial", async () => {
+    await open(dialog(overflowing, ...orderLines));
+
+    expect(slot("dialog-body").tabIndex).toBe(0);
+    expect(document.activeElement).toBe(slot("dialog-body"));
+  });
+
+  it("la trampa lo cuenta: Mayus+Tab desde el cuerpo va a la X y Tab desde la X vuelve al cuerpo", async () => {
+    await open(dialog(overflowing, ...orderLines));
+
+    await pressTab({ shiftKey: true });
+    expect(document.activeElement).toBe(closeX());
+
+    await pressTab();
+    expect(document.activeElement).toBe(slot("dialog-body"));
+  });
+
+  it("el tabIndex ya esta al terminar la fase de layout del montaje, antes del foco inicial de Radix", async () => {
+    const read = vi.fn();
+
+    await open(
+      h(
+        Dialog,
+        { open: true },
+        h(
+          DialogContent,
+          { "aria-describedby": undefined },
+          h(DialogHeader, null, h(DialogTitle, null, "Detalle del pedido")),
+          h(DialogBody, { ...overflowing }, ...orderLines),
+          h(TabIndexAtLayout, { onRead: read }),
+        ),
+      ),
+    );
+
+    expect(read).toHaveBeenNthCalledWith(1, 0);
+  });
+
+  it("no cuentan como enfocables un boton deshabilitado, uno oculto, uno sin visibilidad, uno sin mostrar ni un input oculto", async () => {
+    // El boton con hidden lleva un display que lo mostraria: la hoja base ya le
+    // pone display none, y asi la prueba fija la regla de Radix, que lo salta
+    // por hidden. Al input oculto ningun estilo lo muestra (display none
+    // !important en la hoja base del estandar HTML).
+    await open(
+      dialog(
+        overflowing,
+        ...orderLines,
+        h(Button, { key: "deshabilitado", type: "button", disabled: true }, "Deshabilitado"),
+        h(Button, { key: "oculto", type: "button", hidden: true, style: { display: "inline-flex" } }, "Oculto"),
+        h(Button, { key: "sin-visibilidad", type: "button", style: { visibility: "hidden" } }, "Sin visibilidad"),
+        h("div", { key: "sin-mostrar", style: { display: "none" } }, h(Button, { type: "button" }, "Sin mostrar")),
+        h("input", { key: "id", type: "hidden", name: "id", defaultValue: "PED00000099" }),
+      ),
+    );
+
+    expect(slot("dialog-body").tabIndex).toBe(0);
+    expect(document.activeElement).toBe(slot("dialog-body"));
+  });
+
+  it("sale del orden de Tab cuando aparece un campo y vuelve cuando se va", async () => {
+    await open(dialog(overflowing, ...orderLines));
+    expect(slot("dialog-body").tabIndex).toBe(0);
+
+    await open(dialog(overflowing, ...orderLines, h(Input, { key: "nota", id: "nota", name: "nota" })));
+    expect(slot("dialog-body").hasAttribute("tabindex")).toBe(false);
+
+    await open(dialog(overflowing, ...orderLines));
+    expect(slot("dialog-body").tabIndex).toBe(0);
+  });
+
+  it("entra en el orden de Tab cuando su unico campo se deshabilita", async () => {
+    const field = (disabled: boolean) => h(Input, { key: "nota", id: "nota", name: "nota", disabled });
+
+    await open(dialog(overflowing, ...orderLines, field(false)));
+    expect(slot("dialog-body").hasAttribute("tabindex")).toBe(false);
+
+    await open(dialog(overflowing, ...orderLines, field(true)));
+    expect(slot("dialog-body").tabIndex).toBe(0);
+  });
+
+  it("entra en el orden de Tab cuando un cambio de tamano lo hace desbordar", async () => {
+    await open(dialog(fitting, ...orderLines));
+    const body = slot("dialog-body");
+    expect(body.hasAttribute("tabindex")).toBe(false);
+
+    // Un atributo data-test-* no lo ve el observador de mutaciones: solo el de
+    // tamano puede descubrir el desborde.
+    body.setAttribute("data-test-client-height", "100");
+    await act(async () => resizeAll());
+
+    expect(body.tabIndex).toBe(0);
+  });
+
+  it("en Sheet funciona igual: el cuerpo del panel recibe el foco inicial", async () => {
+    await open(
+      h(
+        Sheet,
+        { open: true },
+        h(
+          SheetContent,
+          { "aria-describedby": undefined },
+          h(SheetHeader, null, h(SheetTitle, null, "Historial del cliente")),
+          h(SheetBody, { ...overflowing }, ...orderLines),
+        ),
+      ),
+    );
+
+    expect(slot("dialog-body").tabIndex).toBe(0);
+    expect(document.activeElement).toBe(slot("dialog-body"));
   });
 });
