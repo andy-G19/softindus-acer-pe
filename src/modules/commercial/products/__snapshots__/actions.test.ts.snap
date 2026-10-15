@@ -1,0 +1,894 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale del nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_producto",
+      "prefijo": "CPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "estado": true,
+        "id_categoria_producto": "CPR00000010",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+    },
+    "prisma": "categoria_producto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoría creada: Herramientas agrícolas",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_producto",
+      "id_registro_afectado": "CPR00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/product-categories",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/products",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductCategoryAction > ADMIN crea una categoria y el slug sale del nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createProductCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createProductCategoryAction > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Soldadura",
+          },
+          {
+            "slug": "soldadura",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_producto",
+      "prefijo": "CPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_categoria_producto": "CPR00000010",
+        "nombre": "Soldadura",
+        "slug": "soldadura",
+      },
+    },
+    "prisma": "categoria_producto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoría creada: Soldadura",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_producto",
+      "id_registro_afectado": "CPR00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/product-categories",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/products",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createProductCategoryAction > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`createProductCategoryAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_producto",
+      "prefijo": "CPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "estado": true,
+        "id_categoria_producto": "CPR00000010",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+    },
+    "prisma": "categoria_producto.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createProductCategoryAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el registro. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`createProductCategoryAction > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createProductCategoryAction > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre de la categoría es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createProductCategoryAction > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+]
+`;
+
+exports[`createProductCategoryAction > un nombre o slug repetido devuelve el error sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoría de producto con ese nombre.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe una categoría de producto con ese nombre.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createProductCategoryAction > un nombre sin letras ni numeros no da slug > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createProductCategoryAction > un nombre sin letras ni numeros no da slug > resultado 1`] = `
+{
+  "estado": {
+    "error": "El nombre de la categoría debe incluir letras o números.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre de la categoría debe incluir letras o números.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_producto",
+      "prefijo": "CPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "estado": true,
+        "id_categoria_producto": "CPR00000010",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+    },
+    "prisma": "categoria_producto.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`slug\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) revierte y marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoría de producto con ese nombre.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe una categoría de producto con ese nombre.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_producto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoría actualizada: Herramientas agrícolas",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_producto",
+      "id_registro_afectado": "CPR00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/product-categories",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/products",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > ADMIN actualiza una categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateProductCategoryAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_producto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoría actualizada: Herramientas agrícolas",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_producto",
+      "id_registro_afectado": "CPR00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/product-categories",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/products",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > el nombre o slug es de otra categoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > el nombre o slug es de otra categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra categoría de producto con ese nombre.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otra categoría de producto con ese nombre.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > la categoria no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > la categoria no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_producto.update",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el registro. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > sin id de categoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > sin id de categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > un nombre demasiado corto devuelve el error despues de comprobar la categoria > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > un nombre demasiado corto devuelve el error despues de comprobar la categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre de la categoría es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > un nombre sin letras ni numeros no da slug > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > un nombre sin letras ni numeros no da slug > resultado 1`] = `
+{
+  "estado": {
+    "error": "El nombre de la categoría debe incluir letras o números.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre de la categoría debe incluir letras o números.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateProductCategoryAction > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_producto": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Herramientas agrícolas",
+          },
+          {
+            "slug": "herramientas-agricolas",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Uso interno de la categoría.",
+        "nombre": "Herramientas agrícolas",
+        "slug": "herramientas-agricolas",
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_producto.update",
+  },
+]
+`;
+
+exports[`updateProductCategoryAction > una carrera por el slug (P2002 al actualizar) marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra categoría de producto con ese nombre.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otra categoría de producto con ese nombre.",
+      ],
+    },
+  },
+}
+`;
