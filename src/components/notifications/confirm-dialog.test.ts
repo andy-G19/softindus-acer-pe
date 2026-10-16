@@ -167,4 +167,31 @@ describe("ConfirmDialog controlada", () => {
     // @ts-expect-error: sin disparador ni open nadie la abre
     expect(() => h(ConfirmDialog, withoutTrigger)).not.toThrow();
   });
+
+  // Entrega 10: ConfirmActionButton la deja abierta al confirmar y muestra
+  // dentro el error de la accion.
+  it("con error muestra el mensaje en una alerta, despues de la consecuencia y antes de los botones", () => {
+    radixDouble.open = false;
+    const html = renderToStaticMarkup(
+      h(ConfirmDialog, {
+        ...withoutTrigger,
+        open: true,
+        onOpenChange: () => {},
+        closeOnConfirm: false,
+        error: "La categoría ya estaba inactiva.",
+      }),
+    );
+    const alert = html.indexOf('role="alert"');
+
+    expect(alert).toBeGreaterThan(html.indexOf("ya no admitira avances"));
+    expect(alert).toBeLessThan(html.indexOf(">Cancelar</button>"));
+    expect(html).toContain("La categoría ya estaba inactiva.");
+    expect(renderControlled(true)).not.toContain('role="alert"');
+  });
+
+  it("closeOnConfirm solo existe en el modo controlado", () => {
+    // Comprobacion de tipos: con disparador nadie podria cerrarla desde fuera.
+    // @ts-expect-error: closeOnConfirm exige open y onOpenChange
+    expect(() => h(ConfirmDialog, { ...base, closeOnConfirm: false })).not.toThrow();
+  });
 });

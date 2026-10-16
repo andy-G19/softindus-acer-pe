@@ -1366,7 +1366,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>«Activar» e «Inactivar» se muestran con el aspecto de RowToggleStatusButton, pero aquí no envían nada: ese componente exige una acción del servidor y la galería no ejecuta ninguna.</p>
+<p>«Inactivar» usa ConfirmActionButton: pide confirmar con el nombre del registro y, mientras la acción espera, la confirmación no se cancela ni se cierra con Esc; al terminar da un solo aviso, se cierra y el foco vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el mensaje queda dentro de la confirmación. «Activar» no pide confirmar. Aquí la acción solo espera en el navegador: no se guarda nada.</p>
 <figure>
 <figcaption>Tabla cargando (TableLoadingRows)</figcaption>
 <div>
