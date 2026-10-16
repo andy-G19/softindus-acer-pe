@@ -1,0 +1,1955 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`categorias de material > activar e inactivar > ADMIN activa un registro inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_material": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Categoría de material activada: Distribuidor",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `"redirect:/dashboard/inventory/material-categories?toast=material-category-activated"`;
+
+exports[`categorias de material > activar e inactivar > ADMIN inactiva un registro activo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_material": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Categoría de material inactivada: Distribuidor",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `"redirect:/dashboard/inventory/material-categories?toast=material-category-deactivated"`;
+
+exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`categorias de material > activar e inactivar > sin id vuelve a la lista sin tocar nada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
+
+exports[`categorias de material > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_categoria_material": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+]
+`;
+
+exports[`categorias de material > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
+
+exports[`categorias de material > alta > ADMIN crea un registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_material",
+      "prefijo": "CMA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_categoria_material": "CMA00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "categoria_material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoría de material creada: Distribuidor mayorista",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > alta > ADMIN crea un registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`categorias de material > alta > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`categorias de material > alta > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_material",
+      "prefijo": "CMA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_categoria_material": "CMA00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "categoria_material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoría de material creada: Distribuidor mayorista",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > alta > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`categorias de material > alta > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_material",
+      "prefijo": "CMA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_categoria_material": "CMA00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "categoria_material.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`categorias de material > alta > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la categoría. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`categorias de material > alta > sin slug devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > alta > sin slug devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "slug": [
+        "El slug es obligatorio.",
+        "El slug solo puede usar minúsculas, números y guiones bajos.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > alta > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+]
+`;
+
+exports[`categorias de material > alta > un nombre o slug repetido devuelve el error sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoría de material con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe una categoría de material con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > alta > un slug con mayusculas o guiones devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > alta > un slug con mayusculas o guiones devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "slug": [
+        "El slug solo puede usar minúsculas, números y guiones bajos.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_material",
+      "prefijo": "CMA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_categoria_material": "CMA00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "categoria_material.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`slug\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`categorias de material > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoría de material con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe una categoría de material con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > edicion > ADMIN actualiza un registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoría de material actualizada: Distribuidor mayorista",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > edicion > ADMIN actualiza un registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`categorias de material > edicion > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoría de material actualizada: Distribuidor mayorista",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_material",
+      "id_registro_afectado": "CMA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/material-categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`categorias de material > edicion > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`categorias de material > edicion > el nombre o slug es de otro registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+]
+`;
+
+exports[`categorias de material > edicion > el nombre o slug es de otro registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra categoría de material con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otra categoría de material con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+]
+`;
+
+exports[`categorias de material > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la categoría. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`categorias de material > edicion > sin id > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > edicion > sin id > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+  },
+}
+`;
+
+exports[`categorias de material > edicion > un nombre demasiado corto devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`categorias de material > edicion > un nombre demasiado corto devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoría.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`categorias de material > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_material": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.update",
+  },
+]
+`;
+
+exports[`categorias de material > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra categoría de material con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otra categoría de material con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_tipo_proveedor": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Tipo de proveedor activado: Distribuidor",
+      "enTransaccion": false,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types?toast=supplier-type-activated"`;
+
+exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro activo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_tipo_proveedor": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Tipo de proveedor inactivado: Distribuidor",
+      "enTransaccion": false,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types?toast=supplier-type-deactivated"`;
+
+exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin tocar nada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
+
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_tipo_proveedor": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
+
+exports[`tipos de proveedor > alta > ADMIN crea un registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tipo_proveedor_catalogo",
+      "prefijo": "TPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_tipo_proveedor": "TPR00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tipo de proveedor creado: Distribuidor mayorista",
+      "enTransaccion": true,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > ADMIN crea un registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tipo_proveedor_catalogo",
+      "prefijo": "TPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_tipo_proveedor": "TPR00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Tipo de proveedor creado: Distribuidor mayorista",
+      "enTransaccion": true,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tipo_proveedor_catalogo",
+      "prefijo": "TPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_tipo_proveedor": "TPR00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el tipo de proveedor. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > sin slug devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > sin slug devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del tipo de proveedor.",
+    "fieldErrors": {
+      "slug": [
+        "El slug es obligatorio.",
+        "El slug solo puede usar minúsculas, números y guiones bajos.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del tipo de proveedor.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > un nombre o slug repetido devuelve el error sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un tipo de proveedor con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe un tipo de proveedor con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > un slug con mayusculas o guiones devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > un slug con mayusculas o guiones devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del tipo de proveedor.",
+    "fieldErrors": {
+      "slug": [
+        "El slug solo puede usar minúsculas, números y guiones bajos.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "tipo_proveedor_catalogo",
+      "prefijo": "TPR",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "estado": true,
+        "id_tipo_proveedor": "TPR00000010",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`slug\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`tipos de proveedor > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un tipo de proveedor con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe un tipo de proveedor con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Tipo de proveedor actualizado: Distribuidor mayorista",
+      "enTransaccion": false,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`tipos de proveedor > edicion > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Tipo de proveedor actualizado: Distribuidor mayorista",
+      "enTransaccion": false,
+      "entidad_afectada": "tipo_proveedor_catalogo",
+      "id_registro_afectado": "TPR00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-types",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "",
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > el nombre o slug es de otro registro > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > el nombre o slug es de otro registro > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro tipo de proveedor con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otro tipo de proveedor con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el tipo de proveedor. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > sin id > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > sin id > resultado 1`] = `
+{
+  "estado": {
+    "error": "El tipo de proveedor no existe.",
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > un nombre demasiado corto devuelve el error del campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > un nombre demasiado corto devuelve el error del campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del tipo de proveedor.",
+    "fieldErrors": {
+      "nombre": [
+        "El nombre es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`tipos de proveedor > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "nombre": "Distribuidor mayorista",
+          },
+          {
+            "slug": "distribuidor_mayorista",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Proveedores que venden por volumen.",
+        "nombre": "Distribuidor mayorista",
+        "slug": "distribuidor_mayorista",
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.update",
+  },
+]
+`;
+
+exports[`tipos de proveedor > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro tipo de proveedor con ese nombre o slug.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otro tipo de proveedor con ese nombre o slug.",
+      ],
+    },
+  },
+}
+`;
