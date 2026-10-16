@@ -171,6 +171,7 @@ export default async function ExpenseCategoriesPage({
                           hiddenFieldName="id_categoria_gasto"
                           hiddenFieldValue={category.id_categoria_gasto}
                           isActive={category.estado}
+                          sendsRequestedStatus
                         />
                       </div>
                     </TableCell>

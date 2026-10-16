@@ -264,14 +264,97 @@ defineCases("updateExpenseCategoryAction", (formData) => updateExpenseCategoryAc
   },
 ]);
 
+// Decision A de la 10.1: activar e inactivar envian el estado pedido y el
+// servidor solo lo fija si la categoria tiene el contrario, comparando y
+// escribiendo en una sola sentencia (updateMany con el estado actual en el
+// where). count 0 es lo que responde la base cuando la categoria no existe o
+// ya tiene el estado pedido: el doble lo simula.
+describe("toggleExpenseCategoryStatusAction: estado pedido", () => {
+  const run = (formData: FormData) => toggleExpenseCategoryStatusAction(formData);
+
+  function writesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
+      (call) => call.prisma === "categoria_gasto.update" || call.prisma === "categoria_gasto.updateMany",
+    );
+  }
+
+  function auditsOf(calls: unknown[]) {
+    return (calls as Array<{ effect?: string }>).filter((call) => call.effect === "registerAuditLog");
+  }
+
+  it("inactivar compara y fija el estado en una sola escritura", async () => {
+    const { calls, outcome } = await runAction(run, {
+      name: "",
+      form: { id_categoria_gasto: CATEGORIA, estado: "false" },
+      data: lookup({ active: true }),
+    });
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "categoria_gasto.updateMany",
+        args: { where: { id_categoria_gasto: CATEGORIA, estado: true }, data: { estado: false } },
+      }),
+    ]);
+    expect(auditsOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("-deactivated");
+  });
+
+  it("pedir inactivar una categoria que otro ya inactivo no la activa ni escribe la bitacora", async () => {
+    const { calls, outcome } = await runAction(run, {
+      name: "",
+      form: { id_categoria_gasto: CATEGORIA, estado: "false" },
+      data: { ...lookup({ active: false }), "categoria_gasto.updateMany": () => ({ count: 0 }) },
+    });
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("pedir activar una categoria que ya esta activa no la inactiva ni escribe la bitacora", async () => {
+    const { calls, outcome } = await runAction(run, {
+      name: "",
+      form: { id_categoria_gasto: CATEGORIA, estado: "true" },
+      data: { ...lookup({ active: true }), "categoria_gasto.updateMany": () => ({ count: 0 }) },
+    });
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+    const forms: FormFields[] = [{ id_categoria_gasto: CATEGORIA }, { id_categoria_gasto: CATEGORIA, estado: "si" }];
+
+    for (const form of forms) {
+      const { calls } = await runAction(run, { name: "", form, data: lookup({ active: true }) });
+
+      expect(writesOf(calls)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+    }
+  });
+});
+
 defineCases("toggleExpenseCategoryStatusAction", (formData) => toggleExpenseCategoryStatusAction(formData), [
-  { name: "ADMIN inactiva una categoria activa", form: { id_categoria_gasto: CATEGORIA }, data: lookup({ active: true }) },
-  { name: "ADMIN activa una categoria inactiva", form: { id_categoria_gasto: CATEGORIA }, data: lookup({ active: false }) },
-  { name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma", form: { id_categoria_gasto: CATEGORIA }, role: "WORKSHOP_MASTER" },
-  { name: "sin id vuelve a la lista sin tocar nada", form: {} },
   {
-    name: "una categoria inexistente vuelve a la lista sin escribir",
-    form: { id_categoria_gasto: CATEGORIA },
-    data: lookup({ exists: false }),
+    name: "ADMIN inactiva una categoria activa",
+    form: { id_categoria_gasto: CATEGORIA, estado: "false" },
+    data: lookup({ active: true }),
+  },
+  {
+    name: "ADMIN activa una categoria inactiva",
+    form: { id_categoria_gasto: CATEGORIA, estado: "true" },
+    data: lookup({ active: false }),
+  },
+  {
+    name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma",
+    form: { id_categoria_gasto: CATEGORIA, estado: "false" },
+    role: "WORKSHOP_MASTER",
+  },
+  { name: "sin id vuelve a la lista sin tocar nada", form: { estado: "false" } },
+  {
+    name: "una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora",
+    form: { id_categoria_gasto: CATEGORIA, estado: "false" },
+    data: { ...lookup({ exists: false }), "categoria_gasto.updateMany": () => ({ count: 0 }) },
   },
 ]);

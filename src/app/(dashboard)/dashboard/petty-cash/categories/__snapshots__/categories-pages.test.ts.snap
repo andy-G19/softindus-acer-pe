@@ -199,6 +199,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -216,6 +217,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -426,6 +428,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -443,6 +446,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -647,6 +651,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -664,6 +669,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>

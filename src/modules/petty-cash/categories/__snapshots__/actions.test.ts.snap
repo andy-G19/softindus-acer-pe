@@ -528,8 +528,20 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_categoria": true,
       },
       "where": {
@@ -537,18 +549,6 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva
       },
     },
     "prisma": "categoria_gasto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_categoria_gasto": "CGA00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "categoria_gasto.update",
   },
   {
     "args": {
@@ -584,8 +584,20 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_categoria": true,
       },
       "where": {
@@ -593,18 +605,6 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa
       },
     },
     "prisma": "categoria_gasto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_categoria_gasto": "CGA00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "categoria_gasto.update",
   },
   {
     "args": {
@@ -656,7 +656,7 @@ exports[`toggleExpenseCategoryStatusAction > sin id vuelve a la lista sin tocar 
 
 exports[`toggleExpenseCategoryStatusAction > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/petty-cash/categories"`;
 
-exports[`toggleExpenseCategoryStatusAction > una categoria inexistente vuelve a la lista sin escribir > llamadas 1`] = `
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -666,20 +666,21 @@ exports[`toggleExpenseCategoryStatusAction > una categoria inexistente vuelve a 
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "nombre_categoria": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_categoria_gasto": "CGA00000004",
       },
     },
-    "prisma": "categoria_gasto.findUnique",
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
   },
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > una categoria inexistente vuelve a la lista sin escribir > resultado 1`] = `"redirect:/dashboard/petty-cash/categories"`;
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/petty-cash/categories"`;
 
 exports[`updateExpenseCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
 [

@@ -9,6 +9,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { expenseCategorySchema } from "@/schemas/petty-cash/expense-category.schema";
 
 export type ExpenseCategoryFormState = ActionErrorState;
@@ -200,8 +201,27 @@ export async function updateExpenseCategoryAction(
 export async function toggleExpenseCategoryStatusAction(formData: FormData) {
   const session = await requireAdmin();
   const categoryId = formData.get("id_categoria_gasto")?.toString().trim();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!categoryId) {
+  if (!categoryId || nextStatus === null) {
+    redirect(EXPENSE_CATEGORIES_PATH);
+  }
+
+  // Fija el estado pedido solo si la categoria tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.categoria_gasto.updateMany({
+    where: {
+      id_categoria_gasto: categoryId,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(EXPENSE_CATEGORIES_PATH);
   }
 
@@ -211,22 +231,6 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
     },
     select: {
       nombre_categoria: true,
-      estado: true,
-    },
-  });
-
-  if (!category) {
-    redirect(EXPENSE_CATEGORIES_PATH);
-  }
-
-  const nextStatus = !category.estado;
-
-  await prisma.categoria_gasto.update({
-    where: {
-      id_categoria_gasto: categoryId,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
@@ -237,7 +241,7 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Categoria de gasto ${
       nextStatus ? "activada" : "inactivada"
-    }: ${category.nombre_categoria}`,
+    }: ${category?.nombre_categoria ?? categoryId}`,
   });
 
   revalidatePath("/dashboard/petty-cash");
