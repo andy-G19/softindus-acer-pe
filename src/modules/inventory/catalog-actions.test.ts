@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
-import type { InventoryCatalogFormState } from "@/modules/inventory/material-categories/actions";
+import type { InventoryCatalogFormState } from "@/modules/inventory/catalog-form-state";
 import {
   createMaterialCategoryAction,
   toggleMaterialCategoryStatusAction,
@@ -29,17 +29,23 @@ import {
 // y su final, el correlativo, la bitacora (y si va dentro de la transaccion),
 // las revalidaciones, la redireccion y el estado que devuelve al formulario.
 //
-// Hoy autorizan con requireRole(["ADMIN"]): sin permiso redirigen (el doble
-// lanza AuthRejected) en lugar de devolver un error. La edicion y el cambio de
+// Desde la ventana modal (entrega 10), el alta y la edicion autorizan con
+// getAuthorizedSession y devuelven el resultado (FormActionState): sin permiso
+// responden con un error en lugar de redirigir. Activar e inactivar siguen con
+// requireRole("ADMIN") y redirigen con ?toast=. La edicion y el cambio de
 // estado escriben con el cliente global, sin transaccion, y registran la
 // bitacora despues: el doble lo permite (writesOutsideTransaction) y lo marca.
-// El cambio de estado lee el registro y escribe el estado contrario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -99,7 +105,7 @@ type FormAction = (prevState: InventoryCatalogFormState, formData: FormData) => 
 type ToggleAction = (formData: FormData) => Promise<unknown>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState: InventoryCatalogFormState = { error: "" };
+const initialState: InventoryCatalogFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();

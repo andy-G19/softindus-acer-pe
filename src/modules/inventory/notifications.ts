@@ -28,5 +28,10 @@ export const inventoryNotifications = {
   "supplier-type-deactivated": { type: "warning", message: "Tipo de proveedor desactivado" },
   "material-category-activated": { type: "success", message: "Categoría de material activada" },
   "material-category-deactivated": { type: "warning", message: "Categoría de material desactivada" },
+  // Ventanas modales de los catalogos (entrega 10): los textos que ya daba el gestor.
+  "supplier-type-created": { type: "success", message: "Registro creado correctamente" },
+  "supplier-type-updated": { type: "success", message: "Registro actualizado correctamente" },
+  "material-category-created": { type: "success", message: "Registro creado correctamente" },
+  "material-category-updated": { type: "success", message: "Registro actualizado correctamente" },
   "stock-alert-attended": { type: "success", message: "Alerta de stock atendida" },
 } satisfies NotificationCatalog;

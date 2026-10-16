@@ -8,5 +8,9 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx [successNotification] -> client-created",
   "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [successNotification] -> product-category-created",
   "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [updateNotification] -> product-category-updated",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [successNotification] -> material-category-created",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [updateNotification] -> material-category-updated",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [successNotification] -> supplier-type-created",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [updateNotification] -> supplier-type-updated",
 ]
 `;

@@ -175,7 +175,7 @@ exports[`categorias de material > activar e inactivar > un registro inexistente 
 exports[`categorias de material > alta > ADMIN crea un registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -254,7 +254,16 @@ exports[`categorias de material > alta > ADMIN crea un registro > llamadas 1`] =
 exports[`categorias de material > alta > ADMIN crea un registro > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "CMA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -262,7 +271,7 @@ exports[`categorias de material > alta > ADMIN crea un registro > resultado 1`] 
 exports[`categorias de material > alta > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -270,12 +279,26 @@ exports[`categorias de material > alta > SELLER es rechazado antes de tocar Pris
 ]
 `;
 
-exports[`categorias de material > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`categorias de material > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -283,12 +306,26 @@ exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de t
 ]
 `;
 
-exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`categorias de material > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > alta > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -367,7 +404,16 @@ exports[`categorias de material > alta > la descripcion vacia o con espacios se 
 exports[`categorias de material > alta > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "CMA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "   ",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -375,7 +421,7 @@ exports[`categorias de material > alta > la descripcion vacia o con espacios se 
 exports[`categorias de material > alta > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -433,6 +479,13 @@ exports[`categorias de material > alta > otro fallo al crear revierte con el men
   "estado": {
     "error": "No se pudo guardar la categoría. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -440,7 +493,7 @@ exports[`categorias de material > alta > otro fallo al crear revierte con el men
 exports[`categorias de material > alta > sin slug devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -458,6 +511,13 @@ exports[`categorias de material > alta > sin slug devuelve el error del campo > 
         "El slug solo puede usar minúsculas, números y guiones bajos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "",
+    },
   },
 }
 `;
@@ -465,7 +525,7 @@ exports[`categorias de material > alta > sin slug devuelve el error del campo > 
 exports[`categorias de material > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -482,6 +542,13 @@ exports[`categorias de material > alta > un nombre demasiado corto devuelve el e
         "El nombre es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "A",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -489,7 +556,7 @@ exports[`categorias de material > alta > un nombre demasiado corto devuelve el e
 exports[`categorias de material > alta > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -524,6 +591,13 @@ exports[`categorias de material > alta > un nombre o slug repetido devuelve el e
         "Ya existe una categoría de material con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -531,7 +605,7 @@ exports[`categorias de material > alta > un nombre o slug repetido devuelve el e
 exports[`categorias de material > alta > un slug con mayusculas o guiones devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -548,6 +622,13 @@ exports[`categorias de material > alta > un slug con mayusculas o guiones devuel
         "El slug solo puede usar minúsculas, números y guiones bajos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "Distribuidor-Mayorista",
+    },
   },
 }
 `;
@@ -555,7 +636,7 @@ exports[`categorias de material > alta > un slug con mayusculas o guiones devuel
 exports[`categorias de material > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -617,6 +698,13 @@ exports[`categorias de material > alta > una carrera por el slug (P2002 al crear
         "Ya existe una categoría de material con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -624,7 +712,7 @@ exports[`categorias de material > alta > una carrera por el slug (P2002 al crear
 exports[`categorias de material > edicion > ADMIN actualiza un registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -690,7 +778,16 @@ exports[`categorias de material > edicion > ADMIN actualiza un registro > llamad
 exports[`categorias de material > edicion > ADMIN actualiza un registro > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "CMA00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -698,7 +795,7 @@ exports[`categorias de material > edicion > ADMIN actualiza un registro > result
 exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -706,12 +803,26 @@ exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes d
 ]
 `;
 
-exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`categorias de material > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > edicion > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -777,7 +888,16 @@ exports[`categorias de material > edicion > conservar su propio nombre no es un 
 exports[`categorias de material > edicion > conservar su propio nombre no es un duplicado > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "CMA00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -785,7 +905,7 @@ exports[`categorias de material > edicion > conservar su propio nombre no es un 
 exports[`categorias de material > edicion > el nombre o slug es de otro registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -820,6 +940,13 @@ exports[`categorias de material > edicion > el nombre o slug es de otro registro
         "Ya existe otra categoría de material con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -827,7 +954,7 @@ exports[`categorias de material > edicion > el nombre o slug es de otro registro
 exports[`categorias de material > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -872,6 +999,13 @@ exports[`categorias de material > edicion > otro fallo al actualizar (tambien un
   "estado": {
     "error": "No se pudo guardar la categoría. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -879,7 +1013,7 @@ exports[`categorias de material > edicion > otro fallo al actualizar (tambien un
 exports[`categorias de material > edicion > sin id > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -891,6 +1025,14 @@ exports[`categorias de material > edicion > sin id > resultado 1`] = `
 {
   "estado": {
     "error": "La categoría no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -898,7 +1040,7 @@ exports[`categorias de material > edicion > sin id > resultado 1`] = `
 exports[`categorias de material > edicion > un nombre demasiado corto devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -915,6 +1057,13 @@ exports[`categorias de material > edicion > un nombre demasiado corto devuelve e
         "El nombre es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "A",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -922,7 +1071,7 @@ exports[`categorias de material > edicion > un nombre demasiado corto devuelve e
 exports[`categorias de material > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -970,6 +1119,13 @@ exports[`categorias de material > edicion > una carrera por el slug (P2002 al ac
       "nombre": [
         "Ya existe otra categoría de material con ese nombre o slug.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
     },
   },
 }
@@ -1150,7 +1306,7 @@ exports[`tipos de proveedor > activar e inactivar > un registro inexistente no c
 exports[`tipos de proveedor > alta > ADMIN crea un registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1229,7 +1385,16 @@ exports[`tipos de proveedor > alta > ADMIN crea un registro > llamadas 1`] = `
 exports[`tipos de proveedor > alta > ADMIN crea un registro > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "TPR00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1237,7 +1402,7 @@ exports[`tipos de proveedor > alta > ADMIN crea un registro > resultado 1`] = `
 exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1245,12 +1410,26 @@ exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma >
 ]
 `;
 
-exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`tipos de proveedor > alta > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar tipos de proveedor.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1258,12 +1437,26 @@ exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar
 ]
 `;
 
-exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`tipos de proveedor > alta > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar tipos de proveedor.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guarda como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1342,7 +1535,16 @@ exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guar
 exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guarda como null > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "TPR00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "   ",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1350,7 +1552,7 @@ exports[`tipos de proveedor > alta > la descripcion vacia o con espacios se guar
 exports[`tipos de proveedor > alta > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1408,6 +1610,13 @@ exports[`tipos de proveedor > alta > otro fallo al crear revierte con el mensaje
   "estado": {
     "error": "No se pudo guardar el tipo de proveedor. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1415,7 +1624,7 @@ exports[`tipos de proveedor > alta > otro fallo al crear revierte con el mensaje
 exports[`tipos de proveedor > alta > sin slug devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1433,6 +1642,13 @@ exports[`tipos de proveedor > alta > sin slug devuelve el error del campo > resu
         "El slug solo puede usar minúsculas, números y guiones bajos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "",
+    },
   },
 }
 `;
@@ -1440,7 +1656,7 @@ exports[`tipos de proveedor > alta > sin slug devuelve el error del campo > resu
 exports[`tipos de proveedor > alta > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1457,6 +1673,13 @@ exports[`tipos de proveedor > alta > un nombre demasiado corto devuelve el error
         "El nombre es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "A",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1464,7 +1687,7 @@ exports[`tipos de proveedor > alta > un nombre demasiado corto devuelve el error
 exports[`tipos de proveedor > alta > un nombre o slug repetido devuelve el error sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1499,6 +1722,13 @@ exports[`tipos de proveedor > alta > un nombre o slug repetido devuelve el error
         "Ya existe un tipo de proveedor con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1506,7 +1736,7 @@ exports[`tipos de proveedor > alta > un nombre o slug repetido devuelve el error
 exports[`tipos de proveedor > alta > un slug con mayusculas o guiones devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1523,6 +1753,13 @@ exports[`tipos de proveedor > alta > un slug con mayusculas o guiones devuelve e
         "El slug solo puede usar minúsculas, números y guiones bajos.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "Distribuidor-Mayorista",
+    },
   },
 }
 `;
@@ -1530,7 +1767,7 @@ exports[`tipos de proveedor > alta > un slug con mayusculas o guiones devuelve e
 exports[`tipos de proveedor > alta > una carrera por el slug (P2002 al crear) revierte y marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1592,6 +1829,13 @@ exports[`tipos de proveedor > alta > una carrera por el slug (P2002 al crear) re
         "Ya existe un tipo de proveedor con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1599,7 +1843,7 @@ exports[`tipos de proveedor > alta > una carrera por el slug (P2002 al crear) re
 exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1665,7 +1909,16 @@ exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > llamadas 1
 exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "TPR00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1673,7 +1926,7 @@ exports[`tipos de proveedor > edicion > ADMIN actualiza un registro > resultado 
 exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1681,12 +1934,26 @@ exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de to
 ]
 `;
 
-exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`tipos de proveedor > edicion > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar tipos de proveedor.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > edicion > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1752,7 +2019,16 @@ exports[`tipos de proveedor > edicion > conservar su propio nombre no es un dupl
 exports[`tipos de proveedor > edicion > conservar su propio nombre no es un duplicado > resultado 1`] = `
 {
   "estado": {
-    "error": "",
+    "data": {
+      "id": "TPR00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1760,7 +2036,7 @@ exports[`tipos de proveedor > edicion > conservar su propio nombre no es un dupl
 exports[`tipos de proveedor > edicion > el nombre o slug es de otro registro > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1795,6 +2071,13 @@ exports[`tipos de proveedor > edicion > el nombre o slug es de otro registro > r
         "Ya existe otro tipo de proveedor con ese nombre o slug.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1802,7 +2085,7 @@ exports[`tipos de proveedor > edicion > el nombre o slug es de otro registro > r
 exports[`tipos de proveedor > edicion > otro fallo al actualizar (tambien un id inexistente) da el mensaje generico sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1847,6 +2130,13 @@ exports[`tipos de proveedor > edicion > otro fallo al actualizar (tambien un id 
   "estado": {
     "error": "No se pudo guardar el tipo de proveedor. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1854,7 +2144,7 @@ exports[`tipos de proveedor > edicion > otro fallo al actualizar (tambien un id 
 exports[`tipos de proveedor > edicion > sin id > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1866,6 +2156,14 @@ exports[`tipos de proveedor > edicion > sin id > resultado 1`] = `
 {
   "estado": {
     "error": "El tipo de proveedor no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1873,7 +2171,7 @@ exports[`tipos de proveedor > edicion > sin id > resultado 1`] = `
 exports[`tipos de proveedor > edicion > un nombre demasiado corto devuelve el error del campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1890,6 +2188,13 @@ exports[`tipos de proveedor > edicion > un nombre demasiado corto devuelve el er
         "El nombre es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "A",
+      "slug": "distribuidor_mayorista",
+    },
   },
 }
 `;
@@ -1897,7 +2202,7 @@ exports[`tipos de proveedor > edicion > un nombre demasiado corto devuelve el er
 exports[`tipos de proveedor > edicion > una carrera por el slug (P2002 al actualizar) marca el nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1945,6 +2250,13 @@ exports[`tipos de proveedor > edicion > una carrera por el slug (P2002 al actual
       "nombre": [
         "Ya existe otro tipo de proveedor con ese nombre o slug.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Proveedores que venden por volumen.",
+      "nombre": "Distribuidor mayorista",
+      "slug": "distribuidor_mayorista",
     },
   },
 }

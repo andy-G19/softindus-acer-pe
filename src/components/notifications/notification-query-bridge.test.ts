@@ -82,7 +82,8 @@ function render(pathname: string, search = "") {
 
 // Las 124 claves del catalogo al empezar la entrega 7, en su orden, menos
 // work-order-materials-consumed, retirada en el grupo 3 de fixes, mas las dos
-// de la ventana modal de categorias de producto (entrega 9).
+// de la ventana modal de categorias de producto (entrega 9) y las cuatro de
+// las ventanas de los catalogos de inventario (entrega 10).
 const CLAVES = [
   "login-success",
 
@@ -104,7 +105,9 @@ const CLAVES = [
   "supplier-material-activated", "supplier-material-deactivated",
   "supplier-payment-registered", "supplier-type-activated",
   "supplier-type-deactivated", "material-category-activated",
-  "material-category-deactivated", "stock-alert-attended",
+  "material-category-deactivated", "supplier-type-created",
+  "supplier-type-updated", "material-category-created",
+  "material-category-updated", "stock-alert-attended",
 
   // Mantenimiento
   "spare-part-created", "spare-part-updated", "spare-part-activated",
@@ -160,9 +163,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 125 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(125);
-  expect(new Set(CLAVES).size).toBe(125);
+it("la lista fija tiene las 129 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(129);
+  expect(new Set(CLAVES).size).toBe(129);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:
