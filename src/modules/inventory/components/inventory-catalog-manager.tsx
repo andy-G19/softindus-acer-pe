@@ -225,6 +225,7 @@ function CatalogRow({
         {canManage ? (
           <form action={toggleAction}>
             <input type="hidden" name={idFieldName} value={item.id} />
+            <input type="hidden" name="estado" value={item.estado ? "false" : "true"} />
             <Button type="submit" variant="outline" size="sm">
               {item.estado ? "Inactivar" : "Activar"}
             </Button>

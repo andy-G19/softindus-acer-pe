@@ -10,9 +10,20 @@ exports[`categorias de material > activar e inactivar > ADMIN activa un registro
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
-        "id_categoria_material": true,
+      },
+      "where": {
+        "estado": false,
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre": true,
       },
       "where": {
@@ -20,18 +31,6 @@ exports[`categorias de material > activar e inactivar > ADMIN activa un registro
       },
     },
     "prisma": "categoria_material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_categoria_material": "CMA00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "categoria_material.update",
   },
   {
     "args": {
@@ -71,9 +70,20 @@ exports[`categorias de material > activar e inactivar > ADMIN inactiva un regist
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
-        "id_categoria_material": true,
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre": true,
       },
       "where": {
@@ -81,18 +91,6 @@ exports[`categorias de material > activar e inactivar > ADMIN inactiva un regist
       },
     },
     "prisma": "categoria_material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_categoria_material": "CMA00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "categoria_material.update",
   },
   {
     "args": {
@@ -148,7 +146,7 @@ exports[`categorias de material > activar e inactivar > sin id vuelve a la lista
 
 exports[`categorias de material > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
 
-exports[`categorias de material > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > llamadas 1`] = `
+exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -158,21 +156,21 @@ exports[`categorias de material > activar e inactivar > un registro inexistente 
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_categoria_material": true,
-        "nombre": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_categoria_material": "CMA00000004",
       },
     },
-    "prisma": "categoria_material.findUnique",
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_material.updateMany",
   },
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
+exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
 
 exports[`categorias de material > alta > ADMIN crea un registro > llamadas 1`] = `
 [
@@ -987,9 +985,20 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro ina
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
-        "id_tipo_proveedor": true,
+      },
+      "where": {
+        "estado": false,
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre": true,
       },
       "where": {
@@ -997,18 +1006,6 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro ina
       },
     },
     "prisma": "tipo_proveedor_catalogo.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_tipo_proveedor": "TPR00000003",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "tipo_proveedor_catalogo.update",
   },
   {
     "args": {
@@ -1048,9 +1045,20 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro a
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
-        "id_tipo_proveedor": true,
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre": true,
       },
       "where": {
@@ -1058,18 +1066,6 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro a
       },
     },
     "prisma": "tipo_proveedor_catalogo.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_tipo_proveedor": "TPR00000003",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "tipo_proveedor_catalogo.update",
   },
   {
     "args": {
@@ -1125,7 +1121,7 @@ exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin
 
 exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
 
-exports[`tipos de proveedor > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > llamadas 1`] = `
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1135,21 +1131,21 @@ exports[`tipos de proveedor > activar e inactivar > un registro inexistente vuel
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_tipo_proveedor": true,
-        "nombre": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_tipo_proveedor": "TPR00000003",
       },
     },
-    "prisma": "tipo_proveedor_catalogo.findUnique",
+    "fueraDeTransaccion": true,
+    "prisma": "tipo_proveedor_catalogo.updateMany",
   },
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > un registro inexistente vuelve a la lista sin escribir > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
 
 exports[`tipos de proveedor > alta > ADMIN crea un registro > llamadas 1`] = `
 [

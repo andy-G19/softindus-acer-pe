@@ -9,6 +9,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { inventoryCatalogSchema } from "@/schemas/inventory/catalog.schema";
 
 export type InventoryCatalogFormState = ActionErrorState;
@@ -223,8 +224,27 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
   const idCategoriaMaterial = formData
     .get("id_categoria_material")
     ?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idCategoriaMaterial) {
+  if (!idCategoriaMaterial || nextStatus === null) {
+    redirect(MATERIAL_CATEGORIES_PATH);
+  }
+
+  // Fija el estado pedido solo si el registro tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.categoria_material.updateMany({
+    where: {
+      id_categoria_material: idCategoriaMaterial,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(MATERIAL_CATEGORIES_PATH);
   }
 
@@ -233,35 +253,18 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
       id_categoria_material: idCategoriaMaterial,
     },
     select: {
-      id_categoria_material: true,
       nombre: true,
-      estado: true,
-    },
-  });
-
-  if (!category) {
-    redirect(MATERIAL_CATEGORIES_PATH);
-  }
-
-  const nextStatus = !category.estado;
-
-  await prisma.categoria_material.update({
-    where: {
-      id_categoria_material: category.id_categoria_material,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "categoria_material",
-    id_registro_afectado: category.id_categoria_material,
+    id_registro_afectado: idCategoriaMaterial,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Categoría de material ${
       nextStatus ? "activada" : "inactivada"
-    }: ${category.nombre}`,
+    }: ${category?.nombre ?? idCategoriaMaterial}`,
   });
 
   revalidatePath(INVENTORY_PATH);

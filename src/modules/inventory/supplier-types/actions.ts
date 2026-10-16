@@ -9,6 +9,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { inventoryCatalogSchema } from "@/schemas/inventory/catalog.schema";
 
 export type InventoryCatalogFormState = ActionErrorState;
@@ -213,8 +214,27 @@ export async function updateSupplierTypeAction(
 export async function toggleSupplierTypeStatusAction(formData: FormData) {
   const session = await requireAdmin();
   const idTipoProveedor = formData.get("id_tipo_proveedor")?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idTipoProveedor) {
+  if (!idTipoProveedor || nextStatus === null) {
+    redirect(SUPPLIER_TYPES_PATH);
+  }
+
+  // Fija el estado pedido solo si el registro tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.tipo_proveedor_catalogo.updateMany({
+    where: {
+      id_tipo_proveedor: idTipoProveedor,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(SUPPLIER_TYPES_PATH);
   }
 
@@ -223,35 +243,18 @@ export async function toggleSupplierTypeStatusAction(formData: FormData) {
       id_tipo_proveedor: idTipoProveedor,
     },
     select: {
-      id_tipo_proveedor: true,
       nombre: true,
-      estado: true,
-    },
-  });
-
-  if (!supplierType) {
-    redirect(SUPPLIER_TYPES_PATH);
-  }
-
-  const nextStatus = !supplierType.estado;
-
-  await prisma.tipo_proveedor_catalogo.update({
-    where: {
-      id_tipo_proveedor: supplierType.id_tipo_proveedor,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "tipo_proveedor_catalogo",
-    id_registro_afectado: supplierType.id_tipo_proveedor,
+    id_registro_afectado: idTipoProveedor,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Tipo de proveedor ${
       nextStatus ? "activado" : "inactivado"
-    }: ${supplierType.nombre}`,
+    }: ${supplierType?.nombre ?? idTipoProveedor}`,
   });
 
   revalidatePath(INVENTORY_PATH);

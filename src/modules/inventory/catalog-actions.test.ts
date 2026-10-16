@@ -282,12 +282,99 @@ for (const catalog of CATALOGS) {
       },
     ]);
 
+    // Decision A de la 10.1: activar e inactivar envian el estado pedido y el
+    // servidor solo lo fija si el registro tiene el contrario, comparando y
+    // escribiendo en una sola sentencia (updateMany con el estado actual en el
+    // where). count 0 es lo que responde la base cuando el registro no existe
+    // o ya tiene el estado pedido: el doble lo simula.
+    describe("estado pedido", () => {
+      function writesOf(calls: unknown[]) {
+        return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
+          (call) => call.prisma === `${model}.update` || call.prisma === `${model}.updateMany`,
+        );
+      }
+
+      function auditsOf(calls: unknown[]) {
+        return (calls as Array<{ effect?: string }>).filter((call) => call.effect === "registerAuditLog");
+      }
+
+      it("inactivar compara y fija el estado en una sola escritura", async () => {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+          name: "",
+          form: { [idField]: catalog.id, estado: "false" },
+          data: lookup({ active: true }),
+        });
+
+        expect(writesOf(calls)).toEqual([
+          expect.objectContaining({
+            prisma: `${model}.updateMany`,
+            args: { where: { [idField]: catalog.id, estado: true }, data: { estado: false } },
+          }),
+        ]);
+        expect(auditsOf(calls)).toHaveLength(1);
+        expect(String(outcome)).toContain("-deactivated");
+      });
+
+      it("pedir inactivar un registro que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+          name: "",
+          form: { [idField]: catalog.id, estado: "false" },
+          data: { ...lookup({ active: false }), [`${model}.updateMany`]: () => ({ count: 0 }) },
+        });
+
+        expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+        expect(auditsOf(calls)).toEqual([]);
+        expect(String(outcome)).not.toContain("toast=");
+      });
+
+      it("pedir activar un registro que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+          name: "",
+          form: { [idField]: catalog.id, estado: "true" },
+          data: { ...lookup({ active: true }), [`${model}.updateMany`]: () => ({ count: 0 }) },
+        });
+
+        expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+        expect(auditsOf(calls)).toEqual([]);
+        expect(String(outcome)).not.toContain("toast=");
+      });
+
+      it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+        for (const form of [{ [idField]: catalog.id }, { [idField]: catalog.id, estado: "si" }]) {
+          const { calls } = await runAction((formData) => catalog.toggle(formData), {
+            name: "",
+            form,
+            data: lookup({ active: true }),
+          });
+
+          expect(writesOf(calls)).toEqual([]);
+          expect(auditsOf(calls)).toEqual([]);
+        }
+      });
+    });
+
     defineCases("activar e inactivar", (formData) => catalog.toggle(formData), [
-      { name: "ADMIN inactiva un registro activo", form: { [idField]: catalog.id }, data: lookup({ active: true }) },
-      { name: "ADMIN activa un registro inactivo", form: { [idField]: catalog.id }, data: lookup({ active: false }) },
-      { name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma", form: { [idField]: catalog.id }, role: "WORKSHOP_MASTER" },
-      { name: "sin id vuelve a la lista sin tocar nada", form: {} },
-      { name: "un registro inexistente vuelve a la lista sin escribir", form: { [idField]: catalog.id }, data: lookup({ exists: false }) },
+      {
+        name: "ADMIN inactiva un registro activo",
+        form: { [idField]: catalog.id, estado: "false" },
+        data: lookup({ active: true }),
+      },
+      {
+        name: "ADMIN activa un registro inactivo",
+        form: { [idField]: catalog.id, estado: "true" },
+        data: lookup({ active: false }),
+      },
+      {
+        name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma",
+        form: { [idField]: catalog.id, estado: "false" },
+        role: "WORKSHOP_MASTER",
+      },
+      { name: "sin id vuelve a la lista sin tocar nada", form: { estado: "false" } },
+      {
+        name: "un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora",
+        form: { [idField]: catalog.id, estado: "false" },
+        data: { ...lookup({ exists: false }), [`${model}.updateMany`]: () => ({ count: 0 }) },
+      },
     ]);
   });
 }

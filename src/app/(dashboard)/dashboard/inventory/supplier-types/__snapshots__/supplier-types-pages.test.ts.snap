@@ -123,6 +123,7 @@ exports[`/dashboard/inventory/supplier-types > catalogo > resultado 1`] = `
 <td>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="outline" type="submit">Inactivar</button>
 </form>
 </td>
@@ -151,6 +152,7 @@ exports[`/dashboard/inventory/supplier-types > catalogo > resultado 1`] = `
 <td>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_tipo_proveedor" value="id_tipo_proveedor-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="outline" type="submit">Activar</button>
 </form>
 </td>
