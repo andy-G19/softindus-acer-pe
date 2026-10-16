@@ -63,6 +63,7 @@ next-env.d.ts
 !/.github/workflows/ci.yml
 /docs/*
 !/docs/refactoring/
+!/docs/manual/
 /output
 /tmp/
 /outputs

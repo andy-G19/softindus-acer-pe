@@ -3117,9 +3117,9 @@ Decisiones del responsable (2026-10-15):
 - Un formulario que hoy lanza pasa a `FormActionState` en su `feat`, con una
   prueba de cada mensaje que antes se perdía.
 - `ConfirmActionButton` (10.1) es una `ConfirmDialog` controlada que ejecuta la
-  acción con `startTransition` y usa el `pending` de `useActionState` como
-  pendiente externo. Confirman inactivar, dar de baja, anular y borrar; activar,
-  no.
+  acción con `startTransition` y usa como pendiente externo el de
+  `useTransition` (el plan decía el de `useActionState`; la 10.1 explica el
+  cambio). Confirman inactivar, dar de baja, anular y borrar; activar, no.
 - La unidad de la tarifa de operarios bloquea unificar el cálculo y la
   etiqueta, no la presentación. Por eso Personal y Costos van al final (10.8):
   si la decisión llega antes, su `fix` abre 10.8; si no, 10.8 conserva el
@@ -3191,9 +3191,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 |---|---|---|---|---|---|---|
 | Clientes | Comercial | ADMIN, SELLER | — | Panel lateral | 9 | Migrado |
 | Categorías de producto | Comercial | ADMIN | — | Modal breve | 9 | Migrado |
-| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Pendiente |
-| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Pendiente |
-| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Pendiente |
+| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado (en verificación) |
+| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado (en verificación) |
+| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado (en verificación); sin el campo Estado |
 | Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
@@ -3228,13 +3228,149 @@ destructivas confirman:
 
 | Sub-entrega | Acciones |
 |---|---|
-| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto |
+| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas, en verificación) |
 | 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
 | 10.4 | Inactivar cliente, producto y categoría de producto |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
 | 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
 | 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
+
+### Sub-entrega 10.1 — Bases y catálogos breves
+
+Fecha: 2026-10-15 y 2026-10-16. Estado: en verificación en staging. 12
+commits, de `582f871` a `0f968ad`, más este registro:
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 582f871 | fix | El Markdown sale del escaneo de Tailwind: `src/styles/sources.css` con `@source not`, importada desde `globals.css`. |
+| f6dd994 | refactor | Descarte y superficie compartidos: `FormDialog`, `useFormSurface`, `useFormResult` y `useDiscardGuard`; `RouteSheet`, la ventana de categorías de producto, `ClientForm` y la demo de la galería los usan sin cambiar lo que hacen. |
+| 8b7aeab | feat | La ventana modal también avisa al recargar con cambios. |
+| af50bb2 | feat | `ConfirmActionButton` para las acciones de fila; `ConfirmDialog` gana `closeOnConfirm` y `error`. |
+| b6d57ef | test | Caracterización de tipos de proveedor y categorías de material (46 casos). |
+| fd762d6 | fix | Activar e inactivar esos catálogos fijan el estado pedido. |
+| 41dedf4 | feat | Tipos de proveedor y categorías de material en ventana modal con `FormActionState`. |
+| 40cdd85 | feat | Inactivarlos pide confirmación. |
+| 524d53b | test | Caracterización de las categorías de gasto (26 casos). |
+| ddde8f6 | fix | Activar e inactivar categorías de gasto fijan el estado pedido. |
+| 05b4523 | feat | Categorías de gasto en ventana modal, sin el campo Estado. |
+| 0f968ad | feat | Inactivarlas pide confirmación; el listado usa `FilterBar`. |
+
+Decisiones del responsable en la sub-entrega (2026-10-15):
+
+- A. Activar e inactivar envían el estado pedido, y el servidor lo fija con
+  una sola sentencia que compara y escribe (*compare-and-set*).
+- B. Los catálogos de inventario conservan sus textos de alta y edición
+  («Registro creado correctamente»), ahora en cuatro claves del catálogo.
+- C. La edición de categorías de gasto se abre en la ventana; su URL
+  `[id]/edit` sigue sirviendo el mismo formulario a pantalla completa.
+- D. WORKSHOP_MASTER ve las categorías de material en solo lectura.
+- El formulario de categorías de gasto pierde el campo Estado (decidido tras
+  la caracterización del commit `524d53b`).
+
+Diseño:
+
+- Superficie del formulario (`src/components/forms/form-surface.tsx`). El
+  mismo formulario funciona en el panel (`RouteSheet`), en la ventana modal
+  (`FormDialog`) y en una página completa:
+  - `useFormSurface()` devuelve los controles de la ventana (`requestClose`,
+    `closeAfterSave` y `setBusy`), o `null` en la página.
+  - `useFormResult(state, pending, { successNotification, onSuccess })`
+    informa el pendiente y da un solo aviso por operación. El aviso y
+    `onSuccess` se leen de una ref: si el efecto dependiera de ellos, una
+    función nueva en cada render repetiría el aviso.
+  - `useDiscardGuard` reúne los cambios pendientes, la guarda de ocupado, el
+    aviso al recargar y la confirmación de descarte. Sus controles leen refs
+    para ser estables.
+- `FormDialog` (`src/components/forms/form-dialog.tsx`) es la ventana modal
+  con su disparador; desde `8b7aeab` también avisa al recargar con cambios.
+- `ConfirmActionButton` (`src/components/forms/confirm-action-button.tsx`)
+  ejecuta la acción con `await` dentro de `startTransition`, y el pendiente de
+  `useTransition` dura hasta la respuesta. El plan decía el pendiente de
+  `useActionState`, pero cerrar la confirmación al llegar el éxito habría
+  exigido un `setState` dentro de un efecto, que prohíbe el lint de React.
+  Con éxito, un aviso y se cierra; con error, el mensaje queda dentro. Sin
+  `confirm`, como al activar, el botón ejecuta la acción y un error sale como
+  aviso.
+- Estado pedido (`src/lib/requested-status.ts`). `parseRequestedStatus`
+  acepta solo `"true"` o `"false"`, y `StatusToggleState` es el resultado de
+  una acción de fila. La acción hace `updateMany` con el estado opuesto en el
+  `where`. Con `count` 0 lee el registro para responder «ya estaba
+  inactivo» o «no existe», sin bitácora. `RowToggleStatusButton` gana la prop
+  opcional `sendsRequestedStatus` para el paso intermedio de cada área.
+- Catálogos de inventario. Un contrato común
+  (`src/modules/inventory/catalog-form-state.ts`), `InventoryCatalogDialog` y
+  `InventoryCatalogManager`, que pasa a ser una tabla de servidor de solo
+  lectura.
+- Categorías de gasto. `ExpenseCategoryForm` funciona en la ventana o en la
+  página, y `ExpenseCategoryStatusButton` es el botón de la fila. El campo
+  `estado` sale también del esquema: con su valor por defecto `"true"`,
+  editar una categoría inactiva la habría reactivado.
+- Las confirmaciones dicen la consecuencia real, comprobada en las consultas:
+  un tipo o una categoría inactivos dejan de ofrecerse al registrar, y los
+  registros que ya los usan los conservan.
+- `action-access.test.ts` declara con `rechazanConResultado` las acciones que
+  responden con el error de permisos en lugar de redirigir.
+
+Evidencia:
+
+1. Caracterización antes de mover: 46 casos en los catálogos de inventario y
+   26 en las categorías de gasto. Después, un script compara los snapshots:
+   las llamadas solo cambian en la autorización (`verify_c7_snaps.py` y
+   `verify_c11_snaps.py`), salvo los cambios anunciados en el estado escrito.
+2. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-c1.txt` (9 archivos
+   `.md` escaneados), `rojo-c3.txt`, `rojo-c6.txt` y `rojo-c10.txt`. En los
+   dos últimos, pedir «Inactivar» sobre un registro que otro ya había
+   inactivado lo volvía a activar.
+3. Mutaciones (`tmp/e10-diff/mut_c*.txt`): 5 de 5, 14 de 15, 5 de 5, 13 de
+   13, 11 de 11, 7 de 7, 10 de 10, 8 de 8, 11 de 11, 8 de 8, 9 de 9 y 9 de 9;
+   en total, 110 de 111. La superviviente (reiniciar los cambios al abrir la
+   ventana) es equivalente: todas las salidas ya los dejan en cero.
+4. Pruebas con el Radix real para lo que un snapshot no distingue: un
+   «Inactivar» con confirmación y uno sin ella pintan el mismo `<button>`.
+5. CSS compilado, commit a commit: 113.900 → 113.366 bytes. Solo pierde 7
+   utilidades y 4 variables de tema sin consumidores, y no gana nada.
+6. `npm run check` terminó con código 0 después de cada commit, de 126 a 135
+   archivos de prueba y de 1.977 a 2.108 pruebas. `npm run refactor:inventory`
+   analiza 619 archivos: 131 páginas, 130 formularios JSX (eran 135) y 48
+   archivos de acciones.
+7. Este registro empieza el manual de usuario (`docs/manual/`): las reglas
+   comunes de las pantallas renovadas, Inventario y Caja chica. Se escribió
+   con el código y sus pruebas, y se contrasta con staging en la
+   verificación; el cierre corrige lo que no coincida.
+
+Tiempo entre commits según sus horas (incluye la preparación y la revisión
+del responsable; el commit 12 cruzó la noche):
+
+| Commit | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Minutos | 24 | 21 | 13 | 18 | 12 | 7 | 14 | 12 | 6 | 27 | 18 |
+
+Los commits 1 a 11 suman unos 172 minutos, frente a las 3,5 horas de
+preparación estimadas para la 10.1.
+
+Hallazgos:
+
+1. Tailwind no solo leía el Markdown. Eran 4 utilidades muertas y no 3:
+   también `.bg-white`. Además, los comentarios y nombres del código se
+   siguen escaneando. El comentario de una prueba nueva regeneró dos
+   utilidades, y un parámetro llamado `container`, la utilidad `.container`.
+   Una sonda que pregunta al escáner de dónde sale cada clase encontró los
+   dos casos (`scratchpad/probe-sources.mjs`).
+2. 11 acciones de activar e inactivar leían el estado y escribían el
+   contrario sin bloqueo; esta sub-entrega corrige 3.
+3. La edición de categorías de gasto podía inactivar sin confirmar, y la
+   bitácora lo registraba como «actualizar».
+4. Con un estado inválido, Zod respondía en inglés («Invalid option…»). Solo
+   ocurría con una petición manipulada, y el campo ya no existe.
+5. En Windows, la escritura de un archivo justo después de Vitest falló dos
+   veces (`Errno 22`). Una vez dejó una mutación aplicada, que se detectó y
+   se restauró. Los scripts de mutación ahora reintentan cada escritura y la
+   comprueban leyendo el archivo.
+6. En jsdom, un Esc sintético sí cierra las ventanas de Radix; en el
+   navegador real no. Allí se sigue probando con teclas reales.
+7. Quitar un campo de un formulario exige quitarlo también del esquema si
+   tiene un valor por defecto.
 
 ## Secuencia de próximas entregas
 
@@ -3282,9 +3418,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 125 / 125 | 7, G3 y 9 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 125 / 1.975 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 135 / 2.108 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3303,10 +3439,13 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 14 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 109 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 26 (42 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 12 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 105 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 25 (41 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 24 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 8 | 10 |
+| Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -3431,6 +3570,24 @@ en 2 archivos, medidos de nuevo. Los tres archivos más grandes de `src` miden
 1.335, 1.176 (el arnés, +15) y 901 líneas. Los de producción miden 696, 643 y
 632: `commercial/products/actions.ts` (606 antes, +26 por el contrato de las
 categorías) supera al resumen mensual de caja (614).
+
+Actualizado en la sub-entrega 10.1 (2026-10-16) sobre `0f968ad`:
+
+- Pruebas: 135 / 2.108. Claves caracterizadas: 129 / 129, por las cuatro
+  de las ventanas de los catálogos de inventario.
+- `FieldError` baja a 12, el `<main>` anidado a 105 y los formularios GET a
+  41, con 25 combinaciones de clases.
+- Las tres filas nuevas se midieron sobre `62640e1`, su línea base. La
+  desviación cuenta las funciones de `useActionState` que autorizan con
+  `requireRole`: quedan 24, en 12 archivos. Los toggles que voltean el
+  estado cuentan las funciones con `nextStatus = !` en `src/modules`:
+  quedan 8, en 7 archivos. Las utilidades sin consumidores son las 4 que
+  generaba el Markdown y las 3 que solo usaba el gestor de catálogos
+  anterior.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0 e `import` de las librerías de
+notificaciones en 2 archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

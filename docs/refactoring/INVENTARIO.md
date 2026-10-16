@@ -6,9 +6,9 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 601 |
+| Archivos fuente analizados | 619 |
 | Páginas | 131 |
-| Declaraciones JSX de formulario | 135 |
+| Declaraciones JSX de formulario | 130 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -102,7 +102,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `/dashboard/petty-cash/boxes/new` | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 1 | — |
 | `/dashboard/petty-cash/boxes` | `src/app/(dashboard)/dashboard/petty-cash/boxes/page.tsx` | 0 | — |
 | `/dashboard/petty-cash/categories/[id]/edit` | `src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx` | 0 | ExpenseCategoryForm |
-| `/dashboard/petty-cash/categories` | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 1 | ExpenseCategoryForm |
+| `/dashboard/petty-cash/categories` | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 0 | — |
 | `/dashboard/petty-cash/expenses/new` | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 1 | — |
 | `/dashboard/petty-cash/income-adjustments/new` | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 1 | — |
 | `/dashboard/petty-cash/monthly-summary` | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 1 | — |
@@ -205,7 +205,6 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 312 | `{updateRepairStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 103 | `"/dashboard/maintenance/spare-parts"` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
-| `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 111 | `"/dashboard/petty-cash/categories"` |
 | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 253 | `Sin action explícita (revisar filtros/onSubmit)` |
@@ -276,7 +275,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/components/forms/filter-bar.tsx` | 35 | `{action}` |
 | `src/components/inventory/purchase-form.tsx` | 142 | `{createPurchaseAction}` |
 | `src/components/inventory/supplier-payment-form.tsx` | 31 | `{createSupplierPaymentAction}` |
-| `src/components/table/row-actions.tsx` | 37 | `{action}` |
+| `src/components/table/row-actions.tsx` | 44 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
 | `src/modules/commercial/products/product-category-manager.tsx` | 84 | `{toggleAction}` |
@@ -287,17 +286,13 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 227 | `{annulIndirectCostAction}` |
 | `src/modules/costs/margins/margins-section.tsx` | 76 | `{createMarginAction}` |
 | `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
-| `src/modules/gallery/dialog-demo.tsx` | 98 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 98 | `{formAction}` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 170 | `{formAction}` |
-| `src/modules/inventory/components/inventory-catalog-manager.tsx` | 226 | `{toggleAction}` |
+| `src/modules/gallery/dialog-demo.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/modules/inventory/materials/material-form.tsx` | 86 | `{formAction}` |
 | `src/modules/inventory/movements/inventory-output-form.tsx` | 62 | `{formAction}` |
 | `src/modules/inventory/supplier-materials/supplier-material-form.tsx` | 91 | `{formAction}` |
 | `src/modules/inventory/suppliers/supplier-form.tsx` | 88 | `{formAction}` |
 | `src/modules/maintenance/machines/machine-form.tsx` | 85 | `{formAction}` |
 | `src/modules/maintenance/spare-parts/spare-part-form.tsx` | 140 | `{formAction}` |
-| `src/modules/petty-cash/categories/expense-category-form.tsx` | 65 | `{formAction}` |
 | `src/modules/production/recipe-details/recipe-detail-form.tsx` | 107 | `{formAction}` |
 | `src/modules/production/recipes/components/recipe-version-form.tsx` | 151 | `{createRecipeVersionAction}` |
 | `src/modules/production/stages/stage-form.tsx` | 123 | `{formAction}` |
