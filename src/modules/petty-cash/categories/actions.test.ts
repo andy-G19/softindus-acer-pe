@@ -7,6 +7,7 @@ import {
   updateExpenseCategoryAction,
   type ExpenseCategoryFormState,
 } from "@/modules/petty-cash/categories/actions";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -27,7 +28,7 @@ import {
 // getAuthorizedSession y devuelven el resultado (FormActionState): sin permiso
 // responden con un error en lugar de redirigir. Ya no leen un campo Estado: el
 // alta nace activa y la edicion no cambia el estado. Activar e inactivar
-// siguen con requireRole y redirigen con ?toast=. El nombre se recorta y el
+// tambien devuelven el resultado (para ConfirmActionButton). El nombre se recorta y el
 // duplicado se busca sin distinguir mayusculas. La edicion comprueba primero
 // que la categoria exista, escribe con el cliente global, sin transaccion, y
 // registra la bitacora despues. El cambio de estado lee el registro y escribe
@@ -101,6 +102,7 @@ type FormFields = Record<string, string>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: ExpenseCategoryFormState = { status: "idle" };
+const initialToggleState: StatusToggleState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -284,7 +286,7 @@ defineCases("updateExpenseCategoryAction", (formData) => updateExpenseCategoryAc
 // where). count 0 es lo que responde la base cuando la categoria no existe o
 // ya tiene el estado pedido: el doble lo simula.
 describe("toggleExpenseCategoryStatusAction: estado pedido", () => {
-  const run = (formData: FormData) => toggleExpenseCategoryStatusAction(formData);
+  const run = (formData: FormData) => toggleExpenseCategoryStatusAction(initialToggleState, formData);
 
   function writesOf(calls: unknown[]) {
     return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
@@ -310,7 +312,7 @@ describe("toggleExpenseCategoryStatusAction: estado pedido", () => {
       }),
     ]);
     expect(auditsOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("-deactivated");
+    expect(outcome).toMatchObject({ estado: { status: "success", data: { estado: false } } });
   });
 
   it("pedir inactivar una categoria que otro ya inactivo no la activa ni escribe la bitacora", async () => {
@@ -322,7 +324,7 @@ describe("toggleExpenseCategoryStatusAction: estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(outcome).toMatchObject({ estado: { status: "error", error: expect.stringMatching(/ya estaba inactiva/) } });
   });
 
   it("pedir activar una categoria que ya esta activa no la inactiva ni escribe la bitacora", async () => {
@@ -334,22 +336,23 @@ describe("toggleExpenseCategoryStatusAction: estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(outcome).toMatchObject({ estado: { status: "error", error: expect.stringMatching(/ya estaba activa/) } });
   });
 
   it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
     const forms: FormFields[] = [{ id_categoria_gasto: CATEGORIA }, { id_categoria_gasto: CATEGORIA, estado: "si" }];
 
     for (const form of forms) {
-      const { calls } = await runAction(run, { name: "", form, data: lookup({ active: true }) });
+      const { calls, outcome } = await runAction(run, { name: "", form, data: lookup({ active: true }) });
 
       expect(writesOf(calls)).toEqual([]);
       expect(auditsOf(calls)).toEqual([]);
+      expect(outcome).toMatchObject({ estado: { status: "error", error: "Estado no válido." } });
     }
   });
 });
 
-defineCases("toggleExpenseCategoryStatusAction", (formData) => toggleExpenseCategoryStatusAction(formData), [
+defineCases("toggleExpenseCategoryStatusAction", (formData) => toggleExpenseCategoryStatusAction(initialToggleState, formData), [
   {
     name: "ADMIN inactiva una categoria activa",
     form: { id_categoria_gasto: CATEGORIA, estado: "false" },
@@ -365,9 +368,9 @@ defineCases("toggleExpenseCategoryStatusAction", (formData) => toggleExpenseCate
     form: { id_categoria_gasto: CATEGORIA, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
-  { name: "sin id vuelve a la lista sin tocar nada", form: { estado: "false" } },
+  { name: "sin id responde con un error sin tocar nada", form: { estado: "false" } },
   {
-    name: "una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora",
+    name: "una categoria inexistente no cambia ninguna fila y responde que no existe, sin bitacora",
     form: { id_categoria_gasto: CATEGORIA, estado: "false" },
     data: { ...lookup({ exists: false }), "categoria_gasto.updateMany": () => ({ count: 0 }) },
   },

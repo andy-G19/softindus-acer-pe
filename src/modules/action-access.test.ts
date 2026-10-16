@@ -197,7 +197,11 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateExpenseCategoryAction",
       "toggleExpenseCategoryStatusAction",
     ],
-    rechazanConResultado: ["createExpenseCategoryAction", "updateExpenseCategoryAction"],
+    rechazanConResultado: [
+      "createExpenseCategoryAction",
+      "updateExpenseCategoryAction",
+      "toggleExpenseCategoryStatusAction",
+    ],
   },
   {
     ruta: "petty-cash/expenses/actions",

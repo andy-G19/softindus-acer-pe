@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { expenseCategorySchema } from "@/schemas/petty-cash/expense-category.schema";
 
 /** Lo que el formulario de categoria de gasto envio, tal cual, para volver a mostrarlo. */
@@ -31,10 +35,6 @@ export type ExpenseCategoryFormState = FormActionState<
 
 const EXPENSE_CATEGORIES_PATH = "/dashboard/petty-cash/categories";
 const PERMISSION_ERROR = "No tienes permisos para gestionar categorías de gasto.";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function getCategoryFormValues(formData: FormData): ExpenseCategoryFormValues {
   return {
@@ -236,19 +236,33 @@ export async function updateExpenseCategoryAction(
   return categorySaved(values, categoryId);
 }
 
-export async function toggleExpenseCategoryStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const categoryId = formData.get("id_categoria_gasto")?.toString().trim();
+// Activar e inactivar desde la fila (entrega 10): devuelven el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=, y sin permiso
+// responden con un error.
+export async function toggleExpenseCategoryStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const categoryId = formData.get("id_categoria_gasto")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return statusToggleError(categoryId, PERMISSION_ERROR);
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!categoryId || nextStatus === null) {
-    redirect(EXPENSE_CATEGORIES_PATH);
+  if (!categoryId) {
+    return statusToggleError(categoryId, "La categoria de gasto no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(categoryId, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si la categoria tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.categoria_gasto.updateMany({
     where: {
       id_categoria_gasto: categoryId,
@@ -259,10 +273,6 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(EXPENSE_CATEGORIES_PATH);
-  }
-
   const category = await prisma.categoria_gasto.findUnique({
     where: {
       id_categoria_gasto: categoryId,
@@ -271,6 +281,16 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
       nombre_categoria: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      categoryId,
+      category
+        ? `La categoría de gasto ya estaba ${nextStatus ? "activa" : "inactiva"}.`
+        : "La categoria de gasto no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -285,7 +305,5 @@ export async function toggleExpenseCategoryStatusAction(formData: FormData) {
   revalidatePath("/dashboard/petty-cash");
   revalidatePath(EXPENSE_CATEGORIES_PATH);
 
-  redirect(
-    `${EXPENSE_CATEGORIES_PATH}?toast=${nextStatus ? "expense-category-activated" : "expense-category-deactivated"}`,
-  );
+  return statusToggleDone(categoryId, nextStatus);
 }

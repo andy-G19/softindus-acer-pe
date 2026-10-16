@@ -35,7 +35,7 @@ export default async function EditExpenseCategoryPage({
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Editar categoría de gasto"
         description="Actualiza la categoría usada para clasificar egresos de caja chica."
@@ -66,6 +66,6 @@ export default async function EditExpenseCategoryPage({
           />
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

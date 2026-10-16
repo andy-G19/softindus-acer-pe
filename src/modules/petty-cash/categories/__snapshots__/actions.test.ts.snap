@@ -691,7 +691,7 @@ exports[`createExpenseCategoryAction > una carrera por el nombre (P2002 al crear
 exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -742,12 +742,25 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva > resultado 1`] = `"redirect:/dashboard/petty-cash/categories?toast=expense-category-activated"`;
+exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -798,12 +811,25 @@ exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa > resultado 1`] = `"redirect:/dashboard/petty-cash/categories?toast=expense-category-deactivated"`;
+exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -811,12 +837,23 @@ exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes 
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de gasto.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleExpenseCategoryStatusAction > sin id vuelve a la lista sin tocar nada > llamadas 1`] = `
+exports[`toggleExpenseCategoryStatusAction > sin id responde con un error sin tocar nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -824,12 +861,23 @@ exports[`toggleExpenseCategoryStatusAction > sin id vuelve a la lista sin tocar 
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/petty-cash/categories"`;
+exports[`toggleExpenseCategoryStatusAction > sin id responde con un error sin tocar nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
-exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y responde que no existe, sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -847,10 +895,32 @@ exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia
     "fueraDeTransaccion": true,
     "prisma": "categoria_gasto.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
 ]
 `;
 
-exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/petty-cash/categories"`;
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y responde que no existe, sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
 
 exports[`updateExpenseCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
 [
