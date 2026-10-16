@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useCallback, useMemo } from "react";
 
 import { ActionForm } from "@/components/forms/action-form";
-import { useRouteSheet } from "@/components/navigation/route-sheet";
 import { Field } from "@/components/forms/field";
+import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,6 @@ import { SheetBody, SheetFooter } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { hasListFilters } from "@/lib/navigation";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
-import { notify } from "@/lib/notifications";
 import type { ClientFormState, ClientFormValues } from "@/modules/commercial/clients/actions";
 
 type ClientFormProps = {
@@ -78,31 +77,20 @@ const emptyValues: ClientFormValues = {
 // completa, Cancelar es un enlace al returnTo y guardar navega a el.
 export function ClientForm({ action, defaultValues, submitLabel, successNotification, returnTo }: ClientFormProps) {
   const router = useRouter();
-  const panel = useRouteSheet();
+  const panel = useFormSurface();
   const [state, formAction, pending] = useActionState(action, initialState);
 
   const values = state.status === "idle" ? { ...emptyValues, ...defaultValues } : state.values;
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
-  useEffect(() => {
-    panel?.setBusy(pending);
-  }, [panel, pending]);
+  const notification = useMemo(
+    () => (hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification),
+    [successNotification, returnTo],
+  );
+  const goBack = useCallback(() => router.push(returnTo), [router, returnTo]);
 
-  // Cada respuesta es un estado nuevo: el aviso sale una vez por operacion. Los
-  // controles del panel son estables, asi que no repiten el efecto.
-  useEffect(() => {
-    if (state.status !== "success") {
-      return;
-    }
-
-    notify(hasListFilters(returnTo) ? { ...successNotification, description: FILTER_HINT } : successNotification);
-
-    if (panel) {
-      panel.closeAfterSave();
-    } else {
-      router.push(returnTo);
-    }
-  }, [state, successNotification, returnTo, router, panel]);
+  // Un aviso por operacion; en el panel lo cierra y en la pagina vuelve al listado.
+  useFormResult(state, pending, { successNotification: notification, onSuccess: goBack });
 
   const resultKey = state.status === "idle" ? undefined : state.operationId;
 

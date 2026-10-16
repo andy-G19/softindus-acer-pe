@@ -3,7 +3,8 @@ import { act, createElement as h, useEffect } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { RouteSheet, useRouteSheet } from "@/components/navigation/route-sheet";
+import { useFormSurface } from "@/components/forms/form-surface";
+import { RouteSheet } from "@/components/navigation/route-sheet";
 
 // Panel de una ruta interceptada (entrega 9) con el Radix real. Se abre al
 // montarse (la navegacion lo monta) y se cierra volviendo atras en el
@@ -62,7 +63,7 @@ const confirmation = () => document.querySelector('[role="alertdialog"]');
 
 // Un hijo que usa el contexto del panel, como lo hara ClientForm.
 function PanelActions({ busy = false }: { busy?: boolean }) {
-  const panel = useRouteSheet();
+  const panel = useFormSurface();
 
   useEffect(() => {
     panel?.setBusy(busy);
@@ -182,10 +183,34 @@ describe("RouteSheet", () => {
     expect(dirty.defaultPrevented).toBe(true);
   });
 
-  it("fuera de un panel, useRouteSheet devuelve null", async () => {
+  it("tras guardar o descartar, recargar ya no pide confirmacion", async () => {
+    await openFrom("Nuevo cliente");
+    const input = document.querySelector<HTMLInputElement>("#nombre")!;
+    await act(async () => input.dispatchEvent(new Event("input", { bubbles: true })));
+    await act(async () => byText("Simular guardado").click());
+
+    const afterSave = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(afterSave);
+    expect(afterSave.defaultPrevented).toBe(false);
+
+    await act(async () => root.unmount());
+    root = createRoot(host);
+    await openFrom("Nuevo cliente");
+    const again = document.querySelector<HTMLInputElement>("#nombre")!;
+    await act(async () => again.dispatchEvent(new Event("input", { bubbles: true })));
+    await act(async () => closeX().click());
+    await act(async () => byText("Descartar cambios").click());
+    await settle();
+
+    const afterDiscard = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(afterDiscard);
+    expect(afterDiscard.defaultPrevented).toBe(false);
+  });
+
+  it("fuera de un panel, useFormSurface devuelve null", async () => {
     const read = vi.fn();
     function Probe({ onRead }: { onRead: (value: unknown) => void }) {
-      onRead(useRouteSheet());
+      onRead(useFormSurface());
       return null;
     }
 
@@ -210,7 +235,7 @@ describe("controles del panel", () => {
   it("son el mismo objeto aunque cambien los cambios pendientes", async () => {
     const seen = new Set<unknown>();
     function Recorder() {
-      seen.add(useRouteSheet());
+      seen.add(useFormSurface());
       return h("input", { id: "campo" });
     }
 

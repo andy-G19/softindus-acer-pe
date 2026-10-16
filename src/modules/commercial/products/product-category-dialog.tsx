@@ -1,27 +1,18 @@
 "use client";
 
-import { useActionState, useCallback, useEffect, useRef, useState, type ReactElement } from "react";
+import { useActionState, type ReactElement } from "react";
 
 import { ActionForm } from "@/components/forms/action-form";
 import { Field } from "@/components/forms/field";
+import { FormDialog } from "@/components/forms/form-dialog";
+import { useFormResult, useFormSurface } from "@/components/forms/form-surface";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { ConfirmDialog } from "@/components/notifications/confirm-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { DialogBody, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
-import { notify } from "@/lib/notifications";
 import type { ProductCategoryFormState } from "@/modules/commercial/products/actions";
 
 type CategoryAction = (prevState: ProductCategoryFormState, formData: FormData) => Promise<ProductCategoryFormState>;
@@ -44,12 +35,6 @@ type ProductCategoryDialogProps = {
   trigger: ReactElement;
 };
 
-type FormControls = {
-  onSaved: () => void;
-  onCancel: () => void;
-  onBusyChange: (busy: boolean) => void;
-};
-
 const initialState: ProductCategoryFormState = { status: "idle" };
 
 // Formulario de la ventana. Se monta cada vez que se abre: empieza sin estado.
@@ -58,10 +43,8 @@ function CategoryForm({
   category,
   submitLabel,
   successNotification,
-  onSaved,
-  onCancel,
-  onBusyChange,
-}: Omit<ProductCategoryDialogProps, "title" | "trigger"> & FormControls) {
+}: Omit<ProductCategoryDialogProps, "title" | "trigger">) {
+  const surface = useFormSurface();
   const [state, formAction, pending] = useActionState(action, initialState);
 
   const values =
@@ -70,17 +53,8 @@ function CategoryForm({
       : state.values;
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
-  useEffect(() => {
-    onBusyChange(pending);
-  }, [onBusyChange, pending]);
-
-  // Un aviso por operacion: los controles de la ventana son estables.
-  useEffect(() => {
-    if (state.status === "success") {
-      notify(successNotification);
-      onSaved();
-    }
-  }, [state, successNotification, onSaved]);
+  // Un aviso por operacion; al guardar se cierra la ventana.
+  useFormResult(state, pending, { successNotification });
 
   return (
     <ActionForm
@@ -126,7 +100,7 @@ function CategoryForm({
       </DialogBody>
 
       <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={() => surface?.requestClose()}>
           Cancelar
         </Button>
         <SubmitButton pendingText="Guardando...">{submitLabel}</SubmitButton>
@@ -136,76 +110,21 @@ function CategoryForm({
 }
 
 // Alta o edicion de una categoria de producto en ventana modal (entrega 9): la
-// variante sin URL del piloto, para catalogos breves. La abre su boton y, al
-// cerrarla, Radix devuelve el foco a ese boton. Escribir deja cambios
-// pendientes: cerrar (Cancelar, X, Esc o el velo) pide confirmar el descarte;
-// mientras guarda no se cierra; al guardar, un solo aviso y se cierra, y la
-// lista se actualiza por el revalidatePath de la accion.
+// variante sin URL del piloto, para catalogos breves. FormDialog la abre con
+// su boton, pide confirmar el descarte si hay cambios, no se cierra mientras
+// guarda y, al guardar, da un solo aviso y se cierra; la lista se actualiza
+// por el revalidatePath de la accion. En la edicion, el codigo describe la
+// ventana.
 export function ProductCategoryDialog({ title, trigger, ...formProps }: ProductCategoryDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const dirtyRef = useRef(false);
-  const busyRef = useRef(false);
-
-  const close = useCallback(() => {
-    dirtyRef.current = false;
-    setOpen(false);
-  }, []);
-
-  const requestClose = useCallback(() => {
-    if (busyRef.current) {
-      return;
-    }
-    if (dirtyRef.current) {
-      setConfirmOpen(true);
-      return;
-    }
-    close();
-  }, [close]);
-
-  const setBusy = useCallback((busy: boolean) => {
-    busyRef.current = busy;
-  }, []);
-
-  function changeOpen(next: boolean) {
-    if (next) {
-      dirtyRef.current = false;
-      setOpen(true);
-    } else {
-      requestClose();
-    }
-  }
-
   return (
-    <>
-      <Dialog open={open} onOpenChange={changeOpen}>
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent
-          // En el alta no hay descripcion: aria-describedby={undefined} le dice a
-          // Radix que es a proposito. En la edicion Radix asocia la suya.
-          {...(formProps.category ? {} : { "aria-describedby": undefined })}
-          onInput={() => {
-            dirtyRef.current = true;
-          }}
-        >
-          <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            {formProps.category ? (
-              <DialogDescription>{formProps.category.id_categoria_producto}</DialogDescription>
-            ) : null}
-          </DialogHeader>
-          <CategoryForm {...formProps} onSaved={close} onCancel={requestClose} onBusyChange={setBusy} />
-        </DialogContent>
-      </Dialog>
-      <ConfirmDialog
-        open={confirmOpen}
-        onOpenChange={setConfirmOpen}
-        variant="destructive"
-        title="¿Descartar la categoría?"
-        description="Se perderán los datos que escribiste en esta ventana."
-        confirmText="Descartar cambios"
-        onConfirm={close}
-      />
-    </>
+    <FormDialog
+      trigger={trigger}
+      title={title}
+      description={formProps.category?.id_categoria_producto}
+      discardTitle="¿Descartar la categoría?"
+      discardDescription="Se perderán los datos que escribiste en esta ventana."
+    >
+      <CategoryForm {...formProps} />
+    </FormDialog>
   );
 }
