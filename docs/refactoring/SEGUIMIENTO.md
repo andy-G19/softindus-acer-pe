@@ -3063,6 +3063,179 @@ Datos leídos de la API de GitHub el 2026-10-15 y comparados con git:
   forzar el push de las dos ramas. Desde la entrega 10, los comandos de cada
   commit se escriben antes de la pregunta que cierra el turno.
 
+## Entrega 10 — Catálogos, listados y resto de dominios
+
+Fecha: desde el 2026-10-15. Estado: en curso; plan aprobado por el
+responsable el 2026-10-15. El paso 0 (`62640e1`) registró la integración de
+la entrega 9 en `main`.
+
+Es la tercera entrega de la pista B y cubre las fases 4 y 7 del plan maestro:
+los catálogos, los listados y el resto de dominios adoptan los patrones del
+piloto. Se divide en 8 sub-entregas por área, y cada una se publica y se
+verifica en staging por separado.
+
+Punto de partida (auditoría sobre `62640e1`):
+
+- 135 formularios JSX, 131 páginas y 48 archivos de acciones.
+- 34 archivos de acciones lanzan `throw new Error` (282 lanzamientos) en lugar
+  de devolver un resultado. Solo Producción tiene `error.tsx`, y en producción
+  Next oculta el mensaje: un rechazo de negocio muestra la página de error
+  genérica y se pierde lo escrito.
+- Solo 7 archivos de acciones están caracterizados: clientes, productos,
+  costos, salidas, compras, órdenes de trabajo y avances.
+- La desviación de autorización afecta a 30 funciones en 15 archivos.
+- Inactivar no pide confirmación: `RowToggleStatusButton` en 9 páginas, el
+  gestor de catálogos de inventario y 3 listas de Producción.
+- Hay 14 copias de `FieldError`, 109 páginas con `<main>` anidado, 42
+  formularios GET con 26 combinaciones de clases y `StatusBadge` en 12
+  archivos.
+- 27 pantallas tienen rango de fechas, contadas por nombre de parámetro: 19
+  con `from`/`to`, 7 con `dateFrom`/`dateTo` y 1 con `desde`/`hasta`. Son las
+  mismas en `aada765`.
+- No hay manual de usuario en el repositorio.
+
+Decisiones del responsable (2026-10-15):
+
+- La presentación sigue la sección 5, con los datos de la entrega 9:
+  - Ventana modal breve, sin URL: hasta unos 4 campos sin datos dependientes.
+  - Panel lateral con URL (rutas interceptadas): una entidad de 5 a 12 campos.
+  - Superficie amplia, una página completa con `returnTo` y descarte: líneas o
+    varias secciones.
+  - En el teléfono, las tres ocupan la pantalla.
+- Diálogo de formulario compartido en 10.1:
+  - `FormDialog`.
+  - `useFormSurface`: los controles de la ventana, o `null` en página
+    completa.
+  - `useFormResult`: un aviso por operación.
+  - Un guardián de descarte común a `FormDialog` y `RouteSheet`.
+
+  La extracción no cambia nada. Un `feat` aparte hace que la ventana modal
+  también avise al recargar con cambios.
+- La desviación de autorización se corrige en el `feat` que migra el contrato
+  de cada formulario y se anuncia en su mensaje. Antes, la caracterización fija
+  la redirección actual.
+- Un formulario que hoy lanza pasa a `FormActionState` en su `feat`, con una
+  prueba de cada mensaje que antes se perdía.
+- `ConfirmActionButton` (10.1) es una `ConfirmDialog` controlada que ejecuta la
+  acción con `startTransition` y usa el `pending` de `useActionState` como
+  pendiente externo. Confirman inactivar, dar de baja, anular y borrar; activar,
+  no.
+- La unidad de la tarifa de operarios bloquea unificar el cálculo y la
+  etiqueta, no la presentación. Por eso Personal y Costos van al final (10.8):
+  si la decisión llega antes, su `fix` abre 10.8; si no, 10.8 conserva el
+  texto «Tarifa».
+- El manual de usuario se versiona en `docs/manual/`, con un archivo por área.
+  Cada sub-entrega agrega su capítulo en el cierre, escrito con lo verificado
+  en staging. Antes, `@source not` excluye la documentación del escaneo de
+  Tailwind; es el primer commit de 10.1.
+- El inventario aprende las ranuras y las rutas interceptadas al empezar 10.3,
+  antes del siguiente panel.
+- Pedidos pilotea la superficie amplia con líneas, porque no mueve stock ni
+  dinero. Las versiones de receta la reutilizan, y la entrega 11 la hereda
+  para compras, proformas y órdenes de trabajo.
+- El `<main>` anidado se quita en todas las páginas de cada área durante su
+  sub-entrega, también en las de la entrega 11.
+- Un `error.tsx` para el panel queda para la entrega 11.
+- En cada verificación, el responsable decide si se prueban SELLER y
+  WORKSHOP_MASTER.
+
+Límite con la entrega 11:
+
+- Entran en esta entrega 31 formularios de alta y edición, 32 acciones de fila
+  (tablas de cobertura) y todos los listados, también los de las pantallas
+  críticas, sin tocar sus acciones de fila.
+- Van a la entrega 11 estas 29 operaciones:
+  - proformas, comprobantes y pagos de clientes;
+  - compras, pagos a proveedor y salidas de inventario;
+  - órdenes de trabajo (crear y 7 operaciones) y avances (3);
+  - caja chica: apertura, gastos, ingresos y anulación;
+  - venta de chatarra, que crea un movimiento de caja;
+  - planillas y pago a operario;
+  - cancelar pedido (H11).
+
+| Sub-entrega | Área | Roles de las acciones | Alcance | Estimación |
+|---|---|---|---|---|
+| 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
+| 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados | 5 h |
+| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
+| 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
+| 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
+| 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
+| 10.8 | Personal y Costos | ADMIN; asistencia y tareas, también WORKSHOP_MASTER | Operarios, asistencia y tareas; secciones del detalle del costeo; listados | 8 h |
+
+La estimación suma unas 48 horas de preparación y verificación, sin contar
+las revisiones ni las esperas. Se calibra con la entrega 9:
+
+| Unidad | Minutos |
+|---|---|
+| Catálogo breve en ventana modal (C8a y C8b) | 14 |
+| Entidad en panel que ya usa `useActionState` (C4 a C7, sin rehacer `RouteSheet`) | 50 |
+| Página que lanza, convertida en componente con resultado y panel | 65 (estimado) |
+| Superficie amplia con líneas | 90 (sin calibrar) |
+| Listado (C7) | 9 |
+| Acción de fila con confirmación | 10 (estimado) |
+| Registro y capítulo del manual | 30 (estimado) |
+| Verificación en staging (57 en la entrega 9) | 60 |
+
+Se recalibra después de 10.1 y 10.2. Las sub-entregas de 7 u 8 horas pueden
+partirse en dos; por ejemplo, 10.5a para máquinas y repuestos y 10.5b para
+fallas, preventivos y reparaciones.
+
+Cobertura de formularios. «Hoy» describe el mecanismo actual:
+
+- «desviación»: usa `useActionState` y redirige al negar el permiso.
+- «lanza»: la acción usa `throw new Error`.
+
+| Formulario | Área | Roles | Hoy | Presentación | Sub-entrega | Estado |
+|---|---|---|---|---|---|---|
+| Clientes | Comercial | ADMIN, SELLER | — | Panel lateral | 9 | Migrado |
+| Categorías de producto | Comercial | ADMIN | — | Modal breve | 9 | Migrado |
+| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Pendiente |
+| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Pendiente |
+| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Pendiente |
+| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
+| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
+| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
+| Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
+| Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5 | Pendiente |
+| Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5 | Pendiente |
+| Mantenimientos preventivos | Mantenimiento | ADMIN | Página, lanza | Panel lateral | 10.5 | Pendiente |
+| Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Panel lateral amplio | 10.5 | Pendiente |
+| Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Modal breve | 10.6 | Pendiente |
+| Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
+| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.6 | Pendiente |
+| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6 | Pendiente |
+| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
+| Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7 | Pendiente |
+| Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.7 | Pendiente |
+| Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
+| Retazos reutilizables | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
+| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7 | Pendiente |
+| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve | 10.7 | Pendiente |
+| Operarios | Personal | ADMIN | Páginas, desviación | Panel lateral | 10.8 | Pendiente |
+| Asistencia | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
+| Tareas de operario | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
+| Mano de obra del costeo | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Costos indirectos | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Márgenes | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Rentabilidad | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+
+Cobertura de acciones de fila; todas pasan a devolver un resultado y las
+destructivas confirman:
+
+| Sub-entrega | Acciones |
+|---|---|
+| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto |
+| 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
+| 10.4 | Inactivar cliente, producto y categoría de producto |
+| 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
+| 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
+| 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
+| 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3087,7 +3260,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | Pendiente |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
