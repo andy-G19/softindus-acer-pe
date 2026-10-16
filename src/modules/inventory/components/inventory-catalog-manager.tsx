@@ -1,3 +1,4 @@
+import { ConfirmActionButton } from "@/components/forms/confirm-action-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -10,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
+import type { StatusToggleState } from "@/lib/requested-status";
 import type { InventoryCatalogFormState } from "@/modules/inventory/catalog-form-state";
 import {
   InventoryCatalogDialog,
@@ -26,7 +28,14 @@ type InventoryCatalogManagerProps = {
   updateAction: (prevState: InventoryCatalogFormState, formData: FormData) => Promise<InventoryCatalogFormState>;
   /** Aviso al guardar una edicion; la pagina lo pasa con su clave literal. */
   updateNotification: NotificationDefinition;
-  toggleAction: (formData: FormData) => Promise<void>;
+  toggleAction: (prevState: StatusToggleState, formData: FormData) => Promise<StatusToggleState>;
+  /** Avisos al activar e inactivar; la pagina los pasa con su clave literal. */
+  activatedNotification: NotificationDefinition;
+  deactivatedNotification: NotificationDefinition;
+  /** Entidad para la pregunta de la confirmacion ("el tipo de proveedor"). */
+  entityLabel: string;
+  /** Consecuencia de inactivar, que muestra la confirmacion. */
+  inactivateConsequence: string;
   canManage: boolean;
   /** Titulo de la ventana de edicion ("Editar tipo de proveedor"). */
   editTitle: string;
@@ -38,14 +47,19 @@ type InventoryCatalogManagerProps = {
 // Lista de un catalogo de inventario: tipos de proveedor o categorias de
 // material (entrega 10). La tabla es de solo lectura: el alta (en el
 // encabezado de la pagina) y la edicion se hacen en una ventana modal, y quien
-// no es ADMIN solo consulta. Activar e inactivar siguen siendo formularios con
-// su redireccion ?toast= y envian el estado pedido.
+// no es ADMIN solo consulta. Inactivar pide confirmar con el nombre del
+// registro y activar no; los dos envian el estado pedido y dan su aviso con el
+// resultado de la accion.
 export function InventoryCatalogManager({
   idFieldName,
   items,
   updateAction,
   updateNotification,
   toggleAction,
+  activatedNotification,
+  deactivatedNotification,
+  entityLabel,
+  inactivateConsequence,
   canManage,
   editTitle,
   discardTitle,
@@ -92,13 +106,24 @@ export function InventoryCatalogManager({
                       </Button>
                     }
                   />
-                  <form action={toggleAction}>
-                    <input type="hidden" name={idFieldName} value={item.id} />
-                    <input type="hidden" name="estado" value={item.estado ? "false" : "true"} />
-                    <Button type="submit" variant="outline" size="sm">
-                      {item.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
+                  <ConfirmActionButton
+                    action={toggleAction}
+                    fields={{ [idFieldName]: item.id, estado: item.estado ? "false" : "true" }}
+                    variant="outline"
+                    successNotification={item.estado ? deactivatedNotification : activatedNotification}
+                    confirm={
+                      item.estado
+                        ? {
+                            title: `¿Inactivar ${entityLabel} ${item.nombre}?`,
+                            description: inactivateConsequence,
+                            confirmText: "Inactivar",
+                          }
+                        : undefined
+                    }
+                    pendingText={item.estado ? "Inactivando..." : "Activando..."}
+                  >
+                    {item.estado ? "Inactivar" : "Activar"}
+                  </ConfirmActionButton>
                 </div>
               ) : (
                 <span className="text-xs text-muted-foreground">Solo lectura</span>

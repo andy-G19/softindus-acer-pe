@@ -1,14 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import {
   catalogError,
   catalogSaved,
@@ -21,10 +25,6 @@ const INVENTORY_PATH = "/dashboard/inventory";
 const MATERIALS_PATH = "/dashboard/inventory/materials";
 const MATERIAL_CATEGORIES_PATH = "/dashboard/inventory/material-categories";
 const PERMISSION_ERROR = "No tienes permisos para gestionar categorías de material.";
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -223,21 +223,35 @@ export async function updateMaterialCategoryAction(
   return catalogSaved(values, idCategoriaMaterial);
 }
 
-export async function toggleMaterialCategoryStatusAction(formData: FormData) {
-  const session = await requireAdmin();
+// Activar e inactivar desde la fila (entrega 10): devuelven el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=, y sin permiso
+// responden con un error.
+export async function toggleMaterialCategoryStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
   const idCategoriaMaterial = formData
     .get("id_categoria_material")
-    ?.toString();
+    ?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return statusToggleError(idCategoriaMaterial, PERMISSION_ERROR);
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idCategoriaMaterial || nextStatus === null) {
-    redirect(MATERIAL_CATEGORIES_PATH);
+  if (!idCategoriaMaterial) {
+    return statusToggleError(idCategoriaMaterial, "La categoría no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idCategoriaMaterial, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si el registro tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.categoria_material.updateMany({
     where: {
       id_categoria_material: idCategoriaMaterial,
@@ -248,10 +262,6 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(MATERIAL_CATEGORIES_PATH);
-  }
-
   const category = await prisma.categoria_material.findUnique({
     where: {
       id_categoria_material: idCategoriaMaterial,
@@ -260,6 +270,16 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
       nombre: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idCategoriaMaterial,
+      category
+        ? `La categoría de material ya estaba ${nextStatus ? "activa" : "inactiva"}.`
+        : "La categoría no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -274,7 +294,6 @@ export async function toggleMaterialCategoryStatusAction(formData: FormData) {
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
   revalidatePath(MATERIAL_CATEGORIES_PATH);
-  redirect(
-    `${MATERIAL_CATEGORIES_PATH}?toast=${nextStatus ? "material-category-activated" : "material-category-deactivated"}`,
-  );
+
+  return statusToggleDone(idCategoriaMaterial, nextStatus);
 }

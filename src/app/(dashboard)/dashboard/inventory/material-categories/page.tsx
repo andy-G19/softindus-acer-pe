@@ -68,6 +68,10 @@ export default async function MaterialCategoriesPage() {
         updateAction={updateMaterialCategoryAction}
         updateNotification={inventoryNotifications["material-category-updated"]}
         toggleAction={toggleMaterialCategoryStatusAction}
+        activatedNotification={inventoryNotifications["material-category-activated"]}
+        deactivatedNotification={inventoryNotifications["material-category-deactivated"]}
+        entityLabel="la categoría de material"
+        inactivateConsequence="Dejará de ofrecerse al registrar materiales; los que ya la usan la conservan. Puedes volver a activarla."
         canManage={canManage}
         editTitle="Editar categoría"
         discardTitle="¿Descartar la categoría de material?"

@@ -55,6 +55,10 @@ export default async function SupplierTypesPage() {
         updateAction={updateSupplierTypeAction}
         updateNotification={inventoryNotifications["supplier-type-updated"]}
         toggleAction={toggleSupplierTypeStatusAction}
+        activatedNotification={inventoryNotifications["supplier-type-activated"]}
+        deactivatedNotification={inventoryNotifications["supplier-type-deactivated"]}
+        entityLabel="el tipo de proveedor"
+        inactivateConsequence="Dejará de ofrecerse al registrar proveedores; los que ya lo usan lo conservan. Puedes volver a activarlo."
         canManage
         editTitle="Editar tipo de proveedor"
         discardTitle="¿Descartar el tipo de proveedor?"

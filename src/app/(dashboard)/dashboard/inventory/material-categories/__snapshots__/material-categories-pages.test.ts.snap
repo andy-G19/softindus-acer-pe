@@ -95,11 +95,7 @@ exports[`/dashboard/inventory/material-categories > administrador gestiona > res
 <td>
 <div>
 <button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_material" value="id_categoria_material-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="outline" type="submit">Inactivar</button>
-</form>
+<button data-variant="outline" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -114,19 +110,14 @@ exports[`/dashboard/inventory/material-categories > administrador gestiona > res
 <td>
 <div>
 <button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_material" value="id_categoria_material-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="outline" type="submit">Activar</button>
-</form>
+<button data-variant="outline" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { StatusToggleState } from "@/lib/requested-status";
 import type { InventoryCatalogFormState } from "@/modules/inventory/catalog-form-state";
 import {
   createMaterialCategoryAction,
@@ -31,8 +32,8 @@ import {
 //
 // Desde la ventana modal (entrega 10), el alta y la edicion autorizan con
 // getAuthorizedSession y devuelven el resultado (FormActionState): sin permiso
-// responden con un error en lugar de redirigir. Activar e inactivar siguen con
-// requireRole("ADMIN") y redirigen con ?toast=. La edicion y el cambio de
+// responden con un error en lugar de redirigir. Activar e inactivar tambien
+// devuelven el resultado (para ConfirmActionButton). La edicion y el cambio de
 // estado escriben con el cliente global, sin transaccion, y registran la
 // bitacora despues: el doble lo permite (writesOutsideTransaction) y lo marca.
 
@@ -102,10 +103,11 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 
 type FormFields = Record<string, string>;
 type FormAction = (prevState: InventoryCatalogFormState, formData: FormData) => Promise<InventoryCatalogFormState>;
-type ToggleAction = (formData: FormData) => Promise<unknown>;
+type ToggleAction = (prevState: StatusToggleState, formData: FormData) => Promise<StatusToggleState>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: InventoryCatalogFormState = { status: "idle" };
+const initialToggleState: StatusToggleState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -305,7 +307,7 @@ for (const catalog of CATALOGS) {
       }
 
       it("inactivar compara y fija el estado en una sola escritura", async () => {
-        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(initialToggleState, formData), {
           name: "",
           form: { [idField]: catalog.id, estado: "false" },
           data: lookup({ active: true }),
@@ -318,11 +320,11 @@ for (const catalog of CATALOGS) {
           }),
         ]);
         expect(auditsOf(calls)).toHaveLength(1);
-        expect(String(outcome)).toContain("-deactivated");
+        expect(outcome).toMatchObject({ estado: { status: "success", data: { estado: false } } });
       });
 
       it("pedir inactivar un registro que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
-        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(initialToggleState, formData), {
           name: "",
           form: { [idField]: catalog.id, estado: "false" },
           data: { ...lookup({ active: false }), [`${model}.updateMany`]: () => ({ count: 0 }) },
@@ -330,11 +332,11 @@ for (const catalog of CATALOGS) {
 
         expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
         expect(auditsOf(calls)).toEqual([]);
-        expect(String(outcome)).not.toContain("toast=");
+        expect(outcome).toMatchObject({ estado: { status: "error", error: expect.stringMatching(/ya estaba inactiv/) } });
       });
 
       it("pedir activar un registro que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
-        const { calls, outcome } = await runAction((formData) => catalog.toggle(formData), {
+        const { calls, outcome } = await runAction((formData) => catalog.toggle(initialToggleState, formData), {
           name: "",
           form: { [idField]: catalog.id, estado: "true" },
           data: { ...lookup({ active: true }), [`${model}.updateMany`]: () => ({ count: 0 }) },
@@ -342,12 +344,12 @@ for (const catalog of CATALOGS) {
 
         expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
         expect(auditsOf(calls)).toEqual([]);
-        expect(String(outcome)).not.toContain("toast=");
+        expect(outcome).toMatchObject({ estado: { status: "error", error: expect.stringMatching(/ya estaba activ/) } });
       });
 
       it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
         for (const form of [{ [idField]: catalog.id }, { [idField]: catalog.id, estado: "si" }]) {
-          const { calls } = await runAction((formData) => catalog.toggle(formData), {
+          const { calls, outcome } = await runAction((formData) => catalog.toggle(initialToggleState, formData), {
             name: "",
             form,
             data: lookup({ active: true }),
@@ -355,11 +357,12 @@ for (const catalog of CATALOGS) {
 
           expect(writesOf(calls)).toEqual([]);
           expect(auditsOf(calls)).toEqual([]);
+          expect(outcome).toMatchObject({ estado: { status: "error", error: "Estado no válido." } });
         }
       });
     });
 
-    defineCases("activar e inactivar", (formData) => catalog.toggle(formData), [
+    defineCases("activar e inactivar", (formData) => catalog.toggle(initialToggleState, formData), [
       {
         name: "ADMIN inactiva un registro activo",
         form: { [idField]: catalog.id, estado: "false" },
@@ -375,9 +378,9 @@ for (const catalog of CATALOGS) {
         form: { [idField]: catalog.id, estado: "false" },
         role: "WORKSHOP_MASTER",
       },
-      { name: "sin id vuelve a la lista sin tocar nada", form: { estado: "false" } },
+      { name: "sin id responde con un error sin tocar nada", form: { estado: "false" } },
       {
-        name: "un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora",
+        name: "un registro inexistente no cambia ninguna fila y responde que no existe, sin bitacora",
         form: { [idField]: catalog.id, estado: "false" },
         data: { ...lookup({ exists: false }), [`${model}.updateMany`]: () => ({ count: 0 }) },
       },

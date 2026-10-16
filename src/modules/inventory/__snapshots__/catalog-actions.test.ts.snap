@@ -3,7 +3,7 @@
 exports[`categorias de material > activar e inactivar > ADMIN activa un registro inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -58,12 +58,25 @@ exports[`categorias de material > activar e inactivar > ADMIN activa un registro
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `"redirect:/dashboard/inventory/material-categories?toast=material-category-activated"`;
+exports[`categorias de material > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CMA00000004",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > activar e inactivar > ADMIN inactiva un registro activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -118,12 +131,25 @@ exports[`categorias de material > activar e inactivar > ADMIN inactiva un regist
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `"redirect:/dashboard/inventory/material-categories?toast=material-category-deactivated"`;
+exports[`categorias de material > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CMA00000004",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -131,12 +157,23 @@ exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es recha
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`categorias de material > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de material.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CMA00000004",
+    },
+  },
+}
+`;
 
-exports[`categorias de material > activar e inactivar > sin id vuelve a la lista sin tocar nada > llamadas 1`] = `
+exports[`categorias de material > activar e inactivar > sin id responde con un error sin tocar nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -144,12 +181,23 @@ exports[`categorias de material > activar e inactivar > sin id vuelve a la lista
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
+exports[`categorias de material > activar e inactivar > sin id responde con un error sin tocar nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
-exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
+exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y responde que no existe, sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -167,10 +215,32 @@ exports[`categorias de material > activar e inactivar > un registro inexistente 
     "fueraDeTransaccion": true,
     "prisma": "categoria_material.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_material": "CMA00000004",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
 ]
 `;
 
-exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/material-categories"`;
+exports[`categorias de material > activar e inactivar > un registro inexistente no cambia ninguna fila y responde que no existe, sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CMA00000004",
+    },
+  },
+}
+`;
 
 exports[`categorias de material > alta > ADMIN crea un registro > llamadas 1`] = `
 [
@@ -1134,7 +1204,7 @@ exports[`categorias de material > edicion > una carrera por el slug (P2002 al ac
 exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1189,12 +1259,25 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro ina
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types?toast=supplier-type-activated"`;
+exports[`tipos de proveedor > activar e inactivar > ADMIN activa un registro inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TPR00000003",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1249,12 +1332,25 @@ exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro a
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types?toast=supplier-type-deactivated"`;
+exports[`tipos de proveedor > activar e inactivar > ADMIN inactiva un registro activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "TPR00000003",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1262,12 +1358,23 @@ exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`tipos de proveedor > activar e inactivar > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar tipos de proveedor.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TPR00000003",
+    },
+  },
+}
+`;
 
-exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin tocar nada > llamadas 1`] = `
+exports[`tipos de proveedor > activar e inactivar > sin id responde con un error sin tocar nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1275,12 +1382,23 @@ exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > sin id vuelve a la lista sin tocar nada > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
+exports[`tipos de proveedor > activar e inactivar > sin id responde con un error sin tocar nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "El tipo de proveedor no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
-exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > llamadas 1`] = `
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y responde que no existe, sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1298,10 +1416,32 @@ exports[`tipos de proveedor > activar e inactivar > un registro inexistente no c
     "fueraDeTransaccion": true,
     "prisma": "tipo_proveedor_catalogo.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_tipo_proveedor": "TPR00000003",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
 ]
 `;
 
-exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y vuelve a la lista sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-types"`;
+exports[`tipos de proveedor > activar e inactivar > un registro inexistente no cambia ninguna fila y responde que no existe, sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El tipo de proveedor no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "TPR00000003",
+    },
+  },
+}
+`;
 
 exports[`tipos de proveedor > alta > ADMIN crea un registro > llamadas 1`] = `
 [
