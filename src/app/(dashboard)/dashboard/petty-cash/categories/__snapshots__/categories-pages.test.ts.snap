@@ -75,6 +75,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -125,35 +126,6 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <section>
 <div>
 <div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
 <div>Listado de categorías</div>
 </div>
 <div>
@@ -196,7 +168,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -214,7 +186,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -304,6 +276,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -354,35 +327,6 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <section>
 <div>
 <div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
 <div>Listado de categorías</div>
 </div>
 <div>
@@ -425,7 +369,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -443,7 +387,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -527,6 +471,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -577,35 +522,6 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <section>
 <div>
 <div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
 <div>Listado de categorías</div>
 </div>
 <div>
@@ -648,7 +564,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -666,7 +582,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -753,19 +669,13 @@ exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
 <div>
-<label for="nombre_categoria">Nombre de categoría</label>
+<label for="nombre_categoria">Nombre de categoría<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_categoria" required="" name="nombre_categoria" value="nombre_categoria-1"/>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
 <textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>

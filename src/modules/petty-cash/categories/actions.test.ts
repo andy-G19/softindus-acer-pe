@@ -23,9 +23,11 @@ import {
 // transaccion), las revalidaciones, la redireccion y el estado que devuelve
 // al formulario.
 //
-// Hoy autorizan con requireRole(["ADMIN"]): sin permiso redirigen (el doble
-// lanza AuthRejected). El alta y la edicion redirigen con ?toast= al guardar y
-// devuelven el estado de error suelto al fallar. El nombre se recorta y el
+// Desde la ventana modal (entrega 10), el alta y la edicion autorizan con
+// getAuthorizedSession y devuelven el resultado (FormActionState): sin permiso
+// responden con un error en lugar de redirigir. Ya no leen un campo Estado: el
+// alta nace activa y la edicion no cambia el estado. Activar e inactivar
+// siguen con requireRole y redirigen con ?toast=. El nombre se recorta y el
 // duplicado se busca sin distinguir mayusculas. La edicion comprueba primero
 // que la categoria exista, escribe con el cliente global, sin transaccion, y
 // registra la bitacora despues. El cambio de estado lee el registro y escribe
@@ -36,6 +38,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -93,7 +100,7 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 type FormFields = Record<string, string>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState: ExpenseCategoryFormState = { error: "" };
+const initialState: ExpenseCategoryFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -150,7 +157,6 @@ const OTRA_CATEGORIA = "CGA00000002";
 const createForm: FormFields = {
   nombre_categoria: "Fletes y movilidad",
   descripcion: "Taxis y envios del taller.",
-  estado: "true",
 };
 
 type Row = Record<string, unknown>;
@@ -196,14 +202,22 @@ const withId = (fields: FormFields) => ({ ...fields, id_categoria_gasto: CATEGOR
 
 defineCases("createExpenseCategoryAction", (formData) => createExpenseCategoryAction(initialState, formData), [
   { name: "ADMIN crea una categoria activa", form: createForm, data: lookup() },
-  { name: "ADMIN crea una categoria inactiva", form: { ...createForm, estado: "false" }, data: lookup() },
+  {
+    name: "el alta ignora un estado enviado: la categoria nace activa",
+    form: { ...createForm, estado: "false" },
+    data: lookup(),
+  },
   { name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma", form: createForm, role: "WORKSHOP_MASTER" },
   { name: "SELLER es rechazado antes de tocar Prisma", form: createForm, role: "SELLER" },
   {
     name: "un nombre demasiado corto devuelve el error del campo sin tocar Prisma",
     form: { ...createForm, nombre_categoria: "Ab" },
   },
-  { name: "un estado que no es true ni false devuelve el error del campo", form: { ...createForm, estado: "si" } },
+  {
+    name: "un estado que no es true ni false ya no se valida: se ignora",
+    form: { ...createForm, estado: "si" },
+    data: lookup(),
+  },
   {
     name: "el nombre se recorta antes de buscar el duplicado y de guardar",
     form: { ...createForm, nombre_categoria: "  Fletes y movilidad  " },
@@ -248,7 +262,7 @@ defineCases("updateExpenseCategoryAction", (formData) => updateExpenseCategoryAc
     data: lookup({ duplicateOwner: CATEGORIA }),
   },
   {
-    name: "inactivar desde la edicion guarda el estado del formulario",
+    name: "la edicion no cambia el estado aunque se envie",
     form: withId({ ...createForm, estado: "false" }),
     data: lookup(),
   },

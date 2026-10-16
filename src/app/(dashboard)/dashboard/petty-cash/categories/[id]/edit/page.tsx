@@ -14,6 +14,7 @@ import { APP_ROLES } from "@/lib/permissions";
 import { updateExpenseCategoryAction } from "@/modules/petty-cash/categories/actions";
 import { ExpenseCategoryForm } from "@/modules/petty-cash/categories/expense-category-form";
 import { getExpenseCategoryForEdit } from "@/modules/petty-cash/categories/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
 type EditExpenseCategoryPageProps = {
   params: Promise<{
@@ -55,13 +56,13 @@ export default async function EditExpenseCategoryPage({
         <CardContent>
           <ExpenseCategoryForm
             action={updateExpenseCategoryAction}
-            defaultValues={{
+            category={{
               id_categoria_gasto: category.id_categoria_gasto,
               nombre_categoria: category.nombre_categoria,
-              descripcion: category.descripcion ?? "",
-              estado: String(category.estado),
+              descripcion: category.descripcion,
             }}
             submitLabel="Guardar cambios"
+            successNotification={pettyCashNotifications["expense-category-updated"]}
           />
         </CardContent>
       </Card>

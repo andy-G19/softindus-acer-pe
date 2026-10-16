@@ -1,10 +1,7 @@
 import { CheckCircle2, Tags, XCircle } from "lucide-react";
 import Link from "next/link";
 
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowToggleStatusButton } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,9 +30,11 @@ import { APP_ROLES } from "@/lib/permissions";
 import {
   createExpenseCategoryAction,
   toggleExpenseCategoryStatusAction,
+  updateExpenseCategoryAction,
 } from "@/modules/petty-cash/categories/actions";
-import { ExpenseCategoryForm } from "@/modules/petty-cash/categories/expense-category-form";
+import { ExpenseCategoryDialog } from "@/modules/petty-cash/categories/expense-category-form";
 import { getExpenseCategoryList } from "@/modules/petty-cash/categories/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
 type ExpenseCategoriesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -78,7 +77,18 @@ export default async function ExpenseCategoriesPage({
           { label: "Caja chica", href: navigationHrefs.pettyCash },
           { label: "Categorías" },
         ])}
-        actions={<Badge>Solo ADMIN</Badge>}
+        actions={
+          <>
+            <Badge>Solo ADMIN</Badge>
+            <ExpenseCategoryDialog
+              action={createExpenseCategoryAction}
+              title="Nueva categoría de gasto"
+              submitLabel="Guardar categoría"
+              successNotification={pettyCashNotifications["expense-category-created"]}
+              trigger={<Button type="button">Nueva categoría</Button>}
+            />
+          </>
+        }
       />
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -87,23 +97,8 @@ export default async function ExpenseCategoriesPage({
         <KpiCard title="Inactivas" value={inactiveCategories.length.toString()} description="Ya no disponibles." tone="warning" icon={XCircle} />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-3">
+      <section>
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              Nueva categoría de gasto
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ExpenseCategoryForm
-              action={createExpenseCategoryAction}
-              defaultValues={{ estado: "true" }}
-              submitLabel="Guardar categoría"
-            />
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-base">Listado de categorías</CardTitle>
           </CardHeader>
@@ -163,8 +158,21 @@ export default async function ExpenseCategoriesPage({
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
-                        <RowEditLink
-                          href={`/dashboard/petty-cash/categories/${category.id_categoria_gasto}/edit`}
+                        <ExpenseCategoryDialog
+                          action={updateExpenseCategoryAction}
+                          category={{
+                            id_categoria_gasto: category.id_categoria_gasto,
+                            nombre_categoria: category.nombre_categoria,
+                            descripcion: category.descripcion,
+                          }}
+                          title="Editar categoría de gasto"
+                          submitLabel="Guardar cambios"
+                          successNotification={pettyCashNotifications["expense-category-updated"]}
+                          trigger={
+                            <Button type="button" variant="ghost" size="sm">
+                              Editar
+                            </Button>
+                          }
                         />
                         <RowToggleStatusButton
                           action={toggleExpenseCategoryStatusAction}

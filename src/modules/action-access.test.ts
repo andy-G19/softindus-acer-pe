@@ -19,6 +19,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // - sesion invalidada (usuario desactivado): redirige a /login con el motivo;
 // - rol permitido: supera el control de acceso.
 // Un rechazo nunca toca Prisma, la bitacora ni la cache.
+//
+// Las acciones de la pista B que se usan desde una ventana (entrega 10)
+// autorizan con getAuthorizedSession y, en los tres rechazos, responden con un
+// error de permisos (FormActionState) en lugar de redirigir: se declaran en
+// rechazanConResultado.
 
 const mocks = vi.hoisted(() => {
   class RedirectSignal extends Error {
@@ -101,6 +106,8 @@ type ModuloDeAcciones = {
   acciones: string[];
   // Acciones del modulo que exigen otros roles que el resto.
   rolesPorAccion?: Record<string, Rol[]>;
+  // Acciones que al negar responden con un error en lugar de redirigir.
+  rechazanConResultado?: string[];
 };
 
 const MODULOS: ModuloDeAcciones[] = [
@@ -190,6 +197,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateExpenseCategoryAction",
       "toggleExpenseCategoryStatusAction",
     ],
+    rechazanConResultado: ["createExpenseCategoryAction", "updateExpenseCategoryAction"],
   },
   {
     ruta: "petty-cash/expenses/actions",
@@ -323,15 +331,15 @@ async function loadAction(modulo: ModuloDeAcciones, name: string) {
  * Devuelve el destino si la accion redirige; cualquier otro final (retorno,
  * error de validacion o acceso a Prisma) significa que supero el control.
  */
-async function run(action: ServerAction) {
+async function run(action: ServerAction): Promise<{ redirectedTo: string | null; result?: unknown }> {
   const formData = new FormData();
 
   try {
     if (action.length >= 2) {
-      await action({ error: "" }, formData);
-    } else {
-      await action(formData);
+      return { redirectedTo: null, result: await action({ error: "" }, formData) };
     }
+
+    return { redirectedTo: null, result: await action(formData) };
   } catch (error) {
     if (error instanceof mocks.RedirectSignal) {
       return { redirectedTo: error.url };
@@ -339,9 +347,10 @@ async function run(action: ServerAction) {
 
     return { redirectedTo: null };
   }
-
-  return { redirectedTo: null };
 }
+
+// El error de permisos de una accion que rechaza con un resultado.
+const PERMISSION_ERROR = { status: "error", error: expect.stringContaining("permisos") };
 
 function expectNoSideEffects() {
   expect(mocks.prismaAccesses).toEqual([]);
@@ -372,11 +381,50 @@ describe.each(MODULOS)("$ruta", (modulo) => {
         (name) => !modulo.acciones.includes(name),
       ),
     ).toEqual([]);
+    expect((modulo.rechazanConResultado ?? []).filter((name) => !modulo.acciones.includes(name))).toEqual([]);
   });
 
   describe.each(modulo.acciones)("%s", (name) => {
     const permitidos = modulo.rolesPorAccion?.[name] ?? modulo.roles;
     const denegados = ROLES.filter((role) => !permitidos.includes(role));
+
+    if (modulo.rechazanConResultado?.includes(name)) {
+      it("sin sesion responde con el error de permisos, sin redirigir", async () => {
+        const action = await loadAction(modulo, name);
+
+        await expect(run(action)).resolves.toEqual({ redirectedTo: null, result: expect.objectContaining(PERMISSION_ERROR) });
+        expectNoSideEffects();
+      });
+
+      it("con la sesion invalidada responde con el error de permisos", async () => {
+        mocks.auth.mockResolvedValue(INVALIDATED_SESSION);
+        const action = await loadAction(modulo, name);
+
+        await expect(run(action)).resolves.toEqual({ redirectedTo: null, result: expect.objectContaining(PERMISSION_ERROR) });
+        expectNoSideEffects();
+      });
+
+      it.each(denegados)("con rol %s responde con el error de permisos", async (role) => {
+        mocks.auth.mockResolvedValue(activeSession(role));
+        const action = await loadAction(modulo, name);
+
+        await expect(run(action)).resolves.toEqual({ redirectedTo: null, result: expect.objectContaining(PERMISSION_ERROR) });
+        expectNoSideEffects();
+      });
+
+      it.each(permitidos)("con rol %s supera el control de acceso", async (role) => {
+        mocks.auth.mockResolvedValue(activeSession(role));
+        const action = await loadAction(modulo, name);
+
+        const { redirectedTo, result } = await run(action);
+
+        expect(redirectedTo).toBeNull();
+        expect(result).not.toEqual(expect.objectContaining(PERMISSION_ERROR));
+        expect(mocks.auth).toHaveBeenCalledTimes(1);
+      });
+
+      return;
+    }
 
     it("sin sesion redirige a /login", async () => {
       const action = await loadAction(modulo, name);
