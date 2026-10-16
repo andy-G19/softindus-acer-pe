@@ -206,15 +206,40 @@ describe("FormDialog", () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it("con cambios, recargar la pagina no lo pregunta el navegador (comportamiento de la entrega 9)", async () => {
+  it("con cambios, recargar o salir de la pagina pide confirmacion al navegador", async () => {
+    await renderDialog();
+    await open();
+    const clean = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(clean);
+    expect(clean.defaultPrevented).toBe(false);
+
+    await type("Distribuidor");
+    const dirty = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(dirty);
+
+    expect(dirty.defaultPrevented).toBe(true);
+  });
+
+  it("tras guardar o descartar, recargar ya no pide confirmacion aunque la ventana siga montada", async () => {
     await renderDialog();
     await open();
     await type("Distribuidor");
+    await act(async () => button("Simular guardado").click());
+    await settle();
 
-    const unload = new Event("beforeunload", { cancelable: true });
-    window.dispatchEvent(unload);
+    const afterSave = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(afterSave);
+    expect(afterSave.defaultPrevented).toBe(false);
 
-    expect(unload.defaultPrevented).toBe(false);
+    await open();
+    await type("Otro tipo");
+    await act(async () => closeX().click());
+    await act(async () => button("Descartar cambios").click());
+    await settle();
+
+    const afterDiscard = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(afterDiscard);
+    expect(afterDiscard.defaultPrevented).toBe(false);
   });
 });
 

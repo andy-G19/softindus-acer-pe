@@ -23,14 +23,15 @@ type FormDialogProps = {
 // abre su boton y, al cerrarla, Radix devuelve el foco a ese boton. El
 // formulario se monta cada vez que se abre, asi que empieza sin estado.
 // - Escribir deja cambios pendientes: cerrar (Cancelar, X, Esc o el velo) pide
-//   confirmar el descarte.
+//   confirmar el descarte, y recargar o salir de la pagina lo pregunta el
+//   navegador, como en el panel lateral.
 // - Mientras la accion esta pendiente no se cierra.
 // - Tras guardar se cierra sin preguntar; la lista se actualiza por el
 //   revalidatePath de la accion.
 export function FormDialog({ trigger, title, description, discardTitle, discardDescription, children }: FormDialogProps) {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
-  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: close, warnOnUnload: false });
+  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: close });
 
   function changeOpen(next: boolean) {
     if (next) {

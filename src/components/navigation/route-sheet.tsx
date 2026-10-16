@@ -48,7 +48,7 @@ export function RouteSheet({ title, description, discardTitle, discardDescriptio
     router.back();
   }
 
-  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: leave, warnOnUnload: true });
+  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: leave });
 
   return (
     <FormSurfaceProvider value={controls}>

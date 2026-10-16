@@ -41,17 +41,16 @@ export type SurfaceLeaveReason = "saved" | "closed";
 type DiscardGuardOptions = {
   /** Cierra la ventana sin preguntar. */
   onLeave: (reason: SurfaceLeaveReason) => void;
-  /** Con cambios, recargar o salir de la pagina lo pregunta el navegador. */
-  warnOnUnload: boolean;
 };
 
 /**
  * Cambios pendientes y guarda de ocupado de una ventana con formulario.
  * La ventana llama a markDirty(true) en cada evento input y a
  * controls.requestClose() cuando se intenta cerrar (X, Esc, el velo o
- * Cancelar); pinta DiscardConfirmDialog con discardDialog.
+ * Cancelar); pinta DiscardConfirmDialog con discardDialog. Con cambios,
+ * recargar o salir de la pagina lo pregunta el navegador (beforeunload).
  */
-export function useDiscardGuard({ onLeave, warnOnUnload }: DiscardGuardOptions) {
+export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
   const [dirty, setDirty] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   // Los controles leen refs para ser estables: si cambiaran con dirty, el
@@ -66,7 +65,7 @@ export function useDiscardGuard({ onLeave, warnOnUnload }: DiscardGuardOptions) 
   }, [onLeave]);
 
   useEffect(() => {
-    if (!warnOnUnload || !dirty) {
+    if (!dirty) {
       return;
     }
 
@@ -74,7 +73,7 @@ export function useDiscardGuard({ onLeave, warnOnUnload }: DiscardGuardOptions) 
     window.addEventListener("beforeunload", warn);
 
     return () => window.removeEventListener("beforeunload", warn);
-  }, [dirty, warnOnUnload]);
+  }, [dirty]);
 
   const markDirty = useCallback((next: boolean) => {
     dirtyRef.current = next;
