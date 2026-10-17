@@ -70,6 +70,11 @@ definePageSuite([
           ]),
         },
       },
+      // Entrega 10.2: lo que pasa hoy con un rango invertido.
+      {
+        name: "rango invertido",
+        searchParams: { dateFrom: "2026-07-31", dateTo: "2026-07-01" },
+      },
     ],
   },
 ]);

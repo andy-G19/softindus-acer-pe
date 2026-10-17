@@ -66,6 +66,16 @@ definePageSuite([
         },
       },
       { name: "sin resultados", data: { "compra.findMany": rowsFrom("compra", []) } },
+      // Entrega 10.2: lo que pasa hoy con un rango invertido y con uno de mas
+      // de 366 dias; la exportacion rechaza los dos con un 400.
+      {
+        name: "rango invertido",
+        searchParams: { dateFrom: "2026-07-31", dateTo: "2026-07-01" },
+      },
+      {
+        name: "rango de mas de 366 dias",
+        searchParams: { dateFrom: "2025-01-01", dateTo: "2026-07-31" },
+      },
     ],
   },
 ]);
