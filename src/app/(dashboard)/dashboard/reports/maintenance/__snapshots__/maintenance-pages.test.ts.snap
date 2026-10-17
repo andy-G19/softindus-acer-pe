@@ -130,20 +130,18 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -188,11 +186,9 @@ exports[`/dashboard/reports/maintenance > maquina reincidente y preventivo venci
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -761,20 +757,18 @@ exports[`/dashboard/reports/maintenance > rango de mas de 366 dias > resultado 1
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2025-01-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2025-01-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2025-01-01" name="dateTo" value="2026-07-31"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -819,11 +813,9 @@ exports[`/dashboard/reports/maintenance > rango de mas de 366 dias > resultado 1
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1274,20 +1266,19 @@ exports[`/dashboard/reports/maintenance > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-31"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-31"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-01"/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -1332,11 +1323,9 @@ exports[`/dashboard/reports/maintenance > rango invertido > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div role="alert">
 <div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
@@ -1475,20 +1464,18 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > resul
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -1533,11 +1520,9 @@ exports[`/dashboard/reports/maintenance > sin filtros, maestro de taller > resul
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -2064,20 +2049,18 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -2122,11 +2105,9 @@ exports[`/dashboard/reports/maintenance > sin resultados > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -2538,20 +2519,18 @@ exports[`/dashboard/reports/maintenance > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/maintenance" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="dateTo" value="2026-07-31"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
-</div>
+</fieldset>
 <div>
 <label for="machineId">Máquina</label>
 <select id="machineId" name="machineId">
@@ -2596,11 +2575,9 @@ exports[`/dashboard/reports/maintenance > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/maintenance">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/maintenance">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>

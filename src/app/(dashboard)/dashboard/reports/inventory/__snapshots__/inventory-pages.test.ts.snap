@@ -112,20 +112,18 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -159,11 +157,9 @@ exports[`/dashboard/reports/inventory > maestro de taller > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -461,20 +457,18 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2025-01-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2025-01-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2025-01-01" name="dateTo" value="2026-07-31"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -508,11 +502,9 @@ exports[`/dashboard/reports/inventory > rango de mas de 366 dias > resultado 1`]
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -773,20 +765,19 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-31"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-31"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-01"/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -820,11 +811,9 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <div role="alert">
 <div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
@@ -945,20 +934,18 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -992,11 +979,9 @@ exports[`/dashboard/reports/inventory > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1290,20 +1275,18 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -1337,11 +1320,9 @@ exports[`/dashboard/reports/inventory > sin resultados > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1561,20 +1542,18 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -1608,11 +1587,9 @@ exports[`/dashboard/reports/inventory > tipos de movimiento, sin orden ni compra
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1964,20 +1941,18 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/inventory" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="dateTo" value="2026-07-15"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-15"/>
-</div>
+</fieldset>
 <div>
 <label for="materialId">Material</label>
 <select id="materialId" name="materialId">
@@ -2011,11 +1986,9 @@ exports[`/dashboard/reports/inventory > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/inventory">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/inventory">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>

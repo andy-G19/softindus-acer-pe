@@ -9,7 +9,9 @@
   Users,
   Wrench,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,7 +22,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -149,93 +150,86 @@ function ReportFilters({
   const { dateFrom, dateTo, machineId, failureStatus, repairStatus, preventiveStatus, searchText } = filters;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Filtros del reporte</CardTitle>
-      </CardHeader>
+    <FilterBar
+      action="/dashboard/reports/maintenance"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/maintenance"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
 
-      <CardContent>
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-          <div className="space-y-2">
-            <Label htmlFor="dateFrom">Fecha desde</Label>
-            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-          </div>
+      <Field id="machineId" label="Máquina">
+        {(control) => (
+          <NativeSelect {...control} name="machineId" defaultValue={machineId}>
+            <option value="">Todas las máquinas</option>
+            {machines.map((item) => (
+              <option key={item.id_maquina} value={item.id_maquina}>
+                {item.nombre}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="dateTo">Fecha hasta</Label>
-            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-          </div>
+      <Field id="failureStatus" label="Estado falla">
+        {(control) => (
+          <NativeSelect {...control} name="failureStatus" defaultValue={failureStatus}>
+            <option value="">Todos</option>
+            {FAILURE_STATUS_OPTIONS.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="machineId">Máquina</Label>
-            <NativeSelect id="machineId" name="machineId" defaultValue={machineId}>
-              <option value="">Todas las máquinas</option>
-              {machines.map((machine) => (
-                <option key={machine.id_maquina} value={machine.id_maquina}>
-                  {machine.nombre}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="repairStatus" label="Estado reparación">
+        {(control) => (
+          <NativeSelect {...control} name="repairStatus" defaultValue={repairStatus}>
+            <option value="">Todos</option>
+            {REPAIR_STATUS_OPTIONS.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="failureStatus">Estado falla</Label>
-            <NativeSelect id="failureStatus" name="failureStatus" defaultValue={failureStatus}>
-              <option value="">Todos</option>
-              {FAILURE_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="preventiveStatus" label="Estado preventivo">
+        {(control) => (
+          <NativeSelect {...control} name="preventiveStatus" defaultValue={preventiveStatus}>
+            <option value="">Todos</option>
+            {PREVENTIVE_STATUS_OPTIONS.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="repairStatus">Estado reparación</Label>
-            <NativeSelect id="repairStatus" name="repairStatus" defaultValue={repairStatus}>
-              <option value="">Todos</option>
-              {REPAIR_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="preventiveStatus">Estado preventivo</Label>
-            <NativeSelect id="preventiveStatus" name="preventiveStatus" defaultValue={preventiveStatus}>
-              <option value="">Todos</option>
-              {PREVENTIVE_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="searchText">Buscar</Label>
-            <Input
-              id="searchText"
-              name="searchText"
-              type="text"
-              defaultValue={searchText}
-              placeholder="Máquina, falla, responsable..."
-            />
-          </div>
-
-          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-            <Button type="submit">Aplicar filtros</Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/reports/maintenance">
-                Limpiar filtros
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <Field id="searchText" label="Buscar">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchText"
+            type="text"
+            defaultValue={searchText}
+            placeholder="Máquina, falla, responsable..."
+          />
+        )}
+      </Field>
+    </FilterBar>
   );
 }
 
