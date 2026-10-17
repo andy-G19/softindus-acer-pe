@@ -113,6 +113,22 @@ function buildPreventiveWhere(
   };
 }
 
+// Opciones del filtro de maquina del reporte. Devuelve la promesa de Prisma
+// en el orden en que la compone getMaintenanceReportData.
+function findMaintenanceFilterOptions() {
+  return [
+    prisma.maquina.findMany({
+      orderBy: {
+        nombre: "asc",
+      },
+      select: {
+        id_maquina: true,
+        nombre: true,
+      },
+    }),
+  ] as const;
+}
+
 export async function getMaintenanceReportData(filters: MaintenanceReportFilters) {
   const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
   const failureWhere = buildFailureWhere(filters, dateRange);
@@ -121,15 +137,7 @@ export async function getMaintenanceReportData(filters: MaintenanceReportFilters
 
   const [machines, failures, repairs, preventiveMaintenances] =
     await Promise.all([
-      prisma.maquina.findMany({
-        orderBy: {
-          nombre: "asc",
-        },
-        select: {
-          id_maquina: true,
-          nombre: true,
-        },
-      }),
+      ...findMaintenanceFilterOptions(),
 
       prisma.falla_maquina.findMany({
         where: failureWhere,
