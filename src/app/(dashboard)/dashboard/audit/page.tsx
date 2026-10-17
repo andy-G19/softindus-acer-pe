@@ -1,5 +1,7 @@
 ﻿import { Database, ScrollText, Users } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +12,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -55,63 +56,55 @@ function ReportFilters({
   const { q, usuario, accion, entidad, from, to } = filters;
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <div className="space-y-2">
-            <Label htmlFor="q">Buscar</Label>
-            <Input id="q" name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="usuario">Usuario</Label>
-            <NativeSelect id="usuario" name="usuario" defaultValue={usuario}>
-              <option value="">Todos los usuarios</option>
-              {users.map((user) => (
-                <option key={user.id_usuario} value={user.id_usuario}>
-                  {user.apellidos}, {user.nombres}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="accion">Acción</Label>
-            <NativeSelect id="accion" name="accion" defaultValue={accion}>
-              <option value="">Todas las acciones</option>
-              {actions.map((item) => (
-                <option key={item.accion} value={item.accion}>
-                  {item.accion}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="entidad">Entidad</Label>
-            <NativeSelect id="entidad" name="entidad" defaultValue={entidad}>
-              <option value="">Todas las entidades</option>
-              {entities.map((item) => (
-                <option key={item.entidad_afectada} value={item.entidad_afectada}>
-                  {item.entidad_afectada}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input id="from" name="from" type="date" defaultValue={from} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input id="to" name="to" type="date" defaultValue={to} />
-          </div>
-          <div className="flex items-end gap-2">
-            <Button type="submit">Filtrar</Button>
-            <Button variant="clear" asChild>
-              <Link href="/dashboard/audit">Limpiar</Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+    <FilterBar
+      action="/dashboard/audit"
+      label="Filtros de la bitácora"
+      clearHref="/dashboard/audit"
+      clearLabel="Limpiar"
+    >
+      <Field id="q" label="Buscar">
+        {(control) => (
+          <Input {...control} name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" />
+        )}
+      </Field>
+      <Field id="usuario" label="Usuario">
+        {(control) => (
+          <NativeSelect {...control} name="usuario" defaultValue={usuario}>
+            <option value="">Todos los usuarios</option>
+            {users.map((user) => (
+              <option key={user.id_usuario} value={user.id_usuario}>
+                {user.apellidos}, {user.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="accion" label="Acción">
+        {(control) => (
+          <NativeSelect {...control} name="accion" defaultValue={accion}>
+            <option value="">Todas las acciones</option>
+            {actions.map((item) => (
+              <option key={item.accion} value={item.accion}>
+                {item.accion}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="entidad" label="Entidad">
+        {(control) => (
+          <NativeSelect {...control} name="entidad" defaultValue={entidad}>
+            <option value="">Todas las entidades</option>
+            {entities.map((item) => (
+              <option key={item.entidad_afectada} value={item.entidad_afectada}>
+                {item.entidad_afectada}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+      <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+    </FilterBar>
   );
 }
 
@@ -140,11 +133,11 @@ export default async function AuditPage({ searchParams }: PageProps) {
     const options = await getAuditLogFilterOptions();
 
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <PageHeader {...pageHeader} />
         <ReportFilters filters={filters} {...options} />
         <InvertedRangeNotice />
-      </main>
+      </div>
     );
   }
 
@@ -175,7 +168,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
   const exportRangeExceeded = exceedsReportExportRange(from, to);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         {...pageHeader}
         actions={
@@ -259,7 +252,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
         searchParams={params}
         itemLabel="operaciones"
       />
-    </main>
+    </div>
   );
 }
 

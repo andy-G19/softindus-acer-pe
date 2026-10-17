@@ -5,8 +5,9 @@
   LayoutGrid,
   Users,
 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import {
   Card,
   CardContent,
@@ -16,7 +17,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -126,93 +126,86 @@ function ReportFilters({
   const { dateFrom, dateTo, reportModule, format, status, userId, searchText } = filters;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Filtros del historial</CardTitle>
-      </CardHeader>
+    <FilterBar
+      action="/dashboard/reports/export-history"
+      label="Filtros del historial"
+      clearHref="/dashboard/reports/export-history"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
 
-      <CardContent>
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-          <div className="space-y-2">
-            <Label htmlFor="dateFrom">Fecha desde</Label>
-            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-          </div>
+      <Field id="module" label="Reporte">
+        {(control) => (
+          <NativeSelect {...control} name="module" defaultValue={reportModule}>
+            <option value="">Todos los reportes</option>
+            {REPORT_MODULE_OPTIONS.map((moduleOption) => (
+              <option key={moduleOption} value={moduleOption}>
+                {moduleOption}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="dateTo">Fecha hasta</Label>
-            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-          </div>
+      <Field id="format" label="Formato">
+        {(control) => (
+          <NativeSelect {...control} name="format" defaultValue={format}>
+            <option value="">Todos los formatos</option>
+            {FORMAT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="module">Reporte</Label>
-            <NativeSelect id="module" name="module" defaultValue={reportModule}>
-              <option value="">Todos los reportes</option>
-              {REPORT_MODULE_OPTIONS.map((moduleOption) => (
-                <option key={moduleOption} value={moduleOption}>
-                  {moduleOption}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="status" label="Estado">
+        {(control) => (
+          <NativeSelect {...control} name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            {STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="format">Formato</Label>
-            <NativeSelect id="format" name="format" defaultValue={format}>
-              <option value="">Todos los formatos</option>
-              {FORMAT_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="userId" label="Usuario">
+        {(control) => (
+          <NativeSelect {...control} name="userId" defaultValue={userId}>
+            <option value="">Todos los usuarios</option>
+            {users.map((user) => (
+              <option key={user.id_usuario} value={user.id_usuario}>
+                {user.apellidos}, {user.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Estado</Label>
-            <NativeSelect id="status" name="status" defaultValue={status}>
-              <option value="">Todos los estados</option>
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="userId">Usuario</Label>
-            <NativeSelect id="userId" name="userId" defaultValue={userId}>
-              <option value="">Todos los usuarios</option>
-              {users.map((user) => (
-                <option key={user.id_usuario} value={user.id_usuario}>
-                  {user.apellidos}, {user.nombres}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="searchText">Buscar</Label>
-            <Input
-              id="searchText"
-              name="searchText"
-              type="text"
-              defaultValue={searchText}
-              placeholder="Archivo, filtros..."
-            />
-          </div>
-
-          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-            <Button type="submit">Aplicar filtros</Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/reports/export-history">
-                Limpiar filtros
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <Field id="searchText" label="Buscar">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchText"
+            type="text"
+            defaultValue={searchText}
+            placeholder="Archivo, filtros..."
+          />
+        )}
+      </Field>
+    </FilterBar>
   );
 }
 
