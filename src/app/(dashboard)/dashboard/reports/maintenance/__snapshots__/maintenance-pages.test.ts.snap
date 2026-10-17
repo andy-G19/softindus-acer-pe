@@ -757,8 +757,7 @@ exports[`/dashboard/reports/maintenance > rango de mas de 366 dias > resultado 1
 </div>
 </div>
 <div>
-<a href="/api/reports/export/maintenance?dateFrom=2025-01-01&amp;dateTo=2026-07-31&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
-<a href="/api/reports/export/maintenance?dateFrom=2025-01-01&amp;dateTo=2026-07-31&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
+<p>Para exportar, el rango no puede superar 366 días.</p>
 </div>
 </div>
 </section>

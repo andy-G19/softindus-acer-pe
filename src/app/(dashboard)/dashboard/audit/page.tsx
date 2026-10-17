@@ -32,8 +32,9 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
-import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
 import { getAuditLogData, getAuditLogFilterOptions } from "@/modules/audit/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 type PageProps = {
@@ -171,23 +172,29 @@ export default async function AuditPage({ searchParams }: PageProps) {
     to,
   };
 
+  const exportRangeExceeded = exceedsReportExportRange(from, to);
+
   return (
     <main className="space-y-6">
       <PageHeader
         {...pageHeader}
         actions={
-          <>
-            <Button variant="outline" asChild>
-              <a href={buildReportExportHref("audit", exportParams)}>
-                Exportar Excel
-              </a>
-            </Button>
-            <Button asChild>
-              <a href={buildReportExportHref("audit", exportParams, "pdf")}>
-                Exportar PDF
-              </a>
-            </Button>
-          </>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <a href={buildReportExportHref("audit", exportParams)}>
+                  Exportar Excel
+                </a>
+              </Button>
+              <Button asChild>
+                <a href={buildReportExportHref("audit", exportParams, "pdf")}>
+                  Exportar PDF
+                </a>
+              </Button>
+            </>
+          )
         }
       />
 

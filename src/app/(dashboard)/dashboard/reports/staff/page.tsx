@@ -34,8 +34,9 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
 import { getStaffReportData, getStaffReportFilterOptions } from "@/modules/reports/staff/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 import {
   parseStringParam,
@@ -185,23 +186,29 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
     to,
   };
 
+  const exportRangeExceeded = exceedsReportExportRange(from, to);
+
   return (
     <main className="space-y-6">
       <PageHeader
         {...pageHeader}
         actions={
-          <>
-            <Button variant="outline" asChild>
-              <a href={buildReportExportHref("staff", exportParams)}>
-                Exportar Excel
-              </a>
-            </Button>
-            <Button asChild>
-              <a href={buildReportExportHref("staff", exportParams, "pdf")}>
-                Exportar PDF
-              </a>
-            </Button>
-          </>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <a href={buildReportExportHref("staff", exportParams)}>
+                  Exportar Excel
+                </a>
+              </Button>
+              <Button asChild>
+                <a href={buildReportExportHref("staff", exportParams, "pdf")}>
+                  Exportar PDF
+                </a>
+              </Button>
+            </>
+          )
         }
       />
 

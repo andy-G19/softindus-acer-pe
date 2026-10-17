@@ -460,3 +460,37 @@ describe("rango invertido: la pantalla no exporta y la ruta lo rechaza", () => {
     });
   }
 });
+
+// Entrega 10.2: con un rango de mas de 366 dias la pantalla muestra los datos
+// pero no ofrece exportar, porque la ruta lo rechaza con un 400.
+describe("rango de mas de 366 dias: la pantalla no exporta y la ruta lo rechaza", () => {
+  preloadPages(loadRoute, ...EXPORTING_SCREENS.map((screen) => screen.load));
+
+  for (const screen of EXPORTING_SCREENS) {
+    it(`${screen.report}: sin enlace de exportar en la pantalla y 400 en la ruta`, async () => {
+      const { from, to } = REPORT_REGISTRY[screen.report].dateParams;
+      const searchParams = { [from]: "2025-01-01", [to]: "2026-07-31" };
+      const page = await characterizePage(
+        screen.load,
+        { name: "rango de mas de 366 dias", searchParams },
+        screen.route,
+      );
+
+      expect(page.html).toContain("Para exportar, el rango no puede superar 366 días.");
+      expect(page.html).not.toContain("Corrige el rango de fechas para ver el reporte.");
+      expect(page.html).not.toContain("/api/reports/export/");
+
+      const query = new URLSearchParams({ ...searchParams, fileFormat: "excel" }).toString();
+      const { status, calls } = await runExport(
+        screen.report,
+        `/api/reports/export/${screen.report}?${query}`,
+      );
+      const exportLogged = calls.some(
+        (call) => isPrismaCall(call) && call.prisma.startsWith("exportacion_datos."),
+      );
+
+      expect(status).toBe(400);
+      expect(exportLogged).toBe(false);
+    });
+  }
+});

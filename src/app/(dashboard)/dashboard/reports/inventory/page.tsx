@@ -33,11 +33,12 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
 import {
   getInventoryReportData,
   getInventoryReportFilterOptions,
 } from "@/modules/reports/inventory/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
 import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const INVENTORY_MOVEMENT_OPTIONS = [
@@ -291,20 +292,26 @@ export default async function InventoryReportPage({
     return sum + toNumber(movement.cantidad);
   }, 0);
 
+  const exportRangeExceeded = exceedsReportExportRange(dateFrom, dateTo);
+
   return (
     <div className="space-y-6">
       <PageHeader
         {...pageHeader}
         actions={
-          <>
-            <Button asChild>
-              <a href={csvExportHref}>Exportar Excel</a>
-            </Button>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button asChild>
+                <a href={csvExportHref}>Exportar Excel</a>
+              </Button>
 
-            <Button variant="destructive" asChild>
-              <a href={pdfExportHref}>Exportar PDF</a>
-            </Button>
-          </>
+              <Button variant="destructive" asChild>
+                <a href={pdfExportHref}>Exportar PDF</a>
+              </Button>
+            </>
+          )
         }
       />
 

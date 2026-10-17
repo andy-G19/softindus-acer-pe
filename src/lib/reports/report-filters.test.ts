@@ -4,6 +4,7 @@ import { DATE_RANGE_INVERTED_MESSAGE } from "@/lib/date-range";
 import { MAX_DATE_RANGE_DAYS } from "@/lib/reports/export-limits";
 import {
   buildReportDateRange,
+  exceedsReportExportRange,
   isReportDateRangeInverted,
   normalizeReportTextParam,
   parseExportFormat,
@@ -135,6 +136,40 @@ describe("isReportDateRangeInverted", () => {
       const rejectedAsInverted = !result.ok && result.error === DATE_RANGE_INVERTED_MESSAGE;
 
       expect(isReportDateRangeInverted(dateFrom, dateTo)).toBe(rejectedAsInverted);
+    }
+  });
+});
+
+// Entrega 10.2: la pantalla deja de ofrecer exportar un rango que la ruta
+// rechazaria por superar MAX_DATE_RANGE_DAYS, con la misma regla.
+describe("exceedsReportExportRange", () => {
+  it.each([
+    ["2025-01-01", "2026-07-31", true],
+    ["2025-07-29", "2026-07-31", true],
+    ["2025-07-30", "2026-07-31", false],
+    ["2026-07-01", "2026-07-31", false],
+    ["2026-07-31", "2025-01-01", false],
+    ["2025-1-1", "2026-07-31", true],
+    ["", "2026-07-31", false],
+    ["2025-01-01", "", false],
+  ])("desde %j hasta %j: %s", (dateFrom, dateTo, expected) => {
+    expect(exceedsReportExportRange(dateFrom, dateTo)).toBe(expected);
+  });
+
+  it("coincide con el rechazo de la ruta de exportacion", () => {
+    const pairs = [
+      ["2025-01-01", "2026-07-31"],
+      ["2025-07-29", "2026-07-31"],
+      ["2025-07-30", "2026-07-31"],
+      ["2026-07-31", "2025-01-01"],
+      ["2025-1-1", "2026-07-31"],
+    ] as const;
+
+    for (const [dateFrom, dateTo] of pairs) {
+      const result = validateDateRange(parseReportDate(dateFrom), parseReportDate(dateTo));
+      const rejectedAsTooLong = !result.ok && result.error !== DATE_RANGE_INVERTED_MESSAGE;
+
+      expect(exceedsReportExportRange(dateFrom, dateTo)).toBe(rejectedAsTooLong);
     }
   });
 });

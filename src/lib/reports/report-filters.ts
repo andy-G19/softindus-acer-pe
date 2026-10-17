@@ -57,6 +57,12 @@ function isInvertedRange(from: Date, to: Date) {
   return from.getTime() > to.getTime();
 }
 
+// Mas dias de los que admite la exportacion. La comparten la ruta
+// (validateDateRange) y las pantallas (exceedsReportExportRange).
+function exceedsExportRange(from: Date, to: Date) {
+  return (to.getTime() - from.getTime()) / MS_PER_DAY > MAX_DATE_RANGE_DAYS;
+}
+
 /**
  * Valida un rango de fechas ya parseado: fechaDesde no puede ser mayor que
  * fechaHasta, y el rango no puede superar MAX_DATE_RANGE_DAYS.
@@ -73,9 +79,7 @@ export function validateDateRange(
       };
     }
 
-    const spanDays = (to.getTime() - from.getTime()) / MS_PER_DAY;
-
-    if (spanDays > MAX_DATE_RANGE_DAYS) {
+    if (exceedsExportRange(from, to)) {
       return {
         ok: false,
         error: `El rango de fechas no puede superar ${MAX_DATE_RANGE_DAYS} días.`,
@@ -116,6 +120,18 @@ export function isReportDateRangeInverted(dateFrom: string, dateTo: string) {
   const to = parseReportDate(dateTo);
 
   return Boolean(from && to && isInvertedRange(from, to));
+}
+
+/**
+ * El rango de la URL de un reporte supera los MAX_DATE_RANGE_DAYS que admite
+ * la exportacion, con la regla de la ruta. La pantalla muestra los datos pero
+ * no ofrece exportar (entrega 10.2), porque la ruta responderia 400.
+ */
+export function exceedsReportExportRange(dateFrom: string, dateTo: string) {
+  const from = parseReportDate(dateFrom);
+  const to = parseReportDate(dateTo);
+
+  return Boolean(from && to && exceedsExportRange(from, to));
 }
 
 /** Como parseReportDate, pero el dia siguiente: limite exclusivo de "hasta". */
