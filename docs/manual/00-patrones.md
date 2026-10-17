@@ -68,6 +68,9 @@ confirmación; se igualarán en una próxima actualización.
 - **Activar** se hace al pulsar, sin preguntar.
 - Al terminar aparece un aviso y la etiqueta de la fila cambia a «Activa» o
   «Inactiva».
+- Las listas muestran primero los registros activos. Al inactivar uno, su
+  fila pasa al final de la lista y el cursor la acompaña; al activarlo,
+  vuelve a su lugar.
 - Si otra persona ya había cambiado ese registro y tu lista estaba
   desactualizada, el sistema no hace lo contrario de lo que pediste: te
   avisa, por ejemplo, de que «ya estaba inactivo».

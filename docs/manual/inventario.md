@@ -9,8 +9,8 @@ reglas comunes (ventanas, guardar, cancelar, inactivar y filtros) están en
 **Dónde:** Inventario → Proveedores → Tipos de proveedor.
 **Quién:** solo el administrador (ADMIN).
 
-Los tipos de proveedor clasifican a los proveedores, por ejemplo
-«Distribuidor» o «Fabricante».
+Los tipos de proveedor clasifican a los proveedores, por ejemplo «Materia
+prima» o «Servicios».
 
 - **Crear:** pulsa **Nuevo tipo de proveedor**, completa el nombre y el slug
   y pulsa **Crear**. Los tipos nuevos nacen activos.
@@ -26,8 +26,8 @@ Los tipos de proveedor clasifican a los proveedores, por ejemplo
 **Quién:** el administrador (ADMIN) las crea, edita e inactiva; el maestro
 de taller (WORKSHOP_MASTER) solo las consulta y ve «Solo lectura».
 
-Las categorías agrupan los materiales e insumos, por ejemplo «Planchas» o
-«Consumibles».
+Las categorías agrupan los materiales e insumos, por ejemplo «Materia prima»
+o «Herramienta».
 
 - **Crear:** pulsa **Nueva categoría**, completa el nombre y el slug y pulsa
   **Crear**. Las categorías nuevas nacen activas.

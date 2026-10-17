@@ -3191,9 +3191,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 |---|---|---|---|---|---|---|
 | Clientes | Comercial | ADMIN, SELLER | — | Panel lateral | 9 | Migrado |
 | Categorías de producto | Comercial | ADMIN | — | Modal breve | 9 | Migrado |
-| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado (en verificación) |
-| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado (en verificación) |
-| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado (en verificación); sin el campo Estado |
+| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
+| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
+| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado; sin el campo Estado |
 | Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
@@ -3228,7 +3228,7 @@ destructivas confirman:
 
 | Sub-entrega | Acciones |
 |---|---|
-| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas, en verificación) |
+| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
 | 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
 | 10.4 | Inactivar cliente, producto y categoría de producto |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
@@ -3238,8 +3238,9 @@ destructivas confirman:
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
 
-Fecha: 2026-10-15 y 2026-10-16. Estado: en verificación en staging. 12
-commits, de `582f871` a `0f968ad`, más este registro:
+Fecha: 2026-10-15 y 2026-10-16. Estado: cerrada en staging; falta integrarla
+en `main`. 12 commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y
+este cierre:
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3372,6 +3373,115 @@ Hallazgos:
 7. Quitar un campo de un formulario exige quitarlo también del esquema si
    tiene un valor por defecto.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 (`tmp/e10-diff/huella.js`): la v4 de la entrega 9 con su propia
+  base (`e10-huella`) y etiquetas `e10/`. Guarda el texto completo de cada
+  elemento (la v4 lo cortaba en 120 caracteres, hallazgo 9 de la entrega 9) y
+  devuelve aparte el hash de los textos.
+- Medidor de tareas (`tmp/e10-diff/medidor.js`), como en la entrega 9.
+- Clics y teclas reales; también Enter y Esc.
+- Las listas que cambian con los datos de prueba se capturaron en el «antes»
+  después de sus tareas, y en el «después» antes de las suyas: las dos fases
+  ven una sola fila «PRUEBA E10 antes» activa.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-17, de 00:29 a 00:43 UTC, sobre `e81299e` (`buildId`
+  `FmieWNMH6hbqw0HZiY0ih`): 17 capturas con ADMIN, con el sello `0078f4e8…`,
+  igual en Python. Tres repeticiones de control dieron el mismo hash.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-1.md`), con
+  un anexo del «antes»: las listas se ordenan por estado, y al inactivar la
+  fila salta al final.
+- Datos de prueba, con autorización del responsable: `TPR00000006` y
+  `CGA00000002` («PRUEBA E10 antes») y `TPR00000007` y `CGA00000003`
+  («PRUEBA E10 despues»), todos activos al terminar. T4 y los controles no
+  escriben.
+- Push de 15 commits (`62640e1` a `b3ec729`): CI #76 en verde (2m 54s).
+  Vercel desplegó `b3ec729` (`success` a las 01:13:36 UTC) y cambió el
+  `buildId` (`EK0U8em4FPh9uqS2QCKRX`). El CSS
+  servido es el predicho byte a byte (113.365 bytes, `3e6b3374…`).
+- «Después» el 2026-10-17, de 01:52 a 02:06 UTC: 17 capturas, sello
+  `299de801…`, igual en Python.
+
+Huella, 17 de 17:
+
+- Idénticas, 8: inicio a 1281 y a 376 px, categorías de producto y las
+  secciones «Fundamentos», «Botones», «Campos», «Mensajes» y «Presentación».
+- Cambian como se predijo, 8:
+  - tipos de proveedor y categorías de material: «Nuevo…» en el encabezado,
+    sin formulario en la página y la tabla de solo lectura (de 355 a 301 y de
+    337 a 290 elementos);
+  - categorías de gasto a las dos anchuras: `FilterBar` fuera de la tarjeta y
+    «Nueva categoría» junto a «Solo ADMIN»;
+  - tipos de proveedor a 376 px: lo mismo que a 1281, sin desbordamiento;
+  - la edición de `CGA00000001`: sin el selector Estado y con «Nombre de
+    categoría*»;
+  - «Ventanas»: solo el texto de la nota, con la misma geometría;
+  - «Listados»: la nota crece 39 px y los otros 122 elementos solo bajan
+    39 px.
+- Una diferencia del «antes», demostrada: clientes a 1281 px. Solo cambiaban
+  los enlaces «Dashboard» y «Comercial» de la barra lateral. En el «antes» su
+  transición de color estaba congelada en el arranque, con «Dashboard» aún
+  activo: la página estaba oculta y Chrome no avanza las animaciones sin
+  pintar. Pausadas esas 6 transiciones al arrancar, el «después» da el hash
+  del «antes» (`aa3d2de8…`). La 10.1 no toca la barra ni sus estilos.
+
+Tareas, con los mismos pasos en las dos fases. Los tiempos son del
+navegador, del clic al aviso o al mensaje:
+
+| Tarea | Antes (`e81299e`) | Después (`b3ec729`) |
+|---|---|---|
+| T6 Alta de tipo de proveedor con el slug `otros` | Alerta (779 ms) y toast de error; se borran los tres campos; foco en `body` | Ventana con el foco en el nombre; alerta dentro (785 ms), sin toast; se conserva lo escrito; foco en el nombre, con `aria-invalid` |
+| T6 Alta válida | Toast «Registro creado correctamente» (1.041 ms); foco en `body` | Un aviso (1.018 ms); la ventana se cierra; foco en «Nuevo tipo de proveedor» |
+| T7 Inactivar el tipo | Sin preguntar; `?toast=` (1.577 ms); foco en `body` | Confirmación con la consecuencia; Esc la cierra sin hacer nada; al confirmar, un aviso (917 ms); la fila pasa al final y el foco la sigue en «Activar» |
+| T7 Activar | Sin preguntar; `?toast=` (1.111 ms); foco en `body` | Con Enter, sin preguntar; un aviso (987 ms); la fila vuelve a su sitio y el foco sigue en el mismo botón, ahora «Inactivar» |
+| T8 Alta de categoría de gasto | En la tarjeta, con selector Estado; `?toast=` (1.099 ms) | En la ventana, sin Estado; un aviso (1.442 ms); foco en «Nueva categoría» |
+| T8 Edición | Página `[id]/edit` con Estado; vuelve con `?toast=` (923 ms) | En la ventana: un aviso (1.530 ms) y el foco vuelve a «Editar». Por la URL, la página completa sin Estado: un aviso (1.257 ms) y vuelve a la lista sin `?toast=` |
+| T8 Inactivar y activar | Sin preguntar, con `?toast=` (1.061 y 952 ms) | Inactivar confirma y activar no; un aviso cada uno (1.140 y 894 ms); el foco queda en el mismo botón |
+
+Controles del «después», sin escribir:
+
+- T4: «Nuevo cliente» desde `?q=a`. Sin cambios, Cancelar cierra sin
+  preguntar; con un nombre escrito pide «¿Descartar el cliente nuevo?», y
+  descartar vuelve a `?q=a` con el foco en el enlace.
+- Categoría de producto: la ventana abre con el foco en el nombre; Esc con
+  cambios pide «¿Descartar la categoría?»; al descartar se cierra y el foco
+  vuelve a «Nueva categoría».
+- El aviso al recargar (un `beforeunload` sintético que la página cancela)
+  solo está activo con cambios, en el panel y en la ventana.
+- El clic fuera de la ventana cierra sin cambios y pide descartar con ellos;
+  volver de esa confirmación conserva lo escrito.
+- A 376 px, la ventana de tipo de proveedor ocupa la pantalla (376 × 813)
+  sin desbordamiento; Tab recorre nombre, slug, descripción, Cancelar, Crear
+  y Cerrar sin salir de ella; Esc sin cambios cierra y devuelve el foco.
+- La edición de un tipo de proveedor muestra su código bajo el título.
+
+SELLER y WORKSHOP_MASTER se omitieron por decisión del responsable: el
+«Solo lectura» de las categorías de material lo cubren las pruebas.
+
+Hallazgos de la verificación:
+
+8. Foco (menor; ya ocurría con la ventana de la entrega 9). Si la
+   confirmación de descarte se abre con un clic fuera de la ventana,
+   «Cancelar» la cierra y deja el foco en `body`: el clic quitó el foco del
+   campo y la confirmación lo devuelve al elemento que lo tenía al abrirse.
+   Un Tab vuelve al primer campo. Se propone como primer `fix` de la 10.2.
+9. Método: la sesión del ERP se cierra tras 15 minutos sin actividad y
+   aterriza en el `/login` de producción. Ejecutar JavaScript no cuenta como
+   actividad. Antes de medir se comprueba el origen.
+10. Método: la página puede estar oculta (`document.visibilityState`)
+    aunque el panel figure como mostrado. Entonces las animaciones casi no
+    avanzan: un cierre tardó 1,6 s en desmontar. Se comprueba `data-state` y
+    no la existencia del nodo, y una huella con elementos animados de la
+    barra lateral se repite.
+11. El manual traía ejemplos que no existen («Distribuidor», «Fabricante» y
+    «Planchas»). Ahora usa los registros base de la migración
+    `20260701173000`, y explica que la fila inactiva pasa al final de la
+    lista.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3396,7 +3506,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada en staging con CI #76, 17 de 17 huellas explicadas) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
