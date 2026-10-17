@@ -1,0 +1,1488 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createExpenseCategoryAction > ADMIN crea una categoria activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoria de gasto creada: Fletes y movilidad",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > ADMIN crea una categoria activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > SELLER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > SELLER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de gasto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de gasto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > el alta ignora un estado enviado: la categoria nace activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoria de gasto creada: Fletes y movilidad",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > el alta ignora un estado enviado: la categoria nace activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > el nombre se recorta antes de buscar el duplicado y de guardar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoria de gasto creada: Fletes y movilidad",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > el nombre se recorta antes de buscar el duplicado y de guardar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "  Fletes y movilidad  ",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > la descripcion vacia se guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoria de gasto creada: Fletes y movilidad",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la categoria de gasto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > un estado que no es true ni false ya no se valida: se ignora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Categoria de gasto creada: Fletes y movilidad",
+      "enTransaccion": true,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > un estado que no es true ni false ya no se valida: se ignora > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > un nombre demasiado corto devuelve el error del campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoria.",
+    "fieldErrors": {
+      "nombre_categoria": [
+        "El nombre de la categoría debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Ab",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > un nombre repetido (sin distinguir mayusculas) devuelve el error sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > un nombre repetido (sin distinguir mayusculas) devuelve el error sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoria de gasto con ese nombre.",
+    "fieldErrors": {
+      "nombre_categoria": [
+        "Ya existe una categoria de gasto con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`createExpenseCategoryAction > una carrera por el nombre (P2002 al crear) revierte con el mensaje del duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "categoria_gasto",
+      "prefijo": "CGA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "estado": true,
+        "id_categoria_gasto": "CGA00000010",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+    },
+    "prisma": "categoria_gasto.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`nombre_categoria\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createExpenseCategoryAction > una carrera por el nombre (P2002 al crear) revierte con el mensaje del duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoria de gasto con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Categoria de gasto activada: Fletes",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleExpenseCategoryStatusAction > ADMIN activa una categoria inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Categoria de gasto inactivada: Fletes",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleExpenseCategoryStatusAction > ADMIN inactiva una categoria activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleExpenseCategoryStatusAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de gasto.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleExpenseCategoryStatusAction > sin id responde con un error sin tocar nada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleExpenseCategoryStatusAction > sin id responde con un error sin tocar nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y responde que no existe, sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_categoria": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`toggleExpenseCategoryStatusAction > una categoria inexistente no cambia ninguna fila y responde que no existe, sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CGA00000004",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoria de gasto actualizada: Fletes y movilidad",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > ADMIN actualiza una categoria > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar categorías de gasto.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoria de gasto actualizada: Fletes y movilidad",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > el nombre es de otra categoria > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > el nombre es de otra categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra categoria de gasto con ese nombre.",
+    "fieldErrors": {
+      "nombre_categoria": [
+        "Ya existe otra categoria de gasto con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > la categoria no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > la categoria no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > la edicion no cambia el estado aunque se envie > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Categoria de gasto actualizada: Fletes y movilidad",
+      "enTransaccion": false,
+      "entidad_afectada": "categoria_gasto",
+      "id_registro_afectado": "CGA00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/petty-cash",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/petty-cash/categories",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > la edicion no cambia el estado aunque se envie > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_categoria_gasto": "CGA00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > otro fallo al actualizar da el mensaje generico sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.update",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > otro fallo al actualizar da el mensaje generico sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la categoria de gasto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > sin id > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > sin id > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoria de gasto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > un nombre demasiado corto devuelve el error despues de comprobar la categoria > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > un nombre demasiado corto devuelve el error despues de comprobar la categoria > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la categoria.",
+    "fieldErrors": {
+      "nombre_categoria": [
+        "El nombre de la categoría debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Ab",
+    },
+  },
+}
+`;
+
+exports[`updateExpenseCategoryAction > una carrera por el nombre (P2002 al actualizar) da el mensaje del duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "prisma": "categoria_gasto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_categoria_gasto": true,
+      },
+      "where": {
+        "nombre_categoria": {
+          "equals": "Fletes y movilidad",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "categoria_gasto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Taxis y envios del taller.",
+        "nombre_categoria": "Fletes y movilidad",
+      },
+      "where": {
+        "id_categoria_gasto": "CGA00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "categoria_gasto.update",
+  },
+]
+`;
+
+exports[`updateExpenseCategoryAction > una carrera por el nombre (P2002 al actualizar) da el mensaje del duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una categoria de gasto con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Taxis y envios del taller.",
+      "nombre_categoria": "Fletes y movilidad",
+    },
+  },
+}
+`;

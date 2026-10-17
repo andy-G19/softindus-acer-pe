@@ -1,26 +1,30 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
+import {
+  catalogError,
+  catalogSaved,
+  getCatalogFormValues,
+  type InventoryCatalogFormState,
+} from "@/modules/inventory/catalog-form-state";
 import { inventoryCatalogSchema } from "@/schemas/inventory/catalog.schema";
-
-export type InventoryCatalogFormState = ActionErrorState;
 
 const INVENTORY_PATH = "/dashboard/inventory";
 const MATERIALS_PATH = "/dashboard/inventory/materials";
 const MATERIAL_CATEGORIES_PATH = "/dashboard/inventory/material-categories";
-const initialState: InventoryCatalogFormState = { error: "" };
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
+const PERMISSION_ERROR = "No tienes permisos para gestionar categorías de material.";
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -38,11 +42,20 @@ function getUniqueErrorMessage(error: unknown, message: string) {
   return "No se pudo guardar la categoría. Intenta nuevamente.";
 }
 
+// Entrega 10: el alta y la edicion se usan desde una ventana modal y
+// devuelven el resultado (FormActionState); sin permiso responden con un
+// error en lugar de redirigir.
 export async function createMaterialCategoryAction(
   _prevState: InventoryCatalogFormState,
   formData: FormData,
 ): Promise<InventoryCatalogFormState> {
-  const session = await requireAdmin();
+  const values = getCatalogFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return catalogError(values, PERMISSION_ERROR);
+  }
+
   const parsed = inventoryCatalogSchema.safeParse({
     nombre: formData.get("nombre")?.toString(),
     slug: formData.get("slug")?.toString(),
@@ -50,10 +63,7 @@ export async function createMaterialCategoryAction(
   });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la categoría.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return catalogError(values, "Revisa los datos de la categoría.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -67,24 +77,23 @@ export async function createMaterialCategoryAction(
   });
 
   if (existingCategory) {
-    return {
-      error: "Ya existe una categoría de material con ese nombre o slug.",
-      fieldErrors: {
-        nombre: ["Ya existe una categoría de material con ese nombre o slug."],
-      },
-    };
+    return catalogError(values, "Ya existe una categoría de material con ese nombre o slug.", {
+      nombre: ["Ya existe una categoría de material con ese nombre o slug."],
+    });
   }
 
+  let idCategoriaMaterial: string;
+
   try {
-    await prisma.$transaction(async (tx) => {
-      const idCategoriaMaterial = await getNextCorrelativeId(tx, {
+    idCategoriaMaterial = await prisma.$transaction(async (tx) => {
+      const idNuevo = await getNextCorrelativeId(tx, {
         codigoEntidad: "categoria_material",
         prefijo: "CMA",
       });
 
       await tx.categoria_material.create({
         data: {
-          id_categoria_material: idCategoriaMaterial,
+          id_categoria_material: idNuevo,
           nombre: data.nombre,
           slug: data.slug,
           descripcion: emptyToNull(formData.get("descripcion")),
@@ -95,11 +104,13 @@ export async function createMaterialCategoryAction(
       await registerAuditLog({
         userId: session.user.id,
         entidad_afectada: "categoria_material",
-        id_registro_afectado: idCategoriaMaterial,
+        id_registro_afectado: idNuevo,
         accion: "crear",
         detalle: `Categoría de material creada: ${data.nombre}`,
         tx,
       });
+
+      return idNuevo;
     });
   } catch (error) {
     const errorMessage = getUniqueErrorMessage(
@@ -107,36 +118,39 @@ export async function createMaterialCategoryAction(
       "Ya existe una categoría de material con ese nombre o slug.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage ===
-        "Ya existe una categoría de material con ese nombre o slug."
-          ? { nombre: [errorMessage] }
-          : undefined,
-    };
+    return catalogError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe una categoría de material con ese nombre o slug."
+        ? { nombre: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
   revalidatePath(MATERIAL_CATEGORIES_PATH);
 
-  return initialState;
+  return catalogSaved(values, idCategoriaMaterial);
 }
 
 export async function updateMaterialCategoryAction(
   _prevState: InventoryCatalogFormState,
   formData: FormData,
 ): Promise<InventoryCatalogFormState> {
-  const session = await requireAdmin();
+  const values = getCatalogFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return catalogError(values, PERMISSION_ERROR);
+  }
+
   const idCategoriaMaterial = formData
     .get("id_categoria_material")
     ?.toString();
 
   if (!idCategoriaMaterial) {
-    return {
-      error: "La categoría no existe.",
-    };
+    return catalogError(values, "La categoría no existe.");
   }
 
   const parsed = inventoryCatalogSchema.safeParse({
@@ -146,10 +160,7 @@ export async function updateMaterialCategoryAction(
   });
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la categoría.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return catalogError(values, "Revisa los datos de la categoría.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -166,14 +177,9 @@ export async function updateMaterialCategoryAction(
     existingCategory &&
     existingCategory.id_categoria_material !== idCategoriaMaterial
   ) {
-    return {
-      error: "Ya existe otra categoría de material con ese nombre o slug.",
-      fieldErrors: {
-        nombre: [
-          "Ya existe otra categoría de material con ese nombre o slug.",
-        ],
-      },
-    };
+    return catalogError(values, "Ya existe otra categoría de material con ese nombre o slug.", {
+      nombre: ["Ya existe otra categoría de material con ese nombre o slug."],
+    });
   }
 
   try {
@@ -193,14 +199,13 @@ export async function updateMaterialCategoryAction(
       "Ya existe otra categoría de material con ese nombre o slug.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage ===
-        "Ya existe otra categoría de material con ese nombre o slug."
-          ? { nombre: [errorMessage] }
-          : undefined,
-    };
+    return catalogError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otra categoría de material con ese nombre o slug."
+        ? { nombre: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -215,59 +220,80 @@ export async function updateMaterialCategoryAction(
   revalidatePath(MATERIALS_PATH);
   revalidatePath(MATERIAL_CATEGORIES_PATH);
 
-  return initialState;
+  return catalogSaved(values, idCategoriaMaterial);
 }
 
-export async function toggleMaterialCategoryStatusAction(formData: FormData) {
-  const session = await requireAdmin();
+// Activar e inactivar desde la fila (entrega 10): devuelven el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=, y sin permiso
+// responden con un error.
+export async function toggleMaterialCategoryStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
   const idCategoriaMaterial = formData
     .get("id_categoria_material")
-    ?.toString();
+    ?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return statusToggleError(idCategoriaMaterial, PERMISSION_ERROR);
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!idCategoriaMaterial) {
-    redirect(MATERIAL_CATEGORIES_PATH);
+    return statusToggleError(idCategoriaMaterial, "La categoría no existe.");
   }
 
-  const category = await prisma.categoria_material.findUnique({
+  if (nextStatus === null) {
+    return statusToggleError(idCategoriaMaterial, "Estado no válido.");
+  }
+
+  // Fija el estado pedido solo si el registro tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton.
+  const { count } = await prisma.categoria_material.updateMany({
     where: {
       id_categoria_material: idCategoriaMaterial,
-    },
-    select: {
-      id_categoria_material: true,
-      nombre: true,
-      estado: true,
-    },
-  });
-
-  if (!category) {
-    redirect(MATERIAL_CATEGORIES_PATH);
-  }
-
-  const nextStatus = !category.estado;
-
-  await prisma.categoria_material.update({
-    where: {
-      id_categoria_material: category.id_categoria_material,
+      estado: !nextStatus,
     },
     data: {
       estado: nextStatus,
     },
   });
 
+  const category = await prisma.categoria_material.findUnique({
+    where: {
+      id_categoria_material: idCategoriaMaterial,
+    },
+    select: {
+      nombre: true,
+    },
+  });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idCategoriaMaterial,
+      category
+        ? `La categoría de material ya estaba ${nextStatus ? "activa" : "inactiva"}.`
+        : "La categoría no existe.",
+    );
+  }
+
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "categoria_material",
-    id_registro_afectado: category.id_categoria_material,
+    id_registro_afectado: idCategoriaMaterial,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Categoría de material ${
       nextStatus ? "activada" : "inactivada"
-    }: ${category.nombre}`,
+    }: ${category?.nombre ?? idCategoriaMaterial}`,
   });
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
   revalidatePath(MATERIAL_CATEGORIES_PATH);
-  redirect(
-    `${MATERIAL_CATEGORIES_PATH}?toast=${nextStatus ? "material-category-activated" : "material-category-deactivated"}`,
-  );
+
+  return statusToggleDone(idCategoriaMaterial, nextStatus);
 }

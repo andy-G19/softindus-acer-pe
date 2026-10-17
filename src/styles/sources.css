@@ -1,0 +1,7 @@
+/* Archivos que Tailwind no lee (entrega 10). Tailwind v4 genera una utilidad
+   por cada palabra con forma de clase en los archivos que git no ignora, y
+   la documentacion (CLAUDE.md, el seguimiento, el plan y el manual) nombra
+   clases sin usarlas: ninguna pantalla se construye con Markdown. La ruta es
+   relativa a esta hoja. tailwind-sources.test.ts lo comprueba con el mismo
+   compilador y escaner del build. */
+@source not "../../**/*.md";

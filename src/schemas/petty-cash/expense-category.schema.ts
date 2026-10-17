@@ -13,6 +13,4 @@ export const expenseCategorySchema = z.object({
     .max(500, "La descripción no debe superar los 500 caracteres.")
     .optional()
     .or(z.literal("")),
-
-  estado: z.enum(["true", "false"]).default("true"),
 });

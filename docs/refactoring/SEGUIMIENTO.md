@@ -2569,8 +2569,8 @@ Datos leídos de la API de GitHub el 2026-10-14 y comparados con git:
 
 ## Entrega 9 — Piloto Clientes y categoría en ventanas
 
-Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada en staging el 2026-10-15; falta
-integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
+Fecha: 2026-10-14 y 2026-10-15. Estado: cerrada el 2026-10-15. 14 commits, de
+`543ff6e` a `498533d`, más el cierre `e81299e` (CI #73 en verde):
 
 - El paso 0 (`543ff6e`).
 - El paso 1, el fix K4 (`01ca73c` y `1812fff`), verificado en staging con el
@@ -2582,7 +2582,9 @@ integrarla en `main`. 14 commits, de `543ff6e` a `498533d`, más este cierre:
 
 Los tres CI terminaron en verde. En staging, 15 de las 18 huellas salieron como
 se predijo y las otras 3 tienen explicación; el CSS servido fue el predicho byte
-a byte, y las tareas T1 a T5 se midieron antes y después.
+a byte, y las tareas T1 a T5 se midieron antes y después. Integrada en `main`
+con el PR #22 (CI #74 en verde; merge commit `e38d633`, CI #75 en verde,
+2m 58s).
 
 Es la segunda entrega de la pista B: las primeras pantallas adoptan la base
 visual de la entrega 8 y prueban dos variantes del alta y la edición, un panel
@@ -2630,7 +2632,7 @@ Decisiones del responsable:
 | 5261489 | feat | Categorías de producto: alta y edición en una ventana modal; sus dos acciones autorizan con `getAuthorizedSession`. |
 | ef477f2 | docs | Registro de la entrega: esta sección, una trampa de Tailwind en `CLAUDE.md` e inventario. |
 | 498533d | fix | La galería respondía 500 en staging: `Button` pendiente pone la guarda de clic solo si es de envío o tiene un `onClick` propio, así que un componente de servidor puede pintarlo. |
-| este | docs | Cierre con la verificación del piloto en staging. |
+| e81299e | docs | Cierre con la verificación del piloto en staging. |
 
 Diseño:
 
@@ -3041,6 +3043,445 @@ De la lista de la entrega 8 quedan resueltos:
 De `FieldError` se migran 2 de las 16 copias, y del `<main>` anidado, 4 de las
 113 páginas.
 
+### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-15 y comparados con git:
+
+- PR #22, abierto a las 19:40:31 UTC y fusionado con merge commit a las
+  19:43:43 UTC del 2026-10-15: 15 commits, de `543ff6e` a `e81299e`. Su CI,
+  el #74, sobre `e81299e`, terminó en verde (2m 56s).
+- El merge commit `e38d633` tiene como padres `a945a5a` (`main`) y `e81299e`
+  (`staging`), y su árbol es el de `e81299e` (`f87a9cc0`): `main` y `staging`
+  tienen el mismo contenido. CI #75 en verde (2m 58s).
+- Vercel desplegó `e38d633` en producción al primer intento (estado «Vercel»
+  `pending` a las 19:43:46 UTC y `success` a las 19:45:20 UTC). La entrega no
+  trae migraciones.
+- El asunto del cierre `e81299e` («Commit de cierre de la entrega 9: Clientes
+  panel y categorias») no sigue Conventional Commits: se escribió sin los
+  comandos preparados. No se reescribe: ya está en `staging` y en `main`, y
+  cambiar el mensaje cambia el hash del commit y del merge, lo que obligaría a
+  forzar el push de las dos ramas. Desde la entrega 10, los comandos de cada
+  commit se escriben antes de la pregunta que cierra el turno.
+
+## Entrega 10 — Catálogos, listados y resto de dominios
+
+Fecha: desde el 2026-10-15. Estado: en curso; plan aprobado por el
+responsable el 2026-10-15. El paso 0 (`62640e1`) registró la integración de
+la entrega 9 en `main`.
+
+Es la tercera entrega de la pista B y cubre las fases 4 y 7 del plan maestro:
+los catálogos, los listados y el resto de dominios adoptan los patrones del
+piloto. Se divide en 8 sub-entregas por área, y cada una se publica y se
+verifica en staging por separado.
+
+Punto de partida (auditoría sobre `62640e1`):
+
+- 135 formularios JSX, 131 páginas y 48 archivos de acciones.
+- 34 archivos de acciones lanzan `throw new Error` (282 lanzamientos) en lugar
+  de devolver un resultado. Solo Producción tiene `error.tsx`, y en producción
+  Next oculta el mensaje: un rechazo de negocio muestra la página de error
+  genérica y se pierde lo escrito.
+- Solo 7 archivos de acciones están caracterizados: clientes, productos,
+  costos, salidas, compras, órdenes de trabajo y avances.
+- La desviación de autorización afecta a 30 funciones en 15 archivos.
+- Inactivar no pide confirmación: `RowToggleStatusButton` en 9 páginas, el
+  gestor de catálogos de inventario y 3 listas de Producción.
+- Hay 14 copias de `FieldError`, 109 páginas con `<main>` anidado, 42
+  formularios GET con 26 combinaciones de clases y `StatusBadge` en 12
+  archivos.
+- 27 pantallas tienen rango de fechas, contadas por nombre de parámetro: 19
+  con `from`/`to`, 7 con `dateFrom`/`dateTo` y 1 con `desde`/`hasta`. Son las
+  mismas en `aada765`.
+- No hay manual de usuario en el repositorio.
+
+Decisiones del responsable (2026-10-15):
+
+- La presentación sigue la sección 5, con los datos de la entrega 9:
+  - Ventana modal breve, sin URL: hasta unos 4 campos sin datos dependientes.
+  - Panel lateral con URL (rutas interceptadas): una entidad de 5 a 12 campos.
+  - Superficie amplia, una página completa con `returnTo` y descarte: líneas o
+    varias secciones.
+  - En el teléfono, las tres ocupan la pantalla.
+- Diálogo de formulario compartido en 10.1:
+  - `FormDialog`.
+  - `useFormSurface`: los controles de la ventana, o `null` en página
+    completa.
+  - `useFormResult`: un aviso por operación.
+  - Un guardián de descarte común a `FormDialog` y `RouteSheet`.
+
+  La extracción no cambia nada. Un `feat` aparte hace que la ventana modal
+  también avise al recargar con cambios.
+- La desviación de autorización se corrige en el `feat` que migra el contrato
+  de cada formulario y se anuncia en su mensaje. Antes, la caracterización fija
+  la redirección actual.
+- Un formulario que hoy lanza pasa a `FormActionState` en su `feat`, con una
+  prueba de cada mensaje que antes se perdía.
+- `ConfirmActionButton` (10.1) es una `ConfirmDialog` controlada que ejecuta la
+  acción con `startTransition` y usa como pendiente externo el de
+  `useTransition` (el plan decía el de `useActionState`; la 10.1 explica el
+  cambio). Confirman inactivar, dar de baja, anular y borrar; activar, no.
+- La unidad de la tarifa de operarios bloquea unificar el cálculo y la
+  etiqueta, no la presentación. Por eso Personal y Costos van al final (10.8):
+  si la decisión llega antes, su `fix` abre 10.8; si no, 10.8 conserva el
+  texto «Tarifa».
+- El manual de usuario se versiona en `docs/manual/`, con un archivo por área.
+  Cada sub-entrega agrega su capítulo en el cierre, escrito con lo verificado
+  en staging. Antes, `@source not` excluye la documentación del escaneo de
+  Tailwind; es el primer commit de 10.1.
+- El inventario aprende las ranuras y las rutas interceptadas al empezar 10.3,
+  antes del siguiente panel.
+- Pedidos pilotea la superficie amplia con líneas, porque no mueve stock ni
+  dinero. Las versiones de receta la reutilizan, y la entrega 11 la hereda
+  para compras, proformas y órdenes de trabajo.
+- El `<main>` anidado se quita en todas las páginas de cada área durante su
+  sub-entrega, también en las de la entrega 11.
+- Un `error.tsx` para el panel queda para la entrega 11.
+- En cada verificación, el responsable decide si se prueban SELLER y
+  WORKSHOP_MASTER.
+
+Límite con la entrega 11:
+
+- Entran en esta entrega 31 formularios de alta y edición, 32 acciones de fila
+  (tablas de cobertura) y todos los listados, también los de las pantallas
+  críticas, sin tocar sus acciones de fila.
+- Van a la entrega 11 estas 29 operaciones:
+  - proformas, comprobantes y pagos de clientes;
+  - compras, pagos a proveedor y salidas de inventario;
+  - órdenes de trabajo (crear y 7 operaciones) y avances (3);
+  - caja chica: apertura, gastos, ingresos y anulación;
+  - venta de chatarra, que crea un movimiento de caja;
+  - planillas y pago a operario;
+  - cancelar pedido (H11).
+
+| Sub-entrega | Área | Roles de las acciones | Alcance | Estimación |
+|---|---|---|---|---|
+| 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
+| 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados | 5 h |
+| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
+| 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
+| 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
+| 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
+| 10.8 | Personal y Costos | ADMIN; asistencia y tareas, también WORKSHOP_MASTER | Operarios, asistencia y tareas; secciones del detalle del costeo; listados | 8 h |
+
+La estimación suma unas 48 horas de preparación y verificación, sin contar
+las revisiones ni las esperas. Se calibra con la entrega 9:
+
+| Unidad | Minutos |
+|---|---|
+| Catálogo breve en ventana modal (C8a y C8b) | 14 |
+| Entidad en panel que ya usa `useActionState` (C4 a C7, sin rehacer `RouteSheet`) | 50 |
+| Página que lanza, convertida en componente con resultado y panel | 65 (estimado) |
+| Superficie amplia con líneas | 90 (sin calibrar) |
+| Listado (C7) | 9 |
+| Acción de fila con confirmación | 10 (estimado) |
+| Registro y capítulo del manual | 30 (estimado) |
+| Verificación en staging (57 en la entrega 9) | 60 |
+
+Se recalibra después de 10.1 y 10.2. Las sub-entregas de 7 u 8 horas pueden
+partirse en dos; por ejemplo, 10.5a para máquinas y repuestos y 10.5b para
+fallas, preventivos y reparaciones.
+
+Cobertura de formularios. «Hoy» describe el mecanismo actual:
+
+- «desviación»: usa `useActionState` y redirige al negar el permiso.
+- «lanza»: la acción usa `throw new Error`.
+
+| Formulario | Área | Roles | Hoy | Presentación | Sub-entrega | Estado |
+|---|---|---|---|---|---|---|
+| Clientes | Comercial | ADMIN, SELLER | — | Panel lateral | 9 | Migrado |
+| Categorías de producto | Comercial | ADMIN | — | Modal breve | 9 | Migrado |
+| Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
+| Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
+| Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado; sin el campo Estado |
+| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
+| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
+| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
+| Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
+| Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5 | Pendiente |
+| Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5 | Pendiente |
+| Mantenimientos preventivos | Mantenimiento | ADMIN | Página, lanza | Panel lateral | 10.5 | Pendiente |
+| Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Panel lateral amplio | 10.5 | Pendiente |
+| Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Modal breve | 10.6 | Pendiente |
+| Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
+| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.6 | Pendiente |
+| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6 | Pendiente |
+| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
+| Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7 | Pendiente |
+| Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.7 | Pendiente |
+| Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
+| Retazos reutilizables | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
+| Usuarios | Usuarios | ADMIN | Páginas, desviación; el `Label` de rol sin control al editarse a sí mismo | Panel lateral | 10.7 | Pendiente |
+| Restablecer contraseña | Usuarios | ADMIN | Página, desviación | Modal breve | 10.7 | Pendiente |
+| Operarios | Personal | ADMIN | Páginas, desviación | Panel lateral | 10.8 | Pendiente |
+| Asistencia | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
+| Tareas de operario | Personal | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.8 | Pendiente |
+| Mano de obra del costeo | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Costos indirectos | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Márgenes | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+| Rentabilidad | Costos | ADMIN | Sección del detalle, lanza | Superficie amplia (el detalle) | 10.8 | Pendiente |
+
+Cobertura de acciones de fila; todas pasan a devolver un resultado y las
+destructivas confirman:
+
+| Sub-entrega | Acciones |
+|---|---|
+| 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
+| 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
+| 10.4 | Inactivar cliente, producto y categoría de producto |
+| 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
+| 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
+| 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
+| 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
+
+### Sub-entrega 10.1 — Bases y catálogos breves
+
+Fecha: 2026-10-15 y 2026-10-16. Estado: cerrada en staging; falta integrarla
+en `main`. 12 commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y
+este cierre:
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 582f871 | fix | El Markdown sale del escaneo de Tailwind: `src/styles/sources.css` con `@source not`, importada desde `globals.css`. |
+| f6dd994 | refactor | Descarte y superficie compartidos: `FormDialog`, `useFormSurface`, `useFormResult` y `useDiscardGuard`; `RouteSheet`, la ventana de categorías de producto, `ClientForm` y la demo de la galería los usan sin cambiar lo que hacen. |
+| 8b7aeab | feat | La ventana modal también avisa al recargar con cambios. |
+| af50bb2 | feat | `ConfirmActionButton` para las acciones de fila; `ConfirmDialog` gana `closeOnConfirm` y `error`. |
+| b6d57ef | test | Caracterización de tipos de proveedor y categorías de material (46 casos). |
+| fd762d6 | fix | Activar e inactivar esos catálogos fijan el estado pedido. |
+| 41dedf4 | feat | Tipos de proveedor y categorías de material en ventana modal con `FormActionState`. |
+| 40cdd85 | feat | Inactivarlos pide confirmación. |
+| 524d53b | test | Caracterización de las categorías de gasto (26 casos). |
+| ddde8f6 | fix | Activar e inactivar categorías de gasto fijan el estado pedido. |
+| 05b4523 | feat | Categorías de gasto en ventana modal, sin el campo Estado. |
+| 0f968ad | feat | Inactivarlas pide confirmación; el listado usa `FilterBar`. |
+
+Decisiones del responsable en la sub-entrega (2026-10-15):
+
+- A. Activar e inactivar envían el estado pedido, y el servidor lo fija con
+  una sola sentencia que compara y escribe (*compare-and-set*).
+- B. Los catálogos de inventario conservan sus textos de alta y edición
+  («Registro creado correctamente»), ahora en cuatro claves del catálogo.
+- C. La edición de categorías de gasto se abre en la ventana; su URL
+  `[id]/edit` sigue sirviendo el mismo formulario a pantalla completa.
+- D. WORKSHOP_MASTER ve las categorías de material en solo lectura.
+- El formulario de categorías de gasto pierde el campo Estado (decidido tras
+  la caracterización del commit `524d53b`).
+
+Diseño:
+
+- Superficie del formulario (`src/components/forms/form-surface.tsx`). El
+  mismo formulario funciona en el panel (`RouteSheet`), en la ventana modal
+  (`FormDialog`) y en una página completa:
+  - `useFormSurface()` devuelve los controles de la ventana (`requestClose`,
+    `closeAfterSave` y `setBusy`), o `null` en la página.
+  - `useFormResult(state, pending, { successNotification, onSuccess })`
+    informa el pendiente y da un solo aviso por operación. El aviso y
+    `onSuccess` se leen de una ref: si el efecto dependiera de ellos, una
+    función nueva en cada render repetiría el aviso.
+  - `useDiscardGuard` reúne los cambios pendientes, la guarda de ocupado, el
+    aviso al recargar y la confirmación de descarte. Sus controles leen refs
+    para ser estables.
+- `FormDialog` (`src/components/forms/form-dialog.tsx`) es la ventana modal
+  con su disparador; desde `8b7aeab` también avisa al recargar con cambios.
+- `ConfirmActionButton` (`src/components/forms/confirm-action-button.tsx`)
+  ejecuta la acción con `await` dentro de `startTransition`, y el pendiente de
+  `useTransition` dura hasta la respuesta. El plan decía el pendiente de
+  `useActionState`, pero cerrar la confirmación al llegar el éxito habría
+  exigido un `setState` dentro de un efecto, que prohíbe el lint de React.
+  Con éxito, un aviso y se cierra; con error, el mensaje queda dentro. Sin
+  `confirm`, como al activar, el botón ejecuta la acción y un error sale como
+  aviso.
+- Estado pedido (`src/lib/requested-status.ts`). `parseRequestedStatus`
+  acepta solo `"true"` o `"false"`, y `StatusToggleState` es el resultado de
+  una acción de fila. La acción hace `updateMany` con el estado opuesto en el
+  `where`. Con `count` 0 lee el registro para responder «ya estaba
+  inactivo» o «no existe», sin bitácora. `RowToggleStatusButton` gana la prop
+  opcional `sendsRequestedStatus` para el paso intermedio de cada área.
+- Catálogos de inventario. Un contrato común
+  (`src/modules/inventory/catalog-form-state.ts`), `InventoryCatalogDialog` y
+  `InventoryCatalogManager`, que pasa a ser una tabla de servidor de solo
+  lectura.
+- Categorías de gasto. `ExpenseCategoryForm` funciona en la ventana o en la
+  página, y `ExpenseCategoryStatusButton` es el botón de la fila. El campo
+  `estado` sale también del esquema: con su valor por defecto `"true"`,
+  editar una categoría inactiva la habría reactivado.
+- Las confirmaciones dicen la consecuencia real, comprobada en las consultas:
+  un tipo o una categoría inactivos dejan de ofrecerse al registrar, y los
+  registros que ya los usan los conservan.
+- `action-access.test.ts` declara con `rechazanConResultado` las acciones que
+  responden con el error de permisos en lugar de redirigir.
+
+Evidencia:
+
+1. Caracterización antes de mover: 46 casos en los catálogos de inventario y
+   26 en las categorías de gasto. Después, un script compara los snapshots:
+   las llamadas solo cambian en la autorización (`verify_c7_snaps.py` y
+   `verify_c11_snaps.py`), salvo los cambios anunciados en el estado escrito.
+2. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-c1.txt` (9 archivos
+   `.md` escaneados), `rojo-c3.txt`, `rojo-c6.txt` y `rojo-c10.txt`. En los
+   dos últimos, pedir «Inactivar» sobre un registro que otro ya había
+   inactivado lo volvía a activar.
+3. Mutaciones (`tmp/e10-diff/mut_c*.txt`): 5 de 5, 14 de 15, 5 de 5, 13 de
+   13, 11 de 11, 7 de 7, 10 de 10, 8 de 8, 11 de 11, 8 de 8, 9 de 9 y 9 de 9;
+   en total, 110 de 111. La superviviente (reiniciar los cambios al abrir la
+   ventana) es equivalente: todas las salidas ya los dejan en cero.
+4. Pruebas con el Radix real para lo que un snapshot no distingue: un
+   «Inactivar» con confirmación y uno sin ella pintan el mismo `<button>`.
+5. CSS compilado, commit a commit: 113.900 → 113.366 bytes. Solo pierde 7
+   utilidades y 4 variables de tema sin consumidores, y no gana nada.
+6. `npm run check` terminó con código 0 después de cada commit, de 126 a 135
+   archivos de prueba y de 1.977 a 2.108 pruebas. `npm run refactor:inventory`
+   analiza 619 archivos: 131 páginas, 130 formularios JSX (eran 135) y 48
+   archivos de acciones.
+7. Este registro empieza el manual de usuario (`docs/manual/`): las reglas
+   comunes de las pantallas renovadas, Inventario y Caja chica. Se escribió
+   con el código y sus pruebas, y se contrasta con staging en la
+   verificación; el cierre corrige lo que no coincida.
+
+Tiempo entre commits según sus horas (incluye la preparación y la revisión
+del responsable; el commit 12 cruzó la noche):
+
+| Commit | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Minutos | 24 | 21 | 13 | 18 | 12 | 7 | 14 | 12 | 6 | 27 | 18 |
+
+Los commits 1 a 11 suman unos 172 minutos, frente a las 3,5 horas de
+preparación estimadas para la 10.1.
+
+Hallazgos:
+
+1. Tailwind no solo leía el Markdown. Eran 4 utilidades muertas y no 3:
+   también `.bg-white`. Además, los comentarios y nombres del código se
+   siguen escaneando. El comentario de una prueba nueva regeneró dos
+   utilidades, y un parámetro llamado `container`, la utilidad `.container`.
+   Una sonda que pregunta al escáner de dónde sale cada clase encontró los
+   dos casos (`scratchpad/probe-sources.mjs`).
+2. 11 acciones de activar e inactivar leían el estado y escribían el
+   contrario sin bloqueo; esta sub-entrega corrige 3.
+3. La edición de categorías de gasto podía inactivar sin confirmar, y la
+   bitácora lo registraba como «actualizar».
+4. Con un estado inválido, Zod respondía en inglés («Invalid option…»). Solo
+   ocurría con una petición manipulada, y el campo ya no existe.
+5. En Windows, la escritura de un archivo justo después de Vitest falló dos
+   veces (`Errno 22`). Una vez dejó una mutación aplicada, que se detectó y
+   se restauró. Los scripts de mutación ahora reintentan cada escritura y la
+   comprueban leyendo el archivo.
+6. En jsdom, un Esc sintético sí cierra las ventanas de Radix; en el
+   navegador real no. Allí se sigue probando con teclas reales.
+7. Quitar un campo de un formulario exige quitarlo también del esquema si
+   tiene un valor por defecto.
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 (`tmp/e10-diff/huella.js`): la v4 de la entrega 9 con su propia
+  base (`e10-huella`) y etiquetas `e10/`. Guarda el texto completo de cada
+  elemento (la v4 lo cortaba en 120 caracteres, hallazgo 9 de la entrega 9) y
+  devuelve aparte el hash de los textos.
+- Medidor de tareas (`tmp/e10-diff/medidor.js`), como en la entrega 9.
+- Clics y teclas reales; también Enter y Esc.
+- Las listas que cambian con los datos de prueba se capturaron en el «antes»
+  después de sus tareas, y en el «después» antes de las suyas: las dos fases
+  ven una sola fila «PRUEBA E10 antes» activa.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-17, de 00:29 a 00:43 UTC, sobre `e81299e` (`buildId`
+  `FmieWNMH6hbqw0HZiY0ih`): 17 capturas con ADMIN, con el sello `0078f4e8…`,
+  igual en Python. Tres repeticiones de control dieron el mismo hash.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-1.md`), con
+  un anexo del «antes»: las listas se ordenan por estado, y al inactivar la
+  fila salta al final.
+- Datos de prueba, con autorización del responsable: `TPR00000006` y
+  `CGA00000002` («PRUEBA E10 antes») y `TPR00000007` y `CGA00000003`
+  («PRUEBA E10 despues»), todos activos al terminar. T4 y los controles no
+  escriben.
+- Push de 15 commits (`62640e1` a `b3ec729`): CI #76 en verde (2m 54s).
+  Vercel desplegó `b3ec729` (`success` a las 01:13:36 UTC) y cambió el
+  `buildId` (`EK0U8em4FPh9uqS2QCKRX`). El CSS
+  servido es el predicho byte a byte (113.365 bytes, `3e6b3374…`).
+- «Después» el 2026-10-17, de 01:52 a 02:06 UTC: 17 capturas, sello
+  `299de801…`, igual en Python.
+
+Huella, 17 de 17:
+
+- Idénticas, 8: inicio a 1281 y a 376 px, categorías de producto y las
+  secciones «Fundamentos», «Botones», «Campos», «Mensajes» y «Presentación».
+- Cambian como se predijo, 8:
+  - tipos de proveedor y categorías de material: «Nuevo…» en el encabezado,
+    sin formulario en la página y la tabla de solo lectura (de 355 a 301 y de
+    337 a 290 elementos);
+  - categorías de gasto a las dos anchuras: `FilterBar` fuera de la tarjeta y
+    «Nueva categoría» junto a «Solo ADMIN»;
+  - tipos de proveedor a 376 px: lo mismo que a 1281, sin desbordamiento;
+  - la edición de `CGA00000001`: sin el selector Estado y con «Nombre de
+    categoría*»;
+  - «Ventanas»: solo el texto de la nota, con la misma geometría;
+  - «Listados»: la nota crece 39 px y los otros 122 elementos solo bajan
+    39 px.
+- Una diferencia del «antes», demostrada: clientes a 1281 px. Solo cambiaban
+  los enlaces «Dashboard» y «Comercial» de la barra lateral. En el «antes» su
+  transición de color estaba congelada en el arranque, con «Dashboard» aún
+  activo: la página estaba oculta y Chrome no avanza las animaciones sin
+  pintar. Pausadas esas 6 transiciones al arrancar, el «después» da el hash
+  del «antes» (`aa3d2de8…`). La 10.1 no toca la barra ni sus estilos.
+
+Tareas, con los mismos pasos en las dos fases. Los tiempos son del
+navegador, del clic al aviso o al mensaje:
+
+| Tarea | Antes (`e81299e`) | Después (`b3ec729`) |
+|---|---|---|
+| T6 Alta de tipo de proveedor con el slug `otros` | Alerta (779 ms) y toast de error; se borran los tres campos; foco en `body` | Ventana con el foco en el nombre; alerta dentro (785 ms), sin toast; se conserva lo escrito; foco en el nombre, con `aria-invalid` |
+| T6 Alta válida | Toast «Registro creado correctamente» (1.041 ms); foco en `body` | Un aviso (1.018 ms); la ventana se cierra; foco en «Nuevo tipo de proveedor» |
+| T7 Inactivar el tipo | Sin preguntar; `?toast=` (1.577 ms); foco en `body` | Confirmación con la consecuencia; Esc la cierra sin hacer nada; al confirmar, un aviso (917 ms); la fila pasa al final y el foco la sigue en «Activar» |
+| T7 Activar | Sin preguntar; `?toast=` (1.111 ms); foco en `body` | Con Enter, sin preguntar; un aviso (987 ms); la fila vuelve a su sitio y el foco sigue en el mismo botón, ahora «Inactivar» |
+| T8 Alta de categoría de gasto | En la tarjeta, con selector Estado; `?toast=` (1.099 ms) | En la ventana, sin Estado; un aviso (1.442 ms); foco en «Nueva categoría» |
+| T8 Edición | Página `[id]/edit` con Estado; vuelve con `?toast=` (923 ms) | En la ventana: un aviso (1.530 ms) y el foco vuelve a «Editar». Por la URL, la página completa sin Estado: un aviso (1.257 ms) y vuelve a la lista sin `?toast=` |
+| T8 Inactivar y activar | Sin preguntar, con `?toast=` (1.061 y 952 ms) | Inactivar confirma y activar no; un aviso cada uno (1.140 y 894 ms); el foco queda en el mismo botón |
+
+Controles del «después», sin escribir:
+
+- T4: «Nuevo cliente» desde `?q=a`. Sin cambios, Cancelar cierra sin
+  preguntar; con un nombre escrito pide «¿Descartar el cliente nuevo?», y
+  descartar vuelve a `?q=a` con el foco en el enlace.
+- Categoría de producto: la ventana abre con el foco en el nombre; Esc con
+  cambios pide «¿Descartar la categoría?»; al descartar se cierra y el foco
+  vuelve a «Nueva categoría».
+- El aviso al recargar (un `beforeunload` sintético que la página cancela)
+  solo está activo con cambios, en el panel y en la ventana.
+- El clic fuera de la ventana cierra sin cambios y pide descartar con ellos;
+  volver de esa confirmación conserva lo escrito.
+- A 376 px, la ventana de tipo de proveedor ocupa la pantalla (376 × 813)
+  sin desbordamiento; Tab recorre nombre, slug, descripción, Cancelar, Crear
+  y Cerrar sin salir de ella; Esc sin cambios cierra y devuelve el foco.
+- La edición de un tipo de proveedor muestra su código bajo el título.
+
+SELLER y WORKSHOP_MASTER se omitieron por decisión del responsable: el
+«Solo lectura» de las categorías de material lo cubren las pruebas.
+
+Hallazgos de la verificación:
+
+8. Foco (menor; ya ocurría con la ventana de la entrega 9). Si la
+   confirmación de descarte se abre con un clic fuera de la ventana,
+   «Cancelar» la cierra y deja el foco en `body`: el clic quitó el foco del
+   campo y la confirmación lo devuelve al elemento que lo tenía al abrirse.
+   Un Tab vuelve al primer campo. Se propone como primer `fix` de la 10.2.
+9. Método: la sesión del ERP se cierra tras 15 minutos sin actividad y
+   aterriza en el `/login` de producción. Ejecutar JavaScript no cuenta como
+   actividad. Antes de medir se comprueba el origen.
+10. Método: la página puede estar oculta (`document.visibilityState`)
+    aunque el panel figure como mostrado. Entonces las animaciones casi no
+    avanzan: un cierre tardó 1,6 s en desmontar. Se comprueba `data-state` y
+    no la existencia del nodo, y una huella con elementos animados de la
+    barra lateral se repite.
+11. El manual traía ejemplos que no existen («Distribuidor», «Fabricante» y
+    «Planchas»). Ahora usa los registros base de la migración
+    `20260701173000`, y explica que la fila inactiva pasa al final de la
+    lista.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3064,8 +3505,8 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G3 | Fix | Puente de notificaciones (F1, F2, F3) y la clave sin emisor | Cerrado (CI #59 verde en main; 23 de 23 observaciones como se predijo en staging) |
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
-| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada en staging (CI #72 verde; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después); falta integrarla en `main` |
-| 10 | B | Catálogos, listados y resto de dominios | Pendiente |
+| 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada en staging con CI #76, 17 de 17 huellas explicadas) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3087,9 +3528,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 125 / 125 | 7, G3 y 9 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 125 / 1.975 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 135 / 2.108 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3108,10 +3549,13 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 14 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 109 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 26 (42 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 12 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 105 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 25 (41 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 24 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 8 | 10 |
+| Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -3236,6 +3680,24 @@ en 2 archivos, medidos de nuevo. Los tres archivos más grandes de `src` miden
 1.335, 1.176 (el arnés, +15) y 901 líneas. Los de producción miden 696, 643 y
 632: `commercial/products/actions.ts` (606 antes, +26 por el contrato de las
 categorías) supera al resumen mensual de caja (614).
+
+Actualizado en la sub-entrega 10.1 (2026-10-16) sobre `0f968ad`:
+
+- Pruebas: 135 / 2.108. Claves caracterizadas: 129 / 129, por las cuatro
+  de las ventanas de los catálogos de inventario.
+- `FieldError` baja a 12, el `<main>` anidado a 105 y los formularios GET a
+  41, con 25 combinaciones de clases.
+- Las tres filas nuevas se midieron sobre `62640e1`, su línea base. La
+  desviación cuenta las funciones de `useActionState` que autorizan con
+  `requireRole`: quedan 24, en 12 archivos. Los toggles que voltean el
+  estado cuentan las funciones con `nextStatus = !` en `src/modules`:
+  quedan 8, en 7 archivos. Las utilidades sin consumidores son las 4 que
+  generaba el Markdown y las 3 que solo usaba el gestor de catálogos
+  anterior.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0 e `import` de las librerías de
+notificaciones en 2 archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

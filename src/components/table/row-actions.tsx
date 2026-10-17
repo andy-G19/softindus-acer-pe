@@ -23,6 +23,12 @@ type RowToggleStatusButtonProps = {
   isActive: boolean;
   activeLabel?: string;
   inactiveLabel?: string;
+  /**
+   * Envia tambien el estado pedido (estado=false al inactivar, true al
+   * activar) para las acciones que lo fijan comparando y escribiendo en una
+   * sola sentencia (entrega 10, src/lib/requested-status.ts).
+   */
+  sendsRequestedStatus?: boolean;
 };
 
 export function RowToggleStatusButton({
@@ -32,10 +38,14 @@ export function RowToggleStatusButton({
   isActive,
   activeLabel = "Inactivar",
   inactiveLabel = "Activar",
+  sendsRequestedStatus = false,
 }: RowToggleStatusButtonProps) {
   return (
     <form action={action}>
       <input type="hidden" name={hiddenFieldName} value={hiddenFieldValue} />
+      {sendsRequestedStatus ? (
+        <input type="hidden" name="estado" value={isActive ? "false" : "true"} />
+      ) : null}
       <Button
         type="submit"
         variant={isActive ? "destructive" : "ghost"}

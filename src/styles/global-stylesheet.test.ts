@@ -17,6 +17,7 @@ const EXPECTED_IMPORTS = [
   "tailwindcss",
   "tw-animate-css",
   "shadcn/tailwind.css",
+  "../styles/sources.css",
   "../styles/tokens.css",
   "../styles/base.css",
   "../styles/brand.css",

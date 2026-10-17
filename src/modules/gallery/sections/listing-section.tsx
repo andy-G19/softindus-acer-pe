@@ -8,7 +8,6 @@ import { PaginationControls } from "@/components/pagination-controls";
 import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { TableLoadingRows } from "@/components/table/table-loading-rows";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -21,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getPaginationMeta } from "@/lib/pagination";
+import { RowStatusDemo } from "@/modules/gallery/confirm-action-demo";
 import {
   GalleryNote,
   GallerySample,
@@ -30,9 +30,9 @@ import {
 const GALLERY_PATH = "/dashboard/gallery";
 
 const ROWS = [
-  { id: "CLI00000001", name: "Metalmecánica Lima S.A.C.", type: "Empresa", phone: "014567890", active: true },
-  { id: "CLI00000002", name: "Taller Arequipa", type: "Persona natural", phone: null, active: true },
-  { id: "CLI00000003", name: "Estructuras del Sur", type: "Empresa", phone: "054223344", active: false },
+  { id: "CLI00000001", name: "Metalmecánica Lima S.A.C.", type: "Empresa", phone: "014567890", active: true, rejects: false },
+  { id: "CLI00000002", name: "Taller Arequipa", type: "Persona natural", phone: null, active: true, rejects: true },
+  { id: "CLI00000003", name: "Estructuras del Sur", type: "Empresa", phone: "054223344", active: false, rejects: false },
 ];
 
 // Mismos estados en las dos etiquetas. La variante de Badge es la del tono que
@@ -129,9 +129,7 @@ export function ListingSection() {
                 <TableCell>
                   <RowActions>
                     <RowEditLink href="#listados" />
-                    <Button type="button" variant={row.active ? "destructive" : "ghost"} size="sm">
-                      {row.active ? "Inactivar" : "Activar"}
-                    </Button>
+                    <RowStatusDemo id={row.id} name={row.name} active={row.active} rejects={row.rejects} />
                   </RowActions>
                 </TableCell>
               </TableRow>
@@ -146,9 +144,12 @@ export function ListingSection() {
         />
       </GallerySample>
       <GalleryNote>
-        «Activar» e «Inactivar» se muestran con el aspecto de
-        RowToggleStatusButton, pero aquí no envían nada: ese componente exige una
-        acción del servidor y la galería no ejecuta ninguna.
+        «Inactivar» usa ConfirmActionButton: pide confirmar con el nombre del
+        registro y, mientras la acción espera, la confirmación no se cancela ni
+        se cierra con Esc; al terminar da un solo aviso, se cierra y el foco
+        vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el
+        mensaje queda dentro de la confirmación. «Activar» no pide confirmar.
+        Aquí la acción solo espera en el navegador: no se guarda nada.
       </GalleryNote>
 
       <GallerySample label="Tabla cargando (TableLoadingRows)" className="block">

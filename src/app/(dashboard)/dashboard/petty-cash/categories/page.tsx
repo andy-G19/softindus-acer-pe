@@ -1,10 +1,7 @@
 import { CheckCircle2, Tags, XCircle } from "lucide-react";
-import Link from "next/link";
 
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +13,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -33,9 +29,12 @@ import { APP_ROLES } from "@/lib/permissions";
 import {
   createExpenseCategoryAction,
   toggleExpenseCategoryStatusAction,
+  updateExpenseCategoryAction,
 } from "@/modules/petty-cash/categories/actions";
-import { ExpenseCategoryForm } from "@/modules/petty-cash/categories/expense-category-form";
+import { ExpenseCategoryDialog } from "@/modules/petty-cash/categories/expense-category-form";
+import { ExpenseCategoryStatusButton } from "@/modules/petty-cash/categories/expense-category-status-button";
 import { getExpenseCategoryList } from "@/modules/petty-cash/categories/queries";
+import { pettyCashNotifications } from "@/modules/petty-cash/notifications";
 
 type ExpenseCategoriesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -68,7 +67,7 @@ export default async function ExpenseCategoriesPage({
   const inactiveCategories = categories.filter((category) => !category.estado);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Categorías de gasto"
         description="Registra y consulta categorías utilizadas para clasificar egresos de caja chica del taller."
@@ -78,7 +77,18 @@ export default async function ExpenseCategoriesPage({
           { label: "Caja chica", href: navigationHrefs.pettyCash },
           { label: "Categorías" },
         ])}
-        actions={<Badge>Solo ADMIN</Badge>}
+        actions={
+          <>
+            <Badge>Solo ADMIN</Badge>
+            <ExpenseCategoryDialog
+              action={createExpenseCategoryAction}
+              title="Nueva categoría de gasto"
+              submitLabel="Guardar categoría"
+              successNotification={pettyCashNotifications["expense-category-created"]}
+              trigger={<Button type="button">Nueva categoría</Button>}
+            />
+          </>
+        }
       />
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -87,53 +97,32 @@ export default async function ExpenseCategoriesPage({
         <KpiCard title="Inactivas" value={inactiveCategories.length.toString()} description="Ya no disponibles." tone="warning" icon={XCircle} />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              Nueva categoría de gasto
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ExpenseCategoryForm
-              action={createExpenseCategoryAction}
-              defaultValues={{ estado: "true" }}
-              submitLabel="Guardar categoría"
-            />
-          </CardContent>
-        </Card>
+      <FilterBar
+        action="/dashboard/petty-cash/categories"
+        label="Filtros de categorías de gasto"
+        clearHref="/dashboard/petty-cash/categories"
+        clearLabel="Limpiar"
+      >
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar categoría..." />}
+        </Field>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activa</option>
+              <option value="inactive">Inactiva</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
-        <Card className="lg:col-span-2">
+      <section>
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Listado de categorías</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <form
-              action="/dashboard/petty-cash/categories"
-              className="grid gap-3 md:grid-cols-3"
-            >
-              <div className="space-y-2">
-                <Label htmlFor="q">Buscar</Label>
-                <Input id="q" name="q" defaultValue={q} placeholder="Buscar categoría..." />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="status">Estado</Label>
-                <NativeSelect id="status" name="status" defaultValue={status}>
-                  <option value="">Todos los estados</option>
-                  <option value="active">Activa</option>
-                  <option value="inactive">Inactiva</option>
-                </NativeSelect>
-              </div>
-              <div className="flex items-end gap-2">
-                <Button type="submit" className="flex-1">
-                  Filtrar
-                </Button>
-                <Button variant="clear" asChild>
-                  <Link href="/dashboard/petty-cash/categories">Limpiar</Link>
-                </Button>
-              </div>
-            </form>
-
             <Table>
               <TableHeader>
                 <TableRow>
@@ -163,14 +152,27 @@ export default async function ExpenseCategoriesPage({
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
-                        <RowEditLink
-                          href={`/dashboard/petty-cash/categories/${category.id_categoria_gasto}/edit`}
+                        <ExpenseCategoryDialog
+                          action={updateExpenseCategoryAction}
+                          category={{
+                            id_categoria_gasto: category.id_categoria_gasto,
+                            nombre_categoria: category.nombre_categoria,
+                            descripcion: category.descripcion,
+                          }}
+                          title="Editar categoría de gasto"
+                          submitLabel="Guardar cambios"
+                          successNotification={pettyCashNotifications["expense-category-updated"]}
+                          trigger={
+                            <Button type="button" variant="ghost" size="sm">
+                              Editar
+                            </Button>
+                          }
                         />
-                        <RowToggleStatusButton
+                        <ExpenseCategoryStatusButton
+                          category={category}
                           action={toggleExpenseCategoryStatusAction}
-                          hiddenFieldName="id_categoria_gasto"
-                          hiddenFieldValue={category.id_categoria_gasto}
-                          isActive={category.estado}
+                          activatedNotification={pettyCashNotifications["expense-category-activated"]}
+                          deactivatedNotification={pettyCashNotifications["expense-category-deactivated"]}
                         />
                       </div>
                     </TableCell>
@@ -191,6 +193,6 @@ export default async function ExpenseCategoriesPage({
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

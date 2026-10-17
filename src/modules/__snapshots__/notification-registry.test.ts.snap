@@ -8,5 +8,18 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx [successNotification] -> client-created",
   "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [successNotification] -> product-category-created",
   "src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx [updateNotification] -> product-category-updated",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [activatedNotification] -> material-category-activated",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [deactivatedNotification] -> material-category-deactivated",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [successNotification] -> material-category-created",
+  "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [updateNotification] -> material-category-updated",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [activatedNotification] -> supplier-type-activated",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [deactivatedNotification] -> supplier-type-deactivated",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [successNotification] -> supplier-type-created",
+  "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [updateNotification] -> supplier-type-updated",
+  "src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx [successNotification] -> expense-category-updated",
+  "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [activatedNotification] -> expense-category-activated",
+  "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [deactivatedNotification] -> expense-category-deactivated",
+  "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [successNotification] -> expense-category-created",
+  "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [successNotification] -> expense-category-updated",
 ]
 `;

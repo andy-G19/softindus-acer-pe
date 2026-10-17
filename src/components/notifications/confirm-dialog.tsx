@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ type ConfirmDialogOpenProps =
       trigger: ReactElement;
       open?: never;
       onOpenChange?: never;
+      closeOnConfirm?: never;
     }
   | {
       trigger?: never;
@@ -32,6 +34,12 @@ type ConfirmDialogOpenProps =
       open: boolean;
       /** Recibe false al cancelar, con Esc y cuando termina la accion. */
       onOpenChange: (open: boolean) => void;
+      /**
+       * Con false, confirmar no la cierra: la cierra quien la controla cuando
+       * llega el resultado (por ejemplo, una accion en startTransition con su
+       * pendiente externo). Por defecto se cierra al terminar onConfirm.
+       */
+      closeOnConfirm?: boolean;
     };
 
 type ConfirmDialogProps = ConfirmDialogOpenProps & {
@@ -45,9 +53,11 @@ type ConfirmDialogProps = ConfirmDialogOpenProps & {
   variant?: "default" | "destructive";
   /** Si devuelve una promesa, la ventana espera con el boton pendiente y se cierra al terminar. */
   onConfirm: () => void | Promise<void>;
-  /** Estado pendiente de una accion externa (por ejemplo, isPending de useActionState). */
+  /** Estado pendiente de una accion externa (por ejemplo, isPending de useTransition). */
   pending?: boolean;
   pendingText?: string;
+  /** Mensaje de una accion que fallo: se muestra dentro de la ventana, que sigue abierta. */
+  error?: ReactNode;
 };
 
 // Confirmacion accesible (entrega 8), sucesora de showConfirm y
@@ -67,6 +77,8 @@ export function ConfirmDialog({
   onConfirm,
   pending = false,
   pendingText,
+  error,
+  closeOnConfirm = true,
 }: ConfirmDialogProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [running, setRunning] = useState(false);
@@ -83,7 +95,9 @@ export function ConfirmDialog({
     setRunning(true);
     try {
       await onConfirm();
-      setOpen(false);
+      if (closeOnConfirm) {
+        setOpen(false);
+      }
     } finally {
       setRunning(false);
     }
@@ -132,6 +146,11 @@ export function ConfirmDialog({
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </div>
         </AlertDialogHeader>
+        {error ? (
+          <Alert variant="destructive" aria-live="polite">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        ) : null}
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
             <Button type="button" variant="outline" disabled={busy}>

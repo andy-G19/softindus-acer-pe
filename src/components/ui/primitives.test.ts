@@ -388,6 +388,16 @@ describe("Navegacion y listados", () => {
         h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_cliente", hiddenFieldValue: "CLI00000002", isActive: false }),
       ),
     ],
+    // Entrega 10: con sendsRequestedStatus envia tambien el estado pedido.
+    [
+      "acciones de fila con el estado pedido",
+      h(
+        RowActions,
+        null,
+        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000001", isActive: true, sendsRequestedStatus: true }),
+        h(RowToggleStatusButton, { action: async () => {}, hiddenFieldName: "id_categoria_gasto", hiddenFieldValue: "CGA00000002", isActive: false, sendsRequestedStatus: true }),
+      ),
+    ],
     ...([1, 2, 3] as const).map((page): Case => [
       `paginacion en la pagina ${page} de 3`,
       h(PaginationControls, {

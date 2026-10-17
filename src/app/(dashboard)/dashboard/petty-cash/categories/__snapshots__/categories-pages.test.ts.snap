@@ -45,7 +45,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > llamadas 1`] = 
 
 exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -75,6 +75,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -122,42 +123,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </div>
 </div>
 </section>
-<section>
-<div>
-<div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
-<div>Listado de categorías</div>
-</div>
-<div>
-<form action="/dashboard/petty-cash/categories">
+<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value="transporte"/>
@@ -175,6 +141,12 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 <a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
 </div>
 </form>
+<section>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
 <div>
 <table>
 <thead>
@@ -196,11 +168,8 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -213,11 +182,8 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -227,8 +193,7 @@ exports[`/dashboard/petty-cash/categories > busqueda y activas > resultado 1`] =
 </div>
 </div>
 </section>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -272,7 +237,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -302,6 +267,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -349,42 +315,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </div>
 </div>
 </section>
-<section>
-<div>
-<div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
-<div>Listado de categorías</div>
-</div>
-<div>
-<form action="/dashboard/petty-cash/categories">
+<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value=""/>
@@ -402,6 +333,12 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
 </div>
 </form>
+<section>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
 <div>
 <table>
 <thead>
@@ -423,11 +360,8 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -440,11 +374,8 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -454,8 +385,7 @@ exports[`/dashboard/petty-cash/categories > inactivas > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -493,7 +423,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -523,6 +453,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
 <span data-variant="default">Solo ADMIN</span>
+<button data-variant="default" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Nueva categoría</button>
 </div>
 </div>
 </section>
@@ -570,42 +501,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<section>
-<div>
-<div>
-<div>Nueva categoría de gasto</div>
-</div>
-<div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<div>
-<label for="nombre_categoria">Nombre de categoría</label>
-<input id="nombre_categoria" required="" name="nombre_categoria" value=""/>
-</div>
-<div>
-<label for="descripcion">Descripción</label>
-<textarea id="descripcion" name="descripcion" rows="4">
-</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
-</div>
-<div>
-<button data-variant="default" type="submit">Guardar categoría</button>
-<a data-variant="outline" href="/dashboard/petty-cash/categories">Volver al listado</a>
-</div>
-</form>
-</div>
-</div>
-<div>
-<div>
-<div>Listado de categorías</div>
-</div>
-<div>
-<form action="/dashboard/petty-cash/categories">
+<form role="search" aria-label="Filtros de categorías de gasto" action="/dashboard/petty-cash/categories" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar categoría..." name="q" value=""/>
@@ -623,6 +519,12 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/petty-cash/categories">Limpiar</a>
 </div>
 </form>
+<section>
+<div>
+<div>
+<div>Listado de categorías</div>
+</div>
+<div>
 <div>
 <table>
 <thead>
@@ -644,11 +546,8 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -661,11 +560,8 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/petty-cash/categories/id_categoria_gasto-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -675,8 +571,7 @@ exports[`/dashboard/petty-cash/categories > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -702,7 +597,7 @@ exports[`/dashboard/petty-cash/categories/[id]/edit > editar > llamadas 1`] = `
 
 exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -747,19 +642,13 @@ exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_gasto" value="id_categoria_gasto-1"/>
 <div>
-<label for="nombre_categoria">Nombre de categoría</label>
+<label for="nombre_categoria">Nombre de categoría<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_categoria" required="" name="nombre_categoria" value="nombre_categoria-1"/>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
 <textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
-</div>
-<div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado">
-<option value="true" selected="">Activa</option>
-<option value="false">Inactiva</option>
-</select>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
@@ -768,7 +657,7 @@ exports[`/dashboard/petty-cash/categories/[id]/edit > editar > resultado 1`] = `
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

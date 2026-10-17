@@ -544,6 +544,22 @@ exports[`cada clave del catalogo > material-category-activated: muestra su toast
 ]
 `;
 
+exports[`cada clave del catalogo > material-category-created: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro creado correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
 exports[`cada clave del catalogo > material-category-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
@@ -553,6 +569,22 @@ exports[`cada clave del catalogo > material-category-deactivated: muestra su toa
       "progressClassName": "toast-industrial-progress-warning",
     },
     "toast": "warning",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
+exports[`cada clave del catalogo > material-category-updated: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro actualizado correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
   },
   {
     "effect": "router.replace /dashboard {"scroll":false}",
@@ -1728,6 +1760,22 @@ exports[`cada clave del catalogo > supplier-type-activated: muestra su toast y l
 ]
 `;
 
+exports[`cada clave del catalogo > supplier-type-created: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro creado correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
 exports[`cada clave del catalogo > supplier-type-deactivated: muestra su toast y limpia la URL 1`] = `
 [
   {
@@ -1737,6 +1785,22 @@ exports[`cada clave del catalogo > supplier-type-deactivated: muestra su toast y
       "progressClassName": "toast-industrial-progress-warning",
     },
     "toast": "warning",
+  },
+  {
+    "effect": "router.replace /dashboard {"scroll":false}",
+  },
+]
+`;
+
+exports[`cada clave del catalogo > supplier-type-updated: muestra su toast y limpia la URL 1`] = `
+[
+  {
+    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Registro actualizado correctamente</p></div>",
+    "options": {
+      "className": "toast-industrial-success",
+      "progressClassName": "toast-industrial-progress-success",
+    },
+    "toast": "success",
   },
   {
     "effect": "router.replace /dashboard {"scroll":false}",

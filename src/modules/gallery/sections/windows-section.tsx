@@ -25,7 +25,8 @@ export function WindowsSection() {
         sigue visible. Mientras se registra el pago no se puede cerrar. Si
         escribiste algo en el pago, cerrar (Cancelar, X, Esc o el velo) pide
         confirmar el descarte; Cancelar vuelve a la ventana con el foco donde
-        estaba. En el teléfono, la
+        estaba. Con cambios, recargar o salir de la página lo pregunta el
+        navegador. En el teléfono, la
         ventana y los paneles ocupan la pantalla y los botones del pie se apilan.
       </GalleryNote>
 
