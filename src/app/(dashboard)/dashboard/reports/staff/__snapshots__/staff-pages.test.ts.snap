@@ -71,7 +71,7 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 
 exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistencias > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -103,9 +103,7 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -136,21 +134,22 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -270,7 +269,7 @@ exports[`/dashboard/reports/staff > planilla pendiente sin pagos y sin asistenci
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -368,7 +367,7 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > llamadas 1`] = `
 
 exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -399,9 +398,7 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -432,21 +429,22 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2025-01-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2025-01-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2025-01-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -575,7 +573,7 @@ exports[`/dashboard/reports/staff > rango de mas de 366 dias > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -615,7 +613,7 @@ exports[`/dashboard/reports/staff > rango invertido > llamadas 1`] = `
 
 exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -643,9 +641,7 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -676,25 +672,27 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div role="alert">
 <div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -770,7 +768,7 @@ exports[`/dashboard/reports/staff > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -802,9 +800,7 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value=""/>
@@ -835,21 +831,22 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -978,7 +975,7 @@ exports[`/dashboard/reports/staff > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1106,7 +1103,7 @@ exports[`/dashboard/reports/staff > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1138,9 +1135,7 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de personal y planillas" action="/dashboard/reports/staff" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar operario" name="q" value="Quispe"/>
@@ -1171,21 +1166,22 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/reports/staff">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1314,7 +1310,7 @@ exports[`/dashboard/reports/staff > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

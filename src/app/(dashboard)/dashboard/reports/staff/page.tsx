@@ -6,7 +6,9 @@
   UserRoundCheck,
   UserX,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -59,59 +60,49 @@ function ReportFilters({
   const { q, operario, modalidad, estado, from, to } = filters;
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-          <div className="space-y-2">
-            <Label htmlFor="q">Buscar</Label>
-            <Input id="q" name="q" defaultValue={q} placeholder="Buscar operario" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="operario">Operario</Label>
-            <NativeSelect id="operario" name="operario" defaultValue={operario}>
-              <option value="">Todos los operarios</option>
-              {operators.map((operator) => (
-                <option key={operator.id_operario} value={operator.id_operario}>
-                  {operator.apellidos}, {operator.nombres}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="modalidad">Modalidad</Label>
-            <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
-              <option value="">Todas las modalidades</option>
-              <option value="semanal">Semanal</option>
-              <option value="quincenal">Quincenal</option>
-              <option value="mensual">Mensual</option>
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="estado">Estado</Label>
-            <NativeSelect id="estado" name="estado" defaultValue={estado}>
-              <option value="">Todos los estados</option>
-              <option value="pendiente">Pendiente</option>
-              <option value="pagado">Pagado</option>
-              <option value="anulada">Anulada</option>
-            </NativeSelect>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input id="from" name="from" type="date" defaultValue={from} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input id="to" name="to" type="date" defaultValue={to} />
-          </div>
-          <div className="flex items-end gap-2">
-            <Button type="submit">Filtrar</Button>
-            <Button variant="clear" asChild>
-              <Link href="/dashboard/reports/staff">Limpiar</Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+    <FilterBar
+      action="/dashboard/reports/staff"
+      label="Filtros de personal y planillas"
+      clearHref="/dashboard/reports/staff"
+      clearLabel="Limpiar"
+    >
+      <Field id="q" label="Buscar">
+        {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar operario" />}
+      </Field>
+      <Field id="operario" label="Operario">
+        {(control) => (
+          <NativeSelect {...control} name="operario" defaultValue={operario}>
+            <option value="">Todos los operarios</option>
+            {operators.map((operator) => (
+              <option key={operator.id_operario} value={operator.id_operario}>
+                {operator.apellidos}, {operator.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="modalidad" label="Modalidad">
+        {(control) => (
+          <NativeSelect {...control} name="modalidad" defaultValue={modalidad}>
+            <option value="">Todas las modalidades</option>
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="estado" label="Estado">
+        {(control) => (
+          <NativeSelect {...control} name="estado" defaultValue={estado}>
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="pagado">Pagado</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        )}
+      </Field>
+      <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+    </FilterBar>
   );
 }
 
@@ -141,11 +132,11 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
     const options = await getStaffReportFilterOptions();
 
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <PageHeader {...pageHeader} />
         <ReportFilters filters={filters} {...options} />
         <InvertedRangeNotice />
-      </main>
+      </div>
     );
   }
 
@@ -189,7 +180,7 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
   const exportRangeExceeded = exceedsReportExportRange(from, to);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         {...pageHeader}
         actions={
@@ -283,7 +274,7 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

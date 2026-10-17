@@ -48,7 +48,7 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 
 exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni rentabilidad > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -80,21 +80,22 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -114,8 +115,6 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -236,7 +235,7 @@ exports[`/dashboard/reports/profitability > costeo sin pedido, orden, margen ni 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -298,7 +297,7 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > llamadas 
 
 exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -329,21 +328,22 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2025-01-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2025-01-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2025-01-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -363,8 +363,6 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -485,7 +483,7 @@ exports[`/dashboard/reports/profitability > rango de mas de 366 dias > resultado
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -503,7 +501,7 @@ exports[`/dashboard/reports/profitability > rango invertido > llamadas 1`] = `
 
 exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -531,21 +529,23 @@ exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -565,12 +565,10 @@ exports[`/dashboard/reports/profitability > rango invertido > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div role="alert">
 <div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -623,7 +621,7 @@ exports[`/dashboard/reports/profitability > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -655,21 +653,22 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -689,8 +688,6 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -811,7 +808,7 @@ exports[`/dashboard/reports/profitability > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -864,7 +861,7 @@ exports[`/dashboard/reports/profitability > sin resultados > llamadas 1`] = `
 
 exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -896,21 +893,22 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value=""/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -930,8 +928,6 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1016,7 +1012,7 @@ exports[`/dashboard/reports/profitability > sin resultados > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1136,7 +1132,7 @@ exports[`/dashboard/reports/profitability > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1168,21 +1164,22 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de costos y rentabilidad" action="/dashboard/reports/profitability" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Costeo, pedido, cliente, producto" name="q" value="Estructura"/>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <label for="lowMargin">Margen</label>
 <select id="lowMargin" name="lowMargin">
@@ -1202,8 +1199,6 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 <a data-variant="clear" href="/dashboard/reports/profitability">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1324,7 +1319,7 @@ exports[`/dashboard/reports/profitability > todos los filtros > resultado 1`] = 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
