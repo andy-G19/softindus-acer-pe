@@ -30,7 +30,10 @@ type DateRangeFieldsProps = {
 // el navegador lo marcaria invalido con su mensaje generico en lugar de este.
 // Dentro de FilterBar ocupa dos columnas si la barra tiene sitio. Un valor de
 // la URL que no es una fecha "aaaa-mm-dd" que existe empieza vacio, como lo
-// muestra el navegador, y no cuenta para el rango (entrega 10.2).
+// muestra el navegador, y no cuenta para el rango (entrega 10.2). Next no
+// vuelve a montar la pagina cuando la URL cambia con next/link (Limpiar,
+// Atras, Adelante): si cambian las fechas de la URL, los campos las toman; si
+// no cambian, conservan lo que eligio el usuario.
 export function DateRangeFields({
   id,
   legend = "Rango de fechas",
@@ -44,8 +47,18 @@ export function DateRangeFields({
 }: DateRangeFieldsProps) {
   const generatedId = useId();
   const baseId = id ?? generatedId;
+  const [urlRange, setUrlRange] = useState({ from: defaultFrom, to: defaultTo });
   const [from, setFrom] = useState(() => toDateInputValue(defaultFrom));
   const [to, setTo] = useState(() => toDateInputValue(defaultTo));
+
+  // Patron de React para ajustar el estado cuando cambia una prop: durante el
+  // render, sin efecto, para no pintar antes las fechas anteriores.
+  if (urlRange.from !== defaultFrom || urlRange.to !== defaultTo) {
+    setUrlRange({ from: defaultFrom, to: defaultTo });
+    setFrom(toDateInputValue(defaultFrom));
+    setTo(toDateInputValue(defaultTo));
+  }
+
   const toRef = useRef<HTMLInputElement>(null);
   const inverted = isDateRangeInverted(from, to);
 
