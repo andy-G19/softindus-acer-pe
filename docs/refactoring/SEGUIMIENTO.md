@@ -3238,9 +3238,10 @@ destructivas confirman:
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
 
-Fecha: 2026-10-15 y 2026-10-16. Estado: cerrada en staging; falta integrarla
-en `main`. 12 commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y
-este cierre:
+Fecha: del 2026-10-15 al 2026-10-17. Estado: cerrada el 2026-10-17. 12
+commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y el cierre
+`d3de58e` (CI #77 en verde). Integrada en `main` con el PR #23 (merge commit
+`9f52808`, CI #79 en verde):
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3357,7 +3358,7 @@ Hallazgos:
    siguen escaneando. El comentario de una prueba nueva regeneró dos
    utilidades, y un parámetro llamado `container`, la utilidad `.container`.
    Una sonda que pregunta al escáner de dónde sale cada clase encontró los
-   dos casos (`scratchpad/probe-sources.mjs`).
+   dos casos (`tmp/e10-diff/probe-sources.mjs`).
 2. 11 acciones de activar e inactivar leían el estado y escribían el
    contrario sin bloqueo; esta sub-entrega corrige 3.
 3. La edición de categorías de gasto podía inactivar sin confirmar, y la
@@ -3482,6 +3483,23 @@ Hallazgos de la verificación:
     `20260701173000`, y explica que la fila inactiva pasa al final de la
     lista.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-17 y comparados con git:
+
+- El cierre `d3de58e` se publicó en `staging`: CI #77 en verde (2m 55s), y
+  Vercel lo desplegó (`success` a las 15:32:44 UTC).
+- PR #23, abierto a las 15:36:00 UTC y fusionado con merge commit a las
+  15:40:44 UTC del 2026-10-17: 16 commits, de `62640e1` a `d3de58e`, y 61
+  archivos (+8.460 −1.324). Su CI, el #78, sobre `d3de58e`, terminó en verde
+  (2m 23s).
+- El merge commit `9f52808` tiene como padres `e38d633` (`main`) y `d3de58e`
+  (`staging`), y su árbol es el de `d3de58e` (`2d6f4f3e`): `main` y `staging`
+  tienen el mismo contenido. CI #79 en verde (2m 38s).
+- Vercel desplegó `9f52808` en producción al primer intento (estado «Vercel»
+  `pending` a las 15:40:48 UTC y `success` a las 15:42:06 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3506,7 +3524,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada en staging con CI #76, 17 de 17 huellas explicadas) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
