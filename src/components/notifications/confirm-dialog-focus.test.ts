@@ -66,7 +66,13 @@ function byText(text: string) {
 const alertDialog = () => document.querySelector('[role="alertdialog"]');
 const dialog = () => document.querySelector('[role="dialog"]');
 
-function EditWindow({ onDiscard }: { onDiscard: () => void | Promise<void> }) {
+function EditWindow({
+  onDiscard,
+  returnFocusTo,
+}: {
+  onDiscard: () => void | Promise<void>;
+  returnFocusTo?: () => HTMLElement | null;
+}) {
   const [windowOpen, setWindowOpen] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -91,6 +97,7 @@ function EditWindow({ onDiscard }: { onDiscard: () => void | Promise<void> }) {
       description: "Se perderan los datos que escribiste en esta ventana.",
       confirmText: "Descartar cambios",
       variant: "destructive",
+      returnFocusTo,
       onConfirm: async () => {
         await onDiscard();
         setWindowOpen(false);
@@ -124,6 +131,34 @@ describe("ConfirmDialog controlada sobre una ventana", () => {
     expect(alertDialog()).toBeNull();
     expect(dialog()).not.toBeNull();
     expect(onDiscard).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(opener);
+  });
+
+  // Entrega 10.2: quien la controla puede decidir a donde vuelve el foco; la
+  // confirmacion de descarte lo devuelve al ultimo campo enfocado de la ventana.
+  it("con returnFocusTo, Cancelar devuelve el foco al elemento que indica", async () => {
+    const field = () => document.querySelector<HTMLInputElement>("#nombre");
+    await act(async () => root.render(h(EditWindow, { onDiscard: () => {}, returnFocusTo: field })));
+    const opener = byText("Cancelar edicion");
+    opener.focus();
+
+    await act(async () => opener.click());
+    await act(async () => byText("Cancelar").click());
+    await settle();
+
+    expect(alertDialog()).toBeNull();
+    expect(document.activeElement).toBe(field());
+  });
+
+  it("si returnFocusTo devuelve null, el foco vuelve al que lo tenia al abrir", async () => {
+    await act(async () => root.render(h(EditWindow, { onDiscard: () => {}, returnFocusTo: () => null })));
+    const opener = byText("Cancelar edicion");
+    opener.focus();
+
+    await act(async () => opener.click());
+    await act(async () => byText("Cancelar").click());
+    await settle();
+
     expect(document.activeElement).toBe(opener);
   });
 

@@ -27,6 +27,7 @@ type ConfirmDialogOpenProps =
       open?: never;
       onOpenChange?: never;
       closeOnConfirm?: never;
+      returnFocusTo?: never;
     }
   | {
       trigger?: never;
@@ -40,6 +41,13 @@ type ConfirmDialogOpenProps =
        * pendiente externo). Por defecto se cierra al terminar onConfirm.
        */
       closeOnConfirm?: boolean;
+      /**
+       * A que elemento vuelve el foco al cerrar. Sin la prop, o si devuelve
+       * null, vuelve al que tenia el foco al abrir; tras un clic fuera de una
+       * ventana ese elemento es body, y quien la controla sabe donde estaba el
+       * usuario (la confirmacion de descarte: el ultimo campo enfocado).
+       */
+      returnFocusTo?: () => HTMLElement | null;
     };
 
 type ConfirmDialogProps = ConfirmDialogOpenProps & {
@@ -79,6 +87,7 @@ export function ConfirmDialog({
   pendingText,
   error,
   closeOnConfirm = true,
+  returnFocusTo,
 }: ConfirmDialogProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [running, setRunning] = useState(false);
@@ -86,7 +95,7 @@ export function ConfirmDialog({
   const open = controlled ? controlledOpen : uncontrolledOpen;
   // Al cerrar, Radix devuelve el foco a su disparador; sin disparador lo
   // perderia (iria a body). En modo controlado se devuelve al elemento que
-  // tenia el foco al abrir.
+  // indique returnFocusTo o, si no, al que tenia el foco al abrir.
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const busy = pending || running;
   const destructive = variant === "destructive";
@@ -128,7 +137,7 @@ export function ConfirmDialog({
         onCloseAutoFocus={(event) => {
           if (controlled) {
             event.preventDefault();
-            returnFocusRef.current?.focus();
+            (returnFocusTo?.() ?? returnFocusRef.current)?.focus();
           }
         }}
       >

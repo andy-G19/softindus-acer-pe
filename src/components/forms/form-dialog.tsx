@@ -31,7 +31,7 @@ type FormDialogProps = {
 export function FormDialog({ trigger, title, description, discardTitle, discardDescription, children }: FormDialogProps) {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
-  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: close });
+  const { controls, markDirty, trackFocus, discardDialog } = useDiscardGuard({ onLeave: close });
 
   function changeOpen(next: boolean) {
     if (next) {
@@ -51,6 +51,7 @@ export function FormDialog({ trigger, title, description, discardTitle, discardD
           // proposito; con ella, Radix la asocia solo y no hay que pisarla.
           {...(description ? {} : { "aria-describedby": undefined })}
           onInput={() => markDirty(true)}
+          onFocus={trackFocus}
         >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
