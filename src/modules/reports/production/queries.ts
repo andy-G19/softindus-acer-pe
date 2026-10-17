@@ -38,9 +38,23 @@ function buildWorkOrderWhere(
   };
 }
 
+// Opciones de los filtros del reporte. Devuelve las promesas de Prisma en el
+// orden en que las compone getProductionReportData.
+function findProductionFilterOptions() {
+  return [findActiveProductFilterOptions()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getProductionReportFilterOptions() {
+  const [products] = await Promise.all(findProductionFilterOptions());
+
+  return { products };
+}
+
 export async function getProductionReportData(filters: ProductionReportFilters) {
   const [products, workOrders] = await Promise.all([
-    findActiveProductFilterOptions(),
+    ...findProductionFilterOptions(),
 
     prisma.orden_trabajo.findMany({
       where: buildWorkOrderWhere(filters),

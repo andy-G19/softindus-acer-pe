@@ -33,7 +33,12 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getSalesCollectionsReportData } from "@/modules/reports/sales-collections/queries";
+import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getSalesCollectionsReportData,
+  getSalesCollectionsReportFilterOptions,
+} from "@/modules/reports/sales-collections/queries";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const ORDER_STATUS_OPTIONS = [
   { value: "registrado", label: "Registrado" },
@@ -117,6 +122,99 @@ function getCollectionStatus(data: {
   return "pagado";
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "clientId" | "orderStatus" | "collectionStatus" | "searchCode",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getSalesCollectionsReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  clients,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode } = filters;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Filtros del reporte</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+          <div className="space-y-2">
+            <Label htmlFor="dateFrom">Fecha desde</Label>
+            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="dateTo">Fecha hasta</Label>
+            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="clientId">Cliente</Label>
+            <NativeSelect id="clientId" name="clientId" defaultValue={clientId}>
+              <option value="">Todos los clientes</option>
+              {clients.map((client) => (
+                <option key={client.id_cliente} value={client.id_cliente}>
+                  {client.nombre_razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="orderStatus">Estado del pedido</Label>
+            <NativeSelect id="orderStatus" name="orderStatus" defaultValue={orderStatus}>
+              <option value="">Todos los estados</option>
+              {ORDER_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="collectionStatus">Estado de cobranza</Label>
+            <NativeSelect id="collectionStatus" name="collectionStatus" defaultValue={collectionStatus}>
+              <option value="">Todos los estados</option>
+              {COLLECTION_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="searchCode">Pedido o proforma</Label>
+            <Input
+              id="searchCode"
+              name="searchCode"
+              type="text"
+              defaultValue={searchCode}
+              placeholder="Ej: PED00000001 o PF-00000001"
+            />
+          </div>
+
+          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
+            <Button type="submit">Aplicar filtros</Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/reports/sales-collections">
+                Limpiar filtros
+              </Link>
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default async function SalesCollectionsReportPage({
   searchParams,
 }: PageProps) {
@@ -130,6 +228,30 @@ export default async function SalesCollectionsReportPage({
   const orderStatus = getSearchParam(params, "orderStatus");
   const collectionStatus = getSearchParam(params, "collectionStatus");
   const searchCode = getSearchParam(params, "searchCode").trim();
+
+  const filters = { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode };
+  const pageHeader = {
+    title: "Reporte de ventas y cobranzas",
+    description: "Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Ventas y cobranzas" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getSalesCollectionsReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const csvExportHref = buildReportExportHref("sales-collections", {
     dateFrom,
@@ -260,12 +382,7 @@ export default async function SalesCollectionsReportPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reporte de ventas y cobranzas"
-        description="Consulta pedidos, proformas, adelantos, amortizaciones, cancelaciones, saldos pendientes y estados de cobranza."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Ventas y cobranzas" },
-        ])}
+        {...pageHeader}
         actions={
           <>
             <Button asChild>
@@ -279,81 +396,7 @@ export default async function SalesCollectionsReportPage({
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del reporte</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="clientId">Cliente</Label>
-              <NativeSelect id="clientId" name="clientId" defaultValue={clientId}>
-                <option value="">Todos los clientes</option>
-                {clients.map((client) => (
-                  <option key={client.id_cliente} value={client.id_cliente}>
-                    {client.nombre_razon_social}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="orderStatus">Estado del pedido</Label>
-              <NativeSelect id="orderStatus" name="orderStatus" defaultValue={orderStatus}>
-                <option value="">Todos los estados</option>
-                {ORDER_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="collectionStatus">Estado de cobranza</Label>
-              <NativeSelect id="collectionStatus" name="collectionStatus" defaultValue={collectionStatus}>
-                <option value="">Todos los estados</option>
-                {COLLECTION_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="searchCode">Pedido o proforma</Label>
-              <Input
-                id="searchCode"
-                name="searchCode"
-                type="text"
-                defaultValue={searchCode}
-                placeholder="Ej: PED00000001 o PF-00000001"
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/sales-collections">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} clients={clients} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Pedidos encontrados" value={totalOrders.toString()} description="Pedidos según los filtros aplicados." tone="info" icon={ClipboardList} />

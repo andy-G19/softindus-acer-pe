@@ -375,96 +375,6 @@ exports[`/dashboard/audit > rango invertido > llamadas 1`] = `
     },
     "prisma": "bitacora_operacion.findMany",
   },
-  {
-    "args": {
-      "include": {
-        "usuario": {
-          "select": {
-            "apellidos": true,
-            "nombres": true,
-          },
-        },
-      },
-      "orderBy": [
-        {
-          "fecha_hora": "desc",
-        },
-        {
-          "id_bitacora": "desc",
-        },
-      ],
-      "skip": 0,
-      "take": 20,
-      "where": {
-        "AND": [
-          {
-            "fecha_hora": {
-              "gte": 2026-07-31T00:00:00.000Z,
-              "lt": 2026-07-02T00:00:00.000Z,
-            },
-          },
-        ],
-      },
-    },
-    "prisma": "bitacora_operacion.findMany",
-  },
-  {
-    "args": {
-      "where": {
-        "AND": [
-          {
-            "fecha_hora": {
-              "gte": 2026-07-31T00:00:00.000Z,
-              "lt": 2026-07-02T00:00:00.000Z,
-            },
-          },
-        ],
-      },
-    },
-    "prisma": "bitacora_operacion.count",
-  },
-  {
-    "args": {
-      "distinct": [
-        "id_usuario",
-      ],
-      "select": {
-        "id_usuario": true,
-      },
-      "where": {
-        "AND": [
-          {
-            "fecha_hora": {
-              "gte": 2026-07-31T00:00:00.000Z,
-              "lt": 2026-07-02T00:00:00.000Z,
-            },
-          },
-        ],
-      },
-    },
-    "prisma": "bitacora_operacion.findMany",
-  },
-  {
-    "args": {
-      "distinct": [
-        "entidad_afectada",
-      ],
-      "select": {
-        "entidad_afectada": true,
-      },
-      "where": {
-        "AND": [
-          {
-            "fecha_hora": {
-              "gte": 2026-07-31T00:00:00.000Z,
-              "lt": 2026-07-02T00:00:00.000Z,
-            },
-          },
-        ],
-      },
-    },
-    "prisma": "bitacora_operacion.findMany",
-  },
 ]
 `;
 
@@ -491,10 +401,6 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 <h1>Bitácora de operaciones</h1>
 <p>Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada.</p>
 </div>
-</div>
-<div>
-<a href="/api/reports/export/audit?from=2026-07-31&amp;to=2026-07-01&amp;fileFormat=excel" data-variant="outline">Exportar Excel</a>
-<a href="/api/reports/export/audit?from=2026-07-31&amp;to=2026-07-01&amp;fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -544,98 +450,8 @@ exports[`/dashboard/audit > rango invertido > resultado 1`] = `
 </form>
 </div>
 </div>
-<section>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Operaciones</div>
-</div>
-</div>
-<div>
-<p>42</p>
-<p>Coincidencias segun filtros.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Usuarios</div>
-</div>
-</div>
-<div>
-<p>2</p>
-<p>Usuarios distintos según filtros.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Entidades</div>
-</div>
-</div>
-<div>
-<p>2</p>
-<p>Entidades afectadas según filtros.</p>
-</div>
-</div>
-</section>
-<div>
-<div>
-<div>Operaciones registradas</div>
-</div>
-<div>
-<div>
-<table>
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Usuario</th>
-<th>Acción</th>
-<th>Entidad</th>
-<th>Registro</th>
-<th>Detalle</th>
-<th>IP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>30 jun. 2026, 7:00 p. m.</td>
-<td>apellidos-1, nombres-1</td>
-<td>accion-1</td>
-<td>entidad_afectada-1</td>
-<td>id_registro_afectado-1</td>
-<td>detalle-1</td>
-<td>ip_origen-1</td>
-</tr>
-<tr>
-<td>1 jul. 2026, 7:00 p. m.</td>
-<td>apellidos-2, nombres-2</td>
-<td>accion-2</td>
-<td>entidad_afectada-2</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div>
-<p>Mostrando 1-20 de 42 operaciones · Página 1 de 3</p>
-<div>
-<button data-variant="outline" disabled="">Anterior</button>
-<a data-variant="outline" href="/dashboard/audit?from=2026-07-31&amp;to=2026-07-01&amp;page=2">Siguiente</a>
-</div>
+<div role="alert">
+<div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
 </main>",
   "outcome": "render",

@@ -741,40 +741,6 @@ exports[`/dashboard/reports/inventory > rango invertido > llamadas 1`] = `
     },
     "prisma": "usuario.findMany",
   },
-  {
-    "args": {
-      "include": {
-        "compra": {
-          "include": {
-            "proveedor": true,
-          },
-        },
-        "material": true,
-        "orden_trabajo": {
-          "include": {
-            "producto": true,
-          },
-        },
-        "usuario": {
-          "select": {
-            "apellidos": true,
-            "nombres": true,
-          },
-        },
-      },
-      "orderBy": {
-        "fecha_movimiento": "desc",
-      },
-      "take": 100,
-      "where": {
-        "fecha_movimiento": {
-          "gte": 2026-07-31T00:00:00.000Z,
-          "lt": 2026-07-02T00:00:00.000Z,
-        },
-      },
-    },
-    "prisma": "movimiento_inventario.findMany",
-  },
 ]
 `;
 
@@ -805,10 +771,6 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 <h1>Reporte de inventario</h1>
 <p>Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.</p>
 </div>
-</div>
-<div>
-<a href="/api/reports/export/inventory?dateFrom=2026-07-31&amp;dateTo=2026-07-01&amp;fileFormat=excel" data-variant="default">Exportar Excel</a>
-<a href="/api/reports/export/inventory?dateFrom=2026-07-31&amp;dateTo=2026-07-01&amp;fileFormat=pdf" data-variant="destructive">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -864,182 +826,9 @@ exports[`/dashboard/reports/inventory > rango invertido > resultado 1`] = `
 </form>
 </div>
 </div>
-<section>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Movimientos</div>
+<div role="alert">
+<div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
-</div>
-<div>
-<p>2</p>
-<p>Total de movimientos encontrados.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Entradas</div>
-</div>
-</div>
-<div>
-<p>0</p>
-<p>Cantidad ingresada: 0.00.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Salidas</div>
-</div>
-</div>
-<div>
-<p>0</p>
-<p>Cantidad retirada: 0.00.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Ajustes</div>
-</div>
-</div>
-<div>
-<p>0</p>
-<p>Movimientos correctivos de inventario.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Reservas</div>
-</div>
-</div>
-<div>
-<p>0</p>
-<p>Cantidad reservada: 0.00.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Balance cantidad</div>
-</div>
-</div>
-<div>
-<p>0.00</p>
-<p>Entradas menos salidas del reporte.</p>
-</div>
-</div>
-</section>
-<div>
-<div>
-<div>Resultado del reporte</div>
-</div>
-<div>
-<div>
-<table>
-<thead>
-<tr>
-<th>Movimiento</th>
-<th>Material</th>
-<th>Tipo</th>
-<th>Cantidad</th>
-<th>Stock anterior</th>
-<th>Stock resultante</th>
-<th>Fecha</th>
-<th>Responsable</th>
-<th>Orden</th>
-<th>Compra</th>
-<th>Motivo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id_movimiento-1</td>
-<td>
-<div>
-<p>nombre_material-1</p>
-<p>categoria-1 · unidad_medida-1</p>
-</div>
-</td>
-<td>tipo_movimiento-1</td>
-<td>11.50</td>
-<td>11.50</td>
-<td>11.50</td>
-<td>30 jun. 2026, 7:00 p. m.</td>
-<td>apellidos-1, nombres-1</td>
-<td>
-<a href="/dashboard/production/work-orders/id_orden_trabajo-1">
-<span>id_orden_trabajo-1</span>
-<br/>
-<span>nombre_producto-1</span>
-</a>
-</td>
-<td>
-<div>
-<p>id_compra-1</p>
-<p>razon_social-1</p>
-</div>
-</td>
-<td>motivo-1</td>
-</tr>
-<tr>
-<td>id_movimiento-2</td>
-<td>
-<div>
-<p>nombre_material-2</p>
-<p>categoria-2 · unidad_medida-2</p>
-</div>
-</td>
-<td>tipo_movimiento-2</td>
-<td>22.50</td>
-<td>22.50</td>
-<td>22.50</td>
-<td>1 jul. 2026, 7:00 p. m.</td>
-<td>apellidos-2, nombres-2</td>
-<td>
-<a href="/dashboard/production/work-orders/id_orden_trabajo-2">
-<span>id_orden_trabajo-2</span>
-<br/>
-<span>nombre_producto-2</span>
-</a>
-</td>
-<td>
-<div>
-<p>id_compra-2</p>
-<p>razon_social-2</p>
-</div>
-</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Se muestran como máximo 100 movimientos para mantener una consulta rápida. En la subfase de exportación se generarán archivos completos según los filtros aplicados.</p>
-</div>
-</div>
-<section>
-<p>Este reporte permite auditar la trazabilidad del almacén: cada movimiento conserva material, cantidad, stock anterior, stock resultante, responsable, fecha y relación con compra u orden de trabajo cuando corresponda.</p>
-</section>
 </div>",
   "outcome": "render",
 }

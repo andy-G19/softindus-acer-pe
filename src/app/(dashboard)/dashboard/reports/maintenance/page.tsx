@@ -37,7 +37,12 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getMaintenanceReportData } from "@/modules/reports/maintenance/queries";
+import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getMaintenanceReportData,
+  getMaintenanceReportFilterOptions,
+} from "@/modules/reports/maintenance/queries";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const FAILURE_STATUS_OPTIONS = [
   { value: "pendiente", label: "Pendiente" },
@@ -128,6 +133,111 @@ function getSparePartCost(
   }, 0);
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "machineId" | "failureStatus" | "repairStatus" | "preventiveStatus" | "searchText",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getMaintenanceReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  machines,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, machineId, failureStatus, repairStatus, preventiveStatus, searchText } = filters;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Filtros del reporte</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+          <div className="space-y-2">
+            <Label htmlFor="dateFrom">Fecha desde</Label>
+            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="dateTo">Fecha hasta</Label>
+            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="machineId">Máquina</Label>
+            <NativeSelect id="machineId" name="machineId" defaultValue={machineId}>
+              <option value="">Todas las máquinas</option>
+              {machines.map((machine) => (
+                <option key={machine.id_maquina} value={machine.id_maquina}>
+                  {machine.nombre}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="failureStatus">Estado falla</Label>
+            <NativeSelect id="failureStatus" name="failureStatus" defaultValue={failureStatus}>
+              <option value="">Todos</option>
+              {FAILURE_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="repairStatus">Estado reparación</Label>
+            <NativeSelect id="repairStatus" name="repairStatus" defaultValue={repairStatus}>
+              <option value="">Todos</option>
+              {REPAIR_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="preventiveStatus">Estado preventivo</Label>
+            <NativeSelect id="preventiveStatus" name="preventiveStatus" defaultValue={preventiveStatus}>
+              <option value="">Todos</option>
+              {PREVENTIVE_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="searchText">Buscar</Label>
+            <Input
+              id="searchText"
+              name="searchText"
+              type="text"
+              defaultValue={searchText}
+              placeholder="Máquina, falla, responsable..."
+            />
+          </div>
+
+          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
+            <Button type="submit">Aplicar filtros</Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/reports/maintenance">
+                Limpiar filtros
+              </Link>
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default async function MaintenanceReportPage({
   searchParams,
 }: PageProps) {
@@ -142,6 +252,38 @@ export default async function MaintenanceReportPage({
   const repairStatus = getSearchParam(params, "repairStatus");
   const preventiveStatus = getSearchParam(params, "preventiveStatus");
   const searchText = getSearchParam(params, "searchText").trim();
+
+  const filters = {
+    dateFrom,
+    dateTo,
+    machineId,
+    failureStatus,
+    repairStatus,
+    preventiveStatus,
+    searchText,
+  };
+  const pageHeader = {
+    title: "Reporte de mantenimiento",
+    description: "Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Mantenimiento" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getMaintenanceReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const csvExportHref = buildReportExportHref("maintenance", {
     dateFrom,
@@ -282,12 +424,7 @@ export default async function MaintenanceReportPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reporte de mantenimiento"
-        description="Consulta máquinas, fallas, reparaciones, costos, repuestos, mantenimientos preventivos y reincidencias por equipo."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Mantenimiento" },
-        ])}
+        {...pageHeader}
         actions={
           <>
             <Button asChild>
@@ -301,93 +438,7 @@ export default async function MaintenanceReportPage({
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del reporte</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="machineId">Máquina</Label>
-              <NativeSelect id="machineId" name="machineId" defaultValue={machineId}>
-                <option value="">Todas las máquinas</option>
-                {machines.map((machine) => (
-                  <option key={machine.id_maquina} value={machine.id_maquina}>
-                    {machine.nombre}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="failureStatus">Estado falla</Label>
-              <NativeSelect id="failureStatus" name="failureStatus" defaultValue={failureStatus}>
-                <option value="">Todos</option>
-                {FAILURE_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="repairStatus">Estado reparación</Label>
-              <NativeSelect id="repairStatus" name="repairStatus" defaultValue={repairStatus}>
-                <option value="">Todos</option>
-                {REPAIR_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="preventiveStatus">Estado preventivo</Label>
-              <NativeSelect id="preventiveStatus" name="preventiveStatus" defaultValue={preventiveStatus}>
-                <option value="">Todos</option>
-                {PREVENTIVE_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="searchText">Buscar</Label>
-              <Input
-                id="searchText"
-                name="searchText"
-                type="text"
-                defaultValue={searchText}
-                placeholder="Máquina, falla, responsable..."
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/maintenance">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} machines={machines} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Fallas registradas" value={totalFailures.toString()} description="Fallas encontradas según los filtros aplicados." tone="info" icon={AlertTriangle} />

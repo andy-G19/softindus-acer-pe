@@ -34,7 +34,12 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getSuppliersPurchasesReportData } from "@/modules/reports/suppliers-purchases/queries";
+import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getSuppliersPurchasesReportData,
+  getSuppliersPurchasesReportFilterOptions,
+} from "@/modules/reports/suppliers-purchases/queries";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const PURCHASE_STATUS_OPTIONS = [
   { value: "registrada", label: "Registrada" },
@@ -93,6 +98,112 @@ function getPaidAmount(
   }, 0);
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "supplierId" | "materialId" | "purchaseStatus" | "paymentStatus" | "searchCode",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getSuppliersPurchasesReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  suppliers,
+  materials,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, supplierId, materialId, purchaseStatus, paymentStatus, searchCode } = filters;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Filtros del reporte</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+          <div className="space-y-2">
+            <Label htmlFor="dateFrom">Fecha desde</Label>
+            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="dateTo">Fecha hasta</Label>
+            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="supplierId">Proveedor</Label>
+            <NativeSelect id="supplierId" name="supplierId" defaultValue={supplierId}>
+              <option value="">Todos los proveedores</option>
+              {suppliers.map((supplier) => (
+                <option key={supplier.id_proveedor} value={supplier.id_proveedor}>
+                  {supplier.razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="materialId">Material</Label>
+            <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
+              <option value="">Todos los materiales</option>
+              {materials.map((material) => (
+                <option key={material.id_material} value={material.id_material}>
+                  {material.nombre_material}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="purchaseStatus">Estado compra</Label>
+            <NativeSelect id="purchaseStatus" name="purchaseStatus" defaultValue={purchaseStatus}>
+              <option value="">Todos los estados</option>
+              {PURCHASE_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="paymentStatus">Estado pago</Label>
+            <NativeSelect id="paymentStatus" name="paymentStatus" defaultValue={paymentStatus}>
+              <option value="">Todos los estados</option>
+              {PAYMENT_STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="searchCode">Compra o comprobante</Label>
+            <Input
+              id="searchCode"
+              name="searchCode"
+              type="text"
+              defaultValue={searchCode}
+              placeholder="Ej: COM00000001"
+            />
+          </div>
+
+          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
+            <Button type="submit">Aplicar filtros</Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/reports/suppliers-purchases">
+                Limpiar filtros
+              </Link>
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default async function SuppliersPurchasesReportPage({
   searchParams,
 }: PageProps) {
@@ -107,6 +218,38 @@ export default async function SuppliersPurchasesReportPage({
   const purchaseStatus = getSearchParam(params, "purchaseStatus");
   const paymentStatus = getSearchParam(params, "paymentStatus");
   const searchCode = getSearchParam(params, "searchCode").trim();
+
+  const filters = {
+    dateFrom,
+    dateTo,
+    supplierId,
+    materialId,
+    purchaseStatus,
+    paymentStatus,
+    searchCode,
+  };
+  const pageHeader = {
+    title: "Reporte de proveedores y compras",
+    description: "Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Proveedores y compras" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getSuppliersPurchasesReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const csvExportHref = buildReportExportHref("suppliers-purchases", {
     dateFrom,
@@ -206,12 +349,7 @@ export default async function SuppliersPurchasesReportPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reporte de proveedores y compras"
-        description="Consulta compras realizadas, proveedores, materiales adquiridos, comprobantes, montos, pagos, saldos pendientes y precios históricos."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Proveedores y compras" },
-        ])}
+        {...pageHeader}
         actions={
           <>
             <Button asChild>
@@ -225,93 +363,7 @@ export default async function SuppliersPurchasesReportPage({
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del reporte</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="supplierId">Proveedor</Label>
-              <NativeSelect id="supplierId" name="supplierId" defaultValue={supplierId}>
-                <option value="">Todos los proveedores</option>
-                {suppliers.map((supplier) => (
-                  <option key={supplier.id_proveedor} value={supplier.id_proveedor}>
-                    {supplier.razon_social}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="materialId">Material</Label>
-              <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
-                <option value="">Todos los materiales</option>
-                {materials.map((material) => (
-                  <option key={material.id_material} value={material.id_material}>
-                    {material.nombre_material}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="purchaseStatus">Estado compra</Label>
-              <NativeSelect id="purchaseStatus" name="purchaseStatus" defaultValue={purchaseStatus}>
-                <option value="">Todos los estados</option>
-                {PURCHASE_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="paymentStatus">Estado pago</Label>
-              <NativeSelect id="paymentStatus" name="paymentStatus" defaultValue={paymentStatus}>
-                <option value="">Todos los estados</option>
-                {PAYMENT_STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="searchCode">Compra o comprobante</Label>
-              <Input
-                id="searchCode"
-                name="searchCode"
-                type="text"
-                defaultValue={searchCode}
-                placeholder="Ej: COM00000001"
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/suppliers-purchases">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} suppliers={suppliers} materials={materials} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Compras encontradas" value={totalPurchases.toString()} description="Compras según los filtros aplicados." tone="info" icon={ClipboardList} />

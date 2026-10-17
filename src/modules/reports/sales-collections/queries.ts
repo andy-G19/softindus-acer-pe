@@ -61,11 +61,25 @@ function buildOrderWhere(
   };
 }
 
+// Opciones de los filtros del reporte. Devuelve las promesas de Prisma en el
+// orden en que las compone getSalesCollectionsReportData.
+function findSalesCollectionsFilterOptions() {
+  return [findActiveClientOptions()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getSalesCollectionsReportFilterOptions() {
+  const [clients] = await Promise.all(findSalesCollectionsFilterOptions());
+
+  return { clients };
+}
+
 export async function getSalesCollectionsReportData(
   filters: SalesCollectionsReportFilters,
 ) {
   const [clients, orders] = await Promise.all([
-    findActiveClientOptions(),
+    ...findSalesCollectionsFilterOptions(),
 
     prisma.pedido.findMany({
       where: buildOrderWhere(filters),

@@ -99,6 +99,14 @@ function findAuditFilterOptions() {
   ] as const;
 }
 
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getAuditLogFilterOptions() {
+  const [users, actions, entities] = await Promise.all(findAuditFilterOptions());
+
+  return { users, actions, entities };
+}
+
 export async function getAuditLogData(
   filters: AuditLogFilters,
   { skip, take }: Pick<PaginationParams, "skip" | "take">,

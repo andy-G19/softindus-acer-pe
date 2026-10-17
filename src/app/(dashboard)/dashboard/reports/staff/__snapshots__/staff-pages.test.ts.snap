@@ -611,64 +611,6 @@ exports[`/dashboard/reports/staff > rango invertido > llamadas 1`] = `
     },
     "prisma": "operario.findMany",
   },
-  {
-    "args": {
-      "include": {
-        "historial_pago_operario": true,
-        "operario": true,
-      },
-      "orderBy": {
-        "fecha_generacion": "desc",
-      },
-      "take": 100,
-      "where": {
-        "AND": [
-          {
-            "periodo_inicio": {
-              "gte": 2026-07-31T00:00:00.000Z,
-              "lt": 2026-07-02T00:00:00.000Z,
-            },
-          },
-        ],
-      },
-    },
-    "prisma": "planilla_pago.findMany",
-  },
-  {
-    "args": {
-      "where": {
-        "fecha": {
-          "gte": 2026-07-31T00:00:00.000Z,
-          "lt": 2026-07-02T00:00:00.000Z,
-        },
-      },
-    },
-    "prisma": "asistencia.count",
-  },
-  {
-    "args": {
-      "where": {
-        "falta": true,
-        "fecha": {
-          "gte": 2026-07-31T00:00:00.000Z,
-          "lt": 2026-07-02T00:00:00.000Z,
-        },
-      },
-    },
-    "prisma": "asistencia.count",
-  },
-  {
-    "args": {
-      "where": {
-        "fecha": {
-          "gte": 2026-07-31T00:00:00.000Z,
-          "lt": 2026-07-02T00:00:00.000Z,
-        },
-        "tardanza": true,
-      },
-    },
-    "prisma": "asistencia.count",
-  },
 ]
 `;
 
@@ -699,10 +641,6 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 <h1>Personal y planillas</h1>
 <p>Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario.</p>
 </div>
-</div>
-<div>
-<a href="/api/reports/export/staff?from=2026-07-31&amp;to=2026-07-01&amp;fileFormat=excel" data-variant="outline">Exportar Excel</a>
-<a href="/api/reports/export/staff?from=2026-07-31&amp;to=2026-07-01&amp;fileFormat=pdf" data-variant="default">Exportar PDF</a>
 </div>
 </div>
 </section>
@@ -754,133 +692,8 @@ exports[`/dashboard/reports/staff > rango invertido > resultado 1`] = `
 </form>
 </div>
 </div>
-<section>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Operarios activos</div>
-</div>
-</div>
-<div>
-<p>2</p>
-<p>Operarios habilitados.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Asistencias</div>
-</div>
-</div>
-<div>
-<p>42</p>
-<p>Registros en el periodo.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Faltas</div>
-</div>
-</div>
-<div>
-<p>42</p>
-<p>Ausencias registradas.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Tardanzas</div>
-</div>
-</div>
-<div>
-<p>42</p>
-<p>Marcaciones tardias.</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Planillas</div>
-</div>
-</div>
-<div>
-<p>2</p>
-<p>Pendientes: 0</p>
-</div>
-</div>
-<div>
-<div>
-<div>
-<span>
-<svg/>
-</span>
-<div>Pagado</div>
-</div>
-</div>
-<div>
-<p>S/ 68.00</p>
-<p>Neto: S/ 34.00</p>
-</div>
-</div>
-</section>
-<div>
-<div>
-<div>Planillas listadas</div>
-</div>
-<div>
-<div>
-<table>
-<thead>
-<tr>
-<th>Planilla</th>
-<th>Operario</th>
-<th>Periodo</th>
-<th>Modalidad</th>
-<th>Neto</th>
-<th>Pagado</th>
-<th>Estado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id_planilla-1</td>
-<td>apellidos-1, nombres-1</td>
-<td>01/07/2026 - 01/07/2026</td>
-<td>modalidad_pago-1</td>
-<td>S/ 11.50</td>
-<td>S/ 34.00</td>
-<td>estado_pago-1</td>
-</tr>
-<tr>
-<td>id_planilla-2</td>
-<td>apellidos-2, nombres-2</td>
-<td>02/07/2026 - 02/07/2026</td>
-<td>modalidad_pago-2</td>
-<td>S/ 22.50</td>
-<td>S/ 34.00</td>
-<td>estado_pago-2</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<div role="alert">
+<div>Corrige el rango de fechas para ver el reporte.</div>
 </div>
 </main>",
   "outcome": "render",

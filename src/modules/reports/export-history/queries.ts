@@ -61,9 +61,23 @@ function buildExportHistoryWhere(
   };
 }
 
+// Opciones de los filtros del historial. Devuelve las promesas de Prisma en el
+// orden en que las compone getExportHistoryData.
+function findExportHistoryFilterOptions() {
+  return [findActiveUserOptions()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getExportHistoryFilterOptions() {
+  const [users] = await Promise.all(findExportHistoryFilterOptions());
+
+  return { users };
+}
+
 export async function getExportHistoryData(filters: ExportHistoryFilters) {
   const [users, exports] = await Promise.all([
-    findActiveUserOptions(),
+    ...findExportHistoryFilterOptions(),
 
     prisma.exportacion_datos.findMany({
       where: buildExportHistoryWhere(filters),

@@ -32,11 +32,87 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
-import { getAuditLogData } from "@/modules/audit/queries";
+import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { getAuditLogData, getAuditLogFilterOptions } from "@/modules/audit/queries";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
+
+type ReportFilterValues = Record<"q" | "usuario" | "accion" | "entidad" | "from" | "to", string>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getAuditLogFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  users,
+  actions,
+  entities,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { q, usuario, accion, entidad, from, to } = filters;
+
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+          <div className="space-y-2">
+            <Label htmlFor="q">Buscar</Label>
+            <Input id="q" name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="usuario">Usuario</Label>
+            <NativeSelect id="usuario" name="usuario" defaultValue={usuario}>
+              <option value="">Todos los usuarios</option>
+              {users.map((user) => (
+                <option key={user.id_usuario} value={user.id_usuario}>
+                  {user.apellidos}, {user.nombres}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="accion">Acción</Label>
+            <NativeSelect id="accion" name="accion" defaultValue={accion}>
+              <option value="">Todas las acciones</option>
+              {actions.map((item) => (
+                <option key={item.accion} value={item.accion}>
+                  {item.accion}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="entidad">Entidad</Label>
+            <NativeSelect id="entidad" name="entidad" defaultValue={entidad}>
+              <option value="">Todas las entidades</option>
+              {entities.map((item) => (
+                <option key={item.entidad_afectada} value={item.entidad_afectada}>
+                  {item.entidad_afectada}
+                </option>
+              ))}
+            </NativeSelect>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="from">Desde</Label>
+            <Input id="from" name="from" type="date" defaultValue={from} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="to">Hasta</Label>
+            <Input id="to" name="to" type="date" defaultValue={to} />
+          </div>
+          <div className="flex items-end gap-2">
+            <Button type="submit">Filtrar</Button>
+            <Button variant="clear" asChild>
+              <Link href="/dashboard/audit">Limpiar</Link>
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default async function AuditPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);
@@ -49,6 +125,27 @@ export default async function AuditPage({ searchParams }: PageProps) {
   const from = parseStringParam(params, "from");
   const to = parseStringParam(params, "to");
   const { page, pageSize, skip, take } = getPaginationParams(params);
+
+  const filters = { q, usuario, accion, entidad, from, to };
+  const pageHeader = {
+    title: "Bitácora de operaciones",
+    description: "Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada.",
+    breadcrumbs: dashboardBreadcrumbs([{ label: "Auditoría" }]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(from, to)) {
+    const options = await getAuditLogFilterOptions();
+
+    return (
+      <main className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </main>
+    );
+  }
 
   const {
     users,
@@ -77,9 +174,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
   return (
     <main className="space-y-6">
       <PageHeader
-        title="Bitácora de operaciones"
-        description="Consulta solo lectura de acciones críticas, entidades afectadas, usuarios responsables, fecha, detalle e IP registrada."
-        breadcrumbs={dashboardBreadcrumbs([{ label: "Auditoría" }])}
+        {...pageHeader}
         actions={
           <>
             <Button variant="outline" asChild>
@@ -96,63 +191,7 @@ export default async function AuditPage({ searchParams }: PageProps) {
         }
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Buscar detalle, entidad o accion" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="usuario">Usuario</Label>
-              <NativeSelect id="usuario" name="usuario" defaultValue={usuario}>
-                <option value="">Todos los usuarios</option>
-                {users.map((user) => (
-                  <option key={user.id_usuario} value={user.id_usuario}>
-                    {user.apellidos}, {user.nombres}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="accion">Acción</Label>
-              <NativeSelect id="accion" name="accion" defaultValue={accion}>
-                <option value="">Todas las acciones</option>
-                {actions.map((item) => (
-                  <option key={item.accion} value={item.accion}>
-                    {item.accion}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="entidad">Entidad</Label>
-              <NativeSelect id="entidad" name="entidad" defaultValue={entidad}>
-                <option value="">Todas las entidades</option>
-                {entities.map((item) => (
-                  <option key={item.entidad_afectada} value={item.entidad_afectada}>
-                    {item.entidad_afectada}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="from">Desde</Label>
-              <Input id="from" name="from" type="date" defaultValue={from} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="to">Hasta</Label>
-              <Input id="to" name="to" type="date" defaultValue={to} />
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit">Filtrar</Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/audit">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} users={users} actions={actions} entities={entities} />
 
       <section className="grid gap-4 md:grid-cols-3">
         <KpiCard title="Operaciones" value={totalLogs.toString()} description="Coincidencias segun filtros." tone="info" icon={ScrollText} />

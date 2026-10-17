@@ -129,6 +129,14 @@ function findMaintenanceFilterOptions() {
   ] as const;
 }
 
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getMaintenanceReportFilterOptions() {
+  const [machines] = await Promise.all(findMaintenanceFilterOptions());
+
+  return { machines };
+}
+
 export async function getMaintenanceReportData(filters: MaintenanceReportFilters) {
   const dateRange = buildReportDateRange(filters.dateFrom, filters.dateTo);
   const failureWhere = buildFailureWhere(filters, dateRange);

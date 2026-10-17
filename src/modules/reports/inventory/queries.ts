@@ -41,11 +41,23 @@ function buildMovementWhere(
   };
 }
 
+// Opciones de los filtros del reporte. Devuelve las promesas de Prisma en el
+// orden en que las compone getInventoryReportData.
+function findInventoryFilterOptions() {
+  return [findActiveMaterialFilterOptions(), findActiveUserOptions()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getInventoryReportFilterOptions() {
+  const [materials, users] = await Promise.all(findInventoryFilterOptions());
+
+  return { materials, users };
+}
+
 export async function getInventoryReportData(filters: InventoryReportFilters) {
   const [materials, users, movements] = await Promise.all([
-    findActiveMaterialFilterOptions(),
-
-    findActiveUserOptions(),
+    ...findInventoryFilterOptions(),
 
     prisma.movimiento_inventario.findMany({
       where: buildMovementWhere(filters),
