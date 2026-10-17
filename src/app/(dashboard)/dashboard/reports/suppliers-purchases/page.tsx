@@ -6,7 +6,9 @@
   Package,
   Truck,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -115,93 +116,86 @@ function ReportFilters({
   const { dateFrom, dateTo, supplierId, materialId, purchaseStatus, paymentStatus, searchCode } = filters;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Filtros del reporte</CardTitle>
-      </CardHeader>
+    <FilterBar
+      action="/dashboard/reports/suppliers-purchases"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/suppliers-purchases"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
 
-      <CardContent>
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-          <div className="space-y-2">
-            <Label htmlFor="dateFrom">Fecha desde</Label>
-            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-          </div>
+      <Field id="supplierId" label="Proveedor">
+        {(control) => (
+          <NativeSelect {...control} name="supplierId" defaultValue={supplierId}>
+            <option value="">Todos los proveedores</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier.id_proveedor} value={supplier.id_proveedor}>
+                {supplier.razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="dateTo">Fecha hasta</Label>
-            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-          </div>
+      <Field id="materialId" label="Material">
+        {(control) => (
+          <NativeSelect {...control} name="materialId" defaultValue={materialId}>
+            <option value="">Todos los materiales</option>
+            {materials.map((material) => (
+              <option key={material.id_material} value={material.id_material}>
+                {material.nombre_material}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="supplierId">Proveedor</Label>
-            <NativeSelect id="supplierId" name="supplierId" defaultValue={supplierId}>
-              <option value="">Todos los proveedores</option>
-              {suppliers.map((supplier) => (
-                <option key={supplier.id_proveedor} value={supplier.id_proveedor}>
-                  {supplier.razon_social}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="purchaseStatus" label="Estado compra">
+        {(control) => (
+          <NativeSelect {...control} name="purchaseStatus" defaultValue={purchaseStatus}>
+            <option value="">Todos los estados</option>
+            {PURCHASE_STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="materialId">Material</Label>
-            <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
-              <option value="">Todos los materiales</option>
-              {materials.map((material) => (
-                <option key={material.id_material} value={material.id_material}>
-                  {material.nombre_material}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="paymentStatus" label="Estado pago">
+        {(control) => (
+          <NativeSelect {...control} name="paymentStatus" defaultValue={paymentStatus}>
+            <option value="">Todos los estados</option>
+            {PAYMENT_STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="purchaseStatus">Estado compra</Label>
-            <NativeSelect id="purchaseStatus" name="purchaseStatus" defaultValue={purchaseStatus}>
-              <option value="">Todos los estados</option>
-              {PURCHASE_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="paymentStatus">Estado pago</Label>
-            <NativeSelect id="paymentStatus" name="paymentStatus" defaultValue={paymentStatus}>
-              <option value="">Todos los estados</option>
-              {PAYMENT_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="searchCode">Compra o comprobante</Label>
-            <Input
-              id="searchCode"
-              name="searchCode"
-              type="text"
-              defaultValue={searchCode}
-              placeholder="Ej: COM00000001"
-            />
-          </div>
-
-          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-            <Button type="submit">Aplicar filtros</Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/reports/suppliers-purchases">
-                Limpiar filtros
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <Field id="searchCode" label="Compra o comprobante">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchCode"
+            type="text"
+            defaultValue={searchCode}
+            placeholder="Ej: COM00000001"
+          />
+        )}
+      </Field>
+    </FilterBar>
   );
 }
 

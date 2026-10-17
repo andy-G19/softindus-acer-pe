@@ -6,6 +6,9 @@
   Receipt,
 } from "lucide-react";
 import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -138,81 +140,73 @@ function ReportFilters({
   const { dateFrom, dateTo, clientId, orderStatus, collectionStatus, searchCode } = filters;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Filtros del reporte</CardTitle>
-      </CardHeader>
+    <FilterBar
+      action="/dashboard/reports/sales-collections"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/sales-collections"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
 
-      <CardContent>
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-          <div className="space-y-2">
-            <Label htmlFor="dateFrom">Fecha desde</Label>
-            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-          </div>
+      <Field id="clientId" label="Cliente">
+        {(control) => (
+          <NativeSelect {...control} name="clientId" defaultValue={clientId}>
+            <option value="">Todos los clientes</option>
+            {clients.map((client) => (
+              <option key={client.id_cliente} value={client.id_cliente}>
+                {client.nombre_razon_social}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="dateTo">Fecha hasta</Label>
-            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-          </div>
+      <Field id="orderStatus" label="Estado del pedido">
+        {(control) => (
+          <NativeSelect {...control} name="orderStatus" defaultValue={orderStatus}>
+            <option value="">Todos los estados</option>
+            {ORDER_STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="clientId">Cliente</Label>
-            <NativeSelect id="clientId" name="clientId" defaultValue={clientId}>
-              <option value="">Todos los clientes</option>
-              {clients.map((client) => (
-                <option key={client.id_cliente} value={client.id_cliente}>
-                  {client.nombre_razon_social}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="collectionStatus" label="Estado de cobranza">
+        {(control) => (
+          <NativeSelect {...control} name="collectionStatus" defaultValue={collectionStatus}>
+            <option value="">Todos los estados</option>
+            {COLLECTION_STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="orderStatus">Estado del pedido</Label>
-            <NativeSelect id="orderStatus" name="orderStatus" defaultValue={orderStatus}>
-              <option value="">Todos los estados</option>
-              {ORDER_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="collectionStatus">Estado de cobranza</Label>
-            <NativeSelect id="collectionStatus" name="collectionStatus" defaultValue={collectionStatus}>
-              <option value="">Todos los estados</option>
-              {COLLECTION_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="searchCode">Pedido o proforma</Label>
-            <Input
-              id="searchCode"
-              name="searchCode"
-              type="text"
-              defaultValue={searchCode}
-              placeholder="Ej: PED00000001 o PF-00000001"
-            />
-          </div>
-
-          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
-            <Button type="submit">Aplicar filtros</Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/reports/sales-collections">
-                Limpiar filtros
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <Field id="searchCode" label="Pedido o proforma">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchCode"
+            type="text"
+            defaultValue={searchCode}
+            placeholder="Ej: PED00000001 o PF-00000001"
+          />
+        )}
+      </Field>
+    </FilterBar>
   );
 }
 

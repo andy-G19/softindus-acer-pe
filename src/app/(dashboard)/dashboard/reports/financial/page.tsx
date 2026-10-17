@@ -6,7 +6,9 @@
   TrendingUp,
   Truck,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -97,84 +98,73 @@ function ReportFilters({
   const { dateFrom, dateTo, cashBoxId, movementType, categoryId, searchText } = filters;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Filtros del reporte</CardTitle>
-      </CardHeader>
+    <FilterBar
+      action="/dashboard/reports/financial"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/financial"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
 
-      <CardContent>
-        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-          <div className="space-y-2">
-            <Label htmlFor="dateFrom">Fecha desde</Label>
-            <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-          </div>
+      <Field id="cashBoxId" label="Caja chica">
+        {(control) => (
+          <NativeSelect {...control} name="cashBoxId" defaultValue={cashBoxId}>
+            <option value="">Todas las cajas</option>
+            {cashBoxes.map((cashBox) => (
+              <option key={cashBox.id_caja_chica} value={cashBox.id_caja_chica}>
+                {cashBox.nombre_caja}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="dateTo">Fecha hasta</Label>
-            <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-          </div>
+      <Field id="movementType" label="Tipo movimiento">
+        {(control) => (
+          <NativeSelect {...control} name="movementType" defaultValue={movementType}>
+            <option value="">Todos los tipos</option>
+            {CASH_MOVEMENT_TYPE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="cashBoxId">Caja chica</Label>
-            <NativeSelect id="cashBoxId" name="cashBoxId" defaultValue={cashBoxId}>
-              <option value="">Todas las cajas</option>
-              {cashBoxes.map((cashBox) => (
-                <option key={cashBox.id_caja_chica} value={cashBox.id_caja_chica}>
-                  {cashBox.nombre_caja}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+      <Field id="categoryId" label="Categoría">
+        {(control) => (
+          <NativeSelect {...control} name="categoryId" defaultValue={categoryId}>
+            <option value="">Todas las categorías</option>
+            {categories.map((category) => (
+              <option key={category.id_categoria_gasto} value={category.id_categoria_gasto}>
+                {category.nombre_categoria}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="movementType">Tipo movimiento</Label>
-            <NativeSelect id="movementType" name="movementType" defaultValue={movementType}>
-              <option value="">Todos los tipos</option>
-              {CASH_MOVEMENT_TYPE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="categoryId">Categoría</Label>
-            <NativeSelect id="categoryId" name="categoryId" defaultValue={categoryId}>
-              <option value="">Todas las categorías</option>
-              {categories.map((category) => (
-                <option
-                  key={category.id_categoria_gasto}
-                  value={category.id_categoria_gasto}
-                >
-                  {category.nombre_categoria}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="searchText">Concepto / responsable</Label>
-            <Input
-              id="searchText"
-              name="searchText"
-              type="text"
-              defaultValue={searchText}
-              placeholder="Ej: transporte, repuesto..."
-            />
-          </div>
-
-          <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
-            <Button type="submit">Aplicar filtros</Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/reports/financial">
-                Limpiar filtros
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <Field id="searchText" label="Concepto / responsable">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchText"
+            type="text"
+            defaultValue={searchText}
+            placeholder="Ej: transporte, repuesto..."
+          />
+        )}
+      </Field>
+    </FilterBar>
   );
 }
 
