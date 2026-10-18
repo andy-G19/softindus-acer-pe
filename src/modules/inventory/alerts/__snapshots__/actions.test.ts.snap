@@ -10,25 +10,18 @@ exports[`attendStockAlertAction > ADMIN atiende una alerta activa > llamadas 1`]
   },
   {
     "args": {
-      "where": {
-        "id_alerta": "ALE00000003",
-      },
-    },
-    "prisma": "alerta_stock.findUnique",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
         "id_usuario_atencion": "USU00000001",
       },
       "where": {
+        "estado_alerta": "activa",
         "id_alerta": "ALE00000003",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
     "args": "/dashboard/inventory",
@@ -79,6 +72,24 @@ exports[`attendStockAlertAction > la alerta no existe: lanza un error > llamadas
   },
   {
     "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
       "where": {
         "id_alerta": "ALE00000003",
       },
@@ -103,7 +114,7 @@ exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > llama
 
 exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > resultado 1`] = `"error: La alerta es obligatoria."`;
 
-exports[`attendStockAlertAction > una alerta ya atendida se vuelve a atender: cambia quien y cuando > llamadas 1`] = `
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe: vuelve a la lista sin aviso > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -113,35 +124,31 @@ exports[`attendStockAlertAction > una alerta ya atendida se vuelve a atender: ca
   },
   {
     "args": {
-      "where": {
-        "id_alerta": "ALE00000003",
-      },
-    },
-    "prisma": "alerta_stock.findUnique",
-  },
-  {
-    "args": {
       "data": {
         "estado_alerta": "atendida",
         "fecha_atencion": 2026-07-15T15:00:00.000Z,
         "id_usuario_atencion": "USU00000001",
       },
       "where": {
+        "estado_alerta": "activa",
         "id_alerta": "ALE00000003",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "alerta_stock.update",
+    "prisma": "alerta_stock.updateMany",
   },
   {
-    "args": "/dashboard/inventory",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/inventory/alerts",
-    "effect": "revalidatePath",
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
   },
 ]
 `;
 
-exports[`attendStockAlertAction > una alerta ya atendida se vuelve a atender: cambia quien y cuando > resultado 1`] = `"redirect:/dashboard/inventory/alerts?toast=stock-alert-attended"`;
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe: vuelve a la lista sin aviso > resultado 1`] = `"redirect:/dashboard/inventory/alerts"`;

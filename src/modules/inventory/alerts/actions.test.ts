@@ -73,8 +73,11 @@ async function runAction(actionCase: ActionCase) {
 
 const ALERTA = "ALE00000003";
 
+// La alerta como la ve la base: updateMany con estado_alerta "activa" en el
+// where solo cambia una fila si la alerta existe y sigue activa.
 function alert(estado_alerta: "activa" | "atendida" | null): DataOverrides {
   return {
+    "alerta_stock.updateMany": { count: estado_alerta === "activa" ? 1 : 0 },
     "alerta_stock.findUnique":
       estado_alerta === null
         ? null
@@ -91,7 +94,7 @@ function alert(estado_alerta: "activa" | "atendida" | null): DataOverrides {
 const CASES: ActionCase[] = [
   { name: "ADMIN atiende una alerta activa", form: { id_alerta: ALERTA }, data: alert("activa") },
   {
-    name: "una alerta ya atendida se vuelve a atender: cambia quien y cuando",
+    name: "una alerta ya atendida no se reescribe: vuelve a la lista sin aviso",
     form: { id_alerta: ALERTA },
     data: alert("atendida"),
   },
@@ -100,6 +103,46 @@ const CASES: ActionCase[] = [
   { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_alerta: ALERTA }, role: "WORKSHOP_MASTER" },
   { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_alerta: ALERTA }, role: "SELLER" },
 ];
+
+// Atender fija «atendida» solo si la alerta sigue activa, comparando y
+// escribiendo en una sola sentencia (updateMany con estado_alerta "activa" en
+// el where): un doble clic o una lista desactualizada no cambian quien la
+// atendio ni cuando (entrega 10.3).
+describe("attendStockAlertAction solo atiende una alerta activa", () => {
+  function writesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string; args?: { data?: Record<string, unknown> } }>).filter(
+      (call) => call.prisma === "alerta_stock.update" || call.prisma === "alerta_stock.updateMany",
+    );
+  }
+
+  it("compara y fija el estado en una sola escritura", async () => {
+    const { calls, outcome } = await runAction({ name: "", form: { id_alerta: ALERTA }, data: alert("activa") });
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "alerta_stock.updateMany",
+        args: {
+          where: { id_alerta: ALERTA, estado_alerta: "activa" },
+          data: expect.objectContaining({ estado_alerta: "atendida", id_usuario_atencion: "USU00000001" }),
+        },
+      }),
+    ]);
+    expect(String(outcome)).toContain("toast=stock-alert-attended");
+  });
+
+  it("una alerta ya atendida no cambia quien la atendio ni cuando, y no da el aviso", async () => {
+    const { calls, outcome } = await runAction({ name: "", form: { id_alerta: ALERTA }, data: alert("atendida") });
+
+    expect(writesOf(calls).filter((call) => call.prisma === "alerta_stock.update")).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("una alerta que no existe sigue respondiendo con su error", async () => {
+    const { outcome } = await runAction({ name: "", form: { id_alerta: ALERTA }, data: alert(null) });
+
+    expect(outcome).toBe("error: La alerta seleccionada no existe.");
+  });
+});
 
 describe("attendStockAlertAction", () => {
   for (const actionCase of CASES) {
