@@ -96,7 +96,7 @@ exports[`createMaterialAction > categoria inexistente: el mismo error > resultad
 }
 `;
 
-exports[`createMaterialAction > con mas de dos decimales decide con el numero del formulario: 5.004 sobre un minimo de 5 no abre alerta > llamadas 1`] = `
+exports[`createMaterialAction > con mas de dos decimales decide con la fila guardada: 5.004 queda en 5.00, igual al minimo, y abre la alerta > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -150,6 +150,10 @@ exports[`createMaterialAction > con mas de dos decimales decide con el numero de
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -163,17 +167,37 @@ exports[`createMaterialAction > con mas de dos decimales decide con el numero de
   {
     "args": {
       "data": {
-        "cantidad": 5.004,
+        "cantidad": Decimal(5),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 5.004,
+        "stock_resultante": Decimal(5),
         "tipo_movimiento": "entrada",
       },
     },
     "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(5),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
   },
   {
     "args": {
@@ -201,9 +225,9 @@ exports[`createMaterialAction > con mas de dos decimales decide con el numero de
 ]
 `;
 
-exports[`createMaterialAction > con mas de dos decimales decide con el numero del formulario: 5.004 sobre un minimo de 5 no abre alerta > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-created"`;
+exports[`createMaterialAction > con mas de dos decimales decide con la fila guardada: 5.004 queda en 5.00, igual al minimo, y abre la alerta > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-created"`;
 
-exports[`createMaterialAction > con mas de dos decimales: 0.004 escribe un kardex inicial > llamadas 1`] = `
+exports[`createMaterialAction > con mas de dos decimales: 0.004 queda en 0.00 y no escribe kardex inicial > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -257,30 +281,12 @@ exports[`createMaterialAction > con mas de dos decimales: 0.004 escribe un karde
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
-    },
-    "prisma": "material.create",
-  },
-  {
-    "args": {
-      "codigoEntidad": "movimiento_inventario",
-      "prefijo": "MVI",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad": 0.004,
-        "id_material": "MAT00000008",
-        "id_movimiento": "MVI00000008",
-        "id_usuario_responsable": "USU00000001",
-        "motivo": "Stock inicial registrado al crear el material",
-        "stock_anterior": 0,
-        "stock_resultante": 0.004,
-        "tipo_movimiento": "entrada",
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
       },
     },
-    "prisma": "movimiento_inventario.create",
+    "prisma": "material.create",
   },
   {
     "args": {
@@ -308,7 +314,7 @@ exports[`createMaterialAction > con mas de dos decimales: 0.004 escribe un karde
 ]
 `;
 
-exports[`createMaterialAction > con mas de dos decimales: 0.004 escribe un kardex inicial > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-created"`;
+exports[`createMaterialAction > con mas de dos decimales: 0.004 queda en 0.00 y no escribe kardex inicial > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-created"`;
 
 exports[`createMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
@@ -421,6 +427,10 @@ exports[`createMaterialAction > la alerta compara el stock actual, no el disponi
         "stock_reservado": 4,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -434,13 +444,13 @@ exports[`createMaterialAction > la alerta compara el stock actual, no el disponi
   {
     "args": {
       "data": {
-        "cantidad": 6,
+        "cantidad": Decimal(6),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 6,
+        "stock_resultante": Decimal(6),
         "tipo_movimiento": "entrada",
       },
     },
@@ -527,6 +537,10 @@ exports[`createMaterialAction > los numeros vacios valen cero: ni kardex ni aler
         "stock_minimo": 0,
         "stock_reservado": 0,
         "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
       },
     },
     "prisma": "material.create",
@@ -659,6 +673,10 @@ exports[`createMaterialAction > sin minimo no hay alerta aunque el stock sea cer
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -744,6 +762,10 @@ exports[`createMaterialAction > stock bajo el minimo: crea el material, el karde
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -757,13 +779,13 @@ exports[`createMaterialAction > stock bajo el minimo: crea el material, el karde
   {
     "args": {
       "data": {
-        "cantidad": 2,
+        "cantidad": Decimal(2),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 2,
+        "stock_resultante": Decimal(2),
         "tipo_movimiento": "entrada",
       },
     },
@@ -783,8 +805,8 @@ exports[`createMaterialAction > stock bajo el minimo: crea el material, el karde
         "id_alerta": "ALE00000008",
         "id_material": "MAT00000008",
         "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
-        "stock_detectado": 2,
-        "stock_minimo": 5,
+        "stock_detectado": Decimal(2),
+        "stock_minimo": Decimal(5),
       },
     },
     "prisma": "alerta_stock.create",
@@ -871,6 +893,10 @@ exports[`createMaterialAction > stock cero con minimo: alerta sin kardex > llama
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -888,8 +914,8 @@ exports[`createMaterialAction > stock cero con minimo: alerta sin kardex > llama
         "id_alerta": "ALE00000008",
         "id_material": "MAT00000008",
         "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
-        "stock_detectado": 0,
-        "stock_minimo": 5,
+        "stock_detectado": Decimal(0),
+        "stock_minimo": Decimal(5),
       },
     },
     "prisma": "alerta_stock.create",
@@ -976,6 +1002,10 @@ exports[`createMaterialAction > stock igual al minimo: tambien abre la alerta > 
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -989,13 +1019,13 @@ exports[`createMaterialAction > stock igual al minimo: tambien abre la alerta > 
   {
     "args": {
       "data": {
-        "cantidad": 5,
+        "cantidad": Decimal(5),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 5,
+        "stock_resultante": Decimal(5),
         "tipo_movimiento": "entrada",
       },
     },
@@ -1015,8 +1045,8 @@ exports[`createMaterialAction > stock igual al minimo: tambien abre la alerta > 
         "id_alerta": "ALE00000008",
         "id_material": "MAT00000008",
         "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
-        "stock_detectado": 5,
-        "stock_minimo": 5,
+        "stock_detectado": Decimal(5),
+        "stock_minimo": Decimal(5),
       },
     },
     "prisma": "alerta_stock.create",
@@ -1103,6 +1133,10 @@ exports[`createMaterialAction > stock sobre el minimo: kardex inicial sin alerta
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -1116,13 +1150,13 @@ exports[`createMaterialAction > stock sobre el minimo: kardex inicial sin alerta
   {
     "args": {
       "data": {
-        "cantidad": 20,
+        "cantidad": Decimal(20),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 20,
+        "stock_resultante": Decimal(20),
         "tipo_movimiento": "entrada",
       },
     },
@@ -1210,6 +1244,10 @@ exports[`createMaterialAction > un fallo al crear la alerta revierte el material
         "stock_reservado": 0,
         "unidad_medida": "unidad",
       },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
     },
     "prisma": "material.create",
   },
@@ -1223,13 +1261,13 @@ exports[`createMaterialAction > un fallo al crear la alerta revierte el material
   {
     "args": {
       "data": {
-        "cantidad": 2,
+        "cantidad": Decimal(2),
         "id_material": "MAT00000008",
         "id_movimiento": "MVI00000008",
         "id_usuario_responsable": "USU00000001",
         "motivo": "Stock inicial registrado al crear el material",
         "stock_anterior": 0,
-        "stock_resultante": 2,
+        "stock_resultante": Decimal(2),
         "tipo_movimiento": "entrada",
       },
     },
@@ -1249,8 +1287,8 @@ exports[`createMaterialAction > un fallo al crear la alerta revierte el material
         "id_alerta": "ALE00000008",
         "id_material": "MAT00000008",
         "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
-        "stock_detectado": 2,
-        "stock_minimo": 5,
+        "stock_detectado": Decimal(2),
+        "stock_minimo": Decimal(5),
       },
     },
     "prisma": "alerta_stock.create",
@@ -1324,6 +1362,10 @@ exports[`createMaterialAction > una carrera por el nombre (P2002 al crear) revie
         "stock_minimo": 5,
         "stock_reservado": 0,
         "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
       },
     },
     "prisma": "material.create",

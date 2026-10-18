@@ -12,6 +12,8 @@ import {
   decimalSnapshotSerializer,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  isPrismaCall,
+  projectRows,
   type DataOverrides,
   type PrismaArgs,
   type Role,
@@ -217,9 +219,26 @@ function failWith(error: Error) {
   };
 }
 
+// La base guarda los numeros del material en numeric(10,2) o (12,2): redondea
+// al segundo decimal, la mitad lejos del cero. El doble devuelve la fila como
+// Prisma: con Decimal y solo las columnas del select.
+function storedMaterial(args: PrismaArgs) {
+  const data = (args?.data ?? {}) as Row;
+  const stored = Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [
+      key,
+      typeof value === "number"
+        ? new Prisma.Decimal(value).toDecimalPlaces(2, Prisma.Decimal.ROUND_HALF_UP)
+        : value,
+    ]),
+  );
+
+  return projectRows([stored], args)[0];
+}
+
 const createWith = (fields: FormFields, data: DataOverrides = {}) => ({
   form: { ...createForm, ...fields },
-  data: { ...category(true), ...materialLookup(), ...data },
+  data: { ...category(true), ...materialLookup(), "material.create": storedMaterial, ...data },
 });
 
 // ---------------------------------------------------------------------------
@@ -240,11 +259,11 @@ defineCases("createMaterialAction", create, [
     ...createWith({ stock_actual: "6", stock_reservado: "4" }),
   },
   {
-    name: "con mas de dos decimales decide con el numero del formulario: 5.004 sobre un minimo de 5 no abre alerta",
+    name: "con mas de dos decimales decide con la fila guardada: 5.004 queda en 5.00, igual al minimo, y abre la alerta",
     ...createWith({ stock_actual: "5.004" }),
   },
   {
-    name: "con mas de dos decimales: 0.004 escribe un kardex inicial",
+    name: "con mas de dos decimales: 0.004 queda en 0.00 y no escribe kardex inicial",
     ...createWith({ stock_actual: "0.004", stock_minimo: "0" }),
   },
   {
@@ -276,6 +295,46 @@ defineCases("createMaterialAction", create, [
     ...createWith({}, { "alerta_stock.create": failWith(new Error("conexion perdida")) }),
   },
 ]);
+
+// Regla 5 de CLAUDE.md (entrega 10.3): el kardex inicial y la alerta usan el
+// stock que devuelve la escritura, no los numeros del formulario. Con mas de
+// dos decimales (una peticion manipulada: el formulario pide step 0.01) la
+// base redondea, y lo que decide es lo que quedo guardado.
+describe("createMaterialAction decide el kardex y la alerta con la fila que devuelve la escritura", () => {
+  async function writes(fields: FormFields, data: DataOverrides = {}) {
+    const { calls } = await runAction(create, { name: "", ...createWith(fields, data) });
+    const created = (model: string) =>
+      calls
+        .filter(isPrismaCall)
+        .filter((call) => call.prisma === `${model}.create`)
+        .map((call) => (call.args as { data: Row }).data);
+
+    return { movements: created("movimiento_inventario"), alerts: created("alerta_stock") };
+  }
+
+  it("5.004 se guarda como 5.00, igual al minimo: kardex y alerta con el stock guardado", async () => {
+    const { movements, alerts } = await writes({ stock_actual: "5.004" });
+
+    expect(movements.map((row) => [String(row.cantidad), String(row.stock_resultante)])).toEqual([["5", "5"]]);
+    expect(alerts.map((row) => [String(row.stock_detectado), String(row.stock_minimo)])).toEqual([["5", "5"]]);
+  });
+
+  it("0.004 se guarda como 0.00: no hay kardex inicial", async () => {
+    const { movements } = await writes({ stock_actual: "0.004", stock_minimo: "0" });
+
+    expect(movements).toEqual([]);
+  });
+
+  it("decide con lo que devuelve la escritura aunque difiera del formulario", async () => {
+    const { movements, alerts } = await writes(
+      { stock_actual: "2", stock_minimo: "5" },
+      { "material.create": { stock_actual: new Prisma.Decimal(7), stock_minimo: new Prisma.Decimal(5) } },
+    );
+
+    expect(movements.map((row) => String(row.stock_resultante))).toEqual(["7"]);
+    expect(alerts).toEqual([]);
+  });
+});
 
 defineCases("updateMaterialAction", update, [
   { name: "ADMIN actualiza los datos sin tocar el stock", form: updateForm, data: { ...category(true), ...materialLookup() } },

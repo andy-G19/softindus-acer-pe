@@ -129,10 +129,6 @@ export async function createMaterialAction(
     };
   }
 
-  const shouldCreateInitialMovement = data.stock_actual > 0;
-  const shouldCreateStockAlert =
-    data.stock_minimo > 0 && data.stock_actual <= data.stock_minimo;
-
   try {
     await prisma.$transaction(async (tx) => {
       const idMaterial = await getNextCorrelativeId(tx, {
@@ -140,7 +136,9 @@ export async function createMaterialAction(
         prefijo: "MAT",
       });
 
-      await tx.material.create({
+      // El kardex inicial y la alerta usan el stock que devuelve la escritura
+      // (regla 5): la base lo guarda con dos decimales, y es lo que queda.
+      const stored = await tx.material.create({
         data: {
           id_material: idMaterial,
           nombre_material: data.nombre_material,
@@ -152,9 +150,13 @@ export async function createMaterialAction(
           costo_unitario_actual: data.costo_unitario_actual,
           estado: true,
         },
+        select: {
+          stock_actual: true,
+          stock_minimo: true,
+        },
       });
 
-      if (shouldCreateInitialMovement) {
+      if (stored.stock_actual.greaterThan(0)) {
         const idMovimiento = await getNextCorrelativeId(tx, {
           codigoEntidad: "movimiento_inventario",
           prefijo: "MVI",
@@ -165,16 +167,19 @@ export async function createMaterialAction(
             id_movimiento: idMovimiento,
             id_material: idMaterial,
             tipo_movimiento: "entrada",
-            cantidad: data.stock_actual,
+            cantidad: stored.stock_actual,
             stock_anterior: 0,
-            stock_resultante: data.stock_actual,
+            stock_resultante: stored.stock_actual,
             motivo: "Stock inicial registrado al crear el material",
             id_usuario_responsable: session.user.id,
           },
         });
       }
 
-      if (shouldCreateStockAlert) {
+      if (
+        stored.stock_minimo.greaterThan(0) &&
+        stored.stock_actual.lessThanOrEqualTo(stored.stock_minimo)
+      ) {
         const idAlerta = await getNextCorrelativeId(tx, {
           codigoEntidad: "alerta_stock",
           prefijo: "ALE",
@@ -184,8 +189,8 @@ export async function createMaterialAction(
           data: {
             id_alerta: idAlerta,
             id_material: idMaterial,
-            stock_detectado: data.stock_actual,
-            stock_minimo: data.stock_minimo,
+            stock_detectado: stored.stock_actual,
+            stock_minimo: stored.stock_minimo,
             estado_alerta: "activa",
             mensaje: `El material ${data.nombre_material} está en stock bajo.`,
           },
