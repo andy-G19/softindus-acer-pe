@@ -3157,7 +3157,7 @@ Límite con la entrega 11:
 |---|---|---|---|---|
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
-| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados | 5 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados) | 5 h; recalibrada a 5,3 h y 4,9 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
@@ -3194,9 +3194,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado; sin el campo Estado |
-| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
-| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
-| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
+| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
+| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
 | Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
@@ -3229,7 +3229,7 @@ destructivas confirman:
 | Sub-entrega | Acciones |
 |---|---|
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
-| 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
+| 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b) |
 | 10.4 | Inactivar cliente, producto y categoría de producto |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
@@ -3760,7 +3760,8 @@ Hallazgos de la verificación:
     en «crear» aunque la URL y la tabla ya no filtran, porque React no
     actualiza el `defaultValue` de un `<select>`. Afecta a toda barra con
     selects que se limpia con `next/link`, también a las de la 10.1. Se
-    propone un `fix` aparte.
+    propone un `fix` aparte. Corregido en `53d9601`, en la 10.3a: `FilterBar`
+    vuelve a montar sus campos cuando cambia la URL.
 11. Preexistente (ya ocurría en el «antes», que tiene el mismo código que
     producción), pendiente: el clic con el ratón en «Cancelar»
     de la confirmación de descarte no la cierra, en la ventana ni en el
@@ -3795,6 +3796,159 @@ Datos leídos de la API de GitHub el 2026-10-18 y comparados con git:
   `pending` a las 03:21:57 UTC y `success` a las 03:23:20 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.3a — Materiales y alertas
+
+Fecha: 2026-10-18. Estado: hecha en local y pendiente de verificar en
+staging. 9 commits, de `4fd9631` a `c5e6f6b`, más este registro. Viajan con
+`513c513` (integración de la 10.2) y `49cf5f5` (hallazgo 11 de la 10.2), que
+no se publicaron al cerrar la 10.2.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4fd9631 | fix | El inventario de refactor muestra la URL de las rutas interceptadas y su ranura (`describeRoute`, con prueba). |
+| 53d9601 | fix | Hallazgo 10 de la 10.2: los campos de `FilterBar` se vuelven a montar cuando cambia la URL. |
+| 1fe0693 | test | Caracterización de las acciones de materiales y de la alerta de stock (42 casos). |
+| ffaa3f1 | fix | El alta de material decide el kárdex inicial y la alerta con la fila que devuelve la escritura. |
+| c69eab4 | fix | Activar e inactivar material fijan el estado pedido. |
+| d2b3ca3 | fix | Atender una alerta ya atendida no reescribe quién ni cuándo. |
+| f7abaf0 | feat | Materiales en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
+| 5991f06 | feat | Inactivar material pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
+| c5e6f6b | feat | Atender una alerta con confirmación y resultado de acción; alertas sin `<main>` anidado. |
+
+Decisiones del responsable (2026-10-18), tras la auditoría:
+
+- D1. La 10.3 se parte. La 10.3a lleva la herramienta, el hallazgo 10, los
+  materiales (lo crítico: el alta escribe el kárdex y la alerta) y las
+  alertas. La 10.3b lleva proveedores, materiales de proveedor y los
+  listados del área. El plan detallado estimó la 10.3 completa en unas
+  8,8 horas, por encima del umbral de la entrega 10.
+- D2. El hallazgo 10 se corrige primero y en `FilterBar`, así las barras de
+  inventario lo heredan.
+- D3. El alta de material decide con la fila escrita (regla 5 de
+  `CLAUDE.md`), aunque solo cambia con una petición manipulada.
+- D4. Atender una alerta confirma con el botón normal, no el destructivo:
+  no borra ni anula nada, pero no se puede deshacer.
+- La confirmación de inactivar material agrega «y saldrá de Stock crítico
+  actual» al texto del plan (aprobado en el commit).
+
+Auditoría: consecuencias comprobadas en las consultas.
+
+- Material inactivo: compras, salidas, recetas (detalles y versiones),
+  chatarra, retazos y asociaciones nuevas solo ofrecen y aceptan materiales
+  activos; la entrega y la entrega adicional a una orden de trabajo lo
+  rechazan; sale de «Stock crítico actual», de «Materiales activos» y de la
+  tarjeta de stock bajo del inicio. Su stock, kárdex y alertas se conservan.
+- Alerta atendida: no se puede reactivar. «Stock crítico actual» se calcula
+  con el stock, así que el material sigue allí mientras no supere el
+  mínimo; solo una entrega a una orden de trabajo abre otra alerta.
+- Para la 10.3b. Proveedor inactivo: deja de ofrecerse en compras,
+  repuestos y asociaciones nuevas, y en el filtro del reporte de proveedores
+  y compras; sale de «Proveedores activos»; sus compras, pagos y
+  asociaciones lo conservan. Material de proveedor inactivo: ninguna otra
+  pantalla lee `proveedor_material`.
+
+Diseño:
+
+- `describeRoute` (`scripts/refactoring-inventory-routes.mjs`) sigue la
+  documentación de Next 16: los grupos y las ranuras no son segmentos de la
+  URL, y `(.)`, `(..)`, `(..)(..)` y `(...)` cuentan segmentos de ruta. El
+  inventario gana la columna «Ranura».
+- `FilterBarFields` (`src/components/forms/filter-bar-fields.tsx`) envuelve
+  los campos de `FilterBar` en un `Fragment` con la consulta de la URL como
+  `key`. Si la URL cambia, los campos se vuelven a montar con los valores que
+  la página leyó de ella; si no, conservan lo elegido. Los botones quedan
+  fuera y «Limpiar» conserva el foco. El HTML no cambia.
+- Materiales, como Clientes:
+  - `layout.tsx` con la ranura `@panel` (`default`, `page`, `(.)new` y
+    `(.)[id]/edit`); cada panel autoriza y consulta como su página completa.
+  - Las acciones devuelven `FormActionState` y autorizan con
+    `getAuthorizedSession`; ninguna redirige ya.
+  - `MaterialForm` usa `ActionForm`, `Field`, `SubmitButton` y
+    `useFormResult`; el stock actual y el reservado solo se escriben en el
+    alta.
+  - `getMaterialEditValues` (`material-edit-values.ts`) da los valores de
+    edición a la página y al panel: el `formatDecimal` de la página se movió
+    allí.
+  - `MaterialStatusButton` y `StockAlertAttendButton` sobre
+    `ConfirmActionButton`; atender usa `confirm.variant: "default"`.
+- El alta pide `select` de `stock_actual` y `stock_minimo` al `create` y
+  decide con esos `Decimal`. Atender y el cambio de estado comparan y
+  escriben en una sola sentencia.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-103-c1.txt` (4 de
+   7 casos), `rojo-103-c2.txt` (2 de 4), `rojo-103-c4.txt` (3 de 3),
+   `rojo-103-c5.txt` (4 de 4) y `rojo-103-c6.txt` (2 de 3).
+2. Caracterización antes de mover: 42 casos de acciones en `1fe0693` y dos
+   casos de la página de alertas con una alerta activa, escritos con el
+   código anterior (`tmp/e10-diff/c9-alerts-pages-snap-antes.snap`): los
+   datos generados nunca tenían una alerta activa y el snapshot no mostraba
+   la acción.
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas (`verify_103_c4_snaps.py`, `verify_103_c5_snaps.py`,
+   `verify_103_c7_actions.py`, `verify_103_c8_page.py` y
+   `verify_103_c9_page.py`): las llamadas solo cambian donde el commit lo
+   anuncia, y el HTML, en los elementos que cambian.
+4. Mutaciones (`tmp/e10-diff/mut_103_c*.txt`): 7 de 8, 4 de 4, 14 de 14, 6
+   de 6, 6 de 6, 5 de 5, 15 de 15, 10 de 10 y 10 de 10; en total, 77 de
+   78. La superviviente de C1 (sin `Math.max`) solo cambia al subir por
+   encima de la raíz, que no es una ruta válida.
+5. Pruebas con React real en jsdom: `filter-bar.test.ts` (4),
+   `material-form.test.ts` (10, en página y en panel),
+   `material-status-button.test.ts` (3) y `stock-alert-attend-button.test.ts`
+   (2), las tres últimas con el Radix real.
+6. CSS compilado: igual hasta C7. C8 quita solo la rejilla de la barra
+   anterior de materiales (113.282 → 113.131 bytes), y el CSS anterior sin
+   esa regla es el nuevo byte a byte. C9 no cambia.
+7. `npm run check` terminó con código 0 después de cada commit, de 137 a 143
+   archivos de prueba y de 2.205 a 2.286 pruebas. `npm run
+   refactor:inventory` analiza 637 archivos: 134 páginas (6 en ranuras, 4
+   que interceptan), 117 formularios JSX (eran 120) y 48 archivos de
+   acciones.
+
+Tiempo entre commits según sus horas. Incluye la preparación, la revisión
+del responsable y sus pausas, así que los primeros no calibran por sí solos:
+
+| Commit | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 |
+|---|---|---|---|---|---|---|---|---|---|
+| Hora (Lima) | 09:26 | 12:38 | 14:50 | 16:14 | 16:21 | 16:27 | 16:43 | 17:28 | 17:43 |
+| Minutos desde el anterior | — | 192 | 132 | 84 | 7 | 5 | 17 | 45 | 15 |
+
+El tramo más continuo, de C5 a C9, suma 89 minutos frente a los 110 que el
+plan estimó para esos commits.
+
+Hallazgos:
+
+1. El inventario de refactor ponía `@panel` en la URL y perdía `new` en las
+   rutas interceptadas. Corregido en `4fd9631`.
+2. Regla de negocio pendiente: la alerta compara el stock actual con el
+   mínimo (alta, entregas y compras), mientras «Stock crítico actual» y el
+   filtro «Críticos» comparan el disponible (actual menos reservado). Un
+   material puede estar crítico sin alerta.
+3. Las salidas de inventario no crean ni actualizan alertas, y editar el
+   stock mínimo no las reevalúa.
+4. Editar una asociación o un repuesto cuyo proveedor (o material) está
+   inactivo falla con «no existe o está inactivo», aunque el formulario lo
+   ofrece. Se revisa en la 10.3b y la 10.5.
+5. El filtro del reporte de proveedores y compras solo ofrece proveedores
+   activos: las compras de uno inactivo no se pueden filtrar allí.
+6. 13 listados de 5 áreas (entre ellos entradas, salidas, compras y pagos a
+   proveedor) filtran fechas con `parseDateParam`, en la hora del servidor, y
+   `lte 23:59:59.999`: la regla que el grupo 4 corrigió solo en los reportes.
+   Se propone un grupo de `fix` aparte o la entrega 11.
+7. Carrera menor: una entrega a una orden puede actualizar una alerta que
+   alguien acaba de atender, y no abre otra. Entrega 11.
+8. Atender no registra bitácora; la alerta guarda quién la atendió y cuándo.
+9. Método: `tsc` no conoce `LayoutProps` de un layout nuevo hasta correr
+   `next typegen`; `npm run typecheck` lo hace.
+10. Método: React agrega su `<script>` de reenvío de formularios solo si la
+    página tiene un `<form>` cuya acción es una función. Al pasar las filas a
+    `ConfirmActionButton` desaparece del HTML.
+11. Método: un heredoc de Bash volvió a comerse las barras invertidas en dos
+    scripts de `tmp`. Los scripts de mutación ahora comprueban todos los
+    fragmentos antes de ejecutar nada.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3819,7 +3973,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a hecha en local con 9 commits y pendiente de verificar en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3843,7 +3997,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 136 / 2.194 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 143 / 2.286 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3862,15 +4016,17 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 12 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 102 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 22 (31 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 11 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 98 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 21 (30 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 24 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 8 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 22 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 7 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 17 | 10 |
+| Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 2 | 10 |
+| Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -4033,6 +4189,26 @@ Actualizado en el cierre de la 10.2 (2026-10-18) sobre `a4a5f9c`: pruebas
 136 / 2.194 (la prueba de `DateRangeFields` en jsdom), y `npm run
 refactor:inventory` analiza 622 archivos. Las demás filas no cambian: el
 `fix` solo toca `DateRangeFields`.
+
+Actualizado en la sub-entrega 10.3a (2026-10-18) sobre `c5e6f6b`:
+
+- Pruebas: 143 / 2.286.
+- La desviación baja a 22 (alta y edición de materiales) y los toggles que
+  voltean el estado a 7: queda uno por archivo en 6 archivos, salvo uno con
+  dos. `FieldError` baja a 11.
+- El `<main>` anidado baja a 98 (la lista, el alta y la edición de
+  materiales y las alertas) y los formularios GET a 30, con 21 combinaciones
+  de clases: la barra de materiales pasa a `FilterBar`.
+- Las dos filas nuevas se midieron sobre `49cf5f5`, su línea base: de los
+  cuatro archivos de acciones de inventario sin caracterización quedan los
+  de proveedores y materiales de proveedor (10.3b), y el alta de material
+  era la única que decidía el kárdex y la alerta con los números del
+  formulario.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0, escrituras del kárdex con
+`stock_anterior:` 6 e `import` de las librerías de notificaciones en 2
+archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

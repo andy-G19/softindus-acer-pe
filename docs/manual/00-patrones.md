@@ -7,7 +7,8 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 Pantallas renovadas hasta ahora:
 
 - Comercial: clientes y categorías de producto.
-- Inventario: tipos de proveedor y categorías de materiales.
+- Inventario: tipos de proveedor, categorías de materiales, materiales e
+  insumos, y alertas y stock crítico.
 - Caja chica: categorías de gasto.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
@@ -22,8 +23,8 @@ lista. Así no pierdes la lista ni los filtros que tenías puestos.
 
 - Los catálogos cortos (tipos, categorías) se abren en una ventana en el
   centro de la pantalla.
-- Los registros con más datos, como los clientes, se abren en un panel a la
-  derecha. Ese panel tiene su propia dirección: si recargas la página o
+- Los registros con más datos, como los clientes y los materiales, se abren
+  en un panel a la derecha. Ese panel tiene su propia dirección: si recargas la página o
   copias el enlace, el mismo formulario se abre a pantalla completa.
 - En el teléfono, la ventana y el panel ocupan toda la pantalla.
 
@@ -61,9 +62,9 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 ## Activar e inactivar
 
 Los registros de los catálogos no se borran: se **inactivan**. Esto vale
-para tipos de proveedor, categorías de materiales y categorías de gasto. En
-clientes y categorías de producto, activar e inactivar todavía se hacen sin
-confirmación; se igualarán en una próxima actualización.
+para tipos de proveedor, categorías de materiales, materiales y categorías
+de gasto. En clientes y categorías de producto, activar e inactivar todavía
+se hacen sin confirmación; se igualarán en una próxima actualización.
 
 - **Inactivar** pide confirmación. La pregunta nombra el registro y explica
   qué pasa, por ejemplo: «Dejará de ofrecerse al registrar proveedores; los
@@ -72,9 +73,10 @@ confirmación; se igualarán en una próxima actualización.
 - **Activar** se hace al pulsar, sin preguntar.
 - Al terminar aparece un aviso y la etiqueta de la fila cambia a «Activa» o
   «Inactiva».
-- Las listas muestran primero los registros activos. Al inactivar uno, su
-  fila pasa al final de la lista y el cursor la acompaña; al activarlo,
-  vuelve a su lugar.
+- Las listas de los catálogos muestran primero los registros activos. Al
+  inactivar uno, su fila pasa al final de la lista y el cursor la acompaña;
+  al activarlo, vuelve a su lugar. En materiales, la fila se queda donde
+  estaba.
 - Si otra persona ya había cambiado ese registro y tu lista estaba
   desactualizada, el sistema no hace lo contrario de lo que pediste: te
   avisa, por ejemplo, de que «ya estaba inactivo».
@@ -86,6 +88,11 @@ que necesites y pulsa **Filtrar** (en algunas pantallas, **Aplicar
 filtros**); **Limpiar** o **Limpiar filtros** quita todos los filtros. Los
 filtros quedan en la dirección de la página, así que puedes guardarla en
 favoritos o compartirla con los filtros puestos.
+
+La barra siempre muestra los filtros que la lista está aplicando: después
+de **Limpiar**, o al volver con **Atrás** o **Adelante** del navegador, sus
+campos y listas desplegables toman los valores de la dirección. Si cambiaste
+un campo y no pulsaste **Filtrar**, ese cambio se pierde en ese momento.
 
 Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
 se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
