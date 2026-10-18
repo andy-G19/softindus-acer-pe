@@ -31,7 +31,9 @@ type FormDialogProps = {
 export function FormDialog({ trigger, title, description, discardTitle, discardDescription, children }: FormDialogProps) {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
-  const { controls, markDirty, trackFocus, discardDialog } = useDiscardGuard({ onLeave: close });
+  const { controls, markDirty, trackFocus, ignoreConfirmationPointer, discardDialog } = useDiscardGuard({
+    onLeave: close,
+  });
 
   function changeOpen(next: boolean) {
     if (next) {
@@ -52,6 +54,7 @@ export function FormDialog({ trigger, title, description, discardTitle, discardD
           {...(description ? {} : { "aria-describedby": undefined })}
           onInput={() => markDirty(true)}
           onFocus={trackFocus}
+          onPointerDownOutside={ignoreConfirmationPointer}
         >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { act, createElement as h, useEffect } from "react";
+import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -78,6 +79,34 @@ async function clickOutside() {
     page.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 }));
     page.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
   });
+  await settle();
+}
+
+// Clic con el raton sobre un elemento, con la secuencia del navegador. El
+// navegador vacia las microtareas entre un listener y el siguiente, asi que
+// React aplica lo que hizo el onClick antes de que el click llegue a los
+// listeners de document (los de Radix); un dispatchEvent de prueba no lo
+// hace. Un listener en <html>, que corre despues del de React (en body) y
+// antes de los de document, lo imita con flushSync (hallazgo 11 de la 10.2).
+async function mouseClick(target: Element) {
+  await settle();
+  const page = document.documentElement;
+  const flush = () => flushSync(() => {});
+  const sequence = ["pointerdown", "mousedown", "pointerup", "mouseup", "click"];
+  for (const name of sequence) {
+    page.addEventListener(name, flush);
+  }
+  try {
+    await act(async () => {
+      for (const name of sequence) {
+        target.dispatchEvent(new MouseEvent(name, { bubbles: true, cancelable: true, button: 0 }));
+      }
+    });
+  } finally {
+    for (const name of sequence) {
+      page.removeEventListener(name, flush);
+    }
+  }
   await settle();
 }
 
@@ -194,6 +223,41 @@ describe("RouteSheet", () => {
     await act(async () => byText("Descartar cambios").click());
     await settle();
 
+    expect(router.back).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(byText("Nuevo cliente"));
+  });
+
+  // Hallazgo 11 de la 10.2: el clic con el raton en Cancelar cerraba la
+  // confirmacion, y el panel, que recibia ese click como un clic fuera, pedia
+  // cerrar otra vez y la volvia a abrir.
+  it("con el raton, Cancelar cierra la confirmacion; el panel sigue con lo escrito y el foco en el ultimo campo", async () => {
+    await openFrom("Nuevo cliente");
+    const ruc = document.querySelector<HTMLInputElement>("#ruc")!;
+    ruc.focus();
+    ruc.value = "20123456789";
+    await act(async () => ruc.dispatchEvent(new Event("input", { bubbles: true })));
+
+    await act(async () => byText("Cancelar formulario").click());
+    expect(confirmation()?.textContent).toContain("¿Descartar el cliente nuevo?");
+    await mouseClick(byText("Cancelar"));
+
+    expect(confirmation()).toBeNull();
+    expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+    expect(router.back).not.toHaveBeenCalled();
+    expect(ruc.value).toBe("20123456789");
+    expect(document.activeElement).toBe(ruc);
+  });
+
+  it("con el raton, Descartar vuelve atras y devuelve el foco al enlace", async () => {
+    await openFrom("Nuevo cliente");
+    const input = document.querySelector<HTMLInputElement>("#nombre")!;
+    input.value = "Andina";
+    await act(async () => input.dispatchEvent(new Event("input", { bubbles: true })));
+
+    await act(async () => byText("Cancelar formulario").click());
+    await mouseClick(byText("Descartar cambios"));
+
+    expect(confirmation()).toBeNull();
     expect(router.back).toHaveBeenCalledTimes(1);
     expect(document.activeElement).toBe(byText("Nuevo cliente"));
   });
