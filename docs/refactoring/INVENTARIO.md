@@ -6,7 +6,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 621 |
+| Archivos fuente analizados | 622 |
 | Páginas | 131 |
 | Declaraciones JSX de formulario | 120 |
 | Archivos con directiva use server | 48 |

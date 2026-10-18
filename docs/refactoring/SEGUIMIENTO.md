@@ -3503,10 +3503,11 @@ Datos leídos de la API de GitHub el 2026-10-17 y comparados con git:
 
 ### Sub-entrega 10.2 — Reportes y auditoría
 
-Fecha: 2026-10-17. Estado: hecha en local; la publicación y la verificación
-en staging se registran en el cierre. El paso 0 (`23f2827`) registró la
-integración de la 10.1 en `main`. 10 commits, de `871fb5a` a `9d70f59`, más
-este registro:
+Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada en staging el
+2026-10-18; falta integrarla en `main`. El paso 0 (`23f2827`) registró la
+integración de la 10.1 en `main`. 10 commits, de `871fb5a` a `9d70f59`, el
+registro `0073c2b`, el `fix` `a4a5f9c` que salió de la verificación y este
+cierre:
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3520,7 +3521,9 @@ este registro:
 | a7ff382 | feat | Rentabilidad y personal, sin `<main>` anidado. |
 | c2860bb | feat | Ventas y cobranzas, proveedores y compras y financiero. |
 | 9d70f59 | feat | Inventario, producción y mantenimiento. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y capítulo de Reportes del manual. |
+| 0073c2b | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y capítulo de Reportes del manual. |
+| a4a5f9c | fix | Hallazgo 9 de la verificación: `DateRangeFields` toma las fechas de la URL cuando la página se vuelve a pintar sin montarse («Limpiar», Atrás, Adelante). |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
 
 Alcance: 10 pantallas. El plan de la entrega 10 decía «9 reportes, el
 historial y auditoría», pero auditoría es uno de los 9 reportes del registro.
@@ -3645,6 +3648,136 @@ Hallazgos:
    Python lo confirmó. Cada regla compartida lleva una prueba «coincide con
    la ruta».
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e102-huella`) y etiquetas `e102/`
+  (`tmp/e10-diff/e102-huella-min.js`), los ayudantes de navegación y
+  comparación (`e102-ayudantes.js`) y el medidor de tareas
+  (`e102-medidor.js`), como en la 10.1.
+- Clics y teclas reales. Las fechas se escriben con flechas y dígitos:
+  escribir texto no llena un `input type="date"`.
+- Auditoría e historial con rangos cerrados en el pasado, porque iniciar
+  sesión escribe en la bitácora.
+- Solo lectura: ninguna tarea guarda datos ni exporta (de los enlaces de
+  exportar se lee el `href`).
+
+Publicación y medición:
+
+- «Antes» el 2026-10-17, de 21:06 a 21:25 UTC, sobre `d3de58e` (`buildId`
+  `j4iKut5sUaZi1kYn7yebm`, CSS servido de 113.365 bytes, `3e6b3374…`): 16
+  capturas con ADMIN, 13 a 1281 px y 3 a 376, con el sello `c8ae572a…`,
+  igual en Python, y 4 controles.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-2.md`).
+- Push de 12 commits (`23f2827` a `0073c2b`): CI #80 en verde (3m 0s).
+  Vercel desplegó `0073c2b` (`success` a las 22:00:03 UTC) y cambió el
+  `buildId` (`GA7HaoF8ZH4YtVXNKXzx6`). El CSS servido es el predicho byte a
+  byte (113.281 bytes, `c5d15599…`): solo faltan `xl:col-span-5` y
+  `xl:col-span-6`.
+- «Después» el 2026-10-17, de 22:03 a 22:17 UTC: 16 capturas, sello
+  `37026342…`, igual en Python.
+
+Huella: las 16 cambian como se predijo, y los 3 controles (el panel de
+reportes, tipos de proveedor y la sección «Listados» de la galería) dan el
+mismo hash que en el «antes».
+
+- A 1281 px, en las 10 pantallas el principio de la página es idéntico salvo
+  el alto de 4 contenedores (y `main` → `div` en rentabilidad, personal y
+  auditoría). Cambia la barra de filtros, y el resto solo se desplaza en `y`,
+  con un delta constante por página: −2,3 px en la familia A (−16,3 en
+  proveedores y compras), +21,7 en rentabilidad y +43,7 en personal y
+  auditoría. La familia A pierde el título visible de la barra (2 elementos
+  menos en total).
+- staff-largo: lo mismo y, en el encabezado, el aviso de los 366 días en
+  lugar de los enlaces (de 354 a 353 elementos).
+- Las dos invertidas cambian enteras: la página es más corta (de 441 a 251 y
+  de 351 a 300 elementos) y, sin barra de desplazamiento, los anchos cambian
+  15 px. Su contenido lo comprueba T9.
+- A 376 px, el mismo patrón (−62,3 px en financiero y −22,3 en personal y
+  auditoría), sin desbordamiento horizontal.
+
+Tareas, con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`d3de58e`) | Después (`0073c2b`) |
+|---|---|---|
+| T9 Rango invertido por URL en financiero, auditoría y personal | Consulta: 0 filas con el mensaje de lista vacía, totales a cero (salvo los que no dependen del rango) y dos enlaces de exportar | No consulta: «Corrige el rango de fechas para ver el reporte.», sin totales ni tablas y sin enlaces; «Hasta» con `aria-invalid` y el mensaje |
+| T10 Más de 366 días en financiero (2 filas) y personal (1) | Los datos y dos enlaces de exportar | Las mismas filas y el aviso de los 366 días en lugar de los enlaces |
+| T11 Auditoría: rango al revés con teclas reales y clic en «Filtrar» | Envía y recarga con el rango invertido; foco en `body` | No envía (mismo documento); «Hasta» muestra el mensaje y recibe el foco |
+| T12 Hallazgo 8: clic fuera y Esc, en tipos de proveedor (ventana) y Clientes (panel) | Foco en `body` | Foco en el campo del nombre. «Descartar cambios» sigue devolviendo el foco a «Nuevo tipo de proveedor» y a «Nuevo cliente» |
+
+Control del «después», sin escribir: a 376 px, Tab recorre la barra de
+auditoría en orden (Buscar, Usuario, Acción, Entidad, Desde, Hasta, Filtrar,
+Limpiar), luego la tabla y «Siguiente». Cada fecha tiene 4 paradas: día, mes,
+año y el selector del navegador.
+
+La regresión del «después» y su arreglo:
+
+- Al llegar a T10 por navegación suave desde el rango invertido, personal
+  conservaba las fechas anteriores. En personal y auditoría, «Limpiar» dejaba
+  la URL limpia y los campos con las fechas viejas, que «Filtrar» volvía a
+  aplicar (hallazgo 9). La captura de staff-largo se repitió con la página
+  montada de nuevo.
+- `a4a5f9c`: la prueba nueva fallaba antes del arreglo en 4 de sus 5 casos
+  (`tmp/e10-diff/rojo-102-fix.txt`), las mutaciones dan 8 de 8
+  (`mut_102_fix.txt`), `npm run check` terminó en verde con 136 archivos y
+  2.194 pruebas, y el CSS compilado no cambia.
+- Push: CI #81 en verde (2m 22s). Vercel `success` a las 22:30:52 UTC,
+  `buildId` `KZMyuMdruOU1_UopARfPp` y el mismo CSS servido.
+- Re-verificación el 2026-10-18, de 02:51 a 02:55 UTC, con la predicción
+  escrita antes (`tmp/e10-diff/prediccion-102-fix.md`):
+  - «Limpiar» vacía las fechas en personal y auditoría, en el mismo
+    documento;
+  - Atrás las devuelve y Adelante las vacía;
+  - T10 por navegación suave muestra 2025-01-01 y 2026-10-16 sin error, 1
+    fila y el aviso de los 366 días;
+  - la huella de staff-largo llegando sin recargar desde el rango invertido
+    es la del montaje nuevo (`73f5b307…`), la misma del «después» pese al
+    cambio de día UTC.
+
+El capítulo de Reportes del manual se cotejó con staging el 2026-10-18: GET
+secuencial de las 11 páginas (el panel y las 10 pantallas) sin abrir ninguna
+exportación, y los límites de filas y las tarjetas por rol en el código.
+Coincide; solo se precisó que «Fecha desde» y «Fecha hasta» son lo habitual
+(7 de las 10 pantallas).
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER ni
+WORKSHOP_MASTER. Ninguna tarea escribió datos. Tiempos: el «antes», 19
+minutos; el «después» con sus tareas, 14; del informe de la regresión al
+commit del arreglo, unos 9; la re-verificación y el cotejo del manual, 5.
+
+Hallazgos de la verificación:
+
+9. Regresión de la 10.2, corregida en `a4a5f9c`. `DateRangeFields` guardaba
+   las fechas en un estado que solo leía la URL al montarse, y Next no vuelve
+   a montar la página cuando `next/link` cambia la URL. El componente tenía
+   el defecto desde la entrega 8 (`aada765`), pero solo lo usaba la galería:
+   antes de la 10.2, los campos de fecha de los reportes no eran controlados
+   y React actualizaba su `defaultValue`. Las caracterizaciones no podían
+   verlo, porque pintan una sola vez en el servidor.
+10. Preexistente, pendiente: un `NativeSelect` con `defaultValue` no sigue a
+    la URL tras «Limpiar». En auditoría con `accion=crear`, la acción sigue
+    en «crear» aunque la URL y la tabla ya no filtran, porque React no
+    actualiza el `defaultValue` de un `<select>`. Afecta a toda barra con
+    selects que se limpia con `next/link`, también a las de la 10.1. Se
+    propone un `fix` aparte.
+11. Preexistente (ya ocurría en el «antes», que tiene el mismo código que
+    producción), pendiente: el clic con el ratón en «Cancelar»
+    de la confirmación de descarte no la cierra, en la ventana ni en el
+    panel; `data-state` pasa de `open` a `closed` y vuelve a `open` en 14 ms.
+    Esc, Enter y «Descartar cambios» con el ratón sí funcionan, y jsdom no lo
+    reproduce. Hipótesis: la ventana trata ese clic, fuera de su árbol de
+    React, como un clic fuera y vuelve a pedir el descarte. Se arregla aparte,
+    tras el cierre de la 10.2.
+12. Método: una huella tomada tras una navegación suave puede arrastrar
+    estado del cliente. Por eso la de staff-largo se repitió montando la
+    página, y en la re-verificación las dos coinciden.
+13. Método: `javascript_tool` no puede devolver un elemento del DOM
+    («Object reference chain is too long»); las comprobaciones devuelven
+    booleanos y textos.
+14. Método: entre sesiones de la app, el panel perdió el acceso a Vercel y
+    hubo que entrar de nuevo antes de la re-verificación.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3669,7 +3802,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 hecha en local, falta la verificación en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada en staging, con CI #81 verde y 16 de 16 huellas como se predijo; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3693,7 +3826,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 135 / 2.189 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 136 / 2.194 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3878,6 +4011,11 @@ Actualizado en la sub-entrega 10.2 (2026-10-17) sobre `9d70f59`:
 Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
 copias locales de conversión y formato 0, `FieldError` 12 e `import` de las
 librerías de notificaciones en 2 archivos, medidos de nuevo.
+
+Actualizado en el cierre de la 10.2 (2026-10-18) sobre `a4a5f9c`: pruebas
+136 / 2.194 (la prueba de `DateRangeFields` en jsdom), y `npm run
+refactor:inventory` analiza 622 archivos. Las demás filas no cambian: el
+`fix` solo toca `DateRangeFields`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

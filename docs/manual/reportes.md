@@ -33,8 +33,9 @@ están en [Cómo funcionan las pantallas](00-patrones.md).
 Cada reporte tiene una barra de filtros arriba, con un rango de fechas y los
 filtros propios del reporte (cliente, material, máquina, estado…).
 
-- El rango se elige con **Desde** y **Hasta** (en algunos reportes, **Fecha
-  desde** y **Fecha hasta**). Los dos días se incluyen completos.
+- El rango se elige con **Fecha desde** y **Fecha hasta** (en costos y
+  rentabilidad, personal y planillas y la bitácora, **Desde** y **Hasta**).
+  Los dos días se incluyen completos.
 - **Hasta** no ofrece días anteriores a **Desde**. Si quedan al revés,
   **Hasta** muestra «La fecha inicial no puede ser mayor que la fecha
   final.» y la barra no se envía hasta corregirlo.
