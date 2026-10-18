@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
+import { attendStockAlertAction, type StockAlertAttendState } from "@/modules/inventory/alerts/actions";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -12,11 +12,17 @@ import {
 // Caracterizacion de «Marcar atendida» en las alertas de stock (entrega 10.3),
 // escrita antes de llevarla al resultado de accion. Fija la autorizacion, la
 // lectura, la escritura (con el cliente global, sin transaccion), las
-// revalidaciones y el resultado: la redireccion o el error que lanza. Hoy no
-// comprueba si la alerta ya estaba atendida ni registra bitacora; un error
-// lanzado se ve en produccion como la pagina de error generica.
+// revalidaciones y el resultado. Desde la confirmacion de la fila
+// (ConfirmActionButton), la accion devuelve el resultado en lugar de redirigir
+// o lanzar: un error ya no lleva a la pagina de error generica. No registra
+// bitacora: la alerta guarda quien la atendio y cuando.
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -42,6 +48,8 @@ vi.mock("next/cache", async () => {
 
 type ActionCase = { name: string; form: Record<string, string>; data?: DataOverrides; role?: Role };
 
+const IDLE: StockAlertAttendState = { status: "idle" };
+
 function formOf(fields: Record<string, string>) {
   const formData = new FormData();
 
@@ -56,7 +64,7 @@ async function runAction(actionCase: ActionCase) {
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        return { estado: await attendStockAlertAction(formOf(actionCase.form)) };
+        return { estado: await attendStockAlertAction(IDLE, formOf(actionCase.form)) };
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -70,6 +78,9 @@ async function runAction(actionCase: ActionCase) {
 
   return { calls, outcome: result };
 }
+
+// El resultado que la accion devuelve a ConfirmActionButton.
+const resultOf = (outcome: unknown) => (outcome as { estado: StockAlertAttendState }).estado;
 
 const ALERTA = "ALE00000003";
 
@@ -94,14 +105,14 @@ function alert(estado_alerta: "activa" | "atendida" | null): DataOverrides {
 const CASES: ActionCase[] = [
   { name: "ADMIN atiende una alerta activa", form: { id_alerta: ALERTA }, data: alert("activa") },
   {
-    name: "una alerta ya atendida no se reescribe: vuelve a la lista sin aviso",
+    name: "una alerta ya atendida no se reescribe y responde que ya estaba atendida",
     form: { id_alerta: ALERTA },
     data: alert("atendida"),
   },
-  { name: "sin id lanza un error sin tocar Prisma", form: {} },
-  { name: "la alerta no existe: lanza un error", form: { id_alerta: ALERTA }, data: alert(null) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_alerta: ALERTA }, role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_alerta: ALERTA }, role: "SELLER" },
+  { name: "sin id responde con un error sin tocar Prisma", form: {} },
+  { name: "la alerta no existe: responde con un error", form: { id_alerta: ALERTA }, data: alert(null) },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", form: { id_alerta: ALERTA }, role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", form: { id_alerta: ALERTA }, role: "SELLER" },
 ];
 
 // Atender fija «atendida» solo si la alerta sigue activa, comparando y
@@ -127,20 +138,20 @@ describe("attendStockAlertAction solo atiende una alerta activa", () => {
         },
       }),
     ]);
-    expect(String(outcome)).toContain("toast=stock-alert-attended");
+    expect(resultOf(outcome)).toMatchObject({ status: "success", data: { id_alerta: ALERTA } });
   });
 
   it("una alerta ya atendida no cambia quien la atendio ni cuando, y no da el aviso", async () => {
     const { calls, outcome } = await runAction({ name: "", form: { id_alerta: ALERTA }, data: alert("atendida") });
 
     expect(writesOf(calls).filter((call) => call.prisma === "alerta_stock.update")).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "La alerta ya estaba atendida." });
   });
 
   it("una alerta que no existe sigue respondiendo con su error", async () => {
     const { outcome } = await runAction({ name: "", form: { id_alerta: ALERTA }, data: alert(null) });
 
-    expect(outcome).toBe("error: La alerta seleccionada no existe.");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "La alerta seleccionada no existe." });
   });
 });
 

@@ -3,7 +3,7 @@
 exports[`attendStockAlertAction > ADMIN atiende una alerta activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -34,12 +34,25 @@ exports[`attendStockAlertAction > ADMIN atiende una alerta activa > llamadas 1`]
 ]
 `;
 
-exports[`attendStockAlertAction > ADMIN atiende una alerta activa > resultado 1`] = `"redirect:/dashboard/inventory/alerts?toast=stock-alert-attended"`;
+exports[`attendStockAlertAction > ADMIN atiende una alerta activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_alerta": "ALE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
 
-exports[`attendStockAlertAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`attendStockAlertAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -47,12 +60,23 @@ exports[`attendStockAlertAction > SELLER: requireRole lo rechaza (redirige) sin 
 ]
 `;
 
-exports[`attendStockAlertAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`attendStockAlertAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para atender alertas de stock.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
 
-exports[`attendStockAlertAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`attendStockAlertAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -60,12 +84,23 @@ exports[`attendStockAlertAction > WORKSHOP_MASTER: requireRole lo rechaza (redir
 ]
 `;
 
-exports[`attendStockAlertAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`attendStockAlertAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para atender alertas de stock.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
 
-exports[`attendStockAlertAction > la alerta no existe: lanza un error > llamadas 1`] = `
+exports[`attendStockAlertAction > la alerta no existe: responde con un error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -99,12 +134,23 @@ exports[`attendStockAlertAction > la alerta no existe: lanza un error > llamadas
 ]
 `;
 
-exports[`attendStockAlertAction > la alerta no existe: lanza un error > resultado 1`] = `"error: La alerta seleccionada no existe."`;
+exports[`attendStockAlertAction > la alerta no existe: responde con un error > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
 
-exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > llamadas 1`] = `
+exports[`attendStockAlertAction > sin id responde con un error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -112,12 +158,23 @@ exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > llama
 ]
 `;
 
-exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > resultado 1`] = `"error: La alerta es obligatoria."`;
+exports[`attendStockAlertAction > sin id responde con un error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta es obligatoria.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
-exports[`attendStockAlertAction > una alerta ya atendida no se reescribe: vuelve a la lista sin aviso > llamadas 1`] = `
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe y responde que ya estaba atendida > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -151,4 +208,15 @@ exports[`attendStockAlertAction > una alerta ya atendida no se reescribe: vuelve
 ]
 `;
 
-exports[`attendStockAlertAction > una alerta ya atendida no se reescribe: vuelve a la lista sin aviso > resultado 1`] = `"redirect:/dashboard/inventory/alerts"`;
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe y responde que ya estaba atendida > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta ya estaba atendida.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;

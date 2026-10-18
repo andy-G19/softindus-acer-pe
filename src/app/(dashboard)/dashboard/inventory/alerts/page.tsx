@@ -3,7 +3,6 @@ import { AlertTriangle, Package } from "lucide-react";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -19,6 +18,8 @@ import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { attendStockAlertAction } from "@/modules/inventory/alerts/actions";
 import { getStockAlertsData } from "@/modules/inventory/alerts/queries";
+import { StockAlertAttendButton } from "@/modules/inventory/alerts/stock-alert-attend-button";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 
 function formatDecimal(value: unknown) {
   if (value === null || value === undefined) {
@@ -49,7 +50,7 @@ export default async function InventoryAlertsPage() {
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Alertas y stock crítico"
         description="Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema."
@@ -205,16 +206,14 @@ export default async function InventoryAlertsPage() {
                     {isAdmin ? (
                       <TableCell>
                         {isActive ? (
-                          <form action={attendStockAlertAction}>
-                            <input
-                              type="hidden"
-                              name="id_alerta"
-                              value={alert.id_alerta}
-                            />
-                            <Button type="submit" variant="outline" size="sm">
-                              Marcar atendida
-                            </Button>
-                          </form>
+                          <StockAlertAttendButton
+                            alert={{
+                              id_alerta: alert.id_alerta,
+                              materialName: material?.nombre_material ?? alert.id_material,
+                            }}
+                            action={attendStockAlertAction}
+                            attendedNotification={inventoryNotifications["stock-alert-attended"]}
+                          />
                         ) : (
                           "-"
                         )}
@@ -238,6 +237,6 @@ export default async function InventoryAlertsPage() {
           </Table>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
