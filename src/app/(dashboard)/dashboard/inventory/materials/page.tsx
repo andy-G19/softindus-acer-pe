@@ -250,6 +250,7 @@ export default async function MaterialsPage({
                           hiddenFieldName="id_material"
                           hiddenFieldValue={material.id_material}
                           isActive={material.estado}
+                          sendsRequestedStatus
                         />
                       </RowActions>
                     ) : (

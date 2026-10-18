@@ -9,6 +9,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import {
   materialSchema,
   materialUpdateSchema,
@@ -339,8 +340,27 @@ export async function updateMaterialAction(
 export async function toggleMaterialStatusAction(formData: FormData) {
   const session = await requireAdmin();
   const idMaterial = formData.get("id_material")?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idMaterial) {
+  if (!idMaterial || nextStatus === null) {
+    redirect(MATERIALS_PATH);
+  }
+
+  // Fija el estado pedido solo si el material tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.material.updateMany({
+    where: {
+      id_material: idMaterial,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(MATERIALS_PATH);
   }
 
@@ -349,34 +369,17 @@ export async function toggleMaterialStatusAction(formData: FormData) {
       id_material: idMaterial,
     },
     select: {
-      id_material: true,
       nombre_material: true,
-      estado: true,
-    },
-  });
-
-  if (!material) {
-    redirect(MATERIALS_PATH);
-  }
-
-  const nextStatus = !material.estado;
-
-  await prisma.material.update({
-    where: {
-      id_material: material.id_material,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "material",
-    id_registro_afectado: material.id_material,
+    id_registro_afectado: idMaterial,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Material ${nextStatus ? "activado" : "inactivado"}: ${
-      material.nombre_material
+      material?.nombre_material ?? idMaterial
     }`,
   });
 

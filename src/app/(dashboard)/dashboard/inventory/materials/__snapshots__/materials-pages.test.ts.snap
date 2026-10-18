@@ -474,6 +474,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -499,6 +500,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -707,6 +709,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -732,6 +735,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -932,6 +936,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>

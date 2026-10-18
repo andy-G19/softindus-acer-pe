@@ -379,15 +379,97 @@ defineCases("updateMaterialAction", update, [
   },
 ]);
 
+// Activar e inactivar envian el estado pedido y el servidor solo lo fija si el
+// material tiene el contrario, comparando y escribiendo en una sola sentencia
+// (updateMany con el estado actual en el where), como los catalogos de la
+// 10.1. count 0 es lo que responde la base cuando el material no existe o ya
+// tiene el estado pedido: el doble lo simula.
+describe("toggleMaterialStatusAction fija el estado pedido", () => {
+  function writesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
+      (call) => call.prisma === "material.update" || call.prisma === "material.updateMany",
+    );
+  }
+
+  function auditsOf(calls: unknown[]) {
+    return (calls as Array<{ effect?: string }>).filter((call) => call.effect === "registerAuditLog");
+  }
+
+  const toggle = (fields: FormFields, data: DataOverrides) =>
+    runAction(toggleMaterialStatusAction, { name: "", form: fields, data });
+
+  it("inactivar compara y fija el estado en una sola escritura", async () => {
+    const { calls, outcome } = await toggle({ id_material: MATERIAL, estado: "false" }, materialLookup({ estado: true }));
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "material.updateMany",
+        args: { where: { id_material: MATERIAL, estado: true }, data: { estado: false } },
+      }),
+    ]);
+    expect(auditsOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=material-deactivated");
+  });
+
+  it("pedir inactivar un material que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_material: MATERIAL, estado: "false" },
+      { ...materialLookup({ estado: false }), "material.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("pedir activar un material que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_material: MATERIAL, estado: "true" },
+      { ...materialLookup({ estado: true }), "material.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+    const forms: FormFields[] = [{ id_material: MATERIAL }, { id_material: MATERIAL, estado: "si" }];
+
+    for (const form of forms) {
+      const { calls } = await toggle(form, materialLookup({ estado: true }));
+
+      expect(writesOf(calls)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+    }
+  });
+});
+
 defineCases("toggleMaterialStatusAction", toggleMaterialStatusAction, [
-  { name: "inactiva un material activo", form: { id_material: MATERIAL }, data: materialLookup({ estado: true }) },
-  { name: "activa un material inactivo", form: { id_material: MATERIAL }, data: materialLookup({ estado: false }) },
   {
-    name: "pedir inactivar un material que ya esta inactivo lo activa: el estado pedido no se lee",
+    name: "inactiva un material activo",
     form: { id_material: MATERIAL, estado: "false" },
+    data: materialLookup({ estado: true }),
+  },
+  {
+    name: "activa un material inactivo",
+    form: { id_material: MATERIAL, estado: "true" },
     data: materialLookup({ estado: false }),
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  { name: "el material no existe: vuelve al listado", form: { id_material: MATERIAL }, data: materialLookup({ exists: false }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_material: MATERIAL }, role: "WORKSHOP_MASTER" },
+  {
+    name: "pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora",
+    form: { id_material: MATERIAL, estado: "false" },
+    data: { ...materialLookup({ estado: false }), "material.updateMany": () => ({ count: 0 }) },
+  },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  {
+    name: "el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_material: MATERIAL, estado: "false" },
+    data: { ...materialLookup({ exists: false }), "material.updateMany": () => ({ count: 0 }) },
+  },
+  {
+    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    form: { id_material: MATERIAL, estado: "false" },
+    role: "WORKSHOP_MASTER",
+  },
 ]);

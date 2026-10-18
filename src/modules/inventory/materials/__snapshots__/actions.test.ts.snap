@@ -1413,9 +1413,20 @@ exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`]
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
-        "id_material": true,
+      },
+      "where": {
+        "estado": false,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_material": true,
       },
       "where": {
@@ -1423,18 +1434,6 @@ exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`]
       },
     },
     "prisma": "material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_material": "MAT00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "material.update",
   },
   {
     "args": {
@@ -1460,7 +1459,7 @@ exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`]
 
 exports[`toggleMaterialStatusAction > activa un material inactivo > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-activated"`;
 
-exports[`toggleMaterialStatusAction > el material no existe: vuelve al listado > llamadas 1`] = `
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1470,21 +1469,21 @@ exports[`toggleMaterialStatusAction > el material no existe: vuelve al listado >
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_material": true,
-        "nombre_material": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_material": "MAT00000004",
       },
     },
-    "prisma": "material.findUnique",
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
   },
 ]
 `;
 
-exports[`toggleMaterialStatusAction > el material no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
 
 exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`] = `
 [
@@ -1496,9 +1495,20 @@ exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`]
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
-        "id_material": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_material": true,
       },
       "where": {
@@ -1506,18 +1516,6 @@ exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`]
       },
     },
     "prisma": "material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_material": "MAT00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "material.update",
   },
   {
     "args": {
@@ -1543,7 +1541,7 @@ exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`]
 
 exports[`toggleMaterialStatusAction > inactiva un material activo > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-deactivated"`;
 
-exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1553,52 +1551,21 @@ exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta in
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_material": true,
-        "nombre_material": true,
-      },
-      "where": {
-        "id_material": "MAT00000004",
-      },
-    },
-    "prisma": "material.findUnique",
-  },
-  {
-    "args": {
       "data": {
-        "estado": true,
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_material": "MAT00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "material.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Material activado: Plancha LAC 1/16",
-      "enTransaccion": false,
-      "entidad_afectada": "material",
-      "id_registro_afectado": "MAT00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/inventory",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/inventory/materials",
-    "effect": "revalidatePath",
+    "prisma": "material.updateMany",
   },
 ]
 `;
 
-exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-activated"`;
+exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
 
 exports[`toggleMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
 [
