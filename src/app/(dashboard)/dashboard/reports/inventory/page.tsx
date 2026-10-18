@@ -6,6 +6,9 @@
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -33,7 +35,13 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getInventoryReportData } from "@/modules/reports/inventory/queries";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getInventoryReportData,
+  getInventoryReportFilterOptions,
+} from "@/modules/reports/inventory/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const INVENTORY_MOVEMENT_OPTIONS = [
   { value: "entrada", label: "Entrada" },
@@ -71,6 +79,92 @@ function getMovementTypeLabel(type: string) {
   );
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "materialId" | "movementType" | "userId" | "workOrderId",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getInventoryReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  materials,
+  users,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, materialId, movementType, userId, workOrderId } = filters;
+
+  return (
+    <FilterBar
+      action="/dashboard/reports/inventory"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/inventory"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
+
+      <Field id="materialId" label="Material">
+        {(control) => (
+          <NativeSelect {...control} name="materialId" defaultValue={materialId}>
+            <option value="">Todos los materiales</option>
+            {materials.map((item) => (
+              <option key={item.id_material} value={item.id_material}>
+                {item.nombre_material}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="movementType" label="Tipo">
+        {(control) => (
+          <NativeSelect {...control} name="movementType" defaultValue={movementType}>
+            <option value="">Todos los tipos</option>
+            {INVENTORY_MOVEMENT_OPTIONS.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="userId" label="Responsable">
+        {(control) => (
+          <NativeSelect {...control} name="userId" defaultValue={userId}>
+            <option value="">Todos los responsables</option>
+            {users.map((item) => (
+              <option key={item.id_usuario} value={item.id_usuario}>
+                {item.apellidos}, {item.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="workOrderId" label="Orden de trabajo">
+        {(control) => (
+          <Input
+            {...control}
+            name="workOrderId"
+            type="text"
+            defaultValue={workOrderId}
+            placeholder="Ej: OTR00000001"
+          />
+        )}
+      </Field>
+    </FilterBar>
+  );
+}
+
 export default async function InventoryReportPage({
   searchParams,
 }: PageProps) {
@@ -84,6 +178,30 @@ export default async function InventoryReportPage({
   const movementType = getSearchParam(params, "movementType");
   const userId = getSearchParam(params, "userId");
   const workOrderId = getSearchParam(params, "workOrderId").trim();
+
+  const filters = { dateFrom, dateTo, materialId, movementType, userId, workOrderId };
+  const pageHeader = {
+    title: "Reporte de inventario",
+    description: "Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Inventario" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getInventoryReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const csvExportHref = buildReportExportHref("inventory", {
     dateFrom,
@@ -158,113 +276,30 @@ export default async function InventoryReportPage({
     return sum + toNumber(movement.cantidad);
   }, 0);
 
+  const exportRangeExceeded = exceedsReportExportRange(dateFrom, dateTo);
+
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reporte de inventario"
-        description="Consulta movimientos de inventario por material, tipo de movimiento, responsable, fechas y orden de trabajo asociada."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Inventario" },
-        ])}
+        {...pageHeader}
         actions={
-          <>
-            <Button asChild>
-              <a href={csvExportHref}>Exportar Excel</a>
-            </Button>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button asChild>
+                <a href={csvExportHref}>Exportar Excel</a>
+              </Button>
 
-            <Button variant="destructive" asChild>
-              <a href={pdfExportHref}>Exportar PDF</a>
-            </Button>
-          </>
+              <Button variant="destructive" asChild>
+                <a href={pdfExportHref}>Exportar PDF</a>
+              </Button>
+            </>
+          )
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del reporte</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input
-                id="dateFrom"
-                name="dateFrom"
-                type="date"
-                defaultValue={dateFrom}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input
-                id="dateTo"
-                name="dateTo"
-                type="date"
-                defaultValue={dateTo}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="materialId">Material</Label>
-              <NativeSelect id="materialId" name="materialId" defaultValue={materialId}>
-                <option value="">Todos los materiales</option>
-                {materials.map((material) => (
-                  <option key={material.id_material} value={material.id_material}>
-                    {material.nombre_material}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="movementType">Tipo</Label>
-              <NativeSelect id="movementType" name="movementType" defaultValue={movementType}>
-                <option value="">Todos los tipos</option>
-                {INVENTORY_MOVEMENT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="userId">Responsable</Label>
-              <NativeSelect id="userId" name="userId" defaultValue={userId}>
-                <option value="">Todos los responsables</option>
-                {users.map((user) => (
-                  <option key={user.id_usuario} value={user.id_usuario}>
-                    {user.apellidos}, {user.nombres}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="workOrderId">Orden de trabajo</Label>
-              <Input
-                id="workOrderId"
-                name="workOrderId"
-                type="text"
-                defaultValue={workOrderId}
-                placeholder="Ej: OTR00000001"
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/inventory">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} materials={materials} users={users} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <KpiCard title="Movimientos" value={totalMovements.toString()} description="Total de movimientos encontrados." tone="info" icon={ClipboardList} />

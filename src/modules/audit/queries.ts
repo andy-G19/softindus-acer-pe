@@ -64,21 +64,12 @@ function buildAuditLogWhere(
   return conditions.length > 0 ? { AND: conditions } : {};
 }
 
-export async function getAuditLogData(
-  filters: AuditLogFilters,
-  { skip, take }: Pick<PaginationParams, "skip" | "take">,
-) {
-  const where = buildAuditLogWhere(filters);
-
-  const [
-    users,
-    actions,
-    entities,
-    logs,
-    totalLogs,
-    distinctUsers,
-    distinctEntities,
-  ] = await Promise.all([
+// Opciones de los filtros de la auditoria: todos los usuarios (tambien los
+// inactivos, que siguen en la bitacora) y las acciones y entidades
+// registradas. Devuelve las promesas de Prisma en el orden en que las compone
+// getAuditLogData.
+function findAuditFilterOptions() {
+  return [
     prisma.usuario.findMany({
       orderBy: [{ apellidos: "asc" }, { nombres: "asc" }],
       select: {
@@ -105,6 +96,33 @@ export async function getAuditLogData(
         entidad_afectada: true,
       },
     }),
+  ] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getAuditLogFilterOptions() {
+  const [users, actions, entities] = await Promise.all(findAuditFilterOptions());
+
+  return { users, actions, entities };
+}
+
+export async function getAuditLogData(
+  filters: AuditLogFilters,
+  { skip, take }: Pick<PaginationParams, "skip" | "take">,
+) {
+  const where = buildAuditLogWhere(filters);
+
+  const [
+    users,
+    actions,
+    entities,
+    logs,
+    totalLogs,
+    distinctUsers,
+    distinctEntities,
+  ] = await Promise.all([
+    ...findAuditFilterOptions(),
     prisma.bitacora_operacion.findMany({
       where,
       orderBy: [{ fecha_hora: "desc" }, { id_bitacora: "desc" }],

@@ -194,4 +194,10 @@ describe("ConfirmDialog controlada", () => {
     // @ts-expect-error: closeOnConfirm exige open y onOpenChange
     expect(() => h(ConfirmDialog, { ...base, closeOnConfirm: false })).not.toThrow();
   });
+
+  it("returnFocusTo solo existe en el modo controlado", () => {
+    // Comprobacion de tipos: con disparador, Radix devuelve el foco al disparador.
+    // @ts-expect-error: returnFocusTo exige open y onOpenChange
+    expect(() => h(ConfirmDialog, { ...base, returnFocusTo: () => null })).not.toThrow();
+  });
 });

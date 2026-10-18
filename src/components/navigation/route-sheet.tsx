@@ -48,7 +48,7 @@ export function RouteSheet({ title, description, discardTitle, discardDescriptio
     router.back();
   }
 
-  const { controls, markDirty, discardDialog } = useDiscardGuard({ onLeave: leave });
+  const { controls, markDirty, trackFocus, discardDialog } = useDiscardGuard({ onLeave: leave });
 
   return (
     <FormSurfaceProvider value={controls}>
@@ -59,6 +59,7 @@ export function RouteSheet({ title, description, discardTitle, discardDescriptio
           // proposito; con ella, Radix la asocia solo y no hay que pisarla.
           {...(description ? {} : { "aria-describedby": undefined })}
           onInput={() => markDirty(true)}
+          onFocus={trackFocus}
           onOpenAutoFocus={() => {
             returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           }}

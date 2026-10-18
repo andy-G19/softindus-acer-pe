@@ -6,7 +6,9 @@
   UserRoundCheck,
   UserX,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -34,7 +35,10 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getStaffReportData } from "@/modules/reports/staff/queries";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import { getStaffReportData, getStaffReportFilterOptions } from "@/modules/reports/staff/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 import {
   parseStringParam,
   type SearchParamsRecord,
@@ -43,6 +47,64 @@ import {
 type PageProps = {
   searchParams?: Promise<SearchParamsRecord>;
 };
+
+type ReportFilterValues = Record<"q" | "operario" | "modalidad" | "estado" | "from" | "to", string>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getStaffReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  operators,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { q, operario, modalidad, estado, from, to } = filters;
+
+  return (
+    <FilterBar
+      action="/dashboard/reports/staff"
+      label="Filtros de personal y planillas"
+      clearHref="/dashboard/reports/staff"
+      clearLabel="Limpiar"
+    >
+      <Field id="q" label="Buscar">
+        {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar operario" />}
+      </Field>
+      <Field id="operario" label="Operario">
+        {(control) => (
+          <NativeSelect {...control} name="operario" defaultValue={operario}>
+            <option value="">Todos los operarios</option>
+            {operators.map((operator) => (
+              <option key={operator.id_operario} value={operator.id_operario}>
+                {operator.apellidos}, {operator.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="modalidad" label="Modalidad">
+        {(control) => (
+          <NativeSelect {...control} name="modalidad" defaultValue={modalidad}>
+            <option value="">Todas las modalidades</option>
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="estado" label="Estado">
+        {(control) => (
+          <NativeSelect {...control} name="estado" defaultValue={estado}>
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="pagado">Pagado</option>
+            <option value="anulada">Anulada</option>
+          </NativeSelect>
+        )}
+      </Field>
+      <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+    </FilterBar>
+  );
+}
 
 export default async function StaffReportPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);
@@ -54,6 +116,30 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
   const estado = parseStringParam(params, "estado");
   const from = parseStringParam(params, "from");
   const to = parseStringParam(params, "to");
+  const filters = { q, operario, modalidad, estado, from, to };
+  const pageHeader = {
+    title: "Personal y planillas",
+    description: "Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Personal" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(from, to)) {
+    const options = await getStaffReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
+
   const { operators, payrolls, attendanceCount, absenceCount, latenessCount } =
     await getStaffReportData({
       q,
@@ -91,84 +177,33 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
     to,
   };
 
+  const exportRangeExceeded = exceedsReportExportRange(from, to);
+
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
-        title="Personal y planillas"
-        description="Consulta asistencias, faltas, tardanzas, planillas generadas, pagos realizados y pendientes por operario."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Personal" },
-        ])}
+        {...pageHeader}
         actions={
-          <>
-            <Button variant="outline" asChild>
-              <a href={buildReportExportHref("staff", exportParams)}>
-                Exportar Excel
-              </a>
-            </Button>
-            <Button asChild>
-              <a href={buildReportExportHref("staff", exportParams, "pdf")}>
-                Exportar PDF
-              </a>
-            </Button>
-          </>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <a href={buildReportExportHref("staff", exportParams)}>
+                  Exportar Excel
+                </a>
+              </Button>
+              <Button asChild>
+                <a href={buildReportExportHref("staff", exportParams, "pdf")}>
+                  Exportar PDF
+                </a>
+              </Button>
+            </>
+          )
         }
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Buscar operario" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="operario">Operario</Label>
-              <NativeSelect id="operario" name="operario" defaultValue={operario}>
-                <option value="">Todos los operarios</option>
-                {operators.map((operator) => (
-                  <option key={operator.id_operario} value={operator.id_operario}>
-                    {operator.apellidos}, {operator.nombres}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="modalidad">Modalidad</Label>
-              <NativeSelect id="modalidad" name="modalidad" defaultValue={modalidad}>
-                <option value="">Todas las modalidades</option>
-                <option value="semanal">Semanal</option>
-                <option value="quincenal">Quincenal</option>
-                <option value="mensual">Mensual</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="estado">Estado</Label>
-              <NativeSelect id="estado" name="estado" defaultValue={estado}>
-                <option value="">Todos los estados</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="pagado">Pagado</option>
-                <option value="anulada">Anulada</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="from">Desde</Label>
-              <Input id="from" name="from" type="date" defaultValue={from} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="to">Hasta</Label>
-              <Input id="to" name="to" type="date" defaultValue={to} />
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit">Filtrar</Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/reports/staff">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} operators={operators} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <KpiCard title="Operarios activos" value={operators.length.toString()} description="Operarios habilitados." tone="info" icon={UserRoundCheck} />
@@ -239,7 +274,7 @@ export default async function StaffReportPage({ searchParams }: PageProps) {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

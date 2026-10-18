@@ -5,8 +5,9 @@
   LayoutGrid,
   Users,
 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import {
   Card,
   CardContent,
@@ -16,7 +17,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -31,7 +31,12 @@ import { requireRole } from "@/lib/authz";
 import { formatDateTime } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
-import { getExportHistoryData } from "@/modules/reports/export-history/queries";
+import { isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getExportHistoryData,
+  getExportHistoryFilterOptions,
+} from "@/modules/reports/export-history/queries";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const REPORT_MODULE_OPTIONS = [
   "Reporte de producción",
@@ -106,6 +111,104 @@ function formatParams(value: string | null) {
   }
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "reportModule" | "format" | "status" | "userId" | "searchText",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getExportHistoryFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  users,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, reportModule, format, status, userId, searchText } = filters;
+
+  return (
+    <FilterBar
+      action="/dashboard/reports/export-history"
+      label="Filtros del historial"
+      clearHref="/dashboard/reports/export-history"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
+
+      <Field id="module" label="Reporte">
+        {(control) => (
+          <NativeSelect {...control} name="module" defaultValue={reportModule}>
+            <option value="">Todos los reportes</option>
+            {REPORT_MODULE_OPTIONS.map((moduleOption) => (
+              <option key={moduleOption} value={moduleOption}>
+                {moduleOption}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="format" label="Formato">
+        {(control) => (
+          <NativeSelect {...control} name="format" defaultValue={format}>
+            <option value="">Todos los formatos</option>
+            {FORMAT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="status" label="Estado">
+        {(control) => (
+          <NativeSelect {...control} name="status" defaultValue={status}>
+            <option value="">Todos los estados</option>
+            {STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="userId" label="Usuario">
+        {(control) => (
+          <NativeSelect {...control} name="userId" defaultValue={userId}>
+            <option value="">Todos los usuarios</option>
+            {users.map((user) => (
+              <option key={user.id_usuario} value={user.id_usuario}>
+                {user.apellidos}, {user.nombres}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="searchText" label="Buscar">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchText"
+            type="text"
+            defaultValue={searchText}
+            placeholder="Archivo, filtros..."
+          />
+        )}
+      </Field>
+    </FilterBar>
+  );
+}
+
 export default async function ExportHistoryPage({ searchParams }: PageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
@@ -118,6 +221,30 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
   const status = getSearchParam(params, "status");
   const userId = getSearchParam(params, "userId");
   const searchText = getSearchParam(params, "searchText").trim();
+
+  const filters = { dateFrom, dateTo, reportModule, format, status, userId, searchText };
+  const pageHeader = {
+    title: "Historial de exportaciones",
+    description: "Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Historial de exportaciones" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getExportHistoryFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const { users, exports } = await getExportHistoryData({
     dateFrom,
@@ -154,101 +281,10 @@ export default async function ExportHistoryPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Historial de exportaciones"
-        description="Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Historial de exportaciones" },
-        ])}
+        {...pageHeader}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del historial</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="module">Reporte</Label>
-              <NativeSelect id="module" name="module" defaultValue={reportModule}>
-                <option value="">Todos los reportes</option>
-                {REPORT_MODULE_OPTIONS.map((moduleOption) => (
-                  <option key={moduleOption} value={moduleOption}>
-                    {moduleOption}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="format">Formato</Label>
-              <NativeSelect id="format" name="format" defaultValue={format}>
-                <option value="">Todos los formatos</option>
-                {FORMAT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="status">Estado</Label>
-              <NativeSelect id="status" name="status" defaultValue={status}>
-                <option value="">Todos los estados</option>
-                {STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="userId">Usuario</Label>
-              <NativeSelect id="userId" name="userId" defaultValue={userId}>
-                <option value="">Todos los usuarios</option>
-                {users.map((user) => (
-                  <option key={user.id_usuario} value={user.id_usuario}>
-                    {user.apellidos}, {user.nombres}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="searchText">Buscar</Label>
-              <Input
-                id="searchText"
-                name="searchText"
-                type="text"
-                defaultValue={searchText}
-                placeholder="Archivo, filtros..."
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-7">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/export-history">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} users={users} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <KpiCard title="Exportaciones" value={totalExports.toString()} description="Registros encontrados según filtros." tone="info" icon={ClipboardList} />

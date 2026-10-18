@@ -62,6 +62,20 @@ function buildPayrollWhere(
   return payrollFilters.length > 0 ? { AND: payrollFilters } : {};
 }
 
+// Opciones de los filtros del reporte. Devuelve las promesas de Prisma en el
+// orden en que las compone getStaffReportData.
+function findStaffFilterOptions() {
+  return [findActiveOperators()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getStaffReportFilterOptions() {
+  const [operators] = await Promise.all(findStaffFilterOptions());
+
+  return { operators };
+}
+
 export async function getStaffReportData(filters: StaffReportFilters) {
   const { operario } = filters;
   const dateRange = buildReportDateRange(filters.from, filters.to);
@@ -74,7 +88,7 @@ export async function getStaffReportData(filters: StaffReportFilters) {
 
   const [operators, payrolls, attendanceCount, absenceCount, latenessCount] =
     await Promise.all([
-      findActiveOperators(),
+      ...findStaffFilterOptions(),
       prisma.planilla_pago.findMany({
         where: payrollWhere,
         orderBy: {

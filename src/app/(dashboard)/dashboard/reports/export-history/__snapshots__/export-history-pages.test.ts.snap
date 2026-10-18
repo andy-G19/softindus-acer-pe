@@ -81,20 +81,18 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del historial</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="module">Reporte</label>
 <select id="module" name="module">
@@ -140,11 +138,9 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/export-history">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -342,6 +338,137 @@ exports[`/dashboard/reports/export-history > parametros vacios, con filtros e il
 }
 `;
 
+exports[`/dashboard/reports/export-history > rango invertido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": [
+        {
+          "apellidos": "asc",
+        },
+        {
+          "nombres": "asc",
+        },
+      ],
+      "select": {
+        "apellidos": true,
+        "id_usuario": true,
+        "nombres": true,
+      },
+      "where": {
+        "estado": "activo",
+      },
+    },
+    "prisma": "usuario.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/export-history > rango invertido > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Historial de exportaciones</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Historial de exportaciones</h1>
+<p>Consulta la trazabilidad de reportes exportados: usuario, módulo, formato, filtros aplicados, fecha y archivo generado.</p>
+</div>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-31"/>
+</div>
+<div>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+</div>
+</fieldset>
+<div>
+<label for="module">Reporte</label>
+<select id="module" name="module">
+<option value="" selected="">Todos los reportes</option>
+<option value="Reporte de producción">Reporte de producción</option>
+<option value="Reporte de inventario">Reporte de inventario</option>
+<option value="Reporte de ventas y cobranzas">Reporte de ventas y cobranzas</option>
+<option value="Reporte de proveedores y compras">Reporte de proveedores y compras</option>
+<option value="Reporte financiero">Reporte financiero</option>
+<option value="Reporte de mantenimiento">Reporte de mantenimiento</option>
+<option value="Reporte de costos y rentabilidad">Reporte de costos y rentabilidad</option>
+<option value="Reporte de personal y planillas">Reporte de personal y planillas</option>
+<option value="Reporte de auditoria">Reporte de auditoria</option>
+</select>
+</div>
+<div>
+<label for="format">Formato</label>
+<select id="format" name="format">
+<option value="" selected="">Todos los formatos</option>
+<option value="excel">Excel</option>
+<option value="pdf">PDF</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="generada">Generada</option>
+<option value="fallida">Fallida</option>
+</select>
+</div>
+<div>
+<label for="userId">Usuario</label>
+<select id="userId" name="userId">
+<option value="" selected="">Todos los usuarios</option>
+<option value="id_usuario-1">apellidos-1, nombres-1</option>
+<option value="id_usuario-2">apellidos-2, nombres-2</option>
+</select>
+</div>
+<div>
+<label for="searchText">Buscar</label>
+<input type="text" id="searchText" placeholder="Archivo, filtros..." name="searchText" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="clear" href="/dashboard/reports/export-history">Limpiar filtros</a>
+</div>
+</form>
+<div role="alert">
+<div>Corrige el rango de fechas para ver el reporte.</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/reports/export-history > sin filtros > llamadas 1`] = `
 [
   {
@@ -423,20 +550,18 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del historial</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="module">Reporte</label>
 <select id="module" name="module">
@@ -482,11 +607,9 @@ exports[`/dashboard/reports/export-history > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/export-history">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -748,20 +871,18 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del historial" action="/dashboard/reports/export-history" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del historial</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="dateTo" value="2026-07-31"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
-</div>
+</fieldset>
 <div>
 <label for="module">Reporte</label>
 <select id="module" name="module">
@@ -807,11 +928,9 @@ exports[`/dashboard/reports/export-history > todos los filtros > resultado 1`] =
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/export-history">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/export-history">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>

@@ -6,7 +6,9 @@
   TrendingUp,
   Truck,
 } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +19,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -34,7 +35,13 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
-import { getFinancialReportData } from "@/modules/reports/financial/queries";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
+import {
+  getFinancialReportData,
+  getFinancialReportFilterOptions,
+} from "@/modules/reports/financial/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 
 const CASH_MOVEMENT_TYPE_OPTIONS = [
   { value: "ingreso", label: "Ingreso" },
@@ -75,6 +82,92 @@ function getPaidSupplierAmount(
   }, 0);
 }
 
+type ReportFilterValues = Record<
+  "dateFrom" | "dateTo" | "cashBoxId" | "movementType" | "categoryId" | "searchText",
+  string
+>;
+type ReportFilterOptions = Awaited<ReturnType<typeof getFinancialReportFilterOptions>>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({
+  filters,
+  cashBoxes,
+  categories,
+}: ReportFilterOptions & { filters: ReportFilterValues }) {
+  const { dateFrom, dateTo, cashBoxId, movementType, categoryId, searchText } = filters;
+
+  return (
+    <FilterBar
+      action="/dashboard/reports/financial"
+      label="Filtros del reporte"
+      clearHref="/dashboard/reports/financial"
+      submitLabel="Aplicar filtros"
+    >
+      <DateRangeFields
+        id="fecha"
+        fromName="dateFrom"
+        toName="dateTo"
+        fromLabel="Fecha desde"
+        toLabel="Fecha hasta"
+        defaultFrom={dateFrom}
+        defaultTo={dateTo}
+      />
+
+      <Field id="cashBoxId" label="Caja chica">
+        {(control) => (
+          <NativeSelect {...control} name="cashBoxId" defaultValue={cashBoxId}>
+            <option value="">Todas las cajas</option>
+            {cashBoxes.map((cashBox) => (
+              <option key={cashBox.id_caja_chica} value={cashBox.id_caja_chica}>
+                {cashBox.nombre_caja}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="movementType" label="Tipo movimiento">
+        {(control) => (
+          <NativeSelect {...control} name="movementType" defaultValue={movementType}>
+            <option value="">Todos los tipos</option>
+            {CASH_MOVEMENT_TYPE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="categoryId" label="Categoría">
+        {(control) => (
+          <NativeSelect {...control} name="categoryId" defaultValue={categoryId}>
+            <option value="">Todas las categorías</option>
+            {categories.map((category) => (
+              <option key={category.id_categoria_gasto} value={category.id_categoria_gasto}>
+                {category.nombre_categoria}
+              </option>
+            ))}
+          </NativeSelect>
+        )}
+      </Field>
+
+      <Field id="searchText" label="Concepto / responsable">
+        {(control) => (
+          <Input
+            {...control}
+            name="searchText"
+            type="text"
+            defaultValue={searchText}
+            placeholder="Ej: transporte, repuesto..."
+          />
+        )}
+      </Field>
+    </FilterBar>
+  );
+}
+
 export default async function FinancialReportPage({
   searchParams,
 }: PageProps) {
@@ -88,6 +181,30 @@ export default async function FinancialReportPage({
   const movementType = getSearchParam(params, "movementType");
   const categoryId = getSearchParam(params, "categoryId");
   const searchText = getSearchParam(params, "searchText").trim();
+
+  const filters = { dateFrom, dateTo, cashBoxId, movementType, categoryId, searchText };
+  const pageHeader = {
+    title: "Reporte financiero",
+    description: "Consulta caja chica, ingresos, egresos, costos de producción, utilidad estimada, cuentas por cobrar y compras pendientes de pago.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Financiero" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(dateFrom, dateTo)) {
+    const options = await getFinancialReportFilterOptions();
+
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} {...options} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
 
   const csvExportHref = buildReportExportHref("financial", {
     dateFrom,
@@ -185,106 +302,30 @@ export default async function FinancialReportPage({
     totalCashExpense -
     toNumber(totalProductionCost);
 
+  const exportRangeExceeded = exceedsReportExportRange(dateFrom, dateTo);
+
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reporte financiero"
-        description="Consulta caja chica, ingresos, egresos, costos de producción, utilidad estimada, cuentas por cobrar y compras pendientes de pago."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Financiero" },
-        ])}
+        {...pageHeader}
         actions={
-          <>
-            <Button asChild>
-              <a href={csvExportHref}>Exportar Excel</a>
-            </Button>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button asChild>
+                <a href={csvExportHref}>Exportar Excel</a>
+              </Button>
 
-            <Button variant="destructive" asChild>
-              <a href={pdfExportHref}>Exportar PDF</a>
-            </Button>
-          </>
+              <Button variant="destructive" asChild>
+                <a href={pdfExportHref}>Exportar PDF</a>
+              </Button>
+            </>
+          )
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros del reporte</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-            <div className="space-y-2">
-              <Label htmlFor="dateFrom">Fecha desde</Label>
-              <Input id="dateFrom" name="dateFrom" type="date" defaultValue={dateFrom} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dateTo">Fecha hasta</Label>
-              <Input id="dateTo" name="dateTo" type="date" defaultValue={dateTo} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="cashBoxId">Caja chica</Label>
-              <NativeSelect id="cashBoxId" name="cashBoxId" defaultValue={cashBoxId}>
-                <option value="">Todas las cajas</option>
-                {cashBoxes.map((cashBox) => (
-                  <option key={cashBox.id_caja_chica} value={cashBox.id_caja_chica}>
-                    {cashBox.nombre_caja}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="movementType">Tipo movimiento</Label>
-              <NativeSelect id="movementType" name="movementType" defaultValue={movementType}>
-                <option value="">Todos los tipos</option>
-                {CASH_MOVEMENT_TYPE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="categoryId">Categoría</Label>
-              <NativeSelect id="categoryId" name="categoryId" defaultValue={categoryId}>
-                <option value="">Todas las categorías</option>
-                {categories.map((category) => (
-                  <option
-                    key={category.id_categoria_gasto}
-                    value={category.id_categoria_gasto}
-                  >
-                    {category.nombre_categoria}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="searchText">Concepto / responsable</Label>
-              <Input
-                id="searchText"
-                name="searchText"
-                type="text"
-                defaultValue={searchText}
-                placeholder="Ej: transporte, repuesto..."
-              />
-            </div>
-
-            <div className="flex items-end gap-2 md:col-span-2 xl:col-span-6">
-              <Button type="submit">Aplicar filtros</Button>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard/reports/financial">
-                  Limpiar filtros
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} cashBoxes={cashBoxes} categories={categories} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KpiCard title="Saldo caja chica" value={formatMoney(totalOpenCashBalance)} description="Saldo actual acumulado de cajas abiertas." tone="info" icon={Landmark} />

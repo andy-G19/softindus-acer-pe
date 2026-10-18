@@ -9,6 +9,8 @@ Pantallas renovadas hasta ahora:
 - Comercial: clientes y categorías de producto.
 - Inventario: tipos de proveedor y categorías de materiales.
 - Caja chica: categorías de gasto.
+- Reportes: los ocho reportes con filtros, el historial de exportaciones y
+  la bitácora de auditoría.
 
 Las demás pantallas se irán sumando a este manual a medida que se renueven.
 
@@ -47,7 +49,9 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 - Si no escribiste nada, se cierra directamente.
 - Si escribiste algo, el sistema pregunta si quieres **descartar los
   cambios**. **Cancelar** te devuelve al formulario con lo escrito;
-  **Descartar cambios** lo cierra sin guardar.
+  **Descartar cambios** lo cierra sin guardar. Al volver con **Cancelar**,
+  el cursor regresa al campo donde estabas, también si la pregunta salió
+  por un clic fuera de la ventana.
 - Mientras se está guardando, la ventana no se puede cerrar.
 - Si intentas recargar la página o cerrar la pestaña con cambios sin
   guardar, el navegador también te pregunta antes de salir.
@@ -78,9 +82,15 @@ confirmación; se igualarán en una próxima actualización.
 ## Filtrar las listas
 
 Las listas renovadas tienen una barra de filtros arriba. Completa los campos
-que necesites y pulsa **Filtrar**; **Limpiar** quita todos los filtros. Los
+que necesites y pulsa **Filtrar** (en algunas pantallas, **Aplicar
+filtros**); **Limpiar** o **Limpiar filtros** quita todos los filtros. Los
 filtros quedan en la dirección de la página, así que puedes guardarla en
 favoritos o compartirla con los filtros puestos.
+
+Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
+se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
+quedan al revés, muestra «La fecha inicial no puede ser mayor que la fecha
+final.» y la barra no se envía hasta corregirlo.
 
 ## Usar el teclado
 

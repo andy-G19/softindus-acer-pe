@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { DATE_RANGE_INVERTED_MESSAGE, isDateRangeInverted } from "@/lib/date-range";
+import { DATE_RANGE_INVERTED_MESSAGE, isDateRangeInverted, toDateInputValue } from "@/lib/date-range";
 import { parseReportDate, validateDateRange } from "@/lib/reports/report-filters";
 
 describe("isDateRangeInverted", () => {
@@ -30,6 +30,28 @@ describe("isDateRangeInverted", () => {
 
       expect(isDateRangeInverted(from, to)).toBe(byDate);
     }
+  });
+});
+
+// Entrega 10.2: un input type="date" solo conserva una fecha "aaaa-mm-dd" que
+// existe; cualquier otro valor lo deja vacio. DateRangeFields valida lo mismo
+// que el campo muestra.
+describe("toDateInputValue", () => {
+  it.each([
+    ["2026-10-01", "2026-10-01"],
+    ["2024-02-29", "2024-02-29"],
+    ["2026-7-5", ""],
+    ["2026-02-30", ""],
+    ["2026-02-29", ""],
+    ["2026-13-01", ""],
+    ["2026-00-10", ""],
+    ["0000-01-01", ""],
+    [" 2026-10-01", ""],
+    ["2026-10-01T00:00", ""],
+    ["", ""],
+    [undefined, ""],
+  ])("%s queda como %j", (value, expected) => {
+    expect(toDateInputValue(value)).toBe(expected);
   });
 });
 

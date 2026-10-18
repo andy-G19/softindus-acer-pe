@@ -95,22 +95,11 @@ function buildFinancialWheres(filters: FinancialReportFilters) {
   };
 }
 
-export async function getFinancialReportData(filters: FinancialReportFilters) {
-  const wheres = buildFinancialWheres(filters);
-  const dateRangeFilter = wheres.dateRange;
-
-  const [
-    cashBoxes,
-    categories,
-    cashMovements,
-    openCashBoxesBalance,
-    collectedPayments,
-    productionCosts,
-    estimatedProfit,
-    lowMarginAlerts,
-    receivables,
-    pendingSupplierPurchases,
-  ] = await Promise.all([
+// Opciones de los filtros del reporte: las cajas y las categorias de gasto
+// activas. Devuelve las promesas de Prisma en el orden en que las compone
+// getFinancialReportData.
+function findFinancialFilterOptions() {
+  return [
     prisma.caja_chica.findMany({
       orderBy: {
         nombre_caja: "asc",
@@ -133,6 +122,34 @@ export async function getFinancialReportData(filters: FinancialReportFilters) {
         nombre_categoria: true,
       },
     }),
+  ] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getFinancialReportFilterOptions() {
+  const [cashBoxes, categories] = await Promise.all(findFinancialFilterOptions());
+
+  return { cashBoxes, categories };
+}
+
+export async function getFinancialReportData(filters: FinancialReportFilters) {
+  const wheres = buildFinancialWheres(filters);
+  const dateRangeFilter = wheres.dateRange;
+
+  const [
+    cashBoxes,
+    categories,
+    cashMovements,
+    openCashBoxesBalance,
+    collectedPayments,
+    productionCosts,
+    estimatedProfit,
+    lowMarginAlerts,
+    receivables,
+    pendingSupplierPurchases,
+  ] = await Promise.all([
+    ...findFinancialFilterOptions(),
 
     prisma.movimiento_caja.findMany({
       where: wheres.cashMovements,

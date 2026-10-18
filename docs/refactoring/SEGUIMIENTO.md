@@ -3238,9 +3238,10 @@ destructivas confirman:
 
 ### Sub-entrega 10.1 — Bases y catálogos breves
 
-Fecha: 2026-10-15 y 2026-10-16. Estado: cerrada en staging; falta integrarla
-en `main`. 12 commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y
-este cierre:
+Fecha: del 2026-10-15 al 2026-10-17. Estado: cerrada el 2026-10-17. 12
+commits, de `582f871` a `0f968ad`, más el registro `b3ec729` y el cierre
+`d3de58e` (CI #77 en verde). Integrada en `main` con el PR #23 (merge commit
+`9f52808`, CI #79 en verde):
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3357,7 +3358,7 @@ Hallazgos:
    siguen escaneando. El comentario de una prueba nueva regeneró dos
    utilidades, y un parámetro llamado `container`, la utilidad `.container`.
    Una sonda que pregunta al escáner de dónde sale cada clase encontró los
-   dos casos (`scratchpad/probe-sources.mjs`).
+   dos casos (`tmp/e10-diff/probe-sources.mjs`).
 2. 11 acciones de activar e inactivar leían el estado y escribían el
    contrario sin bloqueo; esta sub-entrega corrige 3.
 3. La edición de categorías de gasto podía inactivar sin confirmar, y la
@@ -3469,6 +3470,7 @@ Hallazgos de la verificación:
    «Cancelar» la cierra y deja el foco en `body`: el clic quitó el foco del
    campo y la confirmación lo devuelve al elemento que lo tenía al abrirse.
    Un Tab vuelve al primer campo. Se propone como primer `fix` de la 10.2.
+   Corregido en `871fb5a`, en la 10.2.
 9. Método: la sesión del ERP se cierra tras 15 minutos sin actividad y
    aterriza en el `/login` de producción. Ejecutar JavaScript no cuenta como
    actividad. Antes de medir se comprueba el origen.
@@ -3481,6 +3483,300 @@ Hallazgos de la verificación:
     «Planchas»). Ahora usa los registros base de la migración
     `20260701173000`, y explica que la fila inactiva pasa al final de la
     lista.
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-17 y comparados con git:
+
+- El cierre `d3de58e` se publicó en `staging`: CI #77 en verde (2m 55s), y
+  Vercel lo desplegó (`success` a las 15:32:44 UTC).
+- PR #23, abierto a las 15:36:00 UTC y fusionado con merge commit a las
+  15:40:44 UTC del 2026-10-17: 16 commits, de `62640e1` a `d3de58e`, y 61
+  archivos (+8.460 −1.324). Su CI, el #78, sobre `d3de58e`, terminó en verde
+  (2m 23s).
+- El merge commit `9f52808` tiene como padres `e38d633` (`main`) y `d3de58e`
+  (`staging`), y su árbol es el de `d3de58e` (`2d6f4f3e`): `main` y `staging`
+  tienen el mismo contenido. CI #79 en verde (2m 38s).
+- Vercel desplegó `9f52808` en producción al primer intento (estado «Vercel»
+  `pending` a las 15:40:48 UTC y `success` a las 15:42:06 UTC). La
+  sub-entrega no trae migraciones.
+
+### Sub-entrega 10.2 — Reportes y auditoría
+
+Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada en staging el
+2026-10-18; falta integrarla en `main`. El paso 0 (`23f2827`) registró la
+integración de la 10.1 en `main`. 10 commits, de `871fb5a` a `9d70f59`, el
+registro `0073c2b`, el `fix` `a4a5f9c` que salió de la verificación y este
+cierre:
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 871fb5a | fix | Hallazgo 8 de la 10.1: cancelar el descarte devuelve el foco al último elemento enfocado de la ventana; tras un clic fuera quedaba en `body`. `ConfirmDialog` controlada gana `returnFocusTo`. |
+| 37cc40c | test | Caso «rango invertido» en las 10 caracterizaciones y «rango de más de 366 días» en las 9 que exportan. |
+| 3331e90 | refactor | Las opciones de los filtros de financiero, mantenimiento y auditoría pasan a funciones `find*FilterOptions`. |
+| a68066b | fix | `DateRangeFields` solo valida las fechas que el campo puede mostrar (`toDateInputValue`). |
+| e66639c | fix | Con el rango invertido, las 10 pantallas no consultan los datos ni ofrecen exportar, y muestran un aviso. |
+| 683ca93 | fix | Con más de 366 días, las 9 que exportan muestran un aviso en lugar de los enlaces de exportar. |
+| e63ceae | feat | Auditoría e historial con `FilterBar` y `DateRangeFields`; auditoría pierde el `<main>` anidado. |
+| a7ff382 | feat | Rentabilidad y personal, sin `<main>` anidado. |
+| c2860bb | feat | Ventas y cobranzas, proveedores y compras y financiero. |
+| 9d70f59 | feat | Inventario, producción y mantenimiento. |
+| 0073c2b | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y capítulo de Reportes del manual. |
+| a4a5f9c | fix | Hallazgo 9 de la verificación: `DateRangeFields` toma las fechas de la URL cuando la página se vuelve a pintar sin montarse («Limpiar», Atrás, Adelante). |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
+
+Alcance: 10 pantallas. El plan de la entrega 10 decía «9 reportes, el
+historial y auditoría», pero auditoría es uno de los 9 reportes del registro.
+El panel `/dashboard/reports` no tiene filtros y no cambia.
+
+| Pantalla | Roles | Fechas en la URL | Exporta |
+|---|---|---|---|
+| Ventas y cobranzas | ADMIN y SELLER | `dateFrom`/`dateTo` | Sí |
+| Inventario | ADMIN y WORKSHOP_MASTER | `dateFrom`/`dateTo` | Sí |
+| Producción | ADMIN y WORKSHOP_MASTER | `dateFrom`/`dateTo` | Sí |
+| Mantenimiento | ADMIN y WORKSHOP_MASTER | `dateFrom`/`dateTo` | Sí |
+| Proveedores y compras | ADMIN | `dateFrom`/`dateTo` | Sí |
+| Financiero | ADMIN | `dateFrom`/`dateTo` | Sí |
+| Historial de exportaciones | ADMIN | `dateFrom`/`dateTo` | No |
+| Costos y rentabilidad | ADMIN | `from`/`to` | Sí |
+| Personal y planillas | ADMIN | `from`/`to` | Sí |
+| Auditoría | ADMIN | `from`/`to` | Sí |
+
+Decisiones del responsable (2026-10-17):
+
+- D1. Con el rango invertido en la URL, «Hasta» muestra el mensaje y la
+  pantalla muestra «Corrige el rango de fechas para ver el reporte.» en
+  lugar de los totales y las tablas. No consulta los datos, solo las
+  opciones de los filtros, y no ofrece exportar.
+- D2. La ruta de exportación conserva su 400: valida antes de escribir y no
+  registra nada. Solo se llega escribiendo la URL a mano.
+- D3. Con más de 366 días, la pantalla muestra los datos y, en lugar de los
+  botones de exportar, «Para exportar, el rango no puede superar 366 días.».
+- D4. Cada pantalla conserva sus textos. El título visible «Filtros del
+  reporte» o «Filtros del historial» pasa a ser el nombre accesible de la
+  barra.
+- La sub-entrega no se parte, y el arreglo del foco se verifica en staging
+  con ella.
+
+Diseño:
+
+- Una sola regla para la pantalla y la ruta. `isReportDateRangeInverted` y
+  `exceedsReportExportRange` (`src/lib/reports/report-filters.ts`) comparten
+  con `validateDateRange` la comparación y la cuenta de días, sobre fechas
+  interpretadas con `parseReportDate`. La comparación de texto de
+  `isDateRangeInverted` queda para el campo, que solo recibe fechas
+  `aaaa-mm-dd` válidas (`toDateInputValue`).
+- Cada consulta con opciones expone `get*FilterOptions`, que reutiliza la
+  tupla `find*FilterOptions` de su consulta de datos: las opciones no pueden
+  divergir entre los dos caminos.
+- Cada página tiene su encabezado en un objeto `pageHeader`, sus filtros en un
+  componente local `ReportFilters` (`FilterBar`, `Field` y `DateRangeFields`
+  con id explícito) y un retorno temprano para el rango invertido. Los avisos
+  son `InvertedRangeNotice` y `ExportRangeNotice` (`src/modules/reports`).
+- Foco: `useDiscardGuard` recuerda el último elemento enfocado dentro de la
+  ventana (`trackFocus` en el `onFocus` del contenido), y la confirmación de
+  descarte vuelve ahí, o a la ventana si ese elemento ya no existe.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-102-1.txt` (5
+   casos), `rojo-102-c3.txt` (15), `rojo-102-c4.txt` (20) y
+   `rojo-102-c5.txt` (18).
+2. Los cambios de snapshots se comprobaron con scripts contra copias previas:
+   - C1 solo agrega 38 entradas, y C2 no cambia ninguna.
+   - C4 cambia solo las 20 del rango invertido: las llamadas son solo las
+     de las opciones, y el HTML tiene el aviso y ningún enlace de exportar.
+   - C5 cambia solo el HTML de los 9 casos largos: el «antes», con los dos
+     enlaces cambiados por el aviso, es exactamente el «después».
+   - C6 a C9 (`verify_filters_snaps.py`) dejan idénticas las llamadas y el
+     HTML fuera de la barra, y conservan dentro las etiquetas, los campos con
+     sus valores, las opciones y los botones.
+3. Mutaciones (`tmp/e10-diff/mut_102_*.txt`): 9 de 9, 2 de 2, 5 de 5, 5 de
+   5, 6 de 6, 5 de 5, 5 de 5, 4 de 4, 4 de 4 y 4 de 4; en total, 49 de 49.
+4. Paridad nueva en `screen-parity.test.ts`: con el rango invertido y con más
+   de 366 días, las 9 pantallas que exportan no ofrecen el enlace, y la ruta
+   responde 400 sin registrar la exportación.
+5. CSS compilado: igual hasta C8. C9 quita solo `xl:col-span-5` y
+   `xl:col-span-6` (113.366 → 113.282 bytes), y el CSS anterior sin esas dos
+   reglas es el nuevo byte a byte.
+6. `npm run check` terminó con código 0 después de cada commit, con 135
+   archivos de prueba y de 2.108 a 2.189 pruebas. `npm run
+   refactor:inventory` analiza 621 archivos: 131 páginas, 120 formularios JSX
+   (eran 130) y 48 archivos de acciones.
+
+Tiempo entre commits según sus horas (incluye la preparación y la revisión
+del responsable; el commit C1 incluye la auditoría y el plan):
+
+| Commit | 0 | 1 | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Minutos | 30 | 37 | 18 | 6 | 8 | 47 | 9 | 10 | 12 | 9 | 29 |
+
+C1 a C9 suman unos 148 minutos, frente a los 151 que el plan detallado
+estimó para esos commits. El plan de la entrega 10 daba 3,3 horas a toda la
+sub-entrega; el plan detallado la recalibró a unas 4,4 horas con la
+verificación, porque la auditoría agregó la separación de las opciones, el
+`fix` de `DateRangeFields`, el límite de 366 días y la verificación del
+arreglo del foco.
+
+Hallazgos:
+
+1. `screen-parity.test.ts` compara el filtro de 4 reportes con rangos válidos
+   (los del grupo 4), no de los 9: ventas, inventario, producción,
+   proveedores y financiero no tienen esa paridad. Las pruebas nuevas de
+   rango invertido y largo sí recorren los 9. Ampliarla queda pendiente.
+2. `isDateRangeInverted` compara texto, que solo sigue el calendario con
+   ceros a la izquierda; la ruta compara fechas. Con «2026-7-5»
+   discrepaban. Ahora el campo solo recibe fechas válidas y la pantalla usa
+   la regla de la ruta.
+3. Con más de 366 días, la pantalla ofrecía exportar y la ruta respondía 400
+   con un JSON. Se corrige en `683ca93`.
+4. Seis de las nueve consultas ya componían sus opciones con funciones
+   `find*` del módulo dueño, así que la separación de las opciones fue
+   menor de lo previsto.
+5. El maestro de taller tiene permiso para los reportes de inventario y
+   mantenimiento, pero ningún enlace lo lleva a ellos: la tarjeta «Reportes
+   operativos» del inicio abre el de producción, y el panel de Reportes es
+   solo para ADMIN. Se anota para una sub-entrega de navegación.
+6. Safari no enfoca un botón al pulsarlo, así que `ConfirmActionButton`
+   devolvería el foco al elemento anterior tras «Cancelar». No se pudo
+   comprobar sin Safari.
+7. Método: la trampa de foco de Radix vuelve a enfocar la ventana cuando
+   desaparece un nodo, pero solo si el foco está en `body`. Por eso la
+   prueba del respaldo quita el campo con la confirmación abierta.
+8. Método: el borde de 366 días se escribió mal en una prueba (366 días
+   justos se admiten). La prueba de concordancia con la ruta lo contradijo y
+   Python lo confirmó. Cada regla compartida lleva una prueba «coincide con
+   la ruta».
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e102-huella`) y etiquetas `e102/`
+  (`tmp/e10-diff/e102-huella-min.js`), los ayudantes de navegación y
+  comparación (`e102-ayudantes.js`) y el medidor de tareas
+  (`e102-medidor.js`), como en la 10.1.
+- Clics y teclas reales. Las fechas se escriben con flechas y dígitos:
+  escribir texto no llena un `input type="date"`.
+- Auditoría e historial con rangos cerrados en el pasado, porque iniciar
+  sesión escribe en la bitácora.
+- Solo lectura: ninguna tarea guarda datos ni exporta (de los enlaces de
+  exportar se lee el `href`).
+
+Publicación y medición:
+
+- «Antes» el 2026-10-17, de 21:06 a 21:25 UTC, sobre `d3de58e` (`buildId`
+  `j4iKut5sUaZi1kYn7yebm`, CSS servido de 113.365 bytes, `3e6b3374…`): 16
+  capturas con ADMIN, 13 a 1281 px y 3 a 376, con el sello `c8ae572a…`,
+  igual en Python, y 4 controles.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-2.md`).
+- Push de 12 commits (`23f2827` a `0073c2b`): CI #80 en verde (3m 0s).
+  Vercel desplegó `0073c2b` (`success` a las 22:00:03 UTC) y cambió el
+  `buildId` (`GA7HaoF8ZH4YtVXNKXzx6`). El CSS servido es el predicho byte a
+  byte (113.281 bytes, `c5d15599…`): solo faltan `xl:col-span-5` y
+  `xl:col-span-6`.
+- «Después» el 2026-10-17, de 22:03 a 22:17 UTC: 16 capturas, sello
+  `37026342…`, igual en Python.
+
+Huella: las 16 cambian como se predijo, y los 3 controles (el panel de
+reportes, tipos de proveedor y la sección «Listados» de la galería) dan el
+mismo hash que en el «antes».
+
+- A 1281 px, en las 10 pantallas el principio de la página es idéntico salvo
+  el alto de 4 contenedores (y `main` → `div` en rentabilidad, personal y
+  auditoría). Cambia la barra de filtros, y el resto solo se desplaza en `y`,
+  con un delta constante por página: −2,3 px en la familia A (−16,3 en
+  proveedores y compras), +21,7 en rentabilidad y +43,7 en personal y
+  auditoría. La familia A pierde el título visible de la barra (2 elementos
+  menos en total).
+- staff-largo: lo mismo y, en el encabezado, el aviso de los 366 días en
+  lugar de los enlaces (de 354 a 353 elementos).
+- Las dos invertidas cambian enteras: la página es más corta (de 441 a 251 y
+  de 351 a 300 elementos) y, sin barra de desplazamiento, los anchos cambian
+  15 px. Su contenido lo comprueba T9.
+- A 376 px, el mismo patrón (−62,3 px en financiero y −22,3 en personal y
+  auditoría), sin desbordamiento horizontal.
+
+Tareas, con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`d3de58e`) | Después (`0073c2b`) |
+|---|---|---|
+| T9 Rango invertido por URL en financiero, auditoría y personal | Consulta: 0 filas con el mensaje de lista vacía, totales a cero (salvo los que no dependen del rango) y dos enlaces de exportar | No consulta: «Corrige el rango de fechas para ver el reporte.», sin totales ni tablas y sin enlaces; «Hasta» con `aria-invalid` y el mensaje |
+| T10 Más de 366 días en financiero (2 filas) y personal (1) | Los datos y dos enlaces de exportar | Las mismas filas y el aviso de los 366 días en lugar de los enlaces |
+| T11 Auditoría: rango al revés con teclas reales y clic en «Filtrar» | Envía y recarga con el rango invertido; foco en `body` | No envía (mismo documento); «Hasta» muestra el mensaje y recibe el foco |
+| T12 Hallazgo 8: clic fuera y Esc, en tipos de proveedor (ventana) y Clientes (panel) | Foco en `body` | Foco en el campo del nombre. «Descartar cambios» sigue devolviendo el foco a «Nuevo tipo de proveedor» y a «Nuevo cliente» |
+
+Control del «después», sin escribir: a 376 px, Tab recorre la barra de
+auditoría en orden (Buscar, Usuario, Acción, Entidad, Desde, Hasta, Filtrar,
+Limpiar), luego la tabla y «Siguiente». Cada fecha tiene 4 paradas: día, mes,
+año y el selector del navegador.
+
+La regresión del «después» y su arreglo:
+
+- Al llegar a T10 por navegación suave desde el rango invertido, personal
+  conservaba las fechas anteriores. En personal y auditoría, «Limpiar» dejaba
+  la URL limpia y los campos con las fechas viejas, que «Filtrar» volvía a
+  aplicar (hallazgo 9). La captura de staff-largo se repitió con la página
+  montada de nuevo.
+- `a4a5f9c`: la prueba nueva fallaba antes del arreglo en 4 de sus 5 casos
+  (`tmp/e10-diff/rojo-102-fix.txt`), las mutaciones dan 8 de 8
+  (`mut_102_fix.txt`), `npm run check` terminó en verde con 136 archivos y
+  2.194 pruebas, y el CSS compilado no cambia.
+- Push: CI #81 en verde (2m 22s). Vercel `success` a las 22:30:52 UTC,
+  `buildId` `KZMyuMdruOU1_UopARfPp` y el mismo CSS servido.
+- Re-verificación el 2026-10-18, de 02:51 a 02:55 UTC, con la predicción
+  escrita antes (`tmp/e10-diff/prediccion-102-fix.md`):
+  - «Limpiar» vacía las fechas en personal y auditoría, en el mismo
+    documento;
+  - Atrás las devuelve y Adelante las vacía;
+  - T10 por navegación suave muestra 2025-01-01 y 2026-10-16 sin error, 1
+    fila y el aviso de los 366 días;
+  - la huella de staff-largo llegando sin recargar desde el rango invertido
+    es la del montaje nuevo (`73f5b307…`), la misma del «después» pese al
+    cambio de día UTC.
+
+El capítulo de Reportes del manual se cotejó con staging el 2026-10-18: GET
+secuencial de las 11 páginas (el panel y las 10 pantallas) sin abrir ninguna
+exportación, y los límites de filas y las tarjetas por rol en el código.
+Coincide; solo se precisó que «Fecha desde» y «Fecha hasta» son lo habitual
+(7 de las 10 pantallas).
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER ni
+WORKSHOP_MASTER. Ninguna tarea escribió datos. Tiempos: el «antes», 19
+minutos; el «después» con sus tareas, 14; del informe de la regresión al
+commit del arreglo, unos 9; la re-verificación y el cotejo del manual, 5.
+
+Hallazgos de la verificación:
+
+9. Regresión de la 10.2, corregida en `a4a5f9c`. `DateRangeFields` guardaba
+   las fechas en un estado que solo leía la URL al montarse, y Next no vuelve
+   a montar la página cuando `next/link` cambia la URL. El componente tenía
+   el defecto desde la entrega 8 (`aada765`), pero solo lo usaba la galería:
+   antes de la 10.2, los campos de fecha de los reportes no eran controlados
+   y React actualizaba su `defaultValue`. Las caracterizaciones no podían
+   verlo, porque pintan una sola vez en el servidor.
+10. Preexistente, pendiente: un `NativeSelect` con `defaultValue` no sigue a
+    la URL tras «Limpiar». En auditoría con `accion=crear`, la acción sigue
+    en «crear» aunque la URL y la tabla ya no filtran, porque React no
+    actualiza el `defaultValue` de un `<select>`. Afecta a toda barra con
+    selects que se limpia con `next/link`, también a las de la 10.1. Se
+    propone un `fix` aparte.
+11. Preexistente (ya ocurría en el «antes», que tiene el mismo código que
+    producción), pendiente: el clic con el ratón en «Cancelar»
+    de la confirmación de descarte no la cierra, en la ventana ni en el
+    panel; `data-state` pasa de `open` a `closed` y vuelve a `open` en 14 ms.
+    Esc, Enter y «Descartar cambios» con el ratón sí funcionan, y jsdom no lo
+    reproduce. Hipótesis: la ventana trata ese clic, fuera de su árbol de
+    React, como un clic fuera y vuelve a pedir el descarte. Se arregla aparte,
+    tras el cierre de la 10.2.
+12. Método: una huella tomada tras una navegación suave puede arrastrar
+    estado del cliente. Por eso la de staff-largo se repitió montando la
+    página, y en la re-verificación las dos coinciden.
+13. Método: `javascript_tool` no puede devolver un elemento del DOM
+    («Object reference chain is too long»); las comprobaciones devuelven
+    booleanos y textos.
+14. Método: entre sesiones de la app, el panel perdió el acceso a Vercel y
+    hubo que entrar de nuevo antes de la re-verificación.
 
 ## Secuencia de próximas entregas
 
@@ -3506,7 +3802,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada en staging con CI #76, 17 de 17 huellas explicadas) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada en staging, con CI #81 verde y 16 de 16 huellas como se predijo; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3530,7 +3826,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 135 / 2.108 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 136 / 2.194 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3550,12 +3846,14 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 12 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 105 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 25 (41 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 102 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 22 (31 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 24 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 8 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
+| Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 17 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -3698,6 +3996,26 @@ Actualizado en la sub-entrega 10.1 (2026-10-16) sobre `0f968ad`:
 Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
 copias locales de conversión y formato 0 e `import` de las librerías de
 notificaciones en 2 archivos, medidos de nuevo.
+
+Actualizado en la sub-entrega 10.2 (2026-10-17) sobre `9d70f59`:
+
+- Pruebas: 135 / 2.189.
+- El `<main>` anidado baja a 102 (rentabilidad, personal y auditoría) y los
+  formularios GET a 31, con 22 combinaciones de clases: las 10 barras de los
+  reportes pasan a `FilterBar`.
+- Las dos filas nuevas se midieron sobre `d3de58e`, su línea base, y la
+  caracterización `37cc40c` fija ese comportamiento. Las pantallas con rango
+  de fechas se cuentan por nombre de parámetro, como en el plan de la
+  entrega 10: quedan 16 con `from`/`to` y 1 con `desde`/`hasta`.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0, `FieldError` 12 e `import` de las
+librerías de notificaciones en 2 archivos, medidos de nuevo.
+
+Actualizado en el cierre de la 10.2 (2026-10-18) sobre `a4a5f9c`: pruebas
+136 / 2.194 (la prueba de `DateRangeFields` en jsdom), y `npm run
+refactor:inventory` analiza 622 archivos. Las demás filas no cambian: el
+`fix` solo toca `DateRangeFields`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

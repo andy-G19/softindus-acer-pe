@@ -60,13 +60,25 @@ function buildPurchaseWhere(
   };
 }
 
+// Opciones de los filtros del reporte. Devuelve las promesas de Prisma en el
+// orden en que las compone getSuppliersPurchasesReportData.
+function findSuppliersPurchasesFilterOptions() {
+  return [findActiveSupplierOptions(), findActiveMaterialFilterOptions()] as const;
+}
+
+// Solo las opciones de los filtros: la pantalla las necesita aunque no
+// consulte los datos, con el rango de fechas invertido (entrega 10.2).
+export async function getSuppliersPurchasesReportFilterOptions() {
+  const [suppliers, materials] = await Promise.all(findSuppliersPurchasesFilterOptions());
+
+  return { suppliers, materials };
+}
+
 export async function getSuppliersPurchasesReportData(
   filters: SuppliersPurchasesReportFilters,
 ) {
   const [suppliers, materials, purchases] = await Promise.all([
-    findActiveSupplierOptions(),
-
-    findActiveMaterialFilterOptions(),
+    ...findSuppliersPurchasesFilterOptions(),
 
     prisma.compra.findMany({
       where: buildPurchaseWhere(filters),

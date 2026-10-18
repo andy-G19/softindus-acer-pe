@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, createElement as h, useEffect } from "react";
+import { act, createElement as h, useEffect, useState, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -68,6 +68,32 @@ async function type(text: string) {
   await act(async () => input.dispatchEvent(new Event("input", { bubbles: true })));
 }
 
+// Lo que hace el mousedown sobre algo que no recibe el foco: se lo quita al
+// campo y queda en body.
+function loseFocus() {
+  const active = document.activeElement;
+  if (active instanceof HTMLElement) {
+    active.blur();
+  }
+}
+
+// Clic sobre el velo, con la secuencia del navegador: pointerdown, mousedown
+// (el foco pasa a body), mouseup y click. Radix cierra la ventana modal en el
+// click, asi que la confirmacion de descarte se abre con el foco en body.
+async function clickOutside() {
+  // Radix empieza a escuchar el pointerdown fuera tras un setTimeout(0).
+  await settle();
+  const page = document.documentElement;
+  await act(async () => {
+    page.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true, cancelable: true, button: 0 }));
+    loseFocus();
+    page.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, cancelable: true, button: 0 }));
+    page.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 }));
+    page.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
+  });
+  await settle();
+}
+
 // Un formulario que usa los controles de la ventana, como lo hacen los reales.
 function Controls({ busy = false }: { busy?: boolean }) {
   const surface = useFormSurface();
@@ -80,12 +106,34 @@ function Controls({ busy = false }: { busy?: boolean }) {
     "div",
     null,
     h("input", { id: "nombre", name: "nombre", defaultValue: "" }),
+    h("input", { id: "slug", name: "slug", defaultValue: "" }),
     h("button", { type: "button", onClick: () => surface?.requestClose() }, "Cancelar formulario"),
     h("button", { type: "button", onClick: () => surface?.closeAfterSave() }, "Simular guardado"),
   );
 }
 
-async function renderDialog({ busy = false, description }: { busy?: boolean; description?: string } = {}) {
+// Un campo que desaparece mientras la confirmacion esta abierta, como cuando
+// ActionForm remonta los campos al llegar un resultado.
+function RemovableSlug({ onReady }: { onReady: (remove: () => void) => void }) {
+  const [slugShown, setSlugShown] = useState(true);
+
+  useEffect(() => {
+    onReady(() => setSlugShown(false));
+  }, [onReady]);
+
+  return h(
+    "div",
+    null,
+    h("input", { id: "nombre", name: "nombre", defaultValue: "" }),
+    slugShown ? h("input", { id: "slug", name: "slug", defaultValue: "" }) : null,
+  );
+}
+
+async function renderDialog({
+  busy = false,
+  description,
+  content,
+}: { busy?: boolean; description?: string; content?: ReactNode } = {}) {
   await act(async () =>
     root.render(
       h(FormDialog, {
@@ -94,7 +142,7 @@ async function renderDialog({ busy = false, description }: { busy?: boolean; des
         description,
         discardTitle: "¿Descartar el tipo de proveedor?",
         discardDescription: "Se perderán los datos que escribiste en esta ventana.",
-        children: h(Controls, { busy }),
+        children: content ?? h(Controls, { busy }),
       }),
     ),
   );
@@ -240,6 +288,75 @@ describe("FormDialog", () => {
     const afterDiscard = new Event("beforeunload", { cancelable: true });
     window.dispatchEvent(afterDiscard);
     expect(afterDiscard.defaultPrevented).toBe(false);
+  });
+});
+
+// Hallazgo 8 de la 10.1: la confirmacion de descarte devolvia el foco al
+// elemento que lo tenia al abrirse, y tras un clic fuera ese elemento es body.
+// Ahora lo devuelve al ultimo elemento que tuvo el foco dentro de la ventana.
+describe("FormDialog: el foco al cancelar el descarte", () => {
+  it("tras un clic fuera con cambios, Cancelar devuelve el foco al ultimo campo enfocado", async () => {
+    await renderDialog();
+    await open();
+    const slug = document.querySelector<HTMLInputElement>("#slug")!;
+    slug.focus();
+    await type("Distribuidor");
+
+    await clickOutside();
+    expect(confirmation()?.textContent).toContain("¿Descartar el tipo de proveedor?");
+    expect(document.activeElement).toBe(button("Cancelar"));
+
+    await act(async () => button("Cancelar").click());
+    await settle();
+
+    expect(confirmation()).toBeNull();
+    expect(dialog()).not.toBeNull();
+    expect(document.activeElement).toBe(slug);
+  });
+
+  it("si pulsar Cancelar del formulario no le da el foco (asi lo hace Safari), tambien vuelve al ultimo campo", async () => {
+    await renderDialog();
+    await open();
+    const slug = document.querySelector<HTMLInputElement>("#slug")!;
+    slug.focus();
+    await type("Distribuidor");
+
+    loseFocus();
+    await act(async () => button("Cancelar formulario").click());
+    await act(async () => button("Cancelar").click());
+    await settle();
+
+    expect(document.activeElement).toBe(slug);
+  });
+
+  it("si el ultimo campo enfocado ya no existe, el foco vuelve a la ventana", async () => {
+    let removeSlug = () => {};
+    await renderDialog({ content: h(RemovableSlug, { onReady: (remove) => (removeSlug = remove) }) });
+    await open();
+    document.querySelector<HTMLInputElement>("#slug")!.focus();
+    await type("Distribuidor");
+
+    await clickOutside();
+    await act(async () => removeSlug());
+    expect(document.querySelector("#slug")).toBeNull();
+    await act(async () => button("Cancelar").click());
+    await settle();
+
+    expect(document.activeElement).toBe(dialog());
+  });
+
+  it("tras un clic fuera con cambios, Descartar cierra la ventana y devuelve el foco al boton", async () => {
+    await renderDialog();
+    const trigger = await open();
+    await type("Distribuidor");
+
+    await clickOutside();
+    await act(async () => button("Descartar cambios").click());
+    await settle();
+
+    expect(confirmation()).toBeNull();
+    expect(dialog()).toBeNull();
+    expect(document.activeElement).toBe(trigger);
   });
 });
 

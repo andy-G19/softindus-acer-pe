@@ -1,5 +1,7 @@
 ﻿import { CircleDollarSign, ClipboardList, TrendingUp } from "lucide-react";
-import Link from "next/link";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +12,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -27,7 +28,10 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { buildReportExportHref } from "@/lib/report-export-link";
+import { exceedsReportExportRange, isReportDateRangeInverted } from "@/lib/reports/report-filters";
 import { getProfitabilityReportData } from "@/modules/reports/profitability/queries";
+import { ExportRangeNotice } from "@/modules/reports/export-range-notice";
+import { InvertedRangeNotice } from "@/modules/reports/inverted-range-notice";
 import {
   parseStringParam,
   type SearchParamsRecord,
@@ -41,6 +45,46 @@ function formatPercent(value: unknown) {
   return `${toNumber(value).toFixed(2)}%`;
 }
 
+type ReportFilterValues = Record<"q" | "from" | "to" | "lowMargin" | "negativeProfit", string>;
+
+// Filtros del reporte. Los pinta tambien la pantalla con el rango de fechas
+// invertido, que no consulta los datos (entrega 10.2).
+function ReportFilters({ filters }: { filters: ReportFilterValues }) {
+  const { q, from, to, lowMargin, negativeProfit } = filters;
+
+  return (
+    <FilterBar
+      action="/dashboard/reports/profitability"
+      label="Filtros de costos y rentabilidad"
+      clearHref="/dashboard/reports/profitability"
+      clearLabel="Limpiar"
+    >
+      <Field id="q" label="Buscar">
+        {(control) => (
+          <Input {...control} name="q" defaultValue={q} placeholder="Costeo, pedido, cliente, producto" />
+        )}
+      </Field>
+      <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+      <Field id="lowMargin" label="Margen">
+        {(control) => (
+          <NativeSelect {...control} name="lowMargin" defaultValue={lowMargin}>
+            <option value="">Todos los margenes</option>
+            <option value="true">Solo margen bajo</option>
+          </NativeSelect>
+        )}
+      </Field>
+      <Field id="negativeProfit" label="Utilidad">
+        {(control) => (
+          <NativeSelect {...control} name="negativeProfit" defaultValue={negativeProfit}>
+            <option value="">Toda utilidad</option>
+            <option value="true">Solo utilidad negativa</option>
+          </NativeSelect>
+        )}
+      </Field>
+    </FilterBar>
+  );
+}
+
 export default async function ProfitabilityReportPage({
   searchParams,
 }: PageProps) {
@@ -52,6 +96,28 @@ export default async function ProfitabilityReportPage({
   const to = parseStringParam(params, "to");
   const lowMargin = parseStringParam(params, "lowMargin");
   const negativeProfit = parseStringParam(params, "negativeProfit");
+  const filters = { q, from, to, lowMargin, negativeProfit };
+  const pageHeader = {
+    title: "Costos y rentabilidad",
+    description: "Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad.",
+    breadcrumbs: dashboardBreadcrumbs([
+      { label: "Reportes", href: navigationHrefs.reports },
+      { label: "Rentabilidad" },
+    ]),
+  };
+
+  // Con el rango invertido no se consultan los datos ni se ofrece exportar
+  // (entrega 10.2): solo las opciones de los filtros y el aviso.
+  if (isReportDateRangeInverted(from, to)) {
+    return (
+      <div className="space-y-6">
+        <PageHeader {...pageHeader} />
+        <ReportFilters filters={filters} />
+        <InvertedRangeNotice />
+      </div>
+    );
+  }
+
   const costings = await getProfitabilityReportData({
     q,
     lowMargin,
@@ -88,69 +154,33 @@ export default async function ProfitabilityReportPage({
     negativeProfit,
   };
 
+  const exportRangeExceeded = exceedsReportExportRange(from, to);
+
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
-        title="Costos y rentabilidad"
-        description="Analiza costeos, márgenes aplicados, utilidad estimada y alertas de baja rentabilidad."
-        breadcrumbs={dashboardBreadcrumbs([
-          { label: "Reportes", href: navigationHrefs.reports },
-          { label: "Rentabilidad" },
-        ])}
+        {...pageHeader}
         actions={
-          <>
-            <Button variant="outline" asChild>
-              <a href={buildReportExportHref("profitability", exportParams)}>
-                Exportar Excel
-              </a>
-            </Button>
-            <Button asChild>
-              <a href={buildReportExportHref("profitability", exportParams, "pdf")}>
-                Exportar PDF
-              </a>
-            </Button>
-          </>
+          exportRangeExceeded ? (
+            <ExportRangeNotice />
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <a href={buildReportExportHref("profitability", exportParams)}>
+                  Exportar Excel
+                </a>
+              </Button>
+              <Button asChild>
+                <a href={buildReportExportHref("profitability", exportParams, "pdf")}>
+                  Exportar PDF
+                </a>
+              </Button>
+            </>
+          )
         }
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <form className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Costeo, pedido, cliente, producto" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="from">Desde</Label>
-              <Input id="from" name="from" type="date" defaultValue={from} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="to">Hasta</Label>
-              <Input id="to" name="to" type="date" defaultValue={to} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lowMargin">Margen</Label>
-              <NativeSelect id="lowMargin" name="lowMargin" defaultValue={lowMargin}>
-                <option value="">Todos los margenes</option>
-                <option value="true">Solo margen bajo</option>
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="negativeProfit">Utilidad</Label>
-              <NativeSelect id="negativeProfit" name="negativeProfit" defaultValue={negativeProfit}>
-                <option value="">Toda utilidad</option>
-                <option value="true">Solo utilidad negativa</option>
-              </NativeSelect>
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit">Filtrar</Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/reports/profitability">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <ReportFilters filters={filters} />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <KpiCard title="Costeos" value={costings.length.toString()} description="Registros listados." tone="info" icon={ClipboardList} />
@@ -225,7 +255,7 @@ export default async function ProfitabilityReportPage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

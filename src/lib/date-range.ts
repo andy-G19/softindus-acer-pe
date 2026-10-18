@@ -13,3 +13,24 @@ export const DATE_RANGE_INVERTED_MESSAGE =
 export function isDateRangeInverted(from: string | undefined, to: string | undefined) {
   return Boolean(from && to && from > to);
 }
+
+/**
+ * El valor que conserva un input type="date": "aaaa-mm-dd" con una fecha que
+ * existe. Cualquier otro ("2026-7-5", "2026-02-30") lo deja vacio el
+ * navegador, asi que un rango no se valida con el (entrega 10.2).
+ */
+export function toDateInputValue(value: string | undefined) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value ?? "");
+
+  if (!match) {
+    return "";
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const exists = year > 0 && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+
+  return exists ? match[0] : "";
+}

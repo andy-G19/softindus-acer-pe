@@ -87,20 +87,18 @@ exports[`/dashboard/reports/production > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="productId">Producto</label>
 <select id="productId" name="productId">
@@ -126,11 +124,9 @@ exports[`/dashboard/reports/production > maestro de taller > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/production">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -362,20 +358,18 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="productId">Producto</label>
 <select id="productId" name="productId">
@@ -401,11 +395,9 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/production">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -551,6 +543,387 @@ exports[`/dashboard/reports/production > orden retrasada sin cliente, ruta ni av
 }
 `;
 
+exports[`/dashboard/reports/production > rango de mas de 366 dias > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": {
+      "include": {
+        "avance_orden": {
+          "select": {
+            "estado_etapa": true,
+            "porcentaje_avance": true,
+          },
+        },
+        "cliente": true,
+        "producto": true,
+        "ruta_fabricacion": true,
+      },
+      "orderBy": [
+        {
+          "fecha_inicio": "desc",
+        },
+        {
+          "fecha_registro": "desc",
+        },
+      ],
+      "take": 100,
+      "where": {
+        "fecha_inicio": {
+          "gte": 2025-01-01T00:00:00.000Z,
+          "lt": 2026-08-01T00:00:00.000Z,
+        },
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/production > rango de mas de 366 dias > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Producción</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de producción</h1>
+<p>Consulta órdenes de trabajo por rango de fechas, producto, estado y código de orden. Este reporte permite evaluar cumplimiento, cantidad fabricada, avance y retrasos.</p>
+</div>
+</div>
+<div>
+<p>Para exportar, el rango no puede superar 366 días.</p>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2025-01-01"/>
+</div>
+<div>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2025-01-01" name="dateTo" value="2026-07-31"/>
+</div>
+</fieldset>
+<div>
+<label for="productId">Producto</label>
+<select id="productId" name="productId">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_proceso">En proceso</option>
+<option value="pausada">Pausada</option>
+<option value="finalizada">Finalizada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="orderId">Código de orden</label>
+<input type="text" id="orderId" placeholder="Ej: OTR00000001" name="orderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
+</div>
+</form>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes encontradas</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Cantidad de Órdenes según los filtros aplicados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes activas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Pendientes, en proceso o pausadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes finalizadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Órdenes marcadas como finalizadas.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Órdenes retrasadas</div>
+</div>
+</div>
+<div>
+<p>0</p>
+<p>Órdenes activas con fecha estimada vencida.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Cantidad total</div>
+</div>
+</div>
+<div>
+<p>34.00</p>
+<p>Suma de cantidades planificadas a fabricar.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Resultado del reporte</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Producto</th>
+<th>Cliente</th>
+<th>Tipo</th>
+<th>Cantidad</th>
+<th>Inicio</th>
+<th>Entrega estimada</th>
+<th>Estado</th>
+<th>Avance</th>
+<th>Ruta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-1">id_orden_trabajo-1</a>
+</td>
+<td>nombre_producto-1</td>
+<td>nombre_razon_social-1</td>
+<td>tipo_produccion-1</td>
+<td>11.50</td>
+<td>01/07/2026</td>
+<td>
+<div>
+<p>01/07/2026</p>
+</div>
+</td>
+<td>estado-1</td>
+<td>17.00%</td>
+<td>nombre_ruta-1</td>
+</tr>
+<tr>
+<td>
+<a href="/dashboard/production/work-orders/id_orden_trabajo-2">id_orden_trabajo-2</a>
+</td>
+<td>nombre_producto-2</td>
+<td>nombre_razon_social-2</td>
+<td>tipo_produccion-2</td>
+<td>22.50</td>
+<td>02/07/2026</td>
+<td>
+<div>
+<p>-</p>
+</div>
+</td>
+<td>estado-2</td>
+<td>17.00%</td>
+<td>nombre_ruta-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Se muestran como máximo 100 Órdenes para mantener una consulta rápida. En la siguiente subfase agregaremos exportación para generar archivos completos.</p>
+</div>
+</div>
+<section>
+<p>Promedio general de avance del reporte: <span>17.00%</span>. Este valor se calcula usando los avances registrados por etapa en cada orden de trabajo.</p>
+</section>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/reports/production > rango invertido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "id_producto": true,
+        "nombre_producto": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/reports/production > rango invertido > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/reports">Reportes</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Producción</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Reporte de producción</h1>
+<p>Consulta órdenes de trabajo por rango de fechas, producto, estado y código de orden. Este reporte permite evaluar cumplimiento, cantidad fabricada, avance y retrasos.</p>
+</div>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-31"/>
+</div>
+<div>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="dateTo" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+</div>
+</fieldset>
+<div>
+<label for="productId">Producto</label>
+<select id="productId" name="productId">
+<option value="" selected="">Todos los productos</option>
+<option value="id_producto-1">nombre_producto-1</option>
+<option value="id_producto-2">nombre_producto-2</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="en_proceso">En proceso</option>
+<option value="pausada">Pausada</option>
+<option value="finalizada">Finalizada</option>
+<option value="anulada">Anulada</option>
+</select>
+</div>
+<div>
+<label for="orderId">Código de orden</label>
+<input type="text" id="orderId" placeholder="Ej: OTR00000001" name="orderId" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Aplicar filtros</button>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
+</div>
+</form>
+<div role="alert">
+<div>Corrige el rango de fechas para ver el reporte.</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/reports/production > sin filtros > llamadas 1`] = `
 [
   {
@@ -638,20 +1011,18 @@ exports[`/dashboard/reports/production > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="productId">Producto</label>
 <select id="productId" name="productId">
@@ -677,11 +1048,9 @@ exports[`/dashboard/reports/production > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/production">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -913,20 +1282,18 @@ exports[`/dashboard/reports/production > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value=""/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value=""/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" name="dateTo" value=""/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value=""/>
-</div>
+</fieldset>
 <div>
 <label for="productId">Producto</label>
 <select id="productId" name="productId">
@@ -952,11 +1319,9 @@ exports[`/dashboard/reports/production > sin resultados > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/production">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -1147,20 +1512,18 @@ exports[`/dashboard/reports/production > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
+<form role="search" aria-label="Filtros del reporte" action="/dashboard/reports/production" method="GET">
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<div>Filtros del reporte</div>
+<label for="fecha-desde">Fecha desde</label>
+<input type="date" id="fecha-desde" name="dateFrom" value="2026-07-01"/>
 </div>
 <div>
-<form>
-<div>
-<label for="dateFrom">Fecha desde</label>
-<input type="date" id="dateFrom" name="dateFrom" value="2026-07-01"/>
+<label for="fecha-hasta">Fecha hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="dateTo" value="2026-07-31"/>
 </div>
-<div>
-<label for="dateTo">Fecha hasta</label>
-<input type="date" id="dateTo" name="dateTo" value="2026-07-31"/>
-</div>
+</fieldset>
 <div>
 <label for="productId">Producto</label>
 <select id="productId" name="productId">
@@ -1186,11 +1549,9 @@ exports[`/dashboard/reports/production > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Aplicar filtros</button>
-<a data-variant="outline" href="/dashboard/reports/production">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/reports/production">Limpiar filtros</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>

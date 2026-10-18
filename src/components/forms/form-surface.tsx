@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type FocusEvent } from "react";
 
 import { ConfirmDialog } from "@/components/notifications/confirm-dialog";
 import type { FormActionState } from "@/lib/action-result";
@@ -45,10 +45,11 @@ type DiscardGuardOptions = {
 
 /**
  * Cambios pendientes y guarda de ocupado de una ventana con formulario.
- * La ventana llama a markDirty(true) en cada evento input y a
- * controls.requestClose() cuando se intenta cerrar (X, Esc, el velo o
- * Cancelar); pinta DiscardConfirmDialog con discardDialog. Con cambios,
- * recargar o salir de la pagina lo pregunta el navegador (beforeunload).
+ * La ventana llama a markDirty(true) en cada evento input, a trackFocus en el
+ * onFocus de su contenido y a controls.requestClose() cuando se intenta
+ * cerrar (X, Esc, el velo o Cancelar); pinta DiscardConfirmDialog con
+ * discardDialog. Con cambios, recargar o salir de la pagina lo pregunta el
+ * navegador (beforeunload).
  */
 export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
   const [dirty, setDirty] = useState(false);
@@ -59,6 +60,14 @@ export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
   const dirtyRef = useRef(false);
   const busyRef = useRef(false);
   const onLeaveRef = useRef(onLeave);
+  // La ventana y el ultimo elemento que tuvo el foco dentro de ella. Un clic
+  // fuera deja el foco en body antes de que Radix cierre (en el click), y
+  // Safari no enfoca el boton Cancelar al pulsarlo: el foco que habia al
+  // abrir la confirmacion no dice donde estaba el usuario (hallazgo 8 de la
+  // 10.1). El onFocus de React se propaga como focusin, y la confirmacion es
+  // hermana de la ventana en el arbol de React, asi que no cuenta.
+  const surfaceRef = useRef<HTMLElement | null>(null);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     onLeaveRef.current = onLeave;
@@ -103,6 +112,22 @@ export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
     [markDirty],
   );
 
+  const trackFocus = useCallback((event: FocusEvent<HTMLElement>) => {
+    surfaceRef.current = event.currentTarget;
+    if (event.target instanceof HTMLElement) {
+      lastFocusRef.current = event.target;
+    }
+  }, []);
+
+  // Cancelar el descarte vuelve al ultimo elemento enfocado de la ventana; si
+  // ya no esta en ella (por ejemplo, ActionForm remonto los campos), a la
+  // ventana misma, como hace Radix cuando desaparece el elemento enfocado.
+  const returnFocusTo = useCallback(() => {
+    const surface = surfaceRef.current;
+    const last = lastFocusRef.current;
+    return last && surface?.contains(last) ? last : surface;
+  }, []);
+
   function discard() {
     markDirty(false);
     onLeaveRef.current("closed");
@@ -111,7 +136,8 @@ export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
   return {
     controls,
     markDirty,
-    discardDialog: { open: confirmOpen, onOpenChange: setConfirmOpen, onConfirm: discard },
+    trackFocus,
+    discardDialog: { open: confirmOpen, onOpenChange: setConfirmOpen, onConfirm: discard, returnFocusTo },
   };
 }
 
@@ -119,6 +145,8 @@ type DiscardConfirmDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
+  /** A donde vuelve el foco al cancelar: lo da useDiscardGuard. */
+  returnFocusTo: () => HTMLElement | null;
   /** Pregunta con la entidad: "¿Descartar el cliente nuevo?". */
   title: string;
   /** Consecuencia: que se pierde. */
@@ -126,11 +154,19 @@ type DiscardConfirmDialogProps = {
 };
 
 /** Confirmacion de descarte de una ventana con formulario (controlada, sin disparador). */
-export function DiscardConfirmDialog({ open, onOpenChange, onConfirm, title, description }: DiscardConfirmDialogProps) {
+export function DiscardConfirmDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+  returnFocusTo,
+  title,
+  description,
+}: DiscardConfirmDialogProps) {
   return (
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
+      returnFocusTo={returnFocusTo}
       variant="destructive"
       title={title}
       description={description}

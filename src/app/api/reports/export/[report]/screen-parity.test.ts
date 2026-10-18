@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { REPORT_REGISTRY, type ReportKey } from "@/lib/reports/report-registry";
 import {
   characterizeHandler,
   characterizePage,
@@ -375,4 +376,121 @@ describe("paridad entre pantalla y exportacion", () => {
       });
     }
   });
+});
+
+// Entrega 10.2: con el rango invertido, la pantalla no consulta los datos ni
+// ofrece exportar, y la ruta rechaza el mismo rango con un 400 sin registrar
+// la exportacion. Las 9 pantallas que exportan, con los nombres de fecha de
+// su registro.
+const EXPORTING_SCREENS: { report: ReportKey; route: string; load: PageLoader }[] = [
+  {
+    report: "production",
+    route: "/dashboard/reports/production",
+    load: () => import("@/app/(dashboard)/dashboard/reports/production/page"),
+  },
+  {
+    report: "inventory",
+    route: "/dashboard/reports/inventory",
+    load: () => import("@/app/(dashboard)/dashboard/reports/inventory/page"),
+  },
+  {
+    report: "sales-collections",
+    route: "/dashboard/reports/sales-collections",
+    load: () => import("@/app/(dashboard)/dashboard/reports/sales-collections/page"),
+  },
+  {
+    report: "suppliers-purchases",
+    route: "/dashboard/reports/suppliers-purchases",
+    load: () => import("@/app/(dashboard)/dashboard/reports/suppliers-purchases/page"),
+  },
+  {
+    report: "financial",
+    route: "/dashboard/reports/financial",
+    load: () => import("@/app/(dashboard)/dashboard/reports/financial/page"),
+  },
+  {
+    report: "maintenance",
+    route: "/dashboard/reports/maintenance",
+    load: () => import("@/app/(dashboard)/dashboard/reports/maintenance/page"),
+  },
+  {
+    report: "profitability",
+    route: "/dashboard/reports/profitability",
+    load: () => import("@/app/(dashboard)/dashboard/reports/profitability/page"),
+  },
+  {
+    report: "staff",
+    route: "/dashboard/reports/staff",
+    load: () => import("@/app/(dashboard)/dashboard/reports/staff/page"),
+  },
+  {
+    report: "audit",
+    route: "/dashboard/audit",
+    load: () => import("@/app/(dashboard)/dashboard/audit/page"),
+  },
+];
+
+describe("rango invertido: la pantalla no exporta y la ruta lo rechaza", () => {
+  preloadPages(loadRoute, ...EXPORTING_SCREENS.map((screen) => screen.load));
+
+  for (const screen of EXPORTING_SCREENS) {
+    it(`${screen.report}: sin enlace de exportar en la pantalla y 400 en la ruta`, async () => {
+      const { from, to } = REPORT_REGISTRY[screen.report].dateParams;
+      const searchParams = { [from]: "2026-07-31", [to]: "2026-07-01" };
+      const page = await characterizePage(
+        screen.load,
+        { name: "rango invertido", searchParams },
+        screen.route,
+      );
+
+      expect(page.html).toContain("Corrige el rango de fechas para ver el reporte.");
+      expect(page.html).not.toContain("/api/reports/export/");
+
+      const query = new URLSearchParams({ ...searchParams, fileFormat: "excel" }).toString();
+      const { status, calls } = await runExport(
+        screen.report,
+        `/api/reports/export/${screen.report}?${query}`,
+      );
+      const exportLogged = calls.some(
+        (call) => isPrismaCall(call) && call.prisma.startsWith("exportacion_datos."),
+      );
+
+      expect(status).toBe(400);
+      expect(exportLogged).toBe(false);
+    });
+  }
+});
+
+// Entrega 10.2: con un rango de mas de 366 dias la pantalla muestra los datos
+// pero no ofrece exportar, porque la ruta lo rechaza con un 400.
+describe("rango de mas de 366 dias: la pantalla no exporta y la ruta lo rechaza", () => {
+  preloadPages(loadRoute, ...EXPORTING_SCREENS.map((screen) => screen.load));
+
+  for (const screen of EXPORTING_SCREENS) {
+    it(`${screen.report}: sin enlace de exportar en la pantalla y 400 en la ruta`, async () => {
+      const { from, to } = REPORT_REGISTRY[screen.report].dateParams;
+      const searchParams = { [from]: "2025-01-01", [to]: "2026-07-31" };
+      const page = await characterizePage(
+        screen.load,
+        { name: "rango de mas de 366 dias", searchParams },
+        screen.route,
+      );
+
+      expect(page.html).toContain("Para exportar, el rango no puede superar 366 días.");
+      expect(page.html).not.toContain("Corrige el rango de fechas para ver el reporte.");
+      expect(page.html).not.toContain("/api/reports/export/");
+
+      const query = new URLSearchParams({ ...searchParams, fileFormat: "excel" }).toString();
+      const { status, calls } = await runExport(
+        screen.report,
+        `/api/reports/export/${screen.report}?${query}`,
+      );
+      const exportLogged = calls.some(
+        (call) => isPrismaCall(call) && call.prisma.startsWith("exportacion_datos."),
+      );
+
+      expect(status).toBe(400);
+      expect(exportLogged).toBe(false);
+    });
+  }
 });

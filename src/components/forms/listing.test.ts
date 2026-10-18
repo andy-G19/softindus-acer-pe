@@ -98,6 +98,24 @@ describe("DateRangeFields", () => {
     expect(html).not.toContain('aria-invalid="');
     expect(html).not.toContain(DATE_RANGE_INVERTED_MESSAGE);
   });
+
+  // Entrega 10.2: el navegador deja vacio un campo de fecha cuyo valor no es
+  // "aaaa-mm-dd" con una fecha que existe; el rango no se valida con ese
+  // valor, que el campo no muestra.
+  it.each([
+    ["una fecha sin ceros en Desde", "2026-7-5", "2026-07-01", "", "2026-07-01"],
+    ["un dia que no existe en Desde", "2026-02-30", "2026-02-01", "", "2026-02-01"],
+    ["una fecha sin ceros en Hasta", "2026-10-13", "2026-1-05", "2026-10-13", ""],
+  ])("con %s no marca el rango", (_case, defaultFrom, defaultTo, shownFrom, shownTo) => {
+    const html = render(h(DateRangeFields, { id: "rango", defaultFrom, defaultTo }));
+
+    expect(html).not.toContain('aria-invalid="');
+    expect(html).not.toContain(DATE_RANGE_INVERTED_MESSAGE);
+    expect(input(html, "from")).toContain(`value="${shownFrom}"`);
+    expect(input(html, "to")).toContain(`value="${shownTo}"`);
+    expect(input(html, "to")).toContain(shownFrom ? `min="${shownFrom}"` : 'name="to"');
+    expect(input(html, "to").includes("min=")).toBe(Boolean(shownFrom));
+  });
 });
 
 describe("TableLoadingRows", () => {
