@@ -3503,11 +3503,11 @@ Datos leídos de la API de GitHub el 2026-10-17 y comparados con git:
 
 ### Sub-entrega 10.2 — Reportes y auditoría
 
-Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada en staging el
-2026-10-18; falta integrarla en `main`. El paso 0 (`23f2827`) registró la
-integración de la 10.1 en `main`. 10 commits, de `871fb5a` a `9d70f59`, el
-registro `0073c2b`, el `fix` `a4a5f9c` que salió de la verificación y este
-cierre:
+Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada el 2026-10-18. El paso
+0 (`23f2827`) registró la integración de la 10.1 en `main`. 10 commits, de
+`871fb5a` a `9d70f59`, el registro `0073c2b`, el `fix` `a4a5f9c` que salió de
+la verificación y el cierre `41c35cd` (CI #82 en verde). Integrada en `main`
+con el PR #24 (merge commit `9dc6dd9`, CI #84 en verde):
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3523,7 +3523,7 @@ cierre:
 | 9d70f59 | feat | Inventario, producción y mantenimiento. |
 | 0073c2b | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y capítulo de Reportes del manual. |
 | a4a5f9c | fix | Hallazgo 9 de la verificación: `DateRangeFields` toma las fechas de la URL cuando la página se vuelve a pintar sin montarse («Limpiar», Atrás, Adelante). |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
+| 41c35cd | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
 
 Alcance: 10 pantallas. El plan de la entrega 10 decía «9 reportes, el
 historial y auditoría», pero auditoría es uno de los 9 reportes del registro.
@@ -3778,6 +3778,23 @@ Hallazgos de la verificación:
 14. Método: entre sesiones de la app, el panel perdió el acceso a Vercel y
     hubo que entrar de nuevo antes de la re-verificación.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-18 y comparados con git:
+
+- El cierre `41c35cd` se publicó en `staging`: CI #82 en verde (2m 58s), y
+  Vercel lo desplegó (`success` a las 03:12:56 UTC).
+- PR #24, abierto a las 03:17:48 UTC y fusionado con merge commit a las
+  03:21:51 UTC del 2026-10-18: 14 commits, de `23f2827` a `41c35cd`, y 62
+  archivos (+7.783 −1.566). Su CI, el #83, sobre `41c35cd`, terminó en verde
+  (2m 51s).
+- El merge commit `9dc6dd9` tiene como padres `9f52808` (`main`) y `41c35cd`
+  (`staging`), y su árbol es el de `41c35cd` (`569d259c`): `main` y `staging`
+  tienen el mismo contenido. CI #84 en verde (1m 54s).
+- Vercel desplegó `9dc6dd9` en producción al primer intento (estado «Vercel»
+  `pending` a las 03:21:57 UTC y `success` a las 03:23:20 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3802,7 +3819,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada en staging, con CI #81 verde y 16 de 16 huellas como se predijo; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
