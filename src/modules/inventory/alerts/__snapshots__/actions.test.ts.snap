@@ -1,0 +1,147 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`attendStockAlertAction > ADMIN atiende una alerta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > ADMIN atiende una alerta activa > resultado 1`] = `"redirect:/dashboard/inventory/alerts?toast=stock-alert-attended"`;
+
+exports[`attendStockAlertAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`attendStockAlertAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`attendStockAlertAction > la alerta no existe: lanza un error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > la alerta no existe: lanza un error > resultado 1`] = `"error: La alerta seleccionada no existe."`;
+
+exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > sin id lanza un error sin tocar Prisma > resultado 1`] = `"error: La alerta es obligatoria."`;
+
+exports[`attendStockAlertAction > una alerta ya atendida se vuelve a atender: cambia quien y cuando > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.update",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > una alerta ya atendida se vuelve a atender: cambia quien y cuando > resultado 1`] = `"redirect:/dashboard/inventory/alerts?toast=stock-alert-attended"`;
