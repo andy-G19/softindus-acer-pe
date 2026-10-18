@@ -129,7 +129,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > llamadas
 
 exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -160,7 +160,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value="plancha"/>
@@ -199,8 +199,6 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -270,7 +268,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 <a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -360,7 +358,7 @@ exports[`/dashboard/inventory/materials > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -392,7 +390,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -431,8 +429,6 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -472,11 +468,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -498,11 +490,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -516,8 +504,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -595,7 +582,7 @@ exports[`/dashboard/inventory/materials > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -627,7 +614,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -666,8 +653,6 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -707,11 +692,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -733,11 +714,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -751,8 +728,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/materials?page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -822,7 +798,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > ll
 
 exports[`/dashboard/inventory/materials > stock critico paginado en memoria > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -854,7 +830,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -893,8 +869,6 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -934,11 +908,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -952,8 +922,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <a data-variant="outline" href="/dashboard/inventory/materials?stock=critical&amp;pageSize=1&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1023,7 +992,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1055,7 +1024,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -1094,8 +1063,6 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -1136,7 +1103,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

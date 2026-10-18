@@ -1674,10 +1674,10 @@ exports[`createMaterialAction > una carrera por el nombre (P2002 al crear) revie
 }
 `;
 
-exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1685,12 +1685,23 @@ exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (r
 ]
 `;
 
-exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar materiales.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1741,12 +1752,49 @@ exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`]
 ]
 `;
 
-exports[`toggleMaterialStatusAction > activa un material inactivo > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-activated"`;
+exports[`toggleMaterialStatusAction > activa un material inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1764,15 +1812,37 @@ exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna f
     "fueraDeTransaccion": true,
     "prisma": "material.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
 ]
 `;
 
-exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1823,12 +1893,25 @@ exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`]
 ]
 `;
 
-exports[`toggleMaterialStatusAction > inactiva un material activo > resultado 1`] = `"redirect:/dashboard/inventory/materials?toast=material-deactivated"`;
+exports[`toggleMaterialStatusAction > inactiva un material activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1846,15 +1929,37 @@ exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta in
     "fueraDeTransaccion": true,
     "prisma": "material.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
 ]
 `;
 
-exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
+exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleMaterialStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1862,7 +1967,18 @@ exports[`toggleMaterialStatusAction > sin id vuelve al listado sin tocar Prisma 
 ]
 `;
 
-exports[`toggleMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/materials"`;
+exports[`toggleMaterialStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateMaterialAction > ADMIN actualiza los datos sin tocar el stock > llamadas 1`] = `
 [

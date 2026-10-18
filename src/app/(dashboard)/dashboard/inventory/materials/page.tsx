@@ -1,18 +1,15 @@
 import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
-import {
-  RowActions,
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -31,7 +28,9 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleMaterialStatusAction } from "@/modules/inventory/materials/actions";
+import { MaterialStatusButton } from "@/modules/inventory/materials/material-status-button";
 import { getMaterialListData } from "@/modules/inventory/materials/queries";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 
 type MaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -83,7 +82,7 @@ export default async function MaterialsPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Materiales e insumos"
         description="Consulta stock actual, stock reservado, stock mínimo y costo vigente."
@@ -110,69 +109,61 @@ export default async function MaterialsPage({
         }
       />
 
-      <form
-        action="/dashboard/inventory/materials"
-        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))_auto_auto]"
+      <FilterBar
+        action={navigationHrefs.materials}
+        label="Filtros de materiales"
+        clearHref={navigationHrefs.materials}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar material..." />
-        </div>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar material..." />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="category">Categoría</Label>
-          <NativeSelect id="category" name="category" defaultValue={category}>
-            <option value="">Todas las categorías</option>
-            {categories.map((item) => (
-              <option key={item.slug} value={item.slug}>
-                {item.nombre}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="category" label="Categoría">
+          {(control) => (
+            <NativeSelect {...control} name="category" defaultValue={category}>
+              <option value="">Todas las categorías</option>
+              {categories.map((item) => (
+                <option key={item.slug} value={item.slug}>
+                  {item.nombre}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="unit">Unidad</Label>
-          <NativeSelect id="unit" name="unit" defaultValue={unit}>
-            <option value="">Todas las unidades</option>
-            {units.map((item) => (
-              <option key={item.unidad_medida} value={item.unidad_medida}>
-                {item.unidad_medida}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="unit" label="Unidad">
+          {(control) => (
+            <NativeSelect {...control} name="unit" defaultValue={unit}>
+              <option value="">Todas las unidades</option>
+              {units.map((item) => (
+                <option key={item.unidad_medida} value={item.unidad_medida}>
+                  {item.unidad_medida}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </NativeSelect>
-        </div>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="stock">Stock</Label>
-          <NativeSelect id="stock" name="stock" defaultValue={stock}>
-            <option value="">Todo el stock</option>
-            <option value="critical">Críticos</option>
-            <option value="ok">No críticos</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="clear" className="w-full" asChild>
-            <Link href="/dashboard/inventory/materials">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="stock" label="Stock">
+          {(control) => (
+            <NativeSelect {...control} name="stock" defaultValue={stock}>
+              <option value="">Todo el stock</option>
+              <option value="critical">Críticos</option>
+              <option value="ok">No críticos</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -245,12 +236,11 @@ export default async function MaterialsPage({
                           )}
                         />
 
-                        <RowToggleStatusButton
+                        <MaterialStatusButton
+                          material={material}
                           action={toggleMaterialStatusAction}
-                          hiddenFieldName="id_material"
-                          hiddenFieldValue={material.id_material}
-                          isActive={material.estado}
-                          sendsRequestedStatus
+                          activatedNotification={inventoryNotifications["material-activated"]}
+                          deactivatedNotification={inventoryNotifications["material-deactivated"]}
                         />
                       </RowActions>
                     ) : (
@@ -282,6 +272,6 @@ export default async function MaterialsPage({
         searchParams={params}
         itemLabel="materiales"
       />
-    </main>
+    </div>
   );
 }

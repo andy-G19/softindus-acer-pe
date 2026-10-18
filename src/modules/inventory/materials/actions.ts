@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import {
   materialSchema,
   materialUpdateSchema,
@@ -34,14 +38,8 @@ export type MaterialFormState = FormActionState<MaterialFormValues, { id_materia
 const INVENTORY_PATH = "/dashboard/inventory";
 const MATERIALS_PATH = "/dashboard/inventory/materials";
 
-// El cambio de estado sigue redirigiendo (y negando con requireRole) hasta que
-// pase a ConfirmActionButton.
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
-
-// El formulario niega el permiso con un error dentro de el, sin redirigir.
-async function getMaterialFormSession() {
+// El formulario y la fila niegan el permiso con un error, sin redirigir.
+async function getMaterialSession() {
   return getAuthorizedSession(["ADMIN"]);
 }
 
@@ -142,7 +140,7 @@ export async function createMaterialAction(
   formData: FormData,
 ): Promise<MaterialFormState> {
   const values = getMaterialFormValues(formData);
-  const session = await getMaterialFormSession();
+  const session = await getMaterialSession();
 
   if (!session) {
     return materialError(values, "No tienes permisos para registrar materiales.");
@@ -278,7 +276,7 @@ export async function updateMaterialAction(
   formData: FormData,
 ): Promise<MaterialFormState> {
   const values = getMaterialFormValues(formData);
-  const session = await getMaterialFormSession();
+  const session = await getMaterialSession();
 
   if (!session) {
     return materialError(values, "No tienes permisos para actualizar materiales.");
@@ -373,19 +371,33 @@ export async function updateMaterialAction(
   return materialSaved(values, idMaterial);
 }
 
-export async function toggleMaterialStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const idMaterial = formData.get("id_material")?.toString();
+// Activar o inactivar desde la fila (ConfirmActionButton): devuelve el
+// resultado en lugar de redirigir, y un error (sin permiso, ya tenia ese estado
+// o no existe) queda en la confirmacion.
+export async function toggleMaterialStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idMaterial = formData.get("id_material")?.toString().trim() ?? "";
+  const session = await getMaterialSession();
+
+  if (!session) {
+    return statusToggleError(idMaterial, "No tienes permisos para activar o inactivar materiales.");
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idMaterial || nextStatus === null) {
-    redirect(MATERIALS_PATH);
+  if (!idMaterial) {
+    return statusToggleError(idMaterial, "El material no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idMaterial, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si el material tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.material.updateMany({
     where: {
       id_material: idMaterial,
@@ -396,10 +408,6 @@ export async function toggleMaterialStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(MATERIALS_PATH);
-  }
-
   const material = await prisma.material.findUnique({
     where: {
       id_material: idMaterial,
@@ -408,6 +416,16 @@ export async function toggleMaterialStatusAction(formData: FormData) {
       nombre_material: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idMaterial,
+      material
+        ? `El material ya estaba ${nextStatus ? "activo" : "inactivo"}.`
+        : "El material no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -421,7 +439,6 @@ export async function toggleMaterialStatusAction(formData: FormData) {
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(
-    `${MATERIALS_PATH}?toast=${nextStatus ? "material-activated" : "material-deactivated"}`,
-  );
+
+  return statusToggleDone(idMaterial, nextStatus);
 }

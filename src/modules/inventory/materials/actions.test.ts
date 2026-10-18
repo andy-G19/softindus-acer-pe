@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   createMaterialAction,
   toggleMaterialStatusAction,
@@ -255,6 +256,7 @@ const createWith = (fields: FormFields, data: DataOverrides = {}) => ({
 
 const create = (formData: FormData) => createMaterialAction(initialState, formData);
 const update = (formData: FormData) => updateMaterialAction(initialState, formData);
+const toggleStatus = (formData: FormData) => toggleMaterialStatusAction({ status: "idle" }, formData);
 
 defineCases("createMaterialAction", create, [
   { name: "stock bajo el minimo: crea el material, el kardex inicial y la alerta", ...createWith({}) },
@@ -404,7 +406,10 @@ describe("toggleMaterialStatusAction fija el estado pedido", () => {
   }
 
   const toggle = (fields: FormFields, data: DataOverrides) =>
-    runAction(toggleMaterialStatusAction, { name: "", form: fields, data });
+    runAction(toggleStatus, { name: "", form: fields, data });
+
+  // El resultado que la accion devuelve a ConfirmActionButton.
+  const resultOf = (outcome: unknown) => (outcome as { estado: StatusToggleState }).estado;
 
   it("inactivar compara y fija el estado en una sola escritura", async () => {
     const { calls, outcome } = await toggle({ id_material: MATERIAL, estado: "false" }, materialLookup({ estado: true }));
@@ -416,7 +421,7 @@ describe("toggleMaterialStatusAction fija el estado pedido", () => {
       }),
     ]);
     expect(auditsOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=material-deactivated");
+    expect(resultOf(outcome)).toMatchObject({ status: "success", data: { estado: false } });
   });
 
   it("pedir inactivar un material que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
@@ -427,7 +432,7 @@ describe("toggleMaterialStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El material ya estaba inactivo." });
   });
 
   it("pedir activar un material que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
@@ -438,7 +443,7 @@ describe("toggleMaterialStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El material ya estaba activo." });
   });
 
   it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
@@ -453,7 +458,7 @@ describe("toggleMaterialStatusAction fija el estado pedido", () => {
   });
 });
 
-defineCases("toggleMaterialStatusAction", toggleMaterialStatusAction, [
+defineCases("toggleMaterialStatusAction", toggleStatus, [
   {
     name: "inactiva un material activo",
     form: { id_material: MATERIAL, estado: "false" },
@@ -469,14 +474,18 @@ defineCases("toggleMaterialStatusAction", toggleMaterialStatusAction, [
     form: { id_material: MATERIAL, estado: "false" },
     data: { ...materialLookup({ estado: false }), "material.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "el material no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    name: "con un estado pedido que no es true ni false responde sin tocar Prisma",
+    form: { id_material: MATERIAL, estado: "si" },
+  },
+  {
+    name: "el material no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_material: MATERIAL, estado: "false" },
     data: { ...materialLookup({ exists: false }), "material.updateMany": () => ({ count: 0 }) },
   },
   {
-    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_material: MATERIAL, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
