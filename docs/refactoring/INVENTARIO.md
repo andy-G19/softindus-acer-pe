@@ -8,6 +8,8 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | --- | --- |
 | Archivos fuente analizados | 622 |
 | Páginas | 131 |
+| Páginas en ranuras paralelas (@ranura) | 3 |
+| Páginas que interceptan una ruta | 2 |
 | Declaraciones JSX de formulario | 120 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
@@ -34,139 +36,141 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 ## Rutas y formularios candidatos
 
-| Ruta | Fuente | Formularios inline | Componentes candidatos |
-| --- | --- | --- | --- |
-| `/login` | `src/app/(auth)/login/page.tsx` | 0 | LoginForm |
-| `/dashboard/access-denied` | `src/app/(dashboard)/dashboard/access-denied/page.tsx` | 0 | — |
-| `/dashboard/audit` | `src/app/(dashboard)/dashboard/audit/page.tsx` | 0 | — |
-| `/dashboard/commercial/clients/@panel/edit` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)[id]/edit/page.tsx` | 0 | ClientForm |
-| `/dashboard/commercial/clients/@panel` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)new/page.tsx` | 0 | ClientForm |
-| `/dashboard/commercial/clients/@panel` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/page.tsx` | 0 | — |
-| `/dashboard/commercial/clients/[id]/edit` | `src/app/(dashboard)/dashboard/commercial/clients/[id]/edit/page.tsx` | 0 | ClientForm |
-| `/dashboard/commercial/clients/new` | `src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx` | 0 | ClientForm |
-| `/dashboard/commercial/clients` | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 0 | — |
-| `/dashboard/commercial/orders/[id]/edit` | `src/app/(dashboard)/dashboard/commercial/orders/[id]/edit/page.tsx` | 0 | OrderForm |
-| `/dashboard/commercial/orders/[id]` | `src/app/(dashboard)/dashboard/commercial/orders/[id]/page.tsx` | 0 | — |
-| `/dashboard/commercial/orders/new` | `src/app/(dashboard)/dashboard/commercial/orders/new/page.tsx` | 0 | OrderForm |
-| `/dashboard/commercial/orders` | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 2 | — |
-| `/dashboard/commercial` | `src/app/(dashboard)/dashboard/commercial/page.tsx` | 0 | — |
-| `/dashboard/commercial/payments` | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 1 | — |
-| `/dashboard/commercial/product-categories` | `src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx` | 0 | ProductCategoryManager |
-| `/dashboard/commercial/products/[id]/edit` | `src/app/(dashboard)/dashboard/commercial/products/[id]/edit/page.tsx` | 0 | ProductForm |
-| `/dashboard/commercial/products/new` | `src/app/(dashboard)/dashboard/commercial/products/new/page.tsx` | 0 | ProductForm |
-| `/dashboard/commercial/products` | `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 1 | — |
-| `/dashboard/commercial/quotes/[id]` | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 1 | ReceiptForm, PaymentForm |
-| `/dashboard/commercial/quotes/new` | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
-| `/dashboard/commercial/quotes` | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 2 | — |
-| `/dashboard/commercial/receipts` | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 2 | — |
-| `/dashboard/costs/costings/[id]` | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
-| `/dashboard/costs/costings` | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 1 | — |
-| `/dashboard/costs` | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
-| `/dashboard/costs/work-orders` | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 1 | — |
-| `/dashboard/gallery` | `src/app/(dashboard)/dashboard/gallery/page.tsx` | 0 | — |
-| `/dashboard/inventory/alerts` | `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 1 | — |
-| `/dashboard/inventory/entries` | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 1 | — |
-| `/dashboard/inventory/material-categories` | `src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx` | 0 | InventoryCatalogManager |
-| `/dashboard/inventory/materials/[id]/edit` | `src/app/(dashboard)/dashboard/inventory/materials/[id]/edit/page.tsx` | 0 | MaterialForm |
-| `/dashboard/inventory/materials/new` | `src/app/(dashboard)/dashboard/inventory/materials/new/page.tsx` | 0 | MaterialForm |
-| `/dashboard/inventory/materials` | `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 1 | — |
-| `/dashboard/inventory/outputs/new` | `src/app/(dashboard)/dashboard/inventory/outputs/new/page.tsx` | 0 | InventoryOutputForm |
-| `/dashboard/inventory/outputs` | `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 1 | — |
-| `/dashboard/inventory` | `src/app/(dashboard)/dashboard/inventory/page.tsx` | 0 | — |
-| `/dashboard/inventory/purchases/[id]` | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 1 | SupplierPaymentForm |
-| `/dashboard/inventory/purchases/new` | `src/app/(dashboard)/dashboard/inventory/purchases/new/page.tsx` | 0 | PurchaseForm |
-| `/dashboard/inventory/purchases` | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 2 | — |
-| `/dashboard/inventory/supplier-materials/[id]/edit` | `src/app/(dashboard)/dashboard/inventory/supplier-materials/[id]/edit/page.tsx` | 0 | SupplierMaterialForm |
-| `/dashboard/inventory/supplier-materials/new` | `src/app/(dashboard)/dashboard/inventory/supplier-materials/new/page.tsx` | 0 | SupplierMaterialForm |
-| `/dashboard/inventory/supplier-materials` | `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 1 | — |
-| `/dashboard/inventory/supplier-payments` | `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 1 | — |
-| `/dashboard/inventory/supplier-types` | `src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx` | 0 | InventoryCatalogManager |
-| `/dashboard/inventory/suppliers/[id]/edit` | `src/app/(dashboard)/dashboard/inventory/suppliers/[id]/edit/page.tsx` | 0 | SupplierForm |
-| `/dashboard/inventory/suppliers/new` | `src/app/(dashboard)/dashboard/inventory/suppliers/new/page.tsx` | 0 | SupplierForm |
-| `/dashboard/inventory/suppliers` | `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 1 | — |
-| `/dashboard/maintenance/failures/new` | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 1 | — |
-| `/dashboard/maintenance/failures` | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 1 | — |
-| `/dashboard/maintenance/machines/[id]/edit` | `src/app/(dashboard)/dashboard/maintenance/machines/[id]/edit/page.tsx` | 0 | MachineForm |
-| `/dashboard/maintenance/machines/new` | `src/app/(dashboard)/dashboard/maintenance/machines/new/page.tsx` | 0 | MachineForm |
-| `/dashboard/maintenance/machines` | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 1 | — |
-| `/dashboard/maintenance` | `src/app/(dashboard)/dashboard/maintenance/page.tsx` | 0 | — |
-| `/dashboard/maintenance/preventive/new` | `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 1 | — |
-| `/dashboard/maintenance/preventive` | `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 2 | — |
-| `/dashboard/maintenance/recurrences` | `src/app/(dashboard)/dashboard/maintenance/recurrences/page.tsx` | 0 | — |
-| `/dashboard/maintenance/repairs/new` | `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 1 | — |
-| `/dashboard/maintenance/repairs` | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 2 | — |
-| `/dashboard/maintenance/spare-parts/[id]/edit` | `src/app/(dashboard)/dashboard/maintenance/spare-parts/[id]/edit/page.tsx` | 0 | SparePartForm |
-| `/dashboard/maintenance/spare-parts/new` | `src/app/(dashboard)/dashboard/maintenance/spare-parts/new/page.tsx` | 0 | SparePartForm |
-| `/dashboard/maintenance/spare-parts` | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 1 | — |
-| `/dashboard` | `src/app/(dashboard)/dashboard/page.tsx` | 0 | — |
-| `/dashboard/petty-cash/boxes/new` | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/boxes` | `src/app/(dashboard)/dashboard/petty-cash/boxes/page.tsx` | 0 | — |
-| `/dashboard/petty-cash/categories/[id]/edit` | `src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx` | 0 | ExpenseCategoryForm |
-| `/dashboard/petty-cash/categories` | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 0 | — |
-| `/dashboard/petty-cash/expenses/new` | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/income-adjustments/new` | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/monthly-summary` | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 1 | — |
-| `/dashboard/petty-cash/movements` | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 2 | — |
-| `/dashboard/petty-cash` | `src/app/(dashboard)/dashboard/petty-cash/page.tsx` | 0 | — |
-| `/dashboard/production/bottlenecks` | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns/[id]/details/new` | `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns/[id]/edit` | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns/[id]` | `src/app/(dashboard)/dashboard/production/campaigns/[id]/page.tsx` | 0 | — |
-| `/dashboard/production/campaigns/new` | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 1 | — |
-| `/dashboard/production/campaigns` | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 4 | — |
-| `/dashboard/production` | `src/app/(dashboard)/dashboard/production/page.tsx` | 0 | — |
-| `/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit/page.tsx` | 0 | RecipeDetailForm |
-| `/dashboard/production/recipes/[id]/versions/[versionId]/details/new` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/new/page.tsx` | 0 | RecipeDetailForm |
-| `/dashboard/production/recipes/[id]/versions/[versionId]/details` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 1 | — |
-| `/dashboard/production/recipes/[id]/versions/[versionId]/requirements` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 1 | — |
-| `/dashboard/production/recipes/[id]/versions/new` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/new/page.tsx` | 0 | RecipeVersionForm |
-| `/dashboard/production/recipes/[id]/versions` | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 2 | — |
-| `/dashboard/production/recipes/new` | `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 1 | — |
-| `/dashboard/production/recipes` | `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 2 | — |
-| `/dashboard/production/routes/[id]/edit` | `src/app/(dashboard)/dashboard/production/routes/[id]/edit/page.tsx` | 1 | — |
-| `/dashboard/production/routes/[id]/stages/[stageId]/edit` | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/[stageId]/edit/page.tsx` | 0 | StageForm |
-| `/dashboard/production/routes/[id]/stages/new` | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/new/page.tsx` | 0 | StageForm |
-| `/dashboard/production/routes/[id]/stages` | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 2 | — |
-| `/dashboard/production/routes/new` | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 1 | — |
-| `/dashboard/production/routes` | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 2 | — |
-| `/dashboard/production/work-orders/[id]` | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 2 | CloseMaterialsForm, MaterialMovementForm |
-| `/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign` | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 1 | — |
-| `/dashboard/production/work-orders/[id]/progress` | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 2 | — |
-| `/dashboard/production/work-orders/new` | `src/app/(dashboard)/dashboard/production/work-orders/new/page.tsx` | 0 | WorkOrderForm |
-| `/dashboard/production/work-orders` | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 3 | — |
-| `/dashboard/reports/export-history` | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 0 | — |
-| `/dashboard/reports/financial` | `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 0 | — |
-| `/dashboard/reports/inventory` | `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 0 | — |
-| `/dashboard/reports/maintenance` | `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 0 | — |
-| `/dashboard/reports` | `src/app/(dashboard)/dashboard/reports/page.tsx` | 0 | — |
-| `/dashboard/reports/production` | `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 0 | — |
-| `/dashboard/reports/profitability` | `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 0 | — |
-| `/dashboard/reports/sales-collections` | `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 0 | — |
-| `/dashboard/reports/staff` | `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 0 | — |
-| `/dashboard/reports/suppliers-purchases` | `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 0 | — |
-| `/dashboard/staff/attendance/new` | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 1 | — |
-| `/dashboard/staff/attendance` | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 1 | — |
-| `/dashboard/staff/operators/[id]/edit` | `src/app/(dashboard)/dashboard/staff/operators/[id]/edit/page.tsx` | 0 | OperatorForm |
-| `/dashboard/staff/operators/new` | `src/app/(dashboard)/dashboard/staff/operators/new/page.tsx` | 0 | OperatorForm |
-| `/dashboard/staff/operators` | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 1 | — |
-| `/dashboard/staff` | `src/app/(dashboard)/dashboard/staff/page.tsx` | 0 | — |
-| `/dashboard/staff/payment-history/new` | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 1 | — |
-| `/dashboard/staff/payment-history` | `src/app/(dashboard)/dashboard/staff/payment-history/page.tsx` | 0 | — |
-| `/dashboard/staff/payrolls/new` | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 1 | — |
-| `/dashboard/staff/payrolls` | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 2 | — |
-| `/dashboard/staff/tasks/new` | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 1 | — |
-| `/dashboard/staff/tasks` | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 1 | — |
-| `/dashboard/users/[id]/edit` | `src/app/(dashboard)/dashboard/users/[id]/edit/page.tsx` | 0 | UserForm |
-| `/dashboard/users/[id]/reset-password` | `src/app/(dashboard)/dashboard/users/[id]/reset-password/page.tsx` | 0 | ResetPasswordForm |
-| `/dashboard/users/new` | `src/app/(dashboard)/dashboard/users/new/page.tsx` | 0 | UserForm |
-| `/dashboard/users` | `src/app/(dashboard)/dashboard/users/page.tsx` | 3 | — |
-| `/dashboard/waste-scrap` | `src/app/(dashboard)/dashboard/waste-scrap/page.tsx` | 0 | — |
-| `/dashboard/waste-scrap/reusable-scraps/new` | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/reusable-scraps` | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 3 | — |
-| `/dashboard/waste-scrap/scrap-sales/new` | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/scraps/new` | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 1 | — |
-| `/dashboard/waste-scrap/scraps` | `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 1 | — |
-| `/` | `src/app/page.tsx` | 0 | — |
+La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del layout; si intercepta su ruta, es el panel que abre la navegación desde el listado, y la URL directa o una recarga muestran la página completa de la misma ruta.
+
+| Ruta | Ranura | Fuente | Formularios inline | Componentes candidatos |
+| --- | --- | --- | --- | --- |
+| `/login` | — | `src/app/(auth)/login/page.tsx` | 0 | LoginForm |
+| `/dashboard/access-denied` | — | `src/app/(dashboard)/dashboard/access-denied/page.tsx` | 0 | — |
+| `/dashboard/audit` | — | `src/app/(dashboard)/dashboard/audit/page.tsx` | 0 | — |
+| `/dashboard/commercial/clients/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)[id]/edit/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/clients/@panel/(.)new/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients` | `@panel` | `src/app/(dashboard)/dashboard/commercial/clients/@panel/page.tsx` | 0 | — |
+| `/dashboard/commercial/clients/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/clients/[id]/edit/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients/new` | — | `src/app/(dashboard)/dashboard/commercial/clients/new/page.tsx` | 0 | ClientForm |
+| `/dashboard/commercial/clients` | — | `src/app/(dashboard)/dashboard/commercial/clients/page.tsx` | 0 | — |
+| `/dashboard/commercial/orders/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/edit/page.tsx` | 0 | OrderForm |
+| `/dashboard/commercial/orders/[id]` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/page.tsx` | 0 | — |
+| `/dashboard/commercial/orders/new` | — | `src/app/(dashboard)/dashboard/commercial/orders/new/page.tsx` | 0 | OrderForm |
+| `/dashboard/commercial/orders` | — | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 2 | — |
+| `/dashboard/commercial` | — | `src/app/(dashboard)/dashboard/commercial/page.tsx` | 0 | — |
+| `/dashboard/commercial/payments` | — | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 1 | — |
+| `/dashboard/commercial/product-categories` | — | `src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx` | 0 | ProductCategoryManager |
+| `/dashboard/commercial/products/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/products/[id]/edit/page.tsx` | 0 | ProductForm |
+| `/dashboard/commercial/products/new` | — | `src/app/(dashboard)/dashboard/commercial/products/new/page.tsx` | 0 | ProductForm |
+| `/dashboard/commercial/products` | — | `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 1 | — |
+| `/dashboard/commercial/quotes/[id]` | — | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 1 | ReceiptForm, PaymentForm |
+| `/dashboard/commercial/quotes/new` | — | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
+| `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 2 | — |
+| `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 2 | — |
+| `/dashboard/costs/costings/[id]` | — | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
+| `/dashboard/costs/costings` | — | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 1 | — |
+| `/dashboard/costs` | — | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
+| `/dashboard/costs/work-orders` | — | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 1 | — |
+| `/dashboard/gallery` | — | `src/app/(dashboard)/dashboard/gallery/page.tsx` | 0 | — |
+| `/dashboard/inventory/alerts` | — | `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 1 | — |
+| `/dashboard/inventory/entries` | — | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 1 | — |
+| `/dashboard/inventory/material-categories` | — | `src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx` | 0 | InventoryCatalogManager |
+| `/dashboard/inventory/materials/[id]/edit` | — | `src/app/(dashboard)/dashboard/inventory/materials/[id]/edit/page.tsx` | 0 | MaterialForm |
+| `/dashboard/inventory/materials/new` | — | `src/app/(dashboard)/dashboard/inventory/materials/new/page.tsx` | 0 | MaterialForm |
+| `/dashboard/inventory/materials` | — | `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 1 | — |
+| `/dashboard/inventory/outputs/new` | — | `src/app/(dashboard)/dashboard/inventory/outputs/new/page.tsx` | 0 | InventoryOutputForm |
+| `/dashboard/inventory/outputs` | — | `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 1 | — |
+| `/dashboard/inventory` | — | `src/app/(dashboard)/dashboard/inventory/page.tsx` | 0 | — |
+| `/dashboard/inventory/purchases/[id]` | — | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 1 | SupplierPaymentForm |
+| `/dashboard/inventory/purchases/new` | — | `src/app/(dashboard)/dashboard/inventory/purchases/new/page.tsx` | 0 | PurchaseForm |
+| `/dashboard/inventory/purchases` | — | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 2 | — |
+| `/dashboard/inventory/supplier-materials/[id]/edit` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/[id]/edit/page.tsx` | 0 | SupplierMaterialForm |
+| `/dashboard/inventory/supplier-materials/new` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/new/page.tsx` | 0 | SupplierMaterialForm |
+| `/dashboard/inventory/supplier-materials` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 1 | — |
+| `/dashboard/inventory/supplier-payments` | — | `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 1 | — |
+| `/dashboard/inventory/supplier-types` | — | `src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx` | 0 | InventoryCatalogManager |
+| `/dashboard/inventory/suppliers/[id]/edit` | — | `src/app/(dashboard)/dashboard/inventory/suppliers/[id]/edit/page.tsx` | 0 | SupplierForm |
+| `/dashboard/inventory/suppliers/new` | — | `src/app/(dashboard)/dashboard/inventory/suppliers/new/page.tsx` | 0 | SupplierForm |
+| `/dashboard/inventory/suppliers` | — | `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 1 | — |
+| `/dashboard/maintenance/failures/new` | — | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 1 | — |
+| `/dashboard/maintenance/failures` | — | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 1 | — |
+| `/dashboard/maintenance/machines/[id]/edit` | — | `src/app/(dashboard)/dashboard/maintenance/machines/[id]/edit/page.tsx` | 0 | MachineForm |
+| `/dashboard/maintenance/machines/new` | — | `src/app/(dashboard)/dashboard/maintenance/machines/new/page.tsx` | 0 | MachineForm |
+| `/dashboard/maintenance/machines` | — | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 1 | — |
+| `/dashboard/maintenance` | — | `src/app/(dashboard)/dashboard/maintenance/page.tsx` | 0 | — |
+| `/dashboard/maintenance/preventive/new` | — | `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 1 | — |
+| `/dashboard/maintenance/preventive` | — | `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 2 | — |
+| `/dashboard/maintenance/recurrences` | — | `src/app/(dashboard)/dashboard/maintenance/recurrences/page.tsx` | 0 | — |
+| `/dashboard/maintenance/repairs/new` | — | `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 1 | — |
+| `/dashboard/maintenance/repairs` | — | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 2 | — |
+| `/dashboard/maintenance/spare-parts/[id]/edit` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/[id]/edit/page.tsx` | 0 | SparePartForm |
+| `/dashboard/maintenance/spare-parts/new` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/new/page.tsx` | 0 | SparePartForm |
+| `/dashboard/maintenance/spare-parts` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 1 | — |
+| `/dashboard` | — | `src/app/(dashboard)/dashboard/page.tsx` | 0 | — |
+| `/dashboard/petty-cash/boxes/new` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/boxes` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/page.tsx` | 0 | — |
+| `/dashboard/petty-cash/categories/[id]/edit` | — | `src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx` | 0 | ExpenseCategoryForm |
+| `/dashboard/petty-cash/categories` | — | `src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx` | 0 | — |
+| `/dashboard/petty-cash/expenses/new` | — | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/income-adjustments/new` | — | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/monthly-summary` | — | `src/app/(dashboard)/dashboard/petty-cash/monthly-summary/page.tsx` | 1 | — |
+| `/dashboard/petty-cash/movements` | — | `src/app/(dashboard)/dashboard/petty-cash/movements/page.tsx` | 2 | — |
+| `/dashboard/petty-cash` | — | `src/app/(dashboard)/dashboard/petty-cash/page.tsx` | 0 | — |
+| `/dashboard/production/bottlenecks` | — | `src/app/(dashboard)/dashboard/production/bottlenecks/page.tsx` | 1 | — |
+| `/dashboard/production/campaigns/[id]/details/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/details/new/page.tsx` | 1 | — |
+| `/dashboard/production/campaigns/[id]/edit` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/edit/page.tsx` | 1 | — |
+| `/dashboard/production/campaigns/[id]` | — | `src/app/(dashboard)/dashboard/production/campaigns/[id]/page.tsx` | 0 | — |
+| `/dashboard/production/campaigns/new` | — | `src/app/(dashboard)/dashboard/production/campaigns/new/page.tsx` | 1 | — |
+| `/dashboard/production/campaigns` | — | `src/app/(dashboard)/dashboard/production/campaigns/page.tsx` | 4 | — |
+| `/dashboard/production` | — | `src/app/(dashboard)/dashboard/production/page.tsx` | 0 | — |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/[detailId]/edit/page.tsx` | 0 | RecipeDetailForm |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details/new` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/new/page.tsx` | 0 | RecipeDetailForm |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/details` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/details/page.tsx` | 1 | — |
+| `/dashboard/production/recipes/[id]/versions/[versionId]/requirements` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/[versionId]/requirements/page.tsx` | 1 | — |
+| `/dashboard/production/recipes/[id]/versions/new` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/new/page.tsx` | 0 | RecipeVersionForm |
+| `/dashboard/production/recipes/[id]/versions` | — | `src/app/(dashboard)/dashboard/production/recipes/[id]/versions/page.tsx` | 2 | — |
+| `/dashboard/production/recipes/new` | — | `src/app/(dashboard)/dashboard/production/recipes/new/page.tsx` | 1 | — |
+| `/dashboard/production/recipes` | — | `src/app/(dashboard)/dashboard/production/recipes/page.tsx` | 2 | — |
+| `/dashboard/production/routes/[id]/edit` | — | `src/app/(dashboard)/dashboard/production/routes/[id]/edit/page.tsx` | 1 | — |
+| `/dashboard/production/routes/[id]/stages/[stageId]/edit` | — | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/[stageId]/edit/page.tsx` | 0 | StageForm |
+| `/dashboard/production/routes/[id]/stages/new` | — | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/new/page.tsx` | 0 | StageForm |
+| `/dashboard/production/routes/[id]/stages` | — | `src/app/(dashboard)/dashboard/production/routes/[id]/stages/page.tsx` | 2 | — |
+| `/dashboard/production/routes/new` | — | `src/app/(dashboard)/dashboard/production/routes/new/page.tsx` | 1 | — |
+| `/dashboard/production/routes` | — | `src/app/(dashboard)/dashboard/production/routes/page.tsx` | 2 | — |
+| `/dashboard/production/work-orders/[id]` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/page.tsx` | 2 | CloseMaterialsForm, MaterialMovementForm |
+| `/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign/page.tsx` | 1 | — |
+| `/dashboard/production/work-orders/[id]/progress` | — | `src/app/(dashboard)/dashboard/production/work-orders/[id]/progress/page.tsx` | 2 | — |
+| `/dashboard/production/work-orders/new` | — | `src/app/(dashboard)/dashboard/production/work-orders/new/page.tsx` | 0 | WorkOrderForm |
+| `/dashboard/production/work-orders` | — | `src/app/(dashboard)/dashboard/production/work-orders/page.tsx` | 3 | — |
+| `/dashboard/reports/export-history` | — | `src/app/(dashboard)/dashboard/reports/export-history/page.tsx` | 0 | — |
+| `/dashboard/reports/financial` | — | `src/app/(dashboard)/dashboard/reports/financial/page.tsx` | 0 | — |
+| `/dashboard/reports/inventory` | — | `src/app/(dashboard)/dashboard/reports/inventory/page.tsx` | 0 | — |
+| `/dashboard/reports/maintenance` | — | `src/app/(dashboard)/dashboard/reports/maintenance/page.tsx` | 0 | — |
+| `/dashboard/reports` | — | `src/app/(dashboard)/dashboard/reports/page.tsx` | 0 | — |
+| `/dashboard/reports/production` | — | `src/app/(dashboard)/dashboard/reports/production/page.tsx` | 0 | — |
+| `/dashboard/reports/profitability` | — | `src/app/(dashboard)/dashboard/reports/profitability/page.tsx` | 0 | — |
+| `/dashboard/reports/sales-collections` | — | `src/app/(dashboard)/dashboard/reports/sales-collections/page.tsx` | 0 | — |
+| `/dashboard/reports/staff` | — | `src/app/(dashboard)/dashboard/reports/staff/page.tsx` | 0 | — |
+| `/dashboard/reports/suppliers-purchases` | — | `src/app/(dashboard)/dashboard/reports/suppliers-purchases/page.tsx` | 0 | — |
+| `/dashboard/staff/attendance/new` | — | `src/app/(dashboard)/dashboard/staff/attendance/new/page.tsx` | 1 | — |
+| `/dashboard/staff/attendance` | — | `src/app/(dashboard)/dashboard/staff/attendance/page.tsx` | 1 | — |
+| `/dashboard/staff/operators/[id]/edit` | — | `src/app/(dashboard)/dashboard/staff/operators/[id]/edit/page.tsx` | 0 | OperatorForm |
+| `/dashboard/staff/operators/new` | — | `src/app/(dashboard)/dashboard/staff/operators/new/page.tsx` | 0 | OperatorForm |
+| `/dashboard/staff/operators` | — | `src/app/(dashboard)/dashboard/staff/operators/page.tsx` | 1 | — |
+| `/dashboard/staff` | — | `src/app/(dashboard)/dashboard/staff/page.tsx` | 0 | — |
+| `/dashboard/staff/payment-history/new` | — | `src/app/(dashboard)/dashboard/staff/payment-history/new/page.tsx` | 1 | — |
+| `/dashboard/staff/payment-history` | — | `src/app/(dashboard)/dashboard/staff/payment-history/page.tsx` | 0 | — |
+| `/dashboard/staff/payrolls/new` | — | `src/app/(dashboard)/dashboard/staff/payrolls/new/page.tsx` | 1 | — |
+| `/dashboard/staff/payrolls` | — | `src/app/(dashboard)/dashboard/staff/payrolls/page.tsx` | 2 | — |
+| `/dashboard/staff/tasks/new` | — | `src/app/(dashboard)/dashboard/staff/tasks/new/page.tsx` | 1 | — |
+| `/dashboard/staff/tasks` | — | `src/app/(dashboard)/dashboard/staff/tasks/page.tsx` | 1 | — |
+| `/dashboard/users/[id]/edit` | — | `src/app/(dashboard)/dashboard/users/[id]/edit/page.tsx` | 0 | UserForm |
+| `/dashboard/users/[id]/reset-password` | — | `src/app/(dashboard)/dashboard/users/[id]/reset-password/page.tsx` | 0 | ResetPasswordForm |
+| `/dashboard/users/new` | — | `src/app/(dashboard)/dashboard/users/new/page.tsx` | 0 | UserForm |
+| `/dashboard/users` | — | `src/app/(dashboard)/dashboard/users/page.tsx` | 3 | — |
+| `/dashboard/waste-scrap` | — | `src/app/(dashboard)/dashboard/waste-scrap/page.tsx` | 0 | — |
+| `/dashboard/waste-scrap/reusable-scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/new/page.tsx` | 1 | — |
+| `/dashboard/waste-scrap/reusable-scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/reusable-scraps/page.tsx` | 3 | — |
+| `/dashboard/waste-scrap/scrap-sales/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 1 | — |
+| `/dashboard/waste-scrap/scraps/new` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 1 | — |
+| `/dashboard/waste-scrap/scraps` | — | `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 1 | — |
+| `/` | — | `src/app/page.tsx` | 0 | — |
 
 ## Declaraciones de formularios
 
