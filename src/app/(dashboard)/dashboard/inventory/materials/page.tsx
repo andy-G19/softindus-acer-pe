@@ -101,7 +101,7 @@ export default async function MaterialsPage({
 
             {isAdmin ? (
               <Button asChild>
-                <Link href="/dashboard/inventory/materials/new">
+                <Link href={withReturnTo(`${navigationHrefs.materials}/new`, returnTo)}>
                   Nuevo material
                 </Link>
               </Button>

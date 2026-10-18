@@ -26,7 +26,9 @@ import {
 // las lecturas, la transaccion con sus escrituras y su final, los
 // correlativos, la bitacora (y si va dentro de la transaccion), las
 // revalidaciones y el resultado: la redireccion o el estado que devuelve al
-// formulario, con su mensaje exacto.
+// formulario, con su mensaje exacto. Desde el panel lateral, el alta y la
+// edicion devuelven el resultado (FormActionState) en lugar de redirigir, y
+// niegan el permiso con un error dentro del formulario.
 //
 // El alta es la parte critica: dentro de una transaccion crea el material con
 // su stock inicial, el kardex de ese stock (si es mayor que cero) y la alerta
@@ -40,6 +42,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta del formulario lleva un operationId aleatorio; en los
+// snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -99,7 +107,7 @@ expect.addSnapshotSerializer(decimalSnapshotSerializer);
 type FormFields = Record<string, string>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState: MaterialFormState = { error: "" };
+const initialState: MaterialFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -270,8 +278,8 @@ defineCases("createMaterialAction", create, [
     name: "los numeros vacios valen cero: ni kardex ni alerta",
     ...createWith({ stock_actual: "", stock_reservado: "", stock_minimo: "", costo_unitario_actual: "" }),
   },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     form: { ...createForm, nombre_material: "A", unidad_medida: "", stock_minimo: "-1", costo_unitario_actual: "abc" },
@@ -343,7 +351,7 @@ defineCases("updateMaterialAction", update, [
     form: { ...updateForm, stock_actual: "999", stock_reservado: "10" },
     data: { ...category(true), ...materialLookup() },
   },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: updateForm, role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", form: updateForm, role: "WORKSHOP_MASTER" },
   { name: "sin id de material", form: { ...updateForm, id_material: "" } },
   { name: "el material no existe", form: updateForm, data: materialLookup({ exists: false }) },
   {
