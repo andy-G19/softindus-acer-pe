@@ -46,15 +46,19 @@ function getSupplierMaterialFormData(formData: FormData) {
   };
 }
 
+// El proveedor y el material deben estar activos. Al editar (current), los que
+// la asociacion ya tiene se aceptan aunque esten inactivos mientras no se
+// cambien: la consulta de edicion los ofrece (hallazgo 4 de la 10.3a).
 async function validateActiveSupplierAndMaterial(
   supplierId: string,
   materialId: string,
+  current?: { id_proveedor: string; id_material: string },
 ): Promise<SupplierMaterialValidationResult> {
   const [supplier, material] = await Promise.all([
     prisma.proveedor.findFirst({
       where: {
         id_proveedor: supplierId,
-        estado: true,
+        ...(supplierId === current?.id_proveedor ? {} : { estado: true }),
       },
       select: {
         razon_social: true,
@@ -63,7 +67,7 @@ async function validateActiveSupplierAndMaterial(
     prisma.material.findFirst({
       where: {
         id_material: materialId,
-        estado: true,
+        ...(materialId === current?.id_material ? {} : { estado: true }),
       },
       select: {
         nombre_material: true,
@@ -256,6 +260,7 @@ export async function updateSupplierMaterialAction(
   const validation = await validateActiveSupplierAndMaterial(
     data.id_proveedor,
     data.id_material,
+    currentRelation,
   );
 
   if (!validation.ok) {

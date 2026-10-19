@@ -1033,7 +1033,6 @@ exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1045,7 +1044,6 @@ exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1152,7 +1150,6 @@ exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda l
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1246,7 +1243,6 @@ exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1290,7 +1286,6 @@ exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1302,7 +1297,6 @@ exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1397,7 +1391,7 @@ exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores po
 }
 `;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inactivo y no se cambia: la edicion falla > llamadas 1`] = `
+exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1419,7 +1413,6 @@ exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inac
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1431,29 +1424,66 @@ exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inac
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
     "prisma": "material.findFirst",
   },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inactivo y no se cambia: la edicion falla > resultado 1`] = `
-{
-  "estado": {
-    "error": "El material seleccionado no existe o esta inactivo.",
-    "fieldErrors": {
-      "id_material": [
-        "El material seleccionado no existe o esta inactivo.",
-      ],
-    },
-  },
-}
-`;
+exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta inactivo y no se cambia: la edicion falla > llamadas 1`] = `
+exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1475,7 +1505,6 @@ exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta ina
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1487,27 +1516,64 @@ exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta ina
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
     "prisma": "material.findFirst",
   },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta inactivo y no se cambia: la edicion falla > resultado 1`] = `
-{
-  "estado": {
-    "error": "El proveedor seleccionado no existe o esta inactivo.",
-    "fieldErrors": {
-      "id_proveedor": [
-        "El proveedor seleccionado no existe o esta inactivo.",
-      ],
-    },
-  },
-}
-`;
+exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
 
 exports[`updateSupplierMaterialAction > la asociacion no existe > llamadas 1`] = `
 [
@@ -1558,7 +1624,6 @@ exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como nu
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1570,7 +1635,6 @@ exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como nu
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1652,7 +1716,6 @@ exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el men
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1664,7 +1727,6 @@ exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el men
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1752,7 +1814,6 @@ exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P20
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1764,7 +1825,6 @@ exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P20
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },
@@ -1833,7 +1893,6 @@ exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese prove
         "razon_social": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
@@ -1845,7 +1904,6 @@ exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese prove
         "nombre_material": true,
       },
       "where": {
-        "estado": true,
         "id_material": "MAT00000004",
       },
     },

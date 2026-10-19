@@ -26,10 +26,10 @@ import {
 // transaccion), las revalidaciones y el resultado: la redireccion o el estado
 // que devuelve al formulario, con su mensaje exacto.
 //
-// El alta y la edicion exigen que el proveedor y el material esten activos;
-// la edicion lo exige tambien al proveedor y al material que la asociacion ya
-// tenia (hallazgo 4 de la 10.3a, que la consulta de edicion ofrece aunque
-// esten inactivos). El alta escribe dentro de una transaccion; la edicion y el
+// El alta y la edicion exigen que el proveedor y el material esten activos,
+// salvo, al editar, los que la asociacion ya tenia y no cambian: la consulta
+// de edicion los ofrece aunque esten inactivos (hallazgo 4 de la 10.3a,
+// corregido en la 10.3b). El alta escribe dentro de una transaccion; la edicion y el
 // cambio de estado escriben con el cliente global, sin transaccion, y
 // registran la bitacora despues: el doble lo permite (writesOutsideTransaction)
 // y lo marca.
@@ -318,11 +318,11 @@ defineCases("updateSupplierMaterialAction", update, [
     ...updateWith({ unidad_medida: "", precio_referencial: "-5" }),
   },
   {
-    name: "hallazgo 4: su proveedor actual esta inactivo y no se cambia: la edicion falla",
+    name: "hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda",
     ...updateWith({}, parents({ suppliers: { [PROVEEDOR]: false } })),
   },
   {
-    name: "hallazgo 4: su material actual esta inactivo y no se cambia: la edicion falla",
+    name: "hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda",
     ...updateWith({}, parents({ materials: { [MATERIAL]: false } })),
   },
   {
@@ -347,6 +347,55 @@ defineCases("updateSupplierMaterialAction", update, [
     ...updateWith({}, { "proveedor_material.update": failWith(new Error("conexion perdida")) }),
   },
 ]);
+
+// Hallazgo 4 de la 10.3a: la consulta de edicion ofrece el proveedor y el
+// material que la asociacion ya tiene aunque esten inactivos, asi que la
+// edicion los acepta mientras no se cambien; cambiar a otro sigue exigiendo
+// que este activo, como el alta.
+describe("updateSupplierMaterialAction acepta el proveedor y el material actuales aunque esten inactivos", () => {
+  const OTRO_MATERIAL = "MAT00000002";
+
+  function updatesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string }>).filter((call) => call.prisma === "proveedor_material.update");
+  }
+
+  const edit = (fields: FormFields, data: DataOverrides) =>
+    runAction(update, { name: "", form: { ...updateForm, ...fields }, data: { ...currentRelation(), ...duplicateOf(null), ...data } });
+
+  it("con su proveedor actual inactivo, sin cambiarlo, guarda la asociacion", async () => {
+    const { calls, outcome } = await edit({}, parents({ suppliers: { [PROVEEDOR]: false } }));
+
+    expect(updatesOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=supplier-material-updated");
+  });
+
+  it("con su material actual inactivo, sin cambiarlo, guarda la asociacion", async () => {
+    const { calls, outcome } = await edit({}, parents({ materials: { [MATERIAL]: false } }));
+
+    expect(updatesOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=supplier-material-updated");
+  });
+
+  it("cambiar a otro proveedor inactivo se sigue rechazando", async () => {
+    const { calls, outcome } = await edit(
+      { id_proveedor: OTRO_PROVEEDOR },
+      parents({ suppliers: { [PROVEEDOR]: false, [OTRO_PROVEEDOR]: false } }),
+    );
+
+    expect(updatesOf(calls)).toEqual([]);
+    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] } } });
+  });
+
+  it("cambiar a otro material inactivo se sigue rechazando", async () => {
+    const { calls, outcome } = await edit(
+      { id_material: OTRO_MATERIAL },
+      parents({ materials: { [MATERIAL]: false, [OTRO_MATERIAL]: false } }),
+    );
+
+    expect(updatesOf(calls)).toEqual([]);
+    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_material: ["El material seleccionado no existe o esta inactivo."] } } });
+  });
+});
 
 // Activar e inactivar envian el estado pedido y el servidor solo lo fija si la
 // asociacion tiene el contrario, comparando y escribiendo en una sola
