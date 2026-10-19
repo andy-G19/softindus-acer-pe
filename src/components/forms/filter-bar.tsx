@@ -23,8 +23,9 @@ type FilterBarProps = {
 // (columnas de al menos 12rem) en lugar de una por pantalla. Es un contenedor
 // de consultas (@container): un campo ancho, como el rango de fechas, ocupa dos
 // columnas solo si la barra tiene sitio, aunque este dentro de un panel. Los
-// campos se vuelven a montar cuando cambia la URL (FilterBarFields), asi que
-// «Limpiar», Atras y Adelante muestran los filtros que aplica la pagina.
+// campos se vuelven a montar cuando el servidor los pinta para otra URL
+// (FilterBarFields), asi que «Limpiar», Atras y Adelante muestran los filtros
+// que aplica la pagina.
 export function FilterBar({
   action,
   label,

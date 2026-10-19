@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, createElement as h } from "react";
+import { act, createElement as h, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -14,6 +14,11 @@ import { NativeSelect } from "@/components/ui/native-select";
 // el usuario no toco, pero un select solo lo lee al montarse, y un campo
 // escrito sin enviar conserva lo escrito: los campos deben mostrar los filtros
 // de la URL.
+//
+// La URL tambien cambia sin que lleguen campos nuevos (verificacion de la
+// 10.3a en staging): Atras y Adelante confirman la URL con la pagina que ya se
+// ve y luego llega la de la URL restaurada, y el panel de una ruta
+// interceptada cambia la URL con la lista debajo. Aqui, changeUrl.
 
 const url = vi.hoisted(() => ({ search: "" }));
 
@@ -29,9 +34,12 @@ const AUDIT = "/dashboard/audit";
 
 let host: HTMLDivElement;
 let root: Root;
+// Los campos de la ultima pagina que pinto el servidor.
+let fields: ReactNode = null;
 
 beforeEach(() => {
   url.search = "";
+  fields = null;
   host = document.createElement("div");
   document.body.append(host);
   root = createRoot(host);
@@ -44,8 +52,26 @@ afterEach(async () => {
 
 // La pagina pinta la barra con los valores que lee de la URL.
 async function renderBar(search: string) {
-  url.search = search;
   const params = new URLSearchParams(search);
+  fields = h(
+    "div",
+    null,
+    h(Input, { id: "q", name: "q", defaultValue: params.get("q") ?? "" }),
+    h(
+      NativeSelect,
+      { id: "accion", name: "accion", defaultValue: params.get("accion") ?? "" },
+      h("option", { value: "" }, "Todas"),
+      h("option", { value: "crear" }, "crear"),
+      h("option", { value: "editar" }, "editar"),
+    ),
+  );
+
+  await changeUrl(search);
+}
+
+// La URL cambia y la barra se vuelve a pintar con los campos que ya tenia.
+async function changeUrl(search: string) {
+  url.search = search;
 
   await act(async () =>
     root.render(
@@ -54,18 +80,7 @@ async function renderBar(search: string) {
         label: "Filtros de la bitacora",
         clearHref: AUDIT,
         clearLabel: "Limpiar",
-        children: h(
-          "div",
-          null,
-          h(Input, { id: "q", name: "q", defaultValue: params.get("q") ?? "" }),
-          h(
-            NativeSelect,
-            { id: "accion", name: "accion", defaultValue: params.get("accion") ?? "" },
-            h("option", { value: "" }, "Todas"),
-            h("option", { value: "crear" }, "crear"),
-            h("option", { value: "editar" }, "editar"),
-          ),
-        ),
+        children: fields,
       }),
     ),
   );
@@ -135,5 +150,47 @@ describe("FilterBar al navegar sin recargar", () => {
     expect(control<HTMLAnchorElement>("a")).toBe(clear);
     expect(control<HTMLButtonElement>('button[type="submit"]')).toBe(submit);
     expect(document.activeElement).toBe(clear);
+  });
+});
+
+describe("FilterBar cuando la URL cambia antes que los campos", () => {
+  it("Atras tras Limpiar: el select termina en el filtro de la URL", async () => {
+    await renderBar("accion=crear");
+    await renderBar("");
+
+    await changeUrl("accion=crear");
+    // Mientras llega la pagina, la barra es la de la lista que se ve.
+    expect(select().value).toBe("");
+
+    await renderBar("accion=crear");
+    expect(select().value).toBe("crear");
+  });
+
+  it("Adelante: el select vuelve a quedar vacio", async () => {
+    await renderBar("accion=crear");
+    await renderBar("");
+    await changeUrl("accion=crear");
+    await renderBar("accion=crear");
+
+    await changeUrl("");
+    expect(select().value).toBe("crear");
+
+    await renderBar("");
+    expect(select().value).toBe("");
+  });
+
+  it("abrir y cerrar el panel conserva lo elegido sin enviar", async () => {
+    await renderBar("accion=crear");
+    await choose(select(), "editar", "change");
+
+    await changeUrl("returnTo=%2Fdashboard%2Faudit%3Faccion%3Dcrear");
+    expect(select().value).toBe("editar");
+
+    await changeUrl("accion=crear");
+    expect(select().value).toBe("editar");
+
+    // Despues de guardar, el panel pide la lista otra vez (router.refresh).
+    await renderBar("accion=crear");
+    expect(select().value).toBe("editar");
   });
 });
