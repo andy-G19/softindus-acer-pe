@@ -24,8 +24,10 @@ lista. Así no pierdes la lista ni los filtros que tenías puestos.
 - Los catálogos cortos (tipos, categorías) se abren en una ventana en el
   centro de la pantalla.
 - Los registros con más datos, como los clientes y los materiales, se abren
-  en un panel a la derecha. Ese panel tiene su propia dirección: si recargas la página o
-  copias el enlace, el mismo formulario se abre a pantalla completa.
+  en un panel a la derecha. Ese panel tiene su propia dirección: si recargas
+  la página o copias el enlace, el mismo formulario se abre a pantalla
+  completa, y allí **Cancelar** te devuelve a la lista con los filtros que
+  tenía.
 - En el teléfono, la ventana y el panel ocupan toda la pantalla.
 
 Los campos marcados con un asterisco (*) son obligatorios.
@@ -92,7 +94,9 @@ favoritos o compartirla con los filtros puestos.
 La barra siempre muestra los filtros que la lista está aplicando: después
 de **Limpiar**, o al volver con **Atrás** o **Adelante** del navegador, sus
 campos y listas desplegables toman los valores de la dirección. Si cambiaste
-un campo y no pulsaste **Filtrar**, ese cambio se pierde en ese momento.
+un campo y no pulsaste **Filtrar**, ese cambio se pierde en ese momento. En
+cambio, abrir y cerrar una ventana o un panel desde la lista no cambia lo
+que elegiste en la barra.
 
 Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
 se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si

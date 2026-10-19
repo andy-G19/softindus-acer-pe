@@ -3761,7 +3761,9 @@ Hallazgos de la verificación:
     actualiza el `defaultValue` de un `<select>`. Afecta a toda barra con
     selects que se limpia con `next/link`, también a las de la 10.1. Se
     propone un `fix` aparte. Corregido en `53d9601`, en la 10.3a: `FilterBar`
-    vuelve a montar sus campos cuando cambia la URL.
+    vuelve a montar sus campos cuando cambia la URL. Completado en `9f484d2`
+    tras verificar la 10.3a: con Atrás, Adelante y el panel, la URL cambia
+    antes de que lleguen los campos de la página (hallazgo 12 de la 10.3a).
 11. Preexistente (ya ocurría en el «antes», que tiene el mismo código que
     producción), pendiente: el clic con el ratón en «Cancelar»
     de la confirmación de descarte no la cierra, en la ventana ni en el
@@ -3769,7 +3771,11 @@ Hallazgos de la verificación:
     Esc, Enter y «Descartar cambios» con el ratón sí funcionan, y jsdom no lo
     reproduce. Hipótesis: la ventana trata ese clic, fuera de su árbol de
     React, como un clic fuera y vuelve a pedir el descarte. Se arregla aparte,
-    tras el cierre de la 10.2.
+    tras el cierre de la 10.2. Corregido en `49cf5f5`, publicado con la
+    10.3a: la ventana y el panel ignoran el clic fuera que empieza dentro de
+    la confirmación (`ignoreConfirmationPointer`). En staging, el clic con el
+    ratón en «Cancelar» la cierra sin reabrirla, conserva lo escrito y
+    devuelve el foco a la ventana o al panel.
 12. Método: una huella tomada tras una navegación suave puede arrastrar
     estado del cliente. Por eso la de staff-largo se repitió montando la
     página, y en la re-verificación las dos coinciden.
@@ -3798,10 +3804,11 @@ Datos leídos de la API de GitHub el 2026-10-18 y comparados con git:
 
 ### Sub-entrega 10.3a — Materiales y alertas
 
-Fecha: 2026-10-18. Estado: hecha en local y pendiente de verificar en
-staging. 9 commits, de `4fd9631` a `c5e6f6b`, más este registro. Viajan con
-`513c513` (integración de la 10.2) y `49cf5f5` (hallazgo 11 de la 10.2), que
-no se publicaron al cerrar la 10.2.
+Fecha: del 2026-10-18 al 2026-10-19 (UTC). Estado: cerrada en staging el
+2026-10-19; falta integrarla en `main`. 9 commits, de `4fd9631` a `c5e6f6b`,
+el registro `7e50c8e`, el `fix` `9f484d2` que salió de la verificación y
+este cierre. Viajaron con `513c513` (integración de la 10.2) y `49cf5f5`
+(hallazgo 11 de la 10.2), que no se publicaron al cerrar la 10.2.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3814,6 +3821,9 @@ no se publicaron al cerrar la 10.2.
 | f7abaf0 | feat | Materiales en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
 | 5991f06 | feat | Inactivar material pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
 | c5e6f6b | feat | Atender una alerta con confirmación y resultado de acción; alertas sin `<main>` anidado. |
+| 7e50c8e | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y manual de Materiales y Alertas. |
+| 9f484d2 | fix | Hallazgo 12 de la verificación: `FilterBar` sigue a la página con Atrás, Adelante y el panel. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
 
 Decisiones del responsable (2026-10-18), tras la auditoría:
 
@@ -3857,7 +3867,9 @@ Diseño:
   los campos de `FilterBar` en un `Fragment` con la consulta de la URL como
   `key`. Si la URL cambia, los campos se vuelven a montar con los valores que
   la página leyó de ella; si no, conservan lo elegido. Los botones quedan
-  fuera y «Limpiar» conserva el foco. El HTML no cambia.
+  fuera y «Limpiar» conserva el foco. El HTML no cambia. Tras la
+  verificación, `9f484d2` cambia la `key` por la consulta vigente cuando
+  llegan campos nuevos del servidor (hallazgo 12).
 - Materiales, como Clientes:
   - `layout.tsx` con la ranura `@panel` (`default`, `page`, `(.)new` y
     `(.)[id]/edit`); cada panel autoriza y consulta como su página completa.
@@ -3949,6 +3961,139 @@ Hallazgos:
     scripts de `tmp`. Los scripts de mutación ahora comprueban todos los
     fragmentos antes de ejecutar nada.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e103-huella`) y etiquetas `e103/`, los
+  ayudantes y el medidor de tareas (`tmp/e10-diff/e103-*.js`, generados por
+  `c-e103-guiones.py` desde los de la 10.2). Plan en
+  `tmp/e10-diff/plan-verificacion-10-3a.md`.
+- Clics y teclas reales, puntero en el margen del shell.
+- Las capturas que dependen de los datos (lista, lista filtrada y alertas) se
+  tomaron en el «antes» después de sus tareas y en el «después» antes de las
+  suyas: las dos fases ven el mismo estado.
+- T13 a T16 escriben en staging, con autorización del responsable y cada
+  material de prueba inactivo al final. Las demás tareas solo leen.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-19, de 00:00 a 01:05 UTC, sobre `41c35cd` (`buildId`
+  `E6utUZdLyh7ix_xNXaXhJ`, CSS servido de 113.281 bytes, `c5d15599…`): 7
+  capturas y 4 controles, con el sello `7c180c40…`, igual en Python.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-3a.md`).
+- Push de 12 commits (`513c513`, `49cf5f5` y de `4fd9631` a `7e50c8e`): CI
+  #85 en verde (2m 6s). Vercel desplegó `7e50c8e` (`success` a las 01:11:43
+  UTC) y cambió el `buildId` (`959zJuAQLhnbJ-bTWPAS6`). El CSS servido es el
+  predicho byte a byte (113.130 bytes, `e8dc6378…`): solo falta la rejilla de
+  la barra anterior de materiales.
+- «Después» el 2026-10-19, de 01:14 a 01:40 UTC: 7 capturas y 4 controles,
+  sello `4da904c7…`, igual en Python. Evidencia en
+  `tmp/e10-diff/antes-10-3a.json` y `despues-10-3a.json`.
+
+Huella: las 7 cambian como se predijo, y los 4 controles (proveedores, tipos
+de proveedor, auditoría y la sección «Listados» de la galería) dan el mismo
+hash que en el «antes».
+
+- Alta y edición a página completa: el encabezado (migas, título y
+  descripción) es idéntico registro a registro y la raíz `<main>` pasa a
+  `<div>`. En el formulario, el texto visible solo cambia porque el asterisco
+  va en su propio `span` y «Cancelar» queda después de «Guardar».
+- Lista, lista filtrada y lista a 376 px: sin el `<form>` y el campo oculto
+  de cada fila, las tablas tienen los mismos registros (224, 54 y 224). Todos
+  difieren solo en `y`, con un delta constante (+43,98 a 1281 px y −43,98 a
+  376, por la barra de `FilterBar`), salvo los botones de fila, que solo pasan
+  de `inline-flex` a `flex` (un hijo de un contenedor flexible se vuelve de
+  bloque) con la misma variante y tamaño. Ninguna línea con texto visible
+  cambia.
+- Alertas a 1281 y 376 px: solo `<main>` → `<div>`, con el mismo texto.
+
+Tareas, con los mismos pasos en las dos fases («PRUEBA E103 antes» y
+«PRUEBA E103 despues»). Los tiempos van del clic al aviso y dependen de la
+red y del servidor de staging: no miden rendimiento.
+
+| Tarea | Antes (`41c35cd`) | Después (`7e50c8e`) |
+|---|---|---|
+| T13 Alta con un nombre que ya existe | Página completa con el foco inicial en `body`: mensaje rojo y además un toast de error; se borran todos los campos | Panel con el foco inicial en el nombre: el error queda en el panel, sin toast; se conserva lo escrito y el nombre recibe el foco (696 ms) |
+| T13 Alta válida | `MAT00000012`; aviso a 1.625 ms y vuelta a la lista | `MAT00000013`; un aviso a 1.925 ms, el panel se cierra, la fila aparece primera y el foco vuelve a «Nuevo material» |
+| T14 Edición del mínimo de 5 a 6 | Página completa, stock de solo lectura; 1.390 ms | Panel desde la fila, stock de solo lectura; Tab no sale del panel y Esc con cambios pide descartar; 1.681 ms y el foco vuelve a «Editar» de la fila |
+| T15 Inactivar, activar e inactivar | Sin preguntar (1.351 y 1.237 ms) | Confirmación con la consecuencia; Esc no hace nada; inactivar a 1.131 ms con la fila en su lugar y el foco en su «Activar»; activar sin preguntar (828 ms) |
+| T16 Atender la alerta del material | Sin preguntar (979 ms) | Confirmación con el botón normal y el texto aprobado; 799 ms y la fila pasa a «atendida» (hallazgo 13) |
+| T17 Hallazgo 10: «Limpiar», Atrás y Adelante en auditoría y materiales | El selector seguía en el valor viejo tras «Limpiar» | «Limpiar» corregido; Atrás y Adelante un paso atrasados (hallazgo 12) |
+| T18 Hallazgo 11: clic en «Cancelar» de la confirmación de descarte | Se reabría a los 10 ms (ventana) y 13 ms (panel) | Se cierra, conserva lo escrito y devuelve el foco, en la ventana y en el panel |
+
+Además, en el «después»: la edición por URL directa se abre a página
+completa y su «Cancelar» vuelve a la lista con el filtro de `returnTo`; desde
+una lista filtrada, «Nuevo material» y «Editar» llevan ese filtro; a 376 px
+el panel ocupa toda la pantalla (376 × 813) sin desbordamiento, y Esc sin
+cambios lo cierra sin preguntar.
+
+La regresión del «después» y su arreglo:
+
+- Al repetir T17, «Limpiar» ya funcionaba, pero con Atrás y Adelante el
+  selector quedaba un paso atrasado. Además, abrir el panel de materiales
+  volvía a montar la barra y perdía lo elegido sin enviar (comprobado con la
+  categoría «Herramienta»).
+- `9f484d2`: la prueba nueva fallaba antes del arreglo en sus 3 casos, igual
+  que en staging (`tmp/e10-diff/rojo-103-fix-filterbar.txt`), las mutaciones
+  dan 4 de 4 (`mut_103_fix_filterbar.txt`), `npm run check` terminó en verde
+  con 143 archivos y 2.289 pruebas, y el CSS compilado no cambia.
+- Push: CI #86 en verde (2m 11s). Vercel `success` a las 02:27:10 UTC,
+  `buildId` `rfS33EAqVmaxzvQQ-Zw6C` y el mismo CSS servido.
+- Re-verificación el 2026-10-19, de 02:29 a 02:33 UTC, sin escribir datos
+  (`tmp/e10-diff/reverificacion-fix-filterbar.json`, predicción en
+  `plan-reverificacion-fix-filterbar.md`):
+  - auditoría: «Limpiar» vacía la acción y las fechas, Atrás devuelve
+    «crear» y las fechas, y Adelante las vacía; materiales: «Limpiar
+    filtros» vacía el estado, Atrás devuelve «inactive» y Adelante lo vacía;
+  - con «Herramienta» elegida sin filtrar, abrir y cerrar el panel conserva
+    el mismo nodo y el valor;
+  - la auditoría y la lista filtrada dan el mismo hash que en el «después».
+    La lista completa cambia solo por los datos (hallazgo 14): 17 registros
+    de la fila `MAT00000013`, 7 contenedores 52,81 px más altos, el texto
+    «Mostrando 1 - 13 de 13» y 207 registros desplazados +52,81 en `y`; la
+    barra y los otros 263 registros son idénticos.
+
+El capítulo de Inventario del manual se cotejó con lo verificado: coincide.
+Se precisó en las reglas comunes que «Cancelar» de la página completa vuelve
+a la lista con sus filtros y que abrir y cerrar una ventana o un panel no
+cambia lo elegido en la barra.
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER ni
+WORKSHOP_MASTER. Datos escritos en staging: `MAT00000012` y `MAT00000013`
+(inactivos), su kárdex inicial, sus alertas (atendidas) y en la bitácora el
+alta, la edición y los tres cambios de estado de cada uno; atender no
+escribe en la bitácora. Tiempos: el «antes», 65 minutos; el «después» con
+sus tareas, 26; de la primera ejecución de la prueba roja al commit del
+arreglo, 13; la re-verificación, 4.
+
+Hallazgos de la verificación:
+
+12. Regresión de la 10.3a (`53d9601`), corregida en `9f484d2`. La lista con
+    otra búsqueda es el mismo segmento de página para Next 16.2.9: Atrás y
+    Adelante confirman la URL con el contenido que ya se ve y piden al
+    servidor el de la URL restaurada, y el panel de una ruta interceptada
+    cambia la URL sin cambiar la lista. Con la URL como `key`, los campos se
+    montaban con los valores viejos y ya no cambiaban al llegar los nuevos.
+    Ahora la `key` es la consulta vigente cuando llegan campos nuevos del
+    servidor. Las pruebas de C2 pintaban siempre la URL y los campos juntos.
+13. Seguimiento: atender una alerta deja el foco en `body`, porque el botón
+    desaparece de la fila y `ConfirmActionButton` no tiene a dónde
+    devolverlo. Se propone llevarlo a la fila o al título de la tabla, en la
+    10.3b o en la entrega 11.
+14. Método: las capturas con datos del «después» se toman antes de sus
+    tareas, así que una re-verificación posterior ve los datos de prueba.
+    Se compara con un diff por registros que ignora la `y`.
+15. Método: el `textHash` de la huella incluye los elementos sin texto, así
+    que cambia con el número de elementos aunque el texto visible sea el
+    mismo; se compara la secuencia de textos no vacíos. El «antes» a 376 px,
+    tomado tras recargar, tenía un campo oculto más por fila que a 1281
+    (probablemente los que React agrega al pintar en el servidor un `<form>`
+    con acción de función); no cambia la conclusión.
+16. Método: la sesión del ERP caducó entre turnos y la primera petición
+    aterrizó en el `/login` de producción. No se midió allí; el responsable
+    volvió a entrar por el de staging.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -3973,7 +4118,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a hecha en local con 9 commits y pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada en staging, con CI #86 verde y 7 de 7 huellas como se predijo; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3997,7 +4142,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 143 / 2.286 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 143 / 2.289 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -4209,6 +4354,11 @@ Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
 copias locales de conversión y formato 0, escrituras del kárdex con
 `stock_anterior:` 6 e `import` de las librerías de notificaciones en 2
 archivos, medidos de nuevo.
+
+Actualizado en el cierre de la 10.3a (2026-10-19) sobre `9f484d2`: pruebas
+143 / 2.289 (los 3 casos nuevos de `FilterBar` en jsdom), y `npm run
+refactor:inventory` sigue analizando 637 archivos. Las demás filas no
+cambian: el `fix` solo toca `FilterBarFields`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

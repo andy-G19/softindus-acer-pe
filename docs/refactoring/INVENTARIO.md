@@ -267,7 +267,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
 | `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |
 | `src/components/forms/action-form.tsx` | 48 | `{action}` |
-| `src/components/forms/filter-bar.tsx` | 38 | `{action}` |
+| `src/components/forms/filter-bar.tsx` | 39 | `{action}` |
 | `src/components/inventory/purchase-form.tsx` | 142 | `{createPurchaseAction}` |
 | `src/components/inventory/supplier-payment-form.tsx` | 31 | `{createSupplierPaymentAction}` |
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
