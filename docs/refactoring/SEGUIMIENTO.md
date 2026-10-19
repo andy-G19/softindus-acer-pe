@@ -3804,11 +3804,13 @@ Datos leídos de la API de GitHub el 2026-10-18 y comparados con git:
 
 ### Sub-entrega 10.3a — Materiales y alertas
 
-Fecha: del 2026-10-18 al 2026-10-19 (UTC). Estado: cerrada en staging el
-2026-10-19; falta integrarla en `main`. 9 commits, de `4fd9631` a `c5e6f6b`,
-el registro `7e50c8e`, el `fix` `9f484d2` que salió de la verificación y
-este cierre. Viajaron con `513c513` (integración de la 10.2) y `49cf5f5`
+Fecha: del 2026-10-18 al 2026-10-19 (UTC). Estado: cerrada el 2026-10-19.
+9 commits, de `4fd9631` a `c5e6f6b`, el registro `7e50c8e`, el `fix`
+`9f484d2` que salió de la verificación y el cierre `512cbc4` (CI #87 en
+verde). Viajaron con `513c513` (integración de la 10.2) y `49cf5f5`
 (hallazgo 11 de la 10.2), que no se publicaron al cerrar la 10.2.
+Integrada en `main` con el PR #25 (merge commit `13ea654`, CI #89 en
+verde).
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3823,7 +3825,7 @@ este cierre. Viajaron con `513c513` (integración de la 10.2) y `49cf5f5`
 | c5e6f6b | feat | Atender una alerta con confirmación y resultado de acción; alertas sin `<main>` anidado. |
 | 7e50c8e | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y manual de Materiales y Alertas. |
 | 9f484d2 | fix | Hallazgo 12 de la verificación: `FilterBar` sigue a la página con Atrás, Adelante y el panel. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
+| 512cbc4 | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
 
 Decisiones del responsable (2026-10-18), tras la auditoría:
 
@@ -4094,6 +4096,23 @@ Hallazgos de la verificación:
     aterrizó en el `/login` de producción. No se midió allí; el responsable
     volvió a entrar por el de staging.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-19 y comparados con git:
+
+- El cierre `512cbc4` se publicó en `staging`: CI #87 en verde (1m 50s), y
+  Vercel lo desplegó (`success` a las 02:53:57 UTC).
+- PR #25, abierto a las 02:57:00 UTC y fusionado con merge commit a las
+  03:06:09 UTC del 2026-10-19: 14 commits, de `513c513` a `512cbc4`, y 43
+  archivos (+7.094 −684). Su CI, el #88, sobre `512cbc4`, terminó en verde
+  (2m 27s).
+- El merge commit `13ea654` tiene como padres `9dc6dd9` (`main`) y `512cbc4`
+  (`staging`), y su árbol es el de `512cbc4` (`a9557820`): `main` y `staging`
+  tienen el mismo contenido. CI #89 en verde (3m 8s).
+- Vercel desplegó `13ea654` en producción al primer intento (estado «Vercel»
+  `pending` a las 03:06:12 UTC y `success` a las 03:07:43 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4118,7 +4137,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada en staging, con CI #86 verde y 7 de 7 huellas como se predijo; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
