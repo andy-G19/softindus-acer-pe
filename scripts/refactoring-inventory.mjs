@@ -3,6 +3,8 @@ import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
+import { describeRoute } from "./refactoring-inventory-routes.mjs";
+
 const root = fileURLToPath(new URL("../", import.meta.url));
 const slash = (path) => path.split(sep).join("/");
 
@@ -67,9 +69,7 @@ for (const path of paths) {
   visit(source);
 
   if (isPage) {
-    const route = "/" + file.slice("src/app/".length, -"/page.tsx".length)
-      .split("/").filter((segment) => !segment.startsWith("(")).join("/");
-    pages.push({ file, route, area, inline: pageForms.length, imports });
+    pages.push({ file, ...describeRoute(file), area, inline: pageForms.length, imports });
     modules.set(area, (modules.get(area) ?? 0) + 1);
   }
   if (isServerAction) actions.push({ file, exports });
@@ -92,6 +92,8 @@ const output = [
   table(["Medida", "Cantidad"], [
     ["Archivos fuente analizados", paths.length],
     ["Páginas", pages.length],
+    ["Páginas en ranuras paralelas (@ranura)", pages.filter((page) => page.slot).length],
+    ["Páginas que interceptan una ruta", pages.filter((page) => page.intercepted).length],
     ["Declaraciones JSX de formulario", forms.length],
     ["Archivos con directiva use server", actions.length],
     ["Funciones exportadas en esos archivos", actions.reduce((n, row) => n + row.exports.length, 0)],
@@ -99,8 +101,15 @@ const output = [
   "## Páginas por área",
   table(["Área", "Páginas"], [...modules].sort(([a], [b]) => a.localeCompare(b))),
   "## Rutas y formularios candidatos",
-  table(["Ruta", "Fuente", "Formularios inline", "Componentes candidatos"], pages.map((page) => [
-    `\`${page.route}\``, `\`${page.file}\``, page.inline, page.imports.join(", ") || "—",
+  "La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del layout; " +
+    "si intercepta su ruta, es el panel que abre la navegación desde el listado, y la URL " +
+    "directa o una recarga muestran la página completa de la misma ruta.",
+  table(["Ruta", "Ranura", "Fuente", "Formularios inline", "Componentes candidatos"], pages.map((page) => [
+    `\`${page.route}\``,
+    [page.slot && `\`${page.slot}\``, page.intercepted && "intercepta"].filter(Boolean).join(", ") || "—",
+    `\`${page.file}\``,
+    page.inline,
+    page.imports.join(", ") || "—",
   ])),
   "## Declaraciones de formularios",
   table(["Fuente", "Línea", "Acción"], forms.map((form) => [

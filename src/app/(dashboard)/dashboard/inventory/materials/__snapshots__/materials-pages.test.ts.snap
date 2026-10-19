@@ -129,7 +129,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > llamadas
 
 exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -160,7 +160,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value="plancha"/>
@@ -199,8 +199,6 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -270,7 +268,7 @@ exports[`/dashboard/inventory/materials > filtros y maestro de taller > resultad
 <a data-variant="outline" href="/dashboard/inventory/materials?q=plancha&amp;category=materia_prima&amp;unit=kg&amp;status=active&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -360,7 +358,7 @@ exports[`/dashboard/inventory/materials > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -388,11 +386,11 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Nuevo material</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -431,8 +429,6 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -472,10 +468,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -497,10 +490,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -514,8 +504,7 @@ exports[`/dashboard/inventory/materials > inactivos > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -593,7 +582,7 @@ exports[`/dashboard/inventory/materials > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -621,11 +610,11 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Nuevo material</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -664,8 +653,6 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -705,10 +692,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -730,10 +714,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-2/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -747,8 +728,7 @@ exports[`/dashboard/inventory/materials > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/materials?page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -818,7 +798,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > ll
 
 exports[`/dashboard/inventory/materials > stock critico paginado en memoria > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -846,11 +826,11 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Nuevo material</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -889,8 +869,6 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -930,10 +908,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/materials/id_material-1/edit?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dcritical%26pageSize%3D1">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_material" value="id_material-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -947,8 +922,7 @@ exports[`/dashboard/inventory/materials > stock critico paginado en memoria > re
 <a data-variant="outline" href="/dashboard/inventory/materials?stock=critical&amp;pageSize=1&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1018,7 +992,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1046,11 +1020,11 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/material-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/inventory/materials/new">Nuevo material</a>
+<a data-variant="default" href="/dashboard/inventory/materials/new?returnTo=%2Fdashboard%2Finventory%2Fmaterials%3Fstock%3Dok">Nuevo material</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/materials">
+<form role="search" aria-label="Filtros de materiales" action="/dashboard/inventory/materials" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar material..." name="q" value=""/>
@@ -1089,8 +1063,6 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/materials">Limpiar filtros</a>
 </div>
 </form>
@@ -1131,7 +1103,7 @@ exports[`/dashboard/inventory/materials > stock suficiente > resultado 1`] = `
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1179,7 +1151,7 @@ exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listad
 
 exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1218,20 +1190,23 @@ exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listad
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_material" value="id_material-1"/>
 <div>
-<label for="nombre_material">Nombre del material *</label>
+<label for="nombre_material">Nombre del material<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value="nombre_material-1"/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría *</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida *</label>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
 <input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value="unidad_medida-1"/>
 </div>
 </div>
@@ -1247,20 +1222,22 @@ exports[`/dashboard/inventory/materials/[id]/edit > editar con regreso al listad
 </div>
 <div>
 <div>
-<label for="stock_minimo">Stock mínimo *</label>
-<input type="number" id="stock_minimo" step="0.01" min="0" required="" name="stock_minimo" value="11.50"/>
+<label for="stock_minimo">Stock mínimo<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_minimo" required="" step="0.01" min="0" name="stock_minimo" value="11.50"/>
 </div>
 <div>
-<label for="costo_unitario_actual">Costo unitario actual *</label>
-<input type="number" id="costo_unitario_actual" step="0.01" min="0" required="" name="costo_unitario_actual" value="11.50"/>
+<label for="costo_unitario_actual">Costo unitario actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario_actual" required="" step="0.01" min="0" name="costo_unitario_actual" value="11.50"/>
 </div>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/inventory/materials">Cancelar</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?status=active">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1320,7 +1297,7 @@ exports[`/dashboard/inventory/materials/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/inventory/materials/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1358,50 +1335,313 @@ exports[`/dashboard/inventory/materials/new > formulario > resultado 1`] = `
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
-<label for="nombre_material">Nombre del material *</label>
+<label for="nombre_material">Nombre del material<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value=""/>
 </div>
 <div>
 <div>
-<label for="categoria">Categoría *</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida *</label>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
 <input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value=""/>
 </div>
 </div>
 <div>
 <div>
-<label for="stock_actual">Stock actual *</label>
-<input type="number" id="stock_actual" step="0.01" min="0" required="" name="stock_actual" value="0"/>
+<label for="stock_actual">Stock actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_actual" required="" step="0.01" min="0" name="stock_actual" value="0"/>
 </div>
 <div>
-<label for="stock_reservado">Stock reservado *</label>
-<input type="number" id="stock_reservado" step="0.01" min="0" required="" name="stock_reservado" value="0"/>
-</div>
-</div>
-<div>
-<div>
-<label for="stock_minimo">Stock mínimo *</label>
-<input type="number" id="stock_minimo" step="0.01" min="0" required="" name="stock_minimo" value="0"/>
-</div>
-<div>
-<label for="costo_unitario_actual">Costo unitario actual *</label>
-<input type="number" id="costo_unitario_actual" step="0.01" min="0" required="" name="costo_unitario_actual" value="0"/>
+<label for="stock_reservado">Stock reservado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_reservado" required="" step="0.01" min="0" name="stock_reservado" value="0"/>
 </div>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/inventory/materials">Cancelar</a>
+<div>
+<label for="stock_minimo">Stock mínimo<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_minimo" required="" step="0.01" min="0" name="stock_minimo" value="0"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario_actual" required="" step="0.01" min="0" name="costo_unitario_actual" value="0"/>
+</div>
+</div>
+<div>
 <button data-variant="default" type="submit">Guardar material</button>
+<a data-variant="outline" href="/dashboard/inventory/materials">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
+`;
+
+exports[`/dashboard/inventory/materials/new > formulario con regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/materials/new > formulario con regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/materials?status=inactive&amp;page=2">Materiales</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo material</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo material</h1>
+<p>Registra materia prima, consumibles, repuestos, herramientas u otros insumos del taller.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a materiales">
+<svg/>Volver a materiales</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_material">Nombre del material<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value=""/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_actual">Stock actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_actual" required="" step="0.01" min="0" name="stock_actual" value="0"/>
+</div>
+<div>
+<label for="stock_reservado">Stock reservado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_reservado" required="" step="0.01" min="0" name="stock_reservado" value="0"/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_minimo">Stock mínimo<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_minimo" required="" step="0.01" min="0" name="stock_minimo" value="0"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario_actual" required="" step="0.01" min="0" name="costo_unitario_actual" value="0"/>
+</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar material</button>
+<a data-variant="outline" href="/dashboard/inventory/materials?status=inactive&amp;page=2">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`panel lateral de materiales > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Nuevo material</h2>
+<p id="radix-_R_1H2_">Registra materia prima, consumibles, repuestos, herramientas u otros insumos del taller.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombre_material">Nombre del material<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value=""/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_actual">Stock actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_actual" required="" step="0.01" min="0" name="stock_actual" value="0"/>
+</div>
+<div>
+<label for="stock_reservado">Stock reservado<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_reservado" required="" step="0.01" min="0" name="stock_reservado" value="0"/>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_minimo">Stock mínimo<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_minimo" required="" step="0.01" min="0" name="stock_minimo" value="0"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario_actual" required="" step="0.01" min="0" name="costo_unitario_actual" value="0"/>
+</div>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar material</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de materiales > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar material</h2>
+<p id="radix-_R_1H2_">nombre_material-1 · id_material-1</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_material" value="id_material-1"/>
+<div>
+<label for="nombre_material">Nombre del material<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_material" required="" placeholder="Ej. Plancha metálica 1/20" name="nombre_material" value="nombre_material-1"/>
+</div>
+<div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<input id="unidad_medida" required="" placeholder="Ej. kg, unidad, metro, plancha" name="unidad_medida" value="unidad_medida-1"/>
+</div>
+</div>
+<div>
+<div>
+<span>Stock actual</span>
+<div>11.50</div>
+</div>
+<div>
+<span>Stock reservado</span>
+<div>11.50</div>
+</div>
+</div>
+<div>
+<div>
+<label for="stock_minimo">Stock mínimo<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="stock_minimo" required="" step="0.01" min="0" name="stock_minimo" value="11.50"/>
+</div>
+<div>
+<label for="costo_unitario_actual">Costo unitario actual<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario_actual" required="" step="0.01" min="0" name="costo_unitario_actual" value="11.50"/>
+</div>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

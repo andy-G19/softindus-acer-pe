@@ -3157,7 +3157,7 @@ Límite con la entrega 11:
 |---|---|---|---|---|
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
-| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados | 5 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados) | 5 h; recalibrada a 5,3 h y 4,9 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
@@ -3194,9 +3194,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado; sin el campo Estado |
-| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
-| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3 | Pendiente |
-| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3 | Pendiente |
+| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
+| Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
+| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
 | Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
@@ -3229,7 +3229,7 @@ destructivas confirman:
 | Sub-entrega | Acciones |
 |---|---|
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
-| 10.3 | Inactivar proveedor, material y material de proveedor; atender alerta de stock |
+| 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b) |
 | 10.4 | Inactivar cliente, producto y categoría de producto |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
@@ -3503,11 +3503,11 @@ Datos leídos de la API de GitHub el 2026-10-17 y comparados con git:
 
 ### Sub-entrega 10.2 — Reportes y auditoría
 
-Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada en staging el
-2026-10-18; falta integrarla en `main`. El paso 0 (`23f2827`) registró la
-integración de la 10.1 en `main`. 10 commits, de `871fb5a` a `9d70f59`, el
-registro `0073c2b`, el `fix` `a4a5f9c` que salió de la verificación y este
-cierre:
+Fecha: del 2026-10-17 al 2026-10-18. Estado: cerrada el 2026-10-18. El paso
+0 (`23f2827`) registró la integración de la 10.1 en `main`. 10 commits, de
+`871fb5a` a `9d70f59`, el registro `0073c2b`, el `fix` `a4a5f9c` que salió de
+la verificación y el cierre `41c35cd` (CI #82 en verde). Integrada en `main`
+con el PR #24 (merge commit `9dc6dd9`, CI #84 en verde):
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -3523,7 +3523,7 @@ cierre:
 | 9d70f59 | feat | Inventario, producción y mantenimiento. |
 | 0073c2b | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y capítulo de Reportes del manual. |
 | a4a5f9c | fix | Hallazgo 9 de la verificación: `DateRangeFields` toma las fechas de la URL cuando la página se vuelve a pintar sin montarse («Limpiar», Atrás, Adelante). |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
+| 41c35cd | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
 
 Alcance: 10 pantallas. El plan de la entrega 10 decía «9 reportes, el
 historial y auditoría», pero auditoría es uno de los 9 reportes del registro.
@@ -3760,7 +3760,10 @@ Hallazgos de la verificación:
     en «crear» aunque la URL y la tabla ya no filtran, porque React no
     actualiza el `defaultValue` de un `<select>`. Afecta a toda barra con
     selects que se limpia con `next/link`, también a las de la 10.1. Se
-    propone un `fix` aparte.
+    propone un `fix` aparte. Corregido en `53d9601`, en la 10.3a: `FilterBar`
+    vuelve a montar sus campos cuando cambia la URL. Completado en `9f484d2`
+    tras verificar la 10.3a: con Atrás, Adelante y el panel, la URL cambia
+    antes de que lleguen los campos de la página (hallazgo 12 de la 10.3a).
 11. Preexistente (ya ocurría en el «antes», que tiene el mismo código que
     producción), pendiente: el clic con el ratón en «Cancelar»
     de la confirmación de descarte no la cierra, en la ventana ni en el
@@ -3768,7 +3771,11 @@ Hallazgos de la verificación:
     Esc, Enter y «Descartar cambios» con el ratón sí funcionan, y jsdom no lo
     reproduce. Hipótesis: la ventana trata ese clic, fuera de su árbol de
     React, como un clic fuera y vuelve a pedir el descarte. Se arregla aparte,
-    tras el cierre de la 10.2.
+    tras el cierre de la 10.2. Corregido en `49cf5f5`, publicado con la
+    10.3a: la ventana y el panel ignoran el clic fuera que empieza dentro de
+    la confirmación (`ignoreConfirmationPointer`). En staging, el clic con el
+    ratón en «Cancelar» la cierra sin reabrirla, conserva lo escrito y
+    devuelve el foco a la ventana o al panel.
 12. Método: una huella tomada tras una navegación suave puede arrastrar
     estado del cliente. Por eso la de staff-largo se repitió montando la
     página, y en la re-verificación las dos coinciden.
@@ -3777,6 +3784,315 @@ Hallazgos de la verificación:
     booleanos y textos.
 14. Método: entre sesiones de la app, el panel perdió el acceso a Vercel y
     hubo que entrar de nuevo antes de la re-verificación.
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-18 y comparados con git:
+
+- El cierre `41c35cd` se publicó en `staging`: CI #82 en verde (2m 58s), y
+  Vercel lo desplegó (`success` a las 03:12:56 UTC).
+- PR #24, abierto a las 03:17:48 UTC y fusionado con merge commit a las
+  03:21:51 UTC del 2026-10-18: 14 commits, de `23f2827` a `41c35cd`, y 62
+  archivos (+7.783 −1.566). Su CI, el #83, sobre `41c35cd`, terminó en verde
+  (2m 51s).
+- El merge commit `9dc6dd9` tiene como padres `9f52808` (`main`) y `41c35cd`
+  (`staging`), y su árbol es el de `41c35cd` (`569d259c`): `main` y `staging`
+  tienen el mismo contenido. CI #84 en verde (1m 54s).
+- Vercel desplegó `9dc6dd9` en producción al primer intento (estado «Vercel»
+  `pending` a las 03:21:57 UTC y `success` a las 03:23:20 UTC). La
+  sub-entrega no trae migraciones.
+
+### Sub-entrega 10.3a — Materiales y alertas
+
+Fecha: del 2026-10-18 al 2026-10-19 (UTC). Estado: cerrada en staging el
+2026-10-19; falta integrarla en `main`. 9 commits, de `4fd9631` a `c5e6f6b`,
+el registro `7e50c8e`, el `fix` `9f484d2` que salió de la verificación y
+este cierre. Viajaron con `513c513` (integración de la 10.2) y `49cf5f5`
+(hallazgo 11 de la 10.2), que no se publicaron al cerrar la 10.2.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 4fd9631 | fix | El inventario de refactor muestra la URL de las rutas interceptadas y su ranura (`describeRoute`, con prueba). |
+| 53d9601 | fix | Hallazgo 10 de la 10.2: los campos de `FilterBar` se vuelven a montar cuando cambia la URL. |
+| 1fe0693 | test | Caracterización de las acciones de materiales y de la alerta de stock (42 casos). |
+| ffaa3f1 | fix | El alta de material decide el kárdex inicial y la alerta con la fila que devuelve la escritura. |
+| c69eab4 | fix | Activar e inactivar material fijan el estado pedido. |
+| d2b3ca3 | fix | Atender una alerta ya atendida no reescribe quién ni cuándo. |
+| f7abaf0 | feat | Materiales en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
+| 5991f06 | feat | Inactivar material pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
+| c5e6f6b | feat | Atender una alerta con confirmación y resultado de acción; alertas sin `<main>` anidado. |
+| 7e50c8e | docs | Registro de la sub-entrega, `CLAUDE.md`, inventario y manual de Materiales y Alertas. |
+| 9f484d2 | fix | Hallazgo 12 de la verificación: `FilterBar` sigue a la página con Atrás, Adelante y el panel. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos, manual cotejado e inventario. |
+
+Decisiones del responsable (2026-10-18), tras la auditoría:
+
+- D1. La 10.3 se parte. La 10.3a lleva la herramienta, el hallazgo 10, los
+  materiales (lo crítico: el alta escribe el kárdex y la alerta) y las
+  alertas. La 10.3b lleva proveedores, materiales de proveedor y los
+  listados del área. El plan detallado estimó la 10.3 completa en unas
+  8,8 horas, por encima del umbral de la entrega 10.
+- D2. El hallazgo 10 se corrige primero y en `FilterBar`, así las barras de
+  inventario lo heredan.
+- D3. El alta de material decide con la fila escrita (regla 5 de
+  `CLAUDE.md`), aunque solo cambia con una petición manipulada.
+- D4. Atender una alerta confirma con el botón normal, no el destructivo:
+  no borra ni anula nada, pero no se puede deshacer.
+- La confirmación de inactivar material agrega «y saldrá de Stock crítico
+  actual» al texto del plan (aprobado en el commit).
+
+Auditoría: consecuencias comprobadas en las consultas.
+
+- Material inactivo: compras, salidas, recetas (detalles y versiones),
+  chatarra, retazos y asociaciones nuevas solo ofrecen y aceptan materiales
+  activos; la entrega y la entrega adicional a una orden de trabajo lo
+  rechazan; sale de «Stock crítico actual», de «Materiales activos» y de la
+  tarjeta de stock bajo del inicio. Su stock, kárdex y alertas se conservan.
+- Alerta atendida: no se puede reactivar. «Stock crítico actual» se calcula
+  con el stock, así que el material sigue allí mientras no supere el
+  mínimo; solo una entrega a una orden de trabajo abre otra alerta.
+- Para la 10.3b. Proveedor inactivo: deja de ofrecerse en compras,
+  repuestos y asociaciones nuevas, y en el filtro del reporte de proveedores
+  y compras; sale de «Proveedores activos»; sus compras, pagos y
+  asociaciones lo conservan. Material de proveedor inactivo: ninguna otra
+  pantalla lee `proveedor_material`.
+
+Diseño:
+
+- `describeRoute` (`scripts/refactoring-inventory-routes.mjs`) sigue la
+  documentación de Next 16: los grupos y las ranuras no son segmentos de la
+  URL, y `(.)`, `(..)`, `(..)(..)` y `(...)` cuentan segmentos de ruta. El
+  inventario gana la columna «Ranura».
+- `FilterBarFields` (`src/components/forms/filter-bar-fields.tsx`) envuelve
+  los campos de `FilterBar` en un `Fragment` con la consulta de la URL como
+  `key`. Si la URL cambia, los campos se vuelven a montar con los valores que
+  la página leyó de ella; si no, conservan lo elegido. Los botones quedan
+  fuera y «Limpiar» conserva el foco. El HTML no cambia. Tras la
+  verificación, `9f484d2` cambia la `key` por la consulta vigente cuando
+  llegan campos nuevos del servidor (hallazgo 12).
+- Materiales, como Clientes:
+  - `layout.tsx` con la ranura `@panel` (`default`, `page`, `(.)new` y
+    `(.)[id]/edit`); cada panel autoriza y consulta como su página completa.
+  - Las acciones devuelven `FormActionState` y autorizan con
+    `getAuthorizedSession`; ninguna redirige ya.
+  - `MaterialForm` usa `ActionForm`, `Field`, `SubmitButton` y
+    `useFormResult`; el stock actual y el reservado solo se escriben en el
+    alta.
+  - `getMaterialEditValues` (`material-edit-values.ts`) da los valores de
+    edición a la página y al panel: el `formatDecimal` de la página se movió
+    allí.
+  - `MaterialStatusButton` y `StockAlertAttendButton` sobre
+    `ConfirmActionButton`; atender usa `confirm.variant: "default"`.
+- El alta pide `select` de `stock_actual` y `stock_minimo` al `create` y
+  decide con esos `Decimal`. Atender y el cambio de estado comparan y
+  escriben en una sola sentencia.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-103-c1.txt` (4 de
+   7 casos), `rojo-103-c2.txt` (2 de 4), `rojo-103-c4.txt` (3 de 3),
+   `rojo-103-c5.txt` (4 de 4) y `rojo-103-c6.txt` (2 de 3).
+2. Caracterización antes de mover: 42 casos de acciones en `1fe0693` y dos
+   casos de la página de alertas con una alerta activa, escritos con el
+   código anterior (`tmp/e10-diff/c9-alerts-pages-snap-antes.snap`): los
+   datos generados nunca tenían una alerta activa y el snapshot no mostraba
+   la acción.
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas (`verify_103_c4_snaps.py`, `verify_103_c5_snaps.py`,
+   `verify_103_c7_actions.py`, `verify_103_c8_page.py` y
+   `verify_103_c9_page.py`): las llamadas solo cambian donde el commit lo
+   anuncia, y el HTML, en los elementos que cambian.
+4. Mutaciones (`tmp/e10-diff/mut_103_c*.txt`): 7 de 8, 4 de 4, 14 de 14, 6
+   de 6, 6 de 6, 5 de 5, 15 de 15, 10 de 10 y 10 de 10; en total, 77 de
+   78. La superviviente de C1 (sin `Math.max`) solo cambia al subir por
+   encima de la raíz, que no es una ruta válida.
+5. Pruebas con React real en jsdom: `filter-bar.test.ts` (4),
+   `material-form.test.ts` (10, en página y en panel),
+   `material-status-button.test.ts` (3) y `stock-alert-attend-button.test.ts`
+   (2), las tres últimas con el Radix real.
+6. CSS compilado: igual hasta C7. C8 quita solo la rejilla de la barra
+   anterior de materiales (113.282 → 113.131 bytes), y el CSS anterior sin
+   esa regla es el nuevo byte a byte. C9 no cambia.
+7. `npm run check` terminó con código 0 después de cada commit, de 137 a 143
+   archivos de prueba y de 2.205 a 2.286 pruebas. `npm run
+   refactor:inventory` analiza 637 archivos: 134 páginas (6 en ranuras, 4
+   que interceptan), 117 formularios JSX (eran 120) y 48 archivos de
+   acciones.
+
+Tiempo entre commits según sus horas. Incluye la preparación, la revisión
+del responsable y sus pausas, así que los primeros no calibran por sí solos:
+
+| Commit | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 |
+|---|---|---|---|---|---|---|---|---|---|
+| Hora (Lima) | 09:26 | 12:38 | 14:50 | 16:14 | 16:21 | 16:27 | 16:43 | 17:28 | 17:43 |
+| Minutos desde el anterior | — | 192 | 132 | 84 | 7 | 5 | 17 | 45 | 15 |
+
+El tramo más continuo, de C5 a C9, suma 89 minutos frente a los 110 que el
+plan estimó para esos commits.
+
+Hallazgos:
+
+1. El inventario de refactor ponía `@panel` en la URL y perdía `new` en las
+   rutas interceptadas. Corregido en `4fd9631`.
+2. Regla de negocio pendiente: la alerta compara el stock actual con el
+   mínimo (alta, entregas y compras), mientras «Stock crítico actual» y el
+   filtro «Críticos» comparan el disponible (actual menos reservado). Un
+   material puede estar crítico sin alerta.
+3. Las salidas de inventario no crean ni actualizan alertas, y editar el
+   stock mínimo no las reevalúa.
+4. Editar una asociación o un repuesto cuyo proveedor (o material) está
+   inactivo falla con «no existe o está inactivo», aunque el formulario lo
+   ofrece. Se revisa en la 10.3b y la 10.5.
+5. El filtro del reporte de proveedores y compras solo ofrece proveedores
+   activos: las compras de uno inactivo no se pueden filtrar allí.
+6. 13 listados de 5 áreas (entre ellos entradas, salidas, compras y pagos a
+   proveedor) filtran fechas con `parseDateParam`, en la hora del servidor, y
+   `lte 23:59:59.999`: la regla que el grupo 4 corrigió solo en los reportes.
+   Se propone un grupo de `fix` aparte o la entrega 11.
+7. Carrera menor: una entrega a una orden puede actualizar una alerta que
+   alguien acaba de atender, y no abre otra. Entrega 11.
+8. Atender no registra bitácora; la alerta guarda quién la atendió y cuándo.
+9. Método: `tsc` no conoce `LayoutProps` de un layout nuevo hasta correr
+   `next typegen`; `npm run typecheck` lo hace.
+10. Método: React agrega su `<script>` de reenvío de formularios solo si la
+    página tiene un `<form>` cuya acción es una función. Al pasar las filas a
+    `ConfirmActionButton` desaparece del HTML.
+11. Método: un heredoc de Bash volvió a comerse las barras invertidas en dos
+    scripts de `tmp`. Los scripts de mutación ahora comprueban todos los
+    fragmentos antes de ejecutar nada.
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e103-huella`) y etiquetas `e103/`, los
+  ayudantes y el medidor de tareas (`tmp/e10-diff/e103-*.js`, generados por
+  `c-e103-guiones.py` desde los de la 10.2). Plan en
+  `tmp/e10-diff/plan-verificacion-10-3a.md`.
+- Clics y teclas reales, puntero en el margen del shell.
+- Las capturas que dependen de los datos (lista, lista filtrada y alertas) se
+  tomaron en el «antes» después de sus tareas y en el «después» antes de las
+  suyas: las dos fases ven el mismo estado.
+- T13 a T16 escriben en staging, con autorización del responsable y cada
+  material de prueba inactivo al final. Las demás tareas solo leen.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-19, de 00:00 a 01:05 UTC, sobre `41c35cd` (`buildId`
+  `E6utUZdLyh7ix_xNXaXhJ`, CSS servido de 113.281 bytes, `c5d15599…`): 7
+  capturas y 4 controles, con el sello `7c180c40…`, igual en Python.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-3a.md`).
+- Push de 12 commits (`513c513`, `49cf5f5` y de `4fd9631` a `7e50c8e`): CI
+  #85 en verde (2m 6s). Vercel desplegó `7e50c8e` (`success` a las 01:11:43
+  UTC) y cambió el `buildId` (`959zJuAQLhnbJ-bTWPAS6`). El CSS servido es el
+  predicho byte a byte (113.130 bytes, `e8dc6378…`): solo falta la rejilla de
+  la barra anterior de materiales.
+- «Después» el 2026-10-19, de 01:14 a 01:40 UTC: 7 capturas y 4 controles,
+  sello `4da904c7…`, igual en Python. Evidencia en
+  `tmp/e10-diff/antes-10-3a.json` y `despues-10-3a.json`.
+
+Huella: las 7 cambian como se predijo, y los 4 controles (proveedores, tipos
+de proveedor, auditoría y la sección «Listados» de la galería) dan el mismo
+hash que en el «antes».
+
+- Alta y edición a página completa: el encabezado (migas, título y
+  descripción) es idéntico registro a registro y la raíz `<main>` pasa a
+  `<div>`. En el formulario, el texto visible solo cambia porque el asterisco
+  va en su propio `span` y «Cancelar» queda después de «Guardar».
+- Lista, lista filtrada y lista a 376 px: sin el `<form>` y el campo oculto
+  de cada fila, las tablas tienen los mismos registros (224, 54 y 224). Todos
+  difieren solo en `y`, con un delta constante (+43,98 a 1281 px y −43,98 a
+  376, por la barra de `FilterBar`), salvo los botones de fila, que solo pasan
+  de `inline-flex` a `flex` (un hijo de un contenedor flexible se vuelve de
+  bloque) con la misma variante y tamaño. Ninguna línea con texto visible
+  cambia.
+- Alertas a 1281 y 376 px: solo `<main>` → `<div>`, con el mismo texto.
+
+Tareas, con los mismos pasos en las dos fases («PRUEBA E103 antes» y
+«PRUEBA E103 despues»). Los tiempos van del clic al aviso y dependen de la
+red y del servidor de staging: no miden rendimiento.
+
+| Tarea | Antes (`41c35cd`) | Después (`7e50c8e`) |
+|---|---|---|
+| T13 Alta con un nombre que ya existe | Página completa con el foco inicial en `body`: mensaje rojo y además un toast de error; se borran todos los campos | Panel con el foco inicial en el nombre: el error queda en el panel, sin toast; se conserva lo escrito y el nombre recibe el foco (696 ms) |
+| T13 Alta válida | `MAT00000012`; aviso a 1.625 ms y vuelta a la lista | `MAT00000013`; un aviso a 1.925 ms, el panel se cierra, la fila aparece primera y el foco vuelve a «Nuevo material» |
+| T14 Edición del mínimo de 5 a 6 | Página completa, stock de solo lectura; 1.390 ms | Panel desde la fila, stock de solo lectura; Tab no sale del panel y Esc con cambios pide descartar; 1.681 ms y el foco vuelve a «Editar» de la fila |
+| T15 Inactivar, activar e inactivar | Sin preguntar (1.351 y 1.237 ms) | Confirmación con la consecuencia; Esc no hace nada; inactivar a 1.131 ms con la fila en su lugar y el foco en su «Activar»; activar sin preguntar (828 ms) |
+| T16 Atender la alerta del material | Sin preguntar (979 ms) | Confirmación con el botón normal y el texto aprobado; 799 ms y la fila pasa a «atendida» (hallazgo 13) |
+| T17 Hallazgo 10: «Limpiar», Atrás y Adelante en auditoría y materiales | El selector seguía en el valor viejo tras «Limpiar» | «Limpiar» corregido; Atrás y Adelante un paso atrasados (hallazgo 12) |
+| T18 Hallazgo 11: clic en «Cancelar» de la confirmación de descarte | Se reabría a los 10 ms (ventana) y 13 ms (panel) | Se cierra, conserva lo escrito y devuelve el foco, en la ventana y en el panel |
+
+Además, en el «después»: la edición por URL directa se abre a página
+completa y su «Cancelar» vuelve a la lista con el filtro de `returnTo`; desde
+una lista filtrada, «Nuevo material» y «Editar» llevan ese filtro; a 376 px
+el panel ocupa toda la pantalla (376 × 813) sin desbordamiento, y Esc sin
+cambios lo cierra sin preguntar.
+
+La regresión del «después» y su arreglo:
+
+- Al repetir T17, «Limpiar» ya funcionaba, pero con Atrás y Adelante el
+  selector quedaba un paso atrasado. Además, abrir el panel de materiales
+  volvía a montar la barra y perdía lo elegido sin enviar (comprobado con la
+  categoría «Herramienta»).
+- `9f484d2`: la prueba nueva fallaba antes del arreglo en sus 3 casos, igual
+  que en staging (`tmp/e10-diff/rojo-103-fix-filterbar.txt`), las mutaciones
+  dan 4 de 4 (`mut_103_fix_filterbar.txt`), `npm run check` terminó en verde
+  con 143 archivos y 2.289 pruebas, y el CSS compilado no cambia.
+- Push: CI #86 en verde (2m 11s). Vercel `success` a las 02:27:10 UTC,
+  `buildId` `rfS33EAqVmaxzvQQ-Zw6C` y el mismo CSS servido.
+- Re-verificación el 2026-10-19, de 02:29 a 02:33 UTC, sin escribir datos
+  (`tmp/e10-diff/reverificacion-fix-filterbar.json`, predicción en
+  `plan-reverificacion-fix-filterbar.md`):
+  - auditoría: «Limpiar» vacía la acción y las fechas, Atrás devuelve
+    «crear» y las fechas, y Adelante las vacía; materiales: «Limpiar
+    filtros» vacía el estado, Atrás devuelve «inactive» y Adelante lo vacía;
+  - con «Herramienta» elegida sin filtrar, abrir y cerrar el panel conserva
+    el mismo nodo y el valor;
+  - la auditoría y la lista filtrada dan el mismo hash que en el «después».
+    La lista completa cambia solo por los datos (hallazgo 14): 17 registros
+    de la fila `MAT00000013`, 7 contenedores 52,81 px más altos, el texto
+    «Mostrando 1 - 13 de 13» y 207 registros desplazados +52,81 en `y`; la
+    barra y los otros 263 registros son idénticos.
+
+El capítulo de Inventario del manual se cotejó con lo verificado: coincide.
+Se precisó en las reglas comunes que «Cancelar» de la página completa vuelve
+a la lista con sus filtros y que abrir y cerrar una ventana o un panel no
+cambia lo elegido en la barra.
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER ni
+WORKSHOP_MASTER. Datos escritos en staging: `MAT00000012` y `MAT00000013`
+(inactivos), su kárdex inicial, sus alertas (atendidas) y en la bitácora el
+alta, la edición y los tres cambios de estado de cada uno; atender no
+escribe en la bitácora. Tiempos: el «antes», 65 minutos; el «después» con
+sus tareas, 26; de la primera ejecución de la prueba roja al commit del
+arreglo, 13; la re-verificación, 4.
+
+Hallazgos de la verificación:
+
+12. Regresión de la 10.3a (`53d9601`), corregida en `9f484d2`. La lista con
+    otra búsqueda es el mismo segmento de página para Next 16.2.9: Atrás y
+    Adelante confirman la URL con el contenido que ya se ve y piden al
+    servidor el de la URL restaurada, y el panel de una ruta interceptada
+    cambia la URL sin cambiar la lista. Con la URL como `key`, los campos se
+    montaban con los valores viejos y ya no cambiaban al llegar los nuevos.
+    Ahora la `key` es la consulta vigente cuando llegan campos nuevos del
+    servidor. Las pruebas de C2 pintaban siempre la URL y los campos juntos.
+13. Seguimiento: atender una alerta deja el foco en `body`, porque el botón
+    desaparece de la fila y `ConfirmActionButton` no tiene a dónde
+    devolverlo. Se propone llevarlo a la fila o al título de la tabla, en la
+    10.3b o en la entrega 11.
+14. Método: las capturas con datos del «después» se toman antes de sus
+    tareas, así que una re-verificación posterior ve los datos de prueba.
+    Se compara con un diff por registros que ignora la `y`.
+15. Método: el `textHash` de la huella incluye los elementos sin texto, así
+    que cambia con el número de elementos aunque el texto visible sea el
+    mismo; se compara la secuencia de textos no vacíos. El «antes» a 376 px,
+    tomado tras recargar, tenía un campo oculto más por fila que a 1281
+    (probablemente los que React agrega al pintar en el servidor un `<form>`
+    con acción de función); no cambia la conclusión.
+16. Método: la sesión del ERP caducó entre turnos y la primera petición
+    aterrizó en el `/login` de producción. No se midió allí; el responsable
+    volvió a entrar por el de staging.
 
 ## Secuencia de próximas entregas
 
@@ -3802,7 +4118,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada en staging, con CI #81 verde y 16 de 16 huellas como se predijo; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada en staging, con CI #86 verde y 7 de 7 huellas como se predijo; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -3826,7 +4142,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 136 / 2.194 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 143 / 2.289 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -3845,15 +4161,17 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 12 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 102 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 22 (31 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 11 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 98 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 21 (30 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 24 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 8 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 22 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 7 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 17 | 10 |
+| Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 2 | 10 |
+| Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -4016,6 +4334,31 @@ Actualizado en el cierre de la 10.2 (2026-10-18) sobre `a4a5f9c`: pruebas
 136 / 2.194 (la prueba de `DateRangeFields` en jsdom), y `npm run
 refactor:inventory` analiza 622 archivos. Las demás filas no cambian: el
 `fix` solo toca `DateRangeFields`.
+
+Actualizado en la sub-entrega 10.3a (2026-10-18) sobre `c5e6f6b`:
+
+- Pruebas: 143 / 2.286.
+- La desviación baja a 22 (alta y edición de materiales) y los toggles que
+  voltean el estado a 7: queda uno por archivo en 6 archivos, salvo uno con
+  dos. `FieldError` baja a 11.
+- El `<main>` anidado baja a 98 (la lista, el alta y la edición de
+  materiales y las alertas) y los formularios GET a 30, con 21 combinaciones
+  de clases: la barra de materiales pasa a `FilterBar`.
+- Las dos filas nuevas se midieron sobre `49cf5f5`, su línea base: de los
+  cuatro archivos de acciones de inventario sin caracterización quedan los
+  de proveedores y materiales de proveedor (10.3b), y el alta de material
+  era la única que decidía el kárdex y la alerta con los números del
+  formulario.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0, escrituras del kárdex con
+`stock_anterior:` 6 e `import` de las librerías de notificaciones en 2
+archivos, medidos de nuevo.
+
+Actualizado en el cierre de la 10.3a (2026-10-19) sobre `9f484d2`: pruebas
+143 / 2.289 (los 3 casos nuevos de `FilterBar` en jsdom), y `npm run
+refactor:inventory` sigue analizando 637 archivos. Las demás filas no
+cambian: el `fix` solo toca `FilterBarFields`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

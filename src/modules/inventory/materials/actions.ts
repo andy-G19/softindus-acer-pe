@@ -1,27 +1,72 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import {
   materialSchema,
   materialUpdateSchema,
 } from "@/schemas/inventory/material.schema";
 
-export type MaterialFormState = ActionErrorState;
+/** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
+export type MaterialFormValues = {
+  nombre_material: string;
+  categoria: string;
+  unidad_medida: string;
+  stock_actual: string;
+  stock_reservado: string;
+  stock_minimo: string;
+  costo_unitario_actual: string;
+};
+
+// Entrega 10.3: el alta y la edicion no redirigen; devuelven el resultado y
+// el formulario da el aviso y cierra el panel o vuelve al listado.
+export type MaterialFormState = FormActionState<MaterialFormValues, { id_material: string }>;
 
 const INVENTORY_PATH = "/dashboard/inventory";
 const MATERIALS_PATH = "/dashboard/inventory/materials";
-const initialState: MaterialFormState = { error: "" };
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
+// El formulario y la fila niegan el permiso con un error, sin redirigir.
+async function getMaterialSession() {
+  return getAuthorizedSession(["ADMIN"]);
+}
+
+function getMaterialFormValues(formData: FormData): MaterialFormValues {
+  const text = (name: keyof MaterialFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    nombre_material: text("nombre_material"),
+    categoria: text("categoria"),
+    unidad_medida: text("unidad_medida"),
+    stock_actual: text("stock_actual"),
+    stock_reservado: text("stock_reservado"),
+    stock_minimo: text("stock_minimo"),
+    costo_unitario_actual: text("costo_unitario_actual"),
+  };
+}
+
+function materialError(
+  values: MaterialFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): MaterialFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function materialSaved(values: MaterialFormValues, idMaterial: string): MaterialFormState {
+  return { status: "success", data: { id_material: idMaterial }, values, operationId: newOperationId() };
 }
 
 function getMaterialFormData(formData: FormData, includeStock: boolean) {
@@ -94,26 +139,26 @@ export async function createMaterialAction(
   _prevState: MaterialFormState,
   formData: FormData,
 ): Promise<MaterialFormState> {
-  const session = await requireAdmin();
+  const values = getMaterialFormValues(formData);
+  const session = await getMaterialSession();
+
+  if (!session) {
+    return materialError(values, "No tienes permisos para registrar materiales.");
+  }
+
   const parsed = materialSchema.safeParse(getMaterialFormData(formData, true));
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del material.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return materialError(values, "Revisa los datos del material.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
   const categoryIsActive = await validateMaterialCategory(data.categoria, true);
 
   if (!categoryIsActive) {
-    return {
-      error: "Selecciona una categoría de material activa.",
-      fieldErrors: {
-        categoria: ["Selecciona una categoría de material activa."],
-      },
-    };
+    return materialError(values, "Selecciona una categoría de material activa.", {
+      categoria: ["Selecciona una categoría de material activa."],
+    });
   }
 
   const hasDuplicateName = await validateDuplicateMaterialName(
@@ -121,26 +166,23 @@ export async function createMaterialAction(
   );
 
   if (hasDuplicateName) {
-    return {
-      error: "Ya existe un material con ese nombre.",
-      fieldErrors: {
-        nombre_material: ["Ya existe un material con ese nombre."],
-      },
-    };
+    return materialError(values, "Ya existe un material con ese nombre.", {
+      nombre_material: ["Ya existe un material con ese nombre."],
+    });
   }
 
-  const shouldCreateInitialMovement = data.stock_actual > 0;
-  const shouldCreateStockAlert =
-    data.stock_minimo > 0 && data.stock_actual <= data.stock_minimo;
+  let idMaterial = "";
 
   try {
     await prisma.$transaction(async (tx) => {
-      const idMaterial = await getNextCorrelativeId(tx, {
+      idMaterial = await getNextCorrelativeId(tx, {
         codigoEntidad: "material",
         prefijo: "MAT",
       });
 
-      await tx.material.create({
+      // El kardex inicial y la alerta usan el stock que devuelve la escritura
+      // (regla 5): la base lo guarda con dos decimales, y es lo que queda.
+      const stored = await tx.material.create({
         data: {
           id_material: idMaterial,
           nombre_material: data.nombre_material,
@@ -152,9 +194,13 @@ export async function createMaterialAction(
           costo_unitario_actual: data.costo_unitario_actual,
           estado: true,
         },
+        select: {
+          stock_actual: true,
+          stock_minimo: true,
+        },
       });
 
-      if (shouldCreateInitialMovement) {
+      if (stored.stock_actual.greaterThan(0)) {
         const idMovimiento = await getNextCorrelativeId(tx, {
           codigoEntidad: "movimiento_inventario",
           prefijo: "MVI",
@@ -165,16 +211,19 @@ export async function createMaterialAction(
             id_movimiento: idMovimiento,
             id_material: idMaterial,
             tipo_movimiento: "entrada",
-            cantidad: data.stock_actual,
+            cantidad: stored.stock_actual,
             stock_anterior: 0,
-            stock_resultante: data.stock_actual,
+            stock_resultante: stored.stock_actual,
             motivo: "Stock inicial registrado al crear el material",
             id_usuario_responsable: session.user.id,
           },
         });
       }
 
-      if (shouldCreateStockAlert) {
+      if (
+        stored.stock_minimo.greaterThan(0) &&
+        stored.stock_actual.lessThanOrEqualTo(stored.stock_minimo)
+      ) {
         const idAlerta = await getNextCorrelativeId(tx, {
           codigoEntidad: "alerta_stock",
           prefijo: "ALE",
@@ -184,8 +233,8 @@ export async function createMaterialAction(
           data: {
             id_alerta: idAlerta,
             id_material: idMaterial,
-            stock_detectado: data.stock_actual,
-            stock_minimo: data.stock_minimo,
+            stock_detectado: stored.stock_actual,
+            stock_minimo: stored.stock_minimo,
             estado_alerta: "activa",
             mensaje: `El material ${data.nombre_material} está en stock bajo.`,
           },
@@ -207,33 +256,36 @@ export async function createMaterialAction(
       "Ya existe un material con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe un material con ese nombre."
-          ? { nombre_material: [errorMessage] }
-          : undefined,
-    };
+    return materialError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe un material con ese nombre."
+        ? { nombre_material: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(`${MATERIALS_PATH}?toast=material-created`);
 
-  return initialState;
+  return materialSaved(values, idMaterial);
 }
 
 export async function updateMaterialAction(
   _prevState: MaterialFormState,
   formData: FormData,
 ): Promise<MaterialFormState> {
-  const session = await requireAdmin();
+  const values = getMaterialFormValues(formData);
+  const session = await getMaterialSession();
+
+  if (!session) {
+    return materialError(values, "No tienes permisos para actualizar materiales.");
+  }
+
   const idMaterial = formData.get("id_material")?.toString();
 
   if (!idMaterial) {
-    return {
-      error: "El material no existe.",
-    };
+    return materialError(values, "El material no existe.");
   }
 
   const material = await prisma.material.findUnique({
@@ -246,9 +298,7 @@ export async function updateMaterialAction(
   });
 
   if (!material) {
-    return {
-      error: "El material no existe.",
-    };
+    return materialError(values, "El material no existe.");
   }
 
   const parsed = materialUpdateSchema.safeParse(
@@ -256,22 +306,16 @@ export async function updateMaterialAction(
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del material.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return materialError(values, "Revisa los datos del material.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
   const categoryExists = await validateMaterialCategory(data.categoria, false);
 
   if (!categoryExists) {
-    return {
-      error: "Selecciona una categoría de material válida.",
-      fieldErrors: {
-        categoria: ["Selecciona una categoría de material válida."],
-      },
-    };
+    return materialError(values, "Selecciona una categoría de material válida.", {
+      categoria: ["Selecciona una categoría de material válida."],
+    });
   }
 
   const hasDuplicateName = await validateDuplicateMaterialName(
@@ -280,12 +324,9 @@ export async function updateMaterialAction(
   );
 
   if (hasDuplicateName) {
-    return {
-      error: "Ya existe otro material con ese nombre.",
-      fieldErrors: {
-        nombre_material: ["Ya existe otro material con ese nombre."],
-      },
-    };
+    return materialError(values, "Ya existe otro material con ese nombre.", {
+      nombre_material: ["Ya existe otro material con ese nombre."],
+    });
   }
 
   try {
@@ -307,13 +348,13 @@ export async function updateMaterialAction(
       "Ya existe otro material con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe otro material con ese nombre."
-          ? { nombre_material: [errorMessage] }
-          : undefined,
-    };
+    return materialError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otro material con ese nombre."
+        ? { nombre_material: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -326,58 +367,78 @@ export async function updateMaterialAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(`${MATERIALS_PATH}?toast=material-updated`);
 
-  return initialState;
+  return materialSaved(values, idMaterial);
 }
 
-export async function toggleMaterialStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const idMaterial = formData.get("id_material")?.toString();
+// Activar o inactivar desde la fila (ConfirmActionButton): devuelve el
+// resultado en lugar de redirigir, y un error (sin permiso, ya tenia ese estado
+// o no existe) queda en la confirmacion.
+export async function toggleMaterialStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idMaterial = formData.get("id_material")?.toString().trim() ?? "";
+  const session = await getMaterialSession();
+
+  if (!session) {
+    return statusToggleError(idMaterial, "No tienes permisos para activar o inactivar materiales.");
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!idMaterial) {
-    redirect(MATERIALS_PATH);
+    return statusToggleError(idMaterial, "El material no existe.");
   }
 
-  const material = await prisma.material.findUnique({
+  if (nextStatus === null) {
+    return statusToggleError(idMaterial, "Estado no válido.");
+  }
+
+  // Fija el estado pedido solo si el material tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton.
+  const { count } = await prisma.material.updateMany({
     where: {
       id_material: idMaterial,
-    },
-    select: {
-      id_material: true,
-      nombre_material: true,
-      estado: true,
-    },
-  });
-
-  if (!material) {
-    redirect(MATERIALS_PATH);
-  }
-
-  const nextStatus = !material.estado;
-
-  await prisma.material.update({
-    where: {
-      id_material: material.id_material,
+      estado: !nextStatus,
     },
     data: {
       estado: nextStatus,
     },
   });
 
+  const material = await prisma.material.findUnique({
+    where: {
+      id_material: idMaterial,
+    },
+    select: {
+      nombre_material: true,
+    },
+  });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idMaterial,
+      material
+        ? `El material ya estaba ${nextStatus ? "activo" : "inactivo"}.`
+        : "El material no existe.",
+    );
+  }
+
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "material",
-    id_registro_afectado: material.id_material,
+    id_registro_afectado: idMaterial,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Material ${nextStatus ? "activado" : "inactivado"}: ${
-      material.nombre_material
+      material?.nombre_material ?? idMaterial
     }`,
   });
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(MATERIALS_PATH);
-  redirect(
-    `${MATERIALS_PATH}?toast=${nextStatus ? "material-activated" : "material-deactivated"}`,
-  );
+
+  return statusToggleDone(idMaterial, nextStatus);
 }

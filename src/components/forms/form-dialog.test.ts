@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { act, createElement as h, useEffect, useState, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -91,6 +92,34 @@ async function clickOutside() {
     page.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, cancelable: true, button: 0 }));
     page.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
   });
+  await settle();
+}
+
+// Clic con el raton sobre un elemento, con la secuencia del navegador. El
+// navegador vacia las microtareas entre un listener y el siguiente, asi que
+// React aplica lo que hizo el onClick antes de que el click llegue a los
+// listeners de document (los de Radix); un dispatchEvent de prueba no lo
+// hace. Un listener en <html>, que corre despues del de React (en body) y
+// antes de los de document, lo imita con flushSync (hallazgo 11 de la 10.2).
+async function mouseClick(target: Element) {
+  await settle();
+  const page = document.documentElement;
+  const flush = () => flushSync(() => {});
+  const sequence = ["pointerdown", "mousedown", "pointerup", "mouseup", "click"];
+  for (const name of sequence) {
+    page.addEventListener(name, flush);
+  }
+  try {
+    await act(async () => {
+      for (const name of sequence) {
+        target.dispatchEvent(new MouseEvent(name, { bubbles: true, cancelable: true, button: 0 }));
+      }
+    });
+  } finally {
+    for (const name of sequence) {
+      page.removeEventListener(name, flush);
+    }
+  }
   await settle();
 }
 
@@ -353,6 +382,41 @@ describe("FormDialog: el foco al cancelar el descarte", () => {
     await clickOutside();
     await act(async () => button("Descartar cambios").click());
     await settle();
+
+    expect(confirmation()).toBeNull();
+    expect(dialog()).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+});
+
+// Hallazgo 11 de la 10.2: el clic con el raton en Cancelar cerraba la
+// confirmacion, y la ventana, que recibia ese click como un clic fuera, pedia
+// cerrar otra vez y la volvia a abrir.
+describe("FormDialog: la confirmacion de descarte con el raton", () => {
+  it("Cancelar la cierra; la ventana sigue con lo escrito y el foco vuelve al ultimo campo", async () => {
+    await renderDialog();
+    await open();
+    const slug = document.querySelector<HTMLInputElement>("#slug")!;
+    slug.focus();
+    await type("Distribuidor");
+
+    await act(async () => button("Cancelar formulario").click());
+    expect(confirmation()?.textContent).toContain("¿Descartar el tipo de proveedor?");
+    await mouseClick(button("Cancelar"));
+
+    expect(confirmation()).toBeNull();
+    expect(dialog()).not.toBeNull();
+    expect(document.querySelector<HTMLInputElement>("#nombre")!.value).toBe("Distribuidor");
+    expect(document.activeElement).toBe(slug);
+  });
+
+  it("Descartar cierra las dos y devuelve el foco al boton", async () => {
+    await renderDialog();
+    const trigger = await open();
+    await type("Distribuidor");
+
+    await act(async () => button("Cancelar formulario").click());
+    await mouseClick(button("Descartar cambios"));
 
     expect(confirmation()).toBeNull();
     expect(dialog()).toBeNull();

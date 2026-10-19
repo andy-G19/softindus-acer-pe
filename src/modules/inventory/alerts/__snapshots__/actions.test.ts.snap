@@ -1,0 +1,222 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`attendStockAlertAction > ADMIN atiende una alerta activa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/alerts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > ADMIN atiende una alerta activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_alerta": "ALE00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
+
+exports[`attendStockAlertAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para atender alertas de stock.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
+
+exports[`attendStockAlertAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para atender alertas de stock.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
+
+exports[`attendStockAlertAction > la alerta no existe: responde con un error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > la alerta no existe: responde con un error > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;
+
+exports[`attendStockAlertAction > sin id responde con un error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`attendStockAlertAction > sin id responde con un error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta es obligatoria.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe y responde que ya estaba atendida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "atendida",
+        "fecha_atencion": 2026-07-15T15:00:00.000Z,
+        "id_usuario_atencion": "USU00000001",
+      },
+      "where": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "alerta_stock.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "id_alerta": true,
+      },
+      "where": {
+        "id_alerta": "ALE00000003",
+      },
+    },
+    "prisma": "alerta_stock.findUnique",
+  },
+]
+`;
+
+exports[`attendStockAlertAction > una alerta ya atendida no se reescribe y responde que ya estaba atendida > resultado 1`] = `
+{
+  "estado": {
+    "error": "La alerta ya estaba atendida.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ALE00000003",
+    },
+  },
+}
+`;

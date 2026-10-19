@@ -1,0 +1,2823 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createMaterialAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMaterialAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar materiales.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar materiales.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > categoria inactiva: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+]
+`;
+
+exports[`createMaterialAction > categoria inactiva: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona una categoría de material activa.",
+    "fieldErrors": {
+      "categoria": [
+        "Selecciona una categoría de material activa.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > categoria inexistente: el mismo error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+]
+`;
+
+exports[`createMaterialAction > categoria inexistente: el mismo error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona una categoría de material activa.",
+    "fieldErrors": {
+      "categoria": [
+        "Selecciona una categoría de material activa.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > con mas de dos decimales decide con la fila guardada: 5.004 queda en 5.00, igual al minimo, y abre la alerta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 5.004,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(5),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(5),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(5),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > con mas de dos decimales decide con la fila guardada: 5.004 queda en 5.00, igual al minimo, y abre la alerta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "5.004",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > con mas de dos decimales: 0.004 queda en 0.00 y no escribe kardex inicial > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 0.004,
+        "stock_minimo": 0,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > con mas de dos decimales: 0.004 queda en 0.00 y no escribe kardex inicial > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "0.004",
+      "stock_minimo": "0",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "costo_unitario_actual": [
+        "El costo unitario debe ser numérico.",
+      ],
+      "nombre_material": [
+        "El nombre del material es obligatorio.",
+      ],
+      "stock_minimo": [
+        "El stock mínimo no puede ser negativo.",
+      ],
+      "unidad_medida": [
+        "La unidad de medida es obligatoria.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "abc",
+      "nombre_material": "A",
+      "stock_actual": "2",
+      "stock_minimo": "-1",
+      "stock_reservado": "0",
+      "unidad_medida": "",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > el reservado no puede superar el stock actual > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMaterialAction > el reservado no puede superar el stock actual > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "stock_actual": [
+        "El stock actual no puede ser menor que el stock reservado.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "3",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > la alerta compara el stock actual, no el disponible (actual menos reservado) > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 6,
+        "stock_minimo": 5,
+        "stock_reservado": 4,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(6),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(6),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > la alerta compara el stock actual, no el disponible (actual menos reservado) > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "6",
+      "stock_minimo": "5",
+      "stock_reservado": "4",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > los numeros vacios valen cero: ni kardex ni alerta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 0,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 0,
+        "stock_minimo": 0,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > los numeros vacios valen cero: ni kardex ni alerta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "",
+      "stock_minimo": "",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > nombre de otro material: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`createMaterialAction > nombre de otro material: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un material con ese nombre.",
+    "fieldErrors": {
+      "nombre_material": [
+        "Ya existe un material con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > sin minimo no hay alerta aunque el stock sea cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 0,
+        "stock_minimo": 0,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > sin minimo no hay alerta aunque el stock sea cero > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "0",
+      "stock_minimo": "0",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > stock bajo el minimo: crea el material, el kardex inicial y la alerta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 2,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(2),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(2),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(2),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > stock bajo el minimo: crea el material, el kardex inicial y la alerta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > stock cero con minimo: alerta sin kardex > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 0,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(0),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > stock cero con minimo: alerta sin kardex > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "0",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > stock igual al minimo: tambien abre la alerta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 5,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(5),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(5),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(5),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > stock igual al minimo: tambien abre la alerta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "5",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > stock sobre el minimo: kardex inicial sin alerta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 20,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(20),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(20),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Material creado: Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMaterialAction > stock sobre el minimo: kardex inicial sin alerta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "20",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > un fallo al crear la alerta revierte el material y el kardex con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 2,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "movimiento_inventario",
+      "prefijo": "MVI",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": Decimal(2),
+        "id_material": "MAT00000008",
+        "id_movimiento": "MVI00000008",
+        "id_usuario_responsable": "USU00000001",
+        "motivo": "Stock inicial registrado al crear el material",
+        "stock_anterior": 0,
+        "stock_resultante": Decimal(2),
+        "tipo_movimiento": "entrada",
+      },
+    },
+    "prisma": "movimiento_inventario.create",
+  },
+  {
+    "args": {
+      "codigoEntidad": "alerta_stock",
+      "prefijo": "ALE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_alerta": "activa",
+        "id_alerta": "ALE00000008",
+        "id_material": "MAT00000008",
+        "mensaje": "El material Plancha LAC 1/16 está en stock bajo.",
+        "stock_detectado": Decimal(2),
+        "stock_minimo": Decimal(5),
+      },
+    },
+    "prisma": "alerta_stock.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createMaterialAction > un fallo al crear la alerta revierte el material y el kardex con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el material. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`createMaterialAction > una carrera por el nombre (P2002 al crear) revierte y marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "material",
+      "prefijo": "MAT",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 185.5,
+        "estado": true,
+        "id_material": "MAT00000008",
+        "nombre_material": "Plancha LAC 1/16",
+        "stock_actual": 2,
+        "stock_minimo": 5,
+        "stock_reservado": 0,
+        "unidad_medida": "unidad",
+      },
+      "select": {
+        "stock_actual": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "material.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`nombre_material\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createMaterialAction > una carrera por el nombre (P2002 al crear) revierte y marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un material con ese nombre.",
+    "fieldErrors": {
+      "nombre_material": [
+        "Ya existe un material con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "185.50",
+      "nombre_material": "Plancha LAC 1/16",
+      "stock_actual": "2",
+      "stock_minimo": "5",
+      "stock_reservado": "0",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar materiales.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > activa un material inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Material activado: Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > activa un material inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > el material no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > inactiva un material activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Material inactivado: Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > inactiva un material activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > pedir inactivar un material que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAT00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMaterialStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMaterialStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > ADMIN actualiza los datos sin tocar el stock > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Material actualizado: Plancha LAC 1/16 (2 mm)",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMaterialAction > ADMIN actualiza los datos sin tocar el stock > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar materiales.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > categoria inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+]
+`;
+
+exports[`updateMaterialAction > categoria inexistente > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona una categoría de material válida.",
+    "fieldErrors": {
+      "categoria": [
+        "Selecciona una categoría de material válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Material actualizado: Plancha LAC 1/16 (2 mm)",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMaterialAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > datos invalidos devuelven los errores por campo despues de comprobar el material > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`updateMaterialAction > datos invalidos devuelven los errores por campo despues de comprobar el material > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del material.",
+    "fieldErrors": {
+      "nombre_material": [
+        "El nombre del material es obligatorio.",
+      ],
+      "stock_minimo": [
+        "El stock mínimo no puede ser negativo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "A",
+      "stock_actual": "",
+      "stock_minimo": "-2",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > el material no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`updateMaterialAction > el material no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > el nombre es de otro material > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+]
+`;
+
+exports[`updateMaterialAction > el nombre es de otro material > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro material con ese nombre.",
+    "fieldErrors": {
+      "nombre_material": [
+        "Ya existe otro material con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > el stock actual y el reservado del formulario se ignoran > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Material actualizado: Plancha LAC 1/16 (2 mm)",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMaterialAction > el stock actual y el reservado del formulario se ignoran > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "999",
+      "stock_minimo": "8",
+      "stock_reservado": "10",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+]
+`;
+
+exports[`updateMaterialAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el material. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > sin id de material > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMaterialAction > sin id de material > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > una carrera por el nombre (P2002 al actualizar) marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+]
+`;
+
+exports[`updateMaterialAction > una carrera por el nombre (P2002 al actualizar) marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro material con ese nombre.",
+    "fieldErrors": {
+      "nombre_material": [
+        "Ya existe otro material con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
+
+exports[`updateMaterialAction > una categoria inactiva se acepta al editar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "planchas",
+      },
+    },
+    "prisma": "categoria_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_material": true,
+      },
+      "where": {
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      },
+    },
+    "prisma": "material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "planchas",
+        "costo_unitario_actual": 190,
+        "nombre_material": "Plancha LAC 1/16 (2 mm)",
+        "stock_minimo": 8,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_material": "MAT00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Material actualizado: Plancha LAC 1/16 (2 mm)",
+      "enTransaccion": false,
+      "entidad_afectada": "material",
+      "id_registro_afectado": "MAT00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMaterialAction > una categoria inactiva se acepta al editar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_material": "MAT00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "planchas",
+      "costo_unitario_actual": "190",
+      "nombre_material": "Plancha LAC 1/16 (2 mm)",
+      "stock_actual": "",
+      "stock_minimo": "8",
+      "stock_reservado": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;

@@ -46,10 +46,11 @@ type DiscardGuardOptions = {
 /**
  * Cambios pendientes y guarda de ocupado de una ventana con formulario.
  * La ventana llama a markDirty(true) en cada evento input, a trackFocus en el
- * onFocus de su contenido y a controls.requestClose() cuando se intenta
- * cerrar (X, Esc, el velo o Cancelar); pinta DiscardConfirmDialog con
- * discardDialog. Con cambios, recargar o salir de la pagina lo pregunta el
- * navegador (beforeunload).
+ * onFocus de su contenido, a ignoreConfirmationPointer en su
+ * onPointerDownOutside y a controls.requestClose() cuando se intenta cerrar
+ * (X, Esc, el velo o Cancelar); pinta DiscardConfirmDialog con discardDialog.
+ * Con cambios, recargar o salir de la pagina lo pregunta el navegador
+ * (beforeunload).
  */
 export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
   const [dirty, setDirty] = useState(false);
@@ -119,6 +120,20 @@ export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
     }
   }, []);
 
+  // La confirmacion es hermana de la ventana en el arbol de React, asi que para
+  // Radix un clic en ella es un clic fuera de la ventana. Radix lo decide en el
+  // click, y el navegador vacia las microtareas entre listeners: cuando el click
+  // llega a document, Cancelar ya cerro la confirmacion y la ventana es la capa
+  // de arriba, asi que pediria cerrar otra vez y, con cambios, la confirmacion
+  // se volveria a abrir (hallazgo 11 de la 10.2). Un clic que empezo dentro de
+  // una confirmacion no es un clic fuera de la ventana.
+  const ignoreConfirmationPointer = useCallback((event: CustomEvent<{ originalEvent: PointerEvent }>) => {
+    const target = event.detail.originalEvent.target;
+    if (target instanceof Element && target.closest('[role="alertdialog"]')) {
+      event.preventDefault();
+    }
+  }, []);
+
   // Cancelar el descarte vuelve al ultimo elemento enfocado de la ventana; si
   // ya no esta en ella (por ejemplo, ActionForm remonto los campos), a la
   // ventana misma, como hace Radix cuando desaparece el elemento enfocado.
@@ -137,6 +152,7 @@ export function useDiscardGuard({ onLeave }: DiscardGuardOptions) {
     controls,
     markDirty,
     trackFocus,
+    ignoreConfirmationPointer,
     discardDialog: { open: confirmOpen, onOpenChange: setConfirmOpen, onConfirm: discard, returnFocusTo },
   };
 }

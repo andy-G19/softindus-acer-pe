@@ -73,7 +73,7 @@ exports[`/dashboard/inventory/alerts > administrador > llamadas 1`] = `
 
 exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -243,7 +243,245 @@ exports[`/dashboard/inventory/alerts > administrador > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/alerts > administrador con una alerta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_alerta": "desc",
+      },
+      "select": {
+        "estado_alerta": true,
+        "fecha_alerta": true,
+        "id_alerta": true,
+        "id_material": true,
+        "mensaje": true,
+        "stock_detectado": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "alerta_stock.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_material": {
+          "in": [
+            "MAT00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/alerts > administrador con una alerta activa > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Alertas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Alertas y stock crítico</h1>
+<p>Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a inventario">
+<svg/>Volver a inventario</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales activos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Materiales disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales críticos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Bajo el stock mínimo definido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Alertas generadas sin atender.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Stock crítico actual</div>
+<p>Materiales cuyo stock disponible está igual o por debajo del stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Categoría</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plancha LAC 1/16</td>
+<td>planchas</td>
+<td>2.00</td>
+<td>0.00</td>
+<td>
+<span data-variant="destructive">2.00</span>
+</td>
+<td>5.00</td>
+<td>unidad</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de alertas</div>
+<p>Alertas generadas cuando un material llega al stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Material</th>
+<th>Stock detectado</th>
+<th>Stock mínimo</th>
+<th>Estado</th>
+<th>Mensaje</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10/7/2026</td>
+<td>Plancha LAC 1/16</td>
+<td>2.00</td>
+<td>5.00</td>
+<td>
+<span data-variant="destructive">activa</span>
+</td>
+<td>El material Plancha LAC 1/16 está en stock bajo.</td>
+<td>
+<button data-variant="outline" type="button">Marcar atendida</button>
+</td>
+</tr>
+<tr>
+<td>1/7/2026</td>
+<td>Plancha LAC 1/16</td>
+<td>9.00</td>
+<td>5.00</td>
+<td>
+<span data-variant="success">atendida</span>
+</td>
+<td>El material Plancha LAC 1/16 recupero stock por encima del minimo.</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>",
   "outcome": "render",
 }
 `;
@@ -321,7 +559,7 @@ exports[`/dashboard/inventory/alerts > maestro de taller > llamadas 1`] = `
 
 exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -488,7 +726,240 @@ exports[`/dashboard/inventory/alerts > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_alerta": "desc",
+      },
+      "select": {
+        "estado_alerta": true,
+        "fecha_alerta": true,
+        "id_alerta": true,
+        "id_material": true,
+        "mensaje": true,
+        "stock_detectado": true,
+        "stock_minimo": true,
+      },
+    },
+    "prisma": "alerta_stock.findMany",
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "id_material": true,
+        "nombre_material": true,
+        "stock_actual": true,
+        "stock_minimo": true,
+        "stock_reservado": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_material": {
+          "in": [
+            "MAT00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "material.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/alerts > maestro de taller con una alerta activa > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Alertas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Alertas y stock crítico</h1>
+<p>Consulta materiales por debajo del stock mínimo y alertas generadas por el sistema.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a inventario">
+<svg/>Volver a inventario</button>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales activos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Materiales disponibles para uso.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Materiales críticos</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Bajo el stock mínimo definido.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Alertas activas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Alertas generadas sin atender.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Stock crítico actual</div>
+<p>Materiales cuyo stock disponible está igual o por debajo del stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Categoría</th>
+<th>Stock actual</th>
+<th>Reservado</th>
+<th>Disponible</th>
+<th>Stock mínimo</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plancha LAC 1/16</td>
+<td>planchas</td>
+<td>2.00</td>
+<td>0.00</td>
+<td>
+<span data-variant="destructive">2.00</span>
+</td>
+<td>5.00</td>
+<td>unidad</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>Historial de alertas</div>
+<p>Alertas generadas cuando un material llega al stock mínimo.</p>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Material</th>
+<th>Stock detectado</th>
+<th>Stock mínimo</th>
+<th>Estado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10/7/2026</td>
+<td>Plancha LAC 1/16</td>
+<td>2.00</td>
+<td>5.00</td>
+<td>
+<span data-variant="destructive">activa</span>
+</td>
+<td>El material Plancha LAC 1/16 está en stock bajo.</td>
+</tr>
+<tr>
+<td>1/7/2026</td>
+<td>Plancha LAC 1/16</td>
+<td>9.00</td>
+<td>5.00</td>
+<td>
+<span data-variant="success">atendida</span>
+</td>
+<td>El material Plancha LAC 1/16 recupero stock por encima del minimo.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>",
   "outcome": "render",
 }
 `;

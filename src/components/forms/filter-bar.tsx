@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { FilterBarFields } from "@/components/forms/filter-bar-fields";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,10 @@ type FilterBarProps = {
 // que mas repiten los listados y una sola rejilla que se adapta al ancho
 // (columnas de al menos 12rem) en lugar de una por pantalla. Es un contenedor
 // de consultas (@container): un campo ancho, como el rango de fechas, ocupa dos
-// columnas solo si la barra tiene sitio, aunque este dentro de un panel.
+// columnas solo si la barra tiene sitio, aunque este dentro de un panel. Los
+// campos se vuelven a montar cuando el servidor los pinta para otra URL
+// (FilterBarFields), asi que «Limpiar», Atras y Adelante muestran los filtros
+// que aplica la pagina.
 export function FilterBar({
   action,
   label,
@@ -42,7 +46,7 @@ export function FilterBar({
         className,
       )}
     >
-      {children}
+      <FilterBarFields>{children}</FilterBarFields>
       <div className="flex flex-wrap items-end gap-2">
         <Button type="submit">{submitLabel}</Button>
         <Button variant="clear" asChild>

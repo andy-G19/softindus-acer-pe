@@ -8,8 +8,10 @@ import {
   navigationHrefs,
 } from "@/lib/navigation";
 import { updateMaterialAction } from "@/modules/inventory/materials/actions";
+import { getMaterialEditValues } from "@/modules/inventory/materials/material-edit-values";
 import { MaterialForm } from "@/modules/inventory/materials/material-form";
 import { getMaterialEditData } from "@/modules/inventory/materials/queries";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 
 type EditMaterialPageProps = {
   params: Promise<{
@@ -17,14 +19,6 @@ type EditMaterialPageProps = {
   }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimal(value: unknown) {
-  if (value === null || value === undefined) {
-    return "0.00";
-  }
-
-  return Number(value.toString()).toFixed(2);
-}
 
 export default async function EditMaterialPage({
   params,
@@ -47,7 +41,7 @@ export default async function EditMaterialPage({
   );
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Editar material"
         description="Actualiza los datos maestros del material. El stock se mantiene por movimientos de inventario."
@@ -65,19 +59,10 @@ export default async function EditMaterialPage({
         categories={categories}
         submitLabel="Guardar cambios"
         mode="edit"
-        defaultValues={{
-          id_material: material.id_material,
-          nombre_material: material.nombre_material,
-          categoria: material.categoria,
-          unidad_medida: material.unidad_medida,
-          stock_actual: formatDecimal(material.stock_actual),
-          stock_reservado: formatDecimal(material.stock_reservado),
-          stock_minimo: formatDecimal(material.stock_minimo),
-          costo_unitario_actual: formatDecimal(
-            material.costo_unitario_actual,
-          ),
-        }}
+        successNotification={inventoryNotifications["material-updated"]}
+        returnTo={backHref}
+        defaultValues={getMaterialEditValues(material)}
       />
-    </main>
+    </div>
   );
 }
