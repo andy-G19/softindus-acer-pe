@@ -1,0 +1,1987 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createQuickSupplierAction > SELLER: responde sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > SELLER: responde sin permiso, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar proveedores.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > WORKSHOP_MASTER: responde sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > WORKSHOP_MASTER: responde sin permiso, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar proveedores.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > crea el proveedor con su correlativo y la bitacora dentro de la transaccion, sin redirigir > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "razon_social": {
+          "equals": "Ferreteria El Perno",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "observaciones": "Registrado desde el alta rápida de repuestos.",
+        "razon_social": "Ferreteria El Perno",
+        "telefono": "054 221 100",
+        "tipo_proveedor": "ferreteria",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor creado (alta rápida): Ferreteria El Perno",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > crea el proveedor con su correlativo y la bitacora dentro de la transaccion, sin redirigir > resultado 1`] = `
+{
+  "estado": {
+    "ok": true,
+    "supplier": {
+      "id": "PVE00000008",
+      "label": "Ferreteria El Perno",
+    },
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > datos invalidos devuelven el primer mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > datos invalidos devuelven el primer mensaje sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La razón social es obligatoria.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > sin telefono lo guarda como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "razon_social": {
+          "equals": "Ferreteria El Perno",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "observaciones": "Registrado desde el alta rápida de repuestos.",
+        "razon_social": "Ferreteria El Perno",
+        "telefono": null,
+        "tipo_proveedor": "ferreteria",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor creado (alta rápida): Ferreteria El Perno",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > sin telefono lo guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "ok": true,
+    "supplier": {
+      "id": "PVE00000008",
+      "label": "Ferreteria El Perno",
+    },
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > tipo de proveedor inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > tipo de proveedor inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un tipo de proveedor activo.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > tipo de proveedor inexistente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > tipo de proveedor inexistente > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un tipo de proveedor activo.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "razon_social": {
+          "equals": "Ferreteria El Perno",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "observaciones": "Registrado desde el alta rápida de repuestos.",
+        "razon_social": "Ferreteria El Perno",
+        "telefono": "054 221 100",
+        "tipo_proveedor": "ferreteria",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar el proveedor. Intenta nuevamente.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > ya existe uno activo con esa razon social: lo devuelve sin crear otro > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "razon_social": {
+          "equals": "ferreteria el perno",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > ya existe uno activo con esa razon social: lo devuelve sin crear otro > resultado 1`] = `
+{
+  "estado": {
+    "ok": true,
+    "supplier": {
+      "id": "PVE00000002",
+      "label": "Ferreteria El Perno",
+    },
+  },
+}
+`;
+
+exports[`createQuickSupplierAction > ya existe uno inactivo con esa razon social: pide activarlo, sin crear > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "ferreteria",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "razon_social": {
+          "equals": "Ferreteria El Perno",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+]
+`;
+
+exports[`createQuickSupplierAction > ya existe uno inactivo con esa razon social: pide activarlo, sin crear > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un proveedor inactivo con esa razón social (PVE00000002). Actívalo desde el módulo Proveedores.",
+    "ok": false,
+  },
+}
+`;
+
+exports[`createSupplierAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createSupplierAction > crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "credito",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C.",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor creado: Aceros del Sur S.A.C.",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierAction > crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+
+exports[`createSupplierAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del proveedor.",
+    "fieldErrors": {
+      "condicion_pago": [
+        "Invalid option: expected one of "contado"|"credito"|"parcial"|"otro"",
+      ],
+      "correo": [
+        "Ingrese un correo válido.",
+      ],
+      "razon_social": [
+        "La razón social es obligatoria.",
+      ],
+      "tipo_documento": [
+        "Invalid option: expected one of "dni"|"ruc"|"otro"",
+      ],
+      "tipo_proveedor": [
+        "El tipo de proveedor es obligatorio.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierAction > documento de otro proveedor: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierAction > documento de otro proveedor: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un proveedor con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe un proveedor con ese número de documento.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierAction > los opcionales vacios se guardan como null y sin documento no busca duplicados > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": null,
+        "contacto_principal": null,
+        "correo": null,
+        "direccion": null,
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "numero_documento": null,
+        "observaciones": null,
+        "razon_social": "Aceros del Sur S.A.C.",
+        "telefono": null,
+        "tipo_documento": null,
+        "tipo_proveedor": "distribuidor",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor creado: Aceros del Sur S.A.C.",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierAction > los opcionales vacios se guardan como null y sin documento no busca duplicados > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+
+exports[`createSupplierAction > los textos llegan sin los espacios de los extremos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "credito",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C.",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor creado: Aceros del Sur S.A.C.",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+
+exports[`createSupplierAction > otro fallo al crear revierte con el mensaje generico, sin marcar campos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "credito",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C.",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierAction > otro fallo al crear revierte con el mensaje generico, sin marcar campos > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el proveedor. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`createSupplierAction > tipo de proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierAction > tipo de proveedor inactivo: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un tipo de proveedor activo.",
+    "fieldErrors": {
+      "tipo_proveedor": [
+        "Selecciona un tipo de proveedor activo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierAction > tipo de proveedor inexistente: el mismo error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`createSupplierAction > tipo de proveedor inexistente: el mismo error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un tipo de proveedor activo.",
+    "fieldErrors": {
+      "tipo_proveedor": [
+        "Selecciona un tipo de proveedor activo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierAction > una carrera por el documento (P2002 al crear) revierte y marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor",
+      "prefijo": "PVE",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "credito",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "estado": true,
+        "id_proveedor": "PVE00000008",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C.",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+    },
+    "prisma": "proveedor.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`numero_documento\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierAction > una carrera por el documento (P2002 al crear) revierte y marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un proveedor con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe un proveedor con ese número de documento.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Proveedor activado: Aceros del Sur S.A.C.",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > activa un proveedor inactivo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-activated"`;
+
+exports[`toggleSupplierStatusAction > el proveedor no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > el proveedor no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+
+exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Proveedor inactivado: Aceros del Sur S.A.C.",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > inactiva un proveedor activo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-deactivated"`;
+
+exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Proveedor activado: Aceros del Sur S.A.C.",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-activated"`;
+
+exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+
+exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "contado",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor actualizado: Aceros del Sur S.A.C. (Arequipa)",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+
+exports[`updateSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateSupplierAction > conservar su propio documento no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "contado",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor actualizado: Aceros del Sur S.A.C. (Arequipa)",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierAction > conservar su propio documento no es un duplicado > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+
+exports[`updateSupplierAction > datos invalidos devuelven los errores por campo despues de comprobar el proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierAction > datos invalidos devuelven los errores por campo despues de comprobar el proveedor > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del proveedor.",
+    "fieldErrors": {
+      "correo": [
+        "Ingrese un correo válido.",
+      ],
+      "razon_social": [
+        "La razón social es obligatoria.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierAction > el documento es de otro proveedor: error en el campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierAction > el documento es de otro proveedor: error en el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro proveedor con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe otro proveedor con ese número de documento.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierAction > el proveedor no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierAction > el proveedor no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor no existe.",
+  },
+}
+`;
+
+exports[`updateSupplierAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": null,
+        "contacto_principal": null,
+        "correo": null,
+        "direccion": null,
+        "numero_documento": null,
+        "observaciones": null,
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": null,
+        "tipo_documento": null,
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor actualizado: Aceros del Sur S.A.C. (Arequipa)",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+
+exports[`updateSupplierAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "contado",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+]
+`;
+
+exports[`updateSupplierAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el proveedor. Intenta nuevamente.",
+    "fieldErrors": undefined,
+  },
+}
+`;
+
+exports[`updateSupplierAction > sin id de proveedor responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSupplierAction > sin id de proveedor responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor no existe.",
+  },
+}
+`;
+
+exports[`updateSupplierAction > tipo de proveedor inexistente: error en el campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierAction > tipo de proveedor inexistente: error en el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Selecciona un tipo de proveedor válido.",
+    "fieldErrors": {
+      "tipo_proveedor": [
+        "Selecciona un tipo de proveedor válido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al editar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "contado",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor actualizado: Aceros del Sur S.A.C. (Arequipa)",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor",
+      "id_registro_afectado": "PVE00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/suppliers",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al editar > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+
+exports[`updateSupplierAction > una carrera por el documento (P2002 al actualizar) marca el campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "slug": "distribuidor",
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+      },
+      "where": {
+        "numero_documento": "20601234567",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "condicion_pago": "contado",
+        "contacto_principal": "Rosa Quispe",
+        "correo": "ventas@acerosdelsur.pe",
+        "direccion": "Av. Industrial 123, Arequipa",
+        "numero_documento": "20601234567",
+        "observaciones": "Entrega en planta",
+        "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+        "telefono": "999 888 777",
+        "tipo_documento": "ruc",
+        "tipo_proveedor": "distribuidor",
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.update",
+  },
+]
+`;
+
+exports[`updateSupplierAction > una carrera por el documento (P2002 al actualizar) marca el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro proveedor con ese número de documento.",
+    "fieldErrors": {
+      "numero_documento": [
+        "Ya existe otro proveedor con ese número de documento.",
+      ],
+    },
+  },
+}
+`;

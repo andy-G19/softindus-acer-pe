@@ -1,0 +1,1909 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createSupplierMaterialAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createSupplierMaterialAction > crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor_material",
+      "prefijo": "PVM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "alta",
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "id_proveedor_material": "PVM00000008",
+        "precio_referencial": 185.5,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+    },
+    "prisma": "proveedor_material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor-material creado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+
+exports[`createSupplierMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asociacion.",
+    "fieldErrors": {
+      "disponibilidad": [
+        "Invalid option: expected one of "alta"|"media"|"baja"|"no_disponible"",
+      ],
+      "id_material": [
+        "Seleccione un material.",
+      ],
+      "id_proveedor": [
+        "Seleccione un proveedor.",
+      ],
+      "precio_referencial": [
+        "Too small: expected number to be >=0",
+      ],
+      "tiempo_entrega_dias": [
+        "Invalid input: expected number, received NaN",
+      ],
+      "unidad_medida": [
+        "La unidad de medida es obligatoria.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se trunca > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor_material",
+      "prefijo": "PVM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "alta",
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "id_proveedor_material": "PVM00000008",
+        "precio_referencial": 185.5,
+        "tiempo_entrega_dias": 7,
+        "unidad_medida": "plancha",
+      },
+    },
+    "prisma": "proveedor_material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor-material creado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se trunca > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+
+exports[`createSupplierMaterialAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor_material",
+      "prefijo": "PVM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": null,
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "id_proveedor_material": "PVM00000008",
+        "precio_referencial": null,
+        "tiempo_entrega_dias": null,
+        "unidad_medida": "plancha",
+      },
+    },
+    "prisma": "proveedor_material.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Proveedor-material creado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": true,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+
+exports[`createSupplierMaterialAction > material inactivo: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > material inactivo: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor_material",
+      "prefijo": "PVM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "alta",
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "id_proveedor_material": "PVM00000008",
+        "precio_referencial": 185.5,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+    },
+    "prisma": "proveedor_material.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la asociacion proveedor-material. Intenta nuevamente.",
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > proveedor inactivo: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > proveedor inexistente: el mismo error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > proveedor inexistente: el mismo error > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > proveedor y material inactivos: solo informa el proveedor > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > proveedor y material inactivos: solo informa el proveedor > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > una carrera por la misma asociacion (P2002 al crear) revierte con el mensaje de repetida, sin marcar campos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "proveedor_material",
+      "prefijo": "PVM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "alta",
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "id_proveedor_material": "PVM00000008",
+        "precio_referencial": 185.5,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+    },
+    "prisma": "proveedor_material.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`id_proveedor\`,\`id_material\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > una carrera por la misma asociacion (P2002 al crear) revierte con el mensaje de repetida, sin marcar campos > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este proveedor ya esta asociado con el material seleccionado.",
+  },
+}
+`;
+
+exports[`createSupplierMaterialAction > ya existe la asociacion: error en el material, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+]
+`;
+
+exports[`createSupplierMaterialAction > ya existe la asociacion: error en el material, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este proveedor ya esta asociado con el material seleccionado.",
+    "fieldErrors": {
+      "id_material": [
+        "Este proveedor ya esta asociado con el material seleccionado.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Proveedor-material activado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-activated"`;
+
+exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Proveedor-material inactivado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-deactivated"`;
+
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+
+exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva la activa: el estado pedido no se lee > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Proveedor-material activado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva la activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-activated"`;
+
+exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+
+exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+
+exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda la asociacion con el nuevo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000002",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000002",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000002",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda la asociacion con el nuevo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+
+exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error en el campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000002",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error en el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un duplicado > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+
+exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores por campo despues de comprobar la asociacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores por campo despues de comprobar la asociacion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la asociacion.",
+    "fieldErrors": {
+      "precio_referencial": [
+        "Too small: expected number to be >=0",
+      ],
+      "unidad_medida": [
+        "La unidad de medida es obligatoria.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inactivo y no se cambia: la edicion falla > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > hallazgo 4: su material actual esta inactivo y no se cambia: la edicion falla > resultado 1`] = `
+{
+  "estado": {
+    "error": "El material seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_material": [
+        "El material seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta inactivo y no se cambia: la edicion falla > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > hallazgo 4: su proveedor actual esta inactivo y no se cambia: la edicion falla > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > la asociacion no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > la asociacion no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La asociacion proveedor-material no existe.",
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": null,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": null,
+        "tiempo_entrega_dias": null,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Proveedor-material actualizado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
+      "enTransaccion": false,
+      "entidad_afectada": "proveedor_material",
+      "id_registro_afectado": "PVM00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/inventory",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/inventory/supplier-materials",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+
+exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la asociacion proveedor-material. Intenta nuevamente.",
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > sin id de asociacion responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > sin id de asociacion responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La asociacion proveedor-material no existe.",
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P2002 al actualizar) da el mensaje de repetida > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "disponibilidad": "media",
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+        "precio_referencial": 190,
+        "tiempo_entrega_dias": 3,
+        "unidad_medida": "plancha",
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.update",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P2002 al actualizar) da el mensaje de repetida > resultado 1`] = `
+{
+  "estado": {
+    "error": "Este proveedor ya esta asociado con el material seleccionado.",
+  },
+}
+`;
+
+exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese proveedor y material: error en el material > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_material": true,
+      },
+      "where": {
+        "estado": true,
+        "id_material": "MAT00000004",
+      },
+    },
+    "prisma": "material.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor_material": true,
+      },
+      "where": {
+        "id_material": "MAT00000004",
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor_material.findFirst",
+  },
+]
+`;
+
+exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese proveedor y material: error en el material > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra asociacion para ese proveedor y material.",
+    "fieldErrors": {
+      "id_material": [
+        "Ya existe otra asociacion para ese proveedor y material.",
+      ],
+    },
+  },
+}
+`;
