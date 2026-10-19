@@ -619,7 +619,7 @@ exports[`createSupplierAction > datos invalidos devuelven los errores por campo 
     "error": "Revisa los datos del proveedor.",
     "fieldErrors": {
       "condicion_pago": [
-        "Invalid option: expected one of "contado"|"credito"|"parcial"|"otro"",
+        "Selecciona una condición de pago válida.",
       ],
       "correo": [
         "Ingrese un correo válido.",
@@ -628,7 +628,7 @@ exports[`createSupplierAction > datos invalidos devuelven los errores por campo 
         "La razón social es obligatoria.",
       ],
       "tipo_documento": [
-        "Invalid option: expected one of "dni"|"ruc"|"otro"",
+        "Selecciona un tipo de documento válido.",
       ],
       "tipo_proveedor": [
         "El tipo de proveedor es obligatorio.",

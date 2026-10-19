@@ -348,6 +348,28 @@ defineCases("updateSupplierMaterialAction", update, [
   },
 ]);
 
+// Los mensajes que la accion devuelve al formulario llevan tildes (entrega
+// 10.3b): antes decian «asociacion» y «esta».
+describe("los mensajes de las asociaciones llevan tildes", () => {
+  const messageOf = async (run: (formData: FormData) => Promise<unknown>, actionCase: Omit<ActionCase, "name">) => {
+    const { outcome } = await runAction(run, { name: "", ...actionCase });
+
+    return (outcome as { estado: { error: string } }).estado.error;
+  };
+
+  it.each([
+    ["proveedor inactivo", create, createWith({}, parents({ suppliers: { [PROVEEDOR]: false } })), "El proveedor seleccionado no existe o está inactivo."],
+    ["material inactivo", create, createWith({}, parents({ materials: { [MATERIAL]: false } })), "El material seleccionado no existe o está inactivo."],
+    ["asociacion repetida", create, createWith({}, duplicateOf(OTRA_ASOCIACION)), "Este proveedor ya está asociado con el material seleccionado."],
+    ["fallo al guardar", create, createWith({}, { "proveedor_material.create": failWith(new Error("conexion perdida")) }), "No se pudo guardar la asociación proveedor-material. Intenta nuevamente."],
+    ["datos invalidos", create, createWith({ unidad_medida: "" }), "Revisa los datos de la asociación."],
+    ["asociacion inexistente", update, updateWith({}, currentRelation({ exists: false })), "La asociación proveedor-material no existe."],
+    ["otra asociacion igual", update, updateWith({}, duplicateOf(OTRA_ASOCIACION)), "Ya existe otra asociación para ese proveedor y material."],
+  ] as const)("%s", async (_name, run, actionCase, message) => {
+    expect(await messageOf(run, actionCase)).toBe(message);
+  });
+});
+
 // Hallazgo 4 de la 10.3a: la consulta de edicion ofrece el proveedor y el
 // material que la asociacion ya tiene aunque esten inactivos, asi que la
 // edicion los acepta mientras no se cambien; cambiar a otro sigue exigiendo
@@ -383,7 +405,7 @@ describe("updateSupplierMaterialAction acepta el proveedor y el material actuale
     );
 
     expect(updatesOf(calls)).toEqual([]);
-    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] } } });
+    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o está inactivo."] } } });
   });
 
   it("cambiar a otro material inactivo se sigue rechazando", async () => {
@@ -393,7 +415,7 @@ describe("updateSupplierMaterialAction acepta el proveedor y el material actuale
     );
 
     expect(updatesOf(calls)).toEqual([]);
-    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_material: ["El material seleccionado no existe o esta inactivo."] } } });
+    expect(outcome).toMatchObject({ estado: { fieldErrors: { id_material: ["El material seleccionado no existe o está inactivo."] } } });
   });
 });
 

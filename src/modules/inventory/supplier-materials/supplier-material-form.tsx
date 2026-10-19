@@ -183,7 +183,7 @@ export function SupplierMaterialForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="tiempo_entrega_dias">Tiempo de entrega (dias)</Label>
+          <Label htmlFor="tiempo_entrega_dias">Tiempo de entrega (días)</Label>
           <Input
             id="tiempo_entrega_dias"
             name="tiempo_entrega_dias"

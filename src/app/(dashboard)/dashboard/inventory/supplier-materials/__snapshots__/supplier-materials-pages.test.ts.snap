@@ -759,7 +759,7 @@ exports[`/dashboard/inventory/supplier-materials/[id]/edit > editar > resultado 
 </div>
 <div>
 <div>
-<label for="tiempo_entrega_dias">Tiempo de entrega (dias)</label>
+<label for="tiempo_entrega_dias">Tiempo de entrega (días)</label>
 <input type="number" id="tiempo_entrega_dias" min="0" step="1" name="tiempo_entrega_dias" value="1"/>
 </div>
 <div>
@@ -933,7 +933,7 @@ exports[`/dashboard/inventory/supplier-materials/new > formulario > resultado 1`
 </div>
 <div>
 <div>
-<label for="tiempo_entrega_dias">Tiempo de entrega (dias)</label>
+<label for="tiempo_entrega_dias">Tiempo de entrega (días)</label>
 <input type="number" id="tiempo_entrega_dias" min="0" step="1" name="tiempo_entrega_dias" value=""/>
 </div>
 <div>

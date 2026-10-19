@@ -79,10 +79,10 @@ async function validateActiveSupplierAndMaterial(
     return {
       ok: false,
       state: {
-        error: "El proveedor seleccionado no existe o esta inactivo.",
+        error: "El proveedor seleccionado no existe o está inactivo.",
         fieldErrors: {
           id_proveedor: [
-            "El proveedor seleccionado no existe o esta inactivo.",
+            "El proveedor seleccionado no existe o está inactivo.",
           ],
         },
       },
@@ -93,9 +93,9 @@ async function validateActiveSupplierAndMaterial(
     return {
       ok: false,
       state: {
-        error: "El material seleccionado no existe o esta inactivo.",
+        error: "El material seleccionado no existe o está inactivo.",
         fieldErrors: {
-          id_material: ["El material seleccionado no existe o esta inactivo."],
+          id_material: ["El material seleccionado no existe o está inactivo."],
         },
       },
     };
@@ -131,10 +131,10 @@ function getPrismaErrorMessage(error: unknown) {
     error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2002"
   ) {
-    return "Este proveedor ya esta asociado con el material seleccionado.";
+    return "Este proveedor ya está asociado con el material seleccionado.";
   }
 
-  return "No se pudo guardar la asociacion proveedor-material. Intenta nuevamente.";
+  return "No se pudo guardar la asociación proveedor-material. Intenta nuevamente.";
 }
 
 export async function createSupplierMaterialAction(
@@ -148,7 +148,7 @@ export async function createSupplierMaterialAction(
 
   if (!parsed.success) {
     return {
-      error: "Revisa los datos de la asociacion.",
+      error: "Revisa los datos de la asociación.",
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -170,10 +170,10 @@ export async function createSupplierMaterialAction(
 
   if (duplicated) {
     return {
-      error: "Este proveedor ya esta asociado con el material seleccionado.",
+      error: "Este proveedor ya está asociado con el material seleccionado.",
       fieldErrors: {
         id_material: [
-          "Este proveedor ya esta asociado con el material seleccionado.",
+          "Este proveedor ya está asociado con el material seleccionado.",
         ],
       },
     };
@@ -232,7 +232,7 @@ export async function updateSupplierMaterialAction(
   const relationId = formData.get("id_proveedor_material")?.toString().trim();
 
   if (!relationId) {
-    return { error: "La asociacion proveedor-material no existe." };
+    return { error: "La asociación proveedor-material no existe." };
   }
 
   const currentRelation = await prisma.proveedor_material.findUnique({
@@ -242,7 +242,7 @@ export async function updateSupplierMaterialAction(
   });
 
   if (!currentRelation) {
-    return { error: "La asociacion proveedor-material no existe." };
+    return { error: "La asociación proveedor-material no existe." };
   }
 
   const parsed = supplierMaterialSchema.safeParse(
@@ -251,7 +251,7 @@ export async function updateSupplierMaterialAction(
 
   if (!parsed.success) {
     return {
-      error: "Revisa los datos de la asociacion.",
+      error: "Revisa los datos de la asociación.",
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -275,9 +275,9 @@ export async function updateSupplierMaterialAction(
 
   if (duplicated) {
     return {
-      error: "Ya existe otra asociacion para ese proveedor y material.",
+      error: "Ya existe otra asociación para ese proveedor y material.",
       fieldErrors: {
-        id_material: ["Ya existe otra asociacion para ese proveedor y material."],
+        id_material: ["Ya existe otra asociación para ese proveedor y material."],
       },
     };
   }

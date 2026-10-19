@@ -1,6 +1,6 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite } from "@/testing/page-characterization";
+import { characterizePage, definePageSuite } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -56,3 +56,12 @@ definePageSuite([
     ],
   },
 ]);
+
+// Entrega 10.3b: la etiqueta del tiempo de entrega lleva tilde.
+describe("textos del formulario de asociaciones", () => {
+  it("la etiqueta del tiempo de entrega dice dias con tilde", async () => {
+    const result = await characterizePage(() => import("./new/page"), { name: "nuevo" }, "/dashboard/inventory/supplier-materials/new");
+
+    expect(result.html).toContain("Tiempo de entrega (días)");
+  });
+});
