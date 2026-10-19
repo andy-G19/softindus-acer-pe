@@ -348,33 +348,110 @@ defineCases("updateSupplierMaterialAction", update, [
   },
 ]);
 
-// Hoy el cambio de estado lee la asociacion y escribe el contrario de lo que
-// lee, con la fecha de actualizacion: no recibe el estado que pide el boton.
+// Activar e inactivar envian el estado pedido y el servidor solo lo fija si la
+// asociacion tiene el contrario, comparando y escribiendo en una sola
+// sentencia (updateMany con el estado actual en el where), con la fecha de
+// actualizacion. count 0 es lo que responde la base cuando la asociacion no
+// existe o ya tiene el estado pedido: el doble lo simula.
+describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
+  function writesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
+      (call) => call.prisma === "proveedor_material.update" || call.prisma === "proveedor_material.updateMany",
+    );
+  }
+
+  function auditsOf(calls: unknown[]) {
+    return (calls as Array<{ effect?: string }>).filter((call) => call.effect === "registerAuditLog");
+  }
+
+  const toggle = (fields: FormFields, data: DataOverrides) =>
+    runAction(toggleSupplierMaterialStatusAction, { name: "", form: fields, data });
+
+  it("inactivar compara y fija el estado con su fecha en una sola escritura", async () => {
+    const { calls, outcome } = await toggle(
+      { id_proveedor_material: ASOCIACION, estado: "false" },
+      currentRelation({ estado: true }),
+    );
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "proveedor_material.updateMany",
+        args: {
+          where: { id_proveedor_material: ASOCIACION, estado: true },
+          data: { estado: false, fecha_actualizacion: expect.any(Date) },
+        },
+      }),
+    ]);
+    expect(auditsOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=supplier-material-deactivated");
+  });
+
+  it("pedir inactivar una asociacion que otro ya inactivo no la activa ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_proveedor_material: ASOCIACION, estado: "false" },
+      { ...currentRelation({ estado: false }), "proveedor_material.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("pedir activar una asociacion que ya esta activa no la inactiva ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_proveedor_material: ASOCIACION, estado: "true" },
+      { ...currentRelation({ estado: true }), "proveedor_material.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+    const forms: FormFields[] = [
+      { id_proveedor_material: ASOCIACION },
+      { id_proveedor_material: ASOCIACION, estado: "si" },
+    ];
+
+    for (const form of forms) {
+      const { calls } = await toggle(form, currentRelation({ estado: true }));
+
+      expect(writesOf(calls)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+    }
+  });
+});
+
 defineCases("toggleSupplierMaterialStatusAction", toggleSupplierMaterialStatusAction, [
   {
     name: "inactiva una asociacion activa y actualiza su fecha",
-    form: { id_proveedor_material: ASOCIACION },
+    form: { id_proveedor_material: ASOCIACION, estado: "false" },
     data: currentRelation({ estado: true }),
   },
   {
     name: "activa una asociacion inactiva",
-    form: { id_proveedor_material: ASOCIACION },
+    form: { id_proveedor_material: ASOCIACION, estado: "true" },
     data: currentRelation({ estado: false }),
   },
   {
-    name: "pedir inactivar una asociacion que ya esta inactiva la activa: el estado pedido no se lee",
+    name: "pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora",
     form: { id_proveedor_material: ASOCIACION, estado: "false" },
-    data: currentRelation({ estado: false }),
+    data: { ...currentRelation({ estado: false }), "proveedor_material.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "la asociacion no existe: vuelve al listado",
-    form: { id_proveedor_material: ASOCIACION },
-    data: currentRelation({ exists: false }),
+    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    form: { id_proveedor_material: ASOCIACION, estado: "si" },
+  },
+  {
+    name: "la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_proveedor_material: ASOCIACION, estado: "false" },
+    data: { ...currentRelation({ exists: false }), "proveedor_material.updateMany": () => ({ count: 0 }) },
   },
   {
     name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
-    form: { id_proveedor_material: ASOCIACION },
+    form: { id_proveedor_material: ASOCIACION, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
 ]);

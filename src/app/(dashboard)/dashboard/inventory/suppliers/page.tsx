@@ -196,6 +196,7 @@ export default async function SuppliersPage({
                     hiddenFieldName="id_proveedor"
                     hiddenFieldValue={supplier.id_proveedor}
                     isActive={supplier.estado}
+                    sendsRequestedStatus
                   />
                 </RowActions>
               </TableCell>

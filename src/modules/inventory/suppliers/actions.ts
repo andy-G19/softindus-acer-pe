@@ -9,6 +9,7 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import {
   quickSupplierSchema,
   supplierSchema,
@@ -314,8 +315,27 @@ export async function updateSupplierAction(
 export async function toggleSupplierStatusAction(formData: FormData) {
   const session = await requireAdmin();
   const idProveedor = formData.get("id_proveedor")?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idProveedor) {
+  if (!idProveedor || nextStatus === null) {
+    redirect(SUPPLIERS_PATH);
+  }
+
+  // Fija el estado pedido solo si el proveedor tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.proveedor.updateMany({
+    where: {
+      id_proveedor: idProveedor,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(SUPPLIERS_PATH);
   }
 
@@ -324,34 +344,17 @@ export async function toggleSupplierStatusAction(formData: FormData) {
       id_proveedor: idProveedor,
     },
     select: {
-      id_proveedor: true,
       razon_social: true,
-      estado: true,
-    },
-  });
-
-  if (!supplier) {
-    redirect(SUPPLIERS_PATH);
-  }
-
-  const nextStatus = !supplier.estado;
-
-  await prisma.proveedor.update({
-    where: {
-      id_proveedor: supplier.id_proveedor,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "proveedor",
-    id_registro_afectado: supplier.id_proveedor,
+    id_registro_afectado: idProveedor,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Proveedor ${nextStatus ? "activado" : "inactivado"}: ${
-      supplier.razon_social
+      supplier?.razon_social ?? idProveedor
     }`,
   });
 

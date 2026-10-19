@@ -203,6 +203,7 @@ export default async function SupplierMaterialsPage({
                     hiddenFieldName="id_proveedor_material"
                     hiddenFieldValue={relation.id_proveedor_material}
                     isActive={relation.estado}
+                    sendsRequestedStatus
                   />
                 </div>
               </TableCell>

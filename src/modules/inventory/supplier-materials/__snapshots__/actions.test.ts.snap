@@ -809,6 +809,20 @@ exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > l
   },
   {
     "args": {
+      "data": {
+        "estado": true,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "estado": false,
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.updateMany",
+  },
+  {
+    "args": {
       "include": {
         "material": {
           "select": {
@@ -826,19 +840,6 @@ exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > l
       },
     },
     "prisma": "proveedor_material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
-      },
-      "where": {
-        "id_proveedor_material": "PVM00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "proveedor_material.update",
   },
   {
     "args": {
@@ -864,6 +865,19 @@ exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > l
 
 exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-activated"`;
 
+exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+
 exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > llamadas 1`] = `
 [
   {
@@ -871,6 +885,20 @@ exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y a
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.updateMany",
   },
   {
     "args": {
@@ -891,19 +919,6 @@ exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y a
       },
     },
     "prisma": "proveedor_material.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
-      },
-      "where": {
-        "id_proveedor_material": "PVM00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "proveedor_material.update",
   },
   {
     "args": {
@@ -929,103 +944,59 @@ exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y a
 
 exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-deactivated"`;
 
-exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: vuelve al listado > llamadas 1`] = `
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
     "roles": [
       "ADMIN",
     ],
-  },
-  {
-    "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
-        "proveedor": {
-          "select": {
-            "razon_social": true,
-          },
-        },
-      },
-      "where": {
-        "id_proveedor_material": "PVM00000004",
-      },
-    },
-    "prisma": "proveedor_material.findUnique",
-  },
-]
-`;
-
-exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
-
-exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva la activa: el estado pedido no se lee > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "include": {
-        "material": {
-          "select": {
-            "nombre_material": true,
-          },
-        },
-        "proveedor": {
-          "select": {
-            "razon_social": true,
-          },
-        },
-      },
-      "where": {
-        "id_proveedor_material": "PVM00000004",
-      },
-    },
-    "prisma": "proveedor_material.findUnique",
   },
   {
     "args": {
       "data": {
-        "estado": true,
+        "estado": false,
         "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
       },
       "where": {
+        "estado": true,
         "id_proveedor_material": "PVM00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "proveedor_material.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Proveedor-material activado: Aceros del Sur S.A.C. - Plancha LAC 1/16",
-      "enTransaccion": false,
-      "entidad_afectada": "proveedor_material",
-      "id_registro_afectado": "PVM00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/inventory",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/inventory/supplier-materials",
-    "effect": "revalidatePath",
+    "prisma": "proveedor_material.updateMany",
   },
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva la activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-activated"`;
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+
+exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+        "fecha_actualizacion": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "estado": true,
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor_material.updateMany",
+  },
+]
+`;
+
+exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
 
 exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
 [

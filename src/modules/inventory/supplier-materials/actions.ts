@@ -9,6 +9,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
 export type SupplierMaterialFormState = ActionErrorState;
@@ -317,8 +318,28 @@ export async function updateSupplierMaterialAction(
 export async function toggleSupplierMaterialStatusAction(formData: FormData) {
   const session = await requireAdmin();
   const relationId = formData.get("id_proveedor_material")?.toString().trim();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!relationId) {
+  if (!relationId || nextStatus === null) {
+    redirect(SUPPLIER_MATERIALS_PATH);
+  }
+
+  // Fija el estado pedido solo si la asociacion tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.proveedor_material.updateMany({
+    where: {
+      id_proveedor_material: relationId,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+      fecha_actualizacion: new Date(),
+    },
+  });
+
+  if (count === 0) {
     redirect(SUPPLIER_MATERIALS_PATH);
   }
 
@@ -340,30 +361,16 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
     },
   });
 
-  if (!relation) {
-    redirect(SUPPLIER_MATERIALS_PATH);
-  }
-
-  const nextStatus = !relation.estado;
-
-  await prisma.proveedor_material.update({
-    where: {
-      id_proveedor_material: relationId,
-    },
-    data: {
-      estado: nextStatus,
-      fecha_actualizacion: new Date(),
-    },
-  });
-
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "proveedor_material",
     id_registro_afectado: relationId,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Proveedor-material ${nextStatus ? "activado" : "inactivado"}: ${
-      relation.proveedor.razon_social
-    } - ${relation.material.nombre_material}`,
+      relation
+        ? `${relation.proveedor.razon_social} - ${relation.material.nombre_material}`
+        : relationId
+    }`,
   });
 
   revalidatePath("/dashboard/inventory");

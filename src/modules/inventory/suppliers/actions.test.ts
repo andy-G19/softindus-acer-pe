@@ -307,19 +307,103 @@ defineCases("updateSupplierAction", update, [
   },
 ]);
 
-// Hoy el cambio de estado lee el proveedor y escribe el contrario de lo que
-// lee: no recibe el estado que pide el boton.
+// Activar e inactivar envian el estado pedido y el servidor solo lo fija si el
+// proveedor tiene el contrario, comparando y escribiendo en una sola sentencia
+// (updateMany con el estado actual en el where), como materiales en la 10.3a.
+// count 0 es lo que responde la base cuando el proveedor no existe o ya tiene
+// el estado pedido: el doble lo simula.
+describe("toggleSupplierStatusAction fija el estado pedido", () => {
+  function writesOf(calls: unknown[]) {
+    return (calls as Array<{ prisma?: string; args?: { data?: Row; where?: Row } }>).filter(
+      (call) => call.prisma === "proveedor.update" || call.prisma === "proveedor.updateMany",
+    );
+  }
+
+  function auditsOf(calls: unknown[]) {
+    return (calls as Array<{ effect?: string }>).filter((call) => call.effect === "registerAuditLog");
+  }
+
+  const toggle = (fields: FormFields, data: DataOverrides) =>
+    runHandler(() => toggleSupplierStatusAction(formOf(fields)), { name: "", data });
+
+  it("inactivar compara y fija el estado en una sola escritura", async () => {
+    const { calls, outcome } = await toggle({ id_proveedor: PROVEEDOR, estado: "false" }, supplierLookup({ estado: true }));
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "proveedor.updateMany",
+        args: { where: { id_proveedor: PROVEEDOR, estado: true }, data: { estado: false } },
+      }),
+    ]);
+    expect(auditsOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=supplier-deactivated");
+  });
+
+  it("pedir inactivar un proveedor que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_proveedor: PROVEEDOR, estado: "false" },
+      { ...supplierLookup({ estado: false }), "proveedor.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("pedir activar un proveedor que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_proveedor: PROVEEDOR, estado: "true" },
+      { ...supplierLookup({ estado: true }), "proveedor.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+    const forms: FormFields[] = [{ id_proveedor: PROVEEDOR }, { id_proveedor: PROVEEDOR, estado: "si" }];
+
+    for (const form of forms) {
+      const { calls } = await toggle(form, supplierLookup({ estado: true }));
+
+      expect(writesOf(calls)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+    }
+  });
+});
+
 defineCases("toggleSupplierStatusAction", toggleSupplierStatusAction, [
-  { name: "inactiva un proveedor activo", form: { id_proveedor: PROVEEDOR }, data: supplierLookup({ estado: true }) },
-  { name: "activa un proveedor inactivo", form: { id_proveedor: PROVEEDOR }, data: supplierLookup({ estado: false }) },
   {
-    name: "pedir inactivar un proveedor que ya esta inactivo lo activa: el estado pedido no se lee",
+    name: "inactiva un proveedor activo",
     form: { id_proveedor: PROVEEDOR, estado: "false" },
+    data: supplierLookup({ estado: true }),
+  },
+  {
+    name: "activa un proveedor inactivo",
+    form: { id_proveedor: PROVEEDOR, estado: "true" },
     data: supplierLookup({ estado: false }),
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  { name: "el proveedor no existe: vuelve al listado", form: { id_proveedor: PROVEEDOR }, data: supplierLookup({ exists: false }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_proveedor: PROVEEDOR }, role: "WORKSHOP_MASTER" },
+  {
+    name: "pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora",
+    form: { id_proveedor: PROVEEDOR, estado: "false" },
+    data: { ...supplierLookup({ estado: false }), "proveedor.updateMany": () => ({ count: 0 }) },
+  },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  {
+    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    form: { id_proveedor: PROVEEDOR, estado: "si" },
+  },
+  {
+    name: "el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_proveedor: PROVEEDOR, estado: "false" },
+    data: { ...supplierLookup({ exists: false }), "proveedor.updateMany": () => ({ count: 0 }) },
+  },
+  {
+    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    form: { id_proveedor: PROVEEDOR, estado: "false" },
+    role: "WORKSHOP_MASTER",
+  },
 ]);
 
 // Alta rapida desde el formulario de repuestos: recibe un objeto, no FormData.

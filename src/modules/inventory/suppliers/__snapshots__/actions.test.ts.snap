@@ -1098,9 +1098,20 @@ exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
-        "id_proveedor": true,
+      },
+      "where": {
+        "estado": false,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "razon_social": true,
       },
       "where": {
@@ -1108,18 +1119,6 @@ exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`
       },
     },
     "prisma": "proveedor.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_proveedor": "PVE00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "proveedor.update",
   },
   {
     "args": {
@@ -1145,7 +1144,20 @@ exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`
 
 exports[`toggleSupplierStatusAction > activa un proveedor inactivo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-activated"`;
 
-exports[`toggleSupplierStatusAction > el proveedor no existe: vuelve al listado > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+
+exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1155,21 +1167,21 @@ exports[`toggleSupplierStatusAction > el proveedor no existe: vuelve al listado 
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_proveedor": true,
-        "razon_social": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
-    "prisma": "proveedor.findUnique",
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.updateMany",
   },
 ]
 `;
 
-exports[`toggleSupplierStatusAction > el proveedor no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
 
 exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`] = `
 [
@@ -1181,9 +1193,20 @@ exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
-        "id_proveedor": true,
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "proveedor.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "razon_social": true,
       },
       "where": {
@@ -1191,18 +1214,6 @@ exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`
       },
     },
     "prisma": "proveedor.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_proveedor": "PVE00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "proveedor.update",
   },
   {
     "args": {
@@ -1228,7 +1239,7 @@ exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`
 
 exports[`toggleSupplierStatusAction > inactiva un proveedor activo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-deactivated"`;
 
-exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1238,52 +1249,21 @@ exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta i
   },
   {
     "args": {
-      "select": {
-        "estado": true,
-        "id_proveedor": true,
-        "razon_social": true,
-      },
-      "where": {
-        "id_proveedor": "PVE00000004",
-      },
-    },
-    "prisma": "proveedor.findUnique",
-  },
-  {
-    "args": {
       "data": {
-        "estado": true,
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_proveedor": "PVE00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "proveedor.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Proveedor activado: Aceros del Sur S.A.C.",
-      "enTransaccion": false,
-      "entidad_afectada": "proveedor",
-      "id_registro_afectado": "PVE00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/inventory",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/inventory/suppliers",
-    "effect": "revalidatePath",
+    "prisma": "proveedor.updateMany",
   },
 ]
 `;
 
-exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-activated"`;
+exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
 
 exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
 [

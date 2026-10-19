@@ -166,6 +166,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -186,6 +187,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -360,6 +362,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -380,6 +383,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
@@ -594,6 +598,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -614,6 +619,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>
