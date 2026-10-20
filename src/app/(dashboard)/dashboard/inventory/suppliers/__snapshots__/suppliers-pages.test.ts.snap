@@ -69,7 +69,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -101,7 +101,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
@@ -131,8 +131,6 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -164,11 +162,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -185,19 +179,14 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -265,7 +254,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -297,7 +286,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
@@ -327,8 +316,6 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -360,11 +347,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -381,19 +364,14 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -501,7 +479,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -533,7 +511,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value="acero"/>
@@ -563,8 +541,6 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -596,11 +572,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -617,19 +589,14 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

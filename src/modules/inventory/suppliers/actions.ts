@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import {
   quickSupplierSchema,
   supplierSchema,
@@ -37,11 +41,7 @@ export type SupplierFormState = FormActionState<SupplierFormValues, { id_proveed
 const INVENTORY_PATH = "/dashboard/inventory";
 const SUPPLIERS_PATH = "/dashboard/inventory/suppliers";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
-
-// El formulario niega el permiso con un error, sin redirigir.
+// El formulario y la fila niegan el permiso con un error, sin redirigir.
 async function getSupplierSession() {
   return getAuthorizedSession(["ADMIN"]);
 }
@@ -347,19 +347,33 @@ export async function updateSupplierAction(
   return supplierSaved(values, idProveedor);
 }
 
-export async function toggleSupplierStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const idProveedor = formData.get("id_proveedor")?.toString();
+// Activar o inactivar desde la fila (ConfirmActionButton): devuelve el
+// resultado en lugar de redirigir, y un error (sin permiso, ya tenia ese estado
+// o no existe) queda en la confirmacion.
+export async function toggleSupplierStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idProveedor = formData.get("id_proveedor")?.toString().trim() ?? "";
+  const session = await getSupplierSession();
+
+  if (!session) {
+    return statusToggleError(idProveedor, "No tienes permisos para activar o inactivar proveedores.");
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idProveedor || nextStatus === null) {
-    redirect(SUPPLIERS_PATH);
+  if (!idProveedor) {
+    return statusToggleError(idProveedor, "El proveedor no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idProveedor, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si el proveedor tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.proveedor.updateMany({
     where: {
       id_proveedor: idProveedor,
@@ -370,10 +384,6 @@ export async function toggleSupplierStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(SUPPLIERS_PATH);
-  }
-
   const supplier = await prisma.proveedor.findUnique({
     where: {
       id_proveedor: idProveedor,
@@ -382,6 +392,16 @@ export async function toggleSupplierStatusAction(formData: FormData) {
       razon_social: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idProveedor,
+      supplier
+        ? `El proveedor ya estaba ${nextStatus ? "activo" : "inactivo"}.`
+        : "El proveedor no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -395,9 +415,8 @@ export async function toggleSupplierStatusAction(formData: FormData) {
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(
-    `${SUPPLIERS_PATH}?toast=${nextStatus ? "supplier-activated" : "supplier-deactivated"}`,
-  );
+
+  return statusToggleDone(idProveedor, nextStatus);
 }
 
 export type QuickSupplierResult =

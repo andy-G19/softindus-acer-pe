@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   createQuickSupplierAction,
   createSupplierAction,
@@ -26,7 +27,8 @@ import {
 // revalidaciones y el resultado: la redireccion o el estado que devuelve al
 // formulario, con su mensaje exacto. Desde el panel lateral, el alta y la
 // edicion devuelven el resultado (FormActionState) en lugar de redirigir, y
-// niegan el permiso con un error dentro del formulario.
+// niegan el permiso con un error dentro del formulario; el cambio de estado
+// desde la fila (ConfirmActionButton), tambien.
 //
 // El alta crea el proveedor dentro de una transaccion, con su correlativo y la
 // bitacora. La edicion y el cambio de estado escriben con el cliente global,
@@ -255,6 +257,7 @@ const updateWith = (fields: FormFields, data: DataOverrides = {}) => ({
 
 const create = (formData: FormData) => createSupplierAction(initialState, formData);
 const update = (formData: FormData) => updateSupplierAction(initialState, formData);
+const toggleStatus = (formData: FormData) => toggleSupplierStatusAction({ status: "idle" }, formData);
 
 defineCases("createSupplierAction", create, [
   { name: "crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion", ...createWith({}) },
@@ -332,7 +335,10 @@ describe("toggleSupplierStatusAction fija el estado pedido", () => {
   }
 
   const toggle = (fields: FormFields, data: DataOverrides) =>
-    runHandler(() => toggleSupplierStatusAction(formOf(fields)), { name: "", data });
+    runHandler(() => toggleStatus(formOf(fields)), { name: "", data });
+
+  // El resultado que la accion devuelve a ConfirmActionButton.
+  const resultOf = (outcome: unknown) => (outcome as { estado: StatusToggleState }).estado;
 
   it("inactivar compara y fija el estado en una sola escritura", async () => {
     const { calls, outcome } = await toggle({ id_proveedor: PROVEEDOR, estado: "false" }, supplierLookup({ estado: true }));
@@ -344,7 +350,7 @@ describe("toggleSupplierStatusAction fija el estado pedido", () => {
       }),
     ]);
     expect(auditsOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=supplier-deactivated");
+    expect(resultOf(outcome)).toMatchObject({ status: "success", data: { estado: false } });
   });
 
   it("pedir inactivar un proveedor que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
@@ -355,7 +361,7 @@ describe("toggleSupplierStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El proveedor ya estaba inactivo." });
   });
 
   it("pedir activar un proveedor que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
@@ -366,7 +372,7 @@ describe("toggleSupplierStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El proveedor ya estaba activo." });
   });
 
   it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
@@ -381,7 +387,7 @@ describe("toggleSupplierStatusAction fija el estado pedido", () => {
   });
 });
 
-defineCases("toggleSupplierStatusAction", toggleSupplierStatusAction, [
+defineCases("toggleSupplierStatusAction", toggleStatus, [
   {
     name: "inactiva un proveedor activo",
     form: { id_proveedor: PROVEEDOR, estado: "false" },
@@ -397,18 +403,18 @@ defineCases("toggleSupplierStatusAction", toggleSupplierStatusAction, [
     form: { id_proveedor: PROVEEDOR, estado: "false" },
     data: { ...supplierLookup({ estado: false }), "proveedor.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    name: "con un estado pedido que no es true ni false responde sin tocar Prisma",
     form: { id_proveedor: PROVEEDOR, estado: "si" },
   },
   {
-    name: "el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    name: "el proveedor no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_proveedor: PROVEEDOR, estado: "false" },
     data: { ...supplierLookup({ exists: false }), "proveedor.updateMany": () => ({ count: 0 }) },
   },
   {
-    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_proveedor: PROVEEDOR, estado: "false" },
     role: "WORKSHOP_MASTER",
   },

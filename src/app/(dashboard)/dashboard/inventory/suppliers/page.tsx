@@ -1,17 +1,14 @@
 import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
-import {
-  RowActions,
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -27,8 +24,10 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { toggleSupplierStatusAction } from "@/modules/inventory/suppliers/actions";
 import { getSupplierListData } from "@/modules/inventory/suppliers/queries";
+import { SupplierStatusButton } from "@/modules/inventory/suppliers/supplier-status-button";
 
 type SuppliersPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -70,7 +69,7 @@ export default async function SuppliersPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Proveedores"
         description="Registra proveedores de materia prima, consumibles, repuestos y servicios."
@@ -95,62 +94,53 @@ export default async function SuppliersPage({
         }
       />
 
-      <form
-        action="/dashboard/inventory/suppliers"
-        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_auto_auto]"
+      <FilterBar
+        action={navigationHrefs.suppliers}
+        label="Filtros de proveedores"
+        clearHref={navigationHrefs.suppliers}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar proveedor..." />
-        </div>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar proveedor..." />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo</Label>
-          <NativeSelect id="type" name="type" defaultValue={type}>
-            <option value="">Todos los tipos</option>
-            {supplierTypes.map((item) => (
-              <option key={item.slug} value={item.slug}>
-                {item.nombre}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="payment">Condición de pago</Label>
-          <NativeSelect id="payment" name="payment" defaultValue={payment}>
-            <option value="">Todas las condiciones</option>
-            {paymentConditions.map((item) =>
-              item.condicion_pago ? (
-                <option key={item.condicion_pago} value={item.condicion_pago}>
-                  {item.condicion_pago}
+        <Field id="type" label="Tipo">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Todos los tipos</option>
+              {supplierTypes.map((item) => (
+                <option key={item.slug} value={item.slug}>
+                  {item.nombre}
                 </option>
-              ) : null,
-            )}
-          </NativeSelect>
-        </div>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </NativeSelect>
-        </div>
+        <Field id="payment" label="Condición de pago">
+          {(control) => (
+            <NativeSelect {...control} name="payment" defaultValue={payment}>
+              <option value="">Todas las condiciones</option>
+              {paymentConditions.map((item) =>
+                item.condicion_pago ? (
+                  <option key={item.condicion_pago} value={item.condicion_pago}>
+                    {item.condicion_pago}
+                  </option>
+                ) : null,
+              )}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="clear" className="w-full" asChild>
-            <Link href="/dashboard/inventory/suppliers">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -200,12 +190,11 @@ export default async function SuppliersPage({
                     )}
                   />
 
-                  <RowToggleStatusButton
+                  <SupplierStatusButton
+                    supplier={supplier}
                     action={toggleSupplierStatusAction}
-                    hiddenFieldName="id_proveedor"
-                    hiddenFieldValue={supplier.id_proveedor}
-                    isActive={supplier.estado}
-                    sendsRequestedStatus
+                    activatedNotification={inventoryNotifications["supplier-activated"]}
+                    deactivatedNotification={inventoryNotifications["supplier-deactivated"]}
                   />
                 </RowActions>
               </TableCell>
@@ -224,6 +213,6 @@ export default async function SuppliersPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

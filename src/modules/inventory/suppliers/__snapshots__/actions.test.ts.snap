@@ -1267,10 +1267,10 @@ exports[`createSupplierAction > una carrera por el documento (P2002 al crear) re
 }
 `;
 
-exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1278,12 +1278,23 @@ exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (r
 ]
 `;
 
-exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleSupplierStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar proveedores.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1334,12 +1345,25 @@ exports[`toggleSupplierStatusAction > activa un proveedor inactivo > llamadas 1`
 ]
 `;
 
-exports[`toggleSupplierStatusAction > activa un proveedor inactivo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-activated"`;
+exports[`toggleSupplierStatusAction > activa un proveedor inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1347,12 +1371,23 @@ exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni fal
 ]
 `;
 
-exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+exports[`toggleSupplierStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1370,15 +1405,37 @@ exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna 
     "fueraDeTransaccion": true,
     "prisma": "proveedor.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
 ]
 `;
 
-exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+exports[`toggleSupplierStatusAction > el proveedor no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1429,12 +1486,25 @@ exports[`toggleSupplierStatusAction > inactiva un proveedor activo > llamadas 1`
 ]
 `;
 
-exports[`toggleSupplierStatusAction > inactiva un proveedor activo > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-deactivated"`;
+exports[`toggleSupplierStatusAction > inactiva un proveedor activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1452,15 +1522,37 @@ exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta i
     "fueraDeTransaccion": true,
     "prisma": "proveedor.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "razon_social": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000004",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
 ]
 `;
 
-exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+exports[`toggleSupplierStatusAction > pedir inactivar un proveedor que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVE00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1468,7 +1560,18 @@ exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma 
 ]
 `;
 
-exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/suppliers"`;
+exports[`toggleSupplierStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
