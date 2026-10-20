@@ -7,29 +7,41 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { createSupplierMaterialAction } from "@/modules/inventory/supplier-materials/actions";
 import { SupplierMaterialForm } from "@/modules/inventory/supplier-materials/supplier-material-form";
+import { getSupplierMaterialOptions } from "@/modules/inventory/supplier-materials/supplier-material-form-data";
 import { getNewSupplierMaterialFormOptions } from "@/modules/inventory/supplier-materials/queries";
 
-export default async function NewSupplierMaterialPage() {
+type NewSupplierMaterialPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function NewSupplierMaterialPage({ searchParams }: NewSupplierMaterialPageProps) {
   await requireRole([APP_ROLES.ADMIN]);
 
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.supplierMaterials);
   const { suppliers, materials } = await getNewSupplierMaterialFormOptions();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Nueva asociación proveedor-material"
         description="Relaciona proveedores activos con materiales activos para mantener precios referenciales, disponibilidad y tiempos de entrega."
-        backHref={navigationHrefs.supplierMaterials}
+        backHref={backHref}
         backLabel="Volver al listado"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Inventario", href: navigationHrefs.inventory },
           {
             label: "Proveedor-material",
-            href: navigationHrefs.supplierMaterials,
+            href: backHref,
           },
           { label: "Nueva asociación" },
         ])}
@@ -43,18 +55,13 @@ export default async function NewSupplierMaterialPage() {
         <CardContent>
           <SupplierMaterialForm
             action={createSupplierMaterialAction}
-            suppliers={suppliers.map((supplier) => ({
-              id: supplier.id_proveedor,
-              label: supplier.razon_social,
-            }))}
-            materials={materials.map((material) => ({
-              id: material.id_material,
-              label: `${material.nombre_material} (${material.unidad_medida})`,
-            }))}
+            {...getSupplierMaterialOptions(suppliers, materials)}
             submitLabel="Guardar asociación"
+            successNotification={inventoryNotifications["supplier-material-created"]}
+            returnTo={backHref}
           />
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

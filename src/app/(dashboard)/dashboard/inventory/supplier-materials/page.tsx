@@ -20,7 +20,12 @@ import {
 } from "@/components/ui/table";
 import { requireRole } from "@/lib/authz";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toggleSupplierMaterialStatusAction } from "@/modules/inventory/supplier-materials/actions";
 import { getSupplierMaterialListData } from "@/modules/inventory/supplier-materials/queries";
 
@@ -62,6 +67,7 @@ export default async function SupplierMaterialsPage({
   const material = getSearchParam(params, "material");
   const availability = getSearchParam(params, "availability");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.supplierMaterials, params);
   const { relations, suppliers, materials } = await getSupplierMaterialListData({
     supplier,
     material,
@@ -80,7 +86,7 @@ export default async function SupplierMaterialsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/inventory/supplier-materials/new">
+            <Link href={withReturnTo(`${navigationHrefs.supplierMaterials}/new`, returnTo)}>
               Nueva asociación
             </Link>
           </Button>
@@ -196,7 +202,10 @@ export default async function SupplierMaterialsPage({
               <TableCell>
                 <div className="flex justify-end gap-2">
                   <RowEditLink
-                    href={`/dashboard/inventory/supplier-materials/${relation.id_proveedor_material}/edit`}
+                    href={withReturnTo(
+                      `${navigationHrefs.supplierMaterials}/${relation.id_proveedor_material}/edit`,
+                      returnTo,
+                    )}
                   />
                   <RowToggleStatusButton
                     action={toggleSupplierMaterialStatusAction}

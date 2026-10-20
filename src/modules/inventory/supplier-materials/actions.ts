@@ -4,20 +4,37 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import { parseRequestedStatus } from "@/lib/requested-status";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
-export type SupplierMaterialFormState = ActionErrorState;
+/** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
+export type SupplierMaterialFormValues = {
+  id_proveedor: string;
+  id_material: string;
+  unidad_medida: string;
+  precio_referencial: string;
+  tiempo_entrega_dias: string;
+  disponibilidad: string;
+};
+
+// Entrega 10.3b: el alta y la edicion no redirigen; devuelven el resultado y
+// el formulario da el aviso y cierra el panel o vuelve al listado.
+export type SupplierMaterialFormState = FormActionState<
+  SupplierMaterialFormValues,
+  { id_proveedor_material: string }
+>;
 
 type SupplierMaterialValidationResult =
   | {
       ok: false;
-      state: SupplierMaterialFormState;
+      error: string;
+      fieldErrors: FieldErrors;
     }
   | {
       ok: true;
@@ -33,6 +50,44 @@ const SUPPLIER_MATERIALS_PATH = "/dashboard/inventory/supplier-materials";
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
+}
+
+// El formulario niega el permiso con un error, sin redirigir.
+async function getSupplierMaterialSession() {
+  return getAuthorizedSession(["ADMIN"]);
+}
+
+function getSupplierMaterialFormValues(formData: FormData): SupplierMaterialFormValues {
+  const text = (name: keyof SupplierMaterialFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_proveedor: text("id_proveedor"),
+    id_material: text("id_material"),
+    unidad_medida: text("unidad_medida"),
+    precio_referencial: text("precio_referencial"),
+    tiempo_entrega_dias: text("tiempo_entrega_dias"),
+    disponibilidad: text("disponibilidad"),
+  };
+}
+
+function relationError(
+  values: SupplierMaterialFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): SupplierMaterialFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function relationSaved(
+  values: SupplierMaterialFormValues,
+  idProveedorMaterial: string,
+): SupplierMaterialFormState {
+  return {
+    status: "success",
+    data: { id_proveedor_material: idProveedorMaterial },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 function getSupplierMaterialFormData(formData: FormData) {
@@ -78,13 +133,9 @@ async function validateActiveSupplierAndMaterial(
   if (!supplier) {
     return {
       ok: false,
-      state: {
-        error: "El proveedor seleccionado no existe o está inactivo.",
-        fieldErrors: {
-          id_proveedor: [
-            "El proveedor seleccionado no existe o está inactivo.",
-          ],
-        },
+      error: "El proveedor seleccionado no existe o está inactivo.",
+      fieldErrors: {
+        id_proveedor: ["El proveedor seleccionado no existe o está inactivo."],
       },
     };
   }
@@ -92,11 +143,9 @@ async function validateActiveSupplierAndMaterial(
   if (!material) {
     return {
       ok: false,
-      state: {
-        error: "El material seleccionado no existe o está inactivo.",
-        fieldErrors: {
-          id_material: ["El material seleccionado no existe o está inactivo."],
-        },
+      error: "El material seleccionado no existe o está inactivo.",
+      fieldErrors: {
+        id_material: ["El material seleccionado no existe o está inactivo."],
       },
     };
   }
@@ -141,16 +190,19 @@ export async function createSupplierMaterialAction(
   _prevState: SupplierMaterialFormState,
   formData: FormData,
 ): Promise<SupplierMaterialFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierMaterialFormValues(formData);
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return relationError(values, "No tienes permisos para registrar asociaciones proveedor-material.");
+  }
+
   const parsed = supplierMaterialSchema.safeParse(
     getSupplierMaterialFormData(formData),
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la asociación.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return relationError(values, "Revisa los datos de la asociación.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -160,7 +212,7 @@ export async function createSupplierMaterialAction(
   );
 
   if (!validation.ok) {
-    return validation.state;
+    return relationError(values, validation.error, validation.fieldErrors);
   }
 
   const duplicated = await hasDuplicateRelation(
@@ -169,19 +221,16 @@ export async function createSupplierMaterialAction(
   );
 
   if (duplicated) {
-    return {
-      error: "Este proveedor ya está asociado con el material seleccionado.",
-      fieldErrors: {
-        id_material: [
-          "Este proveedor ya está asociado con el material seleccionado.",
-        ],
-      },
-    };
+    return relationError(values, "Este proveedor ya está asociado con el material seleccionado.", {
+      id_material: ["Este proveedor ya está asociado con el material seleccionado."],
+    });
   }
+
+  let idProveedorMaterial = "";
 
   try {
     await prisma.$transaction(async (tx) => {
-      const idProveedorMaterial = await getNextCorrelativeId(tx, {
+      idProveedorMaterial = await getNextCorrelativeId(tx, {
         codigoEntidad: "proveedor_material",
         prefijo: "PVM",
       });
@@ -213,26 +262,30 @@ export async function createSupplierMaterialAction(
       });
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return relationError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-created`);
+  return relationSaved(values, idProveedorMaterial);
 }
 
 export async function updateSupplierMaterialAction(
   _prevState: SupplierMaterialFormState,
   formData: FormData,
 ): Promise<SupplierMaterialFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierMaterialFormValues(formData);
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return relationError(values, "No tienes permisos para actualizar asociaciones proveedor-material.");
+  }
+
   const relationId = formData.get("id_proveedor_material")?.toString().trim();
 
   if (!relationId) {
-    return { error: "La asociación proveedor-material no existe." };
+    return relationError(values, "La asociación proveedor-material no existe.");
   }
 
   const currentRelation = await prisma.proveedor_material.findUnique({
@@ -242,7 +295,7 @@ export async function updateSupplierMaterialAction(
   });
 
   if (!currentRelation) {
-    return { error: "La asociación proveedor-material no existe." };
+    return relationError(values, "La asociación proveedor-material no existe.");
   }
 
   const parsed = supplierMaterialSchema.safeParse(
@@ -250,10 +303,7 @@ export async function updateSupplierMaterialAction(
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la asociación.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return relationError(values, "Revisa los datos de la asociación.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -264,7 +314,7 @@ export async function updateSupplierMaterialAction(
   );
 
   if (!validation.ok) {
-    return validation.state;
+    return relationError(values, validation.error, validation.fieldErrors);
   }
 
   const duplicated = await hasDuplicateRelation(
@@ -274,12 +324,9 @@ export async function updateSupplierMaterialAction(
   );
 
   if (duplicated) {
-    return {
-      error: "Ya existe otra asociación para ese proveedor y material.",
-      fieldErrors: {
-        id_material: ["Ya existe otra asociación para ese proveedor y material."],
-      },
-    };
+    return relationError(values, "Ya existe otra asociación para ese proveedor y material.", {
+      id_material: ["Ya existe otra asociación para ese proveedor y material."],
+    });
   }
 
   try {
@@ -309,15 +356,13 @@ export async function updateSupplierMaterialAction(
       detalle: `Proveedor-material actualizado: ${validation.supplier.razon_social} - ${validation.material.nombre_material}`,
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return relationError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-updated`);
+  return relationSaved(values, relationId);
 }
 
 export async function toggleSupplierMaterialStatusAction(formData: FormData) {

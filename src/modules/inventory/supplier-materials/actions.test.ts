@@ -24,7 +24,9 @@ import {
 // orden: la autorizacion con sus roles, las lecturas, la transaccion con sus
 // escrituras y su final, los correlativos, la bitacora (y si va dentro de la
 // transaccion), las revalidaciones y el resultado: la redireccion o el estado
-// que devuelve al formulario, con su mensaje exacto.
+// que devuelve al formulario, con su mensaje exacto. Desde el panel lateral,
+// el alta y la edicion devuelven el resultado (FormActionState) en lugar de
+// redirigir, y niegan el permiso con un error dentro del formulario.
 //
 // El alta y la edicion exigen que el proveedor y el material esten activos,
 // salvo, al editar, los que la asociacion ya tenia y no cambian: la consulta
@@ -39,6 +41,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta del formulario lleva un operationId aleatorio; en los
+// snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -98,7 +106,7 @@ expect.addSnapshotSerializer(decimalSnapshotSerializer);
 type FormFields = Record<string, string>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState: SupplierMaterialFormState = { error: "" };
+const initialState: SupplierMaterialFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -267,8 +275,8 @@ defineCases("createSupplierMaterialAction", create, [
   { name: "crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion", ...createWith({}) },
   { name: "los opcionales vacios se guardan como null", ...createWith(emptyOptionals) },
   { name: "el tiempo de entrega con decimales se trunca", ...createWith({ tiempo_entrega_dias: "7.8" }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     form: {
@@ -310,7 +318,7 @@ defineCases("createSupplierMaterialAction", create, [
 defineCases("updateSupplierMaterialAction", update, [
   { name: "ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion", ...updateWith({}) },
   { name: "los opcionales vacios se guardan como null", ...updateWith(emptyOptionals) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
   { name: "sin id de asociacion responde que no existe sin tocar Prisma", ...updateWith({ id_proveedor_material: "" }) },
   { name: "la asociacion no existe", ...updateWith({}, currentRelation({ exists: false })) },
   {
@@ -388,14 +396,14 @@ describe("updateSupplierMaterialAction acepta el proveedor y el material actuale
     const { calls, outcome } = await edit({}, parents({ suppliers: { [PROVEEDOR]: false } }));
 
     expect(updatesOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=supplier-material-updated");
+    expect(outcome).toMatchObject({ estado: { status: "success", data: { id_proveedor_material: ASOCIACION } } });
   });
 
   it("con su material actual inactivo, sin cambiarlo, guarda la asociacion", async () => {
     const { calls, outcome } = await edit({}, parents({ materials: { [MATERIAL]: false } }));
 
     expect(updatesOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=supplier-material-updated");
+    expect(outcome).toMatchObject({ estado: { status: "success", data: { id_proveedor_material: ASOCIACION } } });
   });
 
   it("cambiar a otro proveedor inactivo se sigue rechazando", async () => {

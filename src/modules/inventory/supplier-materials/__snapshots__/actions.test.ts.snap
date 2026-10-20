@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createSupplierMaterialAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSupplierMaterialAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,12 +11,29 @@ exports[`createSupplierMaterialAction > SELLER: requireRole lo rechaza (redirige
 ]
 `;
 
-exports[`createSupplierMaterialAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSupplierMaterialAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar asociaciones proveedor-material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
-exports[`createSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSupplierMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -24,12 +41,29 @@ exports[`createSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza 
 ]
 `;
 
-exports[`createSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSupplierMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar asociaciones proveedor-material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`createSupplierMaterialAction > crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -123,12 +157,30 @@ exports[`createSupplierMaterialAction > crea la asociacion activa con su correla
 ]
 `;
 
-exports[`createSupplierMaterialAction > crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+exports[`createSupplierMaterialAction > crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`createSupplierMaterialAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -160,6 +212,16 @@ exports[`createSupplierMaterialAction > datos invalidos devuelven los errores po
         "La unidad de medida es obligatoria.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "siempre",
+      "id_material": "",
+      "id_proveedor": "",
+      "precio_referencial": "-1",
+      "tiempo_entrega_dias": "abc",
+      "unidad_medida": "",
+    },
   },
 }
 `;
@@ -167,7 +229,7 @@ exports[`createSupplierMaterialAction > datos invalidos devuelven los errores po
 exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se trunca > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -261,12 +323,30 @@ exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se tr
 ]
 `;
 
-exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se trunca > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+exports[`createSupplierMaterialAction > el tiempo de entrega con decimales se trunca > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "7.8",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`createSupplierMaterialAction > los opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -360,12 +440,30 @@ exports[`createSupplierMaterialAction > los opcionales vacios se guardan como nu
 ]
 `;
 
-exports[`createSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-created"`;
+exports[`createSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "",
+      "tiempo_entrega_dias": "",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`createSupplierMaterialAction > material inactivo: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -406,6 +504,16 @@ exports[`createSupplierMaterialAction > material inactivo: error en el campo, si
         "El material seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -413,7 +521,7 @@ exports[`createSupplierMaterialAction > material inactivo: error en el campo, si
 exports[`createSupplierMaterialAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -492,6 +600,17 @@ exports[`createSupplierMaterialAction > otro fallo al crear revierte con el mens
 {
   "estado": {
     "error": "No se pudo guardar la asociación proveedor-material. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -499,7 +618,7 @@ exports[`createSupplierMaterialAction > otro fallo al crear revierte con el mens
 exports[`createSupplierMaterialAction > proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -540,6 +659,16 @@ exports[`createSupplierMaterialAction > proveedor inactivo: error en el campo, s
         "El proveedor seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -547,7 +676,7 @@ exports[`createSupplierMaterialAction > proveedor inactivo: error en el campo, s
 exports[`createSupplierMaterialAction > proveedor inexistente: el mismo error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -588,6 +717,16 @@ exports[`createSupplierMaterialAction > proveedor inexistente: el mismo error > 
         "El proveedor seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -595,7 +734,7 @@ exports[`createSupplierMaterialAction > proveedor inexistente: el mismo error > 
 exports[`createSupplierMaterialAction > proveedor y material inactivos: solo informa el proveedor > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -636,6 +775,16 @@ exports[`createSupplierMaterialAction > proveedor y material inactivos: solo inf
         "El proveedor seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -643,7 +792,7 @@ exports[`createSupplierMaterialAction > proveedor y material inactivos: solo inf
 exports[`createSupplierMaterialAction > una carrera por la misma asociacion (P2002 al crear) revierte con el mensaje de repetida, sin marcar campos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -722,6 +871,17 @@ exports[`createSupplierMaterialAction > una carrera por la misma asociacion (P20
 {
   "estado": {
     "error": "Este proveedor ya está asociado con el material seleccionado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -729,7 +889,7 @@ exports[`createSupplierMaterialAction > una carrera por la misma asociacion (P20
 exports[`createSupplierMaterialAction > ya existe la asociacion: error en el material, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -781,6 +941,16 @@ exports[`createSupplierMaterialAction > ya existe la asociacion: error en el mat
       "id_material": [
         "Este proveedor ya está asociado con el material seleccionado.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "alta",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "185.50",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
     },
   },
 }
@@ -1014,7 +1184,7 @@ exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar
 exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1101,12 +1271,30 @@ exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra
 ]
 `;
 
-exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
-exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1114,12 +1302,29 @@ exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza 
 ]
 `;
 
-exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateSupplierMaterialAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar asociaciones proveedor-material.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda la asociacion con el nuevo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1207,12 +1412,30 @@ exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda l
 ]
 `;
 
-exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda la asociacion con el nuevo > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > cambiar a otro proveedor activo guarda la asociacion con el nuevo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000002",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1260,6 +1483,16 @@ exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error
         "El proveedor seleccionado no existe o está inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000002",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -1267,7 +1500,7 @@ exports[`updateSupplierMaterialAction > cambiar a otro proveedor inactivo: error
 exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1354,12 +1587,30 @@ exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un
 ]
 `;
 
-exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un duplicado > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > conservar su propia combinacion no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores por campo despues de comprobar la asociacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1387,6 +1638,16 @@ exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores po
         "La unidad de medida es obligatoria.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "-5",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "",
+    },
   },
 }
 `;
@@ -1394,7 +1655,7 @@ exports[`updateSupplierMaterialAction > datos invalidos devuelven los errores po
 exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1481,12 +1742,30 @@ exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inact
 ]
 `;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > hallazgo 4: con su material actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1573,12 +1852,30 @@ exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inac
 ]
 `;
 
-exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > hallazgo 4: con su proveedor actual inactivo y sin cambiarlo, lo busca sin exigir que este activo y guarda > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > la asociacion no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1598,6 +1895,17 @@ exports[`updateSupplierMaterialAction > la asociacion no existe > resultado 1`] 
 {
   "estado": {
     "error": "La asociación proveedor-material no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -1605,7 +1913,7 @@ exports[`updateSupplierMaterialAction > la asociacion no existe > resultado 1`] 
 exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1692,12 +2000,30 @@ exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como nu
 ]
 `;
 
-exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-updated"`;
+exports[`updateSupplierMaterialAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor_material": "PVM00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "disponibilidad": "",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "",
+      "tiempo_entrega_dias": "",
+      "unidad_medida": "plancha",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1769,6 +2095,17 @@ exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el men
 {
   "estado": {
     "error": "No se pudo guardar la asociación proveedor-material. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -1776,7 +2113,7 @@ exports[`updateSupplierMaterialAction > otro fallo al actualizar devuelve el men
 exports[`updateSupplierMaterialAction > sin id de asociacion responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1788,6 +2125,17 @@ exports[`updateSupplierMaterialAction > sin id de asociacion responde que no exi
 {
   "estado": {
     "error": "La asociación proveedor-material no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -1795,7 +2143,7 @@ exports[`updateSupplierMaterialAction > sin id de asociacion responde que no exi
 exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P2002 al actualizar) da el mensaje de repetida > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1867,6 +2215,17 @@ exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P20
 {
   "estado": {
     "error": "Este proveedor ya está asociado con el material seleccionado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
+    },
   },
 }
 `;
@@ -1874,7 +2233,7 @@ exports[`updateSupplierMaterialAction > una carrera por la misma asociacion (P20
 exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese proveedor y material: error en el material > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1932,6 +2291,16 @@ exports[`updateSupplierMaterialAction > ya existe otra asociacion para ese prove
       "id_material": [
         "Ya existe otra asociación para ese proveedor y material.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "disponibilidad": "media",
+      "id_material": "MAT00000004",
+      "id_proveedor": "PVE00000004",
+      "precio_referencial": "190",
+      "tiempo_entrega_dias": "3",
+      "unidad_medida": "plancha",
     },
   },
 }
