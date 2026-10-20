@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
 /** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
@@ -48,11 +52,7 @@ type SupplierMaterialValidationResult =
 
 const SUPPLIER_MATERIALS_PATH = "/dashboard/inventory/supplier-materials";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
-
-// El formulario niega el permiso con un error, sin redirigir.
+// El formulario y la fila niegan el permiso con un error, sin redirigir.
 async function getSupplierMaterialSession() {
   return getAuthorizedSession(["ADMIN"]);
 }
@@ -365,19 +365,33 @@ export async function updateSupplierMaterialAction(
   return relationSaved(values, relationId);
 }
 
-export async function toggleSupplierMaterialStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const relationId = formData.get("id_proveedor_material")?.toString().trim();
+// Activar o inactivar desde la fila (ConfirmActionButton): devuelve el
+// resultado en lugar de redirigir, y un error (sin permiso, ya tenia ese estado
+// o no existe) queda en la confirmacion.
+export async function toggleSupplierMaterialStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const relationId = formData.get("id_proveedor_material")?.toString().trim() ?? "";
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return statusToggleError(relationId, "No tienes permisos para activar o inactivar asociaciones proveedor-material.");
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!relationId || nextStatus === null) {
-    redirect(SUPPLIER_MATERIALS_PATH);
+  if (!relationId) {
+    return statusToggleError(relationId, "La asociación proveedor-material no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(relationId, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si la asociacion tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.proveedor_material.updateMany({
     where: {
       id_proveedor_material: relationId,
@@ -388,10 +402,6 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
       fecha_actualizacion: new Date(),
     },
   });
-
-  if (count === 0) {
-    redirect(SUPPLIER_MATERIALS_PATH);
-  }
 
   const relation = await prisma.proveedor_material.findUnique({
     where: {
@@ -411,6 +421,16 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
     },
   });
 
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      relationId,
+      relation
+        ? `La asociación ya estaba ${nextStatus ? "activa" : "inactiva"}.`
+        : "La asociación proveedor-material no existe.",
+    );
+  }
+
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "proveedor_material",
@@ -426,7 +446,5 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(
-    `${SUPPLIER_MATERIALS_PATH}?toast=${nextStatus ? "supplier-material-activated" : "supplier-material-deactivated"}`,
-  );
+  return statusToggleDone(relationId, nextStatus);
 }

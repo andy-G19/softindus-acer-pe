@@ -1,14 +1,12 @@
 import Link from "next/link";
 
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -26,8 +24,10 @@ import {
   navigationHrefs,
   withReturnTo,
 } from "@/lib/navigation";
+import { inventoryNotifications } from "@/modules/inventory/notifications";
 import { toggleSupplierMaterialStatusAction } from "@/modules/inventory/supplier-materials/actions";
 import { getSupplierMaterialListData } from "@/modules/inventory/supplier-materials/queries";
+import { SupplierMaterialStatusButton } from "@/modules/inventory/supplier-materials/supplier-material-status-button";
 
 type SupplierMaterialsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -76,7 +76,7 @@ export default async function SupplierMaterialsPage({
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Materiales por proveedor"
         description="Consulta qué proveedores abastecen cada material o insumo."
@@ -93,69 +93,60 @@ export default async function SupplierMaterialsPage({
         }
       />
 
-      <form
-        action="/dashboard/inventory/supplier-materials"
-        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-5"
+      <FilterBar
+        action={navigationHrefs.supplierMaterials}
+        label="Filtros de asociaciones proveedor-material"
+        clearHref={navigationHrefs.supplierMaterials}
+        clearLabel="Limpiar"
       >
-        <div className="space-y-2">
-          <Label htmlFor="supplier">Proveedor</Label>
-          <NativeSelect id="supplier" name="supplier" defaultValue={supplier}>
-            <option value="">Todos los proveedores</option>
-            {suppliers.map((item) => (
-              <option key={item.id_proveedor} value={item.id_proveedor}>
-                {item.razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="supplier" label="Proveedor">
+          {(control) => (
+            <NativeSelect {...control} name="supplier" defaultValue={supplier}>
+              <option value="">Todos los proveedores</option>
+              {suppliers.map((item) => (
+                <option key={item.id_proveedor} value={item.id_proveedor}>
+                  {item.razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="material">Material</Label>
-          <NativeSelect id="material" name="material" defaultValue={material}>
-            <option value="">Todos los materiales</option>
-            {materials.map((item) => (
-              <option key={item.id_material} value={item.id_material}>
-                {item.nombre_material}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="material" label="Material">
+          {(control) => (
+            <NativeSelect {...control} name="material" defaultValue={material}>
+              <option value="">Todos los materiales</option>
+              {materials.map((item) => (
+                <option key={item.id_material} value={item.id_material}>
+                  {item.nombre_material}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="availability">Disponibilidad</Label>
-          <NativeSelect
-            id="availability"
-            name="availability"
-            defaultValue={availability}
-          >
-            <option value="">Disponibilidad</option>
-            <option value="alta">Alta</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
-            <option value="no_disponible">No disponible</option>
-          </NativeSelect>
-        </div>
+        <Field id="availability" label="Disponibilidad">
+          {(control) => (
+            <NativeSelect {...control} name="availability" defaultValue={availability}>
+              <option value="">Disponibilidad</option>
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+              <option value="no_disponible">No disponible</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end gap-2">
-          <Button type="submit" className="flex-1">
-            Filtrar
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/dashboard/inventory/supplier-materials">
-              Limpiar
-            </Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -207,12 +198,11 @@ export default async function SupplierMaterialsPage({
                       returnTo,
                     )}
                   />
-                  <RowToggleStatusButton
+                  <SupplierMaterialStatusButton
+                    relation={relation}
                     action={toggleSupplierMaterialStatusAction}
-                    hiddenFieldName="id_proveedor_material"
-                    hiddenFieldValue={relation.id_proveedor_material}
-                    isActive={relation.estado}
-                    sendsRequestedStatus
+                    activatedNotification={inventoryNotifications["supplier-material-activated"]}
+                    deactivatedNotification={inventoryNotifications["supplier-material-deactivated"]}
                   />
                 </div>
               </TableCell>
@@ -231,6 +221,6 @@ export default async function SupplierMaterialsPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

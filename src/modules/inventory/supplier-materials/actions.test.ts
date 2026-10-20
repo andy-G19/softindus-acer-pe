@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   createSupplierMaterialAction,
   toggleSupplierMaterialStatusAction,
@@ -26,7 +27,8 @@ import {
 // transaccion), las revalidaciones y el resultado: la redireccion o el estado
 // que devuelve al formulario, con su mensaje exacto. Desde el panel lateral,
 // el alta y la edicion devuelven el resultado (FormActionState) en lugar de
-// redirigir, y niegan el permiso con un error dentro del formulario.
+// redirigir, y niegan el permiso con un error dentro del formulario; el
+// cambio de estado desde la fila (ConfirmActionButton), tambien.
 //
 // El alta y la edicion exigen que el proveedor y el material esten activos,
 // salvo, al editar, los que la asociacion ya tenia y no cambian: la consulta
@@ -270,6 +272,7 @@ const updateWith = (fields: FormFields, data: DataOverrides = {}) => ({
 
 const create = (formData: FormData) => createSupplierMaterialAction(initialState, formData);
 const update = (formData: FormData) => updateSupplierMaterialAction(initialState, formData);
+const toggleStatus = (formData: FormData) => toggleSupplierMaterialStatusAction({ status: "idle" }, formData);
 
 defineCases("createSupplierMaterialAction", create, [
   { name: "crea la asociacion activa con su correlativo y la bitacora dentro de la transaccion", ...createWith({}) },
@@ -444,7 +447,10 @@ describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
   }
 
   const toggle = (fields: FormFields, data: DataOverrides) =>
-    runAction(toggleSupplierMaterialStatusAction, { name: "", form: fields, data });
+    runAction(toggleStatus, { name: "", form: fields, data });
+
+  // El resultado que la accion devuelve a ConfirmActionButton.
+  const resultOf = (outcome: unknown) => (outcome as { estado: StatusToggleState }).estado;
 
   it("inactivar compara y fija el estado con su fecha en una sola escritura", async () => {
     const { calls, outcome } = await toggle(
@@ -462,7 +468,7 @@ describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
       }),
     ]);
     expect(auditsOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=supplier-material-deactivated");
+    expect(resultOf(outcome)).toMatchObject({ status: "success", data: { estado: false } });
   });
 
   it("pedir inactivar una asociacion que otro ya inactivo no la activa ni escribe la bitacora", async () => {
@@ -473,7 +479,7 @@ describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "La asociación ya estaba inactiva." });
   });
 
   it("pedir activar una asociacion que ya esta activa no la inactiva ni escribe la bitacora", async () => {
@@ -484,7 +490,7 @@ describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "La asociación ya estaba activa." });
   });
 
   it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
@@ -502,7 +508,7 @@ describe("toggleSupplierMaterialStatusAction fija el estado pedido", () => {
   });
 });
 
-defineCases("toggleSupplierMaterialStatusAction", toggleSupplierMaterialStatusAction, [
+defineCases("toggleSupplierMaterialStatusAction", toggleStatus, [
   {
     name: "inactiva una asociacion activa y actualiza su fecha",
     form: { id_proveedor_material: ASOCIACION, estado: "false" },
@@ -518,18 +524,18 @@ defineCases("toggleSupplierMaterialStatusAction", toggleSupplierMaterialStatusAc
     form: { id_proveedor_material: ASOCIACION, estado: "false" },
     data: { ...currentRelation({ estado: false }), "proveedor_material.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    name: "con un estado pedido que no es true ni false responde sin tocar Prisma",
     form: { id_proveedor_material: ASOCIACION, estado: "si" },
   },
   {
-    name: "la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    name: "la asociacion no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_proveedor_material: ASOCIACION, estado: "false" },
     data: { ...currentRelation({ exists: false }), "proveedor_material.updateMany": () => ({ count: 0 }) },
   },
   {
-    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_proveedor_material: ASOCIACION, estado: "false" },
     role: "WORKSHOP_MASTER",
   },

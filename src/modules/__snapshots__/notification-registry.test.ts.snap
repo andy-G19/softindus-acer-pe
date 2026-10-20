@@ -23,6 +23,8 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/(.)new/page.tsx [successNotification] -> supplier-material-created",
   "src/app/(dashboard)/dashboard/inventory/supplier-materials/[id]/edit/page.tsx [successNotification] -> supplier-material-updated",
   "src/app/(dashboard)/dashboard/inventory/supplier-materials/new/page.tsx [successNotification] -> supplier-material-created",
+  "src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx [activatedNotification] -> supplier-material-activated",
+  "src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx [deactivatedNotification] -> supplier-material-deactivated",
   "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [activatedNotification] -> supplier-type-activated",
   "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [deactivatedNotification] -> supplier-type-deactivated",
   "src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx [successNotification] -> supplier-type-created",

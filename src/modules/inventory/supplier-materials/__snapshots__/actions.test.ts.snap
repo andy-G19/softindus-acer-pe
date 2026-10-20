@@ -956,10 +956,10 @@ exports[`createSupplierMaterialAction > ya existe la asociacion: error en el mat
 }
 `;
 
-exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -967,12 +967,23 @@ exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: requireRole lo re
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleSupplierMaterialStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar asociaciones proveedor-material.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1033,12 +1044,25 @@ exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > l
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-activated"`;
+exports[`toggleSupplierMaterialStatusAction > activa una asociacion inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1046,12 +1070,23 @@ exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es tru
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+exports[`toggleSupplierMaterialStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1112,12 +1147,25 @@ exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y a
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials?toast=supplier-material-deactivated"`;
+exports[`toggleSupplierMaterialStatusAction > inactiva una asociacion activa y actualiza su fecha > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1136,15 +1184,46 @@ exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia
     "fueraDeTransaccion": true,
     "prisma": "proveedor_material.updateMany",
   },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+exports[`toggleSupplierMaterialStatusAction > la asociacion no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La asociación proveedor-material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1163,15 +1242,46 @@ exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que
     "fueraDeTransaccion": true,
     "prisma": "proveedor_material.updateMany",
   },
+  {
+    "args": {
+      "include": {
+        "material": {
+          "select": {
+            "nombre_material": true,
+          },
+        },
+        "proveedor": {
+          "select": {
+            "razon_social": true,
+          },
+        },
+      },
+      "where": {
+        "id_proveedor_material": "PVM00000004",
+      },
+    },
+    "prisma": "proveedor_material.findUnique",
+  },
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+exports[`toggleSupplierMaterialStatusAction > pedir inactivar una asociacion que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La asociación ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PVM00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSupplierMaterialStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1179,7 +1289,18 @@ exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar
 ]
 `;
 
-exports[`toggleSupplierMaterialStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/inventory/supplier-materials"`;
+exports[`toggleSupplierMaterialStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La asociación proveedor-material no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierMaterialAction > ADMIN actualiza la asociacion y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
