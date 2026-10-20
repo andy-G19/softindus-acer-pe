@@ -4,25 +4,75 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import { parseRequestedStatus } from "@/lib/requested-status";
 import {
   quickSupplierSchema,
   supplierSchema,
 } from "@/schemas/inventory/supplier.schema";
 
-export type SupplierFormState = ActionErrorState;
+/** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
+export type SupplierFormValues = {
+  razon_social: string;
+  tipo_documento: string;
+  numero_documento: string;
+  telefono: string;
+  correo: string;
+  direccion: string;
+  contacto_principal: string;
+  tipo_proveedor: string;
+  condicion_pago: string;
+  observaciones: string;
+};
+
+// Entrega 10.3b: el alta y la edicion no redirigen; devuelven el resultado y
+// el formulario da el aviso y cierra el panel o vuelve al listado.
+export type SupplierFormState = FormActionState<SupplierFormValues, { id_proveedor: string }>;
 
 const INVENTORY_PATH = "/dashboard/inventory";
 const SUPPLIERS_PATH = "/dashboard/inventory/suppliers";
-const initialState: SupplierFormState = { error: "" };
 
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
+}
+
+// El formulario niega el permiso con un error, sin redirigir.
+async function getSupplierSession() {
+  return getAuthorizedSession(["ADMIN"]);
+}
+
+function getSupplierFormValues(formData: FormData): SupplierFormValues {
+  const text = (name: keyof SupplierFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    razon_social: text("razon_social"),
+    tipo_documento: text("tipo_documento"),
+    numero_documento: text("numero_documento"),
+    telefono: text("telefono"),
+    correo: text("correo"),
+    direccion: text("direccion"),
+    contacto_principal: text("contacto_principal"),
+    tipo_proveedor: text("tipo_proveedor"),
+    condicion_pago: text("condicion_pago"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function supplierError(
+  values: SupplierFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): SupplierFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function supplierSaved(values: SupplierFormValues, idProveedor: string): SupplierFormState {
+  return { status: "success", data: { id_proveedor: idProveedor }, values, operationId: newOperationId() };
 }
 
 function toNullable(value: string | undefined | null) {
@@ -100,14 +150,17 @@ export async function createSupplierAction(
   _prevState: SupplierFormState,
   formData: FormData,
 ): Promise<SupplierFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierFormValues(formData);
+  const session = await getSupplierSession();
+
+  if (!session) {
+    return supplierError(values, "No tienes permisos para registrar proveedores.");
+  }
+
   const parsed = supplierSchema.safeParse(getSupplierFormData(formData));
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del proveedor.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return supplierError(values, "Revisa los datos del proveedor.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -117,12 +170,9 @@ export async function createSupplierAction(
   );
 
   if (!supplierTypeIsActive) {
-    return {
-      error: "Selecciona un tipo de proveedor activo.",
-      fieldErrors: {
-        tipo_proveedor: ["Selecciona un tipo de proveedor activo."],
-      },
-    };
+    return supplierError(values, "Selecciona un tipo de proveedor activo.", {
+      tipo_proveedor: ["Selecciona un tipo de proveedor activo."],
+    });
   }
 
   const hasDuplicateDocument = await validateDuplicateSupplierDocument(
@@ -130,19 +180,16 @@ export async function createSupplierAction(
   );
 
   if (hasDuplicateDocument) {
-    return {
-      error: "Ya existe un proveedor con ese número de documento.",
-      fieldErrors: {
-        numero_documento: [
-          "Ya existe un proveedor con ese número de documento.",
-        ],
-      },
-    };
+    return supplierError(values, "Ya existe un proveedor con ese número de documento.", {
+      numero_documento: ["Ya existe un proveedor con ese número de documento."],
+    });
   }
+
+  let idProveedor = "";
 
   try {
     await prisma.$transaction(async (tx) => {
-      const idProveedor = await getNextCorrelativeId(tx, {
+      idProveedor = await getNextCorrelativeId(tx, {
         codigoEntidad: "proveedor",
         prefijo: "PVE",
       });
@@ -179,33 +226,36 @@ export async function createSupplierAction(
       "Ya existe un proveedor con ese número de documento.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe un proveedor con ese número de documento."
-          ? { numero_documento: [errorMessage] }
-          : undefined,
-    };
+    return supplierError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe un proveedor con ese número de documento."
+        ? { numero_documento: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(`${SUPPLIERS_PATH}?toast=supplier-created`);
 
-  return initialState;
+  return supplierSaved(values, idProveedor);
 }
 
 export async function updateSupplierAction(
   _prevState: SupplierFormState,
   formData: FormData,
 ): Promise<SupplierFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierFormValues(formData);
+  const session = await getSupplierSession();
+
+  if (!session) {
+    return supplierError(values, "No tienes permisos para actualizar proveedores.");
+  }
+
   const idProveedor = formData.get("id_proveedor")?.toString();
 
   if (!idProveedor) {
-    return {
-      error: "El proveedor no existe.",
-    };
+    return supplierError(values, "El proveedor no existe.");
   }
 
   const supplier = await prisma.proveedor.findUnique({
@@ -218,18 +268,13 @@ export async function updateSupplierAction(
   });
 
   if (!supplier) {
-    return {
-      error: "El proveedor no existe.",
-    };
+    return supplierError(values, "El proveedor no existe.");
   }
 
   const parsed = supplierSchema.safeParse(getSupplierFormData(formData));
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del proveedor.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return supplierError(values, "Revisa los datos del proveedor.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -239,12 +284,9 @@ export async function updateSupplierAction(
   );
 
   if (!supplierTypeExists) {
-    return {
-      error: "Selecciona un tipo de proveedor válido.",
-      fieldErrors: {
-        tipo_proveedor: ["Selecciona un tipo de proveedor válido."],
-      },
-    };
+    return supplierError(values, "Selecciona un tipo de proveedor válido.", {
+      tipo_proveedor: ["Selecciona un tipo de proveedor válido."],
+    });
   }
 
   const hasDuplicateDocument = await validateDuplicateSupplierDocument(
@@ -253,14 +295,9 @@ export async function updateSupplierAction(
   );
 
   if (hasDuplicateDocument) {
-    return {
-      error: "Ya existe otro proveedor con ese número de documento.",
-      fieldErrors: {
-        numero_documento: [
-          "Ya existe otro proveedor con ese número de documento.",
-        ],
-      },
-    };
+    return supplierError(values, "Ya existe otro proveedor con ese número de documento.", {
+      numero_documento: ["Ya existe otro proveedor con ese número de documento."],
+    });
   }
 
   try {
@@ -287,14 +324,13 @@ export async function updateSupplierAction(
       "Ya existe otro proveedor con ese número de documento.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage ===
-        "Ya existe otro proveedor con ese número de documento."
-          ? { numero_documento: [errorMessage] }
-          : undefined,
-    };
+    return supplierError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otro proveedor con ese número de documento."
+        ? { numero_documento: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -307,9 +343,8 @@ export async function updateSupplierAction(
 
   revalidatePath(INVENTORY_PATH);
   revalidatePath(SUPPLIERS_PATH);
-  redirect(`${SUPPLIERS_PATH}?toast=supplier-updated`);
 
-  return initialState;
+  return supplierSaved(values, idProveedor);
 }
 
 export async function toggleSupplierStatusAction(formData: FormData) {

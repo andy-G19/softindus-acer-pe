@@ -488,10 +488,10 @@ exports[`createQuickSupplierAction > ya existe uno inactivo con esa razon social
 }
 `;
 
-exports[`createSupplierAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSupplierAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -499,12 +499,33 @@ exports[`createSupplierAction > SELLER: requireRole lo rechaza (redirige) sin to
 ]
 `;
 
-exports[`createSupplierAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSupplierAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar proveedores.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
-exports[`createSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSupplierAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -512,12 +533,33 @@ exports[`createSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirig
 ]
 `;
 
-exports[`createSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSupplierAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar proveedores.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`createSupplierAction > crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -600,12 +642,34 @@ exports[`createSupplierAction > crea el proveedor activo con su correlativo y la
 ]
 `;
 
-exports[`createSupplierAction > crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+exports[`createSupplierAction > crea el proveedor activo con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`createSupplierAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -634,6 +698,20 @@ exports[`createSupplierAction > datos invalidos devuelven los errores por campo 
         "El tipo de proveedor es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "trueque",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "no-es-correo",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "A",
+      "telefono": "999 888 777",
+      "tipo_documento": "pasaporte",
+      "tipo_proveedor": "",
+    },
   },
 }
 `;
@@ -641,7 +719,7 @@ exports[`createSupplierAction > datos invalidos devuelven los errores por campo 
 exports[`createSupplierAction > documento de otro proveedor: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -680,6 +758,20 @@ exports[`createSupplierAction > documento de otro proveedor: error en el campo, 
         "Ya existe un proveedor con ese número de documento.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -687,7 +779,7 @@ exports[`createSupplierAction > documento de otro proveedor: error en el campo, 
 exports[`createSupplierAction > los opcionales vacios se guardan como null y sin documento no busca duplicados > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -759,12 +851,34 @@ exports[`createSupplierAction > los opcionales vacios se guardan como null y sin
 ]
 `;
 
-exports[`createSupplierAction > los opcionales vacios se guardan como null y sin documento no busca duplicados > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+exports[`createSupplierAction > los opcionales vacios se guardan como null y sin documento no busca duplicados > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "",
+      "contacto_principal": "",
+      "correo": "",
+      "direccion": "",
+      "numero_documento": "",
+      "observaciones": "",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "",
+      "tipo_documento": "",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`createSupplierAction > los textos llegan sin los espacios de los extremos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -847,12 +961,34 @@ exports[`createSupplierAction > los textos llegan sin los espacios de los extrem
 ]
 `;
 
-exports[`createSupplierAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-created"`;
+exports[`createSupplierAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": " 20601234567 ",
+      "observaciones": "Entrega en planta",
+      "razon_social": "  Aceros del Sur S.A.C.  ",
+      "telefono": "  999 888 777 ",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`createSupplierAction > otro fallo al crear revierte con el mensaje generico, sin marcar campos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -921,6 +1057,20 @@ exports[`createSupplierAction > otro fallo al crear revierte con el mensaje gene
   "estado": {
     "error": "No se pudo guardar el proveedor. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -928,7 +1078,7 @@ exports[`createSupplierAction > otro fallo al crear revierte con el mensaje gene
 exports[`createSupplierAction > tipo de proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -956,6 +1106,20 @@ exports[`createSupplierAction > tipo de proveedor inactivo: error en el campo, s
         "Selecciona un tipo de proveedor activo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -963,7 +1127,7 @@ exports[`createSupplierAction > tipo de proveedor inactivo: error en el campo, s
 exports[`createSupplierAction > tipo de proveedor inexistente: el mismo error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -991,6 +1155,20 @@ exports[`createSupplierAction > tipo de proveedor inexistente: el mismo error > 
         "Selecciona un tipo de proveedor activo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -998,7 +1176,7 @@ exports[`createSupplierAction > tipo de proveedor inexistente: el mismo error > 
 exports[`createSupplierAction > una carrera por el documento (P2002 al crear) revierte y marca el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1070,6 +1248,20 @@ exports[`createSupplierAction > una carrera por el documento (P2002 al crear) re
       "numero_documento": [
         "Ya existe un proveedor con ese número de documento.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "credito",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C.",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
     },
   },
 }
@@ -1281,7 +1473,7 @@ exports[`toggleSupplierStatusAction > sin id vuelve al listado sin tocar Prisma 
 exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1362,12 +1554,34 @@ exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitac
 ]
 `;
 
-exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+exports[`updateSupplierAction > ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
-exports[`updateSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`updateSupplierAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1375,12 +1589,33 @@ exports[`updateSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirig
 ]
 `;
 
-exports[`updateSupplierAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateSupplierAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar proveedores.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierAction > conservar su propio documento no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1461,12 +1696,34 @@ exports[`updateSupplierAction > conservar su propio documento no es un duplicado
 ]
 `;
 
-exports[`updateSupplierAction > conservar su propio documento no es un duplicado > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+exports[`updateSupplierAction > conservar su propio documento no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierAction > datos invalidos devuelven los errores por campo despues de comprobar el proveedor > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1497,6 +1754,20 @@ exports[`updateSupplierAction > datos invalidos devuelven los errores por campo 
         "La razón social es obligatoria.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "no-es-correo",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1504,7 +1775,7 @@ exports[`updateSupplierAction > datos invalidos devuelven los errores por campo 
 exports[`updateSupplierAction > el documento es de otro proveedor: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1554,6 +1825,20 @@ exports[`updateSupplierAction > el documento es de otro proveedor: error en el c
         "Ya existe otro proveedor con ese número de documento.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1561,7 +1846,7 @@ exports[`updateSupplierAction > el documento es de otro proveedor: error en el c
 exports[`updateSupplierAction > el proveedor no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1584,6 +1869,21 @@ exports[`updateSupplierAction > el proveedor no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El proveedor no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1591,7 +1891,7 @@ exports[`updateSupplierAction > el proveedor no existe > resultado 1`] = `
 exports[`updateSupplierAction > los opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1661,12 +1961,34 @@ exports[`updateSupplierAction > los opcionales vacios se guardan como null > lla
 ]
 `;
 
-exports[`updateSupplierAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+exports[`updateSupplierAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "",
+      "contacto_principal": "",
+      "correo": "",
+      "direccion": "",
+      "numero_documento": "",
+      "observaciones": "",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "",
+      "tipo_documento": "",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1733,6 +2055,20 @@ exports[`updateSupplierAction > otro fallo al actualizar devuelve el mensaje gen
   "estado": {
     "error": "No se pudo guardar el proveedor. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1740,7 +2076,7 @@ exports[`updateSupplierAction > otro fallo al actualizar devuelve el mensaje gen
 exports[`updateSupplierAction > sin id de proveedor responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1752,6 +2088,21 @@ exports[`updateSupplierAction > sin id de proveedor responde que no existe sin t
 {
   "estado": {
     "error": "El proveedor no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1759,7 +2110,7 @@ exports[`updateSupplierAction > sin id de proveedor responde que no existe sin t
 exports[`updateSupplierAction > tipo de proveedor inexistente: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1798,6 +2149,20 @@ exports[`updateSupplierAction > tipo de proveedor inexistente: error en el campo
         "Selecciona un tipo de proveedor válido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
   },
 }
 `;
@@ -1805,7 +2170,7 @@ exports[`updateSupplierAction > tipo de proveedor inexistente: error en el campo
 exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al editar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1886,12 +2251,34 @@ exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al edita
 ]
 `;
 
-exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al editar > resultado 1`] = `"redirect:/dashboard/inventory/suppliers?toast=supplier-updated"`;
+exports[`updateSupplierAction > un tipo de proveedor inactivo se acepta al editar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_proveedor": "PVE00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
+    },
+  },
+}
+`;
 
 exports[`updateSupplierAction > una carrera por el documento (P2002 al actualizar) marca el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1961,6 +2348,20 @@ exports[`updateSupplierAction > una carrera por el documento (P2002 al actualiza
       "numero_documento": [
         "Ya existe otro proveedor con ese número de documento.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "condicion_pago": "contado",
+      "contacto_principal": "Rosa Quispe",
+      "correo": "ventas@acerosdelsur.pe",
+      "direccion": "Av. Industrial 123, Arequipa",
+      "numero_documento": "20601234567",
+      "observaciones": "Entrega en planta",
+      "razon_social": "Aceros del Sur S.A.C. (Arequipa)",
+      "telefono": "999 888 777",
+      "tipo_documento": "ruc",
+      "tipo_proveedor": "distribuidor",
     },
   },
 }

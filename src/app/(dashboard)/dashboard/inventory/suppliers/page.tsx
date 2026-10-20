@@ -21,7 +21,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toggleSupplierStatusAction } from "@/modules/inventory/suppliers/actions";
 import { getSupplierListData } from "@/modules/inventory/suppliers/queries";
 
@@ -52,6 +57,7 @@ export default async function SuppliersPage({
   const type = getSearchParam(params, "type");
   const payment = getSearchParam(params, "payment");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.suppliers, params);
   const { suppliers, supplierTypes, paymentConditions } = await getSupplierListData({
     q,
     type,
@@ -81,7 +87,7 @@ export default async function SuppliersPage({
             </Button>
 
             <Button asChild>
-              <Link href="/dashboard/inventory/suppliers/new">
+              <Link href={withReturnTo(`${navigationHrefs.suppliers}/new`, returnTo)}>
                 Nuevo proveedor
               </Link>
             </Button>
@@ -188,7 +194,10 @@ export default async function SuppliersPage({
               <TableCell>
                 <RowActions>
                   <RowEditLink
-                    href={`/dashboard/inventory/suppliers/${supplier.id_proveedor}/edit`}
+                    href={withReturnTo(
+                      `${navigationHrefs.suppliers}/${supplier.id_proveedor}/edit`,
+                      returnTo,
+                    )}
                   />
 
                   <RowToggleStatusButton

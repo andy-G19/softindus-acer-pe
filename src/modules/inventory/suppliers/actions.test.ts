@@ -24,7 +24,9 @@ import {
 // sus roles, las lecturas, la transaccion con sus escrituras y su final, los
 // correlativos, la bitacora (y si va dentro de la transaccion), las
 // revalidaciones y el resultado: la redireccion o el estado que devuelve al
-// formulario, con su mensaje exacto.
+// formulario, con su mensaje exacto. Desde el panel lateral, el alta y la
+// edicion devuelven el resultado (FormActionState) en lugar de redirigir, y
+// niegan el permiso con un error dentro del formulario.
 //
 // El alta crea el proveedor dentro de una transaccion, con su correlativo y la
 // bitacora. La edicion y el cambio de estado escriben con el cliente global,
@@ -37,6 +39,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta del formulario lleva un operationId aleatorio; en los
+// snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -95,7 +103,7 @@ type FormFields = Record<string, string>;
 type HandlerCase = { name: string; data?: DataOverrides; role?: Role };
 type ActionCase = HandlerCase & { form: FormFields };
 
-const initialState: SupplierFormState = { error: "" };
+const initialState: SupplierFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -255,8 +263,8 @@ defineCases("createSupplierAction", create, [
     name: "los textos llegan sin los espacios de los extremos",
     ...createWith({ razon_social: "  Aceros del Sur S.A.C.  ", numero_documento: " 20601234567 ", telefono: "  999 888 777 " }),
   },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     form: { ...createForm, razon_social: "A", tipo_documento: "pasaporte", correo: "no-es-correo", tipo_proveedor: "", condicion_pago: "trueque" },
@@ -280,7 +288,7 @@ defineCases("createSupplierAction", create, [
 defineCases("updateSupplierAction", update, [
   { name: "ADMIN actualiza el proveedor y registra la bitacora despues, fuera de transaccion", ...updateWith({}) },
   { name: "los opcionales vacios se guardan como null", ...updateWith(emptyOptionals) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
   { name: "sin id de proveedor responde que no existe sin tocar Prisma", ...updateWith({ id_proveedor: "" }) },
   { name: "el proveedor no existe", ...updateWith({}, supplierLookup({ exists: false })) },
   {
