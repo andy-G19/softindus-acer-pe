@@ -3157,7 +3157,7 @@ Límite con la entrega 11:
 |---|---|---|---|---|
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
-| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados) | 5 h; recalibrada a 5,3 h y 4,9 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, y la 10.3b a 7,5 h y 2,5 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
@@ -3194,9 +3194,9 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Tipos de proveedor | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de material | Inventario | ADMIN | Gestor de catálogo, desviación | Modal breve | 10.1 | Migrado |
 | Categorías de gasto | Caja chica | ADMIN | Formulario en la lista y página de edición, desviación | Modal breve; la edición conserva su página | 10.1 | Migrado; sin el campo Estado |
-| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
+| Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
-| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Pendiente |
+| Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
 | Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
@@ -3229,7 +3229,7 @@ destructivas confirman:
 | Sub-entrega | Acciones |
 |---|---|
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
-| 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b) |
+| 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
 | 10.4 | Inactivar cliente, producto y categoría de producto |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
@@ -3944,7 +3944,8 @@ Hallazgos:
    stock mínimo no las reevalúa.
 4. Editar una asociación o un repuesto cuyo proveedor (o material) está
    inactivo falla con «no existe o está inactivo», aunque el formulario lo
-   ofrece. Se revisa en la 10.3b y la 10.5.
+   ofrece. Se revisa en la 10.3b y la 10.5. Corregido para las
+   asociaciones en `c446d03` (10.3b).
 5. El filtro del reporte de proveedores y compras solo ofrece proveedores
    activos: las compras de uno inactivo no se pueden filtrar allí.
 6. 13 listados de 5 áreas (entre ellos entradas, salidas, compras y pagos a
@@ -4082,7 +4083,8 @@ Hallazgos de la verificación:
 13. Seguimiento: atender una alerta deja el foco en `body`, porque el botón
     desaparece de la fila y `ConfirmActionButton` no tiene a dónde
     devolverlo. Se propone llevarlo a la fila o al título de la tabla, en la
-    10.3b o en la entrega 11.
+    10.3b o en la entrega 11. Corregido en `9490114` (10.3b): va a la fila
+    o a la tabla.
 14. Método: las capturas con datos del «después» se toman antes de sus
     tareas, así que una re-verificación posterior ve los datos de prueba.
     Se compara con un diff por registros que ignora la `y`.
@@ -4113,6 +4115,173 @@ Datos leídos de la API de GitHub el 2026-10-19 y comparados con git:
   `pending` a las 03:06:12 UTC y `success` a las 03:07:43 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.3b — Proveedores y asociaciones proveedor-material
+
+Fecha: del 2026-10-19 al 2026-10-20 (UTC). Estado: commits en `staging`;
+falta la publicación, la verificación en staging y el cierre. El paso 0
+(`f4cbcba`) registró la integración de la 10.3a en `main`. 9 commits, de
+`25303e2` a `2c0e3b5`, y este registro.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 25303e2 | test | Caracterización de las acciones de proveedores (39 casos, con el alta rápida desde repuestos) y de asociaciones (33). |
+| 8ca9f73 | fix | Activar e inactivar proveedor y asociación fijan el estado pedido. |
+| c446d03 | fix | Hallazgo 4 de la 10.3a: editar una asociación conserva su proveedor y su material aunque estén inactivos. |
+| f4cbcba | docs | Paso 0: integración de la 10.3a en `main`. |
+| 441170b | fix | Mensajes en español y con tildes en proveedores y asociaciones, también los de Zod. |
+| 9490114 | fix | Hallazgo 13 de la 10.3a: `ConfirmActionButton` lleva el foco a su fila o a su tabla si el botón desaparece. |
+| aa87e84 | feat | Proveedores en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
+| bf5535e | feat | Inactivar proveedor pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
+| df26c50 | feat | Asociaciones en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
+| 2c0e3b5 | feat | Inactivar asociación pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Decisiones del responsable (2026-10-19), tras la auditoría:
+
+- D1. La 10.3b se parte. Recalibrada con los tiempos de la 10.3a, la
+  10.3b completa daba unas 9 horas: la programación se cumple (de C5 a C9
+  de la 10.3a, 89 minutos frente a 110), pero la verificación con datos y su
+  cierre tardaron 135 minutos frente a 60, el registro 71 frente a 30, y la
+  auditoría agregó la caracterización y cuatro `fix`. La 10.3b lleva las dos
+  entidades (unas 7,5 horas) y la 10.3c, los listados con fechas (entradas,
+  salidas, compras y pagos con `FilterBar` y `DateRangeFields`) y el
+  `<main>` de inicio, nueva salida, nueva compra y detalle de compra (unas
+  2,5 horas).
+- D2. Hallazgo 4: la edición acepta el proveedor y el material actuales
+  aunque estén inactivos mientras no se cambien; uno nuevo debe estar
+  activo, como en el alta. Los repuestos tienen el mismo defecto y van a la
+  10.5.
+- D3. Hallazgo 13 en esta sub-entrega y en `ConfirmActionButton`: inactivar
+  con el filtro «Activo» también saca la fila, así que el arreglo en el
+  componente compartido lo heredan las sub-entregas siguientes.
+- D4. Los textos de las confirmaciones se aprobaron en sus commits (C7 y
+  C9).
+- D5. Las tildes de las asociaciones en un `fix` aparte, ampliado a los
+  mensajes de Zod en inglés de los dos esquemas.
+
+Auditoría:
+
+- Ninguna acción de proveedores ni de asociaciones tenía pruebas.
+- Bloqueo de fila: solo los dos cambios de estado leían, decidían y
+  escribían (escribían `!estado`); se corrigen con el compare-and-set de la
+  10.1, sin bloqueo. El alta y la edición no lo necesitan: la base garantiza
+  la unicidad (`numero_documento` y `@@unique([id_proveedor, id_material])`)
+  y la acción captura el P2002; validar el tipo, el proveedor o el material
+  fuera de la transacción tiene una carrera inocua (sin clave foránea al
+  tipo, y una asociación con un proveedor recién inactivado es como
+  cualquier otra existente).
+- Consecuencias de inactivar, comprobadas otra vez en las consultas: las de
+  la 10.3a (sección «Para la 10.3b»). Un proveedor inactivo deja de
+  ofrecerse en compras, repuestos y asociaciones nuevas y en el filtro del
+  reporte de proveedores y compras, y sale de «Proveedores activos»; sus
+  compras, pagos y asociaciones lo conservan. Ninguna otra pantalla lee
+  `proveedor_material`.
+
+Diseño:
+
+- Proveedores y asociaciones, como Materiales:
+  - `layout.tsx` con la ranura `@panel` (`default`, `page`, `(.)new` y
+    `(.)[id]/edit`); cada panel autoriza y consulta como su página
+    completa, que acepta `returnTo`.
+  - Las acciones de alta, edición y cambio de estado devuelven un resultado
+    y autorizan con `getAuthorizedSession`; ninguna redirige ya. El alta
+    rápida de proveedor desde repuestos no cambia.
+  - `SupplierForm` y `SupplierMaterialForm` usan `ActionForm`, `Field`,
+    `SubmitButton` y `useFormResult`, sin el toast de error que daban.
+  - `getSupplierEditValues` (`supplier-edit-values.ts`) y
+    `supplier-material-form-data.ts` (las opciones, con la unidad del
+    material, y los valores de edición) los comparten la página y el panel.
+  - `SupplierStatusButton` y `SupplierMaterialStatusButton` sobre
+    `ConfirmActionButton`; la lista de asociaciones conserva su «Limpiar»
+    con `clearLabel`.
+- `ConfirmActionButton` (hallazgo 13): si el botón ya no está, el foco va a
+  su fila, con `tabindex="-1"` hasta que sale de ella, o a su tabla. Cubre
+  los dos órdenes en que llega la lista nueva: con la confirmación abierta,
+  por el `returnFocusTo` de `ConfirmDialog` (Radix devuelve el foco en un
+  `setTimeout` al desmontarse), y después de cerrarla o sin confirmación, en
+  la limpieza del `useLayoutEffect`, que corre antes de que React saque el
+  botón del documento.
+- La edición de una asociación busca el proveedor y el material que no
+  cambian sin `estado: true`.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-103b-c2.txt` (8
+   de 8), `rojo-103b-c3.txt` (2 de 4; las 2 contrarias pasan antes y
+   después), `rojo-103b-c4.txt` (24 de 26) y `rojo-103b-c5.txt` (4 de 14:
+   los casos de foco en `body`, como en staging).
+2. Caracterización antes de mover: 72 casos de acciones en `25303e2`, y los
+   casos nuevos de las páginas con `returnTo` grabados con el código
+   anterior (`tmp/e10-diff/c6b-pages-antes.snap` y `c8b-pages-antes.snap`).
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas (`verify_103b_c2.py`, `c3`, `c4`, `c6`, `c7`, `c8` y `c9`): las
+   llamadas solo cambian donde el commit lo anuncia; en las listas el texto
+   visible es el mismo palabra a palabra, y en los formularios solo cambia
+   el orden de «Cancelar» en Proveedores y suman los asteriscos de
+   obligatorio en Asociaciones.
+4. Mutaciones (`tmp/e10-diff/mut_103b_c*.txt`): 20 de 21, 10 de 10, 5 de 5,
+   11 de 11, 8 de 8, 17 de 17, 12 de 12, 18 de 18 y 13 de 13; en total, 114
+   de 115, cada commit con su contraria. La superviviente de C1 es
+   equivalente: Zod convierte el texto vacío en `undefined` antes de
+   `toNullable`.
+5. Pruebas con React real en jsdom: `confirm-action-button.test.ts` (9
+   casos nuevos, con el Radix real), `supplier-form.test.ts` (10),
+   `supplier-status-button.test.ts` (3), `supplier-material-form.test.ts`
+   (10) y `supplier-material-status-button.test.ts` (3). Esquemas:
+   `supplier.schema.test.ts` y `supplier-material.schema.test.ts`.
+6. CSS compilado: igual en cada commit salvo C7, que quita solo la rejilla
+   de la barra anterior de proveedores (113.131 → 112.980 bytes); el CSS
+   anterior sin esa regla es el nuevo byte a byte. La primera versión de C5
+   generaba la clase `blur` por el nombre de un evento; se cambió antes del
+   commit.
+7. `npm run check` terminó con código 0 después de cada commit, de 145 a
+   151 archivos de prueba y de 2.361 a 2.451 pruebas. `npm run
+   refactor:inventory` analiza 659 archivos: 140 páginas (12 en ranuras, 8
+   que interceptan), 113 formularios JSX y 48 archivos de acciones.
+
+Tiempo entre commits según sus horas (Lima). Incluye la preparación, la
+revisión del responsable y sus pausas; C1 incluye la auditoría desde el
+«aprobado»:
+
+| Commit | C1 | C2 | C3 | Paso 0 | C4 | C5 | C6 | C7 | C8 | C9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Hora | 16:19 | 16:32 | 17:05 | 17:12 | 17:22 | 19:23 | 19:40 | 20:08 | 20:25 | 20:41 |
+| Minutos desde el anterior | — | 13 | 33 | 7 | 10 | 121 | 17 | 28 | 17 | 16 |
+
+Entre C4 y C5 hay 121 minutos con una pausa larga, así que C5 no calibra.
+Los otros siete (C2, C3, C4 y de C6 a C9) suman 134 minutos frente a los
+185 que el plan recalibrado estimó para ellos.
+
+Hallazgos:
+
+1. Los dos cambios de estado escribían el contrario de lo que leían.
+   Corregido en `8ca9f73`.
+2. Hallazgo 4 de la 10.3a, corregido para las asociaciones en `c446d03`;
+   los repuestos, en la 10.5.
+3. Los textos de las asociaciones no llevaban tildes y Zod respondía en
+   inglés; en proveedores un usuario lo veía al escribir un campo más largo
+   de lo permitido, porque el formulario no limita el largo. Corregido en
+   `441170b`.
+4. Hallazgo 13 de la 10.3a, corregido en `9490114`.
+5. El alta rápida de proveedor desde repuestos busca la razón social
+   repetida sin restricción de unicidad: dos altas a la vez podrían
+   duplicarla. Va a la 10.5 o a la entrega 11.
+6. La lista de asociaciones ordena por `fecha_actualizacion` y el cambio de
+   estado la actualiza: la fila sube al principio. El foco la sigue, porque
+   la fila tiene `key`.
+7. Método: en Vitest 4, `-u` toma el argumento siguiente como su valor:
+   `npx vitest run -u archivo` corre toda la suite y no actualiza ese
+   archivo. Va al final.
+8. Método: en Git Bash, `grep -c $'\r$'` contaba CRLF en archivos que la
+   copia de trabajo tiene en LF, y `write_text` de Python en Windows escribe
+   CRLF. Los finales de línea se miden con Python y se escribe con
+   `write_bytes`.
+9. Método: el commit de C3 no llegó a git la primera vez; antes de cada paso
+   se comprueba `git log`.
+10. Método: la primera versión de los scripts que comparan snapshots no
+    reconocía las exportaciones de una línea; se corrigió antes de usarlos
+    como evidencia.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4137,7 +4306,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, tiene sus commits en staging y falta verificarla) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -4161,7 +4330,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 143 / 2.289 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 151 / 2.451 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -4180,16 +4349,16 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 11 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 98 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 21 (30 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 9 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 92 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 19 (28 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 22 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 7 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 18 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 5 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 17 | 10 |
-| Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 2 | 10 |
+| Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
@@ -4378,6 +4547,22 @@ Actualizado en el cierre de la 10.3a (2026-10-19) sobre `9f484d2`: pruebas
 143 / 2.289 (los 3 casos nuevos de `FilterBar` en jsdom), y `npm run
 refactor:inventory` sigue analizando 637 archivos. Las demás filas no
 cambian: el `fix` solo toca `FilterBarFields`.
+
+Actualizado en la sub-entrega 10.3b (2026-10-19) sobre `2c0e3b5`:
+
+- Pruebas: 151 / 2.451.
+- La desviación baja a 18 (alta y edición de proveedores y de
+  asociaciones) y los cambios de estado que voltean el estado a 5, en 4
+  archivos (dos en productos). `FieldError` baja a 9.
+- El `<main>` anidado baja a 92 (lista, alta y edición de proveedores y
+  de asociaciones) y los formularios GET a 28, con 19 combinaciones de
+  clases: las dos barras pasan a `FilterBar`.
+- Los archivos de acciones de inventario sin caracterizar bajan a 0.
+
+Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
+copias locales de conversión y formato 0, pantallas con rango de fechas
+sin `DateRangeFields` 17 (la 10.3c las mueve) e `import` de las librerías
+de notificaciones en 2 archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
