@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 659 |
+| Archivos fuente analizados | 660 |
 | Páginas | 140 |
 | Páginas en ranuras paralelas (@ranura) | 12 |
 | Páginas que interceptan una ruta | 8 |
-| Declaraciones JSX de formulario | 113 |
+| Declaraciones JSX de formulario | 109 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -69,7 +69,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/costs/work-orders` | — | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 1 | — |
 | `/dashboard/gallery` | — | `src/app/(dashboard)/dashboard/gallery/page.tsx` | 0 | — |
 | `/dashboard/inventory/alerts` | — | `src/app/(dashboard)/dashboard/inventory/alerts/page.tsx` | 0 | — |
-| `/dashboard/inventory/entries` | — | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 1 | — |
+| `/dashboard/inventory/entries` | — | `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 0 | — |
 | `/dashboard/inventory/material-categories` | — | `src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx` | 0 | InventoryCatalogManager |
 | `/dashboard/inventory/materials/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/materials/@panel/(.)[id]/edit/page.tsx` | 0 | MaterialForm |
 | `/dashboard/inventory/materials/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/materials/@panel/(.)new/page.tsx` | 0 | MaterialForm |
@@ -78,18 +78,18 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/inventory/materials/new` | — | `src/app/(dashboard)/dashboard/inventory/materials/new/page.tsx` | 0 | MaterialForm |
 | `/dashboard/inventory/materials` | — | `src/app/(dashboard)/dashboard/inventory/materials/page.tsx` | 0 | — |
 | `/dashboard/inventory/outputs/new` | — | `src/app/(dashboard)/dashboard/inventory/outputs/new/page.tsx` | 0 | InventoryOutputForm |
-| `/dashboard/inventory/outputs` | — | `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 1 | — |
+| `/dashboard/inventory/outputs` | — | `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 0 | — |
 | `/dashboard/inventory` | — | `src/app/(dashboard)/dashboard/inventory/page.tsx` | 0 | — |
 | `/dashboard/inventory/purchases/[id]` | — | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 1 | SupplierPaymentForm |
 | `/dashboard/inventory/purchases/new` | — | `src/app/(dashboard)/dashboard/inventory/purchases/new/page.tsx` | 0 | PurchaseForm |
-| `/dashboard/inventory/purchases` | — | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 2 | — |
+| `/dashboard/inventory/purchases` | — | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 1 | — |
 | `/dashboard/inventory/supplier-materials/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/(.)[id]/edit/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/(.)new/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials` | `@panel` | `src/app/(dashboard)/dashboard/inventory/supplier-materials/@panel/page.tsx` | 0 | — |
 | `/dashboard/inventory/supplier-materials/[id]/edit` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/[id]/edit/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials/new` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/new/page.tsx` | 0 | SupplierMaterialForm |
 | `/dashboard/inventory/supplier-materials` | — | `src/app/(dashboard)/dashboard/inventory/supplier-materials/page.tsx` | 0 | — |
-| `/dashboard/inventory/supplier-payments` | — | `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 1 | — |
+| `/dashboard/inventory/supplier-payments` | — | `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 0 | — |
 | `/dashboard/inventory/supplier-types` | — | `src/app/(dashboard)/dashboard/inventory/supplier-types/page.tsx` | 0 | InventoryCatalogManager |
 | `/dashboard/inventory/suppliers/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/suppliers/@panel/(.)[id]/edit/page.tsx` | 0 | SupplierForm |
 | `/dashboard/inventory/suppliers/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/inventory/suppliers/@panel/(.)new/page.tsx` | 0 | SupplierForm |
@@ -196,12 +196,8 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 156 | `{annulReceiptAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 128 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 217 | `{createCostingFromWorkOrderAction}` |
-| `src/app/(dashboard)/dashboard/inventory/entries/page.tsx` | 66 | `"/dashboard/inventory/entries"` |
-| `src/app/(dashboard)/dashboard/inventory/outputs/page.tsx` | 72 | `"/dashboard/inventory/outputs"` |
 | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 83 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 78 | `"/dashboard/inventory/purchases"` |
-| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 225 | `{annulPurchaseAction}` |
-| `src/app/(dashboard)/dashboard/inventory/supplier-payments/page.tsx` | 67 | `"/dashboard/inventory/supplier-payments"` |
+| `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 210 | `{annulPurchaseAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 89 | `{createFailureAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 213 | `{updateFailureStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 142 | `"/dashboard/maintenance/machines"` |

@@ -3157,7 +3157,7 @@ Límite con la entrega 11:
 |---|---|---|---|---|
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
-| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, y la 10.3b a 7,5 h y 2,5 h |
+| 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, la 10.3b a 7,5 h y 2,5 h, y la 10.3c a 4,5 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
@@ -3951,7 +3951,9 @@ Hallazgos:
 6. 13 listados de 5 áreas (entre ellos entradas, salidas, compras y pagos a
    proveedor) filtran fechas con `parseDateParam`, en la hora del servidor, y
    `lte 23:59:59.999`: la regla que el grupo 4 corrigió solo en los reportes.
-   Se propone un grupo de `fix` aparte o la entrega 11.
+   Se propone un grupo de `fix` aparte o la entrega 11. Corregido en
+   `12975d0` (10.3c) para los 13 que usan `buildDateRangeFilter`; quedan 4
+   copias locales (hallazgo 2 de la 10.3c).
 7. Carrera menor: una entrega a una orden puede actualizar una alerta que
    alguien acaba de atender, y no abre otra. Entrega 11.
 8. Atender no registra bitácora; la alerta guarda quién la atendió y cuándo.
@@ -4446,6 +4448,182 @@ Datos leídos de la API de GitHub el 2026-10-21 y comparados con git:
   `pending` a las 01:36:34 UTC y `success` a las 01:37:40 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.3c — Listados con fechas e inicio de Inventario
+
+Fecha: 2026-10-21 (UTC). Estado: commits en `staging`; falta verificarla en
+staging. El paso 0 (`2d9ca08`) registró la integración de la 10.3b en
+`main`. 6 commits, de `c148d33` a `3272901`, y este registro.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 2d9ca08 | docs | Paso 0: integración de la 10.3b en `main`. |
+| c148d33 | test | Caracterización de entradas, salidas, compras y pagos con un rango invertido y con fechas que no existen, una compra anulable en la lista y en el detalle, y el maestro de taller en el inicio y en entradas. |
+| 12975d0 | fix | Hallazgo 6 de la 10.3a: el rango de fechas de los listados incluye todo el último día. |
+| 9945158 | feat | Entradas y salidas con `FilterBar` y `DateRangeFields`; registrar salida sin `<main>` anidado. |
+| c8553d8 | feat | Compras y pagos a proveedor con `FilterBar` y `DateRangeFields`; nueva compra y el detalle de compra sin `<main>` anidado. |
+| 075bb00 | fix | El inicio de Inventario y las entradas solo enlazan lo que el rol puede abrir. |
+| 3272901 | feat | El inicio enlaza entradas, salidas y pagos a proveedores, ordenado por flujo, y pierde el `<main>` anidado. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Decisiones del responsable (2026-10-21), tras la auditoría:
+
+- D1. El hallazgo 6 se corrige aquí, en `buildDateRangeFilter`, y lo heredan
+  los 13 listados que la usan, como `FilterBar` en la 10.3a. La zona horaria
+  de Lima, las 4 copias locales y la fecha que no existe quedan registradas
+  (hallazgos 2 a 4).
+- D2. Con un rango invertido, la lista lo marca con `DateRangeFields`, que no
+  deja enviar la barra, y si el rango llega en la URL consulta igual y sale
+  vacía: las listas no tienen indicadores ni exportación que salgan mal, a
+  diferencia de los reportes de la 10.2.
+- D3. El inicio de Inventario muestra a cada rol solo lo que puede abrir y
+  enlaza entradas, salidas y pagos (C5 y C6). Los textos, iconos y tonos de
+  las tres tarjetas nuevas y el orden por flujo se aprobaron en C6.
+- D4. La 10.3c no se parte: recalibrada con los tiempos de la 10.3b, sumaba
+  unas 4,5 horas, lejos del umbral de 7 u 8.
+
+Auditoría (sobre `a49f41b`):
+
+- Alcance: 8 páginas. Las cuatro listas, con sus roles, barras y
+  parámetros:
+  - Entradas (`/dashboard/inventory/entries`, ADMIN y WORKSHOP_MASTER):
+    Buscar, Material, Proveedor, Compra, Desde y Hasta; `q`, `material`,
+    `supplier`, `purchase`, `from`, `to`, `page` y `pageSize`.
+  - Salidas (`/outputs`, ADMIN y WORKSHOP_MASTER): Buscar, Material, Orden,
+    Desde y Hasta; `q`, `material`, `order`, `from`, `to`, `page` y
+    `pageSize`.
+  - Compras (`/purchases`, ADMIN): Buscar, Proveedor, Material, Estado
+    compra, Estado pago, Desde y Hasta; `q`, `supplier`, `material`,
+    `status`, `payment`, `from`, `to`, `page` y `pageSize`.
+  - Pagos a proveedores (`/supplier-payments`, ADMIN): Buscar, Proveedor,
+    Compra, Método, Estado, Desde y Hasta; `q`, `supplier`, `purchase`,
+    `method`, `status`, `from` y `to`, sin paginar.
+
+  Además pierden el `<main>` anidado el inicio, registrar salida, nueva
+  compra y el detalle de compra.
+- Ninguna acción entra en la pista B: anular compra, registrar un pago,
+  nueva compra y registrar salida son de la entrega 11.
+- Hallazgo 6, demostrado con Postgres real (PGlite, las 20 migraciones y las
+  consultas reales; `tmp/e10-diff/e103c-demo/`):
+  - En UTC, como en Vercel, entradas y salidas (`timestamptz`) perdían los
+    movimientos de las 23:59:59.9994 y las 23:59:59.999999 del último día;
+    compras y pagos (`date`) daban lo mismo con `lte` y con `lt`.
+  - En la zona de Lima, como en desarrollo, compras y pagos incluían el día
+    siguiente.
+  - `buildDateRangeFilter` la usan 13 listados; filtran una columna
+    `timestamptz` los de movimientos de inventario y las planillas.
+- Con un rango invertido, las cuatro listas consultaban y decían «Todavía no
+  hay … registradas», y la barra lo dejaba enviar. Con una fecha que no
+  existe, `parseDateParam` pasaba el 30 de febrero al 2 de marzo (el campo se
+  veía vacío y la lista filtraba) e ignoraba el día 32 o `2026-7-5`.
+- Ninguna pantalla enlazaba entradas, salidas ni pagos a proveedores desde
+  que se crearon (`40dc983`): solo se llegaba con la URL.
+- El maestro de taller veía en el inicio Proveedores, Proveedor-material y
+  Compras, y «Ver compra» en las entradas: esas páginas solo admiten ADMIN y
+  lo llevaban a «acceso denegado».
+- Los datos generados de la caracterización nunca pintaban «Anular» en la
+  lista de compras ni «Anular compra» y «Registrar pago» en el detalle: dan
+  dos pagos a cada compra.
+
+Diseño:
+
+- `buildDateRangeFilter` corta con `lt` el inicio del día siguiente (copia la
+  fecha y le suma un día con `setDate`), en la zona del proceso como antes: la
+  regla de `buildReportDateRange` en los reportes.
+- Las cuatro barras usan `FilterBar` («Filtros de entradas», «… de salidas»,
+  «… de compras» y «… de pagos a proveedores»), `Field` con el `id` igual al
+  `name` y `DateRangeFields` con `id="fecha"`, con los mismos nombres de la
+  URL, etiquetas y opciones. «Limpiar filtros» de pagos pasa de `outline` a
+  `clear`, como en las demás listas.
+- Enlaces por rol: cada tarjeta del inicio declara los roles que admite su
+  pantalla (`ADMIN_ONLY` o `ADMIN_AND_WORKSHOP`) y se filtra por el de la
+  sesión; «Ver compra» solo aparece con `canOpenPurchases` (ADMIN). No se
+  usó la tabla `dashboardRoutes` del guardia de rutas: el guardia no registra
+  el rechazo, como sí hace `requireRole`, y en staging redirige al host de
+  `AUTH_URL`, como el login (entrega 4). `inventory-links.test.ts` abre cada
+  enlace de Inventario del inicio y de las entradas con el mismo rol, y falla
+  si su pantalla lo rechaza o si no figura en su tabla.
+- El inicio, ordenado por flujo: Materiales, Entradas, Salidas y Alertas;
+  después Proveedores, Proveedor-material, Compras y Pagos a proveedores. El
+  maestro de taller ve las cuatro primeras.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-103c-c2.txt` (6 de
+   9; las otras 3 pasan antes y después) y `rojo-103c-c5.txt` (los dos casos
+   del maestro de taller).
+2. Caracterización antes de cambiar: 12 casos nuevos (24 entradas de
+   snapshot) en `c148d33`, sin cambiar las existentes
+   (`verify_103c_c1.py`). El rango invertido deja la lista vacía, como la
+   devuelve la base: los datos generados darían filas.
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas:
+   - `verify_103c_c2.py`: de los 84 snapshots cambian 13, en 27 líneas, todas
+     `lte …T23:59:59.999Z` por `lt` con el día siguiente a las 00:00.
+   - `verify_103c_lists.py` (C3 y C4): las llamadas y el HTML fuera de la
+     barra son idénticos; dentro, las mismas etiquetas, campos, opciones y
+     botones. Solo cambian, como se esperaba, las fechas que no existen (que
+     empiezan vacías), el error de «Hasta» con el rango invertido y la
+     variante de «Limpiar filtros» en pagos. Se comprobó que el script falla
+     con una etiqueta equivocada.
+   - C5 y C6 solo cambian los snapshots del inicio y, en C5, el de las
+     entradas del maestro de taller; fuera de las tarjetas, el HTML es
+     idéntico.
+4. Mutaciones (`tmp/e10-diff/mut_103c_c*.txt`): 13 de 13, 7 de 8, 13 de 13,
+   13 de 13, 7 de 7 y 7 de 7; en total, 60 de 61, cada commit con su
+   contraria. La superviviente de C2 es equivalente: `setUTCDate` da el mismo
+   día siguiente en UTC y en Lima, que no tienen horario de verano.
+5. PGlite antes y después del arreglo (`e103c-demo/antes-*.json` y
+   `despues-*.json`): en los 6 casos la lista real coincide con la regla
+   `lt`.
+6. CSS compilado igual en cada commit (112.980 bytes, `6b601998…`): las
+   clases de las barras anteriores siguen teniendo consumidores.
+7. `npm run check` terminó con código 0 después de cada commit, de 151 a 152
+   archivos de prueba y de 2.451 a 2.476 pruebas. `npm run
+   refactor:inventory` analiza 660 archivos: 140 páginas, 109 formularios JSX
+   (eran 113) y 48 archivos de acciones.
+
+Tiempo entre commits según sus horas (Lima, 2026-10-20). Incluye la
+preparación, la revisión del responsable y sus pausas; el paso 0 incluye el
+plan desde el «aprobado»:
+
+| Commit | Paso 0 | C1 | C2 | C3 | C4 | C5 | C6 |
+|---|---|---|---|---|---|---|---|
+| Hora | 21:32 | 22:02 | 22:14 | 22:26 | 22:38 | 23:03 | 23:26 |
+| Minutos desde el anterior | — | 30 | 12 | 12 | 12 | 25 | 23 |
+
+De C1 a C6, 114 minutos frente a los 145 estimados (unos 105 con el factor
+0,72 de la 10.3b). C6 incluye la aprobación de los textos de las tarjetas.
+
+Hallazgos:
+
+1. Hallazgo 6 de la 10.3a, corregido en `12975d0` para los 13 listados que
+   usan `buildDateRangeFilter`.
+2. Quedan 4 copias locales que cortan el último día con `lte` a las
+   `T23:59:59`, sin milisegundos: cuellos de botella, campañas y órdenes de
+   trabajo (Producción, 10.6) y movimientos de caja. Se reemplazan por la
+   función compartida en su sub-entrega.
+3. Regla de negocio pendiente: los filtros usan el día de la zona del
+   servidor, que en Vercel es UTC. Un movimiento de las 20:00 de Lima cuenta
+   como del día siguiente, y las listas de entradas y salidas lo muestran con
+   esa fecha (`formatDate` sobre un instante; la convención pide
+   `formatDateTime`). Los reportes usan la misma hora, así que pasar a los
+   días de Lima es transversal: un grupo de `fix` propio o la entrega 11, con
+   la decisión del responsable.
+4. Una fecha que no existe en la URL (`2026-02-30`) se ve vacía en
+   `DateRangeFields`, pero `parseDateParam` filtra desde el 2 de marzo; el día
+   32 y `2026-7-5` se ignoran. Solo llega con una URL escrita a mano; se
+   resuelve junto con el punto 3.
+5. Pagos a proveedores carga todos los pagos, sin paginar. Entrega 11.
+6. «Todavía no hay … registradas» aparece también cuando un filtro no
+   encuentra nada, en varias áreas (Clientes dice «No se encontraron clientes
+   con los filtros aplicados»). Propuesta de texto para la entrega 11.
+7. Método: la prueba de enlaces superó los 5 segundos de Vitest con la suite
+   completa por importar en frío seis páginas; `preloadPages` las importa en
+   un `beforeAll`, como hace `definePageSuite`.
+8. Método: `purchases/new/page.tsx` mezcla LF y CRLF y el detalle de compra
+   es CRLF; se editaron por bytes, sin tocar los finales de línea
+   (`tmp/e10-diff/c4-103c-main.py`).
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4470,7 +4648,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, en curso) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c tiene sus commits en staging y falta verificarla) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -4494,7 +4672,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 151 / 2.451 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 152 / 2.476 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -4514,16 +4692,18 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 9 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 92 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 19 (28 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 84 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 16 (24 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 18 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 5 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 17 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 13 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
+| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 4 (copias locales) | 10 |
+| Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -4730,6 +4910,24 @@ de notificaciones en 2 archivos, medidos de nuevo.
 
 El cierre de la 10.3b (2026-10-20) no cambia código: las métricas son las
 de `2c0e3b5`.
+
+Actualizado en la sub-entrega 10.3c (2026-10-21) sobre `3272901`:
+
+- Pruebas: 152 / 2.476.
+- El `<main>` anidado baja a 84 (las cuatro listas, el inicio, registrar
+  salida, nueva compra y el detalle de compra) y los formularios GET a 24,
+  con 16 combinaciones de clases: las cuatro barras pasan a `FilterBar`.
+- Las pantallas con rango de fechas sin `DateRangeFields` bajan a 13.
+- Las dos filas nuevas se midieron sobre `2d9ca08`, su línea base: 13
+  listados cortaban el último día con `buildDateRangeFilter` y 4 con una
+  copia local que corta a las `T23:59:59` (cuellos de botella, campañas,
+  órdenes de trabajo y movimientos de caja); el maestro de taller veía 3
+  tarjetas y «Ver compra» que lo rechazaban, y entradas, salidas y pagos a
+  proveedores no tenían enlace.
+
+Las demás no cambian: páginas con Prisma directo 0, copias locales de
+`FieldError` 9 e `import` de las librerías de notificaciones en 2 archivos,
+medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
