@@ -243,7 +243,7 @@ exports[`/dashboard/inventory/outputs > rango invertido > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-31T00:00:00.000Z,
-              "lte": 2026-07-01T23:59:59.999Z,
+              "lt": 2026-07-02T00:00:00.000Z,
             },
           },
         ],
@@ -261,7 +261,7 @@ exports[`/dashboard/inventory/outputs > rango invertido > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-31T00:00:00.000Z,
-              "lte": 2026-07-01T23:59:59.999Z,
+              "lt": 2026-07-02T00:00:00.000Z,
             },
           },
         ],
@@ -666,7 +666,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
@@ -716,7 +716,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
