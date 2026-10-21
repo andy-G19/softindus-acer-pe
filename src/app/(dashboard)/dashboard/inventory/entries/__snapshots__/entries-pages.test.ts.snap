@@ -101,7 +101,7 @@ exports[`/dashboard/inventory/entries > fechas no validas > llamadas 1`] = `
 
 exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -129,7 +129,7 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/entries">
+<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -158,14 +158,17 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 <option value="id_compra-2">id_compra-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-02-30"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-32"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/entries">Limpiar filtros</a>
@@ -218,7 +221,7 @@ exports[`/dashboard/inventory/entries > fechas no validas > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/entries?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -314,7 +317,7 @@ exports[`/dashboard/inventory/entries > maestro de taller > llamadas 1`] = `
 
 exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -342,7 +345,7 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/entries">
+<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -371,14 +374,17 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 <option value="id_compra-2">id_compra-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/entries">Limpiar filtros</a>
@@ -431,7 +437,7 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/entries?page=2">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -539,7 +545,7 @@ exports[`/dashboard/inventory/entries > rango invertido > llamadas 1`] = `
 
 exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -567,7 +573,7 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/entries">
+<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -596,14 +602,18 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 <option value="id_compra-2">id_compra-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/entries">Limpiar filtros</a>
@@ -643,7 +653,7 @@ exports[`/dashboard/inventory/entries > rango invertido > resultado 1`] = `
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -739,7 +749,7 @@ exports[`/dashboard/inventory/entries > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -767,7 +777,7 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/entries">
+<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value=""/>
@@ -796,14 +806,17 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 <option value="id_compra-2">id_compra-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/entries">Limpiar filtros</a>
@@ -856,7 +869,7 @@ exports[`/dashboard/inventory/entries > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/entries?page=2">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1042,7 +1055,7 @@ exports[`/dashboard/inventory/entries > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1070,7 +1083,7 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/entries">
+<form role="search" aria-label="Filtros de entradas" action="/dashboard/inventory/entries" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar entrada..." name="q" value="COM"/>
@@ -1099,14 +1112,17 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 <option value="id_compra-2">id_compra-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/entries">Limpiar filtros</a>
@@ -1159,7 +1175,7 @@ exports[`/dashboard/inventory/entries > todos los filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/entries?q=COM&amp;material=MAT00000001&amp;supplier=PRV00000001&amp;purchase=COM00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

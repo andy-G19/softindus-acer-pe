@@ -1,11 +1,13 @@
 import Link from "next/link";
 
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -52,7 +54,7 @@ export default async function InventoryOutputsPage({
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Salidas de inventario"
         description="Movimientos de salida asociados a producción u otros motivos."
@@ -69,61 +71,44 @@ export default async function InventoryOutputsPage({
         }
       />
 
-      <form
-        action="/dashboard/inventory/outputs"
-        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 md:grid-cols-5"
+      <FilterBar
+        action={navigationHrefs.inventoryOutputs}
+        label="Filtros de salidas"
+        clearHref={navigationHrefs.inventoryOutputs}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar salida..." />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="material">Material</Label>
-          <NativeSelect id="material" name="material" defaultValue={material}>
-            <option value="">Todos los materiales</option>
-            {materials.map((item) => (
-              <option key={item.id_material} value={item.id_material}>
-                {item.nombre_material}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="order">Orden</Label>
-          <NativeSelect id="order" name="order" defaultValue={order}>
-            <option value="">Todas las órdenes</option>
-            {workOrders.map((item) => (
-              <option key={item.id_orden_trabajo} value={item.id_orden_trabajo}>
-                {item.id_orden_trabajo}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="from">Desde</Label>
-          <Input
-            id="from"
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="to">Hasta</Label>
-          <Input
-            id="to"
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-          />
-        </div>
-        <div className="flex items-end gap-2 md:col-span-5">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/inventory/outputs">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar salida..." />}
+        </Field>
+        <Field id="material" label="Material">
+          {(control) => (
+            <NativeSelect {...control} name="material" defaultValue={material}>
+              <option value="">Todos los materiales</option>
+              {materials.map((item) => (
+                <option key={item.id_material} value={item.id_material}>
+                  {item.nombre_material}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="order" label="Orden">
+          {(control) => (
+            <NativeSelect {...control} name="order" defaultValue={order}>
+              <option value="">Todas las órdenes</option>
+              {workOrders.map((item) => (
+                <option key={item.id_orden_trabajo} value={item.id_orden_trabajo}>
+                  {item.id_orden_trabajo}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -188,6 +173,6 @@ export default async function InventoryOutputsPage({
         searchParams={params}
         itemLabel="salidas"
       />
-    </main>
+    </div>
   );
 }

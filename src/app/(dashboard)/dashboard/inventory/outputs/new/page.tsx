@@ -12,7 +12,7 @@ export default async function NewInventoryOutputPage() {
   const { materials, workOrders } = await getInventoryOutputFormOptions();
 
   return (
-    <main className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
         title="Registrar salida de inventario"
         description="La salida descuenta stock actual y registra stock anterior/resultante."
@@ -42,6 +42,6 @@ export default async function NewInventoryOutputPage() {
           label: `${order.id_orden_trabajo} - ${order.estado}`,
         }))}
       />
-    </main>
+    </div>
   );
 }
