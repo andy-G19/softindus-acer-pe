@@ -1,5 +1,406 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`/dashboard/inventory/outputs > fechas no validas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_inicio": "desc",
+      },
+      "select": {
+        "id_orden_trabajo": true,
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/outputs > fechas no validas > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Salidas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Salidas de inventario</h1>
+<p>Movimientos de salida asociados a producción u otros motivos.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/outputs">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar salida..." name="q" value=""/>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="order">Orden</label>
+<select id="order" name="order">
+<option value="" selected="">Todas las órdenes</option>
+<option value="id_orden_trabajo-1">id_orden_trabajo-1</option>
+<option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-02-30"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-32"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Material</th>
+<th>Orden</th>
+<th>Responsable</th>
+<th>Cantidad</th>
+<th>Stock resultante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento-1</td>
+<td>1/7/2026</td>
+<td>nombre_material-1</td>
+<td>id_orden_trabajo-1</td>
+<td>usuario-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/production/work-orders/id_orden_trabajo-1">Ver orden</a>
+</td>
+</tr>
+<tr>
+<td>id_movimiento-2</td>
+<td>2/7/2026</td>
+<td>nombre_material-2</td>
+<td>-</td>
+<td>usuario-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 salidas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/outputs?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/outputs > rango invertido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lte": 2026-07-01T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lte": 2026-07-01T23:59:59.999Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_inicio": "desc",
+      },
+      "select": {
+        "id_orden_trabajo": true,
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Salidas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Salidas de inventario</h1>
+<p>Movimientos de salida asociados a producción u otros motivos.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+</div>
+</div>
+</section>
+<form action="/dashboard/inventory/outputs">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar salida..." name="q" value=""/>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="order">Orden</label>
+<select id="order" name="order">
+<option value="" selected="">Todas las órdenes</option>
+<option value="id_orden_trabajo-1">id_orden_trabajo-1</option>
+<option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value="2026-07-31"/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value="2026-07-01"/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Material</th>
+<th>Orden</th>
+<th>Responsable</th>
+<th>Cantidad</th>
+<th>Stock resultante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="8">
+<div>
+<div>
+<p>Todavía no hay salidas registradas.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 0-0 de 0 salidas · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
+</main>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/inventory/outputs > sin filtros > llamadas 1`] = `
 [
   {

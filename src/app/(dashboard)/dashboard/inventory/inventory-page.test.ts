@@ -16,7 +16,9 @@ vi.mock("next/navigation", async (importOriginal) =>
 );
 
 // Caracterizacion de el panel de Inventario (entrega 4.3), escrita antes
-// de mover sus consultas a modules/inventory/overview/queries.ts.
+// de mover sus consultas a modules/inventory/overview/queries.ts. El caso del
+// maestro de taller (entrega 10.3c) fija las tarjetas que ve antes de que el
+// inicio muestre solo los modulos que su rol puede abrir.
 
 definePageSuite([
   {
@@ -24,6 +26,7 @@ definePageSuite([
     load: () => import("./page"),
     cases: [
       { name: "indicadores" },
+      { name: "maestro de taller", role: "WORKSHOP_MASTER" },
     ],
   },
 ]);
