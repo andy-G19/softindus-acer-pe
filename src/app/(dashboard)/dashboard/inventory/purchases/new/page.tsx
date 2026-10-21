@@ -10,7 +10,7 @@ export default async function NewPurchasePage() {
   const { suppliers, materials } = await getNewPurchaseFormOptions();
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Nueva compra"
         description="Registra una compra de materiales y genera automáticamente la entrada de inventario."
@@ -32,6 +32,6 @@ export default async function NewPurchasePage() {
           costo_unitario_actual: material.costo_unitario_actual.toString(),
         }))}
       />
-    </main>
+    </div>
   );
 }

@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
@@ -7,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -60,7 +62,7 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Compras"
         description="Consulta compras registradas, pagos y entradas generadas."
@@ -75,82 +77,65 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
         }
       />
 
-      <form
-        action="/dashboard/inventory/purchases"
-        className="grid gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-6"
+      <FilterBar
+        action={navigationHrefs.purchases}
+        label="Filtros de compras"
+        clearHref={navigationHrefs.purchases}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar compra..." />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="supplier">Proveedor</Label>
-          <NativeSelect id="supplier" name="supplier" defaultValue={supplier}>
-            <option value="">Todos los proveedores</option>
-            {suppliers.map((item) => (
-              <option key={item.id_proveedor} value={item.id_proveedor}>
-                {item.razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="material">Material</Label>
-          <NativeSelect id="material" name="material" defaultValue={material}>
-            <option value="">Todos los materiales</option>
-            {materials.map((item) => (
-              <option key={item.id_material} value={item.id_material}>
-                {item.nombre_material}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado compra</Label>
-          <NativeSelect id="status" name="status" defaultValue={purchaseStatus}>
-            <option value="">Estado compra</option>
-            <option value="registrada">Registrada</option>
-            <option value="confirmada">Confirmada</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="payment">Estado pago</Label>
-          <NativeSelect id="payment" name="payment" defaultValue={paymentStatus}>
-            <option value="">Estado pago</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="parcial">Parcial</option>
-            <option value="pagado">Pagado</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input
-              id="from"
-              name="from"
-              type="date"
-              defaultValue={parseStringParam(params, "from")}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input
-              id="to"
-              name="to"
-              type="date"
-              defaultValue={parseStringParam(params, "to")}
-            />
-          </div>
-        </div>
-        <div className="flex items-end gap-2 md:col-span-6">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/inventory/purchases">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar compra..." />}
+        </Field>
+        <Field id="supplier" label="Proveedor">
+          {(control) => (
+            <NativeSelect {...control} name="supplier" defaultValue={supplier}>
+              <option value="">Todos los proveedores</option>
+              {suppliers.map((item) => (
+                <option key={item.id_proveedor} value={item.id_proveedor}>
+                  {item.razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="material" label="Material">
+          {(control) => (
+            <NativeSelect {...control} name="material" defaultValue={material}>
+              <option value="">Todos los materiales</option>
+              {materials.map((item) => (
+                <option key={item.id_material} value={item.id_material}>
+                  {item.nombre_material}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="status" label="Estado compra">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={purchaseStatus}>
+              <option value="">Estado compra</option>
+              <option value="registrada">Registrada</option>
+              <option value="confirmada">Confirmada</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="payment" label="Estado pago">
+          {(control) => (
+            <NativeSelect {...control} name="payment" defaultValue={paymentStatus}>
+              <option value="">Estado pago</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="parcial">Parcial</option>
+              <option value="pagado">Pagado</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -264,6 +249,6 @@ export default async function PurchasesPage({ searchParams }: PurchasesPageProps
         searchParams={params}
         itemLabel="compras"
       />
-    </main>
+    </div>
   );
 }

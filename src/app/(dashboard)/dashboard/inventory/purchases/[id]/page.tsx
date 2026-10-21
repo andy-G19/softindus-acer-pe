@@ -67,7 +67,7 @@ export default async function PurchaseDetailPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Detalle de compra"
         description="Consulta los materiales adquiridos, montos, comprobante y estado de pago."
@@ -290,6 +290,6 @@ export default async function PurchaseDetailPage({
           </Table>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

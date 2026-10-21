@@ -60,7 +60,7 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > llamadas 1
 
 exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -88,7 +88,7 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/supplier-payments">
+<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -129,19 +129,20 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 <option value="pagado">Pagado</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-02-30"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-32"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -190,7 +191,7 @@ exports[`/dashboard/inventory/supplier-payments > fechas no validas > resultado 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -256,7 +257,7 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > llamadas 1`]
 
 exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -284,7 +285,7 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/supplier-payments">
+<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -325,19 +326,21 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 <option value="pagado">Pagado</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -367,7 +370,7 @@ exports[`/dashboard/inventory/supplier-payments > rango invertido > resultado 1`
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -424,7 +427,7 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -452,7 +455,7 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/supplier-payments">
+<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -493,19 +496,20 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 <option value="pagado">Pagado</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -554,7 +558,7 @@ exports[`/dashboard/inventory/supplier-payments > sin filtros > resultado 1`] = 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -660,7 +664,7 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > llamadas 1
 
 exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -688,7 +692,7 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/supplier-payments">
+<form role="search" aria-label="Filtros de pagos a proveedores" action="/dashboard/inventory/supplier-payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value="F001"/>
@@ -729,19 +733,20 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 <option value="pagado" selected="">Pagado</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/inventory/supplier-payments">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -790,7 +795,7 @@ exports[`/dashboard/inventory/supplier-payments > todos los filtros > resultado 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
