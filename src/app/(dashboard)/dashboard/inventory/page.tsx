@@ -1,14 +1,13 @@
-/**
- * Ubicación destino: src/app/(dashboard)/dashboard/inventory/page.tsx
- * (reemplaza el archivo actual)
- */
 import {
   AlertTriangle,
+  ArrowDownToLine,
   ArrowLeftRight,
+  ArrowUpFromLine,
   Link2,
   Package,
   ShoppingCart,
   Truck,
+  Wallet,
 } from "lucide-react";
 
 import { PageHeader } from "@/components/navigation/page-header";
@@ -31,7 +30,8 @@ export default async function InventoryPage() {
   // Cada tarjeta lleva los roles que admite su pantalla (los de su
   // requireRole) y solo se muestra a ellos (entrega 10.3c): el maestro de
   // taller veia tarjetas que lo llevaban a «acceso denegado».
-  // inventory-links.test.ts abre cada enlace con cada rol.
+  // inventory-links.test.ts abre cada enlace con cada rol. El orden sigue el
+  // flujo: primero el stock y despues la cadena de compra.
   const modules = [
     {
       title: "Materiales e insumos",
@@ -40,6 +40,32 @@ export default async function InventoryPage() {
         "Registra materia prima, consumibles, repuestos, herramientas y stock mínimo.",
       icon: Package,
       tone: "chart-1" as const,
+      roles: ADMIN_AND_WORKSHOP,
+    },
+    {
+      title: "Entradas",
+      href: "/dashboard/inventory/entries",
+      description:
+        "Consulta las entradas de stock que generan las compras y otros registros.",
+      icon: ArrowDownToLine,
+      tone: "chart-4" as const,
+      roles: ADMIN_AND_WORKSHOP,
+    },
+    {
+      title: "Salidas",
+      href: "/dashboard/inventory/outputs",
+      description:
+        "Registra y consulta las salidas de stock a producción u otros motivos.",
+      icon: ArrowUpFromLine,
+      tone: "chart-3" as const,
+      roles: ADMIN_AND_WORKSHOP,
+    },
+    {
+      title: "Alertas y stock crítico",
+      href: "/dashboard/inventory/alerts",
+      description: "Consulta materiales críticos y alertas activas de inventario.",
+      icon: AlertTriangle,
+      tone: "chart-5" as const,
       roles: ADMIN_AND_WORKSHOP,
     },
     {
@@ -68,17 +94,18 @@ export default async function InventoryPage() {
       roles: ADMIN_ONLY,
     },
     {
-      title: "Alertas y stock crítico",
-      href: "/dashboard/inventory/alerts",
-      description: "Consulta materiales críticos y alertas activas de inventario.",
-      icon: AlertTriangle,
-      tone: "chart-5" as const,
-      roles: ADMIN_AND_WORKSHOP,
+      title: "Pagos a proveedores",
+      href: "/dashboard/inventory/supplier-payments",
+      description:
+        "Consulta los pagos registrados desde las compras y su saldo pendiente.",
+      icon: Wallet,
+      tone: "chart-2" as const,
+      roles: ADMIN_ONLY,
     },
   ].filter((module) => module.roles.some((role) => role === session.user.role));
 
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <PageHeader
         title="Inventario"
         description="Controla materiales, insumos, proveedores, compras, movimientos de inventario y alertas de stock bajo."
@@ -129,6 +156,6 @@ export default async function InventoryPage() {
           />
         ))}
       </section>
-    </main>
+    </div>
   );
 }
