@@ -106,6 +106,87 @@ atendidas.
 - Una alerta activa también pasa a atendida sola cuando una compra, o una
   devolución de material de una orden, deja el stock por encima del mínimo.
 
+## Proveedores
+
+**Dónde:** Inventario → Proveedores.
+**Quién:** solo el administrador (ADMIN).
+
+La lista muestra, por proveedor, el código, la razón social, el documento,
+el tipo, el teléfono, la condición de pago y el estado, en orden alfabético
+por razón social. El botón **Tipos de proveedor** lleva a su catálogo.
+
+- **Crear:** pulsa **Nuevo proveedor**. El panel pide la razón social y el
+  tipo de proveedor (solo los activos) y, si los tienes, el tipo y el
+  número de documento, el teléfono, el correo, la dirección, el contacto
+  principal, la condición de pago y observaciones. Los proveedores nuevos
+  nacen activos.
+  - Si no hay tipos de proveedor activos, el panel lo avisa con un enlace
+    para crearlos y no deja guardar.
+- **Editar:** pulsa **Editar** en la fila. Se cambian todos los datos; el
+  tipo puede quedarse uno que ya está inactivo.
+- **Inactivar:** pulsa **Inactivar** y confirma. La pregunta explica qué
+  pasa: el proveedor deja de ofrecerse en compras, repuestos y asociaciones
+  nuevas con materiales, y en el filtro del reporte de proveedores y
+  compras, y no cuenta en «Proveedores activos». Sus compras, pagos y
+  asociaciones se conservan. La fila se queda en su lugar con la etiqueta
+  «Inactivo».
+- **Activar:** pulsa **Activar**; se hace sin preguntar.
+- **Filtros:** búsqueda por código, razón social, número de documento o
+  teléfono, tipo, condición de pago (las que usa algún proveedor) y estado.
+
+Reglas del formulario:
+
+- **Razón social:** obligatoria, de 2 a 150 caracteres.
+- **Tipo de documento:** Sin documento, RUC, DNI u Otro.
+- **Número de documento:** hasta 20 caracteres. No puede haber dos
+  proveedores con el mismo número: si lo intentas, el panel lo marca en el
+  campo **Número de documento** y conserva lo escrito.
+- **Teléfono:** hasta 20 caracteres. **Correo:** un correo válido, hasta 100.
+  **Dirección:** hasta 150. **Contacto principal:** hasta 100.
+  **Observaciones:** hasta 500.
+- **Condición de pago:** No especificado, Contado, Crédito, Parcial u Otro.
+
+## Materiales de proveedor
+
+**Dónde:** Inventario → Proveedor-material (la pantalla se llama
+«Materiales por proveedor»).
+**Quién:** solo el administrador (ADMIN).
+
+Una asociación indica que un proveedor puede abastecer un material, con un
+precio referencial, el tiempo de entrega y la disponibilidad. Es una
+consulta: ninguna otra pantalla usa las asociaciones, así que no cambian las
+compras ni el stock.
+
+La lista muestra, por asociación, el código, el proveedor, el material, la
+unidad, el precio referencial, el tiempo de entrega, la disponibilidad y el
+estado. Va por la última modificación: las asociaciones creadas o cambiadas
+más recientemente van primero.
+
+- **Crear:** pulsa **Nueva asociación**. El panel pide el proveedor y el
+  material (solo los activos; cada material muestra su unidad entre
+  paréntesis) y la unidad de medida; el precio referencial, el tiempo de
+  entrega en días y la disponibilidad (Alta, Media, Baja o No disponible)
+  son opcionales. Las asociaciones nuevas nacen activas.
+  - Si no hay proveedores o materiales activos, el panel lo avisa y no deja
+    guardar.
+- **Editar:** pulsa **Editar** en la fila. Si el proveedor o el material de
+  la asociación ya están inactivos, el panel los ofrece y se pueden
+  conservar; si los cambias, el nuevo debe estar activo.
+- **Inactivar:** pulsa **Inactivar** y confirma. La pregunta explica que la
+  asociación quedará inactiva en este listado y que no cambia compras ni
+  stock. Como cambia la asociación, su fila pasa al principio de la lista.
+- **Activar:** pulsa **Activar**; se hace sin preguntar.
+- **Filtros:** proveedor y material (también los inactivos), disponibilidad
+  y estado. **Limpiar** quita los filtros.
+
+Reglas del formulario:
+
+- Un proveedor tiene una sola asociación por material: si repites la
+  pareja, el panel lo marca en el campo **Material** y conserva lo escrito.
+- **Unidad de medida:** obligatoria, hasta 20 caracteres.
+- **Precio referencial** y **Tiempo de entrega (días):** números que no
+  pueden ser negativos.
+
 ## Reglas de los catálogos de tipos y categorías
 
 - **Nombre:** obligatorio, de 2 a 80 caracteres.

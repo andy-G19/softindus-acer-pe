@@ -4117,10 +4117,10 @@ Datos leídos de la API de GitHub el 2026-10-19 y comparados con git:
 
 ### Sub-entrega 10.3b — Proveedores y asociaciones proveedor-material
 
-Fecha: del 2026-10-19 al 2026-10-20 (UTC). Estado: commits en `staging`;
-falta la publicación, la verificación en staging y el cierre. El paso 0
-(`f4cbcba`) registró la integración de la 10.3a en `main`. 9 commits, de
-`25303e2` a `2c0e3b5`, y este registro.
+Fecha: del 2026-10-19 al 2026-10-20 (UTC). Estado: cerrada en staging el
+2026-10-20; falta integrarla en `main`. El paso 0 (`f4cbcba`) registró la
+integración de la 10.3a en `main`. 9 commits, de `25303e2` a `2c0e3b5`, el
+registro `b6f4480` y este cierre.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -4134,7 +4134,8 @@ falta la publicación, la verificación en staging y el cierre. El paso 0
 | bf5535e | feat | Inactivar proveedor pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
 | df26c50 | feat | Asociaciones en panel lateral con `FormActionState`; corrige la desviación de alta y edición. |
 | 2c0e3b5 | feat | Inactivar asociación pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| b6f4480 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de Proveedores y Materiales de proveedor. |
 
 Decisiones del responsable (2026-10-19), tras la auditoría:
 
@@ -4268,7 +4269,7 @@ Hallazgos:
    duplicarla. Va a la 10.5 o a la entrega 11.
 6. La lista de asociaciones ordena por `fecha_actualizacion` y el cambio de
    estado la actualiza: la fila sube al principio. El foco la sigue, porque
-   la fila tiene `key`.
+   la fila tiene `key`. En staging no se pudo ver (hallazgo 13).
 7. Método: en Vitest 4, `-u` toma el argumento siguiente como su valor:
    `npx vitest run -u archivo` corre toda la suite y no actualiza ese
    archivo. Va al final.
@@ -4281,6 +4282,151 @@ Hallazgos:
 10. Método: la primera versión de los scripts que comparan snapshots no
     reconocía las exportaciones de una línea; se corrigió antes de usarlos
     como evidencia.
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e103b-huella`) y etiquetas `e103b/`, los
+  ayudantes y el medidor de tareas (`tmp/e10-diff/e103b-*.js`, generados por
+  `c-e103b-guiones.py` desde los de la 10.3a). Plan en
+  `tmp/e10-diff/plan-verificacion-10-3b.md`.
+- Comparador nuevo, `e103b-resumen.js` (`window.__resumen`): empareja los
+  registros de dos capturas por etiqueta y texto propio (una LCS) y separa
+  los quitados, los añadidos, los que solo se mueven (agrupados por delta) y
+  los cambios de propiedad, y compara la secuencia de textos no vacíos. Lo
+  piden las pantallas que pierden elementos en cada fila: comparar por
+  índice desalinea todo lo que sigue.
+- Clics y teclas reales. Las listas, que dependen de los datos, se tomaron
+  en el «antes» después de sus tareas y en el «después» antes de las suyas.
+- T20 a T26 escriben en staging, con autorización del responsable en cada
+  fase; el proveedor y la asociación de prueba de cada fase terminan
+  inactivos. T19, T23 y T27 solo leen.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-20 sobre `512cbc4` (`buildId`
+  `KzGU1eZ-Fwjlek6UAt55l`, CSS servido de 113.130 bytes, `e8dc6378…`). Las
+  capturas de solo lectura se tomaron de 02:12 a 02:17 UTC; la app se
+  reinició, el panel del navegador perdió el acceso a Vercel y el
+  responsable volvió a entrar; las tareas se hicieron de 08:52 a 09:00 y
+  las capturas se repitieron con los mismos hashes, junto con las listas,
+  hasta las 09:03. 10 capturas y 5 controles, sello `12960ef7…`, igual en
+  Python.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-3b.md`),
+  con el CSS predicho (`css-103b-predicho.css`).
+- Push de 11 commits (de `25303e2` a `b6f4480`, con el paso 0): CI #90 en
+  verde (3m 1s). Vercel desplegó `b6f4480` (`success` a las 09:17:36 UTC) y
+  cambió el `buildId` (`n0IFsosqB5qYOLNn-K4hh`). El CSS servido es el
+  predicho byte a byte (112.979 bytes, `f9a5f2e3…`): solo falta la rejilla
+  de la barra anterior de proveedores.
+- «Después» el 2026-10-20: capturas de 09:19 a 09:31 UTC (10 capturas, 5
+  controles y los 8 paneles), sello `e6ed7a4f…`, igual en Python. El panel
+  del navegador se cerró y la sesión del ERP caducó; el responsable volvió a
+  entrar y las tareas se hicieron de 11:49 a 11:59. Evidencia en
+  `tmp/e10-diff/antes-10-3b.json` y `despues-10-3b.json`.
+
+Huella: las 10 cambian como se predijo, con dos imprecisiones de la
+predicción (hallazgo 11), y los 5 controles (materiales, alertas, tipos de
+proveedor, auditoría y la sección «Listados» de la galería) dan el mismo hash
+que en el «antes»: el arreglo del foco de `ConfirmActionButton` no cambia el
+DOM de otras pantallas.
+
+- Listas de proveedores, completa y filtrada: `<main>` → `<div>`. La barra
+  pasa de seis columnas desiguales a las cinco iguales de `FilterBar`, con
+  las etiquetas de `Field` (`gap` 4 en lugar de 8) y «Filtrar» y «Limpiar
+  filtros» en la misma celda. Cada fila pierde su `<form>` y sus dos campos
+  ocultos (390 → 365 registros en la completa) y su botón pasa de
+  `inline-flex` a `flex`. La tabla no se mueve (su contenedor sigue en
+  y = 377,7) y la secuencia de textos visibles es idéntica. «Nuevo
+  proveedor» y «Editar» llevan `returnTo` con el filtro.
+- Listas de asociaciones: lo mismo, salvo la barra, que ya tenía su
+  rejilla: «Filtrar» deja de estirarse (133,77 → 60,67 px) y «Limpiar» pasa
+  de `outline` a la variante `clear` (el cian de «Limpiar filtros» de
+  proveedores) y se coloca a su lado. Nada se desplaza.
+- A 376 px, la barra de proveedores queda 44 px más baja (los dos botones
+  en una fila, ya no a todo el ancho) y los 109 registros de debajo se
+  desplazan −43,98 en `y` (−43,99 en 18, por redondeo). Sin desbordamiento.
+- Formularios a página completa: contenedor con radio de 10 px en lugar de
+  14 y sin sombra, asterisco en su propio `span`; en proveedores, separación
+  de 16 px en lugar de 20 (el formulario queda 44 px más bajo) y «Cancelar»
+  después de «Guardar». El encabezado no cambia y, con `returnTo`, la miga y
+  «Cancelar» llevan el filtro.
+- Paneles, solo en el «después»: a 1281 px, 576 px a la derecha con todo el
+  alto; a 376 px, toda la pantalla (376 × 813) sin desbordamiento. Los 8 se
+  cierran con Atrás y vuelven a su lista.
+
+Tareas, con los mismos pasos en las dos fases («PRUEBA E103B antes» y
+«PRUEBA E103B despues»). Los tiempos van del clic al aviso y dependen de la
+red y del servidor de staging: no miden rendimiento.
+
+| Tarea | Antes (`512cbc4`) | Después (`b6f4480`) |
+|---|---|---|
+| T19 Alta de proveedor con el RUC de otro | Página completa: el error en el campo y además un toast (975 ms); se vacían los campos y el foco queda en `body` | Panel con el foco inicial en la razón social: el error queda en el panel, en la alerta del formulario y en el campo, sin toast (812 ms); se conserva lo escrito y el foco va al número de documento. Esc con cambios pide descartar |
+| T20 Alta válida | `PVE00000008`; aviso a 1.518 ms | `PVE00000009`; un aviso a 1.824 ms, el panel se cierra, la fila aparece en su lugar alfabético y el foco vuelve a «Nuevo proveedor» |
+| T21 Edición: condición de pago «Contado» | Página completa; 1.394 ms | Panel desde la fila; Esc con cambios pide descartar y Esc en la pregunta vuelve al teléfono con lo escrito; Tab no sale del panel (18 pasos); 1.752 ms y el foco vuelve a «Editar» de su fila |
+| T23 Asociación repetida | Mensaje sin tilde y toast (756 ms); se vacían los campos | En el panel, en el campo Material y con tilde, sin toast (878 ms); se conserva lo escrito |
+| T24 Alta válida de asociación | `PVM00000005`; 1.231 ms | `PVM00000006`; un aviso a 1.767 ms y la fila aparece primera |
+| T22 Inactivar y activar el proveedor | Sin preguntar (1.146 y 1.128 ms); desde `?status=active`, la redirección perdía el filtro | Confirmación con el texto aprobado; Esc no hace nada; inactivar a 985 ms con la fila en su lugar y el foco en su «Activar»; activar sin preguntar (830 ms). Con `?status=active` (1.116 ms), la fila sale, el filtro se conserva y el foco va a la tabla |
+| T25 Hallazgo 4: editar la asociación con su proveedor inactivo | «El proveedor seleccionado no existe o esta inactivo.» (544 ms) | Guarda el precio 2; un aviso a 1.784 ms |
+| T26 Inactivar, activar e inactivar la asociación | Sin preguntar (1.097, 846 y 1.081 ms) | Confirmación con el texto aprobado; 1.036, 901 y 1.131 ms, con el foco en el botón de su fila |
+| T27 T17 de la 10.3a en la barra de proveedores | Tras «Limpiar filtros» el selector seguía en «inactive»; «Nuevo proveedor» abría una página completa y se perdía lo elegido | «Limpiar filtros» lo vacía, Atrás devuelve «inactive» y Adelante lo vacía; con «Activo» elegido sin filtrar, abrir y cerrar el panel conserva el mismo nodo y el valor |
+
+Además, en el «después»: la edición por URL directa se abre a página
+completa y su «Cancelar» vuelve a `?status=active`; Esc sin cambios cierra
+el panel sin preguntar; el alta de asociación no ofrece el proveedor ni los
+materiales inactivos, y la edición ofrece su proveedor inactivo. Las altas y
+ediciones dieron el aviso entre 250 y 540 ms más tarde que en el «antes»
+(salvo T25, que antes fallaba en la validación); con una medida por tarea no
+se puede separar la variación de staging del cambio de la respuesta, que
+trae la lista revalidada en lugar de redirigir. Los cambios de estado dieron
+tiempos parecidos o menores.
+
+El capítulo de Inventario del manual suma Proveedores y Materiales de
+proveedor, escritos con lo verificado. Las reglas comunes nombran las
+pantallas nuevas y explican que, con un filtro de estado, la fila que deja
+de cumplirlo sale de la lista y el cursor pasa a la tabla.
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER ni
+WORKSHOP_MASTER, ni la tarea opcional T28. Datos escritos en staging:
+`PVE00000008` y `PVE00000009` (inactivos), `PVM00000005` y `PVM00000006`
+(inactivas) y en la bitácora 9 líneas del «antes» y 10 del «después» (la
+edición de T25 ahora escribe), comprobadas en `/dashboard/audit` sin
+exportar; las dos cancelaciones con Esc no escribieron. Tiempos: el «antes»,
+5 minutos de capturas antes del reinicio de la app y 11 después (tareas y
+capturas); el «después», 11 de capturas y 10 de tareas.
+
+Hallazgos de la verificación:
+
+11. Predicción: no recogió la tilde de «Tiempo de entrega (días)» en los
+    formularios de asociación (C4), y describió «Volver a…» como un enlace
+    con el filtro en el `href`, cuando es el botón Atrás del encabezado con
+    ese destino como `fallbackHref`. Lección: un `fix` de textos se anota en
+    cada pantalla que los muestra, y el encabezado se lee en el código antes
+    de predecir.
+12. Propuesta para la entrega 11: con un dato repetido, el mismo mensaje
+    sale dos veces, en la alerta del formulario y en el campo. Es el contrato
+    de la pista B, igual en Clientes y Materiales. La alerta podría decir
+    solo que hay campos que revisar cuando todos los errores son de campo;
+    decide el responsable.
+13. T26 no pudo ver la fila subir al principio: la asociación de prueba ya
+    era la primera porque T25 la acababa de actualizar. Lo cubren las
+    pruebas en jsdom (hallazgo 6).
+14. Método: durante las tareas, la página del panel estaba oculta para el
+    navegador (`visibilityState` `hidden`, ningún fotograma en 4 s) porque
+    la ventana de la app no se pintaba. Las animaciones de cierre de 200 ms
+    tardaban unos 1.078 ms en desmontar y el foco volvía después. Los
+    resultados valen; los tiempos de animación, no. Antes de medir una
+    animación se comprueba `document.visibilityState` y se pide al
+    responsable que deje la ventana a la vista.
+15. Método: como en la 10.3a (hallazgo 16), la sesión del ERP caducó entre
+    turnos, esta vez al reabrirse el panel del navegador, y la primera
+    petición aterrizó en el `/login` de producción. No se tocó nada allí;
+    los guiones y la base del navegador se conservaron.
+16. En T19 de las dos fases, el navegador avisó que la página escribió en
+    el portapapeles durante un clic sintético. `src` no usa el portapapeles:
+    viene de fuera de la app, probablemente de la barra de Vercel de las
+    vistas previas. No afecta a las medidas.
 
 ## Secuencia de próximas entregas
 
@@ -4306,7 +4452,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, tiene sus commits en staging y falta verificarla) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada en staging, con CI #90 verde, 10 de 10 huellas como se predijo y los hallazgos 4 y 13 de la 10.3a corregidos; falta integrarla en main, y la 10.3c está pendiente) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -4563,6 +4709,9 @@ Las demás no cambian: páginas con Prisma directo 0, `auth()` directo 0,
 copias locales de conversión y formato 0, pantallas con rango de fechas
 sin `DateRangeFields` 17 (la 10.3c las mueve) e `import` de las librerías
 de notificaciones en 2 archivos, medidos de nuevo.
+
+El cierre de la 10.3b (2026-10-20) no cambia código: las métricas son las
+de `2c0e3b5`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
