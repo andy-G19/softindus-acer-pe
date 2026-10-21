@@ -1,22 +1,44 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { supplierMaterialSchema } from "@/schemas/inventory/supplier-material.schema";
 
-export type SupplierMaterialFormState = ActionErrorState;
+/** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
+export type SupplierMaterialFormValues = {
+  id_proveedor: string;
+  id_material: string;
+  unidad_medida: string;
+  precio_referencial: string;
+  tiempo_entrega_dias: string;
+  disponibilidad: string;
+};
+
+// Entrega 10.3b: el alta y la edicion no redirigen; devuelven el resultado y
+// el formulario da el aviso y cierra el panel o vuelve al listado.
+export type SupplierMaterialFormState = FormActionState<
+  SupplierMaterialFormValues,
+  { id_proveedor_material: string }
+>;
 
 type SupplierMaterialValidationResult =
   | {
       ok: false;
-      state: SupplierMaterialFormState;
+      error: string;
+      fieldErrors: FieldErrors;
     }
   | {
       ok: true;
@@ -30,8 +52,42 @@ type SupplierMaterialValidationResult =
 
 const SUPPLIER_MATERIALS_PATH = "/dashboard/inventory/supplier-materials";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
+// El formulario y la fila niegan el permiso con un error, sin redirigir.
+async function getSupplierMaterialSession() {
+  return getAuthorizedSession(["ADMIN"]);
+}
+
+function getSupplierMaterialFormValues(formData: FormData): SupplierMaterialFormValues {
+  const text = (name: keyof SupplierMaterialFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_proveedor: text("id_proveedor"),
+    id_material: text("id_material"),
+    unidad_medida: text("unidad_medida"),
+    precio_referencial: text("precio_referencial"),
+    tiempo_entrega_dias: text("tiempo_entrega_dias"),
+    disponibilidad: text("disponibilidad"),
+  };
+}
+
+function relationError(
+  values: SupplierMaterialFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): SupplierMaterialFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function relationSaved(
+  values: SupplierMaterialFormValues,
+  idProveedorMaterial: string,
+): SupplierMaterialFormState {
+  return {
+    status: "success",
+    data: { id_proveedor_material: idProveedorMaterial },
+    values,
+    operationId: newOperationId(),
+  };
 }
 
 function getSupplierMaterialFormData(formData: FormData) {
@@ -45,15 +101,19 @@ function getSupplierMaterialFormData(formData: FormData) {
   };
 }
 
+// El proveedor y el material deben estar activos. Al editar (current), los que
+// la asociacion ya tiene se aceptan aunque esten inactivos mientras no se
+// cambien: la consulta de edicion los ofrece (hallazgo 4 de la 10.3a).
 async function validateActiveSupplierAndMaterial(
   supplierId: string,
   materialId: string,
+  current?: { id_proveedor: string; id_material: string },
 ): Promise<SupplierMaterialValidationResult> {
   const [supplier, material] = await Promise.all([
     prisma.proveedor.findFirst({
       where: {
         id_proveedor: supplierId,
-        estado: true,
+        ...(supplierId === current?.id_proveedor ? {} : { estado: true }),
       },
       select: {
         razon_social: true,
@@ -62,7 +122,7 @@ async function validateActiveSupplierAndMaterial(
     prisma.material.findFirst({
       where: {
         id_material: materialId,
-        estado: true,
+        ...(materialId === current?.id_material ? {} : { estado: true }),
       },
       select: {
         nombre_material: true,
@@ -73,13 +133,9 @@ async function validateActiveSupplierAndMaterial(
   if (!supplier) {
     return {
       ok: false,
-      state: {
-        error: "El proveedor seleccionado no existe o esta inactivo.",
-        fieldErrors: {
-          id_proveedor: [
-            "El proveedor seleccionado no existe o esta inactivo.",
-          ],
-        },
+      error: "El proveedor seleccionado no existe o está inactivo.",
+      fieldErrors: {
+        id_proveedor: ["El proveedor seleccionado no existe o está inactivo."],
       },
     };
   }
@@ -87,11 +143,9 @@ async function validateActiveSupplierAndMaterial(
   if (!material) {
     return {
       ok: false,
-      state: {
-        error: "El material seleccionado no existe o esta inactivo.",
-        fieldErrors: {
-          id_material: ["El material seleccionado no existe o esta inactivo."],
-        },
+      error: "El material seleccionado no existe o está inactivo.",
+      fieldErrors: {
+        id_material: ["El material seleccionado no existe o está inactivo."],
       },
     };
   }
@@ -126,26 +180,29 @@ function getPrismaErrorMessage(error: unknown) {
     error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2002"
   ) {
-    return "Este proveedor ya esta asociado con el material seleccionado.";
+    return "Este proveedor ya está asociado con el material seleccionado.";
   }
 
-  return "No se pudo guardar la asociacion proveedor-material. Intenta nuevamente.";
+  return "No se pudo guardar la asociación proveedor-material. Intenta nuevamente.";
 }
 
 export async function createSupplierMaterialAction(
   _prevState: SupplierMaterialFormState,
   formData: FormData,
 ): Promise<SupplierMaterialFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierMaterialFormValues(formData);
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return relationError(values, "No tienes permisos para registrar asociaciones proveedor-material.");
+  }
+
   const parsed = supplierMaterialSchema.safeParse(
     getSupplierMaterialFormData(formData),
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la asociacion.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return relationError(values, "Revisa los datos de la asociación.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -155,7 +212,7 @@ export async function createSupplierMaterialAction(
   );
 
   if (!validation.ok) {
-    return validation.state;
+    return relationError(values, validation.error, validation.fieldErrors);
   }
 
   const duplicated = await hasDuplicateRelation(
@@ -164,19 +221,16 @@ export async function createSupplierMaterialAction(
   );
 
   if (duplicated) {
-    return {
-      error: "Este proveedor ya esta asociado con el material seleccionado.",
-      fieldErrors: {
-        id_material: [
-          "Este proveedor ya esta asociado con el material seleccionado.",
-        ],
-      },
-    };
+    return relationError(values, "Este proveedor ya está asociado con el material seleccionado.", {
+      id_material: ["Este proveedor ya está asociado con el material seleccionado."],
+    });
   }
+
+  let idProveedorMaterial = "";
 
   try {
     await prisma.$transaction(async (tx) => {
-      const idProveedorMaterial = await getNextCorrelativeId(tx, {
+      idProveedorMaterial = await getNextCorrelativeId(tx, {
         codigoEntidad: "proveedor_material",
         prefijo: "PVM",
       });
@@ -208,26 +262,30 @@ export async function createSupplierMaterialAction(
       });
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return relationError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-created`);
+  return relationSaved(values, idProveedorMaterial);
 }
 
 export async function updateSupplierMaterialAction(
   _prevState: SupplierMaterialFormState,
   formData: FormData,
 ): Promise<SupplierMaterialFormState> {
-  const session = await requireAdmin();
+  const values = getSupplierMaterialFormValues(formData);
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return relationError(values, "No tienes permisos para actualizar asociaciones proveedor-material.");
+  }
+
   const relationId = formData.get("id_proveedor_material")?.toString().trim();
 
   if (!relationId) {
-    return { error: "La asociacion proveedor-material no existe." };
+    return relationError(values, "La asociación proveedor-material no existe.");
   }
 
   const currentRelation = await prisma.proveedor_material.findUnique({
@@ -237,7 +295,7 @@ export async function updateSupplierMaterialAction(
   });
 
   if (!currentRelation) {
-    return { error: "La asociacion proveedor-material no existe." };
+    return relationError(values, "La asociación proveedor-material no existe.");
   }
 
   const parsed = supplierMaterialSchema.safeParse(
@@ -245,20 +303,18 @@ export async function updateSupplierMaterialAction(
   );
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la asociacion.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return relationError(values, "Revisa los datos de la asociación.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
   const validation = await validateActiveSupplierAndMaterial(
     data.id_proveedor,
     data.id_material,
+    currentRelation,
   );
 
   if (!validation.ok) {
-    return validation.state;
+    return relationError(values, validation.error, validation.fieldErrors);
   }
 
   const duplicated = await hasDuplicateRelation(
@@ -268,12 +324,9 @@ export async function updateSupplierMaterialAction(
   );
 
   if (duplicated) {
-    return {
-      error: "Ya existe otra asociacion para ese proveedor y material.",
-      fieldErrors: {
-        id_material: ["Ya existe otra asociacion para ese proveedor y material."],
-      },
-    };
+    return relationError(values, "Ya existe otra asociación para ese proveedor y material.", {
+      id_material: ["Ya existe otra asociación para ese proveedor y material."],
+    });
   }
 
   try {
@@ -303,24 +356,52 @@ export async function updateSupplierMaterialAction(
       detalle: `Proveedor-material actualizado: ${validation.supplier.razon_social} - ${validation.material.nombre_material}`,
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return relationError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(`${SUPPLIER_MATERIALS_PATH}?toast=supplier-material-updated`);
+  return relationSaved(values, relationId);
 }
 
-export async function toggleSupplierMaterialStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const relationId = formData.get("id_proveedor_material")?.toString().trim();
+// Activar o inactivar desde la fila (ConfirmActionButton): devuelve el
+// resultado en lugar de redirigir, y un error (sin permiso, ya tenia ese estado
+// o no existe) queda en la confirmacion.
+export async function toggleSupplierMaterialStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const relationId = formData.get("id_proveedor_material")?.toString().trim() ?? "";
+  const session = await getSupplierMaterialSession();
+
+  if (!session) {
+    return statusToggleError(relationId, "No tienes permisos para activar o inactivar asociaciones proveedor-material.");
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!relationId) {
-    redirect(SUPPLIER_MATERIALS_PATH);
+    return statusToggleError(relationId, "La asociación proveedor-material no existe.");
   }
+
+  if (nextStatus === null) {
+    return statusToggleError(relationId, "Estado no válido.");
+  }
+
+  // Fija el estado pedido solo si la asociacion tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton.
+  const { count } = await prisma.proveedor_material.updateMany({
+    where: {
+      id_proveedor_material: relationId,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+      fecha_actualizacion: new Date(),
+    },
+  });
 
   const relation = await prisma.proveedor_material.findUnique({
     where: {
@@ -340,21 +421,15 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
     },
   });
 
-  if (!relation) {
-    redirect(SUPPLIER_MATERIALS_PATH);
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      relationId,
+      relation
+        ? `La asociación ya estaba ${nextStatus ? "activa" : "inactiva"}.`
+        : "La asociación proveedor-material no existe.",
+    );
   }
-
-  const nextStatus = !relation.estado;
-
-  await prisma.proveedor_material.update({
-    where: {
-      id_proveedor_material: relationId,
-    },
-    data: {
-      estado: nextStatus,
-      fecha_actualizacion: new Date(),
-    },
-  });
 
   await registerAuditLog({
     userId: session.user.id,
@@ -362,14 +437,14 @@ export async function toggleSupplierMaterialStatusAction(formData: FormData) {
     id_registro_afectado: relationId,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Proveedor-material ${nextStatus ? "activado" : "inactivado"}: ${
-      relation.proveedor.razon_social
-    } - ${relation.material.nombre_material}`,
+      relation
+        ? `${relation.proveedor.razon_social} - ${relation.material.nombre_material}`
+        : relationId
+    }`,
   });
 
   revalidatePath("/dashboard/inventory");
   revalidatePath(SUPPLIER_MATERIALS_PATH);
 
-  redirect(
-    `${SUPPLIER_MATERIALS_PATH}?toast=${nextStatus ? "supplier-material-activated" : "supplier-material-deactivated"}`,
-  );
+  return statusToggleDone(relationId, nextStatus);
 }

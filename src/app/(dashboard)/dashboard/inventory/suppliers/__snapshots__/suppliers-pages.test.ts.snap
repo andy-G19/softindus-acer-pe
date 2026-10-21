@@ -69,7 +69,7 @@ exports[`/dashboard/inventory/suppliers > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -97,11 +97,11 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
-<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Nuevo proveedor</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
@@ -131,8 +131,6 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -163,11 +161,8 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -183,19 +178,15 @@ exports[`/dashboard/inventory/suppliers > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fstatus%3Dinactive">Editar</a>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -263,7 +254,7 @@ exports[`/dashboard/inventory/suppliers > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -291,11 +282,11 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
-<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Nuevo proveedor</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value=""/>
@@ -325,8 +316,6 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -357,11 +346,8 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -377,19 +363,15 @@ exports[`/dashboard/inventory/suppliers > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers">Editar</a>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -497,7 +479,7 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -525,11 +507,11 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/inventory/supplier-types">Tipos de proveedor</a>
-<a data-variant="default" href="/dashboard/inventory/suppliers/new">Nuevo proveedor</a>
+<a data-variant="default" href="/dashboard/inventory/suppliers/new?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Nuevo proveedor</a>
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/suppliers">
+<form role="search" aria-label="Filtros de proveedores" action="/dashboard/inventory/suppliers" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proveedor..." name="q" value="acero"/>
@@ -559,8 +541,6 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/inventory/suppliers">Limpiar filtros</a>
 </div>
 </form>
@@ -591,11 +571,8 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-1/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -611,19 +588,15 @@ exports[`/dashboard/inventory/suppliers > todos los filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_proveedor" value="id_proveedor-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<a data-variant="ghost" href="/dashboard/inventory/suppliers/id_proveedor-2/edit?returnTo=%2Fdashboard%2Finventory%2Fsuppliers%3Fq%3Dacero%26type%3Ddistribuidor%26payment%3Dcontado%26status%3Dactive">Editar</a>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -671,7 +644,7 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -710,7 +683,8 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
 <div>
-<label for="razon_social">Razón social *</label>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
 <input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value="razon_social-1"/>
 </div>
 <div>
@@ -748,8 +722,9 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value="contacto_principal-1"/>
 </div>
 <div>
-<label for="tipo_proveedor">Tipo de proveedor *</label>
-<select id="tipo_proveedor" name="tipo_proveedor" required="">
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
@@ -771,11 +746,166 @@ exports[`/dashboard/inventory/suppliers/[id]/edit > editar > resultado 1`] = `
 <textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">observaciones-1</textarea>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/inventory/suppliers">Cancelar</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/inventory/suppliers">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > editar con regreso al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_proveedor": "PRV00000001",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "slug": "tipo_proveedor-1",
+          },
+        ],
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers/[id]/edit > editar con regreso al listado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/suppliers?q=acero">Proveedores</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar proveedor</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar proveedor</h1>
+<p>Actualiza los datos comerciales del proveedor.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proveedores">
+<svg/>Volver a proveedores</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<div>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value="razon_social-1"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value="numero_documento-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value="contacto_principal-1"/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
+<option value="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/inventory/suppliers?q=acero">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -835,7 +965,7 @@ exports[`/dashboard/inventory/suppliers/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -873,7 +1003,8 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
-<label for="razon_social">Razón social *</label>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
 <input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value=""/>
 </div>
 <div>
@@ -911,8 +1042,9 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 <input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value=""/>
 </div>
 <div>
-<label for="tipo_proveedor">Tipo de proveedor *</label>
-<select id="tipo_proveedor" name="tipo_proveedor" required="">
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
 <option value="" selected="">Selecciona un tipo</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
@@ -935,12 +1067,326 @@ exports[`/dashboard/inventory/suppliers/new > formulario > resultado 1`] = `
 </textarea>
 </div>
 <div>
-<a data-variant="link" href="/dashboard/inventory/suppliers">Cancelar</a>
 <button data-variant="default" type="submit">Guardar proveedor</button>
+<a data-variant="outline" href="/dashboard/inventory/suppliers">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
+`;
+
+exports[`/dashboard/inventory/suppliers/new > formulario con regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/suppliers/new > formulario con regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory/suppliers?status=inactive">Proveedores</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo proveedor</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo proveedor</h1>
+<p>Registra los datos comerciales del proveedor para usarlo luego en compras y abastecimiento.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a proveedores">
+<svg/>Volver a proveedores</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value=""/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="" selected="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value=""/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value=""/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
+<option value="" selected="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="" selected="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar proveedor</button>
+<a data-variant="outline" href="/dashboard/inventory/suppliers?status=inactive">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`panel lateral de proveedores > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Nuevo proveedor</h2>
+<p id="radix-_R_1H2_">Registra los datos comerciales del proveedor para usarlo luego en compras y abastecimiento.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value=""/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="" selected="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value=""/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value=""/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value=""/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value=""/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value=""/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
+<option value="" selected="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="" selected="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">
+</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar proveedor</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de proveedores > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar proveedor</h2>
+<p id="radix-_R_1H2_">razon_social-1 · id_proveedor-1</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
+<div>
+<label for="razon_social">Razón social<span aria-hidden="true">*</span>
+</label>
+<input id="razon_social" required="" placeholder="Ej. Aceros del Sur S.A.C." name="razon_social" value="razon_social-1"/>
+</div>
+<div>
+<div>
+<label for="tipo_documento">Tipo de documento</label>
+<select id="tipo_documento" name="tipo_documento">
+<option value="">Sin documento</option>
+<option value="ruc">RUC</option>
+<option value="dni">DNI</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="numero_documento">Número de documento</label>
+<input id="numero_documento" placeholder="Ej. 20601234567" name="numero_documento" value="numero_documento-1"/>
+</div>
+</div>
+<div>
+<div>
+<label for="telefono">Teléfono</label>
+<input id="telefono" placeholder="Ej. 999 888 777" name="telefono" value="telefono-1"/>
+</div>
+<div>
+<label for="correo">Correo</label>
+<input type="email" id="correo" placeholder="proveedor@correo.com" name="correo" value="correo-1"/>
+</div>
+</div>
+<div>
+<label for="direccion">Dirección</label>
+<input id="direccion" placeholder="Dirección comercial" name="direccion" value="direccion-1"/>
+</div>
+<div>
+<div>
+<label for="contacto_principal">Contacto principal</label>
+<input id="contacto_principal" placeholder="Nombre de la persona de contacto" name="contacto_principal" value="contacto_principal-1"/>
+</div>
+<div>
+<label for="tipo_proveedor">Tipo de proveedor<span aria-hidden="true">*</span>
+</label>
+<select id="tipo_proveedor" required="" name="tipo_proveedor">
+<option value="">Selecciona un tipo</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+</div>
+<div>
+<label for="condicion_pago">Condición de pago</label>
+<select id="condicion_pago" name="condicion_pago">
+<option value="">No especificado</option>
+<option value="contado">Contado</option>
+<option value="credito">Crédito</option>
+<option value="parcial">Parcial</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4" placeholder="Notas adicionales sobre el proveedor">observaciones-1</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

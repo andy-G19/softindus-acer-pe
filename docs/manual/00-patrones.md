@@ -7,8 +7,8 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 Pantallas renovadas hasta ahora:
 
 - Comercial: clientes y categorías de producto.
-- Inventario: tipos de proveedor, categorías de materiales, materiales e
-  insumos, y alertas y stock crítico.
+- Inventario: tipos de proveedor, proveedores, materiales de proveedor,
+  categorías de materiales, materiales e insumos, y alertas y stock crítico.
 - Caja chica: categorías de gasto.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
@@ -23,11 +23,11 @@ lista. Así no pierdes la lista ni los filtros que tenías puestos.
 
 - Los catálogos cortos (tipos, categorías) se abren en una ventana en el
   centro de la pantalla.
-- Los registros con más datos, como los clientes y los materiales, se abren
-  en un panel a la derecha. Ese panel tiene su propia dirección: si recargas
-  la página o copias el enlace, el mismo formulario se abre a pantalla
-  completa, y allí **Cancelar** te devuelve a la lista con los filtros que
-  tenía.
+- Los registros con más datos, como los clientes, los materiales y los
+  proveedores, se abren en un panel a la derecha. Ese panel tiene su propia
+  dirección: si recargas la página o copias el enlace, el mismo formulario
+  se abre a pantalla completa, y allí **Cancelar** te devuelve a la lista
+  con los filtros que tenía.
 - En el teléfono, la ventana y el panel ocupan toda la pantalla.
 
 Los campos marcados con un asterisco (*) son obligatorios.
@@ -64,9 +64,10 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 ## Activar e inactivar
 
 Los registros de los catálogos no se borran: se **inactivan**. Esto vale
-para tipos de proveedor, categorías de materiales, materiales y categorías
-de gasto. En clientes y categorías de producto, activar e inactivar todavía
-se hacen sin confirmación; se igualarán en una próxima actualización.
+para tipos de proveedor, proveedores, materiales de proveedor, categorías de
+materiales, materiales y categorías de gasto. En clientes y categorías de
+producto, activar e inactivar todavía se hacen sin confirmación; se
+igualarán en una próxima actualización.
 
 - **Inactivar** pide confirmación. La pregunta nombra el registro y explica
   qué pasa, por ejemplo: «Dejará de ofrecerse al registrar proveedores; los
@@ -77,8 +78,12 @@ se hacen sin confirmación; se igualarán en una próxima actualización.
   «Inactiva».
 - Las listas de los catálogos muestran primero los registros activos. Al
   inactivar uno, su fila pasa al final de la lista y el cursor la acompaña;
-  al activarlo, vuelve a su lugar. En materiales, la fila se queda donde
-  estaba.
+  al activarlo, vuelve a su lugar. En materiales y proveedores, la fila se
+  queda donde estaba; en materiales de proveedor, pasa al principio, porque
+  esa lista va por la última modificación.
+- Si la lista está filtrada por estado (por ejemplo, solo los activos) y el
+  registro deja de cumplir el filtro, su fila sale de la lista y el cursor
+  pasa a la tabla.
 - Si otra persona ya había cambiado ese registro y tu lista estaba
   desactualizada, el sistema no hace lo contrario de lo que pediste: te
   avisa, por ejemplo, de que «ya estaba inactivo».

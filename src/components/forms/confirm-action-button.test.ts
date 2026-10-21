@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, createElement as h } from "react";
+import { act, createElement as h, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -248,5 +248,200 @@ describe("ConfirmActionButton sin confirmacion", () => {
       type: "error",
       message: "No tienes permisos para gestionar tipos de proveedor.",
     });
+  });
+});
+
+// Hallazgo 13 de la 10.3a: cuando la accion termina, la lista se vuelve a pintar
+// con los datos nuevos y el boton puede desaparecer: atender una alerta deja la
+// fila sin la accion, e inactivar con el filtro «Activo» (o activar con
+// «Inactivo») saca la fila del listado. El foco no debe quedar en body: va a la
+// fila, si sigue, o a la tabla. Si el boton sigue (Inactivar pasa a Activar),
+// se queda en el. Next puede aplicar la lista nueva con la confirmacion
+// todavia abierta o despues de cerrarla: se prueban los dos ordenes.
+describe("ConfirmActionButton cuando su boton desaparece de la lista", () => {
+  type Item = { id: string; estado: boolean };
+
+  const controls: { setItems: (items: Item[]) => void } = { setItems: () => {} };
+
+  // Una tabla con una accion por fila. Con withConfirm, inactivar confirma y
+  // activar no, como las filas de estado; sin el, solo hay accion mientras la
+  // fila esta activa, como atender una alerta.
+  function ItemTable({
+    initial,
+    action,
+    swaps = false,
+  }: {
+    initial: Item[];
+    action: (prev: State, formData: FormData) => Promise<State>;
+    swaps?: boolean;
+  }) {
+    const [items, setItems] = useState(initial);
+    controls.setItems = setItems;
+
+    return h(
+      "table",
+      { "data-testid": "tabla" },
+      h(
+        "tbody",
+        null,
+        items.map((item) =>
+          h(
+            "tr",
+            { key: item.id, "data-id": item.id },
+            h("td", null, item.id),
+            h(
+              "td",
+              null,
+              item.estado
+                ? h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+                    action,
+                    fields: { id: item.id, estado: "false" },
+                    successNotification: DEACTIVATED,
+                    confirm: { title: `¿Inactivar ${item.id}?`, description: "Consecuencia.", confirmText: "Confirmar" },
+                    children: "Inactivar",
+                  })
+                : swaps
+                  ? h(ConfirmActionButton<{ id: string }, { estado: boolean }>, {
+                      action,
+                      fields: { id: item.id, estado: "true" },
+                      successNotification: ACTIVATED,
+                      children: "Activar",
+                    })
+                  : "-",
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  const row = (id: string) => document.querySelector<HTMLElement>(`tr[data-id="${id}"]`);
+  const table = () => document.querySelector<HTMLElement>('[data-testid="tabla"]');
+  const triggerIn = (id: string) => row(id)!.querySelector<HTMLButtonElement>("button")!;
+
+  // Con la confirmacion abierta: la accion cambia la lista antes de responder.
+  function updatesBeforeResponding(next: () => Item[]) {
+    return vi.fn(async () => {
+      controls.setItems(next());
+      return success();
+    });
+  }
+
+  async function confirmIn(id: string) {
+    const trigger = triggerIn(id);
+    trigger.focus();
+    await act(async () => trigger.click());
+    await act(async () => button("Confirmar").click());
+    await settle();
+    await settle();
+  }
+
+  it("si la fila sigue sin la accion, el foco va a la fila (atender una alerta)", async () => {
+    const action = updatesBeforeResponding(() => [{ id: "A1", estado: false }, { id: "A2", estado: true }]);
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }, { id: "A2", estado: true }], action })));
+
+    await confirmIn("A1");
+
+    expect(confirmation()).toBeNull();
+    expect(row("A1")!.querySelector("button")).toBeNull();
+    expect(document.activeElement).toBe(row("A1"));
+    expect(row("A1")!.getAttribute("tabindex")).toBe("-1");
+
+    // Cuando el foco sale de la fila, deja de ser enfocable desde el script.
+    triggerIn("A2").focus();
+    expect(row("A1")!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("si la fila sale del listado, el foco va a la tabla (inactivar con el filtro Activo)", async () => {
+    const action = updatesBeforeResponding(() => [{ id: "A2", estado: true }]);
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }, { id: "A2", estado: true }], action })));
+
+    await confirmIn("A1");
+
+    expect(row("A1")).toBeNull();
+    expect(document.activeElement).toBe(table());
+    expect(table()!.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("si la lista cambia despues de cerrar la confirmacion, el foco tambien va a la fila", async () => {
+    const action = vi.fn(async () => success());
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }], action })));
+
+    await confirmIn("A1");
+    expect(document.activeElement).toBe(triggerIn("A1"));
+
+    await act(async () => controls.setItems([{ id: "A1", estado: false }]));
+    await settle();
+
+    expect(document.activeElement).toBe(row("A1"));
+  });
+
+  it("sin confirmacion, si la fila sale del listado, el foco va a la tabla (activar con el filtro Inactivo)", async () => {
+    const action = updatesBeforeResponding(() => [{ id: "A2", estado: false }]);
+    await act(async () =>
+      root.render(h(ItemTable, { initial: [{ id: "A1", estado: false }, { id: "A2", estado: false }], action, swaps: true })),
+    );
+    const trigger = triggerIn("A1");
+    trigger.focus();
+
+    await act(async () => trigger.click());
+    await settle();
+
+    expect(row("A1")).toBeNull();
+    expect(document.activeElement).toBe(table());
+  });
+
+  it("si el boton sigue (Inactivar pasa a Activar), el foco queda en el y no se agrega tabindex", async () => {
+    const action = updatesBeforeResponding(() => [{ id: "A1", estado: false }]);
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }], action, swaps: true })));
+    const trigger = triggerIn("A1");
+
+    await confirmIn("A1");
+
+    expect(triggerIn("A1")).toBe(trigger);
+    expect(trigger.textContent).toBe("Activar");
+    expect(document.activeElement).toBe(trigger);
+    expect(row("A1")!.hasAttribute("tabindex")).toBe(false);
+    expect(table()!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("al cancelar no cambia nada: el foco vuelve al boton", async () => {
+    const action = vi.fn(async () => success());
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }], action })));
+    const trigger = triggerIn("A1");
+    trigger.focus();
+
+    await act(async () => trigger.click());
+    await act(async () => button("Cancelar").click());
+    await settle();
+
+    expect(action).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(trigger);
+    expect(row("A1")!.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("si la lista cambia sin que el boton tuviera el foco, no lo mueve", async () => {
+    const action = vi.fn(async () => success());
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }, { id: "A2", estado: true }], action })));
+    const other = triggerIn("A2");
+    other.focus();
+
+    await act(async () => controls.setItems([{ id: "A2", estado: true }]));
+    await settle();
+
+    expect(document.activeElement).toBe(other);
+  });
+
+  it("si la lista cambia con el foco en body (tras un clic en una zona vacia), no lo lleva a la tabla", async () => {
+    const action = vi.fn(async () => success());
+    await act(async () => root.render(h(ItemTable, { initial: [{ id: "A1", estado: true }, { id: "A2", estado: true }], action })));
+    (document.activeElement as HTMLElement | null)?.blur();
+    expect(document.activeElement).toBe(document.body);
+
+    await act(async () => controls.setItems([{ id: "A2", estado: true }]));
+    await settle();
+
+    expect(document.activeElement).toBe(document.body);
+    expect(table()!.hasAttribute("tabindex")).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, useTransition, type ReactNode } from "react";
 
 import { ConfirmDialog } from "@/components/notifications/confirm-dialog";
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -40,6 +40,24 @@ type ConfirmActionButtonProps<Values, Data> = {
 
 const IDLE = { status: "idle" } as const;
 
+/** Fila y tabla del boton, guardadas mientras esta en la pagina. */
+type FocusAnchor = { row: HTMLElement | null; table: HTMLElement | null };
+
+// Destino del foco cuando el boton ya no esta (hallazgo 13 de la 10.3a): su
+// fila, si sigue en la pagina, o su tabla. Ninguna se enfoca por si sola, asi
+// que recibe tabindex -1 (enfocable desde el script, fuera del orden de Tab)
+// hasta que el foco sale de ella.
+function fallbackFocusTarget(anchor: FocusAnchor) {
+  const target = [anchor.row, anchor.table].find((element) => element?.isConnected) ?? null;
+
+  if (target && !target.hasAttribute("tabindex")) {
+    target.setAttribute("tabindex", "-1");
+    target.addEventListener("focusout", () => target.removeAttribute("tabindex"), { once: true });
+  }
+
+  return target;
+}
+
 // Accion de fila con confirmacion (entrega 10): inactivar, dar de baja, anular.
 // La accion se ejecuta en startTransition y su pendiente es el de
 // useTransition, que dura hasta que la accion responde: mientras tanto la
@@ -47,6 +65,13 @@ const IDLE = { status: "idle" } as const;
 // y se cierra (la lista se actualiza por el revalidatePath de la accion); con
 // error queda abierta y muestra el mensaje dentro. Sin confirm, el boton
 // ejecuta la accion y un error sale como aviso.
+//
+// La lista se vuelve a pintar con los datos nuevos y el boton puede
+// desaparecer: atender una alerta deja la fila sin la accion, e inactivar con
+// el filtro «Activo» saca la fila. Entonces el foco va a la fila o a la tabla
+// en lugar de quedar en body, con la confirmacion todavia abierta (al cerrarse)
+// o despues (al desmontarse el boton enfocado). Si el boton sigue (Inactivar
+// pasa a Activar), el foco se queda en el.
 export function ConfirmActionButton<Values, Data>({
   action,
   fields,
@@ -60,6 +85,38 @@ export function ConfirmActionButton<Values, Data>({
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const anchorRef = useRef<FocusAnchor>({ row: null, table: null });
+
+  // La fila (con key) y la tabla del boton no cambian mientras esta montado; el
+  // boton tampoco: al pasar de Inactivar a Activar React conserva su nodo.
+  // Al desmontarse, React todavia no saco el boton del documento: si tenia el
+  // foco, en cuanto sale el foco quedaria en body, y se lleva a la fila o a la
+  // tabla.
+  useLayoutEffect(() => {
+    const trigger = triggerRef.current;
+    anchorRef.current = { row: trigger?.closest("tr") ?? null, table: trigger?.closest("table") ?? null };
+
+    return () => {
+      if (!trigger || document.activeElement !== trigger) {
+        return;
+      }
+
+      const anchor = anchorRef.current;
+      setTimeout(() => {
+        if (!trigger.isConnected && (document.activeElement === null || document.activeElement === document.body)) {
+          fallbackFocusTarget(anchor)?.focus();
+        }
+      }, 0);
+    };
+  }, []);
+
+  // Al cerrarse la confirmacion: al boton si sigue; si no, a su fila o tabla.
+  function returnFocusTo() {
+    const trigger = triggerRef.current;
+
+    return trigger?.isConnected ? trigger : fallbackFocusTarget(anchorRef.current);
+  }
 
   function run() {
     const formData = new FormData();
@@ -86,7 +143,15 @@ export function ConfirmActionButton<Values, Data>({
 
   if (!confirm) {
     return (
-      <Button type="button" variant={variant} size={size} pending={pending} pendingText={pendingText} onClick={run}>
+      <Button
+        ref={triggerRef}
+        type="button"
+        variant={variant}
+        size={size}
+        pending={pending}
+        pendingText={pendingText}
+        onClick={run}
+      >
         {children}
       </Button>
     );
@@ -101,13 +166,14 @@ export function ConfirmActionButton<Values, Data>({
 
   return (
     <>
-      <Button type="button" variant={variant} size={size} onClick={() => setOpen(true)}>
+      <Button ref={triggerRef} type="button" variant={variant} size={size} onClick={() => setOpen(true)}>
         {children}
       </Button>
       <ConfirmDialog
         open={open}
         onOpenChange={changeOpen}
         closeOnConfirm={false}
+        returnFocusTo={returnFocusTo}
         variant={confirm.variant ?? "destructive"}
         title={confirm.title}
         description={confirm.description}
