@@ -21,6 +21,7 @@ import { requireRole } from "@/lib/authz";
 import { formatDate } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { APP_ROLES } from "@/lib/permissions";
 import {
   parseDateParam,
   parseStringParam,
@@ -35,7 +36,11 @@ type EntriesPageProps = {
 export default async function InventoryEntriesPage({
   searchParams,
 }: EntriesPageProps) {
-  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+  // El detalle de compra solo admite ADMIN (entrega 10.3c): el maestro de
+  // taller ve el codigo de la compra en su columna, sin «Ver compra», que lo
+  // llevaba a «acceso denegado». inventory-links.test.ts lo comprueba.
+  const canOpenPurchases = session.user.role === APP_ROLES.ADMIN;
 
   const params = (await searchParams) ?? {};
   const q = parseStringParam(params, "q");
@@ -148,7 +153,7 @@ export default async function InventoryEntriesPage({
                 {Number(movement.stock_resultante.toString()).toFixed(2)}
               </TableCell>
               <TableCell>
-                {movement.id_compra ? (
+                {movement.id_compra && canOpenPurchases ? (
                   <Button variant="outline" size="sm" asChild>
                     <Link
                       href={`/dashboard/inventory/purchases/${movement.id_compra}`}

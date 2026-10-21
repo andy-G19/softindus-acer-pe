@@ -413,9 +413,7 @@ exports[`/dashboard/inventory/entries > maestro de taller > resultado 1`] = `
 <td>razon_social-1</td>
 <td>11.50</td>
 <td>11.50</td>
-<td>
-<a data-variant="outline" href="/dashboard/inventory/purchases/id_compra-1">Ver compra</a>
-</td>
+<td>-</td>
 </tr>
 <tr>
 <td>id_movimiento-2</td>

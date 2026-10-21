@@ -340,51 +340,9 @@ exports[`/dashboard/inventory > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </a>
-<a href="/dashboard/inventory/suppliers">
-<div>
-<span aria-hidden="true">02</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Proveedores</div>
-</div>
-<div>
-<p>Registra proveedores y prepara la asociación con materiales y compras.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/inventory/supplier-materials">
-<div>
-<span aria-hidden="true">03</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Proveedor-material</div>
-</div>
-<div>
-<p>Asocia proveedores con los materiales que pueden abastecer.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/inventory/purchases">
-<div>
-<span aria-hidden="true">04</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Compras</div>
-</div>
-<div>
-<p>Registra compras y genera entradas automáticas de inventario.</p>
-</div>
-</div>
-</a>
 <a href="/dashboard/inventory/alerts">
 <div>
-<span aria-hidden="true">05</span>
+<span aria-hidden="true">02</span>
 <div>
 <div>
 <svg/>

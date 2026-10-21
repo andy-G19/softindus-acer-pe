@@ -17,13 +17,21 @@ import { ModuleAccessCard } from "@/components/ui/module-access-card";
 import { requireRole } from "@/lib/authz";
 import { getInventoryOverviewData } from "@/modules/inventory/overview/queries";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
+import { APP_ROLES, type AppRole } from "@/lib/permissions";
+
+const ADMIN_ONLY: AppRole[] = [APP_ROLES.ADMIN];
+const ADMIN_AND_WORKSHOP: AppRole[] = [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER];
 
 export default async function InventoryPage() {
-  await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { materialsCount, suppliersCount, activeAlertsCount, movementsCount } =
     await getInventoryOverviewData();
 
+  // Cada tarjeta lleva los roles que admite su pantalla (los de su
+  // requireRole) y solo se muestra a ellos (entrega 10.3c): el maestro de
+  // taller veia tarjetas que lo llevaban a «acceso denegado».
+  // inventory-links.test.ts abre cada enlace con cada rol.
   const modules = [
     {
       title: "Materiales e insumos",
@@ -32,6 +40,7 @@ export default async function InventoryPage() {
         "Registra materia prima, consumibles, repuestos, herramientas y stock mínimo.",
       icon: Package,
       tone: "chart-1" as const,
+      roles: ADMIN_AND_WORKSHOP,
     },
     {
       title: "Proveedores",
@@ -40,6 +49,7 @@ export default async function InventoryPage() {
         "Registra proveedores y prepara la asociación con materiales y compras.",
       icon: Truck,
       tone: "chart-2" as const,
+      roles: ADMIN_ONLY,
     },
     {
       title: "Proveedor-material",
@@ -47,6 +57,7 @@ export default async function InventoryPage() {
       description: "Asocia proveedores con los materiales que pueden abastecer.",
       icon: Link2,
       tone: "chart-3" as const,
+      roles: ADMIN_ONLY,
     },
     {
       title: "Compras",
@@ -54,6 +65,7 @@ export default async function InventoryPage() {
       description: "Registra compras y genera entradas automáticas de inventario.",
       icon: ShoppingCart,
       tone: "chart-4" as const,
+      roles: ADMIN_ONLY,
     },
     {
       title: "Alertas y stock crítico",
@@ -61,8 +73,9 @@ export default async function InventoryPage() {
       description: "Consulta materiales críticos y alertas activas de inventario.",
       icon: AlertTriangle,
       tone: "chart-5" as const,
+      roles: ADMIN_AND_WORKSHOP,
     },
-  ];
+  ].filter((module) => module.roles.some((role) => role === session.user.role));
 
   return (
     <main className="space-y-8">
