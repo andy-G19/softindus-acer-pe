@@ -30,6 +30,10 @@ export function parseDateParam(
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+// Rango de un filtro de listado: desde el inicio del primer dia hasta antes del
+// dia siguiente al ultimo, la regla de buildReportDateRange en los reportes.
+// Con lte a las 23:59:59.999 se perdian los instantes del ultimo milisegundo
+// del dia, porque timestamptz guarda microsegundos (hallazgo 6 de la 10.3a).
 export function buildDateRangeFilter(
   from: Date | null,
   to: Date | null,
@@ -38,16 +42,16 @@ export function buildDateRangeFilter(
     return undefined;
   }
 
-  const filter: { gte?: Date; lte?: Date } = {};
+  const filter: { gte?: Date; lt?: Date } = {};
 
   if (from) {
     filter.gte = from;
   }
 
   if (to) {
-    const endOfDay = new Date(to);
-    endOfDay.setHours(23, 59, 59, 999);
-    filter.lte = endOfDay;
+    const nextDay = new Date(to);
+    nextDay.setDate(nextDay.getDate() + 1);
+    filter.lt = nextDay;
   }
 
   return filter;

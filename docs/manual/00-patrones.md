@@ -7,8 +7,9 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 Pantallas renovadas hasta ahora:
 
 - Comercial: clientes y categorías de producto.
-- Inventario: tipos de proveedor, proveedores, materiales de proveedor,
-  categorías de materiales, materiales e insumos, y alertas y stock crítico.
+- Inventario: el inicio, tipos de proveedor, proveedores, materiales de
+  proveedor, categorías de materiales, materiales e insumos, alertas y stock
+  crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
@@ -106,7 +107,10 @@ que elegiste en la barra.
 Si la barra tiene un rango de fechas (**Desde** y **Hasta**), los dos días
 se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
 quedan al revés, muestra «La fecha inicial no puede ser mayor que la fecha
-final.» y la barra no se envía hasta corregirlo.
+final.» y la barra no se envía hasta corregirlo. Si llegas con un enlace que
+ya trae el rango al revés, **Hasta** muestra el mismo mensaje: los reportes
+no muestran datos y piden corregir el rango, y las listas de Inventario
+salen vacías.
 
 ## Usar el teclado
 
@@ -120,5 +124,6 @@ final.» y la barra no se envía hasta corregirlo.
 
 Cada pantalla muestra solo lo que tu usuario puede hacer. Si un rol solo
 puede consultar, verás la lista con la indicación **Solo lectura** y sin los
-botones de crear, editar o inactivar. Los permisos de cada pantalla están en
-el capítulo de su área.
+botones de crear, editar o inactivar. El inicio de Inventario muestra solo
+las tarjetas de las pantallas que tu usuario puede abrir. Los permisos de
+cada pantalla están en el capítulo de su área.

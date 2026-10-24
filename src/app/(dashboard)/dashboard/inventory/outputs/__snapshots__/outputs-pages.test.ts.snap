@@ -1,5 +1,413 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`/dashboard/inventory/outputs > fechas no validas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-03-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_inicio": "desc",
+      },
+      "select": {
+        "id_orden_trabajo": true,
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/outputs > fechas no validas > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Salidas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Salidas de inventario</h1>
+<p>Movimientos de salida asociados a producción u otros motivos.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar salida..." name="q" value=""/>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="order">Orden</label>
+<select id="order" name="order">
+<option value="" selected="">Todas las órdenes</option>
+<option value="id_orden_trabajo-1">id_orden_trabajo-1</option>
+<option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
+</select>
+</div>
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
+</div>
+<div>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
+</div>
+</fieldset>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Material</th>
+<th>Orden</th>
+<th>Responsable</th>
+<th>Cantidad</th>
+<th>Stock resultante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_movimiento-1</td>
+<td>1/7/2026</td>
+<td>nombre_material-1</td>
+<td>id_orden_trabajo-1</td>
+<td>usuario-1</td>
+<td>11.50</td>
+<td>11.50</td>
+<td>
+<a data-variant="outline" href="/dashboard/production/work-orders/id_orden_trabajo-1">Ver orden</a>
+</td>
+</tr>
+<tr>
+<td>id_movimiento-2</td>
+<td>2/7/2026</td>
+<td>nombre_material-2</td>
+<td>-</td>
+<td>usuario-2</td>
+<td>22.50</td>
+<td>22.50</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 1-20 de 42 salidas · Página 1 de 3</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<a data-variant="outline" href="/dashboard/inventory/outputs?from=2026-02-30&amp;to=2026-07-32&amp;page=2">Siguiente</a>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/inventory/outputs > rango invertido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "material": true,
+        "usuario": {
+          "select": {
+            "usuario": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_movimiento": "desc",
+        },
+        {
+          "id_movimiento": "desc",
+        },
+      ],
+      "skip": 0,
+      "take": 20,
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "AND": [
+          {
+            "tipo_movimiento": "salida",
+          },
+          {
+            "fecha_movimiento": {
+              "gte": 2026-07-31T00:00:00.000Z,
+              "lt": 2026-07-02T00:00:00.000Z,
+            },
+          },
+        ],
+      },
+    },
+    "prisma": "movimiento_inventario.count",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_material": "asc",
+      },
+      "select": {
+        "id_material": true,
+        "nombre_material": true,
+      },
+    },
+    "prisma": "material.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "fecha_inicio": "desc",
+      },
+      "select": {
+        "id_orden_trabajo": true,
+      },
+    },
+    "prisma": "orden_trabajo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/inventory/outputs > rango invertido > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/inventory">Inventario</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Salidas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Salidas de inventario</h1>
+<p>Movimientos de salida asociados a producción u otros motivos.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/inventory/outputs/new">Registrar salida</a>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar salida..." name="q" value=""/>
+</div>
+<div>
+<label for="material">Material</label>
+<select id="material" name="material">
+<option value="" selected="">Todos los materiales</option>
+<option value="id_material-1">nombre_material-1</option>
+<option value="id_material-2">nombre_material-2</option>
+</select>
+</div>
+<div>
+<label for="order">Orden</label>
+<select id="order" name="order">
+<option value="" selected="">Todas las órdenes</option>
+<option value="id_orden_trabajo-1">id_orden_trabajo-1</option>
+<option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
+</select>
+</div>
+<fieldset>
+<legend>Rango de fechas</legend>
+<div>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
+</div>
+<div>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
+</div>
+</fieldset>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
+</div>
+</form>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Fecha</th>
+<th>Material</th>
+<th>Orden</th>
+<th>Responsable</th>
+<th>Cantidad</th>
+<th>Stock resultante</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colSpan="8">
+<div>
+<div>
+<p>Todavía no hay salidas registradas.</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<p>Mostrando 0-0 de 0 salidas · Página 1 de 1</p>
+<div>
+<button data-variant="outline" disabled="">Anterior</button>
+<button data-variant="outline" disabled="">Siguiente</button>
+</div>
+</div>
+</div>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/inventory/outputs > sin filtros > llamadas 1`] = `
 [
   {
@@ -79,7 +487,7 @@ exports[`/dashboard/inventory/outputs > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -110,7 +518,7 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/outputs">
+<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value=""/>
@@ -131,14 +539,17 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 <option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
@@ -191,7 +602,7 @@ exports[`/dashboard/inventory/outputs > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/outputs?page=2">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -265,7 +676,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
@@ -315,7 +726,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
           {
             "fecha_movimiento": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.999Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],
@@ -351,7 +762,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -382,7 +793,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/inventory/outputs">
+<form role="search" aria-label="Filtros de salidas" action="/dashboard/inventory/outputs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar salida..." name="q" value="OT"/>
@@ -403,14 +814,17 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 <option value="id_orden_trabajo-2">id_orden_trabajo-2</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/inventory/outputs">Limpiar filtros</a>
@@ -463,7 +877,7 @@ exports[`/dashboard/inventory/outputs > todos los filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/outputs?q=OT&amp;material=MAT00000001&amp;order=ORT00000001&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -521,7 +935,7 @@ exports[`/dashboard/inventory/outputs/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/inventory/outputs/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -590,7 +1004,7 @@ exports[`/dashboard/inventory/outputs/new > formulario > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/inventory/outputs">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -649,7 +1063,7 @@ exports[`/dashboard/inventory/outputs/new > maestro de taller > llamadas 1`] = `
 
 exports[`/dashboard/inventory/outputs/new > maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -718,7 +1132,7 @@ exports[`/dashboard/inventory/outputs/new > maestro de taller > resultado 1`] = 
 <a data-variant="outline" href="/dashboard/inventory/outputs">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
