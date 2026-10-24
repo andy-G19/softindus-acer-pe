@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Prisma } from "@/generated/prisma/client";
 import {
   createClientAction,
+  toggleClientStatusAction,
   updateClientAction,
   type ClientFormState,
 } from "@/modules/commercial/clients/actions";
@@ -27,6 +28,11 @@ import {
 // updateClientAction escribe hoy con el cliente global, sin transaccion, y
 // registra la bitacora despues: el doble lo permite (writesOutsideTransaction)
 // y lo marca, para que el snapshot lo deje a la vista.
+//
+// Entrega 10.4a: tambien el cambio de estado, antes de que pida confirmacion y
+// devuelva un resultado. Hoy lee el cliente y escribe el contrario de lo que
+// lee, sin recibir el estado que pide el boton, y redirige al listado sin sus
+// filtros.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -95,6 +101,7 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 
 type FormFields = Record<string, string>;
 type ClientAction = (prevState: ClientFormState, formData: FormData) => Promise<ClientFormState>;
+type ToggleAction = (formData: FormData) => Promise<unknown>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: ClientFormState = { status: "idle" };
@@ -109,13 +116,13 @@ function formOf(fields: FormFields) {
   return formData;
 }
 
-async function runAction(action: ClientAction, actionCase: ActionCase) {
+async function runAction(run: (formData: FormData) => Promise<unknown>, actionCase: ActionCase) {
   mocks.correlatives.clear();
 
   const { calls, result } = await characterizeHandler(
     async () => {
       try {
-        return { estado: await action(initialState, formOf(actionCase.form)) };
+        return { estado: await run(formOf(actionCase.form)) };
       } catch (error) {
         return (
           describeNavigationError(error) ??
@@ -130,11 +137,11 @@ async function runAction(action: ClientAction, actionCase: ActionCase) {
   return { calls, outcome: result };
 }
 
-function defineActionSuite(name: string, action: ClientAction, cases: ActionCase[]) {
+function defineCases(name: string, run: (formData: FormData) => Promise<unknown>, cases: ActionCase[]) {
   describe(name, () => {
     for (const actionCase of cases) {
       it(actionCase.name, async () => {
-        const { calls, outcome } = await runAction(action, actionCase);
+        const { calls, outcome } = await runAction(run, actionCase);
 
         expectAuthorizesBeforePrisma(calls);
         expect(calls).toMatchSnapshot("llamadas");
@@ -142,6 +149,14 @@ function defineActionSuite(name: string, action: ClientAction, cases: ActionCase
       });
     }
   });
+}
+
+function defineActionSuite(name: string, action: ClientAction, cases: ActionCase[]) {
+  defineCases(name, (formData) => action(initialState, formData), cases);
+}
+
+function defineToggleSuite(name: string, action: ToggleAction, cases: ActionCase[]) {
+  defineCases(name, action, cases);
 }
 
 // ---------------------------------------------------------------------------
@@ -195,6 +210,16 @@ function clientLookup({ exists = true, documentOwner = null as string | null } =
 
       return exists ? { id_cliente: where.id_cliente } : null;
     },
+  };
+}
+
+// Cliente que lee el cambio de estado: activo, inactivo o inexistente.
+function clientStatusLookup({ exists = true, estado = true } = {}): DataOverrides {
+  return {
+    "cliente.findUnique": (args: PrismaArgs) =>
+      exists
+        ? { id_cliente: whereOf(args).id_cliente, nombre_razon_social: "Ferreteria Andina SAC", estado }
+        : null,
   };
 }
 
@@ -276,5 +301,27 @@ defineActionSuite("updateClientAction", updateClientAction, [
     name: "otro fallo al actualizar devuelve el mensaje generico y no registra bitacora",
     form: { ...fullForm, id_cliente: CLIENTE },
     data: { ...clientLookup(), "cliente.update": failWith(new Error("conexion perdida")) },
+  },
+]);
+
+defineToggleSuite("toggleClientStatusAction", toggleClientStatusAction, [
+  { name: "ADMIN inactiva un cliente activo", form: { id_cliente: CLIENTE }, data: clientStatusLookup({ estado: true }) },
+  {
+    name: "SELLER tambien puede: activa un cliente inactivo",
+    form: { id_cliente: CLIENTE },
+    data: clientStatusLookup({ estado: false }),
+    role: "SELLER",
+  },
+  {
+    name: "pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee",
+    form: { id_cliente: CLIENTE, estado: "false" },
+    data: clientStatusLookup({ estado: false }),
+  },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
+  { name: "el cliente no existe: vuelve al listado", form: { id_cliente: CLIENTE }, data: clientStatusLookup({ exists: false }) },
+  {
+    name: "WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma",
+    form: { id_cliente: CLIENTE },
+    role: "WORKSHOP_MASTER",
   },
 ]);

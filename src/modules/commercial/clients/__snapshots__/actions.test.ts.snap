@@ -558,6 +558,223 @@ exports[`createClientAction > una carrera por el documento (P2002 al crear) revi
 }
 `;
 
+exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Cliente inactivado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-deactivated"`;
+
+exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Cliente activado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-activated"`;
+
+exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/access-denied"`;
+
+exports[`toggleClientStatusAction > el cliente no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > el cliente no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Cliente activado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-activated"`;
+
+exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+
 exports[`updateClientAction > ADMIN actualiza un cliente > llamadas 1`] = `
 [
   {

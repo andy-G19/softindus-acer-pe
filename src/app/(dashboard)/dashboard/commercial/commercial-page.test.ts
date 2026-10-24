@@ -22,6 +22,7 @@ definePageSuite([
   {
     route: "/dashboard/commercial",
     load: () => import("./page"),
-    cases: [{ name: "indicadores" }],
+    // El vendedor (entrega 10.4a) ve las mismas tarjetas que el administrador.
+    cases: [{ name: "indicadores" }, { name: "vendedor", role: "SELLER" }],
   },
 ]);
