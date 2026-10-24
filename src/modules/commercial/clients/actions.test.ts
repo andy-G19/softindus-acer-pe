@@ -7,6 +7,7 @@ import {
   updateClientAction,
   type ClientFormState,
 } from "@/modules/commercial/clients/actions";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -29,9 +30,9 @@ import {
 // registra la bitacora despues: el doble lo permite (writesOutsideTransaction)
 // y lo marca, para que el snapshot lo deje a la vista.
 //
-// Entrega 10.4a: tambien el cambio de estado, antes de que pida confirmacion y
-// devuelva un resultado. Recibe el estado que pide el boton y lo fija con
-// compare-and-set (C2); redirige al listado sin sus filtros.
+// Entrega 10.4a: tambien el cambio de estado. Recibe el estado que pide el
+// boton y lo fija con compare-and-set (C2), y devuelve el resultado a
+// ConfirmActionButton en lugar de redirigir; niega el permiso con un error (C6).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -100,10 +101,11 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 
 type FormFields = Record<string, string>;
 type ClientAction = (prevState: ClientFormState, formData: FormData) => Promise<ClientFormState>;
-type ToggleAction = (formData: FormData) => Promise<unknown>;
+type ToggleAction = (prevState: StatusToggleState, formData: FormData) => Promise<StatusToggleState>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: ClientFormState = { status: "idle" };
+const initialToggleState: StatusToggleState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -155,7 +157,7 @@ function defineActionSuite(name: string, action: ClientAction, cases: ActionCase
 }
 
 function defineToggleSuite(name: string, action: ToggleAction, cases: ActionCase[]) {
-  defineCases(name, action, cases);
+  defineCases(name, (formData) => action(initialToggleState, formData), cases);
 }
 
 // ---------------------------------------------------------------------------
@@ -320,18 +322,18 @@ defineToggleSuite("toggleClientStatusAction", toggleClientStatusAction, [
     form: { id_cliente: CLIENTE, estado: "false" },
     data: { ...clientStatusLookup({ estado: false }), "cliente.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    name: "con un estado pedido que no es true ni false responde sin tocar Prisma",
     form: { id_cliente: CLIENTE, estado: "si" },
   },
   {
-    name: "el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    name: "el cliente no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_cliente: CLIENTE, estado: "false" },
     data: { ...clientStatusLookup({ exists: false }), "cliente.updateMany": () => ({ count: 0 }) },
   },
   {
-    name: "WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma",
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_cliente: CLIENTE, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
@@ -356,7 +358,10 @@ describe("toggleClientStatusAction fija el estado pedido", () => {
   }
 
   const toggle = (form: FormFields, data: DataOverrides) =>
-    runAction(toggleClientStatusAction, { name: "", form, data });
+    runAction((formData) => toggleClientStatusAction(initialToggleState, formData), { name: "", form, data });
+
+  // El resultado que la accion devuelve a ConfirmActionButton.
+  const resultOf = (outcome: unknown) => (outcome as { estado: StatusToggleState }).estado;
 
   it("inactivar compara y fija el estado en una sola escritura", async () => {
     const { calls, outcome } = await toggle({ id_cliente: CLIENTE, estado: "false" }, clientStatusLookup({ estado: true }));
@@ -368,7 +373,7 @@ describe("toggleClientStatusAction fija el estado pedido", () => {
       }),
     ]);
     expect(auditsOf(calls)).toHaveLength(1);
-    expect(String(outcome)).toContain("toast=client-deactivated");
+    expect(resultOf(outcome)).toMatchObject({ status: "success", data: { estado: false } });
   });
 
   it("pedir inactivar un cliente que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
@@ -379,7 +384,7 @@ describe("toggleClientStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El cliente ya estaba inactivo." });
   });
 
   it("pedir activar un cliente que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
@@ -390,7 +395,7 @@ describe("toggleClientStatusAction fija el estado pedido", () => {
 
     expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
     expect(auditsOf(calls)).toEqual([]);
-    expect(String(outcome)).not.toContain("toast=");
+    expect(resultOf(outcome)).toMatchObject({ status: "error", error: "El cliente ya estaba activo." });
   });
 
   it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {

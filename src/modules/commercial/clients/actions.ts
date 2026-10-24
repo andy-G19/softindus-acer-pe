@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, type Role } from "@/lib/authz";
@@ -9,7 +8,12 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { clientSchema } from "@/schemas/commercial/client.schema";
 
 /** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
@@ -291,24 +295,33 @@ export async function updateClientAction(
   return clientSaved(values, idCliente);
 }
 
-export async function toggleClientStatusAction(formData: FormData) {
+// Activar o inactivar desde la fila (ConfirmActionButton, entrega 10.4a):
+// devuelve el resultado en lugar de redirigir, y un error (sin permiso, ya
+// tenia ese estado o no existe) queda en la confirmacion.
+export async function toggleClientStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idCliente = formData.get("id_cliente")?.toString().trim() ?? "";
   const session = await requireCommercialClientPermission();
 
   if (!session) {
-    redirect("/dashboard/access-denied");
+    return statusToggleError(idCliente, "No tienes permisos para activar o inactivar clientes.");
   }
 
-  const idCliente = formData.get("id_cliente")?.toString();
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idCliente || nextStatus === null) {
-    redirect(CLIENTS_PATH);
+  if (!idCliente) {
+    return statusToggleError(idCliente, "El cliente no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idCliente, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si el cliente tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.cliente.updateMany({
     where: {
       id_cliente: idCliente,
@@ -319,10 +332,6 @@ export async function toggleClientStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(CLIENTS_PATH);
-  }
-
   const client = await prisma.cliente.findUnique({
     where: {
       id_cliente: idCliente,
@@ -331,6 +340,14 @@ export async function toggleClientStatusAction(formData: FormData) {
       nombre_razon_social: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idCliente,
+      client ? `El cliente ya estaba ${nextStatus ? "activo" : "inactivo"}.` : "El cliente no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -343,7 +360,6 @@ export async function toggleClientStatusAction(formData: FormData) {
   });
 
   revalidatePath(CLIENTS_PATH);
-  redirect(
-    `${CLIENTS_PATH}?toast=${nextStatus ? "client-activated" : "client-deactivated"}`,
-  );
+
+  return statusToggleDone(idCliente, nextStatus);
 }

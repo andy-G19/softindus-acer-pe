@@ -60,6 +60,8 @@ export default async function ProductCategoriesPage() {
         updateAction={updateProductCategoryAction}
         updateNotification={commercialNotifications["product-category-updated"]}
         toggleAction={toggleProductCategoryStatusAction}
+        activatedNotification={commercialNotifications["product-category-activated"]}
+        deactivatedNotification={commercialNotifications["product-category-deactivated"]}
       />
     </div>
   );

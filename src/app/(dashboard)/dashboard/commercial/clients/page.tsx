@@ -6,11 +6,7 @@ import { FilterBar } from "@/components/forms/filter-bar";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
-import {
-  RowActions,
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -32,6 +28,8 @@ import {
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleClientStatusAction } from "@/modules/commercial/clients/actions";
+import { ClientStatusButton } from "@/modules/commercial/clients/client-status-button";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { getClientListData } from "@/modules/commercial/clients/queries";
 
 type ClientsPageProps = {
@@ -195,12 +193,11 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
                     )}
                   />
 
-                  <RowToggleStatusButton
+                  <ClientStatusButton
+                    client={clientItem}
                     action={toggleClientStatusAction}
-                    hiddenFieldName="id_cliente"
-                    hiddenFieldValue={clientItem.id_cliente}
-                    isActive={clientItem.estado}
-                    sendsRequestedStatus
+                    activatedNotification={commercialNotifications["client-activated"]}
+                    deactivatedNotification={commercialNotifications["client-deactivated"]}
                   />
                 </RowActions>
               </TableCell>

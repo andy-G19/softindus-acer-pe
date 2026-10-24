@@ -113,7 +113,7 @@ type CategoryAction = (
   formData: FormData,
 ) => Promise<ProductCategoryFormState>;
 type ProductAction = (prevState: ProductFormState, formData: FormData) => Promise<ProductFormState>;
-type ToggleAction = (formData: FormData) => Promise<unknown>;
+type ToggleAction = (formData: FormData) => Promise<StatusToggleState>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: ProductCategoryFormState = { status: "idle" };
@@ -171,10 +171,6 @@ function defineActionSuite(name: string, action: CategoryAction, cases: ActionCa
 
 function defineProductSuite(name: string, action: ProductAction, cases: ActionCase[]) {
   defineCases(name, (formData) => action(initialProductState, formData), cases);
-}
-
-function defineToggleSuite(name: string, action: ToggleAction, cases: ActionCase[]) {
-  defineCases(name, action, cases);
 }
 
 // ---------------------------------------------------------------------------
@@ -422,8 +418,8 @@ defineProductSuite("updateProductAction", updateProductAction, [
 
 // Los dos cambios de estado reciben el estado que pide el boton y lo fijan con
 // compare-and-set (C2); count 0 si no existe o ya lo tenia. El de producto
-// (C5) devuelve el resultado a ConfirmActionButton en lugar de redirigir, y
-// niega el permiso con un error; el de categoria sigue redirigiendo.
+// (C5) y el de categoria (C6) devuelven el resultado a ConfirmActionButton en
+// lugar de redirigir, y niegan el permiso con un error.
 const toggleProduct = (formData: FormData) => toggleProductStatusAction(initialToggleState, formData);
 
 defineCases("toggleProductStatusAction", toggleProduct, [
@@ -459,7 +455,9 @@ defineCases("toggleProductStatusAction", toggleProduct, [
   },
 ]);
 
-defineToggleSuite("toggleProductCategoryStatusAction", toggleProductCategoryStatusAction, [
+const toggleCategory = (formData: FormData) => toggleProductCategoryStatusAction(initialToggleState, formData);
+
+defineCases("toggleProductCategoryStatusAction", toggleCategory, [
   {
     name: "inactiva una categoria activa y revalida categorias y productos",
     form: { id_categoria_producto: CATEGORIA, estado: "false" },
@@ -475,18 +473,18 @@ defineToggleSuite("toggleProductCategoryStatusAction", toggleProductCategoryStat
     form: { id_categoria_producto: CATEGORIA, estado: "false" },
     data: { ...categoryStatusLookup({ estado: false }), "categoria_producto.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    name: "con un estado pedido que no es true ni false responde sin tocar Prisma",
     form: { id_categoria_producto: CATEGORIA, estado: "si" },
   },
   {
-    name: "la categoria no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    name: "la categoria no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_categoria_producto: CATEGORIA, estado: "false" },
     data: { ...categoryStatusLookup({ exists: false }), "categoria_producto.updateMany": () => ({ count: 0 }) },
   },
   {
-    name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    name: "SELLER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_categoria_producto: CATEGORIA, estado: "false" },
     role: "SELLER",
   },
@@ -621,11 +619,11 @@ describe("updateProductAction con la categoria actual inactiva", () => {
 
 describeRequestedStatus({
   name: "toggleProductCategoryStatusAction",
-  action: toggleProductCategoryStatusAction,
+  action: toggleCategory,
   model: "categoria_producto",
   idField: "id_categoria_producto",
   id: CATEGORIA,
   lookup: ({ estado }) => categoryStatusLookup({ estado }),
-  expectDeactivated: (outcome) => expect(String(outcome)).toContain("toast=product-category-deactivated"),
-  expectUnchanged: (outcome) => expect(String(outcome)).not.toContain("toast="),
+  expectDeactivated: (outcome) => expect(toggleResult(outcome)).toMatchObject({ status: "success", data: { estado: false } }),
+  expectUnchanged: (outcome) => expect(toggleResult(outcome)).toMatchObject({ status: "error" }),
 });

@@ -1,12 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
@@ -63,10 +62,6 @@ function slugify(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-async function requireAdminProductPermission() {
-  return requireRole(["ADMIN"]);
 }
 
 function getCategoryFormValues(formData: FormData): ProductCategoryFormValues {
@@ -633,19 +628,30 @@ export async function updateProductCategoryAction(
   return categorySaved(values, idCategoriaProducto);
 }
 
-export async function toggleProductCategoryStatusAction(formData: FormData) {
-  const session = await requireAdminProductPermission();
-  const idCategoriaProducto = formData
-    .get("id_categoria_producto")
-    ?.toString();
-  const nextStatus = parseRequestedStatus(formData.get("estado"));
+// Activar o inactivar una categoria desde su fila, como el producto: devuelve
+// el resultado y un error queda en la confirmacion.
+export async function toggleProductCategoryStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idCategoriaProducto = formData.get("id_categoria_producto")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
 
-  if (!idCategoriaProducto || nextStatus === null) {
-    redirect(PRODUCT_CATEGORIES_PATH);
+  if (!session) {
+    return statusToggleError(idCategoriaProducto, "No tienes permisos para activar o inactivar categorías de producto.");
   }
 
-  // Mismo compare-and-set que el producto: count 0 si no existe o ya tenia el
-  // estado pedido.
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
+
+  if (!idCategoriaProducto) {
+    return statusToggleError(idCategoriaProducto, "La categoría no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idCategoriaProducto, "Estado no válido.");
+  }
+
+  // Mismo compare-and-set que el producto.
   const { count } = await prisma.categoria_producto.updateMany({
     where: {
       id_categoria_producto: idCategoriaProducto,
@@ -656,10 +662,6 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(PRODUCT_CATEGORIES_PATH);
-  }
-
   const category = await prisma.categoria_producto.findUnique({
     where: {
       id_categoria_producto: idCategoriaProducto,
@@ -668,6 +670,14 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
       nombre: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idCategoriaProducto,
+      category ? `La categoría ya estaba ${nextStatus ? "activa" : "inactiva"}.` : "La categoría no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -681,7 +691,6 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
 
   revalidatePath(PRODUCT_CATEGORIES_PATH);
   revalidatePath(PRODUCTS_PATH);
-  redirect(
-    `${PRODUCT_CATEGORIES_PATH}?toast=${nextStatus ? "product-category-activated" : "product-category-deactivated"}`,
-  );
+
+  return statusToggleDone(idCategoriaProducto, nextStatus);
 }

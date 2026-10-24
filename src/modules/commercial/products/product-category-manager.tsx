@@ -10,8 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { NotificationDefinition } from "@/lib/notification-catalog";
+import type { StatusToggleState } from "@/lib/requested-status";
 import type { ProductCategoryFormState } from "@/modules/commercial/products/actions";
 import { ProductCategoryDialog } from "@/modules/commercial/products/product-category-dialog";
+import { ProductCategoryStatusButton } from "@/modules/commercial/products/product-category-status-button";
 
 type ProductCategory = {
   id_categoria_producto: string;
@@ -27,19 +29,24 @@ type ProductCategoryManagerProps = {
   updateAction: (prevState: ProductCategoryFormState, formData: FormData) => Promise<ProductCategoryFormState>;
   /** Aviso al guardar una edicion; la pagina lo pasa con su clave literal. */
   updateNotification: NotificationDefinition;
-  toggleAction: (formData: FormData) => Promise<void>;
+  toggleAction: (prevState: StatusToggleState, formData: FormData) => Promise<StatusToggleState>;
+  /** Avisos al activar e inactivar; la pagina los pasa con su clave literal. */
+  activatedNotification: NotificationDefinition;
+  deactivatedNotification: NotificationDefinition;
 };
 
 // Lista de categorias de producto (entrega 9). La tabla es de solo lectura: el
 // alta (en el encabezado de la pagina) y la edicion se hacen en una ventana
-// modal, y quien no es ADMIN solo consulta. Activar e inactivar siguen siendo
-// formularios con su redireccion ?toast=.
+// modal, y quien no es ADMIN solo consulta. Inactivar pide confirmar y los
+// dos cambios de estado devuelven el resultado (entrega 10.4a).
 export function ProductCategoryManager({
   categories,
   canManage,
   updateAction,
   updateNotification,
   toggleAction,
+  activatedNotification,
+  deactivatedNotification,
 }: ProductCategoryManagerProps) {
   return (
     <Table>
@@ -81,13 +88,12 @@ export function ProductCategoryManager({
                       </Button>
                     }
                   />
-                  <form action={toggleAction}>
-                    <input type="hidden" name="id_categoria_producto" value={category.id_categoria_producto} />
-                    <input type="hidden" name="estado" value={category.estado ? "false" : "true"} />
-                    <Button type="submit" variant="outline" size="sm">
-                      {category.estado ? "Inactivar" : "Activar"}
-                    </Button>
-                  </form>
+                  <ProductCategoryStatusButton
+                    category={category}
+                    action={toggleAction}
+                    activatedNotification={activatedNotification}
+                    deactivatedNotification={deactivatedNotification}
+                  />
                 </div>
               ) : (
                 <span className="text-xs text-muted-foreground">Solo lectura</span>

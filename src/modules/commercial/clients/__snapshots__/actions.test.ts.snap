@@ -609,7 +609,20 @@ exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > llamadas 
 ]
 `;
 
-exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-deactivated"`;
+exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
 exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > llamadas 1`] = `
 [
@@ -662,9 +675,22 @@ exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inac
 ]
 `;
 
-exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-activated"`;
+exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
-exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleClientStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -676,9 +702,20 @@ exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acces
 ]
 `;
 
-exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/access-denied"`;
+exports[`toggleClientStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar clientes.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
-exports[`toggleClientStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -690,9 +727,20 @@ exports[`toggleClientStatusAction > con un estado pedido que no es true ni false
 ]
 `;
 
-exports[`toggleClientStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
-exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -714,10 +762,32 @@ exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila
     "fueraDeTransaccion": true,
     "prisma": "cliente.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
 ]
 `;
 
-exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
 exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
@@ -741,12 +811,34 @@ exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inact
     "fueraDeTransaccion": true,
     "prisma": "cliente.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
 ]
 `;
 
-exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
 
-exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleClientStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -758,7 +850,18 @@ exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > 
 ]
 `;
 
-exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+exports[`toggleClientStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateClientAction > ADMIN actualiza un cliente > llamadas 1`] = `
 [

@@ -1120,10 +1120,10 @@ exports[`createProductCategoryAction > una carrera por el slug (P2002 al crear) 
 }
 `;
 
-exports[`toggleProductCategoryStatusAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductCategoryStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1131,12 +1131,23 @@ exports[`toggleProductCategoryStatusAction > SELLER: requireRole lo rechaza (red
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleProductCategoryStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar categorías de producto.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductCategoryStatusAction > activa una categoria inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1187,12 +1198,25 @@ exports[`toggleProductCategoryStatusAction > activa una categoria inactiva > lla
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > activa una categoria inactiva > resultado 1`] = `"redirect:/dashboard/commercial/product-categories?toast=product-category-activated"`;
+exports[`toggleProductCategoryStatusAction > activa una categoria inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductCategoryStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductCategoryStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1200,12 +1224,23 @@ exports[`toggleProductCategoryStatusAction > con un estado pedido que no es true
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/product-categories"`;
+exports[`toggleProductCategoryStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductCategoryStatusAction > inactiva una categoria activa y revalida categorias y productos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1256,12 +1291,25 @@ exports[`toggleProductCategoryStatusAction > inactiva una categoria activa y rev
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > inactiva una categoria activa y revalida categorias y productos > resultado 1`] = `"redirect:/dashboard/commercial/product-categories?toast=product-category-deactivated"`;
+exports[`toggleProductCategoryStatusAction > inactiva una categoria activa y revalida categorias y productos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductCategoryStatusAction > la categoria no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleProductCategoryStatusAction > la categoria no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1279,15 +1327,37 @@ exports[`toggleProductCategoryStatusAction > la categoria no existe: no cambia n
     "fueraDeTransaccion": true,
     "prisma": "categoria_producto.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > la categoria no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/commercial/product-categories"`;
+exports[`toggleProductCategoryStatusAction > la categoria no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductCategoryStatusAction > pedir inactivar una categoria que ya esta inactiva no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1305,15 +1375,37 @@ exports[`toggleProductCategoryStatusAction > pedir inactivar una categoria que y
     "fueraDeTransaccion": true,
     "prisma": "categoria_producto.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_categoria_producto": "CPR00000004",
+      },
+    },
+    "prisma": "categoria_producto.findUnique",
+  },
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > pedir inactivar una categoria que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/commercial/product-categories"`;
+exports[`toggleProductCategoryStatusAction > pedir inactivar una categoria que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CPR00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductCategoryStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductCategoryStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1321,7 +1413,18 @@ exports[`toggleProductCategoryStatusAction > sin id vuelve al listado sin tocar 
 ]
 `;
 
-exports[`toggleProductCategoryStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/product-categories"`;
+exports[`toggleProductCategoryStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La categoría no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`toggleProductStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
