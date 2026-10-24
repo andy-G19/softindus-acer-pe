@@ -9,12 +9,24 @@ import { registerAuditLog } from "@/lib/audit";
 import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState, FieldErrors } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import { parseRequestedStatus } from "@/lib/requested-status";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
-export type ProductFormState = ActionErrorState;
+/** Lo que el formulario de producto envio, tal cual, para volver a mostrarlo. */
+export type ProductFormValues = {
+  nombre_producto: string;
+  categoria: string;
+  unidad_medida: string;
+  precio_referencial: string;
+  descripcion: string;
+};
+
+// Entrega 10.4a: el alta y la edicion de productos no redirigen; devuelven el
+// resultado y el formulario da el aviso y cierra el panel o vuelve al listado.
+// Sin permiso responden con un error, no redirigen.
+export type ProductFormState = FormActionState<ProductFormValues, { id_producto: string }>;
 
 /** Lo que el formulario de categoria envio, tal cual, para volver a mostrarlo. */
 export type ProductCategoryFormValues = {
@@ -32,7 +44,6 @@ export type ProductCategoryFormState = FormActionState<
 
 const PRODUCTS_PATH = "/dashboard/commercial/products";
 const PRODUCT_CATEGORIES_PATH = "/dashboard/commercial/product-categories";
-const initialProductState: ProductFormState = { error: "" };
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -75,6 +86,26 @@ function categorySaved(values: ProductCategoryFormValues, idCategoriaProducto: s
     values,
     operationId: newOperationId(),
   };
+}
+
+function getProductFormValues(formData: FormData): ProductFormValues {
+  const text = (name: keyof ProductFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    nombre_producto: text("nombre_producto"),
+    categoria: text("categoria"),
+    unidad_medida: text("unidad_medida"),
+    precio_referencial: text("precio_referencial"),
+    descripcion: text("descripcion"),
+  };
+}
+
+function productError(values: ProductFormValues, error: string, fieldErrors?: FieldErrors): ProductFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function productSaved(values: ProductFormValues, idProducto: string): ProductFormState {
+  return { status: "success", data: { id_producto: idProducto }, values, operationId: newOperationId() };
 }
 
 function getProductFormData(formData: FormData) {
@@ -144,26 +175,26 @@ export async function createProductAction(
   _prevState: ProductFormState,
   formData: FormData,
 ): Promise<ProductFormState> {
-  const session = await requireAdminProductPermission();
+  const values = getProductFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return productError(values, "No tienes permisos para registrar productos.");
+  }
+
   const rawData = getProductFormData(formData);
   const parsed = productSchema.safeParse(rawData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del producto.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return productError(values, "Revisa los datos del producto.", parsed.error.flatten().fieldErrors);
   }
 
   const categoryIsActive = await validateActiveCategory(parsed.data.categoria);
 
   if (!categoryIsActive) {
-    return {
-      error: "Selecciona una categoría activa.",
-      fieldErrors: {
-        categoria: ["Selecciona una categoría activa."],
-      },
-    };
+    return productError(values, "Selecciona una categoría activa.", {
+      categoria: ["Selecciona una categoría activa."],
+    });
   }
 
   const hasDuplicateName = await validateDuplicateProductName(
@@ -171,12 +202,9 @@ export async function createProductAction(
   );
 
   if (hasDuplicateName) {
-    return {
-      error: "Ya existe un producto con ese nombre.",
-      fieldErrors: {
-        nombre_producto: ["Ya existe un producto con ese nombre."],
-      },
-    };
+    return productError(values, "Ya existe un producto con ese nombre.", {
+      nombre_producto: ["Ya existe un producto con ese nombre."],
+    });
   }
 
   let idProducto = "";
@@ -215,32 +243,35 @@ export async function createProductAction(
       "Ya existe un producto con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe un producto con ese nombre."
-          ? { nombre_producto: [errorMessage] }
-          : undefined,
-    };
+    return productError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe un producto con ese nombre."
+        ? { nombre_producto: [errorMessage] }
+        : undefined,
+    );
   }
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(`${PRODUCTS_PATH}?toast=product-created`);
 
-  return initialProductState;
+  return productSaved(values, idProducto);
 }
 
 export async function updateProductAction(
   _prevState: ProductFormState,
   formData: FormData,
 ): Promise<ProductFormState> {
-  const session = await requireAdminProductPermission();
+  const values = getProductFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return productError(values, "No tienes permisos para actualizar productos.");
+  }
+
   const idProducto = formData.get("id_producto")?.toString();
 
   if (!idProducto) {
-    return {
-      error: "El producto no existe.",
-    };
+    return productError(values, "El producto no existe.");
   }
 
   const product = await prisma.producto.findUnique({
@@ -254,19 +285,14 @@ export async function updateProductAction(
   });
 
   if (!product) {
-    return {
-      error: "El producto no existe.",
-    };
+    return productError(values, "El producto no existe.");
   }
 
   const rawData = getProductFormData(formData);
   const parsed = productSchema.safeParse(rawData);
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos del producto.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return productError(values, "Revisa los datos del producto.", parsed.error.flatten().fieldErrors);
   }
 
   const categoryIsActive = await validateActiveCategory(
@@ -275,12 +301,9 @@ export async function updateProductAction(
   );
 
   if (!categoryIsActive) {
-    return {
-      error: "Selecciona una categoría activa.",
-      fieldErrors: {
-        categoria: ["Selecciona una categoría activa."],
-      },
-    };
+    return productError(values, "Selecciona una categoría activa.", {
+      categoria: ["Selecciona una categoría activa."],
+    });
   }
 
   const hasDuplicateName = await validateDuplicateProductName(
@@ -289,12 +312,9 @@ export async function updateProductAction(
   );
 
   if (hasDuplicateName) {
-    return {
-      error: "Ya existe otro producto con ese nombre.",
-      fieldErrors: {
-        nombre_producto: ["Ya existe otro producto con ese nombre."],
-      },
-    };
+    return productError(values, "Ya existe otro producto con ese nombre.", {
+      nombre_producto: ["Ya existe otro producto con ese nombre."],
+    });
   }
 
   try {
@@ -316,13 +336,13 @@ export async function updateProductAction(
       "Ya existe otro producto con ese nombre.",
     );
 
-    return {
-      error: errorMessage,
-      fieldErrors:
-        errorMessage === "Ya existe otro producto con ese nombre."
-          ? { nombre_producto: [errorMessage] }
-          : undefined,
-    };
+    return productError(
+      values,
+      errorMessage,
+      errorMessage === "Ya existe otro producto con ese nombre."
+        ? { nombre_producto: [errorMessage] }
+        : undefined,
+    );
   }
 
   await registerAuditLog({
@@ -334,9 +354,8 @@ export async function updateProductAction(
   });
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(`${PRODUCTS_PATH}?toast=product-updated`);
 
-  return initialProductState;
+  return productSaved(values, idProducto);
 }
 
 export async function toggleProductStatusAction(formData: FormData) {

@@ -23,7 +23,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
 import { getProductListData } from "@/modules/commercial/products/queries";
@@ -55,6 +60,7 @@ export default async function ProductsPage({
   const category = getSearchParam(params, "category");
   const unit = getSearchParam(params, "unit");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.products, params);
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
   const { products, totalItems, categories, units } = await getProductListData(
@@ -87,7 +93,7 @@ export default async function ProductsPage({
 
             {canManageProduct ? (
               <Button asChild>
-                <Link href="/dashboard/commercial/products/new">
+                <Link href={withReturnTo(`${navigationHrefs.products}/new`, returnTo)}>
                   Nuevo producto
                 </Link>
               </Button>
@@ -192,7 +198,10 @@ export default async function ProductsPage({
                 {canManageProduct ? (
                   <RowActions>
                     <RowEditLink
-                      href={`/dashboard/commercial/products/${product.id_producto}/edit`}
+                      href={withReturnTo(
+                        `${navigationHrefs.products}/${product.id_producto}/edit`,
+                        returnTo,
+                      )}
                     />
 
                     <RowToggleStatusButton

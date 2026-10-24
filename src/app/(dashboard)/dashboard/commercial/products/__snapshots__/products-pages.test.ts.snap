@@ -98,7 +98,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+<a data-variant="default" href="/dashboard/commercial/products/new?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Nuevo producto</a>
 </div>
 </div>
 </section>
@@ -163,7 +163,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -183,7 +183,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -362,7 +362,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+<a data-variant="default" href="/dashboard/commercial/products/new?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Nuevo producto</a>
 </div>
 </div>
 </section>
@@ -427,7 +427,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -447,7 +447,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -830,7 +830,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+<a data-variant="default" href="/dashboard/commercial/products/new?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Nuevo producto</a>
 </div>
 </div>
 </section>
@@ -895,7 +895,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -915,7 +915,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -1038,7 +1038,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+<a data-variant="default" href="/dashboard/commercial/products/new?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Nuevo producto</a>
 </div>
 </div>
 </section>
@@ -1103,7 +1103,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <input type="hidden" name="estado" value="false"/>
@@ -1123,7 +1123,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-2"/>
 <input type="hidden" name="estado" value="true"/>
@@ -1246,7 +1246,7 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 </div>
 <div>
 <a data-variant="outline" href="/dashboard/commercial/product-categories">Categorías</a>
-<a data-variant="default" href="/dashboard/commercial/products/new">Nuevo producto</a>
+<a data-variant="default" href="/dashboard/commercial/products/new?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Nuevo producto</a>
 </div>
 </div>
 </section>
@@ -1373,7 +1373,7 @@ exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad
 
 exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad elegidas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1412,20 +1412,23 @@ exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <div>
-<label for="nombre_producto">Nombre del producto</label>
-<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value="nombre_producto-1"/>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value="nombre_producto-1"/>
 </div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="">Selecciona una categoría</option>
 <option value="estructuras">Estructuras metálicas</option>
 <option value="herramientas" selected="">Herramientas agrícolas</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida</label>
-<select id="unidad_medida" name="unidad_medida" required="">
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
 <option value="unidad">Unidad</option>
 <option value="docena" selected="">Docena</option>
 <option value="par">Par</option>
@@ -1434,8 +1437,8 @@ exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad
 </div>
 <div>
 <label for="precio_referencial">Precio referencial</label>
-<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="35.5"/>
-<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="35.5"/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
@@ -1446,7 +1449,7 @@ exports[`/dashboard/commercial/products/[id]/edit > con su categoria y su unidad
 <a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1503,7 +1506,7 @@ exports[`/dashboard/commercial/products/[id]/edit > editar > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1542,20 +1545,23 @@ exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <div>
-<label for="nombre_producto">Nombre del producto</label>
-<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value="nombre_producto-1"/>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value="nombre_producto-1"/>
 </div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida</label>
-<select id="unidad_medida" name="unidad_medida" required="">
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
 <option value="unidad">Unidad</option>
 <option value="docena">Docena</option>
 <option value="par">Par</option>
@@ -1564,8 +1570,8 @@ exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
 </div>
 <div>
 <label for="precio_referencial">Precio referencial</label>
-<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="11.5"/>
-<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="11.5"/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
@@ -1576,7 +1582,140 @@ exports[`/dashboard/commercial/products/[id]/edit > editar > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > editar con regreso al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "categoria": true,
+        "descripcion": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "id_producto": "PRO00000001",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "slug": "categoria-1",
+          },
+        ],
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products/[id]/edit > editar con regreso al listado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products?q=lampa">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar producto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar producto</h1>
+<p>Actualiza los datos comerciales del producto.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value="nombre_producto-1"/>
+</div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="unidad">Unidad</option>
+<option value="docena">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="11.5"/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/products?q=lampa">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1644,7 +1783,7 @@ exports[`/dashboard/commercial/products/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1682,20 +1821,23 @@ exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
 </section>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
-<label for="nombre_producto">Nombre del producto</label>
-<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value=""/>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value=""/>
 </div>
 <div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" required="">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 <option value="slug-1">nombre-1</option>
 <option value="slug-2">nombre-2</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida</label>
-<select id="unidad_medida" name="unidad_medida" required="">
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
 <option value="unidad" selected="">Unidad</option>
 <option value="docena">Docena</option>
 <option value="par">Par</option>
@@ -1704,8 +1846,8 @@ exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
 </div>
 <div>
 <label for="precio_referencial">Precio referencial</label>
-<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
-<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
@@ -1717,7 +1859,117 @@ exports[`/dashboard/commercial/products/new > formulario > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/products/new > formulario con regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "categoria_producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/products/new > formulario con regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/products?status=inactive">Productos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo producto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo producto</h1>
+<p>Registra productos fabricados por el taller usando categorías dinámicas.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a productos">
+<svg/>Volver a productos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value=""/>
+</div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="unidad" selected="">Unidad</option>
+<option value="docena">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar producto</button>
+<a data-variant="outline" href="/dashboard/commercial/products?status=inactive">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1751,7 +2003,7 @@ exports[`/dashboard/commercial/products/new > sin categorias activas > llamadas 
 
 exports[`/dashboard/commercial/products/new > sin categorias activas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1792,18 +2044,21 @@ exports[`/dashboard/commercial/products/new > sin categorias activas > resultado
 <div>No hay categorías activas disponibles. <a href="/dashboard/commercial/product-categories">Crear categorías de productos</a>.</div>
 </div>
 <div>
-<label for="nombre_producto">Nombre del producto</label>
-<input id="nombre_producto" placeholder="Ejemplo: Lampa agrícola reforzada" required="" name="nombre_producto" value=""/>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value=""/>
 </div>
-<div>
-<label for="categoria">Categoría</label>
-<select id="categoria" name="categoria" disabled="" required="">
+<div data-disabled="true">
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" disabled="" name="categoria">
 <option value="" selected="">Selecciona una categoría</option>
 </select>
 </div>
 <div>
-<label for="unidad_medida">Unidad de medida</label>
-<select id="unidad_medida" name="unidad_medida" required="">
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
 <option value="unidad" selected="">Unidad</option>
 <option value="docena">Docena</option>
 <option value="par">Par</option>
@@ -1812,8 +2067,8 @@ exports[`/dashboard/commercial/products/new > sin categorias activas > resultado
 </div>
 <div>
 <label for="precio_referencial">Precio referencial</label>
-<input type="number" id="precio_referencial" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
-<p>Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
 </div>
 <div>
 <label for="descripcion">Descripción</label>
@@ -1825,8 +2080,122 @@ exports[`/dashboard/commercial/products/new > sin categorias activas > resultado
 <a data-variant="outline" href="/dashboard/commercial/products">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
+`;
+
+exports[`panel lateral de productos > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Nuevo producto</h2>
+<p id="radix-_R_1H2_">Registra productos fabricados por el taller usando categorías dinámicas.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value=""/>
+</div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="" selected="">Selecciona una categoría</option>
+<option value="slug-1">nombre-1</option>
+<option value="slug-2">nombre-2</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="unidad" selected="">Unidad</option>
+<option value="docena">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value=""/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">
+</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar producto</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de productos > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar producto</h2>
+<p id="radix-_R_1H2_">nombre_producto-1 · id_producto-1</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<label for="nombre_producto">Nombre del producto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_producto" required="" placeholder="Ejemplo: Lampa agrícola reforzada" name="nombre_producto" value="nombre_producto-1"/>
+</div>
+<div>
+<label for="categoria">Categoría<span aria-hidden="true">*</span>
+</label>
+<select id="categoria" required="" name="categoria">
+<option value="">Selecciona una categoría</option>
+<option value="estructuras">Estructuras metálicas</option>
+<option value="herramientas" selected="">Herramientas agrícolas</option>
+</select>
+</div>
+<div>
+<label for="unidad_medida">Unidad de medida<span aria-hidden="true">*</span>
+</label>
+<select id="unidad_medida" required="" name="unidad_medida">
+<option value="unidad">Unidad</option>
+<option value="docena" selected="">Docena</option>
+<option value="par">Par</option>
+<option value="lote">Lote</option>
+</select>
+</div>
+<div>
+<label for="precio_referencial">Precio referencial</label>
+<input type="number" id="precio_referencial" aria-describedby="precio_referencial-ayuda" step="0.01" min="0" placeholder="Ejemplo: 35.00" name="precio_referencial" value="35.5"/>
+<p id="precio_referencial-ayuda">Este precio es referencial. Más adelante se calculará mejor con el módulo de costos.</p>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" placeholder="Describe características principales del producto.">Mango de eucalipto.</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

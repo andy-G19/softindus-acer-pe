@@ -33,12 +33,13 @@ import {
 //
 // Entrega 10.4a: tambien el alta, la edicion y el cambio de estado de
 // productos y el cambio de estado de categorias, antes de llevar los productos
-// al panel lateral y de pedir confirmacion al inactivar. Autorizan con
-// requireRole y redirigen al negar el permiso (desviacion conocida); el alta y
-// la edicion guardan redirigiendo a ?toast= sin los filtros del listado. El
-// cambio de estado escribia el contrario de lo que leia (corregido en C2), y
-// la edicion rechazaba la categoria actual del producto si estaba inactiva
-// (corregido en C3).
+// al panel lateral y de pedir confirmacion al inactivar. Desde el panel (C4),
+// el alta y la edicion devuelven el resultado (FormActionState) en lugar de
+// redirigir y niegan el permiso con un error dentro del formulario; el cambio
+// de estado sigue con requireRole y su redireccion. El cambio de estado
+// escribia el contrario de lo que leia (corregido en C2), y la edicion
+// rechazaba la categoria actual del producto si estaba inactiva (corregido en
+// C3).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -115,7 +116,7 @@ type ToggleAction = (formData: FormData) => Promise<unknown>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 const initialState: ProductCategoryFormState = { status: "idle" };
-const initialProductState: ProductFormState = { error: "" };
+const initialProductState: ProductFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -361,8 +362,8 @@ const productUpdateWith = (fields: FormFields, data: DataOverrides = {}) =>
 defineProductSuite("createProductAction", createProductAction, [
   { name: "ADMIN crea el producto activo con su correlativo y la bitacora dentro de la transaccion", ...productWith({}) },
   { name: "sin precio y con la descripcion en blanco guarda null", ...productWith({ precio_referencial: "", descripcion: "   " }) },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...productWith({}), role: "SELLER" },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...productWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...productWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...productWith({}), role: "WORKSHOP_MASTER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     ...productWith({ nombre_producto: "A", categoria: "", unidad_medida: "", precio_referencial: "-1" }),
@@ -390,7 +391,7 @@ defineProductSuite("createProductAction", createProductAction, [
 defineProductSuite("updateProductAction", updateProductAction, [
   { name: "ADMIN actualiza el producto y registra la bitacora despues, fuera de transaccion", ...productUpdateWith({}) },
   { name: "vaciar el precio y la descripcion guarda null", ...productUpdateWith({ precio_referencial: "", descripcion: "" }) },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...productUpdateWith({}), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...productUpdateWith({}), role: "SELLER" },
   { name: "sin id de producto responde que no existe sin tocar Prisma", ...productUpdateWith({ id_producto: "" }) },
   { name: "el producto no existe", ...productUpdateWith({}, productLookup({ exists: false })) },
   {
@@ -588,7 +589,7 @@ describe("updateProductAction con la categoria actual inactiva", () => {
     expect(productUpdates(calls)).toEqual([
       expect.objectContaining({ args: expect.objectContaining({ data: expect.objectContaining({ categoria: "herramientas" }) }) }),
     ]);
-    expect(String(outcome)).toContain("toast=product-updated");
+    expect(outcome).toMatchObject({ estado: { status: "success", data: { id_producto: PRODUCTO } } });
   });
 
   it("cambiar a otra categoria inactiva se sigue rechazando", async () => {

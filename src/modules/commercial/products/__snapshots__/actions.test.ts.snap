@@ -3,7 +3,7 @@
 exports[`createProductAction > ADMIN crea el producto activo con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -77,12 +77,29 @@ exports[`createProductAction > ADMIN crea el producto activo con su correlativo 
 ]
 `;
 
-exports[`createProductAction > ADMIN crea el producto activo con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-created"`;
+exports[`createProductAction > ADMIN crea el producto activo con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
-exports[`createProductAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createProductAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -90,12 +107,28 @@ exports[`createProductAction > SELLER: requireRole lo rechaza (redirige) sin toc
 ]
 `;
 
-exports[`createProductAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createProductAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar productos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
-exports[`createProductAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createProductAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -103,12 +136,28 @@ exports[`createProductAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige
 ]
 `;
 
-exports[`createProductAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createProductAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar productos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`createProductAction > categoria inactiva: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -136,6 +185,15 @@ exports[`createProductAction > categoria inactiva: error en el campo, sin transa
         "Selecciona una categoría activa.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -143,7 +201,7 @@ exports[`createProductAction > categoria inactiva: error en el campo, sin transa
 exports[`createProductAction > categoria inexistente: el mismo error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -171,6 +229,15 @@ exports[`createProductAction > categoria inexistente: el mismo error > resultado
         "Selecciona una categoría activa.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -178,7 +245,7 @@ exports[`createProductAction > categoria inexistente: el mismo error > resultado
 exports[`createProductAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -204,6 +271,15 @@ exports[`createProductAction > datos invalidos devuelven los errores por campo s
         "La unidad de medida es obligatoria.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "A",
+      "precio_referencial": "-1",
+      "unidad_medida": "",
+    },
   },
 }
 `;
@@ -211,7 +287,7 @@ exports[`createProductAction > datos invalidos devuelven los errores por campo s
 exports[`createProductAction > nombre de otro producto: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -250,6 +326,15 @@ exports[`createProductAction > nombre de otro producto: error en el campo, sin t
         "Ya existe un producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -257,7 +342,7 @@ exports[`createProductAction > nombre de otro producto: error en el campo, sin t
 exports[`createProductAction > otro fallo al crear revierte con el mensaje generico, sin marcar campos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -321,6 +406,15 @@ exports[`createProductAction > otro fallo al crear revierte con el mensaje gener
   "estado": {
     "error": "No se pudo guardar el registro. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -328,7 +422,7 @@ exports[`createProductAction > otro fallo al crear revierte con el mensaje gener
 exports[`createProductAction > sin precio y con la descripcion en blanco guarda null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -402,12 +496,29 @@ exports[`createProductAction > sin precio y con la descripcion en blanco guarda 
 ]
 `;
 
-exports[`createProductAction > sin precio y con la descripcion en blanco guarda null > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-created"`;
+exports[`createProductAction > sin precio y con la descripcion en blanco guarda null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "   ",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`createProductAction > una carrera por el nombre (P2002 al crear) revierte y marca el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -475,6 +586,15 @@ exports[`createProductAction > una carrera por el nombre (P2002 al crear) revier
         "Ya existe un producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -482,7 +602,7 @@ exports[`createProductAction > una carrera por el nombre (P2002 al crear) revier
 exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve su mensaje en espanol > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -498,6 +618,15 @@ exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve
       "descripcion": [
         "La descripción no debe superar 500 caracteres.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
     },
   },
 }
@@ -1392,7 +1521,7 @@ exports[`toggleProductStatusAction > sin id vuelve al listado sin tocar Prisma >
 exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1465,12 +1594,29 @@ exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacor
 ]
 `;
 
-exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-updated"`;
+exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacora despues, fuera de transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
-exports[`updateProductAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`updateProductAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1478,12 +1624,28 @@ exports[`updateProductAction > SELLER: requireRole lo rechaza (redirige) sin toc
 ]
 `;
 
-exports[`updateProductAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateProductAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar productos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`updateProductAction > cambiar a una categoria inactiva: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1523,6 +1685,15 @@ exports[`updateProductAction > cambiar a una categoria inactiva: error en el cam
         "Selecciona una categoría activa.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "soldadura",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1530,7 +1701,7 @@ exports[`updateProductAction > cambiar a una categoria inactiva: error en el cam
 exports[`updateProductAction > conservar su categoria actual inactiva se acepta mientras no se cambie > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1603,12 +1774,29 @@ exports[`updateProductAction > conservar su categoria actual inactiva se acepta 
 ]
 `;
 
-exports[`updateProductAction > conservar su categoria actual inactiva se acepta mientras no se cambie > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-updated"`;
+exports[`updateProductAction > conservar su categoria actual inactiva se acepta mientras no se cambie > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`updateProductAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1681,12 +1869,29 @@ exports[`updateProductAction > conservar su propio nombre no es un duplicado > l
 ]
 `;
 
-exports[`updateProductAction > conservar su propio nombre no es un duplicado > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-updated"`;
+exports[`updateProductAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`updateProductAction > datos invalidos devuelven los errores por campo despues de comprobar el producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1718,6 +1923,15 @@ exports[`updateProductAction > datos invalidos devuelven los errores por campo d
         "La unidad de medida es obligatoria.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "A",
+      "precio_referencial": "35.50",
+      "unidad_medida": "",
+    },
   },
 }
 `;
@@ -1725,7 +1939,7 @@ exports[`updateProductAction > datos invalidos devuelven los errores por campo d
 exports[`updateProductAction > el nombre es de otro producto: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1776,6 +1990,15 @@ exports[`updateProductAction > el nombre es de otro producto: error en el campo 
         "Ya existe otro producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1783,7 +2006,7 @@ exports[`updateProductAction > el nombre es de otro producto: error en el campo 
 exports[`updateProductAction > el producto no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1807,6 +2030,16 @@ exports[`updateProductAction > el producto no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El producto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1814,7 +2047,7 @@ exports[`updateProductAction > el producto no existe > resultado 1`] = `
 exports[`updateProductAction > otro fallo al actualizar devuelve el mensaje generico y no registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1877,6 +2110,15 @@ exports[`updateProductAction > otro fallo al actualizar devuelve el mensaje gene
   "estado": {
     "error": "No se pudo guardar el registro. Intenta nuevamente.",
     "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1884,7 +2126,7 @@ exports[`updateProductAction > otro fallo al actualizar devuelve el mensaje gene
 exports[`updateProductAction > sin id de producto responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1896,6 +2138,16 @@ exports[`updateProductAction > sin id de producto responde que no existe sin toc
 {
   "estado": {
     "error": "El producto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1903,7 +2155,7 @@ exports[`updateProductAction > sin id de producto responde que no existe sin toc
 exports[`updateProductAction > una carrera por el nombre (P2002 al actualizar) marca el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1970,6 +2222,15 @@ exports[`updateProductAction > una carrera por el nombre (P2002 al actualizar) m
         "Ya existe otro producto con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "Mango de eucalipto.",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "35.50",
+      "unidad_medida": "unidad",
+    },
   },
 }
 `;
@@ -1977,7 +2238,7 @@ exports[`updateProductAction > una carrera por el nombre (P2002 al actualizar) m
 exports[`updateProductAction > vaciar el precio y la descripcion guarda null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2050,7 +2311,24 @@ exports[`updateProductAction > vaciar el precio y la descripcion guarda null > l
 ]
 `;
 
-exports[`updateProductAction > vaciar el precio y la descripcion guarda null > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-updated"`;
+exports[`updateProductAction > vaciar el precio y la descripcion guarda null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_producto": "PRO00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "categoria": "herramientas",
+      "descripcion": "",
+      "nombre_producto": "Lampa agrícola reforzada",
+      "precio_referencial": "",
+      "unidad_medida": "unidad",
+    },
+  },
+}
+`;
 
 exports[`updateProductCategoryAction > ADMIN actualiza una categoria > llamadas 1`] = `
 [
