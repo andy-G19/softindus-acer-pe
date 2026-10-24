@@ -4450,10 +4450,11 @@ Datos leídos de la API de GitHub el 2026-10-21 y comparados con git:
 
 ### Sub-entrega 10.3c — Listados con fechas e inicio de Inventario
 
-Fecha: 2026-10-21 (UTC). Estado: cerrada en staging el 2026-10-21; falta
-integrarla en `main`. El paso 0 (`2d9ca08`) registró la integración de la
-10.3b en `main`. 6 commits, de `c148d33` a `3272901`, el registro `7ea09c3`
-y este cierre.
+Fecha: 2026-10-21 (UTC). Estado: cerrada el 2026-10-24 (UTC). El paso 0
+(`2d9ca08`) registró la integración de la 10.3b en `main`. 6 commits, de
+`c148d33` a `3272901`, el registro `7ea09c3` y el cierre `9c708a1` (CI #95
+en verde). Integrada en `main` con el PR #27 (merge commit `cb43290`, CI
+#97 en verde).
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -4465,7 +4466,7 @@ y este cierre.
 | 075bb00 | fix | El inicio de Inventario y las entradas solo enlazan lo que el rol puede abrir. |
 | 3272901 | feat | El inicio enlaza entradas, salidas y pagos a proveedores, ordenado por flujo, y pierde el `<main>` anidado. |
 | 7ea09c3 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Inventario y de su inicio. |
+| 9c708a1 | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Inventario y de su inicio. |
 
 Decisiones del responsable (2026-10-21), tras la auditoría:
 
@@ -4745,6 +4746,23 @@ Compras y Pagos a proveedores, escritos con lo verificado, y las reglas
 comunes explican el rango que llega invertido en la dirección y que el
 inicio solo muestra lo que cada rol puede abrir.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-24 y comparados con git:
+
+- El cierre `9c708a1` se publicó en `staging`: CI #95 en verde (3m 10s), y
+  Vercel lo desplegó (`success` a las 01:32:12 UTC del 2026-10-24).
+- PR #27, abierto a las 01:36:51 UTC y fusionado con merge commit a las
+  01:40:06 UTC del 2026-10-24: 9 commits, de `2d9ca08` a `9c708a1`, y 35
+  archivos (+4.023 −644). Su CI, el #96, sobre `9c708a1`, terminó en verde
+  (2m 54s).
+- El merge commit `cb43290` tiene como padres `28d12a7` (`main`) y `9c708a1`
+  (`staging`), y su árbol es el de `9c708a1` (`fc172155`): `main` y `staging`
+  tienen el mismo contenido. CI #97 en verde (3m 7s).
+- Vercel desplegó `cb43290` en producción al primer intento (estado «Vercel»
+  `pending` a las 01:40:10 UTC y `success` a las 01:41:18 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4769,7 +4787,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada en staging, con CI #94 verde, 21 de 21 huellas como se predijo y el hallazgo 6 de la 10.3a corregido; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, en curso) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
