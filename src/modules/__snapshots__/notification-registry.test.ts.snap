@@ -12,6 +12,8 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/commercial/products/@panel/(.)new/page.tsx [successNotification] -> product-created",
   "src/app/(dashboard)/dashboard/commercial/products/[id]/edit/page.tsx [successNotification] -> product-updated",
   "src/app/(dashboard)/dashboard/commercial/products/new/page.tsx [successNotification] -> product-created",
+  "src/app/(dashboard)/dashboard/commercial/products/page.tsx [activatedNotification] -> product-activated",
+  "src/app/(dashboard)/dashboard/commercial/products/page.tsx [deactivatedNotification] -> product-deactivated",
   "src/app/(dashboard)/dashboard/inventory/alerts/page.tsx [attendedNotification] -> stock-alert-attended",
   "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [activatedNotification] -> material-category-activated",
   "src/app/(dashboard)/dashboard/inventory/material-categories/page.tsx [deactivatedNotification] -> material-category-deactivated",

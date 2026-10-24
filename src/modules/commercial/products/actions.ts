@@ -10,7 +10,12 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
-import { parseRequestedStatus } from "@/lib/requested-status";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
@@ -358,19 +363,33 @@ export async function updateProductAction(
   return productSaved(values, idProducto);
 }
 
-export async function toggleProductStatusAction(formData: FormData) {
-  const session = await requireAdminProductPermission();
-  const idProducto = formData.get("id_producto")?.toString();
+// Activar o inactivar desde la fila (ConfirmActionButton, entrega 10.4a):
+// devuelve el resultado en lugar de redirigir, y un error (sin permiso, ya
+// tenia ese estado o no existe) queda en la confirmacion.
+export async function toggleProductStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idProducto = formData.get("id_producto")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return statusToggleError(idProducto, "No tienes permisos para activar o inactivar productos.");
+  }
+
   const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idProducto || nextStatus === null) {
-    redirect(PRODUCTS_PATH);
+  if (!idProducto) {
+    return statusToggleError(idProducto, "El producto no existe.");
+  }
+
+  if (nextStatus === null) {
+    return statusToggleError(idProducto, "Estado no válido.");
   }
 
   // Fija el estado pedido solo si el producto tiene el contrario: comparar y
   // escribir en una sola sentencia evita que una lista desactualizada o un
-  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
-  // o ya tenia ese estado, y no hay nada que registrar.
+  // doble clic hagan lo contrario de lo que dice el boton.
   const { count } = await prisma.producto.updateMany({
     where: {
       id_producto: idProducto,
@@ -381,10 +400,6 @@ export async function toggleProductStatusAction(formData: FormData) {
     },
   });
 
-  if (count === 0) {
-    redirect(PRODUCTS_PATH);
-  }
-
   const product = await prisma.producto.findUnique({
     where: {
       id_producto: idProducto,
@@ -393,6 +408,14 @@ export async function toggleProductStatusAction(formData: FormData) {
       nombre_producto: true,
     },
   });
+
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      idProducto,
+      product ? `El producto ya estaba ${nextStatus ? "activo" : "inactivo"}.` : "El producto no existe.",
+    );
+  }
 
   await registerAuditLog({
     userId: session.user.id,
@@ -405,9 +428,8 @@ export async function toggleProductStatusAction(formData: FormData) {
   });
 
   revalidatePath(PRODUCTS_PATH);
-  redirect(
-    `${PRODUCTS_PATH}?toast=${nextStatus ? "product-activated" : "product-deactivated"}`,
-  );
+
+  return statusToggleDone(idProducto, nextStatus);
 }
 
 export async function createProductCategoryAction(

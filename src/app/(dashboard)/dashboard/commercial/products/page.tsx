@@ -1,18 +1,15 @@
 import Link from "next/link";
 
 import { requireRole } from "@/lib/authz";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { PaginationControls } from "@/components/pagination-controls";
-import {
-  RowActions,
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowActions, RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -30,7 +27,9 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { toggleProductStatusAction } from "@/modules/commercial/products/actions";
+import { ProductStatusButton } from "@/modules/commercial/products/product-status-button";
 import { getProductListData } from "@/modules/commercial/products/queries";
 
 type ProductsPageProps = {
@@ -75,7 +74,7 @@ export default async function ProductsPage({
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Productos"
         description="Lista de productos registrados para ventas, pedidos y producción."
@@ -102,65 +101,51 @@ export default async function ProductsPage({
         }
       />
 
-      <form
-        action="/dashboard/commercial/products"
-        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))_auto_auto]"
+      <FilterBar
+        action={navigationHrefs.products}
+        label="Filtros de productos"
+        clearHref={navigationHrefs.products}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input
-            id="q"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar producto..."
-          />
-        </div>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar producto..." />}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="category">Categoría</Label>
-          <NativeSelect id="category" name="category" defaultValue={category}>
-            <option value="">Todas las categorías</option>
-            {categories.map((item) => (
-              <option key={item.slug} value={item.slug}>
-                {item.nombre}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="category" label="Categoría">
+          {(control) => (
+            <NativeSelect {...control} name="category" defaultValue={category}>
+              <option value="">Todas las categorías</option>
+              {categories.map((item) => (
+                <option key={item.slug} value={item.slug}>
+                  {item.nombre}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="unit">Unidad</Label>
-          <NativeSelect id="unit" name="unit" defaultValue={unit}>
-            <option value="">Todas las unidades</option>
-            {units.map((item) => (
-              <option key={item.unidad_medida} value={item.unidad_medida}>
-                {item.unidad_medida}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="unit" label="Unidad">
+          {(control) => (
+            <NativeSelect {...control} name="unit" defaultValue={unit}>
+              <option value="">Todas las unidades</option>
+              {units.map((item) => (
+                <option key={item.unidad_medida} value={item.unidad_medida}>
+                  {item.unidad_medida}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </NativeSelect>
-        </div>
-
-        <div className="flex items-end">
-          <Button type="submit" className="w-full">
-            Filtrar
-          </Button>
-        </div>
-
-        <div className="flex items-end">
-          <Button variant="clear" className="w-full" asChild>
-            <Link href="/dashboard/commercial/products">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -204,12 +189,11 @@ export default async function ProductsPage({
                       )}
                     />
 
-                    <RowToggleStatusButton
+                    <ProductStatusButton
+                      product={product}
                       action={toggleProductStatusAction}
-                      hiddenFieldName="id_producto"
-                      hiddenFieldValue={product.id_producto}
-                      isActive={product.estado}
-                      sendsRequestedStatus
+                      activatedNotification={commercialNotifications["product-activated"]}
+                      deactivatedNotification={commercialNotifications["product-deactivated"]}
                     />
                   </RowActions>
                 ) : (
@@ -240,6 +224,6 @@ export default async function ProductsPage({
         searchParams={params}
         itemLabel="productos"
       />
-    </main>
+    </div>
   );
 }

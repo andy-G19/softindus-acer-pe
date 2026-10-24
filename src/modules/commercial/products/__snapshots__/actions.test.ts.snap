@@ -1323,10 +1323,10 @@ exports[`toggleProductCategoryStatusAction > sin id vuelve al listado sin tocar 
 
 exports[`toggleProductCategoryStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/product-categories"`;
 
-exports[`toggleProductStatusAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1334,12 +1334,23 @@ exports[`toggleProductStatusAction > SELLER: requireRole lo rechaza (redirige) s
 ]
 `;
 
-exports[`toggleProductStatusAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleProductStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar productos.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductStatusAction > activa un producto inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1386,12 +1397,25 @@ exports[`toggleProductStatusAction > activa un producto inactivo > llamadas 1`] 
 ]
 `;
 
-exports[`toggleProductStatusAction > activa un producto inactivo > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-activated"`;
+exports[`toggleProductStatusAction > activa un producto inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1399,12 +1423,23 @@ exports[`toggleProductStatusAction > con un estado pedido que no es true ni fals
 ]
 `;
 
-exports[`toggleProductStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/products"`;
+exports[`toggleProductStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductStatusAction > el producto no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
+exports[`toggleProductStatusAction > el producto no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1422,15 +1457,37 @@ exports[`toggleProductStatusAction > el producto no existe: no cambia ninguna fi
     "fueraDeTransaccion": true,
     "prisma": "producto.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_producto": true,
+      },
+      "where": {
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
 ]
 `;
 
-exports[`toggleProductStatusAction > el producto no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/commercial/products"`;
+exports[`toggleProductStatusAction > el producto no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductStatusAction > inactiva un producto activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1477,12 +1534,25 @@ exports[`toggleProductStatusAction > inactiva un producto activo > llamadas 1`] 
 ]
 `;
 
-exports[`toggleProductStatusAction > inactiva un producto activo > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-deactivated"`;
+exports[`toggleProductStatusAction > inactiva un producto activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleProductStatusAction > pedir inactivar un producto que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1500,15 +1570,37 @@ exports[`toggleProductStatusAction > pedir inactivar un producto que ya esta ina
     "fueraDeTransaccion": true,
     "prisma": "producto.updateMany",
   },
+  {
+    "args": {
+      "select": {
+        "nombre_producto": true,
+      },
+      "where": {
+        "id_producto": "PRO00000004",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
 ]
 `;
 
-exports[`toggleProductStatusAction > pedir inactivar un producto que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/commercial/products"`;
+exports[`toggleProductStatusAction > pedir inactivar un producto que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "PRO00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleProductStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleProductStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1516,7 +1608,18 @@ exports[`toggleProductStatusAction > sin id vuelve al listado sin tocar Prisma >
 ]
 `;
 
-exports[`toggleProductStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/products"`;
+exports[`toggleProductStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [

@@ -70,7 +70,7 @@ exports[`/dashboard/commercial/products > estado desconocido > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -102,7 +102,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -133,8 +133,6 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -164,11 +162,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -184,11 +178,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dtodos">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -202,8 +192,7 @@ exports[`/dashboard/commercial/products > estado desconocido > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products?status=todos&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -334,7 +323,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 
 exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -366,7 +355,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value="lampa"/>
@@ -397,8 +386,6 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -428,11 +415,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -448,11 +431,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fq%3Dlampa%26category%3Dherramientas%26unit%3Ddocena%26status%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -466,8 +445,7 @@ exports[`/dashboard/commercial/products > filtros que coinciden con sus opciones
 <a data-variant="outline" href="/dashboard/commercial/products?q=lampa&amp;category=herramientas&amp;unit=docena&amp;status=inactive&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -598,7 +576,7 @@ exports[`/dashboard/commercial/products > filtros y vendedor > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -629,7 +607,7 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value="reja"/>
@@ -660,8 +638,6 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -715,7 +691,7 @@ exports[`/dashboard/commercial/products > filtros y vendedor > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products?q=reja&amp;category=estructuras&amp;unit=unidad&amp;status=active&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -802,7 +778,7 @@ exports[`/dashboard/commercial/products > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -834,7 +810,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -865,8 +841,6 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -896,11 +870,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -916,11 +886,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -934,8 +900,7 @@ exports[`/dashboard/commercial/products > inactivos > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products?status=inactive&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1010,7 +975,7 @@ exports[`/dashboard/commercial/products > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1042,7 +1007,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -1073,8 +1038,6 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -1104,11 +1067,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-1/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-1"/>
-<input type="hidden" name="estado" value="false"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -1124,11 +1083,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/commercial/products/id_producto-2/edit?returnTo=%2Fdashboard%2Fcommercial%2Fproducts">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_producto" value="id_producto-2"/>
-<input type="hidden" name="estado" value="true"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -1142,8 +1097,7 @@ exports[`/dashboard/commercial/products > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/products?page=2">Siguiente</a>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1218,7 +1172,7 @@ exports[`/dashboard/commercial/products > sin productos registrados > llamadas 1
 
 exports[`/dashboard/commercial/products > sin productos registrados > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1250,7 +1204,7 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/products">
+<form role="search" aria-label="Filtros de productos" action="/dashboard/commercial/products" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar producto..." name="q" value=""/>
@@ -1279,8 +1233,6 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/commercial/products">Limpiar filtros</a>
 </div>
 </form>
@@ -1317,7 +1269,7 @@ exports[`/dashboard/commercial/products > sin productos registrados > resultado 
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
