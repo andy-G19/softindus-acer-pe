@@ -246,7 +246,7 @@ exports[`createClientAction > datos invalidos devuelven los errores por campo si
         "El nombre o razón social es obligatorio.",
       ],
       "tipo_cliente": [
-        "Invalid option: expected one of "ferreteria"|"distribuidora"|"constructora"|"cliente_final"|"otro"",
+        "Selecciona un tipo de cliente válido.",
       ],
     },
     "operationId": "operacion-de-prueba",

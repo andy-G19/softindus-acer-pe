@@ -368,7 +368,7 @@ defineProductSuite("createProductAction", createProductAction, [
     ...productWith({ nombre_producto: "A", categoria: "", unidad_medida: "", precio_referencial: "-1" }),
   },
   {
-    name: "una descripcion de mas de 500 caracteres devuelve el mensaje de Zod en ingles",
+    name: "una descripcion de mas de 500 caracteres devuelve su mensaje en espanol",
     ...productWith({ descripcion: "x".repeat(501) }),
   },
   { name: "categoria inactiva: error en el campo, sin transaccion", ...productWith({}, categoryStates({ herramientas: false })) },

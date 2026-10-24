@@ -479,7 +479,7 @@ exports[`createProductAction > una carrera por el nombre (P2002 al crear) revier
 }
 `;
 
-exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve el mensaje de Zod en ingles > llamadas 1`] = `
+exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve su mensaje en espanol > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -490,13 +490,13 @@ exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve
 ]
 `;
 
-exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve el mensaje de Zod en ingles > resultado 1`] = `
+exports[`createProductAction > una descripcion de mas de 500 caracteres devuelve su mensaje en espanol > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos del producto.",
     "fieldErrors": {
       "descripcion": [
-        "Too big: expected string to have <=500 characters",
+        "La descripción no debe superar 500 caracteres.",
       ],
     },
   },
