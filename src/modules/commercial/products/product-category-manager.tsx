@@ -83,6 +83,7 @@ export function ProductCategoryManager({
                   />
                   <form action={toggleAction}>
                     <input type="hidden" name="id_categoria_producto" value={category.id_categoria_producto} />
+                    <input type="hidden" name="estado" value={category.estado ? "false" : "true"} />
                     <Button type="submit" variant="outline" size="sm">
                       {category.estado ? "Inactivar" : "Activar"}
                     </Button>

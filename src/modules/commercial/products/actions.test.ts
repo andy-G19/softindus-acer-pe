@@ -35,10 +35,9 @@ import {
 // productos y el cambio de estado de categorias, antes de llevar los productos
 // al panel lateral y de pedir confirmacion al inactivar. Autorizan con
 // requireRole y redirigen al negar el permiso (desviacion conocida); el alta y
-// la edicion guardan redirigiendo a ?toast= sin los filtros del listado. Fija
-// dos defectos que corrigen los commits siguientes: el cambio de estado
-// escribe el contrario de lo que lee aunque el boton pida otra cosa, y la
-// edicion rechaza la categoria actual del producto si esta inactiva.
+// la edicion guardan redirigiendo a ?toast= sin los filtros del listado. El
+// cambio de estado escribia el contrario de lo que leia (corregido en C2), y
+// la edicion rechaza la categoria actual del producto si esta inactiva.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -417,46 +416,162 @@ defineProductSuite("updateProductAction", updateProductAction, [
   },
 ]);
 
-// Hoy los dos cambios de estado leen el registro y escriben el contrario de lo
-// que leen: no reciben el estado que pide el boton.
+// Los dos cambios de estado reciben el estado que pide el boton y lo fijan con
+// compare-and-set (C2); count 0 si no existe o ya lo tenia.
 defineToggleSuite("toggleProductStatusAction", toggleProductStatusAction, [
-  { name: "inactiva un producto activo", form: { id_producto: PRODUCTO }, data: productLookup({ estado: true }) },
-  { name: "activa un producto inactivo", form: { id_producto: PRODUCTO }, data: productLookup({ estado: false }) },
   {
-    name: "pedir inactivar un producto que ya esta inactivo lo activa: el estado pedido no se lee",
+    name: "inactiva un producto activo",
     form: { id_producto: PRODUCTO, estado: "false" },
+    data: productLookup({ estado: true }),
+  },
+  {
+    name: "activa un producto inactivo",
+    form: { id_producto: PRODUCTO, estado: "true" },
     data: productLookup({ estado: false }),
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  { name: "el producto no existe: vuelve al listado", form: { id_producto: PRODUCTO }, data: productLookup({ exists: false }) },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_producto: PRODUCTO }, role: "SELLER" },
+  {
+    name: "pedir inactivar un producto que ya esta inactivo no cambia ninguna fila ni registra bitacora",
+    form: { id_producto: PRODUCTO, estado: "false" },
+    data: { ...productLookup({ estado: false }), "producto.updateMany": () => ({ count: 0 }) },
+  },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  {
+    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    form: { id_producto: PRODUCTO, estado: "si" },
+  },
+  {
+    name: "el producto no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_producto: PRODUCTO, estado: "false" },
+    data: { ...productLookup({ exists: false }), "producto.updateMany": () => ({ count: 0 }) },
+  },
+  {
+    name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    form: { id_producto: PRODUCTO, estado: "false" },
+    role: "SELLER",
+  },
 ]);
 
 defineToggleSuite("toggleProductCategoryStatusAction", toggleProductCategoryStatusAction, [
   {
     name: "inactiva una categoria activa y revalida categorias y productos",
-    form: { id_categoria_producto: CATEGORIA },
+    form: { id_categoria_producto: CATEGORIA, estado: "false" },
     data: categoryStatusLookup({ estado: true }),
   },
   {
     name: "activa una categoria inactiva",
-    form: { id_categoria_producto: CATEGORIA },
+    form: { id_categoria_producto: CATEGORIA, estado: "true" },
     data: categoryStatusLookup({ estado: false }),
   },
   {
-    name: "pedir inactivar una categoria que ya esta inactiva la activa: el estado pedido no se lee",
+    name: "pedir inactivar una categoria que ya esta inactiva no cambia ninguna fila ni registra bitacora",
     form: { id_categoria_producto: CATEGORIA, estado: "false" },
-    data: categoryStatusLookup({ estado: false }),
+    data: { ...categoryStatusLookup({ estado: false }), "categoria_producto.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
   {
-    name: "la categoria no existe: vuelve al listado",
-    form: { id_categoria_producto: CATEGORIA },
-    data: categoryStatusLookup({ exists: false }),
+    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    form: { id_categoria_producto: CATEGORIA, estado: "si" },
+  },
+  {
+    name: "la categoria no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_categoria_producto: CATEGORIA, estado: "false" },
+    data: { ...categoryStatusLookup({ exists: false }), "categoria_producto.updateMany": () => ({ count: 0 }) },
   },
   {
     name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma",
-    form: { id_categoria_producto: CATEGORIA },
+    form: { id_categoria_producto: CATEGORIA, estado: "false" },
     role: "SELLER",
   },
 ]);
+
+// Activar e inactivar envian el estado pedido y el servidor solo lo fija si el
+// registro tiene el contrario, comparando y escribiendo en una sola sentencia
+// (updateMany con el estado opuesto en el where), como proveedores en la 10.3b.
+// count 0 es lo que responde la base cuando no existe o ya tiene el estado
+// pedido: el doble lo simula.
+type StatusToggleSpec = {
+  name: string;
+  action: ToggleAction;
+  model: string;
+  idField: string;
+  id: string;
+  lookup: (options: { estado: boolean }) => DataOverrides;
+  deactivatedToast: string;
+};
+
+function describeRequestedStatus(spec: StatusToggleSpec) {
+  type Recorded = { prisma?: string; effect?: string; args?: { data?: Row; where?: Row } };
+
+  const writesOf = (calls: unknown[]) =>
+    (calls as Recorded[]).filter(
+      (call) => call.prisma === `${spec.model}.update` || call.prisma === `${spec.model}.updateMany`,
+    );
+  const auditsOf = (calls: unknown[]) => (calls as Recorded[]).filter((call) => call.effect === "registerAuditLog");
+  const toggle = (estado: string | undefined, data: DataOverrides) =>
+    runAction(spec.action, {
+      name: "",
+      form: estado === undefined ? { [spec.idField]: spec.id } : { [spec.idField]: spec.id, estado },
+      data,
+    });
+  const noRowChanged = { [`${spec.model}.updateMany`]: () => ({ count: 0 }) };
+
+  describe(`${spec.name} fija el estado pedido`, () => {
+    it("inactivar compara y fija el estado en una sola escritura", async () => {
+      const { calls, outcome } = await toggle("false", spec.lookup({ estado: true }));
+
+      expect(writesOf(calls)).toEqual([
+        expect.objectContaining({
+          prisma: `${spec.model}.updateMany`,
+          args: { where: { [spec.idField]: spec.id, estado: true }, data: { estado: false } },
+        }),
+      ]);
+      expect(auditsOf(calls)).toHaveLength(1);
+      expect(String(outcome)).toContain(`toast=${spec.deactivatedToast}`);
+    });
+
+    it("pedir inactivar uno que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
+      const { calls, outcome } = await toggle("false", { ...spec.lookup({ estado: false }), ...noRowChanged });
+
+      expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+      expect(String(outcome)).not.toContain("toast=");
+    });
+
+    it("pedir activar uno que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
+      const { calls, outcome } = await toggle("true", { ...spec.lookup({ estado: true }), ...noRowChanged });
+
+      expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+      expect(String(outcome)).not.toContain("toast=");
+    });
+
+    it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+      for (const estado of [undefined, "si"]) {
+        const { calls } = await toggle(estado, spec.lookup({ estado: true }));
+
+        expect(writesOf(calls)).toEqual([]);
+        expect(auditsOf(calls)).toEqual([]);
+      }
+    });
+  });
+}
+
+describeRequestedStatus({
+  name: "toggleProductStatusAction",
+  action: toggleProductStatusAction,
+  model: "producto",
+  idField: "id_producto",
+  id: PRODUCTO,
+  lookup: ({ estado }) => productLookup({ estado }),
+  deactivatedToast: "product-deactivated",
+});
+
+describeRequestedStatus({
+  name: "toggleProductCategoryStatusAction",
+  action: toggleProductCategoryStatusAction,
+  model: "categoria_producto",
+  idField: "id_categoria_producto",
+  id: CATEGORIA,
+  lookup: ({ estado }) => categoryStatusLookup({ estado }),
+  deactivatedToast: "product-category-deactivated",
+});

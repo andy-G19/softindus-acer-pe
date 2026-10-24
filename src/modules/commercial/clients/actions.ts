@@ -9,6 +9,7 @@ import { getNextCorrelativeId } from "@/lib/correlatives";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { clientSchema } from "@/schemas/commercial/client.schema";
 
 /** Lo que el formulario envio, tal cual, para volver a mostrarlo. */
@@ -298,8 +299,27 @@ export async function toggleClientStatusAction(formData: FormData) {
   }
 
   const idCliente = formData.get("id_cliente")?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idCliente) {
+  if (!idCliente || nextStatus === null) {
+    redirect(CLIENTS_PATH);
+  }
+
+  // Fija el estado pedido solo si el cliente tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.cliente.updateMany({
+    where: {
+      id_cliente: idCliente,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(CLIENTS_PATH);
   }
 
@@ -308,34 +328,17 @@ export async function toggleClientStatusAction(formData: FormData) {
       id_cliente: idCliente,
     },
     select: {
-      id_cliente: true,
       nombre_razon_social: true,
-      estado: true,
-    },
-  });
-
-  if (!client) {
-    redirect(CLIENTS_PATH);
-  }
-
-  const nextStatus = !client.estado;
-
-  await prisma.cliente.update({
-    where: {
-      id_cliente: client.id_cliente,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "cliente",
-    id_registro_afectado: client.id_cliente,
+    id_registro_afectado: idCliente,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Cliente ${nextStatus ? "activado" : "inactivado"}: ${
-      client.nombre_razon_social
+      client?.nombre_razon_social ?? idCliente
     }`,
   });
 

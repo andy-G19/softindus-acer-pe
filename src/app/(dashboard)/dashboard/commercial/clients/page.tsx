@@ -200,6 +200,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
                     hiddenFieldName="id_cliente"
                     hiddenFieldValue={clientItem.id_cliente}
                     isActive={clientItem.estado}
+                    sendsRequestedStatus
                   />
                 </RowActions>
               </TableCell>

@@ -98,6 +98,7 @@ exports[`/dashboard/commercial/product-categories > administrador gestiona > res
 <button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_producto" value="id_categoria_producto-1"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="outline" type="submit">Inactivar</button>
 </form>
 </div>
@@ -118,6 +119,7 @@ exports[`/dashboard/commercial/product-categories > administrador gestiona > res
 <button data-variant="ghost" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">Editar</button>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_categoria_producto" value="id_categoria_producto-2"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="outline" type="submit">Activar</button>
 </form>
 </div>

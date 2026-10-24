@@ -10,6 +10,7 @@ import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState, FieldErrors } from "@/lib/errors";
+import { parseRequestedStatus } from "@/lib/requested-status";
 import { productCategorySchema } from "@/schemas/commercial/product-category.schema";
 import { productSchema } from "@/schemas/commercial/product.schema";
 
@@ -330,8 +331,27 @@ export async function updateProductAction(
 export async function toggleProductStatusAction(formData: FormData) {
   const session = await requireAdminProductPermission();
   const idProducto = formData.get("id_producto")?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idProducto) {
+  if (!idProducto || nextStatus === null) {
+    redirect(PRODUCTS_PATH);
+  }
+
+  // Fija el estado pedido solo si el producto tiene el contrario: comparar y
+  // escribir en una sola sentencia evita que una lista desactualizada o un
+  // doble clic hagan lo contrario de lo que dice el boton. count 0: no existe
+  // o ya tenia ese estado, y no hay nada que registrar.
+  const { count } = await prisma.producto.updateMany({
+    where: {
+      id_producto: idProducto,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(PRODUCTS_PATH);
   }
 
@@ -340,34 +360,17 @@ export async function toggleProductStatusAction(formData: FormData) {
       id_producto: idProducto,
     },
     select: {
-      id_producto: true,
       nombre_producto: true,
-      estado: true,
-    },
-  });
-
-  if (!product) {
-    redirect(PRODUCTS_PATH);
-  }
-
-  const nextStatus = !product.estado;
-
-  await prisma.producto.update({
-    where: {
-      id_producto: product.id_producto,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "producto",
-    id_registro_afectado: product.id_producto,
+    id_registro_afectado: idProducto,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Producto ${nextStatus ? "activado" : "inactivado"}: ${
-      product.nombre_producto
+      product?.nombre_producto ?? idProducto
     }`,
   });
 
@@ -583,8 +586,25 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
   const idCategoriaProducto = formData
     .get("id_categoria_producto")
     ?.toString();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
-  if (!idCategoriaProducto) {
+  if (!idCategoriaProducto || nextStatus === null) {
+    redirect(PRODUCT_CATEGORIES_PATH);
+  }
+
+  // Mismo compare-and-set que el producto: count 0 si no existe o ya tenia el
+  // estado pedido.
+  const { count } = await prisma.categoria_producto.updateMany({
+    where: {
+      id_categoria_producto: idCategoriaProducto,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
+
+  if (count === 0) {
     redirect(PRODUCT_CATEGORIES_PATH);
   }
 
@@ -593,34 +613,17 @@ export async function toggleProductCategoryStatusAction(formData: FormData) {
       id_categoria_producto: idCategoriaProducto,
     },
     select: {
-      id_categoria_producto: true,
       nombre: true,
-      estado: true,
-    },
-  });
-
-  if (!category) {
-    redirect(PRODUCT_CATEGORIES_PATH);
-  }
-
-  const nextStatus = !category.estado;
-
-  await prisma.categoria_producto.update({
-    where: {
-      id_categoria_producto: category.id_categoria_producto,
-    },
-    data: {
-      estado: nextStatus,
     },
   });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "categoria_producto",
-    id_registro_afectado: category.id_categoria_producto,
+    id_registro_afectado: idCategoriaProducto,
     accion: nextStatus ? "activar" : "inactivar",
     detalle: `Categoría ${nextStatus ? "activada" : "inactivada"}: ${
-      category.nombre
+      category?.nombre ?? idCategoriaProducto
     }`,
   });
 

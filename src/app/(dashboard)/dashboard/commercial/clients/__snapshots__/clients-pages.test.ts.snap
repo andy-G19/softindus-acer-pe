@@ -987,6 +987,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000003/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_cliente" value="CLI00000003"/>
+<input type="hidden" name="estado" value="false"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
 </form>
 </div>
@@ -1006,6 +1007,7 @@ exports[`listado de clientes > muestra filas, opciones, filtros y paginacion 1`]
 <a data-variant="ghost" href="/dashboard/commercial/clients/CLI00000002/edit?returnTo=%2Fdashboard%2Fcommercial%2Fclients%3Fq%3Dandina%26status%3Dactivo%26page%3D2">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_cliente" value="CLI00000002"/>
+<input type="hidden" name="estado" value="true"/>
 <button data-variant="ghost" type="submit">Activar</button>
 </form>
 </div>

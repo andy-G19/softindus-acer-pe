@@ -200,6 +200,7 @@ export default async function ProductsPage({
                       hiddenFieldName="id_producto"
                       hiddenFieldValue={product.id_producto}
                       isActive={product.estado}
+                      sendsRequestedStatus
                     />
                   </RowActions>
                 ) : (

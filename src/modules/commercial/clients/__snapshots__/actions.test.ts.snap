@@ -569,9 +569,20 @@ exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > llamadas 
   },
   {
     "args": {
-      "select": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
-        "id_cliente": true,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_razon_social": true,
       },
       "where": {
@@ -579,18 +590,6 @@ exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > llamadas 
       },
     },
     "prisma": "cliente.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_cliente": "CLI00000007",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "cliente.update",
   },
   {
     "args": {
@@ -623,9 +622,20 @@ exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inac
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
-        "id_cliente": true,
+      },
+      "where": {
+        "estado": false,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
         "nombre_razon_social": true,
       },
       "where": {
@@ -633,18 +643,6 @@ exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inac
       },
     },
     "prisma": "cliente.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_cliente": "CLI00000007",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "cliente.update",
   },
   {
     "args": {
@@ -680,7 +678,7 @@ exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acces
 
 exports[`toggleClientStatusAction > WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/access-denied"`;
 
-exports[`toggleClientStatusAction > el cliente no existe: vuelve al listado > llamadas 1`] = `
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -688,26 +686,13 @@ exports[`toggleClientStatusAction > el cliente no existe: vuelve al listado > ll
       "ADMIN",
       "SELLER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_cliente": true,
-        "nombre_razon_social": true,
-      },
-      "where": {
-        "id_cliente": "CLI00000007",
-      },
-    },
-    "prisma": "cliente.findUnique",
   },
 ]
 `;
 
-exports[`toggleClientStatusAction > el cliente no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
 
-exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora > llamadas 1`] = `
 [
   {
     "authz": "getAuthorizedSession",
@@ -715,51 +700,51 @@ exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inact
       "ADMIN",
       "SELLER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_cliente": true,
-        "nombre_razon_social": true,
-      },
-      "where": {
-        "id_cliente": "CLI00000007",
-      },
-    },
-    "prisma": "cliente.findUnique",
   },
   {
     "args": {
       "data": {
-        "estado": true,
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_cliente": "CLI00000007",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "cliente.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Cliente activado: Ferreteria Andina SAC",
-      "enTransaccion": false,
-      "entidad_afectada": "cliente",
-      "id_registro_afectado": "CLI00000007",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/commercial/clients",
-    "effect": "revalidatePath",
+    "prisma": "cliente.updateMany",
   },
 ]
 `;
 
-exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/commercial/clients?toast=client-activated"`;
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `"redirect:/dashboard/commercial/clients"`;
 
 exports[`toggleClientStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
 [

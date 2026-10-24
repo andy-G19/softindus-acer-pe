@@ -30,9 +30,8 @@ import {
 // y lo marca, para que el snapshot lo deje a la vista.
 //
 // Entrega 10.4a: tambien el cambio de estado, antes de que pida confirmacion y
-// devuelva un resultado. Hoy lee el cliente y escribe el contrario de lo que
-// lee, sin recibir el estado que pide el boton, y redirige al listado sin sus
-// filtros.
+// devuelva un resultado. Recibe el estado que pide el boton y lo fija con
+// compare-and-set (C2); redirige al listado sin sus filtros.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -305,23 +304,103 @@ defineActionSuite("updateClientAction", updateClientAction, [
 ]);
 
 defineToggleSuite("toggleClientStatusAction", toggleClientStatusAction, [
-  { name: "ADMIN inactiva un cliente activo", form: { id_cliente: CLIENTE }, data: clientStatusLookup({ estado: true }) },
+  {
+    name: "ADMIN inactiva un cliente activo",
+    form: { id_cliente: CLIENTE, estado: "false" },
+    data: clientStatusLookup({ estado: true }),
+  },
   {
     name: "SELLER tambien puede: activa un cliente inactivo",
-    form: { id_cliente: CLIENTE },
+    form: { id_cliente: CLIENTE, estado: "true" },
     data: clientStatusLookup({ estado: false }),
     role: "SELLER",
   },
   {
-    name: "pedir inactivar un cliente que ya esta inactivo lo activa: el estado pedido no se lee",
+    name: "pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora",
     form: { id_cliente: CLIENTE, estado: "false" },
-    data: clientStatusLookup({ estado: false }),
+    data: { ...clientStatusLookup({ estado: false }), "cliente.updateMany": () => ({ count: 0 }) },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  { name: "el cliente no existe: vuelve al listado", form: { id_cliente: CLIENTE }, data: clientStatusLookup({ exists: false }) },
+  { name: "sin id vuelve al listado sin tocar Prisma", form: { estado: "false" } },
+  {
+    name: "con un estado pedido que no es true ni false vuelve al listado sin tocar Prisma",
+    form: { id_cliente: CLIENTE, estado: "si" },
+  },
+  {
+    name: "el cliente no existe: no cambia ninguna fila y vuelve al listado sin bitacora",
+    form: { id_cliente: CLIENTE, estado: "false" },
+    data: { ...clientStatusLookup({ exists: false }), "cliente.updateMany": () => ({ count: 0 }) },
+  },
   {
     name: "WORKSHOP_MASTER no tiene permiso: va a acceso denegado sin tocar Prisma",
-    form: { id_cliente: CLIENTE },
+    form: { id_cliente: CLIENTE, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
 ]);
+
+// Activar e inactivar envian el estado pedido y el servidor solo lo fija si el
+// cliente tiene el contrario, comparando y escribiendo en una sola sentencia
+// (updateMany con el estado opuesto en el where), como proveedores en la 10.3b.
+// count 0 es lo que responde la base cuando el cliente no existe o ya tiene el
+// estado pedido: el doble lo simula.
+describe("toggleClientStatusAction fija el estado pedido", () => {
+  type Recorded = { prisma?: string; effect?: string; args?: { data?: Row; where?: Row } };
+
+  function writesOf(calls: unknown[]) {
+    return (calls as Recorded[]).filter(
+      (call) => call.prisma === "cliente.update" || call.prisma === "cliente.updateMany",
+    );
+  }
+
+  function auditsOf(calls: unknown[]) {
+    return (calls as Recorded[]).filter((call) => call.effect === "registerAuditLog");
+  }
+
+  const toggle = (form: FormFields, data: DataOverrides) =>
+    runAction(toggleClientStatusAction, { name: "", form, data });
+
+  it("inactivar compara y fija el estado en una sola escritura", async () => {
+    const { calls, outcome } = await toggle({ id_cliente: CLIENTE, estado: "false" }, clientStatusLookup({ estado: true }));
+
+    expect(writesOf(calls)).toEqual([
+      expect.objectContaining({
+        prisma: "cliente.updateMany",
+        args: { where: { id_cliente: CLIENTE, estado: true }, data: { estado: false } },
+      }),
+    ]);
+    expect(auditsOf(calls)).toHaveLength(1);
+    expect(String(outcome)).toContain("toast=client-deactivated");
+  });
+
+  it("pedir inactivar un cliente que otro ya inactivo no lo activa ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_cliente: CLIENTE, estado: "false" },
+      { ...clientStatusLookup({ estado: false }), "cliente.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === true)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("pedir activar un cliente que ya esta activo no lo inactiva ni escribe la bitacora", async () => {
+    const { calls, outcome } = await toggle(
+      { id_cliente: CLIENTE, estado: "true" },
+      { ...clientStatusLookup({ estado: true }), "cliente.updateMany": () => ({ count: 0 }) },
+    );
+
+    expect(writesOf(calls).filter((call) => call.args?.data?.estado === false)).toEqual([]);
+    expect(auditsOf(calls)).toEqual([]);
+    expect(String(outcome)).not.toContain("toast=");
+  });
+
+  it("sin estado pedido, o con uno que no es true ni false, no escribe nada", async () => {
+    const forms: FormFields[] = [{ id_cliente: CLIENTE }, { id_cliente: CLIENTE, estado: "si" }];
+
+    for (const form of forms) {
+      const { calls } = await toggle(form, clientStatusLookup({ estado: true }));
+
+      expect(writesOf(calls)).toEqual([]);
+      expect(auditsOf(calls)).toEqual([]);
+    }
+  });
+});
