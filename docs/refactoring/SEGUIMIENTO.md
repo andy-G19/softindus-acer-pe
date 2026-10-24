@@ -4450,9 +4450,10 @@ Datos leídos de la API de GitHub el 2026-10-21 y comparados con git:
 
 ### Sub-entrega 10.3c — Listados con fechas e inicio de Inventario
 
-Fecha: 2026-10-21 (UTC). Estado: commits en `staging`; falta verificarla en
-staging. El paso 0 (`2d9ca08`) registró la integración de la 10.3b en
-`main`. 6 commits, de `c148d33` a `3272901`, y este registro.
+Fecha: 2026-10-21 (UTC). Estado: cerrada en staging el 2026-10-21; falta
+integrarla en `main`. El paso 0 (`2d9ca08`) registró la integración de la
+10.3b en `main`. 6 commits, de `c148d33` a `3272901`, el registro `7ea09c3`
+y este cierre.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -4463,7 +4464,8 @@ staging. El paso 0 (`2d9ca08`) registró la integración de la 10.3b en
 | c8553d8 | feat | Compras y pagos a proveedor con `FilterBar` y `DateRangeFields`; nueva compra y el detalle de compra sin `<main>` anidado. |
 | 075bb00 | fix | El inicio de Inventario y las entradas solo enlazan lo que el rol puede abrir. |
 | 3272901 | feat | El inicio enlaza entradas, salidas y pagos a proveedores, ordenado por flujo, y pierde el `<main>` anidado. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 7ea09c3 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Inventario y de su inicio. |
 
 Decisiones del responsable (2026-10-21), tras la auditoría:
 
@@ -4624,6 +4626,125 @@ Hallazgos:
    es CRLF; se editaron por bytes, sin tocar los finales de línea
    (`tmp/e10-diff/c4-103c-main.py`).
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e103c-huella`) y etiquetas `e103c/`
+  (`tmp/e10-diff/e103c-*.js`, generados por `c-e103c-guiones.py` desde los de
+  la 10.3b), guardada en el `localStorage` de staging y recargada en cada
+  documento. Plan en `tmp/e10-diff/plan-verificacion-10-3c.md`.
+- Ninguna tarea escribe datos: las listas son las mismas en las dos fases.
+  El rango de las capturas y las tareas es julio de 2026: 15 entradas, 1
+  salida, 5 compras y 1 pago.
+- Teclas reales en las fechas, con el foco puesto con `focus()` (en T29 del
+  «antes», con un clic en el día), y botones pulsados por su referencia de
+  accesibilidad: el panel del navegador era más
+  estrecho que la emulación de 1281 px y las capturas de pantalla no servían
+  para apuntar.
+- 1281 × 800 y el preset móvil (376 px), con el puntero en el margen del
+  shell; la barra lateral se expande al pasar por encima, así que el puntero
+  no se acerca a ella.
+
+Publicación y medición:
+
+- «Antes» el 2026-10-21, de 20:26 a 20:37 UTC, sobre `a49f41b` (`buildId`
+  `Zg8lJ1dGECoVlNtxdnaID`, CSS servido de 112.979 bytes, `f9a5f2e3…`): 16
+  capturas y 5 controles, sello `5668ccd5…`, igual en Python.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-3c.md`).
+- Push de 8 commits (de `2d9ca08` a `7ea09c3`): CI #94 en verde (3m 7s).
+  Vercel desplegó `7ea09c3` (`pending` a las 20:40:09 y `success` a las
+  20:42:02 UTC) y cambió el `buildId` (`SmOLZpQDrlir0Wb_vTqWn`). El CSS
+  servido es el predicho byte a byte, el mismo del «antes».
+- El panel del navegador se cerró después del push y perdió el acceso a
+  Vercel, el `localStorage` y la base del navegador de staging; el
+  responsable volvió a entrar. Los hashes del «antes» estaban en
+  `tmp/e10-diff/registro-10-3c.tsv`, no los registros de cada elemento
+  (hallazgo 10).
+- «Después» el 2026-10-21, de 21:45 a 21:56 UTC: 16 capturas y 5 controles,
+  sello `46ae70d1…`, igual en Python. La huella se reinstaló con el mismo
+  código, y el control de materiales dio el hash del «antes» antes de seguir.
+  Evidencia en `tmp/e10-diff/antes-10-3c.json` y `despues-10-3c.json`.
+
+Huella: las 21 como se predijo.
+
+- Los 5 controles (materiales, proveedores, auditoría, la sección
+  «Listados» de la galería y pedidos con un rango) dan el mismo hash. En
+  pedidos, la consulta corta ahora con `lt`, pero la columna es `date`: las
+  mismas filas y el mismo HTML.
+- Registrar salida, nueva compra y el detalle de compra solo cambian la raíz:
+  con `main` en lugar de `div` en el registro de la raíz del «después», el
+  hash es exactamente el del «antes». El `textHash` y el número de elementos
+  no cambian.
+- Las cuatro listas a 1281 px:
+  - la barra es un formulario de búsqueda con su nombre («Filtros de
+    entradas», «… de salidas», «… de compras» y «… de pagos a
+    proveedores»), las filas de campos predichas y el rango en un
+    `fieldset` (dos elementos más; uno más en compras y pagos, que pierden
+    la rejilla que agrupaba las fechas);
+  - en entradas, la quinta columna de `auto-fit` queda vacía y se colapsa:
+    los cuatro campos ocupan 264 px cada uno, y la predicción decía cinco
+    columnas;
+  - las tablas tienen las mismas filas; en compras siguen las seis «Anular»;
+  - en pagos, «Limpiar filtros» pasa a la variante `clear` (fondo cian);
+  - con el rango invertido, «Hasta» queda con `aria-invalid`, el borde
+    destructivo y el mensaje en dos líneas: la barra crece 48 px y la tabla,
+    que sigue diciendo «Todavía no hay entradas registradas.», baja con
+    ella.
+  - Pagos sin filtro y con el rango dan el mismo hash en las dos fases: la
+    misma fila, y la huella no registra el valor de los campos.
+- A 376 px, la barra tiene una columna, Desde y Hasta van uno debajo del
+  otro y no hay desbordamiento.
+- El inicio pasa de 5 a 8 tarjetas en el orden por flujo; los 35 elementos
+  nuevos son los de las tres tarjetas (12, 12 y 11).
+
+Tareas (ADMIN), con los mismos pasos en las dos fases. Los tiempos dependen
+de la red y del servidor de staging:
+
+| Tarea | Antes (`a49f41b`) | Después (`7ea09c3`) |
+|---|---|---|
+| T29 Filtrar entradas por julio | GET nativo con documento nuevo; 15 filas (DOMContentLoaded a 961 ms) | Igual: la misma URL y 15 filas (739 ms) |
+| T30 Rango invertido escrito en compras | Se envía y la lista dice «Todavía no hay compras registradas.» | «Hasta» muestra el mensaje en cuanto el rango queda invertido; «Filtrar» no envía (evento `invalid`), el foco va a «Hasta» y la lista no cambia |
+| T31 Por URL | Invertido: sin aviso y lista vacía. `2026-02-30`: el campo se ve vacío (el HTML trae ese valor) y 23 entradas | Invertido: «Hasta» con el error y lista vacía. `2026-02-30`: vacío también en el HTML y 23 entradas (hallazgo 4) |
+| T32 Salidas de julio: otra fecha en Desde sin filtrar, «Limpiar filtros», Atrás y Adelante | Desde se quedaba en lo escrito en los tres pasos (en Atrás, la URL decía 01/07 y el campo 05/07) | Vacío, 01/07 y 31/07, vacío; el foco se queda en «Limpiar filtros» |
+| T33 Detalle desde una lista filtrada y volver | Compras: «Volver a compras» y la miga llevan el filtro. Entradas: «Ver compra» sin `returnTo`, Atrás vuelve con el filtro | Igual |
+| T34 Registrar salida desde salidas filtradas y volver sin guardar | «Volver a salidas» (sin `referrer` interno, hallazgo 11) y «Cancelar» pierden el filtro | Igual (el formulario es de la entrega 11) |
+| T35 Inicio de Inventario | 5 tarjetas | 8 tarjetas en el orden por flujo |
+
+El hallazgo 6 (las 23:59:59.999xxx) no se puede ver en staging sin escribir
+un movimiento a esa hora: su evidencia es la de PGlite. Se verificó solo con
+ADMIN: el responsable no pidió probar WORKSHOP_MASTER, porque
+`inventory-links.test.ts` y los snapshots cubren lo que ve. El «antes» llevó
+11 minutos de medición y el «después» 11, sin contar la preparación ni las
+esperas.
+
+Hallazgos de la verificación:
+
+9. Lo que se escribe en las fechas antes de que React hidrate la página se
+   pierde: `DateRangeFields` es un campo controlado y la hidratación impone
+   su estado inicial. En T30 las teclas llegaron antes del `replace` con que
+   Next termina de hidratar y los dos campos quedaron vacíos; con la página
+   hidratada, funcionó. Los campos sueltos del «antes» conservaban lo
+   escrito. Afecta a todas las pantallas con `DateRangeFields`, también a los
+   reportes de la 10.2. El responsable decidió registrarlo para un `fix`
+   aparte o la entrega 11.
+10. Método: al cerrarse, el panel del navegador perdió el acceso a Vercel, el
+    `localStorage` y la base del navegador de staging. La evidencia en `tmp`
+    eran los hashes, no los registros de cada elemento, así que las
+    diferencias de las listas se explicaron con la estructura del «después»
+    y no con un diff por registros. Para la próxima: guardar también los
+    registros en `tmp`.
+11. Método: «Volver a…» del encabezado usa `router.back()` solo si el
+    documento tiene un `referrer` interno; las páginas cargadas desde la
+    herramienta no lo tienen y usan su destino fijo.
+12. Predicción: dijo cinco columnas en la barra de entradas a 1281 px; con
+    `auto-fit`, la columna vacía se colapsa y quedan cuatro más anchas.
+
+El capítulo de Inventario del manual suma el inicio, Entradas, Salidas,
+Compras y Pagos a proveedores, escritos con lo verificado, y las reglas
+comunes explican el rango que llega invertido en la dirección y que el
+inicio solo muestra lo que cada rol puede abrir.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4648,7 +4769,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c tiene sus commits en staging y falta verificarla) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada en staging, con CI #94 verde, 21 de 21 huellas como se predijo y el hallazgo 6 de la 10.3a corregido; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -4928,6 +5049,9 @@ Actualizado en la sub-entrega 10.3c (2026-10-21) sobre `3272901`:
 Las demás no cambian: páginas con Prisma directo 0, copias locales de
 `FieldError` 9 e `import` de las librerías de notificaciones en 2 archivos,
 medidos de nuevo.
+
+El cierre de la 10.3c (2026-10-21) no cambia código: las métricas son las
+de `3272901`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

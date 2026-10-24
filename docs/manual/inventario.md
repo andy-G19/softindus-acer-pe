@@ -4,6 +4,28 @@ Este capítulo describe las pantallas de Inventario que ya se renovaron. Las
 reglas comunes (ventanas, guardar, cancelar, inactivar y filtros) están en
 [Cómo funcionan las pantallas](00-patrones.md).
 
+## Inicio de Inventario
+
+**Dónde:** Inventario, en el menú.
+**Quién:** el administrador (ADMIN) y el maestro de taller (WORKSHOP_MASTER).
+
+Arriba están los indicadores: materiales activos, proveedores activos,
+alertas activas y movimientos registrados (entradas y salidas). Debajo, una
+tarjeta por pantalla, primero las del stock y después las de la cadena de
+compra:
+
+1. Materiales e insumos
+2. Entradas
+3. Salidas
+4. Alertas y stock crítico
+5. Proveedores
+6. Proveedor-material
+7. Compras
+8. Pagos a proveedores
+
+Cada usuario ve solo las tarjetas de las pantallas que puede abrir: el
+maestro de taller ve las cuatro primeras.
+
 ## Tipos de proveedor
 
 **Dónde:** Inventario → Proveedores → Tipos de proveedor.
@@ -186,6 +208,82 @@ Reglas del formulario:
 - **Unidad de medida:** obligatoria, hasta 20 caracteres.
 - **Precio referencial** y **Tiempo de entrega (días):** números que no
   pueden ser negativos.
+
+## Entradas
+
+**Dónde:** Inventario → Entradas.
+**Quién:** el administrador (ADMIN) y el maestro de taller
+(WORKSHOP_MASTER) la consultan.
+
+Las entradas de stock que generan las compras y otros registros, las más
+recientes primero, de 20 en 20. Cada fila muestra el código del movimiento,
+la fecha, el material, la compra y su proveedor (si vino de una compra), la
+cantidad y el stock que dejó.
+
+- **Ver compra:** abre el detalle de la compra. Solo lo ve el
+  administrador; el maestro de taller ve el código de la compra en su
+  columna. Con **Atrás** del navegador vuelves a la lista con sus filtros.
+- **Filtros:** búsqueda por código de compra, material o proveedor;
+  material, proveedor, compra y el rango de fechas **Desde** y **Hasta**.
+
+La fecha de cada movimiento y el rango de fechas usan el día de la hora
+universal (UTC): un movimiento registrado después de las 19:00 de Lima
+aparece con la fecha del día siguiente.
+
+## Salidas
+
+**Dónde:** Inventario → Salidas.
+**Quién:** el administrador (ADMIN) y el maestro de taller
+(WORKSHOP_MASTER).
+
+Las salidas de stock a producción u otros motivos, las más recientes
+primero, de 20 en 20. Cada fila muestra el código, la fecha, el material, la
+orden de trabajo, quién registró la salida, la cantidad y el stock que dejó.
+
+- **Ver orden:** abre la orden de trabajo de la salida.
+- **Registrar salida:** abre el formulario de salida a página completa. Ese
+  formulario todavía no se renovó: **Volver a salidas** te lleva a la página
+  anterior (a la lista sin filtros si abriste el formulario por su
+  dirección), y **Cancelar** regresa a la lista sin sus filtros.
+- **Filtros:** búsqueda por orden, material o usuario que registró la
+  salida; material, orden y el rango de fechas **Desde** y **Hasta**.
+
+Como en las entradas, la fecha y el rango usan el día UTC.
+
+## Compras
+
+**Dónde:** Inventario → Compras.
+**Quién:** solo el administrador (ADMIN).
+
+Las compras, las registradas más recientemente primero, de 20 en 20. Cada
+fila muestra el código, la fecha de la compra, el proveedor, el
+comprobante, el total, el estado del pago y el estado de la compra.
+
+- **Ver detalle:** abre la compra con sus indicadores (proveedor, total,
+  pagado y saldo pendiente), sus datos, los materiales comprados y el
+  historial de pagos. **Volver a compras** y la miga **Compras** regresan a
+  la lista con los filtros que tenía.
+- **Nueva compra**, **Anular** (en la lista y en el detalle) y **Registrar
+  pago** todavía no se renovaron y se describirán cuando se renueven.
+- **Filtros:** búsqueda por código de compra, número de comprobante o
+  proveedor; proveedor, material (las compras que lo incluyen), estado de la
+  compra, estado del pago y el rango de fechas **Desde** y **Hasta** (la
+  fecha de la compra).
+
+## Pagos a proveedores
+
+**Dónde:** Inventario → Pagos a proveedores.
+**Quién:** solo el administrador (ADMIN).
+
+Todos los pagos registrados desde las compras, los más recientes primero.
+Cada fila muestra la fecha, el proveedor, la compra, el método, el monto, el
+saldo que quedó y el estado del pago.
+
+- **Ver compra:** abre el detalle de la compra del pago.
+- **Filtros:** búsqueda por compra, número de comprobante o proveedor;
+  proveedor, compra, método (efectivo, transferencia, Yape, Plin u otro),
+  estado (pendiente, parcial o pagado) y el rango de fechas **Desde** y
+  **Hasta** (la fecha del pago).
 
 ## Reglas de los catálogos de tipos y categorías
 
