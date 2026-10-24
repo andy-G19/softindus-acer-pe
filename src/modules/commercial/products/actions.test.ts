@@ -37,7 +37,8 @@ import {
 // requireRole y redirigen al negar el permiso (desviacion conocida); el alta y
 // la edicion guardan redirigiendo a ?toast= sin los filtros del listado. El
 // cambio de estado escribia el contrario de lo que leia (corregido en C2), y
-// la edicion rechaza la categoria actual del producto si esta inactiva.
+// la edicion rechazaba la categoria actual del producto si estaba inactiva
+// (corregido en C3).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -401,7 +402,7 @@ defineProductSuite("updateProductAction", updateProductAction, [
     ...productUpdateWith({ categoria: "soldadura" }, categoryStates({ herramientas: true, soldadura: false })),
   },
   {
-    name: "conservar su categoria actual inactiva tambien se rechaza: no se puede guardar sin cambiarla",
+    name: "conservar su categoria actual inactiva se acepta mientras no se cambie",
     ...productUpdateWith({}, categoryStates({ herramientas: false })),
   },
   { name: "el nombre es de otro producto: error en el campo", ...productUpdateWith({}, productLookup({ nameOwner: OTRO_PRODUCTO })) },
@@ -564,6 +565,45 @@ describeRequestedStatus({
   id: PRODUCTO,
   lookup: ({ estado }) => productLookup({ estado }),
   deactivatedToast: "product-deactivated",
+});
+
+// La edicion ofrece la categoria actual del producto aunque este inactiva
+// (getProductEditData), asi que la accion debe aceptarla mientras no se
+// cambie; cambiar a otra sigue exigiendo que este activa, como el alta. Como
+// las asociaciones proveedor-material en la 10.3b.
+describe("updateProductAction con la categoria actual inactiva", () => {
+  type Recorded = { prisma?: string; args?: { data?: Row } };
+
+  const update = (fields: FormFields, states: Record<string, boolean>) =>
+    runAction((formData) => updateProductAction(initialProductState, formData), {
+      name: "",
+      ...productUpdateWith(fields, categoryStates(states)),
+    });
+  const productUpdates = (calls: unknown[]) =>
+    (calls as Recorded[]).filter((call) => call.prisma === "producto.update");
+
+  it("conservar su categoria actual inactiva guarda el producto", async () => {
+    const { calls, outcome } = await update({}, { herramientas: false });
+
+    expect(productUpdates(calls)).toEqual([
+      expect.objectContaining({ args: expect.objectContaining({ data: expect.objectContaining({ categoria: "herramientas" }) }) }),
+    ]);
+    expect(String(outcome)).toContain("toast=product-updated");
+  });
+
+  it("cambiar a otra categoria inactiva se sigue rechazando", async () => {
+    const { calls, outcome } = await update({ categoria: "soldadura" }, { herramientas: false, soldadura: false });
+
+    expect(productUpdates(calls)).toEqual([]);
+    expect(JSON.stringify(outcome)).toContain("Selecciona una categoría activa.");
+  });
+
+  it("una categoria actual que ya no existe se rechaza", async () => {
+    const { calls, outcome } = await update({}, {});
+
+    expect(productUpdates(calls)).toEqual([]);
+    expect(JSON.stringify(outcome)).toContain("Selecciona una categoría activa.");
+  });
 });
 
 describeRequestedStatus({

@@ -1400,6 +1400,7 @@ exports[`updateProductAction > ADMIN actualiza el producto y registra la bitacor
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1490,6 +1491,7 @@ exports[`updateProductAction > cambiar a una categoria inactiva: error en el cam
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1525,7 +1527,7 @@ exports[`updateProductAction > cambiar a una categoria inactiva: error en el cam
 }
 `;
 
-exports[`updateProductAction > conservar su categoria actual inactiva tambien se rechaza: no se puede guardar sin cambiarla > llamadas 1`] = `
+exports[`updateProductAction > conservar su categoria actual inactiva se acepta mientras no se cambie > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1536,6 +1538,7 @@ exports[`updateProductAction > conservar su categoria actual inactiva tambien se
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1555,21 +1558,52 @@ exports[`updateProductAction > conservar su categoria actual inactiva tambien se
     },
     "prisma": "categoria_producto.findUnique",
   },
+  {
+    "args": {
+      "select": {
+        "id_producto": true,
+      },
+      "where": {
+        "nombre_producto": "Lampa agrícola reforzada",
+      },
+    },
+    "prisma": "producto.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "categoria": "herramientas",
+        "descripcion": "Mango de eucalipto.",
+        "nombre_producto": "Lampa agrícola reforzada",
+        "precio_referencial": 35.5,
+        "unidad_medida": "unidad",
+      },
+      "where": {
+        "id_producto": "PRO00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "producto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Producto actualizado: Lampa agrícola reforzada",
+      "enTransaccion": false,
+      "entidad_afectada": "producto",
+      "id_registro_afectado": "PRO00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/products",
+    "effect": "revalidatePath",
+  },
 ]
 `;
 
-exports[`updateProductAction > conservar su categoria actual inactiva tambien se rechaza: no se puede guardar sin cambiarla > resultado 1`] = `
-{
-  "estado": {
-    "error": "Selecciona una categoría activa.",
-    "fieldErrors": {
-      "categoria": [
-        "Selecciona una categoría activa.",
-      ],
-    },
-  },
-}
-`;
+exports[`updateProductAction > conservar su categoria actual inactiva se acepta mientras no se cambie > resultado 1`] = `"redirect:/dashboard/commercial/products?toast=product-updated"`;
 
 exports[`updateProductAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
@@ -1582,6 +1616,7 @@ exports[`updateProductAction > conservar su propio nombre no es un duplicado > l
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1659,6 +1694,7 @@ exports[`updateProductAction > datos invalidos devuelven los errores por campo d
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1697,6 +1733,7 @@ exports[`updateProductAction > el nombre es de otro producto: error en el campo 
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1754,6 +1791,7 @@ exports[`updateProductAction > el producto no existe > llamadas 1`] = `
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1784,6 +1822,7 @@ exports[`updateProductAction > otro fallo al actualizar devuelve el mensaje gene
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1872,6 +1911,7 @@ exports[`updateProductAction > una carrera por el nombre (P2002 al actualizar) m
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {
@@ -1945,6 +1985,7 @@ exports[`updateProductAction > vaciar el precio y la descripcion guarda null > l
   {
     "args": {
       "select": {
+        "categoria": true,
         "id_producto": true,
       },
       "where": {

@@ -109,7 +109,10 @@ async function validateDuplicateProductName(
   return existingProduct.id_producto !== currentProductId;
 }
 
-async function validateActiveCategory(slug: string) {
+// La categoria debe existir y estar activa. Al editar (currentSlug), la que el
+// producto ya tiene se acepta aunque este inactiva mientras no se cambie: la
+// consulta de edicion la ofrece, como las asociaciones proveedor-material.
+async function validateActiveCategory(slug: string, currentSlug?: string) {
   const category = await prisma.categoria_producto.findUnique({
     where: {
       slug,
@@ -119,7 +122,11 @@ async function validateActiveCategory(slug: string) {
     },
   });
 
-  return Boolean(category?.estado);
+  if (!category) {
+    return false;
+  }
+
+  return slug === currentSlug || category.estado;
 }
 
 function getPrismaUniqueErrorMessage(error: unknown, message: string) {
@@ -242,6 +249,7 @@ export async function updateProductAction(
     },
     select: {
       id_producto: true,
+      categoria: true,
     },
   });
 
@@ -261,7 +269,10 @@ export async function updateProductAction(
     };
   }
 
-  const categoryIsActive = await validateActiveCategory(parsed.data.categoria);
+  const categoryIsActive = await validateActiveCategory(
+    parsed.data.categoria,
+    product.categoria,
+  );
 
   if (!categoryIsActive) {
     return {
