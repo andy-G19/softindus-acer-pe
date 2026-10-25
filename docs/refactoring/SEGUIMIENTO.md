@@ -3158,7 +3158,7 @@ Límite con la entrega 11:
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
 | 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, la 10.3b a 7,5 h y 2,5 h, y la 10.3c a 4,5 h |
-| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge` | 5 h |
+| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
 | 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
@@ -3197,8 +3197,8 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
-| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4 | Pendiente |
-| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4 | Pendiente |
+| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado (en verificación) |
+| Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Pendiente |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
 | Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5 | Pendiente |
 | Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5 | Pendiente |
@@ -3230,7 +3230,7 @@ destructivas confirman:
 |---|---|
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
-| 10.4 | Inactivar cliente, producto y categoría de producto |
+| 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas; en verificación) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
 | 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
@@ -4763,6 +4763,202 @@ Datos leídos de la API de GitHub el 2026-10-24 y comparados con git:
   `pending` a las 01:40:10 UTC y `success` a las 01:41:18 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.4a — Productos, estados e inicio de Comercial
+
+Fecha: del 2026-10-23 al 2026-10-24 (Lima). Estado: en verificación. El
+paso 0 (`c5301c6`) registró la integración de la 10.3c en `main`. 8
+commits, de `f817b90` a `5b28b1e`, y este registro.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| c5301c6 | docs | Paso 0: integración de la 10.3c en `main`. |
+| f817b90 | test | Caracterización del cambio de estado de clientes; del alta, la edición y el cambio de estado de productos; del cambio de estado de categorías de producto, y de 5 casos de página que los datos generados no pintaban. |
+| c8a5a9d | fix | Activar e inactivar cliente, producto y categoría fijan el estado pedido. |
+| 404a761 | fix | Editar un producto conserva su categoría aunque esté inactiva. |
+| 6c8dc59 | fix | Mensajes en español en los esquemas de clientes, productos y categorías. |
+| 3a86b25 | feat | Productos en panel lateral con `FormActionState`; corrige la desviación del alta y la edición. |
+| 3e8f328 | feat | Inactivar producto pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
+| bee5b97 | feat | Inactivar cliente y categoría de producto pide confirmación. |
+| 5b28b1e | feat | El inicio de Comercial enlaza pagos de cliente y comprobantes de venta y pierde el `<main>` anidado. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Decisiones del responsable (2026-10-23), tras la auditoría:
+
+- D1. La 10.4 se parte en tres: 10.4a (productos, estados e inicio), 10.4b
+  (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia).
+  Recalibrada, sumaba unas 16 horas frente a las 5 del plan. Los listados
+  van antes que pedidos para que el piloto se verifique con la lista final.
+- D2. Los importes del pedido se corrigen en la 10.4c con la regla de
+  redondeo de la base, en una función pura que comparten la vista previa y
+  la acción (hallazgo 6).
+- D3. La edición conserva el cliente, los productos y la categoría actuales
+  aunque estén inactivos; uno nuevo debe estar activo, también en el alta de
+  pedido. La categoría se corrige aquí; el pedido, en la 10.4c.
+- D4. El descarte de la superficie amplia es «Cancelar» y el aviso al
+  recargar. Bloquear también los enlaces del shell con `onNavigate` se
+  decide antes de la entrega 11.
+- D5. El inicio de Comercial tiene seis tarjetas en el orden del flujo de
+  venta.
+- D6. Comercial adopta `Badge` con el mapeo de la galería, sacado de
+  `StatusBadge`, que Mantenimiento y Mermas siguen usando hasta la 10.5 y la
+  10.7 (10.4b).
+- D7. El hallazgo 9 de la 10.3c (lo que se teclea en `DateRangeFields`
+  antes de hidratar) se corrige al empezar la 10.4b, antes de sumar cuatro
+  listas más.
+- Tras C1, el mensaje de Zod en inglés va en un `fix` propio después de C3
+  y abarca los tres esquemas de Comercial con formulario en la 10.4a
+  (cliente, producto y categoría); el de pedidos va con su formulario en la
+  10.4c.
+- Los textos de las tres confirmaciones (C5 y C6) y de las dos tarjetas
+  nuevas (C7) se aprobaron en su commit.
+
+Auditoría (sobre `9c708a1`):
+
+- La 10.4 abarca 13 páginas de Comercial con `<main>` anidado. Todas admiten
+  ADMIN y SELLER, salvo el alta y la edición de producto (solo ADMIN); el
+  maestro de taller no entra a Comercial. En la 10.4a: el inicio, la lista
+  de productos (`q`, `category`, `unit`, `status`, `page` y `pageSize`), su
+  alta y su edición, y los cambios de estado de las listas de productos,
+  clientes y categorías de producto.
+- Las acciones de productos y los cambios de estado de clientes y
+  categorías no tenían pruebas. Los tres cambios de estado leían el estado y
+  escribían el contrario, sin confirmar, y volvían a la lista sin sus
+  filtros. El de clientes lo pueden usar ADMIN y SELLER; los otros dos, solo
+  ADMIN.
+- La edición de un producto ofrecía su categoría actual aunque estuviera
+  inactiva, pero la acción la rechazaba: el mismo patrón que el hallazgo 4
+  de la 10.3a.
+- Pagos de cliente y Comprobantes de venta solo se enlazaban desde el inicio
+  de Reportes, que es solo de ADMIN: el vendedor podía abrirlas y no llegaba
+  a ellas desde ninguna pantalla. Ningún rol veía enlaces que lo rechazaran.
+- Para la 10.4c, la auditoría también encontró los hallazgos 5 a 10.
+
+Diseño:
+
+- Productos como Proveedores: `products/layout.tsx` con la ranura `@panel`,
+  `(.)new` y `(.)[id]/edit` sobre `RouteSheet`; `product-edit-values.ts`
+  comparte los valores de la edición entre la página y el panel; las
+  acciones devuelven `FormActionState` y autorizan con
+  `getAuthorizedSession(["ADMIN"])`; la página pasa el aviso con su clave
+  literal y la lista lleva el `returnTo` a «Nuevo producto» y «Editar».
+- Los tres cambios de estado reciben el estado pedido y lo fijan con un
+  `updateMany` que lleva el contrario en el `where`; devuelven
+  `StatusToggleState` a un botón por entidad sobre `ConfirmActionButton`
+  (`ProductStatusButton`, `ClientStatusButton`,
+  `ProductCategoryStatusButton`). Inactivar confirma con la consecuencia
+  comprobada en las consultas:
+  - producto: deja de ofrecerse en pedidos, rutas de fabricación, recetas
+    técnicas nuevas, campañas y órdenes de trabajo, y en los filtros de
+    producto de Producción y de su reporte; no cuenta en Productos activos;
+  - cliente: deja de ofrecerse al registrar pedidos o cambiar el cliente de
+    uno y en el filtro de clientes del reporte de ventas y cobranzas; no
+    cuenta en Clientes activos;
+  - categoría: deja de ofrecerse al registrar productos o cambiar la
+    categoría de uno; los productos que ya la usan la conservan.
+
+  Activar se ejecuta al pulsar. Los botones de categoría conservan su
+  variante `outline` pequeña.
+- La validación de la categoría recibe la actual del producto: la acepta
+  aunque esté inactiva mientras no se cambie, y rechaza una que no existe.
+- Cada límite de largo, lista y campo obligatorio de los tres esquemas tiene
+  su mensaje. El tipo de documento del cliente pasa a
+  `z.union([...], { error })`: con `.or(...)` Zod responde «Invalid input» y
+  no el mensaje de la rama (sonda `tmp/e10-diff/zod-probe.mjs`).
+- El inicio suma «Pagos de cliente» y «Comprobantes de venta»: clientes,
+  productos, pedidos, proformas, pagos y comprobantes. Pierde también el
+  comentario de un borrador antiguo. `commercial-links.test.ts`, como
+  `inventory-links.test.ts`, abre con ADMIN y con SELLER cada enlace de
+  Comercial del inicio, las listas y los detalles de pedido y proforma, y
+  exige una tarjeta para cada lista del área.
+
+Evidencia:
+
+1. Prueba roja antes de cada arreglo: `tmp/e10-diff/rojo-104a-c2.txt` (12),
+   `rojo-104a-c3.txt` (1; sus 2 contrarias pasan antes y después),
+   `rojo-104a-c3b.txt` (11 de 14) y `rojo-104a-c7.txt` (la tarjeta de cada
+   lista, con los dos roles).
+2. Caracterización antes de cambiar: 41 casos de acciones y 5 de página en
+   `f817b90`, sin cambiar los 92 snapshots existentes.
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas (`verify_104a_c2.py`, `verify_104a_c4.py`, `verify_104a_c5.py` y
+   `verify_104a_c6.py`):
+   - las llamadas de las acciones solo cambian la autorización y, en los
+     cambios de estado, la lectura del nombre cuando no cambia ninguna fila;
+   - las de las páginas no cambian;
+   - el formulario de producto solo cambia por el patrón de `Field`,
+     comparado etiqueta por etiqueta y atributo por atributo;
+   - las listas conservan su texto visible y sus controles, salvo los campos
+     ocultos de cada fila y el guion de React que reenvía formularios con
+     acción de función.
+
+   Los de C4 a C6 se probaron en negativo: fallan con una etiqueta, un
+   atributo, un texto, una opción o un mensaje cambiados.
+4. Mutaciones (`tmp/e10-diff/mut_104a_c*.txt`): 19 de 19, 13 de 13, 6 de 6,
+   11 de 11, 19 de 19, 12 de 12, 16 de 16 y 6 de 6; en total, 102 de 102,
+   con las contrarias de C2 y C3.
+5. CSS compilado igual en cada commit (112.980 bytes) salvo C5, que solo
+   quita la rejilla de la barra vieja de productos (112.829 bytes): el
+   anterior sin esa regla es idéntico byte a byte (`css_104a_c5.py`).
+6. `npm run check` terminó con código 0 después de cada commit, de 152 a 160
+   archivos de prueba y de 2.476 a 2.603 pruebas. `npm run
+   refactor:inventory` analiza 677 archivos: 143 páginas (15 en ranuras, 10
+   que interceptan), 106 formularios JSX (eran 109) y 48 archivos de
+   acciones.
+
+Tiempo entre commits según sus horas (Lima). Incluye la preparación, la
+revisión del responsable y sus pausas; el paso 0 incluye el plan desde el
+«aprobado»:
+
+| Commit | Paso 0 | f817b90 | c8a5a9d | 404a761 | 6c8dc59 | 3a86b25 | 3e8f328 | bee5b97 | 5b28b1e |
+|---|---|---|---|---|---|---|---|---|---|
+| Hora | 21:22 | 21:37 | 21:48 | 22:06 | 22:26 | 22:44 | 22:58 | 07:19 | 19:46 |
+| Minutos desde el anterior | — | 15 | 11 | 18 | 20 | 18 | 14 | — | — |
+
+De `f817b90` a `3e8f328`, 96 minutos frente a unos 130 estimados (factor
+0,74, como la 10.3b). `bee5b97` y `5b28b1e` llegaron tras pausas largas (la
+noche y el día siguiente) y no calibran.
+
+Hallazgos:
+
+1. Los tres cambios de estado escribían el contrario de lo que leían.
+   Corregido en `c8a5a9d`.
+2. La edición de un producto con su categoría inactiva no se podía guardar.
+   Corregido en `404a761`.
+3. Los esquemas de cliente, producto y categoría daban el mensaje de Zod en
+   inglés: los formularios no limitan el largo. Corregido en `6c8dc59`;
+   quedan el de pedidos (10.4c) y los de las demás áreas, en su
+   sub-entrega.
+4. El vendedor no llegaba a Pagos de cliente ni a Comprobantes de venta.
+   Corregido en `5b28b1e`.
+5. Para la 10.4c: un pedido cuyo cliente o algún producto se inactivó no se
+   puede guardar al editarlo. La página solo ofrece activos y
+   `SearchableSelect` deja el campo visible vacío y obligatorio. Además, el
+   alta y la edición no comprueban que existan ni que estén activos: un id
+   inexistente rompe en la clave foránea.
+6. Para la 10.4c (dinero): el pedido calcula el subtotal y el monto estimado
+   con números de JavaScript sin redondear, y la base redondea cada uno por
+   su cuenta. Con Postgres real (PGlite, `tmp/e10-diff/e104-demo/`), dos
+   líneas de 1,25 × S/ 10,25 guardan 12,81 + 12,81 y un monto de 25,63; la
+   proforma suma los subtotales (25,62) y el reporte de ventas, el monto.
+   Compras (entrega 11) y reparaciones (10.5) tienen el mismo patrón.
+7. Entrega 11: `updateOrderAction` decide si el pedido se puede modificar
+   fuera de la transacción y sin bloquear la fila, como cancelar (H11). El
+   bloqueo solo ordena a quien lo toma: va con editar, cancelar, generar
+   proforma y crear la orden de trabajo.
+8. El día UTC (hallazgo 3 de la 10.3c) también afecta a los pedidos: después
+   de las 19:00 de Lima, elegir «hoy» como entrega da «no puede ser anterior
+   a la fecha del pedido», y el pedido queda con la fecha del día siguiente.
+9. Proformas, comprobantes y pagos de cliente no paginan, como pagos a
+   proveedores. Entrega 11.
+10. El filtro de cliente del reporte de ventas y cobranzas solo ofrece
+    clientes activos: las ventas de un cliente inactivo no se pueden
+    filtrar.
+11. Método: un guion de prueba negativa recibió `Errno 22` al escribir un
+    `.snap` (Windows). El archivo quedó intacto, comprobado con las pruebas y
+    el verificador, y los guiones siguientes escriben con reintentos.
+12. Método: la etiqueta de una mutación de C6 se corrigió después de
+    ejecutarla, para que describa lo que muta; la mutación no cambió.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4787,7 +4983,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, en curso) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, en verificación) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -4811,7 +5007,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 152 / 2.476 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 160 / 2.603 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -4830,12 +5026,12 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 9 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 84 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 16 (24 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 8 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 80 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 15 (23 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 18 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 5 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 16 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
 | Pantallas con rango de fechas sin `DateRangeFields` | 27 | 13 | 10 |
@@ -4843,6 +5039,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 | Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 4 (copias locales) | 10 |
 | Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
+| Acciones de Comercial sin caracterizar: el cambio de estado de clientes; el alta, la edición y el cambio de estado de productos; el de categorías | 5 | 0 | 10 |
+| Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -5070,6 +5268,28 @@ medidos de nuevo.
 
 El cierre de la 10.3c (2026-10-21) no cambia código: las métricas son las
 de `3272901`.
+
+Actualizado en la sub-entrega 10.4a (2026-10-24) sobre `5b28b1e`:
+
+- Pruebas: 160 / 2.603.
+- La desviación baja a 16 (alta y edición de productos), en 8 archivos, y
+  los cambios de estado que voltean el estado a 2, en 2 archivos (rutas de
+  fabricación y etapas, 10.6). `FieldError` baja a 8.
+- El `<main>` anidado baja a 80 (el inicio de Comercial y la lista, el alta
+  y la edición de productos) y los formularios GET a 23, con 15
+  combinaciones de clases: la barra de productos pasa a `FilterBar`.
+- Las dos filas nuevas se midieron sobre `9c708a1`, su línea base: 5
+  acciones de Comercial sin pruebas, y Pagos de cliente y Comprobantes de
+  venta sin tarjeta en el inicio de Comercial (solo las enlazaba el inicio de
+  Reportes, que es de ADMIN); ningún rol veía enlaces de Comercial que lo
+  rechazaran.
+- La desviación y los cambios de estado que voltean se cuentan con
+  `tmp/e10-diff/count_104a_metrics.py`, que sobre `9c708a1` da las 18 y las
+  5 registradas.
+
+Las demás no cambian: páginas con Prisma directo 0, pantallas con rango de
+fechas sin `DateRangeFields` 13 e `import` de las librerías de
+notificaciones en 2 archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
