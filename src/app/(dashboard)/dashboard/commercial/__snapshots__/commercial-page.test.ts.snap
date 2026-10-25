@@ -71,7 +71,7 @@ exports[`/dashboard/commercial > indicadores > llamadas 1`] = `
 
 exports[`/dashboard/commercial > indicadores > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -243,9 +243,37 @@ exports[`/dashboard/commercial > indicadores > resultado 1`] = `
 </div>
 </div>
 </a>
+<a href="/dashboard/commercial/payments">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Pagos de cliente</div>
+</div>
+<div>
+<p>Consulta los pagos registrados desde las proformas y su saldo pendiente.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Comprobantes de venta</div>
+</div>
+<div>
+<p>Consulta los comprobantes emitidos desde las proformas, también los anulados.</p>
+</div>
+</div>
+</a>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -321,7 +349,7 @@ exports[`/dashboard/commercial > vendedor > llamadas 1`] = `
 
 exports[`/dashboard/commercial > vendedor > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -493,9 +521,37 @@ exports[`/dashboard/commercial > vendedor > resultado 1`] = `
 </div>
 </div>
 </a>
+<a href="/dashboard/commercial/payments">
+<div>
+<span aria-hidden="true">05</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Pagos de cliente</div>
+</div>
+<div>
+<p>Consulta los pagos registrados desde las proformas y su saldo pendiente.</p>
+</div>
+</div>
+</a>
+<a href="/dashboard/commercial/receipts">
+<div>
+<span aria-hidden="true">06</span>
+<div>
+<div>
+<svg/>
+</div>
+<div>Comprobantes de venta</div>
+</div>
+<div>
+<p>Consulta los comprobantes emitidos desde las proformas, también los anulados.</p>
+</div>
+</div>
+</a>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

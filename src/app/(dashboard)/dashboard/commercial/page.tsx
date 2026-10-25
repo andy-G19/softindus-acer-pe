@@ -1,7 +1,3 @@
-/**
- * Ubicación destino: src/app/(dashboard)/dashboard/commercial/page.tsx
- * (reemplaza el archivo actual)
- */
 import {
   ClipboardList,
   FileText,
@@ -9,6 +5,7 @@ import {
   Receipt,
   Tag,
   Users,
+  Wallet,
 } from "lucide-react";
 
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -109,10 +106,26 @@ export default async function CommercialPage() {
       icon: FileText,
       tone: "chart-4" as const,
     },
+    // Entrega 10.4a: antes, estas dos listas solo se enlazaban desde el inicio
+    // de Reportes, que es solo de ADMIN, y el vendedor no llegaba a ellas.
+    {
+      title: "Pagos de cliente",
+      href: "/dashboard/commercial/payments",
+      description: "Consulta los pagos registrados desde las proformas y su saldo pendiente.",
+      icon: Wallet,
+      tone: "chart-5" as const,
+    },
+    {
+      title: "Comprobantes de venta",
+      href: "/dashboard/commercial/receipts",
+      description: "Consulta los comprobantes emitidos desde las proformas, también los anulados.",
+      icon: Receipt,
+      tone: "chart-1" as const,
+    },
   ];
 
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <PageHeader
         title="Comercial"
         description="Gestiona clientes, productos, pedidos, proformas, pagos y comprobantes."
@@ -156,6 +169,6 @@ export default async function CommercialPage() {
           ))}
         </div>
       </section>
-    </main>
+    </div>
   );
 }
