@@ -10,7 +10,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | Páginas | 143 |
 | Páginas en ranuras paralelas (@ranura) | 15 |
 | Páginas que interceptan una ruta | 10 |
-| Declaraciones JSX de formulario | 106 |
+| Declaraciones JSX de formulario | 102 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -52,9 +52,9 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial/orders/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/edit/page.tsx` | 0 | OrderForm |
 | `/dashboard/commercial/orders/[id]` | — | `src/app/(dashboard)/dashboard/commercial/orders/[id]/page.tsx` | 0 | — |
 | `/dashboard/commercial/orders/new` | — | `src/app/(dashboard)/dashboard/commercial/orders/new/page.tsx` | 0 | OrderForm |
-| `/dashboard/commercial/orders` | — | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 2 | — |
+| `/dashboard/commercial/orders` | — | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 1 | — |
 | `/dashboard/commercial` | — | `src/app/(dashboard)/dashboard/commercial/page.tsx` | 0 | — |
-| `/dashboard/commercial/payments` | — | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 1 | — |
+| `/dashboard/commercial/payments` | — | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 0 | — |
 | `/dashboard/commercial/product-categories` | — | `src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx` | 0 | ProductCategoryManager |
 | `/dashboard/commercial/products/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/products/@panel/(.)[id]/edit/page.tsx` | 0 | ProductForm |
 | `/dashboard/commercial/products/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/products/@panel/(.)new/page.tsx` | 0 | ProductForm |
@@ -64,8 +64,8 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial/products` | — | `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 0 | — |
 | `/dashboard/commercial/quotes/[id]` | — | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 1 | ReceiptForm, PaymentForm |
 | `/dashboard/commercial/quotes/new` | — | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
-| `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 2 | — |
-| `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 2 | — |
+| `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 1 | — |
+| `/dashboard/commercial/receipts` | — | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 1 | — |
 | `/dashboard/costs/costings/[id]` | — | `src/app/(dashboard)/dashboard/costs/costings/[id]/page.tsx` | 0 | — |
 | `/dashboard/costs/costings` | — | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 1 | — |
 | `/dashboard/costs` | — | `src/app/(dashboard)/dashboard/costs/page.tsx` | 0 | — |
@@ -188,14 +188,10 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
-| `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 66 | `"/dashboard/commercial/payments"` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 233 | `{cancelOrderAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 72 | `"/dashboard/commercial/quotes"` |
-| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 218 | `{annulQuoteAction}` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 56 | `"/dashboard/commercial/receipts"` |
-| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 156 | `{annulReceiptAction}` |
+| `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 203 | `{annulQuoteAction}` |
+| `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 136 | `{annulReceiptAction}` |
 | `src/app/(dashboard)/dashboard/costs/costings/page.tsx` | 128 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/costs/work-orders/page.tsx` | 217 | `{createCostingFromWorkOrderAction}` |
 | `src/app/(dashboard)/dashboard/inventory/purchases/[id]/page.tsx` | 83 | `{annulPurchaseAction}` |
