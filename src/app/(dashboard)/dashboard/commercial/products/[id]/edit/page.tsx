@@ -2,8 +2,14 @@ import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { updateProductAction } from "@/modules/commercial/products/actions";
+import { getProductEditValues } from "@/modules/commercial/products/product-edit-values";
 import { ProductForm } from "@/modules/commercial/products/product-form";
 import { getProductEditData } from "@/modules/commercial/products/queries";
 
@@ -11,10 +17,12 @@ type EditProductPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function EditProductPage({ params }: EditProductPageProps) {
+export default async function EditProductPage({ params, searchParams }: EditProductPageProps) {
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
   await requireRole(["ADMIN"]);
 
   const productEditData = await getProductEditData(id);
@@ -24,17 +32,18 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
   }
 
   const { product, categories } = productEditData;
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.products);
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader
         title="Editar producto"
         description="Actualiza los datos comerciales del producto."
-        backHref={navigationHrefs.products}
+        backHref={backHref}
         backLabel="Volver a productos"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Comercial", href: navigationHrefs.commercial },
-          { label: "Productos", href: navigationHrefs.products },
+          { label: "Productos", href: backHref },
           { label: "Editar producto" },
         ])}
       />
@@ -43,15 +52,10 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         action={updateProductAction}
         categories={categories}
         submitLabel="Guardar cambios"
-        defaultValues={{
-          id_producto: product.id_producto,
-          nombre_producto: product.nombre_producto,
-          categoria: product.categoria,
-          descripcion: product.descripcion ?? "",
-          unidad_medida: product.unidad_medida,
-          precio_referencial: product.precio_referencial?.toString() ?? "",
-        }}
+        successNotification={commercialNotifications["product-updated"]}
+        returnTo={backHref}
+        defaultValues={getProductEditValues(product)}
       />
-    </main>
+    </div>
   );
 }

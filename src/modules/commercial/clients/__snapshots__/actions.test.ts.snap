@@ -246,7 +246,7 @@ exports[`createClientAction > datos invalidos devuelven los errores por campo si
         "El nombre o razón social es obligatorio.",
       ],
       "tipo_cliente": [
-        "Invalid option: expected one of "ferreteria"|"distribuidora"|"constructora"|"cliente_final"|"otro"",
+        "Selecciona un tipo de cliente válido.",
       ],
     },
     "operationId": "operacion-de-prueba",
@@ -553,6 +553,311 @@ exports[`createClientAction > una carrera por el documento (P2002 al crear) revi
       "telefono": "987654321",
       "tipo_cliente": "ferreteria",
       "tipo_documento": "ruc",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Cliente inactivado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > ADMIN inactiva un cliente activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Cliente activado: Ferreteria Andina SAC",
+      "enTransaccion": false,
+      "entidad_afectada": "cliente",
+      "id_registro_afectado": "CLI00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/commercial/clients",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > SELLER tambien puede: activa un cliente inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar clientes.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > el cliente no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "cliente.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_razon_social": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000007",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > pedir inactivar un cliente que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "CLI00000007",
+    },
+  },
+}
+`;
+
+exports[`toggleClientStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`toggleClientStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El cliente no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
     },
   },
 }

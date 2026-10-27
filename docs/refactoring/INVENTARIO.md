@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 660 |
-| Páginas | 140 |
-| Páginas en ranuras paralelas (@ranura) | 12 |
-| Páginas que interceptan una ruta | 8 |
-| Declaraciones JSX de formulario | 109 |
+| Archivos fuente analizados | 677 |
+| Páginas | 143 |
+| Páginas en ranuras paralelas (@ranura) | 15 |
+| Páginas que interceptan una ruta | 10 |
+| Declaraciones JSX de formulario | 106 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -21,7 +21,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | access-denied | 1 |
 | audit | 1 |
 | auth | 1 |
-| commercial | 20 |
+| commercial | 23 |
 | costs | 4 |
 | gallery | 1 |
 | inicio | 2 |
@@ -56,9 +56,12 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/commercial` | — | `src/app/(dashboard)/dashboard/commercial/page.tsx` | 0 | — |
 | `/dashboard/commercial/payments` | — | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 1 | — |
 | `/dashboard/commercial/product-categories` | — | `src/app/(dashboard)/dashboard/commercial/product-categories/page.tsx` | 0 | ProductCategoryManager |
+| `/dashboard/commercial/products/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/products/@panel/(.)[id]/edit/page.tsx` | 0 | ProductForm |
+| `/dashboard/commercial/products/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/commercial/products/@panel/(.)new/page.tsx` | 0 | ProductForm |
+| `/dashboard/commercial/products` | `@panel` | `src/app/(dashboard)/dashboard/commercial/products/@panel/page.tsx` | 0 | — |
 | `/dashboard/commercial/products/[id]/edit` | — | `src/app/(dashboard)/dashboard/commercial/products/[id]/edit/page.tsx` | 0 | ProductForm |
 | `/dashboard/commercial/products/new` | — | `src/app/(dashboard)/dashboard/commercial/products/new/page.tsx` | 0 | ProductForm |
-| `/dashboard/commercial/products` | — | `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 1 | — |
+| `/dashboard/commercial/products` | — | `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 0 | — |
 | `/dashboard/commercial/quotes/[id]` | — | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 1 | ReceiptForm, PaymentForm |
 | `/dashboard/commercial/quotes/new` | — | `src/app/(dashboard)/dashboard/commercial/quotes/new/page.tsx` | 0 | QuoteForm |
 | `/dashboard/commercial/quotes` | — | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 2 | — |
@@ -188,7 +191,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 78 | `"/dashboard/commercial/orders"` |
 | `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 249 | `{cancelOrderAction}` |
 | `src/app/(dashboard)/dashboard/commercial/payments/page.tsx` | 66 | `"/dashboard/commercial/payments"` |
-| `src/app/(dashboard)/dashboard/commercial/products/page.tsx` | 99 | `"/dashboard/commercial/products"` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 72 | `"/dashboard/commercial/quotes"` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 218 | `{annulQuoteAction}` |
@@ -273,8 +275,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/components/table/row-actions.tsx` | 44 | `{action}` |
 | `src/modules/auth/components/login-form.tsx` | 162 | `{formAction}` |
 | `src/modules/auth/components/logout-button.tsx` | 8 | `{async () => { "use server"; await signOut({ redirectTo: "/login", }); }}` |
-| `src/modules/commercial/products/product-category-manager.tsx` | 84 | `{toggleAction}` |
-| `src/modules/commercial/products/product-form.tsx` | 90 | `{formAction}` |
 | `src/modules/costs/costings/costing-data-card.tsx` | 66 | `{updateLaborCostAction}` |
 | `src/modules/costs/costings/costing-data-card.tsx` | 91 | `{recalculateCostingAction}` |
 | `src/modules/costs/indirect-costs/indirect-costs-section.tsx` | 75 | `{createIndirectCostAction}` |
