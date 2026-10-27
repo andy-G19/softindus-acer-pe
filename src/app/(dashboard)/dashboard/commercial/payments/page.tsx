@@ -1,10 +1,12 @@
 import Link from "next/link";
 
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -53,7 +55,7 @@ export default async function CustomerPaymentsPage({
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Pagos de cliente"
         description="Consulta pagos registrados desde proformas."
@@ -63,83 +65,66 @@ export default async function CustomerPaymentsPage({
         ])}
       />
 
-      <form
-        action="/dashboard/commercial/payments"
-        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-6"
+      <FilterBar
+        action={navigationHrefs.customerPayments}
+        label="Filtros de pagos de cliente"
+        clearHref={navigationHrefs.customerPayments}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar pago..." />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="client">Cliente</Label>
-          <NativeSelect id="client" name="client" defaultValue={client}>
-            <option value="">Todos los clientes</option>
-            {clients.map((item) => (
-              <option key={item.id_cliente} value={item.id_cliente}>
-                {item.nombre_razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="order">Pedido</Label>
-          <NativeSelect id="order" name="order" defaultValue={order}>
-            <option value="">Todos los pedidos</option>
-            {orders.map((item) => (
-              <option key={item.id_pedido} value={item.id_pedido}>
-                {item.id_pedido}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="method">Método</Label>
-          <NativeSelect id="method" name="method" defaultValue={method}>
-            <option value="">Método</option>
-            <option value="efectivo">Efectivo</option>
-            <option value="transferencia">Transferencia</option>
-            <option value="yape">Yape</option>
-            <option value="plin">Plin</option>
-            <option value="otro">Otro</option>
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo de pago</Label>
-          <NativeSelect id="type" name="type" defaultValue={type}>
-            <option value="">Tipo pago</option>
-            <option value="adelanto">Adelanto</option>
-            <option value="amortizacion">Amortización</option>
-            <option value="cancelacion">Cancelación</option>
-          </NativeSelect>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input
-              id="from"
-              name="from"
-              type="date"
-              defaultValue={parseStringParam(params, "from")}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input
-              id="to"
-              name="to"
-              type="date"
-              defaultValue={parseStringParam(params, "to")}
-            />
-          </div>
-        </div>
-        <div className="flex items-end gap-2 md:col-span-6">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/commercial/payments">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar pago..." />}
+        </Field>
+        <Field id="client" label="Cliente">
+          {(control) => (
+            <NativeSelect {...control} name="client" defaultValue={client}>
+              <option value="">Todos los clientes</option>
+              {clients.map((item) => (
+                <option key={item.id_cliente} value={item.id_cliente}>
+                  {item.nombre_razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="order" label="Pedido">
+          {(control) => (
+            <NativeSelect {...control} name="order" defaultValue={order}>
+              <option value="">Todos los pedidos</option>
+              {orders.map((item) => (
+                <option key={item.id_pedido} value={item.id_pedido}>
+                  {item.id_pedido}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="method" label="Método">
+          {(control) => (
+            <NativeSelect {...control} name="method" defaultValue={method}>
+              <option value="">Método</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="transferencia">Transferencia</option>
+              <option value="yape">Yape</option>
+              <option value="plin">Plin</option>
+              <option value="otro">Otro</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="type" label="Tipo de pago">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Tipo pago</option>
+              <option value="adelanto">Adelanto</option>
+              <option value="amortizacion">Amortización</option>
+              <option value="cancelacion">Cancelación</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -195,6 +180,6 @@ export default async function CustomerPaymentsPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

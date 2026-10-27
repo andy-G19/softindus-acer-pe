@@ -65,7 +65,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > llamadas 1`] = `
 
 exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -93,7 +93,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/payments">
+<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -134,16 +134,17 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-02-30"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-32"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
@@ -194,7 +195,7 @@ exports[`/dashboard/commercial/payments > fechas no validas > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -265,7 +266,7 @@ exports[`/dashboard/commercial/payments > rango invertido > llamadas 1`] = `
 
 exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -293,7 +294,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/payments">
+<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -334,16 +335,18 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
@@ -377,7 +380,7 @@ exports[`/dashboard/commercial/payments > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -439,7 +442,7 @@ exports[`/dashboard/commercial/payments > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -467,7 +470,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/payments">
+<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -508,16 +511,17 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
@@ -568,7 +572,7 @@ exports[`/dashboard/commercial/payments > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -630,7 +634,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > llamadas 1`] 
 
 exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -658,7 +662,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/payments">
+<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value=""/>
@@ -699,16 +703,17 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
@@ -772,7 +777,7 @@ exports[`/dashboard/commercial/payments > tipos y metodos reales > resultado 1`]
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -887,7 +892,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -915,7 +920,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/payments">
+<form role="search" aria-label="Filtros de pagos de cliente" action="/dashboard/commercial/payments" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar pago..." name="q" value="PRO"/>
@@ -956,16 +961,17 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 <option value="cancelacion">Cancelación</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/payments">Limpiar filtros</a>
@@ -1016,7 +1022,7 @@ exports[`/dashboard/commercial/payments > todos los filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
