@@ -126,7 +126,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <div>
@@ -146,7 +146,7 @@ exports[`/dashboard/commercial/receipts > fechas no validas > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <div>
@@ -420,7 +420,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <div>
@@ -440,7 +440,7 @@ exports[`/dashboard/commercial/receipts > sin filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <div>
@@ -619,7 +619,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <div>
@@ -639,7 +639,7 @@ exports[`/dashboard/commercial/receipts > todos los filtros > resultado 1`] = `
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <div>
@@ -777,7 +777,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span>Emitido</span>
+<span data-variant="success">Emitido</span>
 </td>
 <td>
 <div>
@@ -797,7 +797,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>1/7/2026</td>
 <td>S/ 11.50</td>
 <td>
-<span>Anulado</span>
+<span data-variant="destructive">Anulado</span>
 </td>
 <td>
 <div>
@@ -813,7 +813,7 @@ exports[`/dashboard/commercial/receipts > un comprobante por estado > resultado 
 <td>2/7/2026</td>
 <td>S/ 22.50</td>
 <td>
-<span>Emitido</span>
+<span data-variant="success">Emitido</span>
 </td>
 <td>
 <div>

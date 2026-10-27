@@ -1,6 +1,6 @@
 import { Boxes, Factory, Package, Users } from "lucide-react";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,15 +59,20 @@ export function PresentationSection() {
         ))}
       </GallerySample>
 
-      <GallerySample label="Etiqueta de estado comercial (StatusBadge)">
+      <GallerySample label="Etiqueta de estado (StateBadge)">
+        {COMMERCIAL_STATUSES.map((status) => (
+          <StateBadge key={status} status={status} />
+        ))}
+      </GallerySample>
+      <GallerySample label="Etiqueta de estado anterior (StatusBadge)">
         {COMMERCIAL_STATUSES.map((status) => (
           <StatusBadge key={status} status={status} />
         ))}
       </GallerySample>
       <GalleryNote>
-        Hay dos aspectos para las etiquetas de estado: Badge, que usan la mayoría
-        de los módulos, y StatusBadge, que usa Comercial. Unificarlos es una
-        decisión visible que se tomará al migrar los listados.
+        La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono
+        de cada estado, y Comercial la usa desde la entrega 10.4b. StatusBadge
+        queda en Mantenimiento y Mermas hasta la 10.5 y la 10.7.
       </GalleryNote>
 
       <div className="grid gap-6 lg:grid-cols-3">

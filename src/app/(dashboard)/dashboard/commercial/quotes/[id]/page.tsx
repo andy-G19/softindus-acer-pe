@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { annulQuoteAction } from "@/modules/commercial/quotes/actions";
 import { getQuoteDetail } from "@/modules/commercial/quotes/queries";
 
@@ -195,11 +195,11 @@ export default async function QuoteDetailPage({
                 </p>
                 <p>
                   <span className="font-medium">Estado del pedido:</span>{" "}
-                  <StatusBadge status={quote.pedido.estado} />
+                  <StateBadge status={quote.pedido.estado} />
                 </p>
                 <p>
                   <span className="font-medium">Estado de proforma:</span>{" "}
-                  <StatusBadge status={quote.estado} />
+                  <StateBadge status={quote.estado} />
                 </p>
               </div>
             </div>
@@ -371,7 +371,7 @@ export default async function QuoteDetailPage({
                             {formatMoney(receipt.monto_total)}
                           </td>
                           <td className="px-4 py-3">
-                            <StatusBadge status={receipt.estado} />
+                            <StateBadge status={receipt.estado} />
                           </td>
                         </tr>
                       ))}

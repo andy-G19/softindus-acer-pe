@@ -1,3 +1,7 @@
+import type { ComponentProps } from "react";
+
+import { Badge } from "@/components/ui/badge";
+
 type StatusBadgeProps = {
   status: string | null | undefined;
 };
@@ -65,4 +69,34 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       {label}
     </span>
   );
+}
+
+// Etiqueta de estado con Badge (entrega 10.4b, D6 de la 10.4): las mismas
+// etiquetas y los mismos tonos que StatusBadge, con la forma de Badge, mas
+// compacta y en mayusculas. Comercial la usa desde la 10.4b; Mantenimiento y
+// Mermas siguen con StatusBadge hasta la 10.5 y la 10.7. Cada clase de tono
+// pasa a su variante, como en la galeria; un estado sin tono usa outline, la
+// mas parecida al gris de StatusBadge. Solo cuentan los estados de las tablas
+// (Object.hasOwn): "constructor" no toma una propiedad de Object.
+type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
+
+const variantByStyle: Record<string, BadgeVariant> = {
+  "badge-state-info": "info",
+  "badge-state-success": "success",
+  "badge-state-active": "default",
+  "badge-state-danger": "destructive",
+};
+
+export function StateBadge({ status }: StatusBadgeProps) {
+  const normalizedStatus = normalizeStatus(status);
+  const style =
+    normalizedStatus && Object.hasOwn(statusStyles, normalizedStatus)
+      ? statusStyles[normalizedStatus]
+      : undefined;
+  const label =
+    normalizedStatus && Object.hasOwn(statusLabels, normalizedStatus)
+      ? statusLabels[normalizedStatus]
+      : status ?? "-";
+
+  return <Badge variant={style ? variantByStyle[style] : "outline"}>{label}</Badge>;
 }

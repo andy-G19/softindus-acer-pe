@@ -210,7 +210,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -230,7 +230,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>-</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -679,7 +679,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -699,7 +699,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>-</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -1024,7 +1024,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -1044,7 +1044,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>-</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -1265,10 +1265,10 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>Registrado</span>
+<span data-variant="info">Registrado</span>
 </td>
 <td>
-<span>Sin proforma</span>
+<span data-variant="default">Sin proforma</span>
 </td>
 <td>
 <div>
@@ -1290,7 +1290,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>Aprobado</span>
+<span data-variant="info">Aprobado</span>
 </td>
 <td>
 <span data-variant="success">numero_proforma-1</span>
@@ -1310,10 +1310,10 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>En producción</span>
+<span data-variant="default">En producción</span>
 </td>
 <td>
-<span>Sin proforma</span>
+<span data-variant="default">Sin proforma</span>
 </td>
 <td>
 <div>
@@ -1329,10 +1329,10 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>Cancelado</span>
+<span data-variant="destructive">Cancelado</span>
 </td>
 <td>
-<span>Sin proforma</span>
+<span data-variant="default">Sin proforma</span>
 </td>
 <td>
 <div>
@@ -1348,10 +1348,10 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 <td>nombre_producto-1 x 11.5 | nombre_producto-2 x 22.5</td>
 <td>S/ 11.50</td>
 <td>
-<span>Aprobado</span>
+<span data-variant="info">Aprobado</span>
 </td>
 <td>
-<span>Sin proforma</span>
+<span data-variant="default">Sin proforma</span>
 </td>
 <td>
 <div>
@@ -1495,7 +1495,7 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 <div>
 <p>Estado</p>
 <div>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </div>
 </div>
 </section>
@@ -1680,7 +1680,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 <div>
 <p>Estado</p>
 <div>
-<span>En producción</span>
+<span data-variant="default">En producción</span>
 </div>
 </div>
 </section>
@@ -1921,7 +1921,7 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 <div>
 <p>Estado</p>
 <div>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </div>
 </div>
 </section>

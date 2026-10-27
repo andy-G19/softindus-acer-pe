@@ -190,7 +190,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -210,7 +210,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -618,7 +618,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -638,7 +638,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -840,7 +840,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -860,7 +860,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -1113,7 +1113,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -1133,7 +1133,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <td>S/ 22.50</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -1335,10 +1335,10 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>Vigente</span>
+<span data-variant="info">Vigente</span>
 </td>
 <td>
-<span>Sin comprobante</span>
+<span data-variant="default">Sin comprobante</span>
 </td>
 <td>
 <div>
@@ -1359,7 +1359,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>Aceptada</span>
+<span data-variant="info">Aceptada</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -1379,7 +1379,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <td>S/ 11.50</td>
 <td>S/ 0.00</td>
 <td>
-<span>Pagada</span>
+<span data-variant="success">Pagada</span>
 </td>
 <td>
 <span data-variant="success">tipo_comprobante-1 numero_comprobante-1</span>
@@ -1398,10 +1398,10 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <td>S/ 11.50</td>
 <td>S/ 11.50</td>
 <td>
-<span>Anulada</span>
+<span data-variant="destructive">Anulada</span>
 </td>
 <td>
-<span>Sin comprobante</span>
+<span data-variant="default">Sin comprobante</span>
 </td>
 <td>
 <div>
@@ -1559,10 +1559,10 @@ exports[`/dashboard/commercial/quotes/[id] > anulable > resultado 1`] = `
 <p>
 <span>Entrega estimada:</span> 1/7/2026</p>
 <p>
-<span>Estado del pedido:</span> <span>estado-1</span>
+<span>Estado del pedido:</span> <span data-variant="outline">estado-1</span>
 </p>
 <p>
-<span>Estado de proforma:</span> <span>Vigente</span>
+<span>Estado de proforma:</span> <span data-variant="info">Vigente</span>
 </p>
 </div>
 </div>
@@ -1899,10 +1899,10 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <p>
 <span>Entrega estimada:</span> 1/7/2026</p>
 <p>
-<span>Estado del pedido:</span> <span>estado-1</span>
+<span>Estado del pedido:</span> <span data-variant="outline">estado-1</span>
 </p>
 <p>
-<span>Estado de proforma:</span> <span>estado-1</span>
+<span>Estado de proforma:</span> <span data-variant="outline">estado-1</span>
 </p>
 </div>
 </div>
@@ -2095,7 +2095,7 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <td>numero_comprobante-1</td>
 <td>S/ 11.50</td>
 <td>
-<span>estado-1</span>
+<span data-variant="outline">estado-1</span>
 </td>
 </tr>
 <tr>
@@ -2104,7 +2104,7 @@ exports[`/dashboard/commercial/quotes/[id] > detalle > resultado 1`] = `
 <td>numero_comprobante-2</td>
 <td>S/ 22.50</td>
 <td>
-<span>estado-2</span>
+<span data-variant="outline">estado-2</span>
 </td>
 </tr>
 </tbody>
@@ -2314,10 +2314,10 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <p>
 <span>Entrega estimada:</span> 1/7/2026</p>
 <p>
-<span>Estado del pedido:</span> <span>Aprobado</span>
+<span>Estado del pedido:</span> <span data-variant="info">Aprobado</span>
 </p>
 <p>
-<span>Estado de proforma:</span> <span>Pagada</span>
+<span>Estado de proforma:</span> <span data-variant="success">Pagada</span>
 </p>
 </div>
 </div>
@@ -2513,7 +2513,7 @@ exports[`/dashboard/commercial/quotes/[id] > pagada con su comprobante anulado >
 <td>numero_comprobante-1</td>
 <td>S/ 11.50</td>
 <td>
-<span>Anulado</span>
+<span data-variant="destructive">Anulado</span>
 </td>
 </tr>
 </tbody>

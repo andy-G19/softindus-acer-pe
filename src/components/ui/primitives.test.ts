@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Info, Package, Plus, TriangleAlert, type LucideProps } from "lucide-react";
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
 import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field, FieldError, type FieldControlProps } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
@@ -300,6 +300,12 @@ describe("Presentacion", () => {
       "etiqueta de estado comercial",
       ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null].map((status) =>
         h(StatusBadge, { key: String(status), status }),
+      ),
+    ],
+    [
+      "etiqueta de estado con Badge",
+      ["pagada", "Pendiente", "anulado", "en_produccion", "sin proforma", "desconocido", null, "constructor"].map(
+        (status) => h(StateBadge, { key: String(status), status }),
       ),
     ],
     ["estado vacio", h(EmptyState, { label: "No se encontraron clientes con los filtros aplicados." })],

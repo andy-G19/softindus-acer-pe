@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Button } from "@/components/ui/button";
@@ -139,7 +139,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                 {formatMoney(receipt.monto_total)}
               </TableCell>
               <TableCell>
-                <StatusBadge status={receipt.estado} />
+                <StateBadge status={receipt.estado} />
               </TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-2">

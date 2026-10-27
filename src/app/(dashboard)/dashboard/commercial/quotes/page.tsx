@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -184,7 +184,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                   <TableCell>{formatMoney(quote.monto_total)}</TableCell>
                   <TableCell>{formatMoney(quote.saldo)}</TableCell>
                   <TableCell>
-                    <StatusBadge status={quote.estado} />
+                    <StateBadge status={quote.estado} />
                   </TableCell>
                   <TableCell>
                     {quote.comprobante_venta[0] ? (
@@ -193,7 +193,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                         {quote.comprobante_venta[0].numero_comprobante}
                       </Badge>
                     ) : (
-                      <StatusBadge status="sin-comprobante" />
+                      <StateBadge status="sin-comprobante" />
                     )}
                   </TableCell>
                   <TableCell>

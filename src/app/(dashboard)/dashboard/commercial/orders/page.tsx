@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
@@ -192,7 +192,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                   <TableCell>{productsText}</TableCell>
                   <TableCell>{formatMoney(order.monto_estimado, { emptyText: "-" })}</TableCell>
                   <TableCell>
-                    <StatusBadge status={order.estado} />
+                    <StateBadge status={order.estado} />
                   </TableCell>
                   <TableCell>
                     {activeQuote ? (
@@ -200,7 +200,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                         {activeQuote.numero_proforma}
                       </Badge>
                     ) : (
-                      <StatusBadge status="sin-proforma" />
+                      <StateBadge status="sin-proforma" />
                     )}
                   </TableCell>
                   <TableCell>
