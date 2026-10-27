@@ -81,7 +81,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -112,7 +112,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -151,16 +151,17 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 <option value="paid">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-02-30"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-32"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -225,7 +226,7 @@ exports[`/dashboard/commercial/quotes > fechas no validas > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -312,7 +313,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -343,7 +344,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -382,16 +383,18 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 <option value="paid">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-31"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-31"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-01"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" aria-invalid="true" aria-describedby="fecha-hasta-error" min="2026-07-31" name="to" value="2026-07-01"/>
+<p id="fecha-hasta-error">La fecha inicial no puede ser mayor que la fecha final.</p>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -425,7 +428,7 @@ exports[`/dashboard/commercial/quotes > rango invertido > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -509,7 +512,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -540,7 +543,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -579,16 +582,17 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 <option value="paid" selected="">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -653,7 +657,7 @@ exports[`/dashboard/commercial/quotes > saldo pagado > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -731,7 +735,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -762,7 +766,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -801,16 +805,17 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 <option value="paid">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -875,7 +880,7 @@ exports[`/dashboard/commercial/quotes > sin filtros > resultado 1`] = `
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1004,7 +1009,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 
 exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1035,7 +1040,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value="PRF"/>
@@ -1074,16 +1079,17 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 <option value="paid">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -1148,7 +1154,7 @@ exports[`/dashboard/commercial/quotes > todos los filtros con saldo pendiente > 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1226,7 +1232,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > llamadas 1`] =
 
 exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1257,7 +1263,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </div>
 </div>
 </section>
-<form action="/dashboard/commercial/quotes">
+<form role="search" aria-label="Filtros de proformas" action="/dashboard/commercial/quotes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar proforma..." name="q" value=""/>
@@ -1296,16 +1302,17 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 <option value="paid">Sin saldo</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/commercial/quotes">Limpiar filtros</a>
@@ -1412,7 +1419,7 @@ exports[`/dashboard/commercial/quotes > una proforma por estado > resultado 1`] 
 </tbody>
 </table>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

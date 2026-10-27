@@ -1,6 +1,9 @@
 import Link from "next/link";
 
 import { StateBadge } from "@/components/commercial/status-badge";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { PaginationControls } from "@/components/pagination-controls";
@@ -8,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -60,7 +62,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   const meta = getPaginationMeta({ totalItems, page, pageSize });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Pedidos"
         description="Lista de pedidos registrados por cliente y productos asociados."
@@ -75,72 +77,54 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         }
       />
 
-      <form
-        action="/dashboard/commercial/orders"
-        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-6"
+      <FilterBar
+        action={navigationHrefs.orders}
+        label="Filtros de pedidos"
+        clearHref={navigationHrefs.orders}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar pedido..." />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="client">Cliente</Label>
-          <NativeSelect id="client" name="client" defaultValue={client}>
-            <option value="">Todos los clientes</option>
-            {clients.map((item) => (
-              <option key={item.id_cliente} value={item.id_cliente}>
-                {item.nombre_razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="product">Producto</Label>
-          <NativeSelect id="product" name="product" defaultValue={product}>
-            <option value="">Todos los productos</option>
-            {products.map((item) => (
-              <option key={item.id_producto} value={item.id_producto}>
-                {item.nombre_producto}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="registrado">Registrado</option>
-            <option value="aprobado">Aprobado</option>
-            <option value="cancelado">Cancelado</option>
-          </NativeSelect>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2 md:col-span-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input
-              id="from"
-              name="from"
-              type="date"
-              defaultValue={parseStringParam(params, "from")}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input
-              id="to"
-              name="to"
-              type="date"
-              defaultValue={parseStringParam(params, "to")}
-            />
-          </div>
-        </div>
-        <div className="flex items-end gap-2 md:col-span-6">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/commercial/orders">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar pedido..." />}
+        </Field>
+        <Field id="client" label="Cliente">
+          {(control) => (
+            <NativeSelect {...control} name="client" defaultValue={client}>
+              <option value="">Todos los clientes</option>
+              {clients.map((item) => (
+                <option key={item.id_cliente} value={item.id_cliente}>
+                  {item.nombre_razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="product" label="Producto">
+          {(control) => (
+            <NativeSelect {...control} name="product" defaultValue={product}>
+              <option value="">Todos los productos</option>
+              {products.map((item) => (
+                <option key={item.id_producto} value={item.id_producto}>
+                  {item.nombre_producto}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="registrado">Registrado</option>
+              <option value="aprobado">Aprobado</option>
+              <option value="cancelado">Cancelado</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -288,6 +272,6 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
           searchParams={params}
           itemLabel="pedidos"
         />
-    </main>
+    </div>
   );
 }
