@@ -3,8 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AuthRejected,
   characterizePage,
+  generatedResult,
   preloadPages,
+  type DataOverrides,
   type PageLoader,
+  type PrismaArgs,
   type Role,
 } from "@/testing/page-characterization";
 
@@ -51,7 +54,34 @@ const PAGES: [RegExp, PageLoader][] = [
   [/^\/dashboard\/commercial\/payments$/, () => import("./payments/page")],
 ];
 
-const SOURCES: { name: string; route: string; load: PageLoader; params?: Record<string, string> }[] = [
+// Los datos generados dan a cada pedido una proforma activa, asi que la lista
+// nunca enlazaba «Editar» ni «Generar proforma» (10.4b): esta fuente agrega un
+// pedido registrado sin proforma, comprobantes ni ordenes de trabajo.
+const WITH_EDITABLE_ORDER: DataOverrides = {
+  "pedido.findMany": (args: PrismaArgs) => {
+    const [first, ...rest] = generatedResult("pedido", "findMany", args) as Record<string, unknown>[];
+    const details = first.detalle_pedido as Record<string, unknown>[];
+
+    return [
+      {
+        ...first,
+        estado: "registrado",
+        proforma: [],
+        comprobante_venta: [],
+        detalle_pedido: details.map((detail) => ({ ...detail, orden_trabajo: [] })),
+      },
+      ...rest,
+    ];
+  },
+};
+
+const SOURCES: {
+  name: string;
+  route: string;
+  load: PageLoader;
+  params?: Record<string, string>;
+  data?: DataOverrides;
+}[] = [
   { name: "el inicio", route: "/dashboard/commercial", load: () => import("./page") },
   { name: "la lista de clientes", route: "/dashboard/commercial/clients", load: () => import("./clients/page") },
   { name: "la lista de productos", route: "/dashboard/commercial/products", load: () => import("./products/page") },
@@ -61,6 +91,12 @@ const SOURCES: { name: string; route: string; load: PageLoader; params?: Record<
     load: () => import("./product-categories/page"),
   },
   { name: "la lista de pedidos", route: "/dashboard/commercial/orders", load: () => import("./orders/page") },
+  {
+    name: "la lista de pedidos con un pedido editable",
+    route: "/dashboard/commercial/orders",
+    load: () => import("./orders/page"),
+    data: WITH_EDITABLE_ORDER,
+  },
   {
     name: "el detalle de un pedido",
     route: "/dashboard/commercial/orders/PED00000001",
@@ -128,8 +164,8 @@ async function opens(href: string, role: Role) {
 preloadPages(...PAGES.map(([, load]) => load));
 
 describe.each(["ADMIN", "SELLER"] as const)("enlaces de Comercial con %s", (role) => {
-  it.each(SOURCES)("$name solo enlaza pantallas que el rol puede abrir", async ({ route, load, params }) => {
-    const { outcome, html } = await characterizePage(load, { name: route, role, params }, route);
+  it.each(SOURCES)("$name solo enlaza pantallas que el rol puede abrir", async ({ route, load, params, data }) => {
+    const { outcome, html } = await characterizePage(load, { name: route, role, params, data }, route);
 
     expect(outcome).toBe("render");
 
@@ -152,5 +188,17 @@ describe.each(["ADMIN", "SELLER"] as const)("enlaces de Comercial con %s", (role
     const links = commercialLinks(html ?? "");
 
     expect(LISTS.filter((list) => !links.includes(list))).toEqual([]);
+  });
+
+  it("la lista de pedidos con un pedido editable enlaza su edicion y su proforma nueva", async () => {
+    const { html } = await characterizePage(
+      () => import("./orders/page"),
+      { name: "pedido editable", role, data: WITH_EDITABLE_ORDER },
+      "/dashboard/commercial/orders",
+    );
+    const links = commercialLinks(html ?? "");
+
+    expect(links).toContain("/dashboard/commercial/orders/id_pedido-1/edit");
+    expect(links).toContain("/dashboard/commercial/quotes/new");
   });
 });
