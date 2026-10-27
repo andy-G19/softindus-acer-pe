@@ -3197,7 +3197,7 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Proveedores | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Materiales | Inventario | ADMIN | Páginas, desviación; el alta escribe el kárdex inicial y la alerta de stock | Panel lateral | 10.3a | Migrado |
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
-| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado (en verificación) |
+| Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado |
 | Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Pendiente |
 | Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
 | Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5 | Pendiente |
@@ -3230,7 +3230,7 @@ destructivas confirman:
 |---|---|
 | 10.1 | Inactivar tipo de proveedor, categoría de material y categoría de gasto (migradas) |
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
-| 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas; en verificación) |
+| 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
 | 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
 | 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
@@ -4765,9 +4765,10 @@ Datos leídos de la API de GitHub el 2026-10-24 y comparados con git:
 
 ### Sub-entrega 10.4a — Productos, estados e inicio de Comercial
 
-Fecha: del 2026-10-23 al 2026-10-24 (Lima). Estado: en verificación. El
-paso 0 (`c5301c6`) registró la integración de la 10.3c en `main`. 8
-commits, de `f817b90` a `5b28b1e`, y este registro.
+Fecha: del 2026-10-23 al 2026-10-26 (Lima). Estado: cerrada en staging el
+2026-10-26 (Lima); falta integrarla en `main`. El paso 0 (`c5301c6`)
+registró la integración de la 10.3c en `main`. 8 commits, de `f817b90` a
+`5b28b1e`, el registro `6ee389c` y este cierre.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -4780,7 +4781,8 @@ commits, de `f817b90` a `5b28b1e`, y este registro.
 | 3e8f328 | feat | Inactivar producto pide confirmación; el listado usa `FilterBar` y pierde el `<main>` anidado. |
 | bee5b97 | feat | Inactivar cliente y categoría de producto pide confirmación. |
 | 5b28b1e | feat | El inicio de Comercial enlaza pagos de cliente y comprobantes de venta y pierde el `<main>` anidado. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 6ee389c | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de Comercial. |
 
 Decisiones del responsable (2026-10-23), tras la auditoría:
 
@@ -4959,6 +4961,122 @@ Hallazgos:
 12. Método: la etiqueta de una mutación de C6 se corrigió después de
     ejecutarla, para que describa lo que muta; la mutación no cambió.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e104-huella`) y etiquetas `e104/`
+  (`tmp/e10-diff/e104-*.js`, generados por `c-e104-guiones.py`), guardada en
+  el `localStorage` de staging y recargada en cada documento. Plan en
+  `tmp/e10-diff/plan-verificacion-10-4a.md`.
+- Por el hallazgo 10 de la 10.3c, los registros de cada captura del «antes»
+  se exportaron a `tmp/e10-diff/e104-registros/` y se comprobaron con su
+  hash (`e104-registros.py`).
+- Las tareas escriben datos autorizados por el responsable en cada turno:
+  «PRUEBA E104 antes» con `CPR00000010` y `CLI00000008` en el «antes», y
+  «PRUEBA E104 despues» con `CPR00000011` y `CLI00000009` en el «después».
+  Las capturas 2, 7 y 8 se repiten al final (`-fin`).
+- 1281 × 800 y el preset móvil (376 px). El marco de los clics medía 800 px
+  para los 1281 de la emulación: los clics por referencia caían fuera y cada
+  coordenada se calculó con `getBoundingClientRect` (hallazgo 18).
+- La categoría se eligió con `form_input`: las teclas no llegan a un
+  `select` nativo en este panel. El nombre y el precio, con teclas reales.
+
+Publicación y medición:
+
+- «Antes» sobre `9c708a1` (CSS servido de 112.979 bytes, `f9a5f2e3…`): las
+  15 capturas el 2026-10-25, de 04:38 a 04:42 UTC. El aviso para seguir
+  llegó el día 26: el repaso de las 15, de 11:48 a 11:52 UTC, dio los mismos
+  hashes, y las tareas y las 3 finales siguieron hasta las 12:02. Sello de 14
+  capturas `9a724237…`, igual en Python.
+- Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-4a.md`).
+- Push de 10 commits (de `c5301c6` a `6ee389c`): CI #98 en verde (de 12:14:08
+  a 12:17:24 UTC del 2026-10-26). Vercel desplegó `6ee389c` (`pending` a las
+  12:14:09 y `success` a las 12:15:09 UTC). El CSS servido es el predicho
+  byte a byte: 112.828 bytes, `6228f316…`.
+- El aviso del push llegó a las 00:14 UTC del 2026-10-27: el «después» se
+  tomó en el día UTC 27, con la excepción aprobada por el responsable
+  (hallazgo 13).
+- «Después» el 2026-10-27, de 00:26 a 00:41 UTC: 22 capturas (4 controles,
+  11 pantallas, 4 paneles nuevos y 3 finales). Sello de 18 capturas
+  `170373e9…`, igual en Python. Evidencia en `tmp/e10-diff/antes-10-4a.json`,
+  `despues-10-4a.json`, `registro-10-4a.tsv` (55 filas) y
+  `resultado-10-4a.md`.
+
+Huella: 21 de 22 como se predijo, y la del control de pedidos explicada.
+
+- Proveedores, materiales y la sección «Listados» de la galería dan el mismo
+  hash que el día 25. Pedidos tiene un elemento más: su filtro «Producto»
+  ofrece «PRUEBA E104 antes», que creó el «antes»; sin esa `option`, el
+  registro de hoy da exactamente el hash y el `textHash` del día 25
+  (hallazgo 15).
+- Clientes, 371 elementos, y categorías de producto, 366, como se predijo:
+  cada fila pierde su `form` y sus dos campos ocultos, y el texto visible es
+  el mismo (hallazgo 14).
+- Productos, 341 elementos (342 ± 1 predichos), con el mismo texto visible
+  que `products-fin` del «antes»; sin `form` por fila, con `role="search"`,
+  «Filtros de productos» y «Nuevo producto» y «Editar» con `returnTo`. Con
+  filtros, 293 (294 ± 1) y el mismo texto visible; los `select` conservan el
+  filtro.
+- El inicio pasa a 6 tarjetas con sus destinos; el alta y la edición
+  muestran los asteriscos de obligatorio y la ayuda del precio.
+- Los 4 paneles (alta y edición, a 1281 y a 376 px) se abren sobre la lista
+  con `returnTo` y el foco en el nombre; a 376 px ocupan la pantalla sin
+  desbordar. Esc sin cambios los cierra sin preguntar y devuelve el foco al
+  enlace que los abrió.
+- Las finales de categorías y clientes dan el hash de sus capturas
+  iniciales: los datos de prueba quedaron como estaban.
+
+Tareas (ADMIN), con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`9c708a1`) | Después (`6ee389c`) |
+|---|---|---|
+| T36 Alta desde la lista filtrada, con nombre duplicado y después correcto | Página completa. El error sale en el formulario y en un toast, y el formulario pierde todo lo escrito; el foco queda en `body`. Al guardar vuelve a la lista sin filtros con `?toast=product-created` | Panel sobre la lista. El error queda en el formulario, sin toast, con todo lo escrito y el foco en el nombre. Al guardar, un aviso (con «Puede no aparecer con los filtros activos del listado.») y el panel se cierra sobre la lista filtrada |
+| T37 Inactivar la categoría de prueba y cambiar el precio de su producto | La categoría se inactiva sin confirmar; la edición falla con «Selecciona una categoría activa.» y el precio escrito se pierde | La categoría pide confirmación; la edición guarda (hallazgo 2) |
+| T38 Inactivar el producto desde la lista con «Activo» | Sin confirmar; vuelve sin el filtro y la fila sigue a la vista | Confirmación con nombre y consecuencia; «Cancelar» devuelve el foco al botón; al confirmar, un aviso, la fila sale de la lista, el filtro se conserva y el foco va a la tabla |
+| T39 Inactivar y activar el cliente; activar la categoría | Sin confirmar; la página vuelve arriba | El cliente confirma al inactivar; activar actúa al pulsar; se conservan el desplazamiento y el foco en el botón de la fila |
+| T40 Inicio de Comercial | 4 tarjetas; pagos y comprobantes existían sin enlace | 6 tarjetas con sus destinos |
+| T41 Descartar lo escrito | Página completa: «Cancelar» es un enlace y sale sin preguntar; Esc y el clic fuera no hacen nada | En el panel, los tres piden descartar; «Descartar cambios» cierra sin crear nada (hallazgo 16) |
+
+Se verificó solo con ADMIN: el responsable no pidió probar SELLER, porque
+`commercial-links.test.ts` y los snapshots cubren lo que ve.
+
+Hallazgos de la verificación:
+
+13. El «antes» y el «después» no cayeron en el mismo día UTC: el aviso del
+    push llegó doce horas después del push, ya en el día 27. El responsable
+    aprobó tomar el «después» ese día como excepción: el repaso del día 26
+    dio los mismos hashes que el 25 en las 15 capturas, y los controles del
+    día 27 dieron los del 25.
+14. Predicción: «texto igual» se midió con el `textHash`, que lleva una
+    entrada vacía por elemento y cambia al quitar `form` e `input` aunque el
+    texto que se ve sea el mismo. Se compara el texto visible
+    (`tmp/e10-diff/e104-visible.py` y el mismo cálculo en el navegador).
+15. El filtro «Producto» de pedidos ofrece también los productos
+    inactivos, así que el control de pedidos cambia con los productos de
+    prueba. La próxima predicción lo cuenta, o el control se toma antes de
+    crear datos. Si ese filtro debe ocultarlos es una decisión de negocio.
+16. Predicción: dijo que «Cancelar» de la pregunta de descarte devuelve el
+    foco al campo; vuelve al último elemento enfocado de la ventana, como
+    documenta *Form surfaces* en `CLAUDE.md`: al campo, o al «Cancelar» del
+    pie si la pregunta salió por él. Tampoco previó la segunda línea del aviso con la
+    lista filtrada. El manual se corrigió.
+17. Método: el panel del navegador se cerró tres veces; perdió dos veces el
+    acceso a Vercel y la última, también el `localStorage` y la base del
+    navegador de staging. Las comparaciones del «después» se hicieron contra
+    los registros de `tmp`, y los guiones se recargaron comprobando su
+    SHA-256 contra `e104-cargar.js`.
+18. Método: con el panel más estrecho que la emulación, el marco de los
+    clics escala 1,6 veces el CSS; una sonda de `mousedown` confirmó la
+    escala. Las capturas de pantalla no sirven para apuntar.
+19. Método: la rueda del ratón sobre un campo numérico enfocado cambia su
+    valor (el precio pasó a 0,99 en el «antes» y se corrigió antes de
+    guardar).
+
+El capítulo de Comercial del manual describe el inicio, clientes, productos
+y categorías de producto con lo verificado, y las reglas comunes suman
+clientes, productos y categorías de producto a la confirmación al inactivar.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -4983,7 +5101,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, en verificación) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada en staging, con CI #98 verde, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -5290,6 +5408,9 @@ Actualizado en la sub-entrega 10.4a (2026-10-24) sobre `5b28b1e`:
 Las demás no cambian: páginas con Prisma directo 0, pantallas con rango de
 fechas sin `DateRangeFields` 13 e `import` de las librerías de
 notificaciones en 2 archivos, medidos de nuevo.
+
+El cierre de la 10.4a (2026-10-26) no cambia código: las métricas son las
+de `5b28b1e`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

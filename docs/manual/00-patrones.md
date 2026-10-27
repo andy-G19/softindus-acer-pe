@@ -6,7 +6,7 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 
 Pantallas renovadas hasta ahora:
 
-- Comercial: clientes y categorías de producto.
+- Comercial: el inicio, clientes, productos y categorías de producto.
 - Inventario: el inicio, tipos de proveedor, proveedores, materiales de
   proveedor, categorías de materiales, materiales e insumos, alertas y stock
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
@@ -54,8 +54,9 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 - Si escribiste algo, el sistema pregunta si quieres **descartar los
   cambios**. **Cancelar** te devuelve al formulario con lo escrito;
   **Descartar cambios** lo cierra sin guardar. Al volver con **Cancelar**,
-  el cursor regresa al campo donde estabas, también si la pregunta salió
-  por un clic fuera de la ventana.
+  el cursor regresa a donde estabas: al campo en el que escribías, también
+  si la pregunta salió por un clic fuera de la ventana, o al botón
+  **Cancelar** de la ventana si la pregunta salió por él.
 - Mientras se está guardando, la ventana no se puede cerrar.
 - Si intentas recargar la página o cerrar la pestaña con cambios sin
   guardar, el navegador también te pregunta antes de salir.
@@ -66,9 +67,8 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 
 Los registros de los catálogos no se borran: se **inactivan**. Esto vale
 para tipos de proveedor, proveedores, materiales de proveedor, categorías de
-materiales, materiales y categorías de gasto. En clientes y categorías de
-producto, activar e inactivar todavía se hacen sin confirmación; se
-igualarán en una próxima actualización.
+materiales, materiales, categorías de gasto, clientes, productos y
+categorías de producto.
 
 - **Inactivar** pide confirmación. La pregunta nombra el registro y explica
   qué pasa, por ejemplo: «Dejará de ofrecerse al registrar proveedores; los
@@ -79,9 +79,9 @@ igualarán en una próxima actualización.
   «Inactiva».
 - Las listas de los catálogos muestran primero los registros activos. Al
   inactivar uno, su fila pasa al final de la lista y el cursor la acompaña;
-  al activarlo, vuelve a su lugar. En materiales y proveedores, la fila se
-  queda donde estaba; en materiales de proveedor, pasa al principio, porque
-  esa lista va por la última modificación.
+  al activarlo, vuelve a su lugar. En materiales, proveedores, clientes y
+  productos, la fila se queda donde estaba; en materiales de proveedor, pasa
+  al principio, porque esa lista va por la última modificación.
 - Si la lista está filtrada por estado (por ejemplo, solo los activos) y el
   registro deja de cumplir el filtro, su fila sale de la lista y el cursor
   pasa a la tabla.
