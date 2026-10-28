@@ -281,7 +281,7 @@ exports[`createOrderAction > cantidad cero > resultado 1`] = `
 }
 `;
 
-exports[`createOrderAction > cantidad que no es un numero da el mensaje de Zod en ingles > llamadas 1`] = `
+exports[`createOrderAction > cantidad que no es un numero > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -293,13 +293,13 @@ exports[`createOrderAction > cantidad que no es un numero da el mensaje de Zod e
 ]
 `;
 
-exports[`createOrderAction > cantidad que no es un numero da el mensaje de Zod en ingles > resultado 1`] = `
+exports[`createOrderAction > cantidad que no es un numero > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
       "items": [
-        "Invalid input: expected number, received NaN",
+        "La cantidad debe ser un número.",
       ],
     },
   },
@@ -845,7 +845,7 @@ exports[`createOrderAction > observaciones de mas de 500 caracteres > resultado 
 }
 `;
 
-exports[`createOrderAction > precio infinito da el mensaje de Zod en ingles > llamadas 1`] = `
+exports[`createOrderAction > precio infinito > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -857,13 +857,13 @@ exports[`createOrderAction > precio infinito da el mensaje de Zod en ingles > ll
 ]
 `;
 
-exports[`createOrderAction > precio infinito da el mensaje de Zod en ingles > resultado 1`] = `
+exports[`createOrderAction > precio infinito > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
       "items": [
-        "Invalid input: expected number, received number",
+        "El precio unitario debe ser un número.",
       ],
     },
   },
@@ -945,7 +945,7 @@ exports[`createOrderAction > sin cliente elegido > resultado 1`] = `
 }
 `;
 
-exports[`createOrderAction > sin el campo cliente da el mensaje de Zod en ingles > llamadas 1`] = `
+exports[`createOrderAction > sin el campo cliente > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -957,13 +957,13 @@ exports[`createOrderAction > sin el campo cliente da el mensaje de Zod en ingles
 ]
 `;
 
-exports[`createOrderAction > sin el campo cliente da el mensaje de Zod en ingles > resultado 1`] = `
+exports[`createOrderAction > sin el campo cliente > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
       "id_cliente": [
-        "Invalid input: expected string, received undefined",
+        "Debes seleccionar un cliente.",
       ],
     },
   },
@@ -1227,7 +1227,7 @@ exports[`createOrderAction > una cantidad de tres decimales se redondea antes de
 
 exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
 
-exports[`createOrderAction > una cantidad que no cabe en la columna llega a la base > llamadas 1`] = `
+exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1236,107 +1236,21 @@ exports[`createOrderAction > una cantidad que no cabe en la columna llega a la b
       "SELLER",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_cliente": true,
-      },
-      "where": {
-        "id_cliente": "CLI00000003",
-      },
-    },
-    "prisma": "cliente.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_producto": true,
-      },
-      "where": {
-        "id_producto": {
-          "in": [
-            "PRO00000001",
-          ],
-        },
-      },
-    },
-    "prisma": "producto.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "pedido",
-      "prefijo": "PED",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "cantidad": 1,
-      "codigoEntidad": "detalle_pedido",
-      "prefijo": "DPE",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "registrado",
-        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
-        "fecha_pedido": 2026-07-15T15:00:00.000Z,
-        "id_cliente": "CLI00000003",
-        "id_pedido": "PED00000010",
-        "id_usuario_registro": "USU00000001",
-        "monto_estimado": "10000000000000.00",
-        "observaciones": "Entrega en obra.",
-      },
-    },
-    "prisma": "pedido.create",
-  },
-  {
-    "args": {
-      "data": [
-        {
-          "cantidad": "1000000000000.00",
-          "id_detalle_pedido": "DPE00000010",
-          "id_pedido": "PED00000010",
-          "id_producto": "PRO00000001",
-          "observaciones": null,
-          "precio_unitario": "10.00",
-          "subtotal": "10000000000000.00",
-        },
-      ],
-    },
-    "prisma": "detalle_pedido.createMany",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Pedido creado: PED00000010",
-      "enTransaccion": true,
-      "entidad_afectada": "pedido",
-      "id_registro_afectado": "PED00000010",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/commercial/orders",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createOrderAction > una cantidad que no cabe en la columna llega a la base > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "La cantidad no debe superar 99,999,999.99.",
+      ],
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > llamadas 1`] = `
 [
@@ -1444,7 +1358,7 @@ exports[`createOrderAction > una clave foranea rota al crear el detalle se propa
 
 exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
 
-exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha anterior > llamadas 1`] = `
+exports[`createOrderAction > una fecha que no existe no es valida > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1456,13 +1370,13 @@ exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha a
 ]
 `;
 
-exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha anterior > resultado 1`] = `
+exports[`createOrderAction > una fecha que no existe no es valida > resultado 1`] = `
 {
   "estado": {
-    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "error": "Revisa los datos del pedido.",
     "fieldErrors": {
       "fecha_entrega_estimada": [
-        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+        "La fecha estimada de entrega no es válida.",
       ],
     },
   },

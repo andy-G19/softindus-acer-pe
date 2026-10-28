@@ -34,9 +34,10 @@ import {
 //   distinguia el cliente o los productos que el pedido ya tenia (hallazgo 5
 //   de la 10.4a; corregido en C3: los casos de la clave foranea simulan ahora
 //   un producto borrado entre la comprobacion y la escritura);
-// - un campo que falta o un numero que no lo es dan el mensaje de Zod en
-//   ingles, una cantidad fuera de la columna llega a la base y una fecha que
-//   no existe da el mensaje de la fecha anterior.
+// - un campo que falta o un numero que no lo es daban el mensaje de Zod en
+//   ingles, una cantidad fuera de la columna llegaba a la base y una fecha que
+//   no existe daba el mensaje de la fecha anterior (corregido en C4, con los
+//   limites de las columnas en el esquema).
 // La edicion decide fuera de la transaccion y sin bloquear la fila
 // (hallazgo 7 de la 10.4a, entrega 11): no se corrige aqui.
 
@@ -415,7 +416,7 @@ defineOrderSuite("createOrderAction", createOrderAction, [
   },
   { name: "sin cliente elegido", form: { ...orderForm, id_cliente: "" } },
   {
-    name: "sin el campo cliente da el mensaje de Zod en ingles",
+    name: "sin el campo cliente",
     form: Object.fromEntries(Object.entries(orderForm).filter(([key]) => key !== "id_cliente")),
   },
   { name: "sin lineas", form: { ...orderForm, ...lines() } },
@@ -425,16 +426,16 @@ defineOrderSuite("createOrderAction", createOrderAction, [
   },
   { name: "cantidad cero", form: { ...orderForm, ...lines([PRODUCTO_A, "0", "150"]) } },
   {
-    name: "cantidad que no es un numero da el mensaje de Zod en ingles",
+    name: "cantidad que no es un numero",
     form: { ...orderForm, ...lines([PRODUCTO_A, "abc", "150"]) },
   },
   { name: "precio negativo", form: { ...orderForm, ...lines([PRODUCTO_A, "2", "-1"]) } },
   {
-    name: "precio infinito da el mensaje de Zod en ingles",
+    name: "precio infinito",
     form: { ...orderForm, ...lines([PRODUCTO_A, "2", "1e400"]) },
   },
   {
-    name: "una cantidad que no cabe en la columna llega a la base",
+    name: "una cantidad que no cabe en la columna se rechaza",
     form: { ...orderForm, ...lines([PRODUCTO_A, "1e12", "10"]) },
   },
   { name: "producto repetido", form: { ...orderForm, ...lines([PRODUCTO_A, "2", "150"], [PRODUCTO_A, "1", "80"]) } },
@@ -450,7 +451,7 @@ defineOrderSuite("createOrderAction", createOrderAction, [
   { name: "entrega hoy", form: { ...orderForm, fecha_entrega_estimada: "2026-07-15" } },
   { name: "entrega anterior a hoy", form: { ...orderForm, fecha_entrega_estimada: "2026-07-14" } },
   {
-    name: "una fecha que no existe da el mensaje de la fecha anterior",
+    name: "una fecha que no existe no es valida",
     form: { ...orderForm, fecha_entrega_estimada: "2026-02-30" },
   },
   {
