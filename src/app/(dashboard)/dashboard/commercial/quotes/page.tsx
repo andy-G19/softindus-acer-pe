@@ -1,13 +1,15 @@
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -54,7 +56,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Proformas"
         description="Lista de proformas digitales generadas desde pedidos registrados."
@@ -69,81 +71,64 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
         }
       />
 
-      <form
-        action="/dashboard/commercial/quotes"
-        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-6"
+      <FilterBar
+        action={navigationHrefs.quotes}
+        label="Filtros de proformas"
+        clearHref={navigationHrefs.quotes}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Buscar proforma..." />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="client">Cliente</Label>
-          <NativeSelect id="client" name="client" defaultValue={client}>
-            <option value="">Todos los clientes</option>
-            {clients.map((item) => (
-              <option key={item.id_cliente} value={item.id_cliente}>
-                {item.nombre_razon_social}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="order">Pedido</Label>
-          <NativeSelect id="order" name="order" defaultValue={order}>
-            <option value="">Todos los pedidos</option>
-            {orders.map((item) => (
-              <option key={item.id_pedido} value={item.id_pedido}>
-                {item.id_pedido}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="vigente">Vigente</option>
-            <option value="aceptada">Aceptada</option>
-            <option value="pagada">Pagada</option>
-            <option value="anulada">Anulada</option>
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="balance">Saldo</Label>
-          <NativeSelect id="balance" name="balance" defaultValue={balance}>
-            <option value="">Todos los saldos</option>
-            <option value="pending">Con saldo</option>
-            <option value="paid">Sin saldo</option>
-          </NativeSelect>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input
-              id="from"
-              name="from"
-              type="date"
-              defaultValue={parseStringParam(params, "from")}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input
-              id="to"
-              name="to"
-              type="date"
-              defaultValue={parseStringParam(params, "to")}
-            />
-          </div>
-        </div>
-        <div className="flex items-end gap-2 md:col-span-6">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/commercial/quotes">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar proforma..." />}
+        </Field>
+        <Field id="client" label="Cliente">
+          {(control) => (
+            <NativeSelect {...control} name="client" defaultValue={client}>
+              <option value="">Todos los clientes</option>
+              {clients.map((item) => (
+                <option key={item.id_cliente} value={item.id_cliente}>
+                  {item.nombre_razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="order" label="Pedido">
+          {(control) => (
+            <NativeSelect {...control} name="order" defaultValue={order}>
+              <option value="">Todos los pedidos</option>
+              {orders.map((item) => (
+                <option key={item.id_pedido} value={item.id_pedido}>
+                  {item.id_pedido}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="vigente">Vigente</option>
+              <option value="aceptada">Aceptada</option>
+              <option value="pagada">Pagada</option>
+              <option value="anulada">Anulada</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="balance" label="Saldo">
+          {(control) => (
+            <NativeSelect {...control} name="balance" defaultValue={balance}>
+              <option value="">Todos los saldos</option>
+              <option value="pending">Con saldo</option>
+              <option value="paid">Sin saldo</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -184,7 +169,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                   <TableCell>{formatMoney(quote.monto_total)}</TableCell>
                   <TableCell>{formatMoney(quote.saldo)}</TableCell>
                   <TableCell>
-                    <StatusBadge status={quote.estado} />
+                    <StateBadge status={quote.estado} />
                   </TableCell>
                   <TableCell>
                     {quote.comprobante_venta[0] ? (
@@ -193,7 +178,7 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
                         {quote.comprobante_venta[0].numero_comprobante}
                       </Badge>
                     ) : (
-                      <StatusBadge status="sin-comprobante" />
+                      <StateBadge status="sin-comprobante" />
                     )}
                   </TableCell>
                   <TableCell>
@@ -249,6 +234,6 @@ export default async function QuotesPage({ searchParams }: QuotesPageProps) {
             )}
           </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

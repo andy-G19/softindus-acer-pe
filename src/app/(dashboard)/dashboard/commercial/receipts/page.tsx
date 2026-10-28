@@ -1,12 +1,14 @@
 import Link from "next/link";
 
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { PageHeader } from "@/components/navigation/page-header";
 import { ConfirmDeleteButton } from "@/components/notifications/confirm-delete-button";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -43,7 +45,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
   const receipts = await getReceiptList({ q, type, status, from, to });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Comprobantes de venta"
         description="Consulta comprobantes emitidos y anulados."
@@ -53,62 +55,40 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
         ])}
       />
 
-      <form
-        action="/dashboard/commercial/receipts"
-        className="grid gap-3 rounded-lg border border-border/80 bg-card p-4 md:grid-cols-5"
+      <FilterBar
+        action={navigationHrefs.salesReceipts}
+        label="Filtros de comprobantes de venta"
+        clearHref={navigationHrefs.salesReceipts}
       >
-        <div className="space-y-2">
-          <Label htmlFor="q">Buscar</Label>
-          <Input
-            id="q"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar comprobante..."
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo</Label>
-          <NativeSelect id="type" name="type" defaultValue={type}>
-            <option value="">Todos los tipos</option>
-            <option value="boleta">Boleta</option>
-            <option value="factura">Factura</option>
-            <option value="recibo">Recibo</option>
-            <option value="otro">Otro</option>
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="status">Estado</Label>
-          <NativeSelect id="status" name="status" defaultValue={status}>
-            <option value="">Todos los estados</option>
-            <option value="emitido">Emitido</option>
-            <option value="anulado">Anulado</option>
-          </NativeSelect>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="from">Desde</Label>
-          <Input
-            id="from"
-            name="from"
-            type="date"
-            defaultValue={parseStringParam(params, "from")}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="to">Hasta</Label>
-          <Input
-            id="to"
-            name="to"
-            type="date"
-            defaultValue={parseStringParam(params, "to")}
-          />
-        </div>
-        <div className="flex items-end gap-2 md:col-span-5">
-          <Button type="submit">Filtrar</Button>
-          <Button variant="clear" asChild>
-            <Link href="/dashboard/commercial/receipts">Limpiar filtros</Link>
-          </Button>
-        </div>
-      </form>
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar comprobante..." />}
+        </Field>
+        <Field id="type" label="Tipo">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Todos los tipos</option>
+              <option value="boleta">Boleta</option>
+              <option value="factura">Factura</option>
+              <option value="recibo">Recibo</option>
+              <option value="otro">Otro</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="emitido">Emitido</option>
+              <option value="anulado">Anulado</option>
+            </NativeSelect>
+          )}
+        </Field>
+        <DateRangeFields
+          id="fecha"
+          defaultFrom={parseStringParam(params, "from")}
+          defaultTo={parseStringParam(params, "to")}
+        />
+      </FilterBar>
 
       <Table>
         <TableHeader>
@@ -139,7 +119,7 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
                 {formatMoney(receipt.monto_total)}
               </TableCell>
               <TableCell>
-                <StatusBadge status={receipt.estado} />
+                <StateBadge status={receipt.estado} />
               </TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-2">
@@ -186,6 +166,6 @@ export default async function ReceiptsPage({ searchParams }: ReceiptsPageProps) 
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

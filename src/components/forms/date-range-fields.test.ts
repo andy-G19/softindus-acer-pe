@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act, createElement as h } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { createRoot, hydrateRoot, type Root } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { DateRangeFields } from "@/components/forms/date-range-fields";
@@ -31,8 +32,8 @@ async function renderRange(defaults: { defaultFrom?: string; defaultTo?: string 
   await act(async () => root.render(h(DateRangeFields, { id: "rango", ...defaults })));
 }
 
-function field(name: "from" | "to") {
-  const input = host.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+function field(name: "from" | "to", inside: HTMLElement = host) {
+  const input = inside.querySelector<HTMLInputElement>(`input[name="${name}"]`);
   if (!input) {
     throw new Error(`No hay campo ${name}`);
   }
@@ -41,8 +42,8 @@ function field(name: "from" | "to") {
 
 // Lo que hace el navegador cuando el usuario elige una fecha: React escucha el
 // evento input y lee el valor con el setter nativo.
-async function typeDate(name: "from" | "to", value: string) {
-  const input = field(name);
+async function typeDate(name: "from" | "to", value: string, inside: HTMLElement = host) {
+  const input = field(name, inside);
   const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
   await act(async () => {
     setValue?.call(input, value);
@@ -107,5 +108,102 @@ describe("DateRangeFields al navegar sin recargar", () => {
     await renderRange({ defaultFrom: "2026-07-01", defaultTo: "2026-07-31" });
 
     expect([field("from").value, field("to").value]).toEqual(["2026-07-10", "2026-07-20"]);
+  });
+});
+
+// Fechas elegidas antes de hidratar (hallazgo 9 de la 10.3c, D7 de la 10.4).
+// El servidor pinta los campos y el usuario elige fechas antes de que llegue
+// el JavaScript: el DOM cambia y React todavia no escucha. React hidrata sin
+// pisar el valor del DOM, pero si el estado no lo toma, el siguiente render
+// vuelve a escribir el estado en el campo y el rango no se valida.
+describe("DateRangeFields con fechas elegidas antes de hidratar", () => {
+  let serverHost: HTMLDivElement;
+  let hydrated: Root | undefined;
+
+  afterEach(async () => {
+    const current = hydrated;
+    hydrated = undefined;
+
+    if (current) {
+      await act(async () => current.unmount());
+    }
+
+    serverHost.remove();
+  });
+
+  async function chooseBeforeHydrating(
+    defaults: { defaultFrom?: string; defaultTo?: string },
+    chosen: { from?: string; to?: string },
+  ) {
+    const element = h(DateRangeFields, { id: "rango", ...defaults });
+    serverHost = document.createElement("div");
+    serverHost.innerHTML = renderToString(element);
+    document.body.append(serverHost);
+
+    if (chosen.from !== undefined) {
+      field("from", serverHost).value = chosen.from;
+    }
+
+    if (chosen.to !== undefined) {
+      field("to", serverHost).value = chosen.to;
+    }
+
+    await act(async () => {
+      hydrated = hydrateRoot(serverHost, element);
+    });
+  }
+
+  async function renderAgain(defaults: { defaultFrom?: string; defaultTo?: string }) {
+    await act(async () => hydrated?.render(h(DateRangeFields, { id: "rango", ...defaults })));
+  }
+
+  it("conserva las fechas al volver a pintar con la misma URL y marca el rango invertido", async () => {
+    await chooseBeforeHydrating({}, { from: "2026-07-31", to: "2026-07-01" });
+
+    await renderAgain({});
+
+    expect([field("from", serverHost).value, field("to", serverHost).value]).toEqual([
+      "2026-07-31",
+      "2026-07-01",
+    ]);
+    expect(field("to", serverHost).getAttribute("aria-invalid")).toBe("true");
+    expect(field("to", serverHost).validationMessage).toBe(DATE_RANGE_INVERTED_MESSAGE);
+  });
+
+  it("elegir despues la otra fecha no borra la primera", async () => {
+    await chooseBeforeHydrating({ defaultFrom: "2026-07-01" }, { from: "2026-07-10" });
+
+    await typeDate("to", "2026-07-20", serverHost);
+
+    expect([field("from", serverHost).value, field("to", serverHost).value]).toEqual([
+      "2026-07-10",
+      "2026-07-20",
+    ]);
+    expect(field("to", serverHost).getAttribute("min")).toBe("2026-07-10");
+  });
+
+  it("sin nada elegido, hidrata con las fechas de la URL", async () => {
+    await chooseBeforeHydrating({ defaultFrom: "2026-07-01", defaultTo: "2026-07-31" }, {});
+
+    await renderAgain({ defaultFrom: "2026-07-01", defaultTo: "2026-07-31" });
+
+    expect([field("from", serverHost).value, field("to", serverHost).value]).toEqual([
+      "2026-07-01",
+      "2026-07-31",
+    ]);
+    expect(field("to", serverHost).getAttribute("min")).toBe("2026-07-01");
+    expect(field("to", serverHost).hasAttribute("aria-invalid")).toBe(false);
+  });
+
+  it("si despues cambia la URL (Limpiar), los campos toman la URL", async () => {
+    await chooseBeforeHydrating({}, { from: "2026-07-31", to: "2026-07-01" });
+
+    await renderAgain({ defaultFrom: "2026-08-01", defaultTo: "2026-08-15" });
+
+    expect([field("from", serverHost).value, field("to", serverHost).value]).toEqual([
+      "2026-08-01",
+      "2026-08-15",
+    ]);
+    expect(field("to", serverHost).hasAttribute("aria-invalid")).toBe(false);
   });
 });

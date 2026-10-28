@@ -3158,7 +3158,7 @@ Límite con la entrega 11:
 | 10.1 | Bases y catálogos breves | ADMIN | `@source not`, diálogo compartido, `ConfirmActionButton`, tipos de proveedor, categorías de material y de gasto; manual: patrones comunes | 3,5 h |
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
 | 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, la 10.3b a 7,5 h y 2,5 h, y la 10.3c a 4,5 h |
-| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h |
+| 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h, y la 10.4b a 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
 | 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
@@ -4765,10 +4765,11 @@ Datos leídos de la API de GitHub el 2026-10-24 y comparados con git:
 
 ### Sub-entrega 10.4a — Productos, estados e inicio de Comercial
 
-Fecha: del 2026-10-23 al 2026-10-26 (Lima). Estado: cerrada en staging el
-2026-10-26 (Lima); falta integrarla en `main`. El paso 0 (`c5301c6`)
-registró la integración de la 10.3c en `main`. 8 commits, de `f817b90` a
-`5b28b1e`, el registro `6ee389c` y este cierre.
+Fecha: del 2026-10-23 al 2026-10-26 (Lima). Estado: cerrada el 2026-10-26
+(Lima). El paso 0 (`c5301c6`) registró la integración de la 10.3c en
+`main`. 8 commits, de `f817b90` a `5b28b1e`, el registro `6ee389c` y el
+cierre `fd08d33` (CI #99 en verde). Integrada en `main` con el PR #28
+(merge commit `3545faf`, CI #101 en verde).
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -4782,7 +4783,7 @@ registró la integración de la 10.3c en `main`. 8 commits, de `f817b90` a
 | bee5b97 | feat | Inactivar cliente y categoría de producto pide confirmación. |
 | 5b28b1e | feat | El inicio de Comercial enlaza pagos de cliente y comprobantes de venta y pierde el `<main>` anidado. |
 | 6ee389c | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de Comercial. |
+| fd08d33 | docs | Cierre: publicación y verificación en staging, hallazgos y manual de Comercial. |
 
 Decisiones del responsable (2026-10-23), tras la auditoría:
 
@@ -5077,6 +5078,299 @@ El capítulo de Comercial del manual describe el inicio, clientes, productos
 y categorías de producto con lo verificado, y las reglas comunes suman
 clientes, productos y categorías de producto a la confirmación al inactivar.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-27 (UTC) y comparados con git:
+
+- El cierre `fd08d33` se publicó en `staging`: CI #99 en verde (3m 4s), y
+  Vercel lo desplegó (`success` a las 01:42:53 UTC del 2026-10-27).
+- PR #28, abierto a las 01:50:46 UTC y fusionado con merge commit a las
+  01:57:13 UTC del 2026-10-27: 11 commits, de `c5301c6` a `fd08d33`, y 46
+  archivos (+7.216 −903). Su CI, el #100, sobre `fd08d33`, terminó en verde
+  (2m 38s).
+- El merge commit `3545faf` tiene como padres `cb43290` (`main`) y `fd08d33`
+  (`staging`), y su árbol es el de `fd08d33` (`64c7c1db`): `main` y `staging`
+  tienen el mismo contenido. CI #101 en verde (2m 47s).
+- Vercel desplegó `3545faf` en producción al primer intento (estado «Vercel»
+  `pending` a las 01:57:16 UTC y `success` a las 01:58:20 UTC). La
+  sub-entrega no trae migraciones.
+
+### Sub-entrega 10.4b — Listados de Comercial con fechas y `Badge`
+
+Fecha: del 2026-10-26 al 2026-10-27 (Lima). Estado: cerrada en staging el
+2026-10-27 (Lima); falta integrarla en `main`. El paso 0 (`0a9cd58`)
+registró la integración de la 10.4a en `main`. 5 commits, de `77d93f4` a
+`9ba917b`, el registro `9473952` y este cierre.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 0a9cd58 | docs | Paso 0: integración de la 10.4a en `main`. |
+| 77d93f4 | fix | `DateRangeFields` conserva las fechas elegidas antes de hidratar (D7 de la 10.4). |
+| 625d2b3 | test | Caracterización de las listas de pedidos, proformas, pagos de cliente y comprobantes, de los detalles de pedido y proforma con estados reales y de los enlaces «Editar» y «Generar proforma». |
+| 42faf2f | feat | Etiquetas de estado con `Badge` (`StateBadge`) en Comercial y en la galería. |
+| 391e452 | feat | Pedidos y proformas con `FilterBar` y `DateRangeFields`, sin el `<main>` anidado. |
+| 9ba917b | feat | Pagos de cliente y comprobantes con `FilterBar` y `DateRangeFields`, sin el `<main>` anidado. |
+| 9473952 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Comercial. |
+
+Decisiones del responsable (2026-10-26), tras la auditoría; aprobó las
+cuatro recomendadas:
+
+- D1. `Badge` también en los detalles de pedido y proforma, solo la
+  etiqueta: su `<main>` queda para la 10.4c y la entrega 11. `StatusBadge`
+  sale de Comercial.
+- D2. El mapeo sale de `StatusBadge`: `StateBadge` usa sus mismas tablas
+  de etiquetas y de clases de tono, y `StatusBadge` no cambia.
+- D3. D7 se corrige pasando al estado, al montar, lo que muestra cada
+  campo, y no con campos no controlados.
+- D4. D7 se verifica en staging con un iframe del mismo origen: las fechas
+  se ponen en el DOM antes de que el campo tenga `__reactFiber` y, tras
+  hidratar, se miden el aviso del rango y una tecla real en «Hasta»; además,
+  un intento con teclas reales inmediatas.
+
+Auditoría (sobre `fd08d33`):
+
+- Las cuatro listas admiten ADMIN y SELLER. Sus parámetros: pedidos `q`,
+  `client`, `product`, `status`, `from`, `to`, `page` y `pageSize`;
+  proformas `q`, `client`, `order`, `status`, `balance`, `from` y `to`;
+  pagos `q`, `client`, `order`, `method`, `type`, `from` y `to`, y
+  comprobantes `q`, `type`, `status`, `from` y `to`. Ninguna usa otro nombre
+  de fecha, las cuatro filtran una columna `date` con `buildDateRangeFilter`
+  y solo pedidos pagina.
+- Los destinos de sus enlaces y sus acciones de fila admiten los dos
+  roles: ningún rol veía un enlace que lo rechazara y ninguna lista quedaba
+  sin tarjeta. La prueba de enlaces no abría «Editar» ni «Generar
+  proforma»: los datos generados dan a cada pedido una proforma activa.
+- Clientes, productos y categorías ya usaban `Badge`. `StatusBadge` quedaba
+  en tres listas y dos detalles de Comercial.
+- Los datos generados no pintaban ningún estado real ni las acciones que
+  dependen de él: «Sin proforma», «Editar», «Generar proforma» y «Cancelar»
+  en pedidos; «Anular» y «Sin comprobante» en proformas; un comprobante
+  anulado.
+- D7, con el React 19.2.4 de Next: al hidratar, React no pisa el valor del
+  DOM, pero el estado del componente sigue con el de la URL y el siguiente
+  render lo escribe en el campo. La sonda
+  `tmp/e10-diff/explore-hydration-104b.test.ts` lo reprodujo antes de
+  editar.
+
+Diseño:
+
+- `DateRangeFields`: al montar, un `useLayoutEffect` compara el valor de
+  cada campo con el `defaultValue` que pintó React y, si difiere, lo pasa
+  al estado. Solo si difiere (hallazgo 2).
+- `StateBadge`, al final de `status-badge.tsx`: cada clase de tono pasa a
+  su variante (info, success, default y destructive), un estado sin tono
+  usa `outline` y las búsquedas usan `Object.hasOwn`. La galería lo muestra
+  en Presentación y en la tabla «lado a lado», cuyas filas no cambiaron: el
+  mapeo escrito a mano era el mismo.
+- Las barras se llaman «Filtros de pedidos», «Filtros de proformas»,
+  «Filtros de pagos de cliente» y «Filtros de comprobantes de venta», con
+  su ruta de `navigationHrefs` como acción y como «Limpiar filtros», los
+  mismos nombres, textos y opciones, y `DateRangeFields` con `id="fecha"`.
+  En comprobantes, «Desde» y «Hasta» eran dos columnas sueltas de la
+  rejilla y ahora son el rango. Las acciones de fila (cancelar, anular,
+  registrar pago) son de la entrega 11 y no cambian.
+
+Evidencia:
+
+1. Prueba roja antes del arreglo: `tmp/e10-diff/rojo-104b-c1.txt` (2 de
+   9; sus 2 contrarias pasan antes y después).
+2. Caracterización antes de cambiar: 14 casos de página y 2 de enlaces en
+   `625d2b3`, con rango invertido y fechas que no existen en las cuatro
+   listas; las 42 entradas existentes no cambian (`verify_104b_c2.py`).
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas:
+   - en C3, 19 resultados cambian solo en la etiqueta: sin el
+     `data-variant` quedan iguales, y las 50 etiquetas llevan la variante
+     del mapeo (`verify_104b_c3.py`); la entrada de `StatusBadge` de las
+     primitivas no cambia;
+   - en C4 y C5, 21 resultados de lista cambian solo en la barra y en el
+     `<main>` (`verify_104b_lists.py`): fuera de la barra el HTML es
+     idéntico; el texto visible solo suma la leyenda «Rango de fechas» y,
+     con el rango invertido, el aviso; los demás controles conservan sus
+     atributos, y las fechas cambian como manda `DateRangeFields`.
+
+   Los tres se probaron en negativo.
+4. Mutaciones (`tmp/e10-diff/mut_104b_c*.txt`): 6 de 6 (y las 2
+   equivalentes anunciadas sobreviven), 16 de 16, 7 de 7, 7 de 7 y 8 de 8;
+   en total, 44 de 44.
+5. CSS compilado igual de C1 a C4 (112.829 bytes). En C5 salen
+   `md:col-span-6` y `md:col-span-5`, como predijo
+   `tmp/e10-diff/probe-sources.mjs`: el anterior sin esas dos reglas es
+   idéntico byte a byte (112.745 bytes, `css_104b_c5.py`).
+6. `npm run check` terminó con código 0 después de cada commit, de 2.603 a
+   2.626 pruebas en 160 archivos; en C2, al segundo intento (hallazgo 6).
+   `npm run refactor:inventory` analiza 677 archivos: 143 páginas y 102
+   formularios JSX (eran 106).
+
+Tiempo entre commits según sus horas (Lima). Incluye la preparación, la
+revisión del responsable y sus pausas:
+
+| Commit | Paso 0 | 77d93f4 | 625d2b3 | 42faf2f | 391e452 | 9ba917b |
+|---|---|---|---|---|---|---|
+| Hora | 21:55 | 22:09 | 06:21 | 06:35 | 07:02 | 07:10 |
+| Minutos desde el anterior | — | 14 | — | 14 | 27 | 8 |
+
+`77d93f4`, `42faf2f`, `391e452` y `9ba917b` suman 63 minutos frente a 140
+estimados en bruto (104 con el factor 0,74 de la 10.4a). `625d2b3` llegó
+tras la noche y no calibra.
+
+Hallazgos:
+
+1. Hallazgo 9 de la 10.3c (D7 de la 10.4), corregido en `77d93f4` para las
+   14 pantallas que ya usaban `DateRangeFields` y las cuatro listas nuevas.
+2. Método: la primera versión del arreglo llamaba siempre a `setFrom` con
+   lo que mostraba el campo, y 4 pruebas de cambio de URL fallaron. Una
+   sonda (`tmp/e10-diff/explore-d7-cola.test.ts`) mostró que, tras cambiar
+   la URL, un render dejaba «Desde» vacío y el siguiente volvía a poner la
+   fecha vieja: la actualización con el mismo valor no se descarta, queda
+   en la cola con prioridad síncrona y React la vuelve a aplicar después.
+3. El filtro «Estado» de pedidos ofrece Registrado, Aprobado y Cancelado,
+   pero crear una orden de trabajo deja el pedido en `en_produccion`: un
+   pedido en producción no se puede filtrar por su estado. Decisión de
+   negocio.
+4. Pagos de cliente muestra el tipo y el método como se guardan
+   («amortizacion», «efectivo»), y sus filtros, con el texto
+   («Amortización», «Efectivo»). Propuesta de texto para la entrega 11.
+5. El detalle de proforma no recibe `returnTo`: desde proformas, pagos o
+   comprobantes filtrados, «Volver a proformas» pierde los filtros y, desde
+   pagos o comprobantes, vuelve a proformas. Va con ese detalle (entrega
+   11).
+6. Método: el primer `npm run check` de C2 falló porque «el excel combinado
+   de mantenimiento se recorta a 5000 filas» (`route.test.ts`) tardó 6,5 s
+   con la suite completa, y el límite de Vitest es 5 s. Sola tarda 2,5 s y
+   el segundo intento pasó sin cambios. El límite no se cambió: ajustarlo es
+   decisión del responsable.
+7. Método: el verificador de C4 escribía de memoria el texto del aviso y
+   falló; ahora lo lee del código. Una mutación de C4 (el `<main>` de
+   vuelta) se detectaba solo porque rompía la compilación; se rehízo
+   cambiando la apertura y el cierre, y la detectan 5 aserciones.
+
+Siguen pendientes: el filtro «Producto» de pedidos ofrece también los
+productos inactivos (hallazgo 15 de la 10.4a, decisión de negocio); el día
+UTC de los filtros y de las fechas de pedido, y la fecha que no existe en
+la URL (hallazgos 3 y 4 de la 10.3c); proformas, pagos y comprobantes sin
+paginar (entrega 11), y las 4 copias locales que cortan a las `T23:59:59`.
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e104b-huella`) y etiquetas `e104b/`
+  (`tmp/e10-diff/e104b-*.js`, generados por `c-e104b-guiones.py`), cargada
+  en el `localStorage` de staging y comprobada con su SHA-256
+  (`e104b-guiones.sha256`) en las dos fases. Plan en
+  `tmp/e10-diff/plan-verificacion-10-4b.md`.
+- Los registros de cada captura de las dos fases se exportaron a
+  `tmp/e10-diff/e104b-registros/` y se comprobaron con su hash
+  (`e104b-registros.py`).
+- 1281 × 800 y el preset móvil (376 px). Las fechas se teclearon tecla a
+  tecla (hallazgo 11) y los `select` se eligieron con `form_input`. Cada
+  coordenada de clic se calculó con `getBoundingClientRect` y se confirmó
+  con una sonda de `mousedown` (hallazgo 10).
+- El D7 se reprodujo con la restauración de formularios de Chrome
+  (hallazgo 8): fechas elegidas con la página hidratada, un `unload` vacío
+  para que la página no quede en la caché de ida y vuelta, una navegación de
+  documento a otra página y **Atrás**. El guion comprueba que vuelve un
+  documento nuevo (`back_forward`) con las fechas restauradas. Ninguna tarea
+  escribió datos ni exportó.
+
+Publicación y medición:
+
+- «Antes» sobre `fd08d33` (CSS servido de 112.828 bytes, `6228f316…`), el
+  2026-10-28 UTC, de 01:53 a 02:10: 17 capturas (13 y 4 controles) y las
+  tareas. Sello de 13 capturas `2f12aa4c…`, igual en Python. Predicción
+  escrita antes del push (`tmp/e10-diff/prediccion-10-4b.md` y su `.json`:
+  número de elementos y hash del texto visible de cada captura).
+- Push de 7 commits (de `0a9cd58` a `9473952`): CI #102 en verde (3m 24s, de
+  02:07:26 a 02:10:50 UTC). Vercel desplegó `9473952` (`pending` a las
+  02:07:26 y `success` a las 02:09:06 UTC). El CSS servido es el predicho
+  byte a byte: 112.744 bytes, `ef3c3e19…`.
+- «Después» el mismo día UTC, de 02:16 a 02:34: 17 capturas y las tareas.
+  Sello de 13 capturas `f1e4d33c…`, igual en Python. Evidencia en
+  `tmp/e10-diff/antes-10-4b.json`, `despues-10-4b.json`,
+  `registro-10-4b.tsv` (34 filas), `tareas-10-4b.md`,
+  `tareas-antes-10-4b.json` y `resultado-10-4b.md`.
+
+Huella: 15 de 17 como se predijo, y los dos controles restantes explicados.
+
+- Las cuatro listas (a 1281 y a 376 px), los dos detalles y las dos
+  secciones de la galería dan el número de elementos y el hash del texto
+  visible predichos: +1 en pedidos, proformas y pagos, y +2 en comprobantes
+  y en el rango invertido (la leyenda «Rango de fechas» y el aviso), +12 en
+  la sección de presentación de la galería y 0 en los detalles y en
+  listados. Clientes y productos dan el hash completo del «antes».
+- Por elemento:
+  - en pedidos, la raíz pasa de `main` a `div` y el envoltorio de las fechas, a `fieldset` con su `legend`;
+  - las 9 etiquetas pasan a `Badge`: `inline-flex`, 20 px de alto, 11 px y en mayúsculas;
+  - todo lo que hay bajo la barra baja un `dy` constante de 22 px, y las columnas se mueven 1,2 px por el ancho nuevo de las etiquetas;
+  - en comprobantes, la barra pasa a `rounded-xl` y las etiquetas de `Field` cambian su separación;
+  - en el detalle de pedido solo cambia la etiqueta (285 de 286 registros iguales).
+- Entradas y máquinas (controles) tienen el mismo número de elementos y el
+  mismo texto visible. Solo difieren 13 y 11 registros de la barra lateral
+  del shell: los enlaces de la sección de origen y de destino, con la
+  transición del enlace activo a medias en el «antes» (14 y 12 elementos
+  animados, frente a 1). Desde el `h1` de la página todo es idéntico, y el
+  shell no cambió entre `fd08d33` y `9473952` (hallazgo 13).
+
+Tareas (ADMIN), con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`fd08d33`) | Después (`9473952`) |
+|---|---|---|
+| T43 D7 en compras | Al volver con Atrás, las fechas restauradas se ven, pero «Hasta» no tiene `min` ni aviso; «Filtrar» envía el rango invertido y la lista dice «Todavía no hay compras registradas.» | Al volver, las mismas fechas, «Hasta» con `min`, `aria-invalid` y el aviso; «Filtrar» da el evento `invalid`, no envía y el foco va a «Hasta» |
+| T43 D7 en pedidos | — (la lista no tenía `DateRangeFields`) | Igual que en compras |
+| T44 Filtrar pedidos por estado y rango | GET a `?q=&client=&product=&status=registrado&from=2026-07-01&to=2026-07-31`, con PED00000002 | Igual |
+| T45 Rango invertido escrito en proformas | Sin aviso; se envía y la lista dice «Todavía no hay proformas registradas.» | El aviso aparece al teclear «Hasta»; no se envía y el foco va a «Hasta» |
+| T46 Por URL en pagos | Invertido: sin aviso y lista vacía. `2026-02-30`: el campo se ve vacío, el HTML trae ese valor y salen 5 pagos | Invertido: aviso y lista vacía. `2026-02-30`: vacío también en el HTML y los mismos 5 pagos |
+| T47 Comprobantes: Desde sin filtrar, Limpiar, Atrás y Adelante | «Desde» se queda en lo escrito en los tres pasos | Vacío, 01/07 y vacío; el foco se queda en «Limpiar filtros» |
+| T48 Etiquetas de estado | `StatusBadge`: 12 px, minúsculas, 26 px de alto | `Badge`: 11 px, mayúsculas, 20 px; el mismo texto y el mismo tono |
+
+Un intento con teclas inmediatas tras cargar compras no ganó la carrera a
+la hidratación: React vio las teclas a los 1,9 s. Se verificó solo con
+ADMIN: el responsable no pidió probar SELLER, porque
+`commercial-links.test.ts` y los snapshots cubren lo que ve.
+
+Hallazgos de la verificación:
+
+8. El método del D4 (un iframe del mismo origen) era imposible: el ERP
+   manda `X-Frame-Options: DENY`. El responsable aprobó cambiarlo por la
+   restauración de formularios al volver con Atrás, que además es lo que le
+   pasa a un usuario real: con el código anterior, el rango invertido
+   restaurado se enviaba; con el arreglo, se bloquea.
+9. Método: el camino importa. La primera captura de pedidos del «después»
+   tenía un elemento más: tras cargar el documento, el HTML del servidor
+   trae en el formulario «Cancelar» de la fila editable el `input` oculto
+   `$ACTION_ID_…` que Next añade a una acción de servidor, y React lo
+   conserva al hidratar; pintado en el cliente con una navegación suave, no
+   está. Con el mismo camino que el «antes» dio lo predicho (373, 344 y 374
+   a 376 px). La primera versión quedó en `despues-documento__*`.
+10. Método: el marco de los clics cambia con el tamaño del panel. Fue de
+    673 × 883, que no escala igual en los dos ejes (x × 0,525; y × 1,104),
+    y luego de 800 × 500, que sí (0,6245). Dos clics calculados con el marco
+    anterior cayeron en la tabla, sin efecto. Las capturas de pantalla
+    siguen sin servir para apuntar: una ampliación mostró una fila y no la
+    barra.
+11. Método: la acción `type` no llena un campo de fecha. Hay que usar `key`
+    tecla a tecla, empezando por ← ←: un clic hacia el centro del campo
+    puede enfocar el mes.
+12. Método: una salida grande de `javascript_tool` se guarda en disco, así
+    que los registros de cada fase se exportaron en una sola llamada
+    (`e104b-importar.py`), sin copiar trozos de base64. Una salida que cabe
+    vuelve en la respuesta: para guardarla, se exporta todo junto.
+13. Método: la página del panel estuvo oculta (`visibilityState`) dos veces
+    aunque el panel figuraba como mostrado. Se pidió dejar la ventana a la
+    vista antes de medir. Las transiciones de la barra lateral de los dos
+    controles quedaron a medias en el «antes».
+14. Predicción: dijo que, en los detalles, lo de debajo de una etiqueta
+    podía subir unos píxeles. En el detalle de proforma, una fila de la
+    tabla de comprobantes crece 1,2 px.
+
+El capítulo de Comercial del manual suma las listas de pedidos, proformas,
+pagos de cliente y comprobantes de venta y las etiquetas de estado, escritos
+con lo verificado. Las reglas comunes suman esas listas a las renovadas y
+explican que las fechas elegidas mientras la página carga, o recuperadas al
+volver con Atrás, también se validan.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5101,7 +5395,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada en staging, con CI #98 verde, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada en staging, con CI #102 verde, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; falta integrarla en main) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -5125,7 +5419,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 160 / 2.603 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 160 / 2.626 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -5145,20 +5439,22 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 8 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 80 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 15 (23 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 76 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 13 (19 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 16 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 13 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 9 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 | Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 4 (copias locales) | 10 |
 | Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
 | Acciones de Comercial sin caracterizar: el cambio de estado de clientes; el alta, la edición y el cambio de estado de productos; el de categorías | 5 | 0 | 10 |
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
+| Pantallas con `DateRangeFields` que pierden las fechas elegidas antes de hidratar | 14 | 0 | 10 |
+| Pantallas de Comercial con `StatusBadge` | 5 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -5411,6 +5707,27 @@ notificaciones en 2 archivos, medidos de nuevo.
 
 El cierre de la 10.4a (2026-10-26) no cambia código: las métricas son las
 de `5b28b1e`.
+
+Actualizado en la sub-entrega 10.4b (2026-10-27) sobre `9ba917b`:
+
+- Pruebas: 160 / 2.626.
+- El `<main>` anidado baja a 76 (las listas de pedidos, proformas, pagos de
+  cliente y comprobantes) y los formularios GET a 19, con 13 combinaciones
+  de clases: las cuatro barras pasan a `FilterBar`.
+- Las pantallas con rango de fechas sin `DateRangeFields` bajan a 9.
+- Las dos filas nuevas se midieron sobre `fd08d33`, su línea base: las 14
+  pantallas que usaban `DateRangeFields` (los nueve reportes, auditoría
+  incluida, el historial de exportaciones y cuatro listas de Inventario)
+  perdían las fechas elegidas antes de hidratar, y `StatusBadge` se usaba
+  en las listas de pedidos, proformas y comprobantes y en los detalles de
+  pedido y proforma.
+
+Las demás no cambian: la desviación 16, los cambios de estado que voltean
+2, las copias locales de `FieldError` 8 y el `import` de las librerías de
+notificaciones en 2 archivos, medidos de nuevo.
+
+El cierre de la 10.4b (2026-10-27) no cambia código: las métricas son las
+de `9ba917b`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

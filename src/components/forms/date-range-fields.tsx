@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 import { Field } from "@/components/forms/field";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,10 @@ type DateRangeFieldsProps = {
 // muestra el navegador, y no cuenta para el rango (entrega 10.2). Next no
 // vuelve a montar la pagina cuando la URL cambia con next/link (Limpiar,
 // Atras, Adelante): si cambian las fechas de la URL, los campos las toman; si
-// no cambian, conservan lo que eligio el usuario.
+// no cambian, conservan lo que eligio el usuario. Lo que el usuario elige antes
+// de que React hidrate la pagina solo cambia el DOM: al montar, los campos
+// leen su valor y lo pasan al estado; si no, el siguiente render lo borraba y
+// el rango no se validaba (D7 de la 10.4).
 export function DateRangeFields({
   id,
   legend = "Rango de fechas",
@@ -59,8 +62,27 @@ export function DateRangeFields({
     setTo(toDateInputValue(defaultTo));
   }
 
+  const fromRef = useRef<HTMLInputElement>(null);
   const toRef = useRef<HTMLInputElement>(null);
   const inverted = isDateRangeInverted(from, to);
+
+  // Hidratar no pisa el valor del DOM, pero el estado sigue con el de la URL.
+  // React deja en defaultValue el valor que pinto: si el campo muestra otro, lo
+  // eligio el usuario. Solo se actualiza si difiere: una actualizacion que no
+  // cambia nada quedaba en la cola y volvia a poner esa fecha despues de que
+  // la URL cambiara.
+  useLayoutEffect(() => {
+    const fromInput = fromRef.current;
+    const toInput = toRef.current;
+
+    if (fromInput && fromInput.value !== fromInput.defaultValue) {
+      setFrom(fromInput.value);
+    }
+
+    if (toInput && toInput.value !== toInput.defaultValue) {
+      setTo(toInput.value);
+    }
+  }, []);
 
   useEffect(() => {
     toRef.current?.setCustomValidity(inverted ? DATE_RANGE_INVERTED_MESSAGE : "");
@@ -73,6 +95,7 @@ export function DateRangeFields({
         {(control) => (
           <Input
             {...control}
+            ref={fromRef}
             type="date"
             name={fromName}
             value={from}

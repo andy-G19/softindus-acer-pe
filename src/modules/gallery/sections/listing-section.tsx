@@ -1,4 +1,4 @@
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge, StatusBadge } from "@/components/commercial/status-badge";
 import { DateRangeFields } from "@/components/forms/date-range-fields";
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
@@ -35,18 +35,18 @@ const ROWS = [
   { id: "CLI00000003", name: "Estructuras del Sur", type: "Empresa", phone: "054223344", active: false, rejects: false },
 ];
 
-// Mismos estados en las dos etiquetas. La variante de Badge es la del tono que
-// StatusBadge ya usa (active es la default de Badge; el estado desconocido usa
-// outline, el mas parecido a su gris).
+// Mismos estados en las dos etiquetas. StateBadge toma de StatusBadge la
+// etiqueta y el tono, y pasa el tono a la variante de Badge (active es la
+// default; el estado desconocido usa outline, la mas parecida a su gris).
 const STATUS_SAMPLES = [
-  { status: "pagada", label: "Pagada", variant: "success" },
-  { status: "aprobado", label: "Aprobado", variant: "info" },
-  { status: "pendiente", label: "Pendiente", variant: "default" },
-  { status: "en_produccion", label: "En producción", variant: "default" },
-  { status: "sin proforma", label: "Sin proforma", variant: "default" },
-  { status: "anulado", label: "Anulado", variant: "destructive" },
-  { status: "desconocido", label: "desconocido", variant: "outline" },
-] as const;
+  "pagada",
+  "aprobado",
+  "pendiente",
+  "en_produccion",
+  "sin proforma",
+  "anulado",
+  "desconocido",
+];
 
 export function ListingSection() {
   return (
@@ -168,24 +168,24 @@ export function ListingSection() {
         </Table>
       </GallerySample>
 
-      <GallerySample label="Etiquetas de estado: StatusBadge (Comercial) y Badge, lado a lado" className="block">
+      <GallerySample label="Etiquetas de estado: StatusBadge y StateBadge (Badge), lado a lado" className="block">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Estado</TableHead>
               <TableHead>StatusBadge</TableHead>
-              <TableHead>Badge</TableHead>
+              <TableHead>StateBadge</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {STATUS_SAMPLES.map(({ status, label, variant }) => (
+            {STATUS_SAMPLES.map((status) => (
               <TableRow key={status}>
                 <TableCell className="font-mono text-xs text-muted-foreground">{status}</TableCell>
                 <TableCell>
                   <StatusBadge status={status} />
                 </TableCell>
                 <TableCell>
-                  <Badge variant={variant}>{label}</Badge>
+                  <StateBadge status={status} />
                 </TableCell>
               </TableRow>
             ))}
@@ -193,10 +193,11 @@ export function ListingSection() {
         </Table>
       </GallerySample>
       <GalleryNote>
-        Las dos usan los mismos colores (las clases badge-state-*); solo cambia
-        la forma: StatusBadge es redondeada, en minúsculas y traduce el estado;
-        Badge es más compacta y en mayúsculas. En la entrega 10 se adopta una
-        sola para todas las pantallas.
+        Las dos usan las mismas etiquetas y los mismos colores (las clases
+        badge-state-*); solo cambia la forma: StatusBadge es redondeada y en
+        minúsculas; StateBadge es un Badge, más compacto y en mayúsculas.
+        Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas
+        pasan a ella en la 10.5 y la 10.7.
       </GalleryNote>
 
       <GallerySample label="Tabla sin resultados" className="block">

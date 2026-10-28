@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { requireRole } from "@/lib/authz";
-import { StatusBadge } from "@/components/commercial/status-badge";
+import { StateBadge } from "@/components/commercial/status-badge";
 import { PageHeader } from "@/components/navigation/page-header";
 import { KpiCard } from "@/components/ui/kpi-card";
 import {
@@ -78,7 +78,7 @@ export default async function OrderDetailPage({
             Estado
           </p>
           <div className="mt-2">
-            <StatusBadge status={order.estado} />
+            <StateBadge status={order.estado} />
           </div>
         </div>
       </section>
