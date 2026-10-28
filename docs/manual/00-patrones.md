@@ -6,7 +6,8 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 
 Pantallas renovadas hasta ahora:
 
-- Comercial: el inicio, clientes, productos y categorías de producto.
+- Comercial: el inicio, clientes, productos, categorías de producto y las
+  listas de pedidos, proformas, pagos de cliente y comprobantes de venta.
 - Inventario: el inicio, tipos de proveedor, proveedores, materiales de
   proveedor, categorías de materiales, materiales e insumos, alertas y stock
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
@@ -109,8 +110,12 @@ se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
 quedan al revés, muestra «La fecha inicial no puede ser mayor que la fecha
 final.» y la barra no se envía hasta corregirlo. Si llegas con un enlace que
 ya trae el rango al revés, **Hasta** muestra el mismo mensaje: los reportes
-no muestran datos y piden corregir el rango, y las listas de Inventario
-salen vacías.
+no muestran datos y piden corregir el rango, y las listas de Inventario y
+de Comercial salen vacías.
+
+Las fechas cuentan aunque las elijas mientras la página todavía carga, o
+aunque el navegador las recupere al volver con **Atrás**: si quedan al
+revés, el mensaje aparece igual y la barra no se envía.
 
 ## Usar el teclado
 

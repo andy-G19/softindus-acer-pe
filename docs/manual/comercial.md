@@ -122,3 +122,102 @@ Reglas del formulario:
 - **Nombre:** obligatorio, de 2 a 80 caracteres. No puede haber dos
   categorías con el mismo nombre.
 - **Descripción:** hasta 500 caracteres.
+
+## Estados
+
+Pedidos, proformas y comprobantes muestran su estado con una etiqueta de
+color en mayúsculas:
+
+- azul: «Registrado», «Aprobado», «Vigente» y «Aceptada»;
+- verde: «Pagada» y «Emitido»;
+- naranja: «En producción», «Sin proforma» y «Sin comprobante»;
+- rojo: «Cancelado», «Anulada» y «Anulado».
+
+## Pedidos
+
+**Dónde:** Comercial → Pedidos.
+**Quién:** el administrador (ADMIN) y el vendedor (SELLER).
+
+La lista muestra, por pedido, el código, el cliente, la fecha del pedido,
+la entrega estimada, los productos con su cantidad, el monto estimado, el
+estado y la proforma activa (su número, o «Sin proforma»). Los pedidos más
+recientes van primero, de 20 en 20.
+
+- **Estados:** un pedido nace «Registrado»; pasa a «En producción» cuando
+  se crea su orden de trabajo, y puede quedar «Aprobado» o «Cancelado».
+- **En cada fila:**
+  - **Ver detalle**, siempre;
+  - **Editar** y **Cancelar**, mientras el pedido no esté cancelado ni tenga una proforma activa, un comprobante o una orden de trabajo;
+  - **Ver proforma**, si tiene una proforma activa;
+  - **Generar proforma**, si está registrado o aprobado y no tiene una proforma activa.
+- **Filtros:**
+  - búsqueda por código, cliente o producto;
+  - cliente;
+  - producto (ofrece también los productos inactivos);
+  - estado: Registrado, Aprobado o Cancelado. No hay opción para «En producción»;
+  - rango de fechas del pedido.
+
+## Proformas
+
+**Dónde:** Comercial → Proformas.
+**Quién:** el administrador (ADMIN) y el vendedor (SELLER).
+
+La lista muestra, por proforma, el número, el pedido, el cliente, la fecha
+de emisión, el total, el saldo, el estado y el comprobante (su tipo y
+número, o «Sin comprobante»). Las más recientes van primero; la lista
+muestra todas, sin páginas.
+
+- **En cada fila:**
+  - **Ver detalle**, siempre;
+  - **Registrar pago**, mientras no esté pagada ni anulada y tenga saldo; lleva al detalle, donde se registra;
+  - **Anular**, mientras no esté anulada y no tenga pagos ni comprobantes; pide confirmación.
+- **Filtros:**
+  - búsqueda por número de proforma, pedido o cliente;
+  - cliente;
+  - pedido;
+  - estado: Vigente, Aceptada, Pagada o Anulada;
+  - saldo: con saldo o sin saldo;
+  - rango de fechas de emisión.
+
+## Pagos de cliente
+
+**Dónde:** Comercial → Pagos de cliente.
+**Quién:** el administrador (ADMIN) y el vendedor (SELLER).
+
+Los pagos se registran en el detalle de cada proforma; esta lista los
+consulta. Muestra, por pago, la fecha, el cliente, el pedido, la proforma,
+el tipo, el método, el monto y el saldo que quedó. Los más recientes van
+primero; la lista muestra todos, sin páginas. El tipo y el método se ven
+como se guardaron, por ejemplo «amortizacion» o «transferencia».
+
+- **En cada fila:** **Ver proforma**.
+- **Filtros:**
+  - búsqueda por pedido, proforma o cliente;
+  - cliente;
+  - pedido;
+  - método: efectivo, transferencia, Yape, Plin u otro;
+  - tipo de pago: adelanto, amortización o cancelación;
+  - rango de fechas del pago.
+
+## Comprobantes de venta
+
+**Dónde:** Comercial → Comprobantes de venta.
+**Quién:** el administrador (ADMIN) y el vendedor (SELLER).
+
+Los comprobantes se emiten en el detalle de cada proforma; esta lista los
+consulta. Muestra, por comprobante, el número, el cliente, el pedido, el
+tipo, la fecha de emisión, el total y el estado («Emitido» o «Anulado»). Los
+más recientes van primero; la lista muestra todos, sin páginas.
+
+- **En cada fila:**
+  - **Ver proforma**, si el comprobante tiene una;
+  - **Anular**, mientras esté emitido; pide confirmación.
+- **Filtros:**
+  - búsqueda por número, pedido o cliente;
+  - tipo: boleta, factura, recibo u otro;
+  - estado;
+  - rango de fechas de emisión.
+
+En las cuatro listas, el rango de fechas sigue las reglas comunes: si
+**Desde** es posterior a **Hasta**, la barra lo marca y no se envía, y un
+enlace que ya trae el rango al revés muestra el aviso y la lista vacía.
