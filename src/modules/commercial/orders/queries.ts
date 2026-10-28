@@ -183,6 +183,9 @@ export async function getOrderDetail(idPedido: string) {
   });
 }
 
+// La edicion ofrece los clientes y productos activos y, aunque esten
+// inactivos, el cliente y los productos que el pedido ya tiene (D3 de la
+// 10.4a): el pedido trae su cliente y el producto de cada linea.
 export async function getOrderEditData(idPedido: string) {
   const [order, clients, products] = await Promise.all([
     prisma.pedido.findUnique({
@@ -190,6 +193,14 @@ export async function getOrderEditData(idPedido: string) {
         id_pedido: idPedido,
       },
       include: {
+        cliente: {
+          select: {
+            id_cliente: true,
+            nombre_razon_social: true,
+            tipo_cliente: true,
+            estado: true,
+          },
+        },
         proforma: {
           select: {
             id_proforma: true,

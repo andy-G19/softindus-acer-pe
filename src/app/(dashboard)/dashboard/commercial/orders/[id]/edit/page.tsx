@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateOrderAction } from "@/modules/commercial/orders/actions";
+import { buildOrderEditOptions } from "@/modules/commercial/orders/order-edit-options";
 import { getOrderEditData } from "@/modules/commercial/orders/queries";
 
 type EditOrderPageProps = {
@@ -44,6 +45,9 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
     redirect(`/dashboard/commercial/orders/${order.id_pedido}`);
   }
 
+  // D3 de la 10.4a: el cliente y los productos actuales, aunque esten inactivos.
+  const options = buildOrderEditOptions(order, clients, products);
+
   return (
     <main className="mx-auto max-w-5xl space-y-6">
       <PageHeader
@@ -60,14 +64,8 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
 
       <OrderForm
         action={updateOrderAction}
-        clients={clients}
-        products={products.map((product) => ({
-          id_producto: product.id_producto,
-          nombre_producto: product.nombre_producto,
-          categoria: product.categoria,
-          unidad_medida: product.unidad_medida,
-          precio_referencial: product.precio_referencial?.toString() ?? null,
-        }))}
+        clients={options.clients}
+        products={options.products}
         defaultValues={{
           id_pedido: order.id_pedido,
           id_cliente: order.id_cliente,

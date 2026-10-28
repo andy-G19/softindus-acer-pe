@@ -20,6 +20,8 @@ type ClientOption = {
   id_cliente: string;
   nombre_razon_social: string;
   tipo_cliente: string;
+  /** Cliente actual del pedido que se edita, inactivo: se marca en la lista. */
+  inactivo?: boolean;
 };
 
 type ProductOption = {
@@ -28,6 +30,8 @@ type ProductOption = {
   categoria: string;
   unidad_medida: string;
   precio_referencial: string | null;
+  /** Producto actual del pedido que se edita, inactivo: se marca en la lista. */
+  inactivo?: boolean;
 };
 
 type OrderItem = {
@@ -105,7 +109,7 @@ export function OrderForm({
     return clients.map((client) => ({
       id: client.id_cliente,
       label: client.nombre_razon_social,
-      description: client.tipo_cliente,
+      description: client.inactivo ? `${client.tipo_cliente} - Inactivo` : client.tipo_cliente,
     }));
   }, [clients]);
 
@@ -116,7 +120,7 @@ export function OrderForm({
       description: `${product.categoria} - ${product.unidad_medida} - ${formatMoney(
         product.precio_referencial,
         { emptyText: "Sin precio" },
-      )}`,
+      )}${product.inactivo ? " - Inactivo" : ""}`,
     }));
   }, [products]);
 

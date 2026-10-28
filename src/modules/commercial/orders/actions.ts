@@ -9,7 +9,7 @@ import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives"
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
 import { calculateOrderAmounts } from "@/lib/order-amounts";
-import { orderSchema } from "@/schemas/commercial/order.schema";
+import { orderSchema, type OrderInput } from "@/schemas/commercial/order.schema";
 
 export type OrderFormState = ActionErrorState;
 
@@ -90,6 +90,48 @@ function validateEstimatedDate(
   orderDate.setHours(0, 0, 0, 0);
 
   return deliveryDate >= orderDate;
+}
+
+// El cliente y los productos deben existir y estar activos. Al editar
+// (current), el cliente y los productos que el pedido ya tiene se aceptan
+// aunque esten inactivos mientras no se cambien: la edicion los ofrece (D3 y
+// hallazgo 5 de la 10.4a). Sin esta comprobacion, un id que no existe rompia en
+// la clave foranea.
+async function validateActiveReferences(
+  data: OrderInput,
+  current?: { id_cliente: string; productIds: string[] },
+): Promise<OrderFormState | null> {
+  const productIds = data.items.map((item) => item.id_producto);
+  const [client, products] = await Promise.all([
+    prisma.cliente.findUnique({
+      where: { id_cliente: data.id_cliente },
+      select: { id_cliente: true, estado: true },
+    }),
+    prisma.producto.findMany({
+      where: { id_producto: { in: productIds } },
+      select: { id_producto: true, estado: true },
+    }),
+  ]);
+
+  if (!client || (!client.estado && client.id_cliente !== current?.id_cliente)) {
+    const message = "El cliente seleccionado no existe o está inactivo.";
+
+    return { error: message, fieldErrors: { id_cliente: [message] } };
+  }
+
+  const usable = new Set(
+    products
+      .filter((product) => product.estado || current?.productIds.includes(product.id_producto))
+      .map((product) => product.id_producto),
+  );
+
+  if (productIds.some((id) => !usable.has(id))) {
+    const message = "Un producto seleccionado no existe o está inactivo.";
+
+    return { error: message, fieldErrors: { items: [message] } };
+  }
+
+  return null;
 }
 
 async function validateOrderCanChange(orderId: string) {
@@ -183,6 +225,12 @@ export async function createOrderAction(
         items: ["No repitas el mismo producto dentro del pedido."],
       },
     };
+  }
+
+  const referencesError = await validateActiveReferences(parsed.data);
+
+  if (referencesError) {
+    return referencesError;
   }
 
   const amounts = calculateOrderAmounts(parsed.data.items);
@@ -289,6 +337,15 @@ export async function updateOrderAction(
         items: ["No repitas el mismo producto dentro del pedido."],
       },
     };
+  }
+
+  const referencesError = await validateActiveReferences(parsed.data, {
+    id_cliente: changeValidation.order.id_cliente,
+    productIds: changeValidation.order.detalle_pedido.map((detail) => detail.id_producto),
+  });
+
+  if (referencesError) {
+    return referencesError;
   }
 
   const amounts = calculateOrderAmounts(parsed.data.items);

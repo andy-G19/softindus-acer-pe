@@ -96,7 +96,8 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
 // Entrega 10.4c: lo que pasa hoy antes de llevar el alta y la edicion a
 // FormActionState. La edicion solo ofrece clientes y productos activos: si el
 // del pedido se inactivo, el campo visible queda vacio y obligatorio aunque el
-// oculto conserve su id (hallazgo 5 de la 10.4a). Los subtotales y el total se
+// oculto conserve su id (hallazgo 5 de la 10.4a; desde C3 se ofrecen marcados
+// como inactivos). Los subtotales y el total se
 // calculaban en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
 // 10,25 mostraban 12.81 cada una y un total de 25.63; desde C2, la vista previa
 // usa la regla de la base y el total es 25.62. Un pedido anulado sin
@@ -210,14 +211,37 @@ definePageSuite([
       {
         name: "cliente inactivo",
         params: { id: "PED00000001" },
-        data: { "pedido.findUnique": editableWith((order) => ({ ...order, id_cliente: "CLI00000099" })) },
+        data: {
+          "pedido.findUnique": editableWith((order) => ({
+            ...order,
+            id_cliente: "CLI00000099",
+            cliente: {
+              id_cliente: "CLI00000099",
+              nombre_razon_social: "Cliente dado de baja",
+              tipo_cliente: "ferreteria",
+              estado: false,
+            },
+          })),
+        },
       },
       {
         name: "producto inactivo",
         params: { id: "PED00000001" },
         data: {
           "pedido.findUnique": editableWith((order) =>
-            withDetails(order, [{ id_producto: "PRO00000099" }]),
+            withDetails(order, [
+              {
+                id_producto: "PRO00000099",
+                producto: {
+                  id_producto: "PRO00000099",
+                  nombre_producto: "Producto dado de baja",
+                  categoria: "herramientas",
+                  unidad_medida: "unidad",
+                  precio_referencial: new Prisma.Decimal("35.50"),
+                  estado: false,
+                },
+              },
+            ]),
           ),
         },
       },

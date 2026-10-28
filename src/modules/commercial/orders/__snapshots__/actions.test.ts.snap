@@ -10,6 +10,35 @@ exports[`createOrderAction > ADMIN crea un pedido de dos lineas > llamadas 1`] =
     ],
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -100,6 +129,35 @@ exports[`createOrderAction > SELLER crea un pedido > llamadas 1`] = `
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -308,6 +366,35 @@ exports[`createOrderAction > entrega hoy > llamadas 1`] = `
     ],
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -398,6 +485,35 @@ exports[`createOrderAction > importes con decimales: cada linea redondeada y el 
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -492,6 +608,34 @@ exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > llamadas 1`] =
     ],
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -573,6 +717,34 @@ exports[`createOrderAction > observaciones con espacios se guardan como null > l
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -808,6 +980,35 @@ exports[`createOrderAction > sin fecha de entrega > llamadas 1`] = `
     ],
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -915,83 +1116,6 @@ exports[`createOrderAction > sin lineas > resultado 1`] = `
 }
 `;
 
-exports[`createOrderAction > un producto inexistente rompe en la clave foranea > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "SELLER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "pedido",
-      "prefijo": "PED",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "cantidad": 2,
-      "codigoEntidad": "detalle_pedido",
-      "prefijo": "DPE",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "registrado",
-        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
-        "fecha_pedido": 2026-07-15T15:00:00.000Z,
-        "id_cliente": "CLI00000003",
-        "id_pedido": "PED00000010",
-        "id_usuario_registro": "USU00000001",
-        "monto_estimado": "380.50",
-        "observaciones": "Entrega en obra.",
-      },
-    },
-    "prisma": "pedido.create",
-  },
-  {
-    "args": {
-      "data": [
-        {
-          "cantidad": "2.00",
-          "id_detalle_pedido": "DPE00000010",
-          "id_pedido": "PED00000010",
-          "id_producto": "PRO00000001",
-          "observaciones": "Pintado negro",
-          "precio_unitario": "150.00",
-          "subtotal": "300.00",
-        },
-        {
-          "cantidad": "1.00",
-          "id_detalle_pedido": "DPE00000011",
-          "id_pedido": "PED00000010",
-          "id_producto": "PRO00000002",
-          "observaciones": null,
-          "precio_unitario": "80.50",
-          "subtotal": "80.50",
-        },
-      ],
-    },
-    "prisma": "detalle_pedido.createMany",
-  },
-  {
-    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`createOrderAction > un producto inexistente rompe en la clave foranea > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
-
 exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > llamadas 1`] = `
 [
   {
@@ -1000,6 +1124,34 @@ exports[`createOrderAction > una cantidad de tres decimales se redondea antes de
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -1085,6 +1237,34 @@ exports[`createOrderAction > una cantidad que no cabe en la columna llega a la b
     ],
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -1158,6 +1338,112 @@ exports[`createOrderAction > una cantidad que no cabe en la columna llega a la b
 
 exports[`createOrderAction > una cantidad que no cabe en la columna llega a la base > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
 
+exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
+
 exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha anterior > llamadas 1`] = `
 [
   {
@@ -1191,6 +1477,34 @@ exports[`createOrderAction > una linea sin producto se descarta > llamadas 1`] =
       "ADMIN",
       "SELLER",
     ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -1303,6 +1617,35 @@ exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -1428,6 +1771,35 @@ exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -1672,6 +2044,35 @@ exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] 
     "prisma": "pedido.findUnique",
   },
   {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
     "args": null,
     "effect": "prisma.$transaction",
   },
@@ -1795,6 +2196,35 @@ exports[`updateOrderAction > importes con decimales: cada linea redondeada y el 
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -2256,7 +2686,7 @@ exports[`updateOrderAction > un error de validacion llega despues de leer el ped
 }
 `;
 
-exports[`updateOrderAction > un producto inexistente rompe en la clave foranea despues de borrar el detalle > llamadas 1`] = `
+exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle se propaga > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2293,6 +2723,35 @@ exports[`updateOrderAction > un producto inexistente rompe en la clave foranea d
       },
     },
     "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
   },
   {
     "args": null,
@@ -2360,4 +2819,4 @@ exports[`updateOrderAction > un producto inexistente rompe en la clave foranea d
 ]
 `;
 
-exports[`updateOrderAction > un producto inexistente rompe en la clave foranea despues de borrar el detalle > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
+exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle se propaga > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;

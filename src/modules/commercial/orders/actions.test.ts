@@ -11,6 +11,7 @@ import {
   describeNavigationError,
   expectAuthorizesBeforePrisma,
   type DataOverrides,
+  type PrismaArgs,
   type Role,
 } from "@/testing/page-characterization";
 
@@ -28,8 +29,11 @@ import {
 // - los importes se calculaban en coma flotante sin redondear, y la base
 //   redondeaba cada columna por su cuenta (hallazgo 6 de la 10.4a; corregido
 //   en C2 con src/lib/order-amounts.ts);
-// - no comprueban que el cliente y los productos existan ni esten activos: un
-//   id inexistente rompe en la clave foranea (hallazgo 5 de la 10.4a);
+// - no comprobaban que el cliente y los productos existieran ni estuvieran
+//   activos: un id inexistente rompia en la clave foranea, y la edicion no
+//   distinguia el cliente o los productos que el pedido ya tenia (hallazgo 5
+//   de la 10.4a; corregido en C3: los casos de la clave foranea simulan ahora
+//   un producto borrado entre la comprobacion y la escritura);
 // - un campo que falta o un numero que no lo es dan el mensaje de Zod en
 //   ingles, una cantidad fuera de la columna llega a la base y una fecha que
 //   no existe da el mensaje de la fecha anterior.
@@ -153,7 +157,7 @@ function defineOrderSuite(name: string, action: OrderAction, cases: ActionCase[]
               );
             }
           },
-          actionCase.data,
+          { ...CATALOG, ...actionCase.data },
           { role: actionCase.role },
         );
 
@@ -173,6 +177,28 @@ const CLIENTE = "CLI00000003";
 const PEDIDO = "PED00000020";
 const PRODUCTO_A = "PRO00000001";
 const PRODUCTO_B = "PRO00000002";
+const CLIENTE_INACTIVO = "CLI00000004";
+const PRODUCTO_INACTIVO = "PRO00000003";
+
+// Clientes y productos de la base en todos los casos (C3): los de arriba,
+// activos o inactivos; cualquier otro id no existe.
+const CLIENTES: Record<string, boolean> = { [CLIENTE]: true, [CLIENTE_INACTIVO]: false };
+const PRODUCTOS: Record<string, boolean> = { [PRODUCTO_A]: true, [PRODUCTO_B]: true, [PRODUCTO_INACTIVO]: false };
+
+const CATALOG: DataOverrides = {
+  "cliente.findUnique": (args: PrismaArgs) => {
+    const id = String((args?.where as Record<string, unknown>)?.id_cliente);
+
+    return Object.hasOwn(CLIENTES, id) ? { id_cliente: id, estado: CLIENTES[id] } : null;
+  },
+  "producto.findMany": (args: PrismaArgs) => {
+    const filter = (args?.where as { id_producto?: { in?: string[] } })?.id_producto?.in ?? [];
+
+    return filter
+      .filter((id) => Object.hasOwn(PRODUCTOS, id))
+      .map((id) => ({ id_producto: id, estado: PRODUCTOS[id] }));
+  },
+};
 
 // Una linea por producto: los campos repetidos van en el mismo orden.
 function lines(...items: Array<[string, string, string, string?]>): FormFields {
@@ -246,7 +272,7 @@ async function writtenAmounts(action: OrderAction, form: FormFields, data?: Data
         throw error;
       }
     }
-  }, data);
+  }, { ...CATALOG, ...data });
   const argsOf = (name: string) => {
     const call = calls.find((item) => "prisma" in item && item.prisma === name) as
       | { args: { data: unknown } }
@@ -279,6 +305,91 @@ describe("importes con la regla de la base", () => {
 
   it("la edicion guarda lo mismo", async () => {
     expect(await writtenAmounts(updateOrderAction, { ...editForm, ...decimalLines }, orderRow())).toEqual(expected);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Clientes y productos activos (C3, D3 y hallazgo 5 de la 10.4a)
+// ---------------------------------------------------------------------------
+
+// Un cliente o un producto nuevo debe existir y estar activo, en el alta y en
+// la edicion; la edicion acepta el cliente y los productos que el pedido ya
+// tiene aunque esten inactivos, mientras no se cambien.
+async function outcomeOf(action: OrderAction, form: FormFields, data?: DataOverrides) {
+  mocks.correlatives.clear();
+
+  const { result } = await characterizeHandler(async () => {
+    try {
+      return await action(initialState, formOf(form));
+    } catch (error) {
+      return describeNavigationError(error) ?? `error: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }, { ...CATALOG, ...data });
+
+  return result;
+}
+
+const CLIENT_ERROR = {
+  error: "El cliente seleccionado no existe o está inactivo.",
+  fieldErrors: { id_cliente: ["El cliente seleccionado no existe o está inactivo."] },
+};
+const PRODUCT_ERROR = {
+  error: "Un producto seleccionado no existe o está inactivo.",
+  fieldErrors: { items: ["Un producto seleccionado no existe o está inactivo."] },
+};
+const CREATED = "redirect:/dashboard/commercial/orders?toast=order-created";
+const UPDATED = "redirect:/dashboard/commercial/orders?toast=order-updated";
+
+describe("clientes y productos activos", () => {
+  it("el alta rechaza un cliente inactivo", async () => {
+    expect(await outcomeOf(createOrderAction, { ...orderForm, id_cliente: CLIENTE_INACTIVO })).toEqual(CLIENT_ERROR);
+  });
+
+  it("el alta rechaza un cliente que no existe", async () => {
+    expect(await outcomeOf(createOrderAction, { ...orderForm, id_cliente: "CLI00000099" })).toEqual(CLIENT_ERROR);
+  });
+
+  it("el alta rechaza un producto inactivo", async () => {
+    const form = { ...orderForm, ...lines([PRODUCTO_A, "2", "150"], [PRODUCTO_INACTIVO, "1", "10"]) };
+
+    expect(await outcomeOf(createOrderAction, form)).toEqual(PRODUCT_ERROR);
+  });
+
+  it("el alta rechaza un producto que no existe sin llegar a la clave foranea", async () => {
+    const form = { ...orderForm, ...lines(["PRO00000099", "1", "10"]) };
+
+    expect(await outcomeOf(createOrderAction, form)).toEqual(PRODUCT_ERROR);
+  });
+
+  it("la edicion conserva su cliente inactivo", async () => {
+    const form = { ...editForm, id_cliente: CLIENTE_INACTIVO };
+
+    expect(await outcomeOf(updateOrderAction, form, orderRow({ id_cliente: CLIENTE_INACTIVO }))).toBe(UPDATED);
+  });
+
+  it("la edicion conserva un producto inactivo que ya tenia", async () => {
+    const form = { ...editForm, ...lines([PRODUCTO_INACTIVO, "2", "150"]) };
+    const order = orderRow({
+      detalle_pedido: [{ id_detalle_pedido: "DPE00000040", id_producto: PRODUCTO_INACTIVO, orden_trabajo: [] }],
+    });
+
+    expect(await outcomeOf(updateOrderAction, form, order)).toBe(UPDATED);
+  });
+
+  it("la edicion rechaza cambiar a otro cliente inactivo", async () => {
+    expect(await outcomeOf(updateOrderAction, { ...editForm, id_cliente: CLIENTE_INACTIVO }, orderRow())).toEqual(
+      CLIENT_ERROR,
+    );
+  });
+
+  it("la edicion rechaza agregar un producto inactivo que no tenia", async () => {
+    const form = { ...editForm, ...lines([PRODUCTO_A, "2", "150"], [PRODUCTO_INACTIVO, "1", "10"]) };
+
+    expect(await outcomeOf(updateOrderAction, form, orderRow())).toEqual(PRODUCT_ERROR);
+  });
+
+  it("el alta de un cliente y productos activos se guarda", async () => {
+    expect(await outcomeOf(createOrderAction, orderForm)).toBe(CREATED);
   });
 });
 
@@ -348,7 +459,7 @@ defineOrderSuite("createOrderAction", createOrderAction, [
     now: "2026-07-16T01:00:00.000Z",
   },
   {
-    name: "un producto inexistente rompe en la clave foranea",
+    name: "una clave foranea rota al crear el detalle se propaga",
     form: orderForm,
     data: { "detalle_pedido.createMany": failWith(foreignKeyViolation()) },
   },
@@ -415,7 +526,7 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
     data: orderRow(),
   },
   {
-    name: "un producto inexistente rompe en la clave foranea despues de borrar el detalle",
+    name: "una clave foranea rota despues de borrar el detalle se propaga",
     form: editForm,
     data: { ...orderRow(), "detalle_pedido.createMany": failWith(foreignKeyViolation()) },
   },
