@@ -25,8 +25,9 @@ import {
 // AuthRejected) en lugar de devolver un error, y con exito redirigen con
 // ?toast=. Lo que fijan los casos y se corrige despues, cada cosa en su
 // commit:
-// - los importes se calculan en coma flotante sin redondear, y la base
-//   redondea cada columna por su cuenta (hallazgo 6 de la 10.4a);
+// - los importes se calculaban en coma flotante sin redondear, y la base
+//   redondeaba cada columna por su cuenta (hallazgo 6 de la 10.4a; corregido
+//   en C2 con src/lib/order-amounts.ts);
 // - no comprueban que el cliente y los productos existan ni esten activos: un
 //   id inexistente rompe en la clave foranea (hallazgo 5 de la 10.4a);
 // - un campo que falta o un numero que no lo es dan el mensaje de Zod en
@@ -228,6 +229,60 @@ function failWith(error: Error) {
 }
 
 // ---------------------------------------------------------------------------
+// Importes con la regla de la base (C2, hallazgo 6 de la 10.4a)
+// ---------------------------------------------------------------------------
+
+// Lo que escribe la accion en el pedido y en su detalle: la cantidad, el
+// precio y el subtotal redondeados como sus columnas, y el monto como la suma
+// de los subtotales guardados (la proforma suma los subtotales).
+async function writtenAmounts(action: OrderAction, form: FormFields, data?: DataOverrides) {
+  mocks.correlatives.clear();
+
+  const { calls } = await characterizeHandler(async () => {
+    try {
+      await action(initialState, formOf(form));
+    } catch (error) {
+      if (!describeNavigationError(error)) {
+        throw error;
+      }
+    }
+  }, data);
+  const argsOf = (name: string) => {
+    const call = calls.find((item) => "prisma" in item && item.prisma === name) as
+      | { args: { data: unknown } }
+      | undefined;
+
+    return call?.args.data;
+  };
+  const order = (argsOf("pedido.create") ?? argsOf("pedido.update")) as Record<string, unknown>;
+  const details = argsOf("detalle_pedido.createMany") as Record<string, unknown>[];
+
+  return {
+    monto: order.monto_estimado,
+    lineas: details.map(({ cantidad, precio_unitario, subtotal }) => ({ cantidad, precio_unitario, subtotal })),
+  };
+}
+
+describe("importes con la regla de la base", () => {
+  const decimalLines = lines([PRODUCTO_A, "1.25", "10.25"], [PRODUCTO_B, "1.005", "10"]);
+  const expected = {
+    monto: "22.91",
+    lineas: [
+      { cantidad: "1.25", precio_unitario: "10.25", subtotal: "12.81" },
+      { cantidad: "1.01", precio_unitario: "10.00", subtotal: "10.10" },
+    ],
+  };
+
+  it("el alta guarda cada linea redondeada y el monto como suma de subtotales", async () => {
+    expect(await writtenAmounts(createOrderAction, { ...orderForm, ...decimalLines })).toEqual(expected);
+  });
+
+  it("la edicion guarda lo mismo", async () => {
+    expect(await writtenAmounts(updateOrderAction, { ...editForm, ...decimalLines }, orderRow())).toEqual(expected);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Alta
 // ---------------------------------------------------------------------------
 
@@ -236,7 +291,7 @@ defineOrderSuite("createOrderAction", createOrderAction, [
   { name: "SELLER crea un pedido", form: orderForm, role: "SELLER" },
   { name: "WORKSHOP_MASTER es rechazado antes de tocar Prisma", form: orderForm, role: "WORKSHOP_MASTER" },
   {
-    name: "importes con decimales: cada subtotal y el monto sin redondear",
+    name: "importes con decimales: cada linea redondeada y el monto como suma de subtotales",
     form: { ...orderForm, ...lines([PRODUCTO_A, "1.25", "10.25"], [PRODUCTO_B, "1.25", "10.25"]) },
   },
   {
@@ -244,7 +299,7 @@ defineOrderSuite("createOrderAction", createOrderAction, [
     form: { ...orderForm, ...lines([PRODUCTO_A, "3", "0.1"]) },
   },
   {
-    name: "una cantidad de tres decimales se multiplica sin redondear",
+    name: "una cantidad de tres decimales se redondea antes de multiplicar",
     form: { ...orderForm, ...lines([PRODUCTO_A, "1.005", "10"]) },
   },
   { name: "sin cliente elegido", form: { ...orderForm, id_cliente: "" } },
@@ -355,7 +410,7 @@ defineOrderSuite("updateOrderAction", updateOrderAction, [
     data: orderRow(),
   },
   {
-    name: "importes con decimales: cada subtotal y el monto sin redondear",
+    name: "importes con decimales: cada linea redondeada y el monto como suma de subtotales",
     form: { ...editForm, ...lines([PRODUCTO_A, "1.25", "10.25"], [PRODUCTO_B, "1.25", "10.25"]) },
     data: orderRow(),
   },

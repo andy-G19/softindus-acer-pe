@@ -8,6 +8,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { calculateOrderAmounts } from "@/lib/order-amounts";
 import { orderSchema } from "@/schemas/commercial/order.schema";
 
 export type OrderFormState = ActionErrorState;
@@ -184,9 +185,7 @@ export async function createOrderAction(
     };
   }
 
-  const montoEstimado = parsed.data.items.reduce((total, item) => {
-    return total + item.cantidad * item.precio_unitario;
-  }, 0);
+  const amounts = calculateOrderAmounts(parsed.data.items);
 
   await prisma.$transaction(async (tx) => {
     const id_pedido = await getNextCorrelativeId(tx, {
@@ -209,7 +208,7 @@ export async function createOrderAction(
           parsed.data.fecha_entrega_estimada,
         ),
         estado: "registrado",
-        monto_estimado: montoEstimado,
+        monto_estimado: amounts.total,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
     });
@@ -219,9 +218,9 @@ export async function createOrderAction(
         id_detalle_pedido: detailIds[index],
         id_pedido,
         id_producto: item.id_producto,
-        cantidad: item.cantidad,
-        precio_unitario: item.precio_unitario,
-        subtotal: item.cantidad * item.precio_unitario,
+        cantidad: amounts.lines[index].cantidad,
+        precio_unitario: amounts.lines[index].precio_unitario,
+        subtotal: amounts.lines[index].subtotal,
         observaciones: item.observaciones?.trim() || null,
       })),
     });
@@ -292,9 +291,7 @@ export async function updateOrderAction(
     };
   }
 
-  const montoEstimado = parsed.data.items.reduce((total, item) => {
-    return total + item.cantidad * item.precio_unitario;
-  }, 0);
+  const amounts = calculateOrderAmounts(parsed.data.items);
 
   await prisma.$transaction(async (tx) => {
     await tx.detalle_pedido.deleteMany({
@@ -318,7 +315,7 @@ export async function updateOrderAction(
         fecha_entrega_estimada: toDateOrNull(
           parsed.data.fecha_entrega_estimada,
         ),
-        monto_estimado: montoEstimado,
+        monto_estimado: amounts.total,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
     });
@@ -328,9 +325,9 @@ export async function updateOrderAction(
         id_detalle_pedido: detailIds[index],
         id_pedido: orderId,
         id_producto: item.id_producto,
-        cantidad: item.cantidad,
-        precio_unitario: item.precio_unitario,
-        subtotal: item.cantidad * item.precio_unitario,
+        cantidad: amounts.lines[index].cantidad,
+        precio_unitario: amounts.lines[index].precio_unitario,
+        subtotal: amounts.lines[index].subtotal,
         observaciones: item.observaciones?.trim() || null,
       })),
     });

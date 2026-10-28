@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatMoney } from "@/lib/formatters";
+import { calculateOrderAmounts } from "@/lib/order-amounts";
 import { showError } from "@/lib/notifications";
 import {
   createOrderAction,
@@ -119,13 +120,8 @@ export function OrderForm({
     }));
   }, [products]);
 
-  const total = useMemo(() => {
-    return items.reduce((sum, item) => {
-      const cantidad = Number(item.cantidad || 0);
-      const precio = Number(item.precio_unitario || 0);
-      return sum + cantidad * precio;
-    }, 0);
-  }, [items]);
+  // Vista previa con la misma regla que guarda la accion (src/lib/order-amounts.ts).
+  const amounts = useMemo(() => calculateOrderAmounts(items), [items]);
 
   function addItem() {
     setItems((currentItems) => [
@@ -246,8 +242,7 @@ export function OrderForm({
 
         <div className="space-y-4">
           {items.map((item, index) => {
-            const subtotal =
-              Number(item.cantidad || 0) * Number(item.precio_unitario || 0);
+            const { subtotal } = amounts.lines[index];
 
             return (
               <div
@@ -327,7 +322,7 @@ export function OrderForm({
                   <div className="space-y-2">
                     <Label>Subtotal</Label>
                     <div className="flex h-8 items-center rounded-lg border border-input bg-muted px-2.5 text-sm">
-                      S/ {subtotal.toFixed(2)}
+                      S/ {subtotal}
                     </div>
                   </div>
                 </div>
@@ -356,7 +351,7 @@ export function OrderForm({
         <div className="flex justify-end border-t border-border/80 pt-4">
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Total estimado</p>
-            <p className="text-2xl font-bold">S/ {total.toFixed(2)}</p>
+            <p className="text-2xl font-bold">S/ {amounts.total}</p>
           </div>
         </div>
       </div>

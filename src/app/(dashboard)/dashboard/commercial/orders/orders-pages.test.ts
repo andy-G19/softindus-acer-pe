@@ -97,8 +97,9 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
 // FormActionState. La edicion solo ofrece clientes y productos activos: si el
 // del pedido se inactivo, el campo visible queda vacio y obligatorio aunque el
 // oculto conserve su id (hallazgo 5 de la 10.4a). Los subtotales y el total se
-// calculan en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
-// 10,25 muestran 12.81 cada una y un total de 25.63. Un pedido anulado sin
+// calculaban en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
+// 10,25 mostraban 12.81 cada una y un total de 25.63; desde C2, la vista previa
+// usa la regla de la base y el total es 25.62. Un pedido anulado sin
 // proforma muestra el formulario, que la accion rechaza al guardar.
 const editableWith = (changes: (order: Record<string, unknown>) => Record<string, unknown>) =>
   (args: PrismaArgs) => changes(editableOrder(args));
@@ -237,6 +238,23 @@ definePageSuite([
                 cantidad: new Prisma.Decimal("1.25"),
                 precio_unitario: new Prisma.Decimal("10.25"),
                 subtotal: new Prisma.Decimal("12.81"),
+              },
+            ]),
+          ),
+        },
+      },
+      {
+        // C2: 1,25 x 1,02 = 1,275; toFixed mostraba 1.27 y la base guarda 1.28.
+        name: "subtotal en empate",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [
+              {
+                id_producto: "id_producto-1",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("1.02"),
+                subtotal: new Prisma.Decimal("1.28"),
               },
             ]),
           ),
