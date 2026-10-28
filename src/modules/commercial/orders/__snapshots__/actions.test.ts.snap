@@ -3,7 +3,7 @@
 exports[`createOrderAction > ADMIN crea un pedido de dos lineas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -119,12 +119,41 @@ exports[`createOrderAction > ADMIN crea un pedido de dos lineas > llamadas 1`] =
 ]
 `;
 
-exports[`createOrderAction > ADMIN crea un pedido de dos lineas > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > ADMIN crea un pedido de dos lineas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > SELLER crea un pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -240,12 +269,41 @@ exports[`createOrderAction > SELLER crea un pedido > llamadas 1`] = `
 ]
 `;
 
-exports[`createOrderAction > SELLER crea un pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > SELLER crea un pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -254,12 +312,40 @@ exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma 
 ]
 `;
 
-exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar pedidos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > cantidad cero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -273,9 +359,24 @@ exports[`createOrderAction > cantidad cero > resultado 1`] = `
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.0.cantidad": [
         "La cantidad debe ser mayor que cero.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "0",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -284,7 +385,7 @@ exports[`createOrderAction > cantidad cero > resultado 1`] = `
 exports[`createOrderAction > cantidad que no es un numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -298,9 +399,24 @@ exports[`createOrderAction > cantidad que no es un numero > resultado 1`] = `
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.0.cantidad": [
         "La cantidad debe ser un número.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "abc",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -309,7 +425,7 @@ exports[`createOrderAction > cantidad que no es un numero > resultado 1`] = `
 exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es anterior al pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -327,6 +443,73 @@ exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es a
         "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-15",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > el error de una linea lleva su posicion aunque otra se descarte > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > el error de una linea lleva su posicion aunque otra se descarte > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.1.cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "5",
+          "id_producto": "",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+        {
+          "cantidad": "0",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -334,7 +517,7 @@ exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es a
 exports[`createOrderAction > entrega anterior a hoy > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -352,6 +535,27 @@ exports[`createOrderAction > entrega anterior a hoy > resultado 1`] = `
         "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-14",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -359,7 +563,7 @@ exports[`createOrderAction > entrega anterior a hoy > resultado 1`] = `
 exports[`createOrderAction > entrega hoy > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -475,12 +679,41 @@ exports[`createOrderAction > entrega hoy > llamadas 1`] = `
 ]
 `;
 
-exports[`createOrderAction > entrega hoy > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > entrega hoy > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-15",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -596,12 +829,41 @@ exports[`createOrderAction > importes con decimales: cada linea redondeada y el 
 ]
 `;
 
-exports[`createOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -707,12 +969,35 @@ exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > llamadas 1`] =
 ]
 `;
 
-exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "3",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "0.1",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > observaciones con espacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -818,12 +1103,35 @@ exports[`createOrderAction > observaciones con espacios se guardan como null > l
 ]
 `;
 
-exports[`createOrderAction > observaciones con espacios se guardan como null > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > observaciones con espacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "   ",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "   ",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > observaciones de mas de 500 caracteres > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -841,6 +1149,27 @@ exports[`createOrderAction > observaciones de mas de 500 caracteres > resultado 
         "Las observaciones no deben superar 500 caracteres.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    },
   },
 }
 `;
@@ -848,7 +1177,7 @@ exports[`createOrderAction > observaciones de mas de 500 caracteres > resultado 
 exports[`createOrderAction > precio infinito > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -862,9 +1191,24 @@ exports[`createOrderAction > precio infinito > resultado 1`] = `
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.0.precio_unitario": [
         "El precio unitario debe ser un número.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "1e400",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -873,7 +1217,7 @@ exports[`createOrderAction > precio infinito > resultado 1`] = `
 exports[`createOrderAction > precio negativo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -887,9 +1231,24 @@ exports[`createOrderAction > precio negativo > resultado 1`] = `
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.0.precio_unitario": [
         "El precio unitario no puede ser negativo.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "-1",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -898,7 +1257,7 @@ exports[`createOrderAction > precio negativo > resultado 1`] = `
 exports[`createOrderAction > producto repetido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -912,9 +1271,30 @@ exports[`createOrderAction > producto repetido > resultado 1`] = `
   "estado": {
     "error": "No repitas el mismo producto dentro del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.1.id_producto": [
         "No repitas el mismo producto dentro del pedido.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "80",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -923,7 +1303,7 @@ exports[`createOrderAction > producto repetido > resultado 1`] = `
 exports[`createOrderAction > sin cliente elegido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -941,6 +1321,27 @@ exports[`createOrderAction > sin cliente elegido > resultado 1`] = `
         "Debes seleccionar un cliente.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -948,7 +1349,7 @@ exports[`createOrderAction > sin cliente elegido > resultado 1`] = `
 exports[`createOrderAction > sin el campo cliente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -966,6 +1367,27 @@ exports[`createOrderAction > sin el campo cliente > resultado 1`] = `
         "Debes seleccionar un cliente.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -973,7 +1395,7 @@ exports[`createOrderAction > sin el campo cliente > resultado 1`] = `
 exports[`createOrderAction > sin fecha de entrega > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1089,12 +1511,41 @@ exports[`createOrderAction > sin fecha de entrega > llamadas 1`] = `
 ]
 `;
 
-exports[`createOrderAction > sin fecha de entrega > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > sin fecha de entrega > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > sin lineas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1112,6 +1563,14 @@ exports[`createOrderAction > sin lineas > resultado 1`] = `
         "El pedido debe tener al menos un producto.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -1119,7 +1578,7 @@ exports[`createOrderAction > sin lineas > resultado 1`] = `
 exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1225,12 +1684,35 @@ exports[`createOrderAction > una cantidad de tres decimales se redondea antes de
 ]
 `;
 
-exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.005",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1244,9 +1726,24 @@ exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza >
   "estado": {
     "error": "Revisa los datos del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.0.cantidad": [
         "La cantidad no debe superar 99,999,999.99.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1e12",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -1255,7 +1752,7 @@ exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza >
 exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1361,7 +1858,7 @@ exports[`createOrderAction > una clave foranea rota al crear el detalle se propa
 exports[`createOrderAction > una fecha que no existe no es valida > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1379,6 +1876,27 @@ exports[`createOrderAction > una fecha que no existe no es valida > resultado 1`
         "La fecha estimada de entrega no es válida.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-02-30",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -1386,7 +1904,7 @@ exports[`createOrderAction > una fecha que no existe no es valida > resultado 1`
 exports[`createOrderAction > una linea sin producto se descarta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1492,12 +2010,41 @@ exports[`createOrderAction > una linea sin producto se descarta > llamadas 1`] =
 ]
 `;
 
-exports[`createOrderAction > una linea sin producto se descarta > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+exports[`createOrderAction > una linea sin producto se descarta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "5",
+          "id_producto": "",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1646,12 +2193,41 @@ exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
 ]
 `;
 
-exports[`updateOrderAction > ADMIN edita un pedido registrado > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+exports[`updateOrderAction > ADMIN edita un pedido registrado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1800,12 +2376,41 @@ exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
 ]
 `;
 
-exports[`updateOrderAction > SELLER edita un pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+exports[`updateOrderAction > SELLER edita un pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1814,12 +2419,40 @@ exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma 
 ]
 `;
 
-exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar pedidos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > el pedido no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1861,6 +2494,28 @@ exports[`updateOrderAction > el pedido no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El pedido no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -1868,7 +2523,7 @@ exports[`updateOrderAction > el pedido no existe > resultado 1`] = `
 exports[`updateOrderAction > entrega anterior a la fecha del pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -1915,6 +2570,27 @@ exports[`updateOrderAction > entrega anterior a la fecha del pedido > resultado 
         "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-09",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -1922,7 +2598,7 @@ exports[`updateOrderAction > entrega anterior a la fecha del pedido > resultado 
 exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2071,12 +2747,41 @@ exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] 
 ]
 `;
 
-exports[`updateOrderAction > entrega igual a la fecha del pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+exports[`updateOrderAction > entrega igual a la fecha del pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-10",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2225,12 +2930,41 @@ exports[`updateOrderAction > importes con decimales: cada linea redondeada y el 
 ]
 `;
 
-exports[`updateOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+exports[`updateOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
 
 exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2272,6 +3006,28 @@ exports[`updateOrderAction > pedido anulado > resultado 1`] = `
 {
   "estado": {
     "error": "No se puede modificar un pedido cancelado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2279,7 +3035,7 @@ exports[`updateOrderAction > pedido anulado > resultado 1`] = `
 exports[`updateOrderAction > pedido cancelado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2321,6 +3077,28 @@ exports[`updateOrderAction > pedido cancelado > resultado 1`] = `
 {
   "estado": {
     "error": "No se puede modificar un pedido cancelado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2328,7 +3106,7 @@ exports[`updateOrderAction > pedido cancelado > resultado 1`] = `
 exports[`updateOrderAction > pedido con comprobante > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2370,6 +3148,28 @@ exports[`updateOrderAction > pedido con comprobante > resultado 1`] = `
 {
   "estado": {
     "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2377,7 +3177,7 @@ exports[`updateOrderAction > pedido con comprobante > resultado 1`] = `
 exports[`updateOrderAction > pedido con orden de trabajo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2419,6 +3219,28 @@ exports[`updateOrderAction > pedido con orden de trabajo > resultado 1`] = `
 {
   "estado": {
     "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2426,7 +3248,7 @@ exports[`updateOrderAction > pedido con orden de trabajo > resultado 1`] = `
 exports[`updateOrderAction > pedido con proforma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2468,6 +3290,28 @@ exports[`updateOrderAction > pedido con proforma > resultado 1`] = `
 {
   "estado": {
     "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2475,7 +3319,7 @@ exports[`updateOrderAction > pedido con proforma > resultado 1`] = `
 exports[`updateOrderAction > producto repetido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2518,9 +3362,30 @@ exports[`updateOrderAction > producto repetido > resultado 1`] = `
   "estado": {
     "error": "No repitas el mismo producto dentro del pedido.",
     "fieldErrors": {
-      "items": [
+      "items.1.id_producto": [
         "No repitas el mismo producto dentro del pedido.",
       ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "80",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
     },
   },
 }
@@ -2529,7 +3394,7 @@ exports[`updateOrderAction > producto repetido > resultado 1`] = `
 exports[`updateOrderAction > sin id de pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2542,6 +3407,28 @@ exports[`updateOrderAction > sin id de pedido > resultado 1`] = `
 {
   "estado": {
     "error": "El pedido no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2549,7 +3436,7 @@ exports[`updateOrderAction > sin id de pedido > resultado 1`] = `
 exports[`updateOrderAction > un error de validacion llega despues de leer el pedido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",
@@ -2596,6 +3483,27 @@ exports[`updateOrderAction > un error de validacion llega despues de leer el ped
         "Debes seleccionar un cliente.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
   },
 }
 `;
@@ -2603,7 +3511,7 @@ exports[`updateOrderAction > un error de validacion llega despues de leer el ped
 exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle se propaga > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "SELLER",

@@ -20,6 +20,15 @@ type SearchableSelectItem = {
 
 type SearchableSelectProps = {
   name: string;
+  /**
+   * id del campo de busqueda; si falta se genera uno. Un formulario lo pasa
+   * explicito (useId cambia con los hermanos) para asociar su error.
+   */
+  id?: string;
+  /** Con un error del campo: ActionForm enfoca el primer campo invalido. */
+  "aria-invalid"?: true;
+  /** id del mensaje de error (FieldError) del campo. */
+  "aria-describedby"?: string;
   label: string;
   placeholder?: string;
   items: SearchableSelectItem[];
@@ -38,6 +47,9 @@ function normalize(value: string) {
 
 export function SearchableSelect({
   name,
+  id,
+  "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
   label,
   placeholder = "Buscar...",
   items,
@@ -48,7 +60,7 @@ export function SearchableSelect({
   onValueChange,
 }: SearchableSelectProps) {
   const generatedId = useId();
-  const inputId = `${name}-${generatedId}`;
+  const inputId = id ?? `${name}-${generatedId}`;
   const listboxId = `${inputId}-listbox`;
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -213,6 +225,8 @@ export function SearchableSelect({
               ? `${listboxId}-${filteredItems[activeIndex].id}`
               : undefined
           }
+          aria-invalid={ariaInvalid}
+          aria-describedby={ariaDescribedBy}
           required={required}
           disabled={disabled}
           value={displayValue}
@@ -225,6 +239,8 @@ export function SearchableSelect({
             required && !selectedValue
               ? "invalid:border-destructive invalid:ring-destructive/25"
               : "",
+            // Un error de la accion: las mismas clases que Input.
+            "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
           )}
         />
 

@@ -1,17 +1,23 @@
 import { notFound, redirect } from "next/navigation";
 
-import { OrderForm } from "@/components/commercial/order-form";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { updateOrderAction } from "@/modules/commercial/orders/actions";
 import { buildOrderEditOptions } from "@/modules/commercial/orders/order-edit-options";
+import { OrderForm } from "@/modules/commercial/orders/order-form";
 import { getOrderEditData } from "@/modules/commercial/orders/queries";
 
 type EditOrderPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function formatDateInput(value: Date | null) {
@@ -22,10 +28,12 @@ function formatDateInput(value: Date | null) {
   return value.toISOString().split("T")[0];
 }
 
-export default async function EditOrderPage({ params }: EditOrderPageProps) {
+export default async function EditOrderPage({ params, searchParams }: EditOrderPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
   const { id } = await params;
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.orders);
   const { order, clients, products } = await getOrderEditData(id);
 
   if (!order) {
@@ -49,15 +57,15 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
   const options = buildOrderEditOptions(order, clients, products);
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Editar pedido"
         description="Solo se permite editar pedidos sin proforma, comprobante u orden asociada."
-        backHref={navigationHrefs.orders}
+        backHref={backHref}
         backLabel="Volver a pedidos"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Comercial", href: navigationHrefs.commercial },
-          { label: "Pedidos", href: navigationHrefs.orders },
+          { label: "Pedidos", href: backHref },
           { label: "Editar pedido" },
         ])}
       />
@@ -81,7 +89,9 @@ export default async function EditOrderPage({ params }: EditOrderPageProps) {
           })),
         }}
         submitLabel="Guardar cambios"
+        successNotification={commercialNotifications["order-updated"]}
+        returnTo={backHref}
       />
-    </main>
+    </div>
   );
 }

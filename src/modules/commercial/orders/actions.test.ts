@@ -22,10 +22,12 @@ import {
 // y su final, los correlativos, la bitacora (y si va dentro de la
 // transaccion), las revalidaciones y la redireccion o el error.
 //
-// Hoy autorizan con requireRole: sin permiso redirigen (el doble lanza
-// AuthRejected) en lugar de devolver un error, y con exito redirigen con
-// ?toast=. Lo que fijan los casos y se corrige despues, cada cosa en su
-// commit:
+// Autorizaban con requireRole: sin permiso redirigian (el doble lanza
+// AuthRejected) en lugar de devolver un error, y con exito redirigian con
+// ?toast=. Desde C5 devuelven el resultado (FormActionState) y el formulario
+// da el aviso y vuelve al listado; sin permiso responden con un error, y los
+// errores de una linea llevan la clave items.<linea>.<campo>. Lo que fijaban
+// los casos y se corrigio despues, cada cosa en su commit:
 // - los importes se calculaban en coma flotante sin redondear, y la base
 //   redondeaba cada columna por su cuenta (hallazgo 6 de la 10.4a; corregido
 //   en C2 con src/lib/order-amounts.ts);
@@ -46,6 +48,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -123,7 +130,7 @@ type ActionCase = {
   now?: string;
 };
 
-const initialState: OrderFormState = { error: "" };
+const initialState: OrderFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -321,7 +328,9 @@ async function outcomeOf(action: OrderAction, form: FormFields, data?: DataOverr
 
   const { result } = await characterizeHandler(async () => {
     try {
-      return await action(initialState, formOf(form));
+      const state = await action(initialState, formOf(form));
+
+      return state.status === "error" ? { error: state.error, fieldErrors: state.fieldErrors } : state.status;
     } catch (error) {
       return describeNavigationError(error) ?? `error: ${error instanceof Error ? error.message : String(error)}`;
     }
@@ -334,12 +343,15 @@ const CLIENT_ERROR = {
   error: "El cliente seleccionado no existe o está inactivo.",
   fieldErrors: { id_cliente: ["El cliente seleccionado no existe o está inactivo."] },
 };
-const PRODUCT_ERROR = {
-  error: "Un producto seleccionado no existe o está inactivo.",
-  fieldErrors: { items: ["Un producto seleccionado no existe o está inactivo."] },
-};
-const CREATED = "redirect:/dashboard/commercial/orders?toast=order-created";
-const UPDATED = "redirect:/dashboard/commercial/orders?toast=order-updated";
+// Desde C5 el error va en la linea del producto (su posicion en el formulario).
+function productError(line: number) {
+  return {
+    error: "Un producto seleccionado no existe o está inactivo.",
+    fieldErrors: { [`items.${line}.id_producto`]: ["El producto seleccionado no existe o está inactivo."] },
+  };
+}
+const CREATED = "success";
+const UPDATED = "success";
 
 describe("clientes y productos activos", () => {
   it("el alta rechaza un cliente inactivo", async () => {
@@ -353,13 +365,13 @@ describe("clientes y productos activos", () => {
   it("el alta rechaza un producto inactivo", async () => {
     const form = { ...orderForm, ...lines([PRODUCTO_A, "2", "150"], [PRODUCTO_INACTIVO, "1", "10"]) };
 
-    expect(await outcomeOf(createOrderAction, form)).toEqual(PRODUCT_ERROR);
+    expect(await outcomeOf(createOrderAction, form)).toEqual(productError(1));
   });
 
   it("el alta rechaza un producto que no existe sin llegar a la clave foranea", async () => {
     const form = { ...orderForm, ...lines(["PRO00000099", "1", "10"]) };
 
-    expect(await outcomeOf(createOrderAction, form)).toEqual(PRODUCT_ERROR);
+    expect(await outcomeOf(createOrderAction, form)).toEqual(productError(0));
   });
 
   it("la edicion conserva su cliente inactivo", async () => {
@@ -386,7 +398,7 @@ describe("clientes y productos activos", () => {
   it("la edicion rechaza agregar un producto inactivo que no tenia", async () => {
     const form = { ...editForm, ...lines([PRODUCTO_A, "2", "150"], [PRODUCTO_INACTIVO, "1", "10"]) };
 
-    expect(await outcomeOf(updateOrderAction, form, orderRow())).toEqual(PRODUCT_ERROR);
+    expect(await outcomeOf(updateOrderAction, form, orderRow())).toEqual(productError(1));
   });
 
   it("el alta de un cliente y productos activos se guarda", async () => {
@@ -425,6 +437,12 @@ defineOrderSuite("createOrderAction", createOrderAction, [
     form: { ...orderForm, ...lines([PRODUCTO_A, "2", "150"], ["", "5", "10"]) },
   },
   { name: "cantidad cero", form: { ...orderForm, ...lines([PRODUCTO_A, "0", "150"]) } },
+  {
+    // C5: la linea sin producto se descarta, pero el error de la siguiente
+    // lleva su posicion en el formulario (items.1), no la de la lista validada.
+    name: "el error de una linea lleva su posicion aunque otra se descarte",
+    form: { ...orderForm, ...lines(["", "5", "10"], [PRODUCTO_A, "0", "150"]) },
+  },
   {
     name: "cantidad que no es un numero",
     form: { ...orderForm, ...lines([PRODUCTO_A, "abc", "150"]) },

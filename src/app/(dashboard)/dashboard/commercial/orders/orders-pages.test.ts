@@ -154,6 +154,11 @@ definePageSuite([
         data: { "cliente.findMany": [], "producto.findMany": [] },
       },
       { name: "sin productos activos", data: { "producto.findMany": [] } },
+      // C5: vuelve al listado con sus filtros (Volver, la ruta y Cancelar).
+      {
+        name: "regreso al listado filtrado",
+        searchParams: { returnTo: "/dashboard/commercial/orders?status=registrado" },
+      },
     ],
   },
   {
@@ -197,6 +202,12 @@ definePageSuite([
         name: "inexistente",
         params: { id: "PED99999999" },
         data: { "pedido.findUnique": null },
+      },
+      {
+        name: "regreso al listado filtrado",
+        params: { id: "PED00000001" },
+        searchParams: { returnTo: "/dashboard/commercial/orders?status=registrado" },
+        data: { "pedido.findUnique": editableOrder },
       },
       {
         name: "cancelado redirige al detalle",

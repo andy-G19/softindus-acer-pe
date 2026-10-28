@@ -493,7 +493,7 @@ exports[`Campos > busqueda con lista 1`] = `
 <label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar cliente" class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100" value=""/>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar cliente" class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" value=""/>
 </div>
 </div>"
 `;
@@ -503,7 +503,7 @@ exports[`Campos > busqueda con valor y obligatoria 1`] = `
 <label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente *</label>
 <input type="hidden" name="client" value="CLI00000001"/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" required="" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100" value="Metalmecanica Lima"/>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" required="" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" value="Metalmecanica Lima"/>
 <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50">Limpiar</button>
 </div>
 </div>"
@@ -514,7 +514,7 @@ exports[`Campos > busqueda deshabilitada 1`] = `
 <label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value=""/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100" value=""/>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" disabled="" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" value=""/>
 </div>
 </div>"
 `;
@@ -526,7 +526,7 @@ exports[`Campos > filtro de busqueda 1`] = `
 <label for="client-_R_0_" class="text-sm font-medium text-foreground">Cliente</label>
 <input type="hidden" name="client" value="CLI00000001"/>
 <div class="relative">
-<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100" value="Metalmecanica Lima"/>
+<input id="client-_R_0_" type="text" role="combobox" aria-autocomplete="list" aria-controls="client-_R_0_-listbox" aria-expanded="false" placeholder="Buscar..." class="h-9 w-full min-w-0 rounded-lg border border-border bg-input px-3 py-2 pr-16 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/75 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" value="Metalmecanica Lima"/>
 <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-transparent px-2 py-1 text-xs font-medium text-muted-foreground transition hover:border-border hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 disabled:pointer-events-none disabled:opacity-50">Limpiar</button>
 </div>
 </div>"

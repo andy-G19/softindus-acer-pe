@@ -1,12 +1,24 @@
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
-import { OrderForm } from "@/components/commercial/order-form";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
+import { createOrderAction } from "@/modules/commercial/orders/actions";
+import { OrderForm } from "@/modules/commercial/orders/order-form";
+import { commercialNotifications } from "@/modules/commercial/notifications";
 import { getNewOrderFormOptions } from "@/modules/commercial/orders/queries";
 
-export default async function NewOrderPage() {
+type NewOrderPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function NewOrderPage({ searchParams }: NewOrderPageProps) {
   await requireRole(["ADMIN", "SELLER"]);
 
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.orders);
   const { clients, products } = await getNewOrderFormOptions();
 
   const clientOptions = clients.map((client) => ({
@@ -24,20 +36,27 @@ export default async function NewOrderPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Nuevo pedido"
         description="Registra un pedido comercial con uno o varios productos asociados al mismo cliente."
-        backHref={navigationHrefs.orders}
+        backHref={backHref}
         backLabel="Volver a pedidos"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Comercial", href: navigationHrefs.commercial },
-          { label: "Pedidos", href: navigationHrefs.orders },
+          { label: "Pedidos", href: backHref },
           { label: "Nuevo pedido" },
         ])}
       />
 
-      <OrderForm clients={clientOptions} products={productOptions} />
-    </main>
+      <OrderForm
+        action={createOrderAction}
+        clients={clientOptions}
+        products={productOptions}
+        submitLabel="Guardar pedido"
+        successNotification={commercialNotifications["order-created"]}
+        returnTo={backHref}
+      />
+    </div>
   );
 }
