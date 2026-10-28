@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 
+import { Prisma } from "@/generated/prisma/client";
 import {
   definePageSuite,
   generatedResult,
@@ -92,6 +93,25 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
   ];
 };
 
+// Entrega 10.4c: lo que pasa hoy antes de llevar el alta y la edicion a
+// FormActionState. La edicion solo ofrece clientes y productos activos: si el
+// del pedido se inactivo, el campo visible queda vacio y obligatorio aunque el
+// oculto conserve su id (hallazgo 5 de la 10.4a). Los subtotales y el total se
+// calculan en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
+// 10,25 muestran 12.81 cada una y un total de 25.63. Un pedido anulado sin
+// proforma muestra el formulario, que la accion rechaza al guardar.
+const editableWith = (changes: (order: Record<string, unknown>) => Record<string, unknown>) =>
+  (args: PrismaArgs) => changes(editableOrder(args));
+
+const withDetails = (order: Record<string, unknown>, details: Record<string, unknown>[]) => {
+  const [first] = order.detalle_pedido as Array<Record<string, unknown>>;
+
+  return {
+    ...order,
+    detalle_pedido: details.map((detail) => ({ ...first, ...detail })),
+  };
+};
+
 definePageSuite([
   {
     route: "/dashboard/commercial/orders",
@@ -125,7 +145,14 @@ definePageSuite([
   {
     route: "/dashboard/commercial/orders/new",
     load: () => import("./new/page"),
-    cases: [{ name: "formulario" }],
+    cases: [
+      { name: "formulario" },
+      {
+        name: "sin clientes ni productos activos",
+        data: { "cliente.findMany": [], "producto.findMany": [] },
+      },
+      { name: "sin productos activos", data: { "producto.findMany": [] } },
+    ],
   },
   {
     route: "/dashboard/commercial/orders/[id]",
@@ -168,6 +195,52 @@ definePageSuite([
         name: "inexistente",
         params: { id: "PED99999999" },
         data: { "pedido.findUnique": null },
+      },
+      {
+        name: "cancelado redirige al detalle",
+        params: { id: "PED00000001" },
+        data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "cancelado" })) },
+      },
+      {
+        name: "anulado muestra el formulario",
+        params: { id: "PED00000001" },
+        data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "anulado" })) },
+      },
+      {
+        name: "cliente inactivo",
+        params: { id: "PED00000001" },
+        data: { "pedido.findUnique": editableWith((order) => ({ ...order, id_cliente: "CLI00000099" })) },
+      },
+      {
+        name: "producto inactivo",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [{ id_producto: "PRO00000099" }]),
+          ),
+        },
+      },
+      {
+        name: "importes con decimales",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [
+              {
+                id_producto: "id_producto-1",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("10.25"),
+                subtotal: new Prisma.Decimal("12.81"),
+              },
+              {
+                id_producto: "id_producto-2",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("10.25"),
+                subtotal: new Prisma.Decimal("12.81"),
+              },
+            ]),
+          ),
+        },
       },
     ],
   },

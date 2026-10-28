@@ -1,0 +1,2363 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createOrderAction > ADMIN crea un pedido de dos lineas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > ADMIN crea un pedido de dos lineas > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > SELLER crea un pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > SELLER crea un pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createOrderAction > cantidad cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > cantidad cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > cantidad que no es un numero da el mensaje de Zod en ingles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > cantidad que no es un numero da el mensaje de Zod en ingles > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "Invalid input: expected number, received NaN",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es anterior al pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es anterior al pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > entrega anterior a hoy > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > entrega anterior a hoy > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > entrega hoy > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-15T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > entrega hoy > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > importes con decimales: cada subtotal y el monto sin redondear > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 25.625,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 1.25,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 10.25,
+          "subtotal": 12.8125,
+        },
+        {
+          "cantidad": 1.25,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 10.25,
+          "subtotal": 12.8125,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > importes con decimales: cada subtotal y el monto sin redondear > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 0.30000000000000004,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 3,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 0.1,
+          "subtotal": 0.30000000000000004,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > observaciones con espacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 300,
+        "observaciones": null,
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > observaciones con espacios se guardan como null > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > observaciones de mas de 500 caracteres > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > observaciones de mas de 500 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "observaciones": [
+        "Las observaciones no deben superar 500 caracteres.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > precio infinito da el mensaje de Zod en ingles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > precio infinito da el mensaje de Zod en ingles > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "Invalid input: expected number, received number",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > precio negativo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > precio negativo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "El precio unitario no puede ser negativo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > producto repetido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > producto repetido > resultado 1`] = `
+{
+  "estado": {
+    "error": "No repitas el mismo producto dentro del pedido.",
+    "fieldErrors": {
+      "items": [
+        "No repitas el mismo producto dentro del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin cliente elegido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin cliente elegido > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Debes seleccionar un cliente.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin el campo cliente da el mensaje de Zod en ingles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin el campo cliente da el mensaje de Zod en ingles > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Invalid input: expected string, received undefined",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin fecha de entrega > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": null,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > sin fecha de entrega > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > sin lineas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin lineas > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "El pedido debe tener al menos un producto.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > un producto inexistente rompe en la clave foranea > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createOrderAction > un producto inexistente rompe en la clave foranea > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
+
+exports[`createOrderAction > una cantidad de tres decimales se multiplica sin redondear > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 10.049999999999999,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 1.005,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 10,
+          "subtotal": 10.049999999999999,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > una cantidad de tres decimales se multiplica sin redondear > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > una cantidad que no cabe en la columna llega a la base > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 10000000000000,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 1000000000000,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 10,
+          "subtotal": 10000000000000,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > una cantidad que no cabe en la columna llega a la base > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha anterior > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > una fecha que no existe da el mensaje de la fecha anterior > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > una linea sin producto se descarta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": 300,
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > una linea sin producto se descarta > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-created"`;
+
+exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > ADMIN edita un pedido registrado > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+
+exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > SELLER edita un pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+
+exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateOrderAction > el pedido no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > el pedido no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El pedido no existe.",
+  },
+}
+`;
+
+exports[`updateOrderAction > entrega anterior a la fecha del pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > entrega anterior a la fecha del pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-10T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > entrega igual a la fecha del pedido > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+
+exports[`updateOrderAction > importes con decimales: cada subtotal y el monto sin redondear > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": 25.625,
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 1.25,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": 10.25,
+          "subtotal": 12.8125,
+        },
+        {
+          "cantidad": 1.25,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 10.25,
+          "subtotal": 12.8125,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > importes con decimales: cada subtotal y el monto sin redondear > resultado 1`] = `"redirect:/dashboard/commercial/orders?toast=order-updated"`;
+
+exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido anulado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido cancelado.",
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido cancelado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido cancelado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido cancelado.",
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con comprobante > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con comprobante > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con orden de trabajo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con orden de trabajo > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con proforma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con proforma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+  },
+}
+`;
+
+exports[`updateOrderAction > producto repetido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > producto repetido > resultado 1`] = `
+{
+  "estado": {
+    "error": "No repitas el mismo producto dentro del pedido.",
+    "fieldErrors": {
+      "items": [
+        "No repitas el mismo producto dentro del pedido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > sin id de pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateOrderAction > sin id de pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "El pedido no existe.",
+  },
+}
+`;
+
+exports[`updateOrderAction > un error de validacion llega despues de leer el pedido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > un error de validacion llega despues de leer el pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Debes seleccionar un cliente.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > un producto inexistente rompe en la clave foranea despues de borrar el detalle > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": 380.5,
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": 2,
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": 150,
+          "subtotal": 300,
+        },
+        {
+          "cantidad": 1,
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": 80.5,
+          "subtotal": 80.5,
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateOrderAction > un producto inexistente rompe en la clave foranea despues de borrar el detalle > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;

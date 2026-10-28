@@ -461,6 +461,37 @@ describe("dbModuleMock con transacciones", () => {
     expect(none.result).toEqual([]);
   });
 
+  // Entrega 10.4c: la edicion de un pedido borra su detalle antes de crearlo.
+  it("registra deleteMany dentro de la transaccion: borra una fila, o lo que fije el caso", async () => {
+    type DeletingClient = {
+      cliente: { deleteMany: (args: object) => Promise<unknown> };
+    };
+    const prisma = dbModuleMock({ transactions: true }).prisma as {
+      $transaction: <T>(callback: (tx: DeletingClient) => Promise<T>) => Promise<T>;
+      cliente: DeletingClient["cliente"];
+    };
+    const args = { where: { id_cliente: "CLI00000001" } };
+
+    expect(() => prisma.cliente.deleteMany).toThrow("solo leen");
+
+    const deleted = await characterizeHandler(() =>
+      prisma.$transaction((tx) => tx.cliente.deleteMany(args)),
+    );
+
+    expect(deleted.result).toEqual({ count: 1 });
+    expect(deleted.calls).toEqual([
+      { effect: "prisma.$transaction", args: null },
+      { prisma: "cliente.deleteMany", args },
+    ]);
+
+    const none = await characterizeHandler(
+      () => prisma.$transaction((tx) => tx.cliente.deleteMany(args)),
+      { "cliente.deleteMany": { count: 0 } },
+    );
+
+    expect(none.result).toEqual({ count: 0 });
+  });
+
   it("con recordTransactionEnd registra el commit, o el rollback con su motivo", async () => {
     const prisma = dbModuleMock({ transactions: true, recordTransactionEnd: true })
       .prisma as Client;
