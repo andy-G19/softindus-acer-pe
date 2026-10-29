@@ -1433,7 +1433,7 @@ exports[`/dashboard/commercial/orders/[id] > detalle > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1562,7 +1562,7 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1618,7 +1618,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1747,7 +1747,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1859,7 +1859,7 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > llama
 
 exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1988,7 +1988,7 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
