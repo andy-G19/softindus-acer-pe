@@ -157,6 +157,60 @@ recientes van primero, de 20 en 20.
   - estado: Registrado, Aprobado o Cancelado. No hay opción para «En producción»;
   - rango de fechas del pedido.
 
+### Crear y editar un pedido
+
+El pedido no se abre en una ventana: tiene varias líneas de productos, así
+que **Nuevo pedido** y **Editar** abren el formulario en su propia página.
+Al guardar, o con **Cancelar**, vuelves a la lista con los filtros que
+tenía. Si la lista estaba filtrada, el aviso recuerda que el pedido puede no
+aparecer con esos filtros.
+
+- **Cliente:** obligatorio. Escribe para buscarlo y elígelo de la lista;
+  solo se ofrecen los clientes activos.
+- **Productos:** al menos uno. Cada línea pide el producto (solo los
+  activos), la cantidad, el precio unitario y una observación del producto
+  opcional. Al elegir el producto, el precio toma su precio referencial, y
+  puedes cambiarlo. **Agregar producto** suma una línea y **Quitar** la
+  borra, siempre que quede al menos una. No se puede repetir un producto en
+  el mismo pedido.
+- **Importes:** cada línea muestra su subtotal y abajo aparece el **Total
+  estimado**. Cantidad y precio se redondean a 2 decimales (la mitad sube),
+  el subtotal es cantidad × precio redondeado a 2 decimales y el total es la
+  suma de los subtotales. Lo que ves es lo que se guarda: por ejemplo, dos
+  líneas de 1,25 × S/ 10,25 dan S/ 12,81 cada una y S/ 25,62 de total.
+- **Fecha estimada de entrega:** opcional; no puede ser anterior a la fecha
+  del pedido.
+- **Observaciones generales del pedido:** hasta 500 caracteres; la del
+  producto, hasta 300.
+- **Límites:** cantidad hasta 99.999.999,99; precio, subtotal y total hasta
+  S/ 9.999.999.999,99.
+- Si no hay clientes o productos activos, el formulario lo avisa y no deja
+  registrar.
+
+Si algo está mal, el pedido no se guarda y el formulario sigue abierto. El
+mensaje aparece junto a su campo, también el de la línea concreta (por
+ejemplo, el producto repetido se marca en su segunda aparición), y el
+cursor va al primer campo a corregir. Lo escrito se conserva, también la
+fecha y las observaciones.
+
+**Cancelar** sin cambios vuelve a la lista sin preguntar. Si escribiste o
+cambiaste algo (también elegir un cliente o un producto, o agregar o quitar
+una línea), pregunta «¿Descartar el pedido nuevo?» o «¿Descartar los
+cambios del pedido?». **Cancelar** te deja seguir con lo escrito y
+**Descartar cambios** vuelve a la lista sin guardar. Recargar o cerrar la
+pestaña con cambios también pregunta. Los enlaces del menú lateral y el
+botón **Atrás** del navegador no preguntan.
+
+Al editar:
+
+- Solo se editan los pedidos que no están cancelados ni tienen una
+  proforma activa, un comprobante o una orden de trabajo. A los demás la
+  lista no les muestra **Editar**, y si se abre su dirección de edición,
+  lleva al detalle.
+- Si el cliente o un producto del pedido se inactivaron después, siguen
+  apareciendo, con «Inactivo» en su descripción, y el pedido se puede
+  guardar mientras no los cambies. Uno nuevo debe estar activo.
+
 ## Proformas
 
 **Dónde:** Comercial → Proformas.

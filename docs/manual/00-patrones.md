@@ -6,8 +6,9 @@ describe lo que es igual en todas las pantallas que ya se renovaron; cada
 
 Pantallas renovadas hasta ahora:
 
-- Comercial: el inicio, clientes, productos, categorías de producto y las
-  listas de pedidos, proformas, pagos de cliente y comprobantes de venta.
+- Comercial: el inicio, clientes, productos, categorías de producto, las
+  listas de pedidos, proformas, pagos de cliente y comprobantes de venta, y
+  el alta y la edición de pedidos.
 - Inventario: el inicio, tipos de proveedor, proveedores, materiales de
   proveedor, categorías de materiales, materiales e insumos, alertas y stock
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
