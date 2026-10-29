@@ -6,11 +6,11 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 677 |
+| Archivos fuente analizados | 684 |
 | Páginas | 143 |
 | Páginas en ranuras paralelas (@ranura) | 15 |
 | Páginas que interceptan una ruta | 10 |
-| Declaraciones JSX de formulario | 102 |
+| Declaraciones JSX de formulario | 101 |
 | Archivos con directiva use server | 48 |
 | Funciones exportadas en esos archivos | 114 |
 
@@ -188,7 +188,7 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 
 | Fuente | Línea | Acción |
 | --- | --- | --- |
-| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 233 | `{cancelOrderAction}` |
+| `src/app/(dashboard)/dashboard/commercial/orders/page.tsx` | 235 | `{cancelOrderAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/[id]/page.tsx` | 79 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/quotes/page.tsx` | 203 | `{annulQuoteAction}` |
 | `src/app/(dashboard)/dashboard/commercial/receipts/page.tsx` | 136 | `{annulReceiptAction}` |
@@ -260,7 +260,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/waste-scrap/scrap-sales/new/page.tsx` | 82 | `{createScrapSaleAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scraps/new/page.tsx` | 59 | `{createScrapAction}` |
 | `src/app/(dashboard)/dashboard/waste-scrap/scraps/page.tsx` | 132 | `Sin action explícita (revisar filtros/onSubmit)` |
-| `src/components/commercial/order-form.tsx` | 185 | `{formAction}` |
 | `src/components/commercial/payment-form.tsx` | 31 | `{createPaymentAction}` |
 | `src/components/commercial/quote-form.tsx` | 66 | `{createQuoteAction}` |
 | `src/components/commercial/receipt-form.tsx` | 54 | `{createReceiptAction}` |
