@@ -1,6 +1,8 @@
 ﻿import { CheckCircle2, Wrench, XCircle } from "lucide-react";
 import Link from "next/link";
 
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import {
   RowEditLink,
   RowToggleStatusButton,
@@ -16,7 +18,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -109,7 +110,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
   );
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Máquinas"
         description="Consulta máquinas del taller, estado operativo, ubicación, código interno y trazabilidad relacionada."
@@ -120,7 +121,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
         actions={
           canManageMachines ? (
             <Button asChild>
-              <Link href={`${navigationHrefs.machines}/new`}>
+              <Link href={withReturnTo(`${navigationHrefs.machines}/new`, returnTo)}>
                 Registrar máquina
               </Link>
             </Button>
@@ -134,64 +135,56 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
         <KpiCard title="Inactivas" value={inactiveMachines.length.toString()} description="Fuera de operación." tone="warning" icon={XCircle} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            action="/dashboard/maintenance/machines"
-            className="grid gap-3 md:grid-cols-5"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Buscar maquina..." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="type">Tipo</Label>
-              <NativeSelect id="type" name="type" defaultValue={type}>
-                <option value="">Todos los tipos</option>
-                {types.map((item) => (
-                  <option key={item.tipo} value={item.tipo}>
-                    {item.tipo}
+      <FilterBar
+        action={navigationHrefs.machines}
+        label="Filtros de máquinas"
+        clearHref={navigationHrefs.machines}
+        clearLabel="Limpiar"
+      >
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar maquina..." />}
+        </Field>
+
+        <Field id="type" label="Tipo">
+          {(control) => (
+            <NativeSelect {...control} name="type" defaultValue={type}>
+              <option value="">Todos los tipos</option>
+              {types.map((item) => (
+                <option key={item.tipo} value={item.tipo}>
+                  {item.tipo}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="location" label="Ubicación">
+          {(control) => (
+            <NativeSelect {...control} name="location" defaultValue={location}>
+              <option value="">Todas las ubicaciones</option>
+              {locations.map((item) =>
+                item.ubicacion ? (
+                  <option key={item.ubicacion} value={item.ubicacion}>
+                    {item.ubicacion}
                   </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="location">Ubicación</Label>
-              <NativeSelect id="location" name="location" defaultValue={location}>
-                <option value="">Todas las ubicaciones</option>
-                {locations.map((item) =>
-                  item.ubicacion ? (
-                    <option key={item.ubicacion} value={item.ubicacion}>
-                      {item.ubicacion}
-                    </option>
-                  ) : null,
-                )}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Estado</Label>
-              <NativeSelect id="status" name="status" defaultValue={status}>
-                <option value="">Todos los estados</option>
-                <option value="operativa">Operativa</option>
-                <option value="en_reparacion">En mantenimiento</option>
-                <option value="dada_de_baja">Fuera de servicio</option>
-                <option value="inactiva">Inactiva</option>
-              </NativeSelect>
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit" className="flex-1">
-                Filtrar
-              </Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/maintenance/machines">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                ) : null,
+              )}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="operativa">Operativa</option>
+              <option value="en_reparacion">En mantenimiento</option>
+              <option value="dada_de_baja">Fuera de servicio</option>
+              <option value="inactiva">Inactiva</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -277,7 +270,7 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

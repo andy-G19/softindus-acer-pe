@@ -51,18 +51,3 @@ export const machineSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
-
-export const machineStatusSchema = z.object({
-  id_maquina: z
-    .string()
-    .trim()
-    .length(11, "El identificador de la máquina no es válido."),
-
-  estado: z
-    .string()
-    .trim()
-    .refine(
-      (value) => machineStatuses.includes(value),
-      "Seleccione un estado válido para la máquina.",
-    ),
-});

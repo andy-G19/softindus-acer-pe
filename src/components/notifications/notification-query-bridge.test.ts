@@ -112,7 +112,7 @@ const CLAVES = [
   // Mantenimiento
   "spare-part-created", "spare-part-updated", "spare-part-activated",
   "spare-part-deactivated", "machine-created", "machine-updated",
-  "machine-status-updated", "machine-activated", "machine-deactivated",
+  "machine-activated", "machine-deactivated",
   "failure-created", "failure-updated", "repair-created", "repair-updated",
   "preventive-maintenance-created", "preventive-maintenance-updated",
 
@@ -163,9 +163,9 @@ beforeEach(() => {
   mount();
 });
 
-it("la lista fija tiene las 129 claves sin repetir", () => {
-  expect(CLAVES).toHaveLength(129);
-  expect(new Set(CLAVES).size).toBe(129);
+it("la lista fija tiene las 128 claves sin repetir", () => {
+  expect(CLAVES).toHaveLength(128);
+  expect(new Set(CLAVES).size).toBe(128);
 });
 
 // Una clave nueva en el registro tambien entra en la lista y en el snapshot:

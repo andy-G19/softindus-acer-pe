@@ -5,7 +5,6 @@ import {
   createMachineAction,
   toggleMachineStatusAction,
   updateMachineAction,
-  updateMachineStatusAction,
   type MachineFormState,
 } from "@/modules/maintenance/machines/actions";
 import {
@@ -28,14 +27,23 @@ import {
 // El alta crea la maquina dentro de una transaccion, con su correlativo y la
 // bitacora. La edicion y los cambios de estado escriben con el cliente global,
 // sin transaccion, y registran la bitacora despues: el doble lo permite
-// (writesOutsideTransaction) y lo marca. Todas niegan el permiso con
-// requireRole, que redirige.
+// (writesOutsideTransaction) y lo marca.
+//
+// Desde el panel lateral (A4), el alta y la edicion devuelven el resultado
+// (FormActionState) en lugar de redirigir y niegan el permiso con un error
+// dentro del formulario; el cambio de estado sigue con requireRole y su
+// redireccion. updateMachineStatusAction, sin uso, se retiro (D4).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -94,7 +102,7 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 type FormFields = Record<string, string | null>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
-const initialState: MachineFormState = { error: "" };
+const initialState: MachineFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -225,8 +233,8 @@ defineCases("createMachineAction", create, [
     name: "los textos llegan sin los espacios de los extremos",
     ...createWith({ nombre: "  Prensa hidraulica 60 t  ", tipo: " prensa ", codigo_interno: " PH-60 " }),
   },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     form: { ...createForm, nombre: "P", tipo: "", estado: "rota", codigo_interno: "X".repeat(31) },
@@ -253,7 +261,7 @@ defineCases("updateMachineAction", update, [
   { name: "ADMIN actualiza la maquina y registra la bitacora despues, fuera de transaccion", ...updateWith({}) },
   { name: "los opcionales vacios se guardan como null", ...updateWith(emptyOptionals) },
   { name: "la edicion puede dejarla en cualquier estado", ...updateWith({ estado: "dada_de_baja" }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
   { name: "sin id de maquina responde que no existe sin tocar Prisma", ...updateWith({ id_maquina: "" }) },
   { name: "la maquina no existe", ...updateWith({}, machineLookup({ exists: false })) },
   {
@@ -275,28 +283,6 @@ defineCases("updateMachineAction", update, [
   {
     name: "otro fallo al actualizar devuelve el mensaje generico",
     ...updateWith({}, { "maquina.update": failWith(new Error("conexion perdida")) }),
-  },
-]);
-
-// Sin uso en la interfaz: ninguna pagina la llama, pero es un endpoint publico
-// y es el unico emisor de machine-status-updated.
-defineCases("updateMachineStatusAction", updateMachineStatusAction, [
-  {
-    name: "escribe el estado pedido y registra la bitacora despues",
-    form: { id_maquina: MAQUINA, estado: "en_reparacion" },
-    data: machineLookup(),
-  },
-  { name: "un estado invalido vuelve al listado sin tocar Prisma", form: { id_maquina: MAQUINA, estado: "rota" } },
-  { name: "un id invalido vuelve al listado sin tocar Prisma", form: { id_maquina: "MAQ1", estado: "operativa" } },
-  {
-    name: "la maquina no existe: vuelve al listado",
-    form: { id_maquina: MAQUINA, estado: "operativa" },
-    data: machineLookup({ exists: false }),
-  },
-  {
-    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
-    form: { id_maquina: MAQUINA, estado: "operativa" },
-    role: "WORKSHOP_MASTER",
   },
 ]);
 
