@@ -734,6 +734,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > l
         "razon_social": "asc",
       },
       "select": {
+        "estado": true,
         "id_proveedor": true,
         "razon_social": true,
       },
@@ -881,6 +882,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
         "razon_social": "asc",
       },
       "select": {
+        "estado": true,
         "id_proveedor": true,
         "razon_social": true,
       },
@@ -1028,6 +1030,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > l
         "razon_social": "asc",
       },
       "select": {
+        "estado": true,
         "id_proveedor": true,
         "razon_social": true,
       },

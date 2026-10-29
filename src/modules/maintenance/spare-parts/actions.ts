@@ -55,22 +55,29 @@ async function hasDuplicateSparePart(
   return sparePart.id_repuesto !== currentSparePartId;
 }
 
-async function validateProvider(providerId: string | undefined) {
+// Un proveedor nuevo debe existir y estar activo. Al editar, el proveedor
+// actual del repuesto se acepta aunque este inactivo mientras no se cambie: la
+// edicion lo ofrece (D2 de la 10.5a, hallazgo 4 de la 10.3a).
+async function validateProvider(
+  providerId: string | undefined,
+  currentProviderId?: string | null,
+) {
   if (!providerId) {
     return true;
   }
 
-  const provider = await prisma.proveedor.findFirst({
+  const provider = await prisma.proveedor.findUnique({
     where: {
       id_proveedor: providerId,
-      estado: true,
     },
     select: {
-      id_proveedor: true,
+      estado: true,
     },
   });
 
-  return Boolean(provider);
+  return Boolean(
+    provider && (provider.estado || providerId === currentProviderId),
+  );
 }
 
 function getPrismaErrorMessage(error: unknown) {
@@ -172,6 +179,7 @@ export async function updateSparePartAction(
     },
     select: {
       id_repuesto: true,
+      id_proveedor: true,
     },
   });
 
@@ -190,7 +198,9 @@ export async function updateSparePartAction(
 
   const data = parsed.data;
 
-  if (!(await validateProvider(data.id_proveedor))) {
+  if (
+    !(await validateProvider(data.id_proveedor, currentSparePart.id_proveedor))
+  ) {
     return {
       error: "El proveedor seleccionado no existe o esta inactivo.",
       fieldErrors: {

@@ -85,14 +85,13 @@ exports[`createSparePartAction > crea el repuesto con su proveedor, su correlati
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -231,14 +230,13 @@ exports[`createSparePartAction > los textos llegan sin los espacios de los extre
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -317,14 +315,13 @@ exports[`createSparePartAction > otro fallo al crear revierte con el mensaje gen
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -390,14 +387,13 @@ exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -429,7 +425,7 @@ exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo
 }
 `;
 
-exports[`createSparePartAction > proveedor inactivo o inexistente: error en el campo, sin transaccion > llamadas 1`] = `
+exports[`createSparePartAction > proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -440,19 +436,53 @@ exports[`createSparePartAction > proveedor inactivo o inexistente: error en el c
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
 ]
 `;
 
-exports[`createSparePartAction > proveedor inactivo o inexistente: error en el campo, sin transaccion > resultado 1`] = `
+exports[`createSparePartAction > proveedor inactivo: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > proveedor inexistente: el mismo error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`createSparePartAction > proveedor inexistente: el mismo error > resultado 1`] = `
 {
   "estado": {
     "error": "El proveedor seleccionado no existe o esta inactivo.",
@@ -476,14 +506,13 @@ exports[`createSparePartAction > puede crearse inactivo > llamadas 1`] = `
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -710,14 +739,13 @@ exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin 
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -796,14 +824,13 @@ exports[`createSparePartAction > un costo que no cabe en numeric(12,2) pasa el e
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -882,14 +909,13 @@ exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revi
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -1238,6 +1264,7 @@ exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitac
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1249,14 +1276,13 @@ exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitac
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -1325,7 +1351,7 @@ exports[`updateSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (rediri
 
 exports[`updateSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
 
-exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1336,6 +1362,7 @@ exports[`updateSparePartAction > conservar su propio nombre no es un duplicado >
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1347,14 +1374,145 @@ exports[`updateSparePartAction > conservar su propio nombre no es un duplicado >
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
+        "id_proveedor": "PVE00000006",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
         "estado": true,
+        "id_proveedor": "PVE00000006",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000006",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -1410,7 +1568,7 @@ exports[`updateSparePartAction > conservar su propio nombre no es un duplicado >
 
 exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
 
-exports[`updateSparePartAction > conservar su proveedor actual inactivo se rechaza como si no existiera (hallazgo 4 de la 10.3a) > llamadas 1`] = `
+exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1421,6 +1579,7 @@ exports[`updateSparePartAction > conservar su proveedor actual inactivo se recha
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1432,30 +1591,67 @@ exports[`updateSparePartAction > conservar su proveedor actual inactivo se recha
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
   },
 ]
 `;
 
-exports[`updateSparePartAction > conservar su proveedor actual inactivo se rechaza como si no existiera (hallazgo 4 de la 10.3a) > resultado 1`] = `
-{
-  "estado": {
-    "error": "El proveedor seleccionado no existe o esta inactivo.",
-    "fieldErrors": {
-      "id_proveedor": [
-        "El proveedor seleccionado no existe o esta inactivo.",
-      ],
-    },
-  },
-}
-`;
+exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
 
 exports[`updateSparePartAction > datos invalidos devuelven los errores por campo despues de comprobar el repuesto > llamadas 1`] = `
 [
@@ -1468,6 +1664,7 @@ exports[`updateSparePartAction > datos invalidos devuelven los errores por campo
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1506,6 +1703,7 @@ exports[`updateSparePartAction > el repuesto no existe > llamadas 1`] = `
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1536,6 +1734,7 @@ exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje ge
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1547,14 +1746,13 @@ exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje ge
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -1608,6 +1806,7 @@ exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1619,14 +1818,13 @@ exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {
@@ -1669,6 +1867,7 @@ exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin val
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1750,7 +1949,7 @@ exports[`updateSparePartAction > sin id de repuesto responde que no existe sin t
 }
 `;
 
-exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar) devuelve su mensaje y no registra bitacora > llamadas 1`] = `
+exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1761,6 +1960,7 @@ exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar)
   {
     "args": {
       "select": {
+        "id_proveedor": true,
         "id_repuesto": true,
       },
       "where": {
@@ -1772,14 +1972,60 @@ exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar)
   {
     "args": {
       "select": {
-        "id_proveedor": true,
+        "estado": true,
       },
       "where": {
-        "estado": true,
         "id_proveedor": "PVE00000003",
       },
     },
-    "prisma": "proveedor.findFirst",
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar) devuelve su mensaje y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
   },
   {
     "args": {

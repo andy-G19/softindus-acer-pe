@@ -13,6 +13,7 @@ import {
   describeNavigationError,
   expectAuthorizesBeforePrisma,
   type DataOverrides,
+  type PrismaArgs,
   type Role,
 } from "@/testing/page-characterization";
 
@@ -92,7 +93,9 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 
 // null deja el campo fuera del formulario: formData.get devuelve null.
 type FormFields = Record<string, string | null>;
-type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
+// `expected` fija el resultado ademas del snapshot: un snapshot nuevo se
+// escribe con lo que hace el codigo, no con lo que deberia hacer.
+type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role; expected?: unknown };
 
 const initialState: SparePartFormState = { error: "" };
 
@@ -130,6 +133,11 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
         );
 
         expectAuthorizesBeforePrisma(calls);
+
+        if ("expected" in actionCase) {
+          expect(result).toEqual(actionCase.expected);
+        }
+
         expect(calls).toMatchSnapshot("llamadas");
         expect(result).toMatchSnapshot("resultado");
       });
@@ -144,6 +152,7 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 const REPUESTO = "REP00000004";
 const OTRO_REPUESTO = "REP00000002";
 const PROVEEDOR = "PVE00000003";
+const OTRO_PROVEEDOR = "PVE00000006";
 
 const createForm: FormFields = {
   id_proveedor: PROVEEDOR,
@@ -160,20 +169,32 @@ const updateForm: FormFields = {
   costo_unitario: "41.90",
 };
 
-// El repuesto buscado por id (existencia o cambio de estado), el que ya usa
-// ese nombre (duplicado) y si el proveedor elegido existe y esta activo.
+// El repuesto buscado por id (existencia o cambio de estado), con PROVEEDOR
+// como proveedor actual; el que ya usa ese nombre (duplicado), y el estado del
+// proveedor elegido: activo, inactivo o inexistente (null).
 function sparePartLookup({
   exists = true,
   estado = true,
   duplicateOwner = null as string | null,
-  activeProvider = true,
+  providerActive = true as boolean | null,
 } = {}): DataOverrides {
+  const provider = (args: PrismaArgs) => {
+    const where = (args?.where ?? {}) as Record<string, unknown>;
+
+    if (providerActive === null || (where.estado === true && !providerActive)) {
+      return null;
+    }
+
+    return { id_proveedor: where.id_proveedor, estado: providerActive };
+  };
+
   return {
     "repuesto.findUnique": exists
-      ? { id_repuesto: REPUESTO, nombre_repuesto: "Faja en V B-52", estado }
+      ? { id_repuesto: REPUESTO, nombre_repuesto: "Faja en V B-52", estado, id_proveedor: PROVEEDOR }
       : null,
     "repuesto.findFirst": duplicateOwner ? { id_repuesto: duplicateOwner } : null,
-    "proveedor.findFirst": activeProvider ? { id_proveedor: PROVEEDOR } : null,
+    "proveedor.findFirst": provider,
+    "proveedor.findUnique": provider,
   };
 }
 
@@ -243,8 +264,12 @@ defineCases("createSparePartAction", create, [
     ...createWith({ costo_unitario: "1.005" }),
   },
   {
-    name: "proveedor inactivo o inexistente: error en el campo, sin transaccion",
-    ...createWith({}, sparePartLookup({ activeProvider: false })),
+    name: "proveedor inactivo: error en el campo, sin transaccion",
+    ...createWith({}, sparePartLookup({ providerActive: false })),
+  },
+  {
+    name: "proveedor inexistente: el mismo error",
+    ...createWith({}, sparePartLookup({ providerActive: null })),
   },
   {
     name: "otro repuesto con ese nombre: error en el campo, sin transaccion",
@@ -270,9 +295,37 @@ defineCases("updateSparePartAction", update, [
     name: "datos invalidos devuelven los errores por campo despues de comprobar el repuesto",
     ...updateWith({ nombre_repuesto: "", costo_unitario: "abc" }),
   },
+  // D2 de la 10.5a (hallazgo 4 de la 10.3a): la edicion ofrece el proveedor
+  // actual aunque este inactivo y la accion lo acepta mientras no se cambie.
   {
-    name: "conservar su proveedor actual inactivo se rechaza como si no existiera (hallazgo 4 de la 10.3a)",
-    ...updateWith({}, sparePartLookup({ activeProvider: false })),
+    name: "conservar su proveedor actual inactivo se acepta",
+    ...updateWith({}, sparePartLookup({ providerActive: false })),
+    expected: "redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated",
+  },
+  {
+    name: "cambiar a otro proveedor inactivo se rechaza",
+    ...updateWith({ id_proveedor: OTRO_PROVEEDOR }, sparePartLookup({ providerActive: false })),
+    expected: {
+      estado: {
+        error: "El proveedor seleccionado no existe o esta inactivo.",
+        fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] },
+      },
+    },
+  },
+  {
+    name: "cambiar a otro proveedor activo se acepta",
+    ...updateWith({ id_proveedor: OTRO_PROVEEDOR }),
+    expected: "redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated",
+  },
+  {
+    name: "su proveedor actual ya no existe: se rechaza",
+    ...updateWith({}, sparePartLookup({ providerActive: null })),
+    expected: {
+      estado: {
+        error: "El proveedor seleccionado no existe o esta inactivo.",
+        fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] },
+      },
+    },
   },
   {
     name: "otro repuesto con ese nombre: error en el campo",

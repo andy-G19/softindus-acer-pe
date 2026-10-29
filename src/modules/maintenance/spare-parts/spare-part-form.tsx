@@ -17,6 +17,8 @@ import type { SparePartFormState } from "@/modules/maintenance/spare-parts/actio
 type ProviderOption = {
   id: string;
   label: string;
+  /** «Inactivo» en el proveedor actual del repuesto que se edita. */
+  description?: string;
 };
 
 type SupplierTypeOption = {

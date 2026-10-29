@@ -14,6 +14,7 @@ import { APP_ROLES } from "@/lib/permissions";
 import { updateSparePartAction } from "@/modules/maintenance/spare-parts/actions";
 import { SparePartForm } from "@/modules/maintenance/spare-parts/spare-part-form";
 import { getSparePartEditData } from "@/modules/maintenance/spare-parts/queries";
+import { buildSparePartProviderOptions } from "@/modules/maintenance/spare-parts/spare-part-provider-options";
 
 type EditSparePartPageProps = {
   params: Promise<{
@@ -57,10 +58,7 @@ export default async function EditSparePartPage({
         <CardContent>
           <SparePartForm
             action={updateSparePartAction}
-            providers={providers.map((provider) => ({
-              id: provider.id_proveedor,
-              label: provider.razon_social,
-            }))}
+            providers={buildSparePartProviderOptions(providers)}
             supplierTypes={supplierTypes}
             defaultValues={{
               id_repuesto: sparePart.id_repuesto,
