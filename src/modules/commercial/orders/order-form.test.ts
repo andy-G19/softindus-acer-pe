@@ -16,6 +16,11 @@ import { OrderForm } from "@/modules/commercial/orders/order-form";
 // linea), enfoca el primero y deja el mensaje general dentro, sin otro aviso
 // (antes daba ademas un SweetAlert y React vaciaba la fecha y las
 // observaciones); con exito da un solo aviso y vuelve al returnTo.
+//
+// Desde C6, con cambios, Cancelar pide confirmar el descarte y recargar lo
+// pregunta el navegador (D4 de la 10.4); sin cambios, o tras guardar, sale sin
+// preguntar. Elegir un producto o agregar una linea son cambios aunque no
+// disparen el evento input.
 
 const navigation = vi.hoisted(() => ({ push: vi.fn(), back: vi.fn(), refresh: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), forward: vi.fn() }));
 const notifications = vi.hoisted(() => ({ notify: vi.fn(), showError: vi.fn() }));
@@ -328,5 +333,182 @@ describe("OrderForm con el resultado de la accion", () => {
 
     expect(cancel?.getAttribute("href")).toBe(returnTo);
     expect(action).not.toHaveBeenCalled();
+  });
+});
+
+describe("OrderForm al cancelar", () => {
+  const cancelLink = () => [...document.querySelectorAll("a")].find((link) => link.textContent?.trim() === "Cancelar")!;
+  const dialog = () => document.querySelector('[role="alertdialog"]');
+  const button = (text: string) =>
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent?.trim() === text)!;
+
+  function click(element: HTMLElement, init: MouseEventInit = {}) {
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true, button: 0, ...init });
+    element.dispatchEvent(event);
+    return event;
+  }
+
+  function beforeUnloadPrevented() {
+    const event = new Event("beforeunload", { cancelable: true });
+    window.dispatchEvent(event);
+    return event.defaultPrevented;
+  }
+
+  async function type(element: HTMLInputElement | HTMLTextAreaElement, value: string) {
+    const prototype = element instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    await act(async () => {
+      Object.getOwnPropertyDescriptor(prototype, "value")!.set!.call(element, value);
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  }
+
+  it("sin cambios vuelve al returnTo sin preguntar", async () => {
+    await renderForm(success, { returnTo: `${LIST}?q=puerta` });
+
+    let event!: MouseEvent;
+    await act(async () => {
+      event = click(cancelLink());
+    });
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(dialog()).toBeNull();
+    expect(navigation.push).toHaveBeenCalledWith(`${LIST}?q=puerta`);
+    expect(beforeUnloadPrevented()).toBe(false);
+  });
+
+  it("con lo escrito pide confirmar; seguir editando no sale y descartar vuelve", async () => {
+    await renderForm(success);
+    await act(async () => byId<HTMLTextAreaElement>("observaciones").focus());
+    await type(byId<HTMLTextAreaElement>("observaciones"), "Otra cosa");
+
+    expect(beforeUnloadPrevented()).toBe(true);
+
+    // Safari no enfoca el enlace pulsado: el foco ya no esta en el campo al
+    // abrir la confirmacion (hallazgo 8 de la 10.1).
+    await act(async () => byId<HTMLTextAreaElement>("observaciones").blur());
+    await act(async () => {
+      click(cancelLink());
+    });
+
+    expect(dialog()?.textContent).toContain("¿Descartar los cambios del pedido?");
+    expect(dialog()?.textContent).toContain("Se perderán los cambios que hiciste en este formulario.");
+    expect(navigation.push).not.toHaveBeenCalled();
+
+    await act(async () => button("Cancelar").click());
+
+    expect(dialog()).toBeNull();
+    expect(navigation.push).not.toHaveBeenCalled();
+    expect(byId<HTMLTextAreaElement>("observaciones").value).toBe("Otra cosa");
+    // El foco vuelve al ultimo campo enfocado del formulario (trackFocus).
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 0)));
+    expect(document.activeElement).toBe(byId("observaciones"));
+
+    await act(async () => {
+      click(cancelLink());
+    });
+    await act(async () => button("Descartar cambios").click());
+
+    expect(navigation.push).toHaveBeenCalledTimes(1);
+    expect(navigation.push).toHaveBeenCalledWith(LIST);
+    expect(beforeUnloadPrevented()).toBe(false);
+  });
+
+  it("en el alta la confirmacion habla del pedido nuevo", async () => {
+    await renderForm(success, { defaultValues: undefined });
+    await type(byId<HTMLTextAreaElement>("observaciones"), "Urgente");
+
+    await act(async () => {
+      click(cancelLink());
+    });
+
+    expect(dialog()?.textContent).toContain("¿Descartar el pedido nuevo?");
+    expect(dialog()?.textContent).toContain("Se perderán los datos que escribiste en este formulario.");
+  });
+
+  it("agregar una linea es un cambio aunque no dispare input", async () => {
+    await renderForm(success);
+
+    await act(async () => button("Agregar producto").click());
+    await act(async () => {
+      click(cancelLink());
+    });
+
+    expect(dialog()).not.toBeNull();
+    expect(beforeUnloadPrevented()).toBe(true);
+  });
+
+  it("quitar una linea es un cambio", async () => {
+    await renderForm(success);
+
+    await act(async () => [...document.querySelectorAll<HTMLButtonElement>("button")].filter((item) => item.textContent?.trim() === "Quitar")[1].click());
+
+    expect(beforeUnloadPrevented()).toBe(true);
+  });
+
+  // En el alta los campos estan vacios: al enfocar, la lista muestra todo.
+  async function pick(name: string, label: string) {
+    await act(async () => combobox(name).focus());
+    const option = [...document.querySelectorAll<HTMLElement>('[role="option"]')].find((item) =>
+      item.textContent?.startsWith(label),
+    )!;
+    await act(async () => option.click());
+  }
+
+  it("elegir un producto de la lista es un cambio aunque no dispare input", async () => {
+    await renderForm(success, { defaultValues: undefined });
+
+    expect(beforeUnloadPrevented()).toBe(false);
+    await pick("id_producto", "Reja de ventana");
+
+    expect(combobox("id_producto").value).toBe("Reja de ventana");
+    expect(beforeUnloadPrevented()).toBe(true);
+  });
+
+  it("elegir un cliente de la lista es un cambio aunque no dispare input", async () => {
+    await renderForm(success, { defaultValues: undefined });
+
+    await pick("id_cliente", "Ferretería El Perno");
+
+    expect(combobox("id_cliente").value).toBe("Ferretería El Perno");
+    expect(beforeUnloadPrevented()).toBe(true);
+  });
+
+  it("tras guardar sale sin preguntar aunque hubiera cambios", async () => {
+    await renderForm(success);
+    await type(byId<HTMLTextAreaElement>("observaciones"), "Otra cosa");
+
+    await submit();
+
+    expect(dialog()).toBeNull();
+    expect(navigation.push).toHaveBeenCalledTimes(1);
+    expect(beforeUnloadPrevented()).toBe(false);
+  });
+
+  it("mientras guarda, Cancelar no sale ni pregunta", async () => {
+    await renderForm(() => new Promise<never>(() => {}) as never);
+    await type(byId<HTMLTextAreaElement>("observaciones"), "Otra cosa");
+
+    await act(async () => {
+      document.querySelector("form")!.requestSubmit();
+    });
+    await act(async () => {
+      click(cancelLink());
+    });
+
+    expect(dialog()).toBeNull();
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  it("con una tecla de modificador el enlace abre el listado sin pasar por el descarte", async () => {
+    await renderForm(success);
+    await type(byId<HTMLTextAreaElement>("observaciones"), "Otra cosa");
+
+    let event!: MouseEvent;
+    await act(async () => {
+      event = click(cancelLink(), { ctrlKey: true });
+    });
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(dialog()).toBeNull();
   });
 });
