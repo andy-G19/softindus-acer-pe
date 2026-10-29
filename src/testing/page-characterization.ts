@@ -469,16 +469,19 @@ const WRITE_METHODS = new Set([
   "update",
   "updateMany",
   "updateManyAndReturn",
+  "deleteMany",
 ]);
 
 // create y update devuelven el `data` recibido. updateMany afecta una fila,
 // que es lo que esperan las guardas que comprueban `count` (un caso simula la
 // guarda que falla con `{ count: 0 }`); createMany, una por elemento.
+// deleteMany borra una fila, como updateMany (10.4c: la edicion de un pedido
+// reemplaza su detalle).
 // updateManyAndReturn tambien afecta una fila y la devuelve generada segun su
 // select, sin aplicar `data` (grupo 2 de fixes): el caso que necesita el valor
 // que dejaria la escritura lo fija, y `[]` simula la guarda que falla.
 function defaultWriteResult(modelName: string, method: string, args: PrismaArgs) {
-  if (method === "updateMany") {
+  if (method === "updateMany" || method === "deleteMany") {
     return { count: 1 };
   }
 

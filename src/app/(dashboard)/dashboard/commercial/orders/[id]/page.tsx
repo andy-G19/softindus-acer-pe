@@ -46,7 +46,7 @@ export default async function OrderDetailPage({
   const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.orders);
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
         title="Detalle de pedido"
         description="Consulta la información comercial, productos y estado del pedido."
@@ -181,7 +181,7 @@ export default async function OrderDetailPage({
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

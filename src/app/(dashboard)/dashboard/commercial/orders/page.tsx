@@ -72,7 +72,9 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/commercial/orders/new">Nuevo pedido</Link>
+            <Link href={withReturnTo(`${navigationHrefs.orders}/new`, returnTo)}>
+              Nuevo pedido
+            </Link>
           </Button>
         }
       />

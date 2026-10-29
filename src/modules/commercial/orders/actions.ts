@@ -3,16 +3,40 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
-import { orderSchema } from "@/schemas/commercial/order.schema";
+import type { FieldErrors } from "@/lib/errors";
+import { calculateOrderAmounts } from "@/lib/order-amounts";
+import { orderSchema, type OrderInput } from "@/schemas/commercial/order.schema";
 
-export type OrderFormState = ActionErrorState;
+/** Una linea del pedido tal como se envio. */
+export type OrderLineValues = {
+  id_producto: string;
+  cantidad: string;
+  precio_unitario: string;
+  observacion_detalle: string;
+};
+
+/** Lo que el formulario de pedido envio, tal cual, para volver a mostrarlo. */
+export type OrderFormValues = {
+  id_cliente: string;
+  fecha_entrega_estimada: string;
+  observaciones: string;
+  items: OrderLineValues[];
+};
+
+// Entrega 10.4c: el alta y la edicion de pedidos no redirigen; devuelven el
+// resultado y el formulario da el aviso y vuelve al listado. Sin permiso
+// responden con un error, no redirigen. Los errores de una linea van con la
+// clave items.<linea>.<campo> (o items.<linea> si son de la linea entera), con
+// la posicion de la linea en el formulario.
+export type OrderFormState = FormActionState<OrderFormValues, { id_pedido: string }>;
 
 const ORDERS_PATH = "/dashboard/commercial/orders";
+const REPEATED_PRODUCT = "No repitas el mismo producto dentro del pedido.";
 
 function emptyToNull(value: FormDataEntryValue | null) {
   const text = value?.toString().trim();
@@ -29,6 +53,33 @@ function toDateOrNull(value?: string | null) {
 
 async function requireCommercialPermission() {
   return requireRole(["ADMIN", "SELLER"]);
+}
+
+function getOrderFormValues(formData: FormData): OrderFormValues {
+  const all = (name: string) => formData.getAll(name).map((value) => value.toString());
+  const quantities = all("cantidad");
+  const unitPrices = all("precio_unitario");
+  const observations = all("observacion_detalle");
+
+  return {
+    id_cliente: formData.get("id_cliente")?.toString() ?? "",
+    fecha_entrega_estimada: formData.get("fecha_entrega_estimada")?.toString() ?? "",
+    observaciones: formData.get("observaciones")?.toString() ?? "",
+    items: all("id_producto").map((id_producto, index) => ({
+      id_producto,
+      cantidad: quantities[index] ?? "",
+      precio_unitario: unitPrices[index] ?? "",
+      observacion_detalle: observations[index] ?? "",
+    })),
+  };
+}
+
+function orderError(values: OrderFormValues, error: string, fieldErrors?: FieldErrors): OrderFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function orderSaved(values: OrderFormValues, idPedido: string): OrderFormState {
+  return { status: "success", data: { id_pedido: idPedido }, values, operationId: newOperationId() };
 }
 
 function getOrderItems(formData: FormData) {
@@ -51,24 +102,59 @@ function getOrderItems(formData: FormData) {
       cantidad: quantities[index],
       precio_unitario: unitPrices[index],
       observaciones: itemObservations[index] ?? "",
+      line: index,
     }))
     .filter((item) => item.id_producto);
 }
 
+// Las lineas sin producto se descartan: lines dice en que posicion del
+// formulario esta cada linea que se valida, para dar el error en su linea.
 function getOrderFormData(formData: FormData) {
+  const items = getOrderItems(formData);
+
   return {
-    id_cliente: formData.get("id_cliente")?.toString(),
-    fecha_entrega_estimada:
-      formData.get("fecha_entrega_estimada")?.toString() || undefined,
-    observaciones: formData.get("observaciones")?.toString() ?? "",
-    items: getOrderItems(formData),
+    data: {
+      id_cliente: formData.get("id_cliente")?.toString(),
+      fecha_entrega_estimada:
+        formData.get("fecha_entrega_estimada")?.toString() || undefined,
+      observaciones: formData.get("observaciones")?.toString() ?? "",
+      items: items.map(({ line: _line, ...item }) => item),
+    },
+    lines: items.map((item) => item.line),
   };
 }
 
-function validateRepeatedProducts(items: { id_producto: string }[]) {
+function lineKey(lines: number[], index: number, field?: string) {
+  return `items.${lines[index]}${field ? `.${field}` : ""}`;
+}
+
+function addFieldError(errors: FieldErrors, key: string, message: string) {
+  errors[key] = [...(errors[key] ?? []), message];
+}
+
+// Errores de Zod por campo: los de una linea, con la clave de su linea.
+function schemaFieldErrors(issues: { path: PropertyKey[]; message: string }[], lines: number[]) {
+  const errors: FieldErrors = {};
+
+  for (const issue of issues) {
+    const [first, index, field] = issue.path;
+    const key =
+      first === "items" && typeof index === "number"
+        ? lineKey(lines, index, field === undefined ? undefined : String(field))
+        : String(first);
+
+    addFieldError(errors, key, issue.message);
+  }
+
+  return errors;
+}
+
+// Posiciones (en items) de un producto que ya aparecio en una linea anterior.
+function findRepeatedProducts(items: { id_producto: string }[]) {
   return items
-    .map((item) => item.id_producto)
-    .filter((id_producto, index, array) => array.indexOf(id_producto) !== index);
+    .map((item, index) => ({ id_producto: item.id_producto, index }))
+    .filter(({ id_producto }, index, array) => array.findIndex((other) => other.id_producto === id_producto) !== index)
+    .map(({ index }) => index);
 }
 
 function validateEstimatedDate(
@@ -89,6 +175,54 @@ function validateEstimatedDate(
   orderDate.setHours(0, 0, 0, 0);
 
   return deliveryDate >= orderDate;
+}
+
+// El cliente y los productos deben existir y estar activos. Al editar
+// (current), el cliente y los productos que el pedido ya tiene se aceptan
+// aunque esten inactivos mientras no se cambien: la edicion los ofrece (D3 y
+// hallazgo 5 de la 10.4a). Sin esta comprobacion, un id que no existe rompia en
+// la clave foranea.
+async function validateActiveReferences(
+  data: OrderInput,
+  lines: number[],
+  current?: { id_cliente: string; productIds: string[] },
+): Promise<{ error: string; fieldErrors: FieldErrors } | null> {
+  const productIds = data.items.map((item) => item.id_producto);
+  const [client, products] = await Promise.all([
+    prisma.cliente.findUnique({
+      where: { id_cliente: data.id_cliente },
+      select: { id_cliente: true, estado: true },
+    }),
+    prisma.producto.findMany({
+      where: { id_producto: { in: productIds } },
+      select: { id_producto: true, estado: true },
+    }),
+  ]);
+
+  if (!client || (!client.estado && client.id_cliente !== current?.id_cliente)) {
+    const message = "El cliente seleccionado no existe o está inactivo.";
+
+    return { error: message, fieldErrors: { id_cliente: [message] } };
+  }
+
+  const usable = new Set(
+    products
+      .filter((product) => product.estado || current?.productIds.includes(product.id_producto))
+      .map((product) => product.id_producto),
+  );
+  const fieldErrors: FieldErrors = {};
+
+  productIds.forEach((id, index) => {
+    if (!usable.has(id)) {
+      addFieldError(fieldErrors, lineKey(lines, index, "id_producto"), "El producto seleccionado no existe o está inactivo.");
+    }
+  });
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { error: "Un producto seleccionado no existe o está inactivo.", fieldErrors };
+  }
+
+  return null;
 }
 
 async function validateOrderCanChange(orderId: string) {
@@ -149,44 +283,72 @@ async function validateOrderCanChange(orderId: string) {
   return { ok: true as const, order };
 }
 
+// Reglas comunes del alta y la edicion (en la edicion, despues de leer el
+// pedido): esquema, fecha de entrega, productos repetidos y referencias
+// activas. Devuelve los datos validados o el estado de error.
+async function validateOrder(
+  formData: FormData,
+  values: OrderFormValues,
+  orderDate: Date,
+  current?: { id_cliente: string; productIds: string[] },
+) {
+  const { data, lines } = getOrderFormData(formData);
+  const parsed = orderSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return {
+      ok: false as const,
+      state: orderError(values, "Revisa los datos del pedido.", schemaFieldErrors(parsed.error.issues, lines)),
+    };
+  }
+
+  if (!validateEstimatedDate(parsed.data.fecha_entrega_estimada, orderDate)) {
+    const message = "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.";
+
+    return { ok: false as const, state: orderError(values, message, { fecha_entrega_estimada: [message] }) };
+  }
+
+  const repeated = findRepeatedProducts(parsed.data.items);
+
+  if (repeated.length > 0) {
+    const fieldErrors: FieldErrors = {};
+
+    for (const index of repeated) {
+      addFieldError(fieldErrors, lineKey(lines, index, "id_producto"), REPEATED_PRODUCT);
+    }
+
+    return { ok: false as const, state: orderError(values, REPEATED_PRODUCT, fieldErrors) };
+  }
+
+  const referencesError = await validateActiveReferences(parsed.data, lines, current);
+
+  if (referencesError) {
+    return { ok: false as const, state: orderError(values, referencesError.error, referencesError.fieldErrors) };
+  }
+
+  return { ok: true as const, data: parsed.data };
+}
+
 export async function createOrderAction(
   _prevState: OrderFormState,
   formData: FormData,
 ): Promise<OrderFormState> {
-  const session = await requireCommercialPermission();
-  const parsed = orderSchema.safeParse(getOrderFormData(formData));
+  const values = getOrderFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "SELLER"]);
 
-  if (!parsed.success) {
-    return {
-      error: "Revisa los datos del pedido.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+  if (!session) {
+    return orderError(values, "No tienes permisos para registrar pedidos.");
   }
 
-  if (!validateEstimatedDate(parsed.data.fecha_entrega_estimada, new Date())) {
-    return {
-      error:
-        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
-      fieldErrors: {
-        fecha_entrega_estimada: [
-          "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
-        ],
-      },
-    };
+  const validation = await validateOrder(formData, values, new Date());
+
+  if (!validation.ok) {
+    return validation.state;
   }
 
-  if (validateRepeatedProducts(parsed.data.items).length > 0) {
-    return {
-      error: "No repitas el mismo producto dentro del pedido.",
-      fieldErrors: {
-        items: ["No repitas el mismo producto dentro del pedido."],
-      },
-    };
-  }
-
-  const montoEstimado = parsed.data.items.reduce((total, item) => {
-    return total + item.cantidad * item.precio_unitario;
-  }, 0);
+  const data = validation.data;
+  const amounts = calculateOrderAmounts(data.items);
+  let idPedido = "";
 
   await prisma.$transaction(async (tx) => {
     const id_pedido = await getNextCorrelativeId(tx, {
@@ -196,32 +358,32 @@ export async function createOrderAction(
     const detailIds = await getNextCorrelativeIds(tx, {
       codigoEntidad: "detalle_pedido",
       prefijo: "DPE",
-      cantidad: parsed.data.items.length,
+      cantidad: data.items.length,
     });
+
+    idPedido = id_pedido;
 
     await tx.pedido.create({
       data: {
         id_pedido,
-        id_cliente: parsed.data.id_cliente,
+        id_cliente: data.id_cliente,
         id_usuario_registro: session.user.id,
         fecha_pedido: new Date(),
-        fecha_entrega_estimada: toDateOrNull(
-          parsed.data.fecha_entrega_estimada,
-        ),
+        fecha_entrega_estimada: toDateOrNull(data.fecha_entrega_estimada),
         estado: "registrado",
-        monto_estimado: montoEstimado,
+        monto_estimado: amounts.total,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
     });
 
     await tx.detalle_pedido.createMany({
-      data: parsed.data.items.map((item, index) => ({
+      data: data.items.map((item, index) => ({
         id_detalle_pedido: detailIds[index],
         id_pedido,
         id_producto: item.id_producto,
-        cantidad: item.cantidad,
-        precio_unitario: item.precio_unitario,
-        subtotal: item.cantidad * item.precio_unitario,
+        cantidad: amounts.lines[index].cantidad,
+        precio_unitario: amounts.lines[index].precio_unitario,
+        subtotal: amounts.lines[index].subtotal,
         observaciones: item.observaciones?.trim() || null,
       })),
     });
@@ -237,64 +399,44 @@ export async function createOrderAction(
   });
 
   revalidatePath(ORDERS_PATH);
-  redirect(`${ORDERS_PATH}?toast=order-created`);
+
+  return orderSaved(values, idPedido);
 }
 
 export async function updateOrderAction(
   _prevState: OrderFormState,
   formData: FormData,
 ): Promise<OrderFormState> {
-  const session = await requireCommercialPermission();
+  const values = getOrderFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "SELLER"]);
+
+  if (!session) {
+    return orderError(values, "No tienes permisos para actualizar pedidos.");
+  }
+
   const orderId = formData.get("id_pedido")?.toString().trim();
 
   if (!orderId) {
-    return { error: "El pedido no existe." };
+    return orderError(values, "El pedido no existe.");
   }
 
   const changeValidation = await validateOrderCanChange(orderId);
 
   if (!changeValidation.ok) {
-    return { error: changeValidation.message };
+    return orderError(values, changeValidation.message);
   }
 
-  const parsed = orderSchema.safeParse(getOrderFormData(formData));
+  const validation = await validateOrder(formData, values, changeValidation.order.fecha_pedido, {
+    id_cliente: changeValidation.order.id_cliente,
+    productIds: changeValidation.order.detalle_pedido.map((detail) => detail.id_producto),
+  });
 
-  if (!parsed.success) {
-    return {
-      error: "Revisa los datos del pedido.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+  if (!validation.ok) {
+    return validation.state;
   }
 
-  if (
-    !validateEstimatedDate(
-      parsed.data.fecha_entrega_estimada,
-      changeValidation.order.fecha_pedido,
-    )
-  ) {
-    return {
-      error:
-        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
-      fieldErrors: {
-        fecha_entrega_estimada: [
-          "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
-        ],
-      },
-    };
-  }
-
-  if (validateRepeatedProducts(parsed.data.items).length > 0) {
-    return {
-      error: "No repitas el mismo producto dentro del pedido.",
-      fieldErrors: {
-        items: ["No repitas el mismo producto dentro del pedido."],
-      },
-    };
-  }
-
-  const montoEstimado = parsed.data.items.reduce((total, item) => {
-    return total + item.cantidad * item.precio_unitario;
-  }, 0);
+  const data = validation.data;
+  const amounts = calculateOrderAmounts(data.items);
 
   await prisma.$transaction(async (tx) => {
     await tx.detalle_pedido.deleteMany({
@@ -306,7 +448,7 @@ export async function updateOrderAction(
     const detailIds = await getNextCorrelativeIds(tx, {
       codigoEntidad: "detalle_pedido",
       prefijo: "DPE",
-      cantidad: parsed.data.items.length,
+      cantidad: data.items.length,
     });
 
     await tx.pedido.update({
@@ -314,23 +456,21 @@ export async function updateOrderAction(
         id_pedido: orderId,
       },
       data: {
-        id_cliente: parsed.data.id_cliente,
-        fecha_entrega_estimada: toDateOrNull(
-          parsed.data.fecha_entrega_estimada,
-        ),
-        monto_estimado: montoEstimado,
+        id_cliente: data.id_cliente,
+        fecha_entrega_estimada: toDateOrNull(data.fecha_entrega_estimada),
+        monto_estimado: amounts.total,
         observaciones: emptyToNull(formData.get("observaciones")),
       },
     });
 
     await tx.detalle_pedido.createMany({
-      data: parsed.data.items.map((item, index) => ({
+      data: data.items.map((item, index) => ({
         id_detalle_pedido: detailIds[index],
         id_pedido: orderId,
         id_producto: item.id_producto,
-        cantidad: item.cantidad,
-        precio_unitario: item.precio_unitario,
-        subtotal: item.cantidad * item.precio_unitario,
+        cantidad: amounts.lines[index].cantidad,
+        precio_unitario: amounts.lines[index].precio_unitario,
+        subtotal: amounts.lines[index].subtotal,
         observaciones: item.observaciones?.trim() || null,
       })),
     });
@@ -347,7 +487,8 @@ export async function updateOrderAction(
 
   revalidatePath(ORDERS_PATH);
   revalidatePath(`${ORDERS_PATH}/${orderId}`);
-  redirect(`${ORDERS_PATH}?toast=order-updated`);
+
+  return orderSaved(values, orderId);
 }
 
 export async function cancelOrderAction(formData: FormData) {

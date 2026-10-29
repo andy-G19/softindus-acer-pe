@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 
+import { Prisma } from "@/generated/prisma/client";
 import {
   definePageSuite,
   generatedResult,
@@ -92,6 +93,27 @@ const ORDERS_BY_STATUS = (args: PrismaArgs) => {
   ];
 };
 
+// Entrega 10.4c: lo que pasa hoy antes de llevar el alta y la edicion a
+// FormActionState. La edicion solo ofrece clientes y productos activos: si el
+// del pedido se inactivo, el campo visible queda vacio y obligatorio aunque el
+// oculto conserve su id (hallazgo 5 de la 10.4a; desde C3 se ofrecen marcados
+// como inactivos). Los subtotales y el total se
+// calculaban en coma flotante con toFixed (hallazgo 6): dos lineas de 1,25 x
+// 10,25 mostraban 12.81 cada una y un total de 25.63; desde C2, la vista previa
+// usa la regla de la base y el total es 25.62. Un pedido anulado sin
+// proforma muestra el formulario, que la accion rechaza al guardar.
+const editableWith = (changes: (order: Record<string, unknown>) => Record<string, unknown>) =>
+  (args: PrismaArgs) => changes(editableOrder(args));
+
+const withDetails = (order: Record<string, unknown>, details: Record<string, unknown>[]) => {
+  const [first] = order.detalle_pedido as Array<Record<string, unknown>>;
+
+  return {
+    ...order,
+    detalle_pedido: details.map((detail) => ({ ...first, ...detail })),
+  };
+};
+
 definePageSuite([
   {
     route: "/dashboard/commercial/orders",
@@ -125,7 +147,19 @@ definePageSuite([
   {
     route: "/dashboard/commercial/orders/new",
     load: () => import("./new/page"),
-    cases: [{ name: "formulario" }],
+    cases: [
+      { name: "formulario" },
+      {
+        name: "sin clientes ni productos activos",
+        data: { "cliente.findMany": [], "producto.findMany": [] },
+      },
+      { name: "sin productos activos", data: { "producto.findMany": [] } },
+      // C5: vuelve al listado con sus filtros (Volver, la ruta y Cancelar).
+      {
+        name: "regreso al listado filtrado",
+        searchParams: { returnTo: "/dashboard/commercial/orders?status=registrado" },
+      },
+    ],
   },
   {
     route: "/dashboard/commercial/orders/[id]",
@@ -168,6 +202,98 @@ definePageSuite([
         name: "inexistente",
         params: { id: "PED99999999" },
         data: { "pedido.findUnique": null },
+      },
+      {
+        name: "regreso al listado filtrado",
+        params: { id: "PED00000001" },
+        searchParams: { returnTo: "/dashboard/commercial/orders?status=registrado" },
+        data: { "pedido.findUnique": editableOrder },
+      },
+      {
+        name: "cancelado redirige al detalle",
+        params: { id: "PED00000001" },
+        data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "cancelado" })) },
+      },
+      {
+        name: "anulado muestra el formulario",
+        params: { id: "PED00000001" },
+        data: { "pedido.findUnique": editableWith((order) => ({ ...order, estado: "anulado" })) },
+      },
+      {
+        name: "cliente inactivo",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) => ({
+            ...order,
+            id_cliente: "CLI00000099",
+            cliente: {
+              id_cliente: "CLI00000099",
+              nombre_razon_social: "Cliente dado de baja",
+              tipo_cliente: "ferreteria",
+              estado: false,
+            },
+          })),
+        },
+      },
+      {
+        name: "producto inactivo",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [
+              {
+                id_producto: "PRO00000099",
+                producto: {
+                  id_producto: "PRO00000099",
+                  nombre_producto: "Producto dado de baja",
+                  categoria: "herramientas",
+                  unidad_medida: "unidad",
+                  precio_referencial: new Prisma.Decimal("35.50"),
+                  estado: false,
+                },
+              },
+            ]),
+          ),
+        },
+      },
+      {
+        name: "importes con decimales",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [
+              {
+                id_producto: "id_producto-1",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("10.25"),
+                subtotal: new Prisma.Decimal("12.81"),
+              },
+              {
+                id_producto: "id_producto-2",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("10.25"),
+                subtotal: new Prisma.Decimal("12.81"),
+              },
+            ]),
+          ),
+        },
+      },
+      {
+        // C2: 1,25 x 1,02 = 1,275; toFixed mostraba 1.27 y la base guarda 1.28.
+        name: "subtotal en empate",
+        params: { id: "PED00000001" },
+        data: {
+          "pedido.findUnique": editableWith((order) =>
+            withDetails(order, [
+              {
+                id_producto: "id_producto-1",
+                cantidad: new Prisma.Decimal("1.25"),
+                precio_unitario: new Prisma.Decimal("1.02"),
+                subtotal: new Prisma.Decimal("1.28"),
+              },
+            ]),
+          ),
+        },
       },
     ],
   },

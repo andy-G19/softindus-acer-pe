@@ -5097,10 +5097,11 @@ Datos leídos de la API de GitHub el 2026-10-27 (UTC) y comparados con git:
 
 ### Sub-entrega 10.4b — Listados de Comercial con fechas y `Badge`
 
-Fecha: del 2026-10-26 al 2026-10-27 (Lima). Estado: cerrada en staging el
-2026-10-27 (Lima); falta integrarla en `main`. El paso 0 (`0a9cd58`)
-registró la integración de la 10.4a en `main`. 5 commits, de `77d93f4` a
-`9ba917b`, el registro `9473952` y este cierre.
+Fecha: del 2026-10-26 al 2026-10-27 (Lima). Estado: cerrada el 2026-10-27
+(Lima). El paso 0 (`0a9cd58`) registró la integración de la 10.4a en
+`main`. 5 commits, de `77d93f4` a `9ba917b`, el registro `9473952` y el
+cierre `052e41d` (CI #103 en verde). Integrada en `main` con el PR #29
+(merge commit `745229c`, CI #105 en verde).
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -5111,7 +5112,7 @@ registró la integración de la 10.4a en `main`. 5 commits, de `77d93f4` a
 | 391e452 | feat | Pedidos y proformas con `FilterBar` y `DateRangeFields`, sin el `<main>` anidado. |
 | 9ba917b | feat | Pagos de cliente y comprobantes con `FilterBar` y `DateRangeFields`, sin el `<main>` anidado. |
 | 9473952 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Comercial. |
+| 052e41d | docs | Cierre: publicación y verificación en staging, hallazgos y manual de las listas de Comercial. |
 
 Decisiones del responsable (2026-10-26), tras la auditoría; aprobó las
 cuatro recomendadas:
@@ -5371,6 +5372,290 @@ con lo verificado. Las reglas comunes suman esas listas a las renovadas y
 explican que las fechas elegidas mientras la página carga, o recuperadas al
 volver con Atrás, también se validan.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-28 (UTC) y comparados con git:
+
+- El cierre `052e41d` se publicó en `staging`: CI #103 en verde (2m 17s), y
+  Vercel lo desplegó (`success` a las 02:44:45 UTC del 2026-10-28).
+- PR #29, abierto a las 02:56:01 UTC y fusionado con merge commit a las
+  02:59:20 UTC del 2026-10-28: 8 commits, de `0a9cd58` a `052e41d`, y 28
+  archivos (+4.780 −845). Su CI, el #104, sobre `052e41d`, terminó en verde
+  (3m 3s).
+- El merge commit `745229c` tiene como padres `3545faf` (`main`) y `052e41d`
+  (`staging`), y su árbol es el de `052e41d` (`2a784fa8`): `main` y `staging`
+  tienen el mismo contenido. CI #105 en verde (2m 58s).
+- Vercel desplegó `745229c` en producción al primer intento (estado «Vercel»
+  `pending` a las 02:59:23 UTC y `success` a las 03:01:05 UTC). La
+  sub-entrega no trae migraciones.
+
+### Sub-entrega 10.4c — Pedidos, la superficie amplia de Comercial
+
+Fecha: del 2026-10-28 al 2026-10-29 (Lima). Estado: cerrada el 2026-10-29
+(Lima). El paso 0 (`93901b0`) registró la integración de la 10.4b en `main`.
+7 commits, de `2fd79f2` a `7d03553`, el registro `9a79d36` y este cierre
+(CI #106 en verde sobre el registro). Plan en `tmp/e10-diff/plan-10-4c.md`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 93901b0 | docs | Paso 0: integración de la 10.4b en `main`. |
+| 2fd79f2 | test | Caracterización del alta y la edición de pedidos (`orders/actions.test.ts`) y de sus páginas con clientes, productos e importes reales. |
+| 386ca5e | fix | Importes del pedido con la regla de redondeo de la base (D2 de la 10.4, hallazgo 6 de la 10.4a). |
+| 782bd17 | fix | Editar un pedido conserva su cliente y sus productos aunque estén inactivos; uno nuevo debe existir y estar activo (D3 de la 10.4). |
+| 3cd7c84 | fix | Mensajes en español, límites de columna y fecha válida en el esquema de pedidos. |
+| 8626f18 | feat | Alta y edición con `FormActionState`: superficie amplia en página completa, errores por línea, sin SweetAlert, con `returnTo` y sin `<main>` anidado. |
+| 5f58a7c | feat | Confirmar el descarte del formulario de pedidos (D4 de la 10.4). |
+| 7d03553 | feat | Detalle de pedido sin `<main>` anidado. |
+| 9a79d36 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual del alta y la edición de pedidos. |
+
+Decisiones del responsable (2026-10-28), tras la auditoría; aprobó las
+cinco recomendadas:
+
+- E1 (D2, dinero). Una función pura, `src/lib/order-amounts.ts`, para la
+  vista previa y las dos acciones: cantidad y precio se redondean a 2
+  decimales como `numeric` (mitad lejos del cero, sobre el texto decimal y
+  no sobre el binario), el subtotal es `round2(cantidad × precio)` y el
+  monto, la suma de los subtotales redondeados. Aritmética entera exacta con
+  `BigInt`. La acción envía a Prisma las cadenas redondeadas: lo que se
+  envía es lo que se guarda.
+- E2 (D3 y hallazgo 5 de la auditoría). La edición ofrece el cliente y los
+  productos actuales aunque estén inactivos, marcados «Inactivo» en la
+  descripción de la opción, y la acción los acepta mientras no cambien. Uno
+  nuevo, en el alta o en la edición, debe existir y estar activo, con su
+  mensaje junto al campo.
+- E3. Mensajes de Zod en español, los límites de las columnas (cantidad,
+  precio, subtotal y monto) y la fecha `aaaa-mm-dd` real, en el mismo `fix`.
+- E4. Página completa con `FormActionState`, `ActionForm` y `Field`, errores
+  por línea con claves `items.<posición>.<campo>`, `SearchableSelect` con
+  `id`, `aria-invalid` y `aria-describedby` opcionales (y una muestra con
+  error en la galería), sin el aviso de SweetAlert y «Observación» con
+  tilde.
+- E5 (D4). «Cancelar» con cambios pide confirmar y recargar avisa
+  (`beforeunload`); los enlaces del shell no se bloquean.
+
+Auditoría (sobre `052e41d`):
+
+- Alta, edición y detalle admiten ADMIN y SELLER. Las tres tenían un
+  `<main>` anidado. El alta no recibía `returnTo` y la edición lo recibía
+  de la lista, pero lo ignoraba.
+- El formulario (`src/components/commercial/order-form.tsx`) avisaba dos
+  veces de un error (SweetAlert y la alerta del formulario) y solo pintaba
+  junto a su campo el cliente y la fecha: los errores de las líneas y el
+  producto repetido quedaban en «Revisa los datos del pedido.». Seis
+  etiquetas no estaban asociadas a su control, y React 19 vaciaba la fecha
+  y las observaciones tras un error.
+- Las acciones no tenían pruebas, autorizaban con `requireRole` y
+  redirigían (la desviación conocida). No comprobaban que el cliente y los
+  productos existieran y estuvieran activos: un id inexistente daba 500 en
+  la clave foránea.
+- Importes en coma flotante sin redondear, mientras la base redondea cada
+  columna por su cuenta: 1,25 × 10,25 en dos líneas mostraba y guardaba
+  25,63 de monto con subtotales de 12,81.
+- La sonda de Zod (`tmp/e10-diff/zod-probe-104c.mjs`) dio mensajes en
+  inglés con un POST armado, una cantidad de `1e12` que pasaba Zod y
+  desbordaba la columna (500) y una fecha que no existe que caía en «no
+  puede ser anterior a la fecha del pedido».
+
+Diseño:
+
+- `calculateOrderAmounts` devuelve las líneas y el total como cadenas
+  `x.xx`. Las acciones envían esas cadenas, y la vista previa del formulario
+  usa la misma función.
+- `validateOrder` reúne las cuatro reglas comunes de alta y edición: el
+  esquema, la fecha de entrega, los productos repetidos (marca la segunda
+  aparición) y el cliente y los productos activos, que lee antes de la
+  transacción. La edición sigue decidiendo fuera de ella (hallazgo 7 de la
+  10.4a, entrega 11).
+- `lineKey` arma la clave de cada error con la posición de la línea en el
+  formulario, aunque se descarte una línea sin producto: `flatten` de Zod
+  aplana las rutas anidadas.
+- El formulario pasa a `src/modules/commercial/orders/order-form.tsx`. Cada
+  línea tiene ids con su `key`, el subtotal va en un `<output>` y las
+  líneas vuelven de `state.values` tras un error. Sin ventana alrededor, usa
+  `useDiscardGuard({ onLeave })`: «Cancelar» es un enlace que, con un clic
+  izquierdo sin teclas de modificador, pasa por `requestClose`; mientras
+  guarda no sale ni pregunta, y al guardar sale sin preguntar
+  (`closeAfterSave`). Elegir una opción, agregar o quitar una línea marcan
+  el cambio a mano porque no disparan `input`. Los textos de la
+  confirmación los elige el formulario según sea alta o edición.
+- Las acciones de pedidos no entran en `action-access.test.ts`: como las
+  demás de Comercial, sus rechazos se caracterizan en su propio
+  `actions.test.ts`. `cancelOrderAction` no cambia (entrega 11).
+
+Evidencia:
+
+1. Pruebas rojas antes de cada arreglo: `tmp/e10-diff/rojo-104c-c2.txt` y
+   `rojo-104c-c2-pagina.txt` (importes), `rojo-104c-c3.txt` (inactivos) y
+   `rojo-104c-c4.txt` (esquema).
+2. Los valores esperados de los importes salen de Postgres, calculados con
+   PGlite (`tmp/e10-diff/e104c-demo/casos-importes.mjs`); entre ellos,
+   1,25 × 1,02 = 1,28, donde `toFixed` da 1,27. Una comparación fuera de la
+   suite (`comparar-importes.mjs`), sobre 2.000 líneas y 500 pedidos
+   aleatorios, dio 0 diferencias con la función nueva y 1.203 y 436 con la
+   fórmula anterior.
+3. Los cambios de snapshots se comprobaron con scripts contra copias
+   previas (`verify_104c_c1.py` a `verify_104c_c5.py`, probados en negativo
+   con `verify_104c_c5_neg.py` y sus equivalentes), y el de C7 con el
+   reemplazo de `<main>` por `<div>`: en cada commit cambia solo lo
+   anunciado.
+4. Mutaciones (`tmp/e10-diff/mut_104c_c*.txt`): 20 de 20, 13 de 13, 15 de
+   15, 14 de 14, 23 de 23, 14 de 14 y 1 de 1; en total, 100 de 100.
+5. CSS compilado igual en los 7 commits (112.745 bytes).
+6. `npm run check` terminó con código 0 después de cada commit, de 2.626
+   pruebas en 160 archivos a 2.750 en 165; en C6, al segundo intento
+   (hallazgo 6). `npm run refactor:inventory` analiza 684 archivos: 143
+   páginas y 101 formularios JSX (eran 102: el de pedidos usa `ActionForm`).
+
+Tiempo de preparación: de un commit al `npm run check` en verde del
+siguiente (Lima). Las esperas al responsable quedan fuera:
+
+| Commit | 2fd79f2 | 386ca5e | 782bd17 | 3cd7c84 | 8626f18 | 5f58a7c | 7d03553 |
+|---|---|---|---|---|---|---|---|
+| Hora del commit | 05:46 | 05:59 | 06:12 | 06:23 | 13:12 | 20:28 | 21:34 |
+| Check en verde | 05:45 | 05:58 | 06:11 | 06:21 | 06:50 | 13:44 | 20:34 |
+| Minutos de preparación | 11 | 12 | 12 | 9 | 27 | 32 | 6 |
+
+Suman 109 minutos frente a 250 estimados en bruto (150 con el factor 0,6
+del plan): un factor de 0,44, como el 0,45 de la 10.4b.
+
+Hallazgos:
+
+1. La página de edición muestra el formulario de un pedido anulado sin
+   proforma, y la acción lo rechaza al guardar. Va con la regla de qué
+   pedidos se editan (entrega 11).
+2. «Cantidad» tiene `min="1"` en el navegador y el esquema acepta
+   cualquier positivo: 0,5 m de baranda no se puede pedir desde la
+   pantalla. Decisión de negocio; no se cambió.
+3. Cantidades, precios, subtotales o montos fuera de la columna daban 500,
+   y una fecha que no existe, el mensaje de la fecha anterior. Corregidos
+   en `3cd7c84`.
+4. Los errores de las líneas y el del producto repetido no se mostraban
+   junto a su campo. Corregido en `8626f18`.
+5. Tras un error, quitar una línea anterior a la del error deja los
+   mensajes desalineados hasta el siguiente envío: las claves llevan la
+   posición del envío. Se registra; no se corrige.
+6. Método: el primer `npm run check` de C6 falló con «Failed to start forks
+   worker» en `form-dialog.test.ts` (164 archivos): es la infraestructura de
+   Vitest, no una prueba. El segundo intento pasó sin cambios.
+7. Método: la muestra con error de `SearchableSelect` en la galería cambió
+   los ids de `useId` de sus hermanas, como avisa *Pitfalls*; el verificador
+   de C5 los aceptó solo en la galería.
+8. Método: varias mutaciones no probaban nada y se rehicieron. Algunas eran
+   equivalentes (C1 P4, C2 L5, L8 y F1): se cambiaron, o se añadió el caso
+   que faltaba («sin productos activos»). Otras rompían la sintaxis (C4 S4 y
+   S6): se cambiaron por `.max(Infinity, …)`. Tres sobrevivieron y dieron
+   pruebas nuevas: el error del cliente en C5, y en C6 los textos de
+   descarte (que pasaron al formulario) y el seguimiento del foco (la prueba
+   quita el foco antes de «Cancelar», como Safari).
+9. Método: los heredocs de Bash se comen las barras invertidas; los guiones
+   se escribieron con Write o Edit.
+
+Siguen pendientes: `updateOrderAction` decide fuera de la transacción
+(hallazgo 7 de la 10.4a, entrega 11); el día UTC (hallazgo 8); los
+hallazgos 3 a 5 de la 10.4b, y el filtro «Producto» con inactivos
+(hallazgo 15 de la 10.4a).
+
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e104c-huella`) y etiquetas `e104c/`
+  (`tmp/e10-diff/e104c-*.js`, generados por `c-e104c-guiones.py`), cargada
+  en el `localStorage` de staging y comprobada con su SHA-256
+  (`e104c-guiones.sha256`) en las dos fases. Plan en
+  `tmp/e10-diff/plan-verificacion-10-4c.md`.
+- Los registros de cada captura se exportaron a
+  `tmp/e10-diff/e104c-registros/` y se comprobaron con su hash
+  (`e104c-registros.py`).
+- 1281 × 800 y el preset móvil (376 px).
+- Cada captura se tomó tras cargar el documento, para seguir el mismo
+  camino en las dos fases (hallazgo 9 de la 10.4b).
+- Las tareas usaron clics reales por `ref`, fechas con teclas y opciones
+  de `SearchableSelect` con un clic en la opción. `e104c-form.js` leyó el
+  formulario y, para saber si recargar preguntaría, despachó un
+  `beforeunload` sintético.
+- La predicción salió de los snapshots de página (`pred_104c_snap.py`:
+  elementos y textos propios entre `2fd79f2` y HEAD), aplicados a los
+  textos visibles del «antes» de staging (`pred_104c_visible.py`).
+- Datos de prueba, con autorización del responsable:
+  - el «antes» creó el cliente CLI00000010 «Cliente prueba 10.4c» y lo
+    inactivó, y creó los pedidos PED00000007 (T51) y PED00000008 (T49);
+  - el «después» creó PED00000009 y cambió la observación de PED00000007.
+  - No se exportó nada.
+
+Publicación y medición:
+
+- «Antes» sobre `052e41d` (CSS servido de 112.744 bytes, `ef3c3e19…`), el
+  2026-10-29 UTC: 12 capturas de 03:09 a 03:11 y luego las tareas.
+  Predicción escrita antes del push (`tmp/e10-diff/prediccion-10-4c.md` y su
+  `.json`: número de elementos y hash del texto visible de cada captura).
+- Push de 9 commits (de `93901b0` a `9a79d36`): CI #106 en verde (2m 36s, de
+  03:19:50 a 03:22:26 UTC). Vercel desplegó `9a79d36` (`pending` a las
+  03:19:51 y `success` a las 03:21:06 UTC). El CSS servido no cambió, como
+  se predijo.
+- «Después» el mismo día UTC: 12 capturas de 03:22 a 03:24 y las tareas
+  hasta las 03:28. Evidencia en `tmp/e10-diff/registro-10-4c.tsv`
+  (24 filas), `tareas-antes-10-4c.md` y `resultado-10-4c.md`.
+
+Huella: 10 de 12 como se predijo y 2 explicadas por los datos de prueba.
+
+- **Alta y edición, a 1281 y a 376 px:** +2 elementos (los asteriscos de
+  «Cantidad» y «Precio unitario»), con el hash del texto visible predicho:
+  `c632b82c…` y `8ea32518…`, con «Observación» con tilde.
+- **Alta con `returnTo`:** el mismo hash que el alta, porque la huella no
+  registra los `href`.
+- **Detalle:** solo cambia un registro (`main` → `div`), con el `textHash`
+  completo igual.
+- **Galería, sección de campos:** +11 elementos y los 4 textos de la
+  muestra «Búsqueda con error».
+- **Clientes, productos y categorías:** idénticos byte a byte.
+- **Lista filtrada de pedidos y proformas:** suman 1 y 3 elementos.
+  Emparejando registros (`__resumen`), los 301 y los 326 del «antes» son
+  idénticos. Solo se añaden `option "Cliente prueba 10.4c"` y, en
+  proformas, `option "PED00000007"` y `option "PED00000008"`: sus filtros
+  listan también los clientes inactivos y todos los pedidos (hallazgo 12).
+
+Tareas (ADMIN), con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`052e41d`) | Después (`9a79d36`) |
+|---|---|---|
+| T49 Pedido de dos líneas de 1,25 × S/ 10,25 desde la lista filtrada | Vista previa 25,63. PED00000008 guarda 12,81 + 12,81 y monto **25,63**. Vuelve a la lista sin filtros | Vista previa 25,62. PED00000009 guarda 12,81 + 12,81 y monto **25,62**. Vuelve a la lista con el rango, con un solo aviso y «Puede no aparecer con los filtros activos del listado.» |
+| T50 Entrega anterior a la fecha del pedido | Toast de error y alerta. Se vacían la fecha y las observaciones. Foco en `body` y ningún campo inválido | Sin toast. El error bajo la fecha, con `aria-invalid` y el foco en ella. Fecha y observaciones conservadas. No guarda |
+| T51 Editar un pedido de cliente inactivo | El buscador de cliente sale vacío y el cliente no está entre las opciones. «Completa este campo» bloquea el envío | El cliente con «Inactivo» en la descripción. Guarda y conserva el cliente |
+| T52 Cancelar con cambios en la edición | Sale sin preguntar. Recargar no pregunta | Recargar preguntaría. «¿Descartar los cambios del pedido?»: seguir editando conserva el texto y devuelve el foco al enlace; descartar vuelve a la lista con el rango sin guardar |
+| T53 Cancelar sin cambios desde la lista filtrada | El alta y la edición vuelven a la lista sin filtros | Las dos vuelven con el rango, sin preguntar |
+
+En la edición, las etiquetas asociadas a su control pasan de 2 de 8 a 9 de
+9. Se verificó solo con ADMIN: el responsable no pidió SELLER, y
+`actions.test.ts` y `commercial-links.test.ts` cubren sus permisos.
+Ctrl + clic en «Cancelar» no se probó con un clic real, porque abriría una
+pestaña; lo cubre `order-form.test.ts`.
+
+Hallazgos de la verificación:
+
+10. El aviso doble de error del formulario viejo era un toast de la
+    fachada, no un SweetAlert como decía la auditoría. El arreglo es el
+    mismo: el error queda dentro del formulario.
+11. En el «antes», T51 no llegaba a la acción: el `required` del buscador
+    de cliente, vacío porque el cliente inactivo no estaba entre las
+    opciones, bloqueaba el envío. El `id_cliente` oculto sí conservaba el
+    cliente.
+12. Predicción: los datos de prueba entran en los filtros que listan
+    inactivos (cliente) y todos los pedidos (pedido de proformas). El plan
+    eligió proformas como control sin verlo.
+13. Método: la página del panel figuró como `hidden` en casi todo el
+    «antes», aunque el panel estaba a la vista. La huella de la lista dio el
+    mismo hash en una toma oculta y en otra visible: el único elemento
+    animado queda fuera de la huella.
+14. Método: la confirmación sigue en el DOM durante su animación de salida.
+    Una lectura a los 800 ms la dio por abierta; poco después ya no
+    existía y el foco estaba en el enlace.
+
+El capítulo de Comercial del manual suma el alta y la edición de pedidos,
+escritos con lo verificado, y las reglas comunes los cuentan entre las
+pantallas renovadas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5395,7 +5680,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada en staging, con CI #102 verde, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; falta integrarla en main) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #106 verde en staging, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -5419,7 +5704,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 160 / 2.626 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 165 / 2.750 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -5439,10 +5724,10 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 8 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 76 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 73 | 9 y 10 |
 | Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 13 (19 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 16 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 14 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
@@ -5728,6 +6013,23 @@ notificaciones en 2 archivos, medidos de nuevo.
 
 El cierre de la 10.4b (2026-10-27) no cambia código: las métricas son las
 de `9ba917b`.
+
+Actualizado en la sub-entrega 10.4c (2026-10-28) sobre `7d03553`:
+
+- Pruebas: 165 / 2.750.
+- La desviación baja a 14, en 7 archivos (alta y edición de pedidos;
+  `count_104a_metrics.py`).
+- El `<main>` anidado baja a 73 (alta, edición y detalle de pedido),
+  contado con `git grep -l "<main"` en las `page.tsx` de `src/app` menos
+  el login: 77 sobre `052e41d`.
+
+Las demás no cambian: los cambios de estado que voltean 2, las copias
+locales de `FieldError` 8 (el formulario de pedidos no tenía copia) y el
+`import` de las librerías de notificaciones en 2 archivos, medidos de
+nuevo, y los formularios GET 19, porque la sub-entrega no toca ninguno.
+
+El cierre de la 10.4c (2026-10-29) no cambia código: las métricas son las
+de `7d03553`.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 

@@ -1,4 +1,4 @@
-import { Field } from "@/components/forms/field";
+import { Field, FieldError } from "@/components/forms/field";
 import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,6 +115,25 @@ export function FieldsSection() {
 
         <GallerySample label="Búsqueda deshabilitada" className="block">
           <SearchableSelect name="galeria_cliente_bloqueado" label="Cliente" items={CLIENTES} disabled />
+        </GallerySample>
+
+        <GallerySample label="Búsqueda con error" className="block">
+          <div className="space-y-2">
+            <SearchableSelect
+              id="galeria_cliente_error"
+              name="galeria_cliente_error"
+              label="Cliente"
+              items={CLIENTES}
+              value="CLI00000003"
+              required
+              aria-invalid
+              aria-describedby="galeria_cliente_error-error"
+            />
+            <FieldError
+              id="galeria_cliente_error-error"
+              messages={["El cliente seleccionado no existe o está inactivo."]}
+            />
+          </div>
         </GallerySample>
       </div>
 

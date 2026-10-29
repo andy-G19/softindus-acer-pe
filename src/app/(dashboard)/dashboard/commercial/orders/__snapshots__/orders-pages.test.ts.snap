@@ -137,7 +137,7 @@ exports[`/dashboard/commercial/orders > fechas no validas > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+<a data-variant="default" href="/dashboard/commercial/orders/new?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-02-30%26to%3D2026-07-32">Nuevo pedido</a>
 </div>
 </div>
 </section>
@@ -397,7 +397,7 @@ exports[`/dashboard/commercial/orders > rango invertido > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+<a data-variant="default" href="/dashboard/commercial/orders/new?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Ffrom%3D2026-07-31%26to%3D2026-07-01">Nuevo pedido</a>
 </div>
 </div>
 </section>
@@ -609,7 +609,7 @@ exports[`/dashboard/commercial/orders > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+<a data-variant="default" href="/dashboard/commercial/orders/new?returnTo=%2Fdashboard%2Fcommercial%2Forders">Nuevo pedido</a>
 </div>
 </div>
 </section>
@@ -955,7 +955,7 @@ exports[`/dashboard/commercial/orders > todos los filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+<a data-variant="default" href="/dashboard/commercial/orders/new?returnTo=%2Fdashboard%2Fcommercial%2Forders%3Fq%3DPED%26client%3DCLI00000001%26product%3DPRO00000001%26status%3Daprobado%26from%3D2026-07-01%26to%3D2026-07-31%26page%3D2">Nuevo pedido</a>
 </div>
 </div>
 </section>
@@ -1197,7 +1197,7 @@ exports[`/dashboard/commercial/orders > un pedido por estado > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/commercial/orders/new">Nuevo pedido</a>
+<a data-variant="default" href="/dashboard/commercial/orders/new?returnTo=%2Fdashboard%2Fcommercial%2Forders">Nuevo pedido</a>
 </div>
 </div>
 </section>
@@ -1433,7 +1433,7 @@ exports[`/dashboard/commercial/orders/[id] > detalle > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1562,7 +1562,7 @@ exports[`/dashboard/commercial/orders/[id] > detalle > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1618,7 +1618,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1747,7 +1747,7 @@ exports[`/dashboard/commercial/orders/[id] > en produccion > resultado 1`] = `
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1859,7 +1859,7 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > llama
 
 exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1988,7 +1988,582 @@ exports[`/dashboard/commercial/orders/[id] > regreso al listado filtrado > resul
 </div>
 </div>
 </section>
-</main>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > anulado muestra el formulario > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 132.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+<div>
+<div>
+<h3>Producto 2</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-2">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<div>
+<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="22.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="22.5"/>
+</div>
+<div>
+<label for="subtotal-row-2">Subtotal</label>
+<output id="subtotal-row-2">S/ 506.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-2">Observación del producto</label>
+<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 638.50</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > cancelado redirige al detalle > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > cancelado redirige al detalle > resultado 1`] = `
+{
+  "html": null,
+  "outcome": "redirect:/dashboard/commercial/orders/id_pedido-1",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > cliente inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > cliente inactivo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="CLI00000099"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="Cliente dado de baja"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 132.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+<div>
+<div>
+<h3>Producto 2</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-2">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<div>
+<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="22.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="22.5"/>
+</div>
+<div>
+<label for="subtotal-row-2">Subtotal</label>
+<output id="subtotal-row-2">S/ 506.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-2">Observación del producto</label>
+<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 638.50</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
 `;
@@ -2005,6 +2580,14 @@ exports[`/dashboard/commercial/orders/[id]/edit > con proforma redirige al detal
   {
     "args": {
       "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -2088,6 +2671,14 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > llamadas 1`] = `
   {
     "args": {
       "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -2154,7 +2745,7 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2194,10 +2785,10 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 <input type="hidden" name="id_pedido" value="id_pedido-1"/>
 <div>
 <div>
-<label for="id_cliente-_R_2i_">Cliente *</label>
+<label for="id_cliente">Cliente *</label>
 <input type="hidden" name="id_cliente" value="id_cliente-1"/>
 <div>
-<input id="id_cliente-_R_2i_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-_R_2i_-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
@@ -2218,31 +2809,33 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 </div>
 <div>
 <div>
-<label for="id_producto-_R_2cm_">Producto *</label>
+<label for="id_producto-row-1">Producto *</label>
 <input type="hidden" name="id_producto" value="id_producto-1"/>
 <div>
-<input id="id_producto-_R_2cm_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_2cm_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label>Cantidad</label>
-<input type="number" min="1" step="0.01" required="" name="cantidad" value="11.5"/>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
 </div>
 <div>
-<label>Precio unitario</label>
-<input type="number" min="0" step="0.01" required="" name="precio_unitario" value="11.5"/>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
 </div>
 <div>
-<label>Subtotal</label>
-<div>S/ 132.25</div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 132.25</output>
 </div>
 </div>
 <div>
-<label>Observacion del producto</label>
-<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
 </div>
 </div>
 <div>
@@ -2252,31 +2845,33 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 </div>
 <div>
 <div>
-<label for="id_producto-_R_2km_">Producto *</label>
+<label for="id_producto-row-2">Producto *</label>
 <input type="hidden" name="id_producto" value="id_producto-2"/>
 <div>
-<input id="id_producto-_R_2km_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_2km_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label>Cantidad</label>
-<input type="number" min="1" step="0.01" required="" name="cantidad" value="22.5"/>
+<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="22.5"/>
 </div>
 <div>
-<label>Precio unitario</label>
-<input type="number" min="0" step="0.01" required="" name="precio_unitario" value="22.5"/>
+<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="22.5"/>
 </div>
 <div>
-<label>Subtotal</label>
-<div>S/ 506.25</div>
+<label for="subtotal-row-2">Subtotal</label>
+<output id="subtotal-row-2">S/ 506.25</output>
 </div>
 </div>
 <div>
-<label>Observacion del producto</label>
-<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+<label for="observacion_detalle-row-2">Observación del producto</label>
+<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
 </div>
 </div>
 </div>
@@ -2288,19 +2883,261 @@ exports[`/dashboard/commercial/orders/[id]/edit > editable > resultado 1`] = `
 </div>
 </div>
 <div>
-<label>Fecha estimada de entrega</label>
-<input type="date" name="fecha_entrega_estimada" value="2026-07-01"/>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
 </div>
 <div>
-<label>Observaciones generales del pedido</label>
-<textarea name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
 <a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > importes con decimales > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > importes con decimales > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="1.25"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="10.25"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 12.81</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+<div>
+<div>
+<h3>Producto 2</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-2">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<div>
+<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="1.25"/>
+</div>
+<div>
+<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="10.25"/>
+</div>
+<div>
+<label for="subtotal-row-2">Subtotal</label>
+<output id="subtotal-row-2">S/ 12.81</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-2">Observación del producto</label>
+<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 25.62</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2318,6 +3155,14 @@ exports[`/dashboard/commercial/orders/[id]/edit > inexistente > llamadas 1`] = `
   {
     "args": {
       "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
         "comprobante_venta": {
           "select": {
             "id_comprobante": true,
@@ -2389,6 +3234,660 @@ exports[`/dashboard/commercial/orders/[id]/edit > inexistente > resultado 1`] = 
 }
 `;
 
+exports[`/dashboard/commercial/orders/[id]/edit > producto inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > producto inactivo > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="PRO00000099"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="Producto dado de baja"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 132.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 132.25</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders?status=registrado">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="11.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="11.5"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 132.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+<div>
+<div>
+<h3>Producto 2</h3>
+<button data-variant="ghost" type="button">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-2">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-2"/>
+<div>
+<input id="id_producto-row-2" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-2-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-2"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-2">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-2" required="" min="1" step="0.01" name="cantidad" value="22.5"/>
+</div>
+<div>
+<label for="precio_unitario-row-2">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-2" required="" min="0" step="0.01" name="precio_unitario" value="22.5"/>
+</div>
+<div>
+<label for="subtotal-row-2">Subtotal</label>
+<output id="subtotal-row-2">S/ 506.25</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-2">Observación del producto</label>
+<input id="observacion_detalle-row-2" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 638.50</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders?status=registrado">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > subtotal en empate > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "cliente": {
+          "select": {
+            "estado": true,
+            "id_cliente": true,
+            "nombre_razon_social": true,
+            "tipo_cliente": true,
+          },
+        },
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+            "producto": true,
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000001",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/[id]/edit > subtotal en empate > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar pedido</h1>
+<p>Solo se permite editar pedidos sin proforma, comprobante u orden asociada.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_pedido" value="id_pedido-1"/>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value="id_cliente-1"/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value="nombre_razon_social-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value="nombre_producto-1"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="1.25"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value="1.02"/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 1.28</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value="observaciones-1"/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 1.28</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value="2026-07-01"/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">observaciones-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/commercial/orders/new > formulario > llamadas 1`] = `
 [
   {
@@ -2437,7 +3936,7 @@ exports[`/dashboard/commercial/orders/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2476,10 +3975,10 @@ exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
 <div>
-<label for="id_cliente-_R_2i_">Cliente *</label>
+<label for="id_cliente">Cliente *</label>
 <input type="hidden" name="id_cliente" value=""/>
 <div>
-<input id="id_cliente-_R_2i_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-_R_2i_-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value=""/>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value=""/>
 </div>
 </div>
 </div>
@@ -2499,30 +3998,32 @@ exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 </div>
 <div>
 <div>
-<label for="id_producto-_R_1cm_">Producto *</label>
+<label for="id_producto-row-1">Producto *</label>
 <input type="hidden" name="id_producto" value=""/>
 <div>
-<input id="id_producto-_R_1cm_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-_R_1cm_-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
 </div>
 </div>
 </div>
 <div>
 <div>
-<label>Cantidad</label>
-<input type="number" min="1" step="0.01" required="" name="cantidad" value="1"/>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="1"/>
 </div>
 <div>
-<label>Precio unitario</label>
-<input type="number" min="0" step="0.01" required="" name="precio_unitario" value=""/>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value=""/>
 </div>
 <div>
-<label>Subtotal</label>
-<div>S/ 0.00</div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 0.00</output>
 </div>
 </div>
 <div>
-<label>Observacion del producto</label>
-<input placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
 </div>
 </div>
 </div>
@@ -2534,12 +4035,12 @@ exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 </div>
 </div>
 <div>
-<label>Fecha estimada de entrega</label>
-<input type="date" name="fecha_entrega_estimada" value=""/>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value=""/>
 </div>
 <div>
-<label>Observaciones generales del pedido</label>
-<textarea name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
 </textarea>
 </div>
 <div>
@@ -2547,7 +4048,511 @@ exports[`/dashboard/commercial/orders/new > formulario > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/new > regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/new > regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders?status=registrado">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo pedido</h1>
+<p>Registra un pedido comercial con uno o varios productos asociados al mismo cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value=""/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" placeholder="Buscar cliente..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" min="1" step="0.01" name="cantidad" value="1"/>
+</div>
+<div>
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" min="0" step="0.01" name="precio_unitario" value=""/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 0.00</output>
+</div>
+</div>
+<div>
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+<div>
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" name="fecha_entrega_estimada" value=""/>
+</div>
+<div>
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar pedido</button>
+<a data-variant="outline" href="/dashboard/commercial/orders?status=registrado">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/new > sin clientes ni productos activos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/new > sin clientes ni productos activos > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo pedido</h1>
+<p>Registra un pedido comercial con uno o varios productos asociados al mismo cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div role="alert">
+<div>Para registrar un pedido necesitas tener al menos un cliente activo y un producto activo.</div>
+</div>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value=""/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar cliente..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button" disabled="">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div data-disabled="true">
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" disabled="" min="1" step="0.01" name="cantidad" value="1"/>
+</div>
+<div data-disabled="true">
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" disabled="" min="0" step="0.01" name="precio_unitario" value=""/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 0.00</output>
+</div>
+</div>
+<div data-disabled="true">
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" disabled="" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+<div data-disabled="true">
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" disabled="" name="fecha_entrega_estimada" value=""/>
+</div>
+<div data-disabled="true">
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" disabled="" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit" disabled="">Guardar pedido</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/commercial/orders/new > sin productos activos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_razon_social": "asc",
+      },
+      "select": {
+        "id_cliente": true,
+        "nombre_razon_social": true,
+        "tipo_cliente": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "cliente.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre_producto": "asc",
+      },
+      "select": {
+        "categoria": true,
+        "id_producto": true,
+        "nombre_producto": true,
+        "precio_referencial": true,
+        "unidad_medida": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/commercial/orders/new > sin productos activos > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial">Comercial</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/commercial/orders">Pedidos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo pedido</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Nuevo pedido</h1>
+<p>Registra un pedido comercial con uno o varios productos asociados al mismo cliente.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a pedidos">
+<svg/>Volver a pedidos</button>
+</div>
+</div>
+</section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div role="alert">
+<div>Para registrar un pedido necesitas tener al menos un cliente activo y un producto activo.</div>
+</div>
+<div>
+<div>
+<label for="id_cliente">Cliente *</label>
+<input type="hidden" name="id_cliente" value=""/>
+<div>
+<input id="id_cliente" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_cliente-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar cliente..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<div>
+<h2>Detalle del pedido</h2>
+<p>Puedes agregar varios productos al mismo pedido.</p>
+</div>
+<button data-variant="outline" type="button" disabled="">Agregar producto</button>
+</div>
+<div>
+<div>
+<div>
+<h3>Producto 1</h3>
+<button data-variant="ghost" type="button" disabled="">Quitar</button>
+</div>
+<div>
+<div>
+<label for="id_producto-row-1">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto-row-1" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-row-1-listbox" aria-expanded="false" required="" disabled="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<div data-disabled="true">
+<label for="cantidad-row-1">Cantidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="cantidad-row-1" required="" disabled="" min="1" step="0.01" name="cantidad" value="1"/>
+</div>
+<div data-disabled="true">
+<label for="precio_unitario-row-1">Precio unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="precio_unitario-row-1" required="" disabled="" min="0" step="0.01" name="precio_unitario" value=""/>
+</div>
+<div>
+<label for="subtotal-row-1">Subtotal</label>
+<output id="subtotal-row-1">S/ 0.00</output>
+</div>
+</div>
+<div data-disabled="true">
+<label for="observacion_detalle-row-1">Observación del producto</label>
+<input id="observacion_detalle-row-1" disabled="" placeholder="Ejemplo: entregar pintado de color negro" name="observacion_detalle" value=""/>
+</div>
+</div>
+</div>
+<div>
+<div>
+<p>Total estimado</p>
+<p>S/ 0.00</p>
+</div>
+</div>
+</div>
+<div data-disabled="true">
+<label for="fecha_entrega_estimada">Fecha estimada de entrega</label>
+<input type="date" id="fecha_entrega_estimada" disabled="" name="fecha_entrega_estimada" value=""/>
+</div>
+<div data-disabled="true">
+<label for="observaciones">Observaciones generales del pedido</label>
+<textarea id="observaciones" disabled="" name="observaciones" placeholder="Ejemplo: Cliente solicita entrega urgente.">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit" disabled="">Guardar pedido</button>
+<a data-variant="outline" href="/dashboard/commercial/orders">Cancelar</a>
+</div>
+</form>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

@@ -1,0 +1,3644 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createOrderAction > ADMIN crea un pedido de dos lineas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > ADMIN crea un pedido de dos lineas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > SELLER crea un pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > SELLER crea un pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar pedidos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > cantidad cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > cantidad cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "0",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > cantidad que no es un numero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > cantidad que no es un numero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad debe ser un número.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "abc",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es anterior al pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > despues de las 19:00 de Lima, hoy como entrega es anterior al pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-15",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > el error de una linea lleva su posicion aunque otra se descarte > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > el error de una linea lleva su posicion aunque otra se descarte > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.1.cantidad": [
+        "La cantidad debe ser mayor que cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "5",
+          "id_producto": "",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+        {
+          "cantidad": "0",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > entrega anterior a hoy > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > entrega anterior a hoy > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-14",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > entrega hoy > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-15T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > entrega hoy > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-15",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "25.62",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "1.25",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "10.25",
+          "subtotal": "12.81",
+        },
+        {
+          "cantidad": "1.25",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "10.25",
+          "subtotal": "12.81",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "0.30",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "3.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "0.10",
+          "subtotal": "0.30",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > importes en coma flotante: 3 x 0.1 > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "3",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "0.1",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > observaciones con espacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "300.00",
+        "observaciones": null,
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > observaciones con espacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "   ",
+          "precio_unitario": "150",
+        },
+      ],
+      "observaciones": "   ",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > observaciones de mas de 500 caracteres > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > observaciones de mas de 500 caracteres > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "observaciones": [
+        "Las observaciones no deben superar 500 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > precio infinito > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > precio infinito > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.0.precio_unitario": [
+        "El precio unitario debe ser un número.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "1e400",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > precio negativo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > precio negativo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.0.precio_unitario": [
+        "El precio unitario no puede ser negativo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "-1",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > producto repetido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > producto repetido > resultado 1`] = `
+{
+  "estado": {
+    "error": "No repitas el mismo producto dentro del pedido.",
+    "fieldErrors": {
+      "items.1.id_producto": [
+        "No repitas el mismo producto dentro del pedido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "80",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin cliente elegido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin cliente elegido > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Debes seleccionar un cliente.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin el campo cliente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin el campo cliente > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Debes seleccionar un cliente.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin fecha de entrega > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": null,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > sin fecha de entrega > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > sin lineas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > sin lineas > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items": [
+        "El pedido debe tener al menos un producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "10.10",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "1.01",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "10.00",
+          "subtotal": "10.10",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > una cantidad de tres decimales se redondea antes de multiplicar > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.005",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > una cantidad que no cabe en la columna se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad no debe superar 99,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1e12",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createOrderAction > una clave foranea rota al crear el detalle se propaga > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
+
+exports[`createOrderAction > una fecha que no existe no es valida > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`createOrderAction > una fecha que no existe no es valida > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-02-30",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`createOrderAction > una linea sin producto se descarta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "pedido",
+      "prefijo": "PED",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "registrado",
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "fecha_pedido": 2026-07-15T15:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "id_pedido": "PED00000010",
+        "id_usuario_registro": "USU00000001",
+        "monto_estimado": "300.00",
+        "observaciones": "Entrega en obra.",
+      },
+    },
+    "prisma": "pedido.create",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000010",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Pedido creado: PED00000010",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000010",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createOrderAction > una linea sin producto se descarta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000010",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "5",
+          "id_producto": "",
+          "observacion_detalle": "",
+          "precio_unitario": "10",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > ADMIN edita un pedido registrado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > ADMIN edita un pedido registrado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > SELLER edita un pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > SELLER edita un pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateOrderAction > WORKSHOP_MASTER es rechazado antes de tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para actualizar pedidos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > el pedido no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > el pedido no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El pedido no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > entrega anterior a la fecha del pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > entrega anterior a la fecha del pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+    "fieldErrors": {
+      "fecha_entrega_estimada": [
+        "La fecha estimada de entrega no puede ser anterior a la fecha del pedido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-09",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > entrega igual a la fecha del pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-10T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > entrega igual a la fecha del pedido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-10",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": "25.62",
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "1.25",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": null,
+          "precio_unitario": "10.25",
+          "subtotal": "12.81",
+        },
+        {
+          "cantidad": "1.25",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "10.25",
+          "subtotal": "12.81",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Pedido actualizado: PED00000020",
+      "enTransaccion": true,
+      "entidad_afectada": "pedido",
+      "id_registro_afectado": "PED00000020",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/commercial/orders",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/commercial/orders/PED00000020",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateOrderAction > importes con decimales: cada linea redondeada y el monto como suma de subtotales > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_pedido": "PED00000020",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+        {
+          "cantidad": "1.25",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "10.25",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido anulado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido anulado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido cancelado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido cancelado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido cancelado > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido cancelado.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con comprobante > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con comprobante > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con orden de trabajo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con orden de trabajo > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > pedido con proforma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > pedido con proforma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un pedido con proforma, comprobante u orden asociada.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > producto repetido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > producto repetido > resultado 1`] = `
+{
+  "estado": {
+    "error": "No repitas el mismo producto dentro del pedido.",
+    "fieldErrors": {
+      "items.1.id_producto": [
+        "No repitas el mismo producto dentro del pedido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "",
+          "precio_unitario": "80",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > sin id de pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+]
+`;
+
+exports[`updateOrderAction > sin id de pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "El pedido no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "CLI00000003",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > un error de validacion llega despues de leer el pedido > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+]
+`;
+
+exports[`updateOrderAction > un error de validacion llega despues de leer el pedido > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del pedido.",
+    "fieldErrors": {
+      "id_cliente": [
+        "Debes seleccionar un cliente.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "fecha_entrega_estimada": "2026-07-20",
+      "id_cliente": "",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_producto": "PRO00000001",
+          "observacion_detalle": "Pintado negro",
+          "precio_unitario": "150",
+        },
+        {
+          "cantidad": "1",
+          "id_producto": "PRO00000002",
+          "observacion_detalle": "",
+          "precio_unitario": "80.5",
+        },
+      ],
+      "observaciones": "Entrega en obra.",
+    },
+  },
+}
+`;
+
+exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle se propaga > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "SELLER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "comprobante_venta": {
+          "select": {
+            "id_comprobante": true,
+          },
+        },
+        "detalle_pedido": {
+          "include": {
+            "orden_trabajo": {
+              "select": {
+                "id_orden_trabajo": true,
+              },
+            },
+          },
+        },
+        "proforma": {
+          "select": {
+            "id_proforma": true,
+          },
+        },
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_cliente": true,
+      },
+      "where": {
+        "id_cliente": "CLI00000003",
+      },
+    },
+    "prisma": "cliente.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_producto": true,
+      },
+      "where": {
+        "id_producto": {
+          "in": [
+            "PRO00000001",
+            "PRO00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "producto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "detalle_pedido.deleteMany",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_pedido",
+      "prefijo": "DPE",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "fecha_entrega_estimada": 2026-07-20T00:00:00.000Z,
+        "id_cliente": "CLI00000003",
+        "monto_estimado": "380.50",
+        "observaciones": "Entrega en obra.",
+      },
+      "where": {
+        "id_pedido": "PED00000020",
+      },
+    },
+    "prisma": "pedido.update",
+  },
+  {
+    "args": {
+      "data": [
+        {
+          "cantidad": "2.00",
+          "id_detalle_pedido": "DPE00000010",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000001",
+          "observaciones": "Pintado negro",
+          "precio_unitario": "150.00",
+          "subtotal": "300.00",
+        },
+        {
+          "cantidad": "1.00",
+          "id_detalle_pedido": "DPE00000011",
+          "id_pedido": "PED00000020",
+          "id_producto": "PRO00000002",
+          "observaciones": null,
+          "precio_unitario": "80.50",
+          "subtotal": "80.50",
+        },
+      ],
+    },
+    "prisma": "detalle_pedido.createMany",
+  },
+  {
+    "args": "Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateOrderAction > una clave foranea rota despues de borrar el detalle se propaga > resultado 1`] = `"error: Foreign key constraint violated on the constraint: \`fk_detalle_pedido_producto\`"`;
