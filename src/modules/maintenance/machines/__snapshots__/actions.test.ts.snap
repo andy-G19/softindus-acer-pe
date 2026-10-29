@@ -151,7 +151,7 @@ exports[`createMachineAction > datos invalidos devuelven los errores por campo s
 }
 `;
 
-exports[`createMachineAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > llamadas 1`] = `
+exports[`createMachineAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -162,19 +162,19 @@ exports[`createMachineAction > los obligatorios ausentes devuelven los mensajes 
 ]
 `;
 
-exports[`createMachineAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > resultado 1`] = `
+exports[`createMachineAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos de la maquina.",
     "fieldErrors": {
       "estado": [
-        "Invalid input: expected string, received null",
+        "Seleccione un estado válido para la máquina.",
       ],
       "nombre": [
-        "Invalid input: expected string, received null",
+        "El nombre de la máquina es obligatorio.",
       ],
       "tipo": [
-        "Invalid input: expected string, received null",
+        "El tipo de máquina es obligatorio.",
       ],
     },
   },

@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+// Cada error tiene su mensaje en espanol: sin el, Zod devuelve el suyo en
+// ingles cuando un campo no llega (entrega 10.5a, como Comercial en la 10.4a).
+// repuesto.costo_unitario es numeric(12,2): un costo mayor llegaba a la base y
+// daba un error 500. Un tercer decimal lo redondea la base, como en pedidos.
+const MAX_COST = 9_999_999_999.99;
+
 export const sparePartSchema = z.object({
   id_proveedor: z
     .string()
@@ -12,7 +18,7 @@ export const sparePartSchema = z.object({
     ),
 
   nombre_repuesto: z
-    .string()
+    .string({ error: "El nombre del repuesto es obligatorio." })
     .trim()
     .min(2, "El nombre del repuesto debe tener al menos 2 caracteres.")
     .max(100, "El nombre del repuesto no debe superar los 100 caracteres."),
@@ -25,7 +31,7 @@ export const sparePartSchema = z.object({
     .or(z.literal("")),
 
   costo_unitario: z
-    .string()
+    .string({ error: "El costo unitario es obligatorio." })
     .trim()
     .min(1, "El costo unitario es obligatorio.")
     .transform((value, ctx) => {
@@ -49,11 +55,20 @@ export const sparePartSchema = z.object({
         return z.NEVER;
       }
 
+      if (amount > MAX_COST) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "El costo unitario no debe superar S/ 9,999,999,999.99.",
+        });
+
+        return z.NEVER;
+      }
+
       return amount;
     }),
 
   estado: z
-    .string()
+    .string({ error: "Seleccione un estado válido." })
     .trim()
     .refine(
       (value) => value === "true" || value === "false",

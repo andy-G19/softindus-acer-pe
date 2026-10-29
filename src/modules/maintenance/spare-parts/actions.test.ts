@@ -252,11 +252,11 @@ defineCases("createSparePartAction", create, [
   { name: "costo vacio: es obligatorio", form: { ...createForm, costo_unitario: "" } },
   { name: "costo que no es un numero", form: { ...createForm, costo_unitario: "abc" } },
   {
-    name: "los obligatorios ausentes devuelven los mensajes de Zod en ingles",
+    name: "los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma",
     form: { ...createForm, nombre_repuesto: null, costo_unitario: null },
   },
   {
-    name: "un costo que no cabe en numeric(12,2) pasa el esquema y llega a Prisma",
+    name: "un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma",
     ...createWith({ costo_unitario: "1e12" }),
   },
   {

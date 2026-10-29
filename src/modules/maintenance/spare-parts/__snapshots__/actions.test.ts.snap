@@ -192,7 +192,7 @@ exports[`createSparePartAction > datos invalidos devuelven los errores por campo
 }
 `;
 
-exports[`createSparePartAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > llamadas 1`] = `
+exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -203,16 +203,16 @@ exports[`createSparePartAction > los obligatorios ausentes devuelven los mensaje
 ]
 `;
 
-exports[`createSparePartAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > resultado 1`] = `
+exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > resultado 1`] = `
 {
   "estado": {
     "error": "Revisa los datos del repuesto.",
     "fieldErrors": {
       "costo_unitario": [
-        "Invalid input: expected string, received null",
+        "El costo unitario es obligatorio.",
       ],
       "nombre_repuesto": [
-        "Invalid input: expected string, received null",
+        "El nombre del repuesto es obligatorio.",
       ],
     },
   },
@@ -813,7 +813,7 @@ exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin 
 
 exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
 
-exports[`createSparePartAction > un costo que no cabe en numeric(12,2) pasa el esquema y llega a Prisma > llamadas 1`] = `
+exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -821,82 +821,21 @@ exports[`createSparePartAction > un costo que no cabe en numeric(12,2) pasa el e
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-      },
-      "where": {
-        "id_proveedor": "PVE00000003",
-      },
-    },
-    "prisma": "proveedor.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_repuesto": true,
-      },
-      "where": {
-        "nombre_repuesto": {
-          "equals": "Faja en V B-52",
-          "mode": "insensitive",
-        },
-      },
-    },
-    "prisma": "repuesto.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "repuesto",
-      "prefijo": "REP",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_unitario": 1000000000000,
-        "descripcion": "Para el motor de la cizalla",
-        "estado": true,
-        "id_proveedor": "PVE00000003",
-        "id_repuesto": "REP00000008",
-        "nombre_repuesto": "Faja en V B-52",
-      },
-    },
-    "prisma": "repuesto.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Repuesto creado: Faja en V B-52",
-      "enTransaccion": true,
-      "entidad_afectada": "repuesto",
-      "id_registro_afectado": "REP00000008",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/spare-parts",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createSparePartAction > un costo que no cabe en numeric(12,2) pasa el esquema y llega a Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario no debe superar S/ 9,999,999,999.99.",
+      ],
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revierte con su mensaje, sin marcar campos > llamadas 1`] = `
 [

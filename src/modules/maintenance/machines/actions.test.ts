@@ -232,7 +232,7 @@ defineCases("createMachineAction", create, [
     form: { ...createForm, nombre: "P", tipo: "", estado: "rota", codigo_interno: "X".repeat(31) },
   },
   {
-    name: "los obligatorios ausentes devuelven los mensajes de Zod en ingles",
+    name: "los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma",
     form: { ...createForm, nombre: null, tipo: null, estado: null },
   },
   {
