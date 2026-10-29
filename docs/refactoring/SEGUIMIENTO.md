@@ -3159,7 +3159,7 @@ Límite con la entrega 11:
 | 10.2 | Reportes y auditoría | ADMIN; SELLER y WORKSHOP_MASTER en sus reportes | `FilterBar` y `DateRangeFields` en 9 reportes, el historial de exportaciones y auditoría; `fix` del rango invertido | 3,3 h |
 | 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, la 10.3b a 7,5 h y 2,5 h, y la 10.3c a 4,5 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h, y la 10.4b a 5 h |
-| 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado | 8 h |
+| 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado. Partida el 2026-10-29 en 10.5a (máquinas, repuestos e inicio) y 10.5b (fallas, preventivos y reparaciones) | 8 h; recalibrada a 6 h y 6,7 h |
 | 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
 | 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
 | 10.8 | Personal y Costos | ADMIN; asistencia y tareas, también WORKSHOP_MASTER | Operarios, asistencia y tareas; secciones del detalle del costeo; listados | 8 h |
@@ -5393,8 +5393,10 @@ Datos leídos de la API de GitHub el 2026-10-28 (UTC) y comparados con git:
 
 Fecha: del 2026-10-28 al 2026-10-29 (Lima). Estado: cerrada el 2026-10-29
 (Lima). El paso 0 (`93901b0`) registró la integración de la 10.4b en `main`.
-7 commits, de `2fd79f2` a `7d03553`, el registro `9a79d36` y este cierre
-(CI #106 en verde sobre el registro). Plan en `tmp/e10-diff/plan-10-4c.md`.
+7 commits, de `2fd79f2` a `7d03553`, el registro `9a79d36` (CI #106 en
+verde) y el cierre `24fe030` (CI #107 en verde). Integrada en `main` con el
+PR #30 (merge commit `3ed8001`, CI #109 en verde). Plan en
+`tmp/e10-diff/plan-10-4c.md`.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -5407,7 +5409,7 @@ Fecha: del 2026-10-28 al 2026-10-29 (Lima). Estado: cerrada el 2026-10-29
 | 5f58a7c | feat | Confirmar el descarte del formulario de pedidos (D4 de la 10.4). |
 | 7d03553 | feat | Detalle de pedido sin `<main>` anidado. |
 | 9a79d36 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos y manual del alta y la edición de pedidos. |
+| 24fe030 | docs | Cierre: publicación y verificación en staging, hallazgos y manual del alta y la edición de pedidos. |
 
 Decisiones del responsable (2026-10-28), tras la auditoría; aprobó las
 cinco recomendadas:
@@ -5656,6 +5658,23 @@ El capítulo de Comercial del manual suma el alta y la edición de pedidos,
 escritos con lo verificado, y las reglas comunes los cuentan entre las
 pantallas renovadas.
 
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-29 (UTC) y comparados con git:
+
+- El cierre `24fe030` se publicó en `staging`: CI #107 en verde (3m 12s), y
+  Vercel lo desplegó (`success` a las 12:22:21 UTC del 2026-10-29).
+- PR #30, abierto a las 12:35:54 UTC y fusionado con merge commit a las
+  12:39:47 UTC del 2026-10-29: 10 commits, de `93901b0` a `24fe030`, y 31
+  archivos (+8.837 −729). Su CI, el #108, sobre `24fe030`, terminó en verde
+  (3m 26s).
+- El merge commit `3ed8001` tiene como padres `745229c` (`main`) y `24fe030`
+  (`staging`), y su árbol es el de `24fe030` (`ca4cf6fa`): `main` y `staging`
+  tienen el mismo contenido. CI #109 en verde (3m 24s).
+- Vercel desplegó `3ed8001` en producción al primer intento (estado «Vercel»
+  `pending` a las 12:39:50 UTC y `success` a las 12:41:46 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5680,7 +5699,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #106 verde en staging, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
