@@ -1,6 +1,11 @@
 import { vi } from "vitest";
 
-import { definePageSuite, generatedRow } from "@/testing/page-characterization";
+import {
+  definePageSuite,
+  generatedRow,
+  projectRows,
+  type PrismaArgs,
+} from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -23,6 +28,24 @@ const sparePartWithoutSupplier = (args: Parameters<typeof generatedRow>[2]) => (
   ...generatedRow("repuesto", "findUnique", args),
   id_proveedor: null,
 });
+
+// Repuesto cuyo proveedor actual esta inactivo (10.5a): la edicion lo ofrece
+// junto a los activos (hallazgo 4 de la 10.3a).
+const INACTIVE_SUPPLIER = "PVE00000009";
+
+const sparePartWithInactiveSupplier = (args: PrismaArgs) => ({
+  ...generatedRow("repuesto", "findUnique", args),
+  id_proveedor: INACTIVE_SUPPLIER,
+});
+
+const activeSuppliersAndCurrent = (args: PrismaArgs) =>
+  projectRows(
+    [
+      { id_proveedor: "PVE00000001", razon_social: "Aceros Arequipa", estado: true },
+      { id_proveedor: INACTIVE_SUPPLIER, razon_social: "Ferreteria El Perno", estado: false },
+    ],
+    args,
+  );
 
 definePageSuite([
   {
@@ -53,6 +76,14 @@ definePageSuite([
         name: "editar sin proveedor",
         params: { id: "REP00000002" },
         data: { "repuesto.findUnique": sparePartWithoutSupplier },
+      },
+      {
+        name: "editar con su proveedor inactivo",
+        params: { id: "REP00000003" },
+        data: {
+          "repuesto.findUnique": sparePartWithInactiveSupplier,
+          "proveedor.findMany": activeSuppliersAndCurrent,
+        },
       },
       {
         name: "inexistente",

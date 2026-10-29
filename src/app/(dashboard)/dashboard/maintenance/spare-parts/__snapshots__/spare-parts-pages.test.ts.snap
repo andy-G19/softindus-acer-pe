@@ -859,6 +859,153 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 }
 `;
 
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "where": {
+        "id_repuesto": "REP00000003",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "estado": true,
+          },
+          {
+            "id_proveedor": "PVE00000009",
+          },
+        ],
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor inactivo > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/spare-parts">Repuestos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Editar repuesto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Editar repuesto</h1>
+<p>Actualiza datos maestros del repuesto sin tocar reparaciones.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<div>
+<label for="nombre_repuesto">Nombre del repuesto</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<input type="hidden" name="id_proveedor" value="PVE00000009"/>
+<div>
+<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario</label>
+<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="estado">Estado</label>
+<select id="estado" name="estado" required="">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > llamadas 1`] = `
 [
   {

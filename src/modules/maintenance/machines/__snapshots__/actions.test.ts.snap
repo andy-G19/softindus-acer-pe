@@ -1,0 +1,1797 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createMachineAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMachineAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createMachineAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMachineAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createMachineAction > crea la maquina con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 1",
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Maquina creada: Prensa hidraulica 60 t",
+      "enTransaccion": true,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMachineAction > crea la maquina con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-created"`;
+
+exports[`createMachineAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMachineAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la maquina.",
+    "fieldErrors": {
+      "codigo_interno": [
+        "El código interno no debe superar los 30 caracteres.",
+      ],
+      "estado": [
+        "Seleccione un estado válido para la máquina.",
+      ],
+      "nombre": [
+        "El nombre de la máquina debe tener al menos 2 caracteres.",
+      ],
+      "tipo": [
+        "El tipo de máquina debe tener al menos 2 caracteres.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createMachineAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createMachineAction > los obligatorios ausentes devuelven los mensajes de Zod en ingles > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la maquina.",
+    "fieldErrors": {
+      "estado": [
+        "Invalid input: expected string, received null",
+      ],
+      "nombre": [
+        "Invalid input: expected string, received null",
+      ],
+      "tipo": [
+        "Invalid input: expected string, received null",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createMachineAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": null,
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": null,
+        "tipo": "prensa",
+        "ubicacion": null,
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Maquina creada: Prensa hidraulica 60 t",
+      "enTransaccion": true,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMachineAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-created"`;
+
+exports[`createMachineAction > los opcionales vacios se guardan como null y sin codigo interno solo busca nombre y tipo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": null,
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": null,
+        "tipo": "prensa",
+        "ubicacion": null,
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Maquina creada: Prensa hidraulica 60 t",
+      "enTransaccion": true,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMachineAction > los opcionales vacios se guardan como null y sin codigo interno solo busca nombre y tipo > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-created"`;
+
+exports[`createMachineAction > los textos llegan sin los espacios de los extremos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 1",
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Maquina creada: Prensa hidraulica 60 t",
+      "enTransaccion": true,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createMachineAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-created"`;
+
+exports[`createMachineAction > otra maquina con ese nombre, tipo o codigo: error en el nombre, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+]
+`;
+
+exports[`createMachineAction > otra maquina con ese nombre, tipo o codigo: error en el nombre, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createMachineAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 1",
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createMachineAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la maquina. Intenta nuevamente.",
+  },
+}
+`;
+
+exports[`createMachineAction > una carrera por el codigo interno (P2002 al crear) revierte con su mensaje, sin marcar campos > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "maquina",
+      "prefijo": "MAQ",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "id_maquina": "MAQ00000008",
+        "nombre": "Prensa hidraulica 60 t",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 1",
+      },
+    },
+    "prisma": "maquina.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`codigo_interno\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createMachineAction > una carrera por el codigo interno (P2002 al crear) revierte con su mensaje, sin marcar campos > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una maquina con ese codigo interno.",
+  },
+}
+`;
+
+exports[`toggleMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operativa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "operativa",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Maquina activada: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operativa > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-activated"`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Maquina inactivada: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina en reparacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Maquina inactivada: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina en reparacion > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina operativa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Maquina inactivada: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina operativa > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
+
+exports[`toggleMachineStatusAction > la maquina no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > la maquina no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+
+exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva la activa: el estado pedido no se lee > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "operativa",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Maquina activada: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva la activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-activated"`;
+
+exports[`toggleMachineStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+
+exports[`updateMachineAction > ADMIN actualiza la maquina y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 2",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Maquina actualizada: Prensa hidraulica 60 t (nave 2)",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMachineAction > ADMIN actualiza la maquina y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-updated"`;
+
+exports[`updateMachineAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMachineAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateMachineAction > conservar su propio nombre y codigo no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 2",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Maquina actualizada: Prensa hidraulica 60 t (nave 2)",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMachineAction > conservar su propio nombre y codigo no es un duplicado > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-updated"`;
+
+exports[`updateMachineAction > datos invalidos devuelven los errores por campo despues de comprobar la maquina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateMachineAction > datos invalidos devuelven los errores por campo despues de comprobar la maquina > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la maquina.",
+    "fieldErrors": {
+      "estado": [
+        "Seleccione un estado válido para la máquina.",
+      ],
+      "nombre": [
+        "El nombre de la máquina debe tener al menos 2 caracteres.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateMachineAction > la edicion puede dejarla en cualquier estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "dada_de_baja",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 2",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Maquina actualizada: Prensa hidraulica 60 t (nave 2)",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMachineAction > la edicion puede dejarla en cualquier estado > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-updated"`;
+
+exports[`updateMachineAction > la maquina no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateMachineAction > la maquina no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La maquina no existe.",
+  },
+}
+`;
+
+exports[`updateMachineAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": null,
+        "estado": "operativa",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": null,
+        "tipo": "prensa",
+        "ubicacion": null,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Maquina actualizada: Prensa hidraulica 60 t (nave 2)",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMachineAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-updated"`;
+
+exports[`updateMachineAction > otra maquina con ese nombre, tipo o codigo: error en el nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+]
+`;
+
+exports[`updateMachineAction > otra maquina con ese nombre, tipo o codigo: error en el nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otra maquina registrada con ese nombre, tipo o codigo interno.",
+    "fieldErrors": {
+      "nombre": [
+        "Ya existe otra maquina registrada con ese nombre, tipo o codigo interno.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateMachineAction > otro fallo al actualizar devuelve el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 2",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+]
+`;
+
+exports[`updateMachineAction > otro fallo al actualizar devuelve el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la maquina. Intenta nuevamente.",
+  },
+}
+`;
+
+exports[`updateMachineAction > sin id de maquina responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMachineAction > sin id de maquina responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La maquina no existe.",
+  },
+}
+`;
+
+exports[`updateMachineAction > una carrera por el codigo interno (P2002 al actualizar) devuelve su mensaje y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "OR": [
+          {
+            "AND": [
+              {
+                "nombre": {
+                  "equals": "Prensa hidraulica 60 t (nave 2)",
+                  "mode": "insensitive",
+                },
+              },
+              {
+                "tipo": {
+                  "equals": "prensa",
+                  "mode": "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            "codigo_interno": "PH-60",
+          },
+        ],
+      },
+    },
+    "prisma": "maquina.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "codigo_interno": "PH-60",
+        "estado": "operativa",
+        "nombre": "Prensa hidraulica 60 t (nave 2)",
+        "observaciones": "Revisar mangueras cada mes",
+        "tipo": "prensa",
+        "ubicacion": "Nave 2",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+]
+`;
+
+exports[`updateMachineAction > una carrera por el codigo interno (P2002 al actualizar) devuelve su mensaje y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una maquina con ese codigo interno.",
+  },
+}
+`;
+
+exports[`updateMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateMachineStatusAction > escribe el estado pedido y registra la bitacora despues > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de maquina actualizado: Prensa hidraulica 60 t",
+      "enTransaccion": false,
+      "entidad_afectada": "maquina",
+      "id_registro_afectado": "MAQ00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateMachineStatusAction > escribe el estado pedido y registra la bitacora despues > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-status-updated"`;
+
+exports[`updateMachineStatusAction > la maquina no existe: vuelve al listado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateMachineStatusAction > la maquina no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+
+exports[`updateMachineStatusAction > un estado invalido vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMachineStatusAction > un estado invalido vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+
+exports[`updateMachineStatusAction > un id invalido vuelve al listado sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateMachineStatusAction > un id invalido vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
