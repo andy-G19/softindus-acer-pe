@@ -7,6 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockPreventiveMaintenanceRow } from "@/lib/row-locks";
 import {
   preventiveMaintenanceSchema,
   preventiveMaintenanceStatusSchema,
@@ -109,28 +110,30 @@ export async function updatePreventiveMaintenanceStatusAction(
 
   const data = parsed.data;
 
-  const maintenance = await prisma.mantenimiento_preventivo.findUnique({
-    where: {
-      id_mantenimiento: data.id_mantenimiento,
-    },
-    select: {
-      id_mantenimiento: true,
-      fecha_programada: true,
-      estado: true,
-    },
-  });
-
-  if (!maintenance) {
-    throw new Error("El mantenimiento seleccionado no existe.");
-  }
-
-  if (["realizado", "anulado"].includes(maintenance.estado)) {
-    throw new Error(
-      "No se puede modificar un mantenimiento realizado o anulado.",
-    );
-  }
-
   await prisma.$transaction(async (tx) => {
+    await lockPreventiveMaintenanceRow(tx, data.id_mantenimiento);
+
+    const maintenance = await tx.mantenimiento_preventivo.findUnique({
+      where: {
+        id_mantenimiento: data.id_mantenimiento,
+      },
+      select: {
+        id_mantenimiento: true,
+        fecha_programada: true,
+        estado: true,
+      },
+    });
+
+    if (!maintenance) {
+      throw new Error("El mantenimiento seleccionado no existe.");
+    }
+
+    if (["realizado", "anulado"].includes(maintenance.estado)) {
+      throw new Error(
+        "No se puede modificar un mantenimiento realizado o anulado.",
+      );
+    }
+
     await tx.mantenimiento_preventivo.update({
       where: {
         id_mantenimiento: data.id_mantenimiento,

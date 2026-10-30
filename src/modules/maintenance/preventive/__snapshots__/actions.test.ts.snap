@@ -709,6 +709,19 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -720,10 +733,6 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > llam
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -778,6 +787,19 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -789,10 +811,6 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la 
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -847,6 +865,19 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -858,10 +889,6 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > llam
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -916,6 +943,19 @@ exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > llam
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -927,10 +967,6 @@ exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > llam
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -985,6 +1021,19 @@ exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -996,6 +1045,10 @@ exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > 
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": "El mantenimiento seleccionado no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1011,6 +1064,19 @@ exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1022,10 +1088,6 @@ exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene 
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1106,6 +1168,19 @@ exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no s
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1117,6 +1192,10 @@ exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no s
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": "No se puede modificar un mantenimiento realizado o anulado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1132,6 +1211,19 @@ exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "estado": true,
@@ -1143,6 +1235,10 @@ exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no
       },
     },
     "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": "No se puede modificar un mantenimiento realizado o anulado.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;

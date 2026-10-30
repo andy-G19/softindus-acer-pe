@@ -9,6 +9,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type PrismaArgs,
   type Role,
@@ -26,10 +27,10 @@ import {
 // requireRole. El alta lee tres ranuras fijas de repuesto (id_repuesto_N y
 // cantidad_N), ignora en silencio la que llega incompleta (hallazgo 7),
 // calcula los importes con src/lib/repair-amounts.ts y envia a Prisma las
-// cadenas que devuelve (B2, hallazgo 3) y decide sobre la falla fuera de la
-// transaccion (hallazgo 2). El cambio de
-// estado lee la reparacion fuera de la transaccion y comprueba dentro, con el
-// dato viejo, si esta finalizada. Las reglas de negocio que el hallazgo 12
+// cadenas que devuelve (B2, hallazgo 3) y, con la falla bloqueada, decide
+// dentro de la transaccion (B3, hallazgo 2). El cambio de estado bloquea la
+// reparacion antes de leerla. El orden de los bloqueos es reparacion, falla,
+// maquina. Las reglas de negocio que el hallazgo 12
 // registra (anular devuelve la falla a pendiente y deja la maquina en
 // reparacion; ejecutar cierra la falla aunque otra reparacion siga
 // programada) se fijan tal como estan.
@@ -375,5 +376,37 @@ describe("createRepairAction envia los importes como los guarda la base", () => 
     const { details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: "", cantidad_2: "3" });
 
     expect(details).toEqual([]);
+  });
+});
+
+// B3 (hallazgo 2): la fila se bloquea antes de leer lo que decide, tanto si la
+// operacion sigue como si la rechaza.
+describe("las acciones de reparaciones deciden con la fila bloqueada", () => {
+  const readsFailureOrSpareParts = ({ prisma }: { prisma: string }) =>
+    prisma === "falla_maquina.findUnique" || prisma === "repuesto.findMany";
+
+  it("el alta bloquea la falla antes de leerla y de leer los repuestos", async () => {
+    const { calls } = await runCase(createRepairAction, createWith(twoSpareParts));
+
+    expectRowLockedBefore(calls, { table: "falla_maquina", id: FALLA, reads: readsFailureOrSpareParts });
+  });
+
+  it("el alta rechaza una falla cerrada despues de bloquearla", async () => {
+    const { calls } = await runCase(createRepairAction, createWith({}, lookups({ failureState: "reparada" })));
+
+    expectRowLockedBefore(calls, { table: "falla_maquina", id: FALLA, reads: readsFailureOrSpareParts });
+  });
+
+  it.each([
+    ["programada", "acepta"],
+    ["ejecutada", "rechaza"],
+  ])("el cambio de estado bloquea la reparacion antes de leerla (%s: %s)", async (estado) => {
+    const { calls } = await runCase(updateRepairStatusAction, statusWith("observada", estado));
+
+    expectRowLockedBefore(calls, {
+      table: "reparacion",
+      id: REPARACION,
+      reads: (call) => call.prisma === "reparacion.findUnique",
+    });
   });
 });

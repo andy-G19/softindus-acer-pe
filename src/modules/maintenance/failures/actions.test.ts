@@ -8,6 +8,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -22,9 +23,9 @@ import {
 // su mensaje exacto.
 //
 // Hoy las dos acciones reciben solo el FormData, autorizan con requireRole
-// (ADMIN y maestro de taller), leen la maquina o la falla y deciden fuera de
-// la transaccion (hallazgo 2 de la auditoria de la 10.5), lanzan un Error con
-// los mensajes de Zod unidos y redirigen con su toast al terminar.
+// (ADMIN y maestro de taller), bloquean la maquina o la falla y deciden dentro
+// de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5), lanzan un
+// Error con los mensajes de Zod unidos y redirigen con su toast al terminar.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -250,5 +251,35 @@ describe("createFailureAction escribe lo que recibe", () => {
     expect((await created({ fecha_falla: "2026-02-30T10:00" }))?.fecha_falla).toEqual(
       new Date("2026-03-02T10:00:00.000Z"),
     );
+  });
+});
+
+// B3 (hallazgo 2): la fila se bloquea antes de leer lo que decide, tanto si la
+// operacion sigue como si la rechaza.
+describe("las acciones de fallas deciden con la fila bloqueada", () => {
+  it.each([
+    ["operativa", "acepta"],
+    ["inactiva", "rechaza"],
+  ])("el alta bloquea la maquina antes de leerla (%s: %s)", async (estado) => {
+    const { calls } = await runCase(createFailureAction, createWith({}, machine(estado)));
+
+    expectRowLockedBefore(calls, {
+      table: "maquina",
+      id: MAQUINA,
+      reads: (call) => call.prisma === "maquina.findUnique",
+    });
+  });
+
+  it.each([
+    ["pendiente", "acepta"],
+    ["reparada", "rechaza"],
+  ])("el cambio de estado bloquea la falla antes de leerla (%s: %s)", async (estado) => {
+    const { calls } = await runCase(updateFailureStatusAction, statusWith("en_atencion", estado));
+
+    expectRowLockedBefore(calls, {
+      table: "falla_maquina",
+      id: FALLA,
+      reads: (call) => call.prisma === "falla_maquina.findUnique",
+    });
   });
 });

@@ -8,6 +8,7 @@ import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { calculateRepairAmounts } from "@/lib/repair-amounts";
+import { lockFailureRow, lockRepairRow } from "@/lib/row-locks";
 import {
   repairSchema,
   repairSparePartSchema,
@@ -71,65 +72,67 @@ export async function createRepairAction(formData: FormData) {
     throw new Error("No repitas el mismo repuesto en la reparación.");
   }
 
-  const failure = await prisma.falla_maquina.findUnique({
-    where: {
-      id_falla: data.id_falla,
-    },
-    include: {
-      maquina: true,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    await lockFailureRow(tx, data.id_falla);
 
-  if (!failure) {
-    throw new Error("La falla seleccionada no existe.");
-  }
+    const failure = await tx.falla_maquina.findUnique({
+      where: {
+        id_falla: data.id_falla,
+      },
+      include: {
+        maquina: true,
+      },
+    });
 
-  if (["reparada", "anulada"].includes(failure.estado_atencion)) {
-    throw new Error("No se puede registrar una reparacion sobre una falla cerrada o anulada.");
-  }
-
-  const spareParts =
-    selectedSparePartIds.length > 0
-      ? await prisma.repuesto.findMany({
-          where: {
-            id_repuesto: {
-              in: selectedSparePartIds,
-            },
-            estado: true,
-          },
-        })
-      : [];
-
-  if (spareParts.length !== selectedSparePartIds.length) {
-    throw new Error(
-      "Uno o más repuestos seleccionados no existen o están inactivos.",
-    );
-  }
-
-  const sparePartMap = new Map(
-    spareParts.map((sparePart) => [sparePart.id_repuesto, sparePart]),
-  );
-
-  const sparePartDetails = selectedSpareParts.map((item) => {
-    const sparePart = sparePartMap.get(item.id_repuesto as string);
-
-    if (!sparePart) {
-      throw new Error("No se encontró uno de los repuestos seleccionados.");
+    if (!failure) {
+      throw new Error("La falla seleccionada no existe.");
     }
 
-    return {
-      id_repuesto: sparePart.id_repuesto,
-      cantidad: item.cantidad ?? 0,
-      costo_unitario: String(sparePart.costo_unitario),
-    };
-  });
+    if (["reparada", "anulada"].includes(failure.estado_atencion)) {
+      throw new Error("No se puede registrar una reparacion sobre una falla cerrada o anulada.");
+    }
 
-  const amounts = calculateRepairAmounts({
-    mano_obra: data.mano_obra,
-    items: sparePartDetails,
-  });
+    const spareParts =
+      selectedSparePartIds.length > 0
+        ? await tx.repuesto.findMany({
+            where: {
+              id_repuesto: {
+                in: selectedSparePartIds,
+              },
+              estado: true,
+            },
+          })
+        : [];
 
-  await prisma.$transaction(async (tx) => {
+    if (spareParts.length !== selectedSparePartIds.length) {
+      throw new Error(
+        "Uno o más repuestos seleccionados no existen o están inactivos.",
+      );
+    }
+
+    const sparePartMap = new Map(
+      spareParts.map((sparePart) => [sparePart.id_repuesto, sparePart]),
+    );
+
+    const sparePartDetails = selectedSpareParts.map((item) => {
+      const sparePart = sparePartMap.get(item.id_repuesto as string);
+
+      if (!sparePart) {
+        throw new Error("No se encontró uno de los repuestos seleccionados.");
+      }
+
+      return {
+        id_repuesto: sparePart.id_repuesto,
+        cantidad: item.cantidad ?? 0,
+        costo_unitario: String(sparePart.costo_unitario),
+      };
+    });
+
+    const amounts = calculateRepairAmounts({
+      mano_obra: data.mano_obra,
+      items: sparePartDetails,
+    });
+
     const idReparacion = await getNextCorrelativeId(tx, {
       codigoEntidad: "reparacion",
       prefijo: "RPA",
@@ -246,20 +249,22 @@ export async function updateRepairStatusAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const repair = await prisma.reparacion.findUnique({
-    where: {
-      id_reparacion: data.id_reparacion,
-    },
-    include: {
-      falla_maquina: true,
-    },
-  });
-
-  if (!repair) {
-    throw new Error("La reparación seleccionada no existe.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    await lockRepairRow(tx, data.id_reparacion);
+
+    const repair = await tx.reparacion.findUnique({
+      where: {
+        id_reparacion: data.id_reparacion,
+      },
+      include: {
+        falla_maquina: true,
+      },
+    });
+
+    if (!repair) {
+      throw new Error("La reparación seleccionada no existe.");
+    }
+
     if (["ejecutada", "anulada"].includes(repair.estado_reparacion)) {
       throw new Error("No se puede modificar una reparacion finalizada o anulada.");
     }

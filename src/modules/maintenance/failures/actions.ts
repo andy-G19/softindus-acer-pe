@@ -7,6 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import { lockFailureRow, lockMachineRow } from "@/lib/row-locks";
 import {
   failureSchema,
   failureStatusSchema,
@@ -39,25 +40,27 @@ export async function createFailureAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const machine = await prisma.maquina.findUnique({
-    where: {
-      id_maquina: data.id_maquina,
-    },
-    select: {
-      id_maquina: true,
-      estado: true,
-    },
-  });
-
-  if (!machine) {
-    throw new Error("La máquina seleccionada no existe.");
-  }
-
-  if (["inactiva", "dada_de_baja"].includes(machine.estado)) {
-    throw new Error("No se puede registrar una falla sobre una maquina inactiva.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    await lockMachineRow(tx, data.id_maquina);
+
+    const machine = await tx.maquina.findUnique({
+      where: {
+        id_maquina: data.id_maquina,
+      },
+      select: {
+        id_maquina: true,
+        estado: true,
+      },
+    });
+
+    if (!machine) {
+      throw new Error("La máquina seleccionada no existe.");
+    }
+
+    if (["inactiva", "dada_de_baja"].includes(machine.estado)) {
+      throw new Error("No se puede registrar una falla sobre una maquina inactiva.");
+    }
+
     const idFalla = await getNextCorrelativeId(tx, {
       codigoEntidad: "falla_maquina",
       prefijo: "FAL",
@@ -112,25 +115,27 @@ export async function updateFailureStatusAction(formData: FormData) {
 
   const data = parsed.data;
 
-  const failure = await prisma.falla_maquina.findUnique({
-    where: {
-      id_falla: data.id_falla,
-    },
-    select: {
-      id_falla: true,
-      estado_atencion: true,
-    },
-  });
-
-  if (!failure) {
-    throw new Error("La falla seleccionada no existe.");
-  }
-
-  if (["reparada", "anulada"].includes(failure.estado_atencion)) {
-    throw new Error("No se puede modificar una falla cerrada o anulada.");
-  }
-
   await prisma.$transaction(async (tx) => {
+    await lockFailureRow(tx, data.id_falla);
+
+    const failure = await tx.falla_maquina.findUnique({
+      where: {
+        id_falla: data.id_falla,
+      },
+      select: {
+        id_falla: true,
+        estado_atencion: true,
+      },
+    });
+
+    if (!failure) {
+      throw new Error("La falla seleccionada no existe.");
+    }
+
+    if (["reparada", "anulada"].includes(failure.estado_atencion)) {
+      throw new Error("No se puede modificar una falla cerrada o anulada.");
+    }
+
     await tx.falla_maquina.update({
       where: {
         id_falla: data.id_falla,

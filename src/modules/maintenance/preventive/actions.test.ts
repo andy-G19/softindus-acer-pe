@@ -8,6 +8,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   FIXED_NOW,
   type DataOverrides,
   type Role,
@@ -22,10 +23,12 @@ import {
 // que lanza, con su mensaje exacto.
 //
 // Hoy las dos acciones reciben solo el FormData, autorizan solo a ADMIN con
-// requireRole, leen la maquina o el mantenimiento y deciden fuera de la
-// transaccion (hallazgo 2 de la auditoria de la 10.5), lanzan un Error con los
-// mensajes de Zod unidos y redirigen con su toast al terminar. El alta acepta
-// una maquina inactiva (hallazgo 12: se registra, no se cambia).
+// requireRole, lanzan un Error con los mensajes de Zod unidos y redirigen con
+// su toast al terminar. El cambio de estado bloquea el mantenimiento y decide
+// dentro de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5). El alta
+// solo comprueba que la maquina exista, fuera de la transaccion: las maquinas
+// no se borran, asi que no hay carrera que proteger, y acepta una maquina
+// inactiva (hallazgo 12: se registra, no se cambia).
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -256,5 +259,22 @@ describe("las fechas del mantenimiento preventivo", () => {
     expect((await written(run, statusWith("realizado"), key))?.fecha_realizada).toEqual(FIXED_NOW);
     expect((await written(run, statusWith("vencido"), key))?.fecha_realizada).toBeNull();
     expect((await written(run, statusWith("pendiente", "vencido"), key))?.fecha_realizada).toBeNull();
+  });
+});
+
+// B3 (hallazgo 2): la fila se bloquea antes de leer lo que decide, tanto si la
+// operacion sigue como si la rechaza.
+describe("el cambio de estado decide con la fila bloqueada", () => {
+  it.each([
+    ["pendiente", "acepta"],
+    ["realizado", "rechaza"],
+  ])("bloquea el mantenimiento antes de leerlo (%s: %s)", async (estado) => {
+    const { calls } = await runCase(updatePreventiveMaintenanceStatusAction, statusWith("anulado", estado));
+
+    expectRowLockedBefore(calls, {
+      table: "mantenimiento_preventivo",
+      id: MANTENIMIENTO,
+      reads: (call) => call.prisma === "mantenimiento_preventivo.findUnique",
+    });
   });
 });

@@ -22,6 +22,19 @@ exports[`createRepairAction > anulada al crear no toca la falla ni la maquina > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -31,10 +44,6 @@ exports[`createRepairAction > anulada al crear no toca la falla ni la maquina > 
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -124,6 +133,19 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -147,10 +169,6 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
       },
     },
     "prisma": "repuesto.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -275,6 +293,19 @@ exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina op
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -284,10 +315,6 @@ exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina op
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -386,6 +413,19 @@ exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -395,10 +435,6 @@ exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como 
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -510,6 +546,19 @@ exports[`createRepairAction > la falla no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -519,6 +568,10 @@ exports[`createRepairAction > la falla no existe > llamadas 1`] = `
       },
     },
     "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": "La falla seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -534,6 +587,19 @@ exports[`createRepairAction > los opcionales vacios o ausentes se guardan como n
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -543,10 +609,6 @@ exports[`createRepairAction > los opcionales vacios o ausentes se guardan como n
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -645,6 +707,19 @@ exports[`createRepairAction > observada hace lo mismo que programada > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -654,10 +729,6 @@ exports[`createRepairAction > observada hace lo mismo que programada > llamadas 
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -756,6 +827,19 @@ exports[`createRepairAction > programada sin repuestos: crea la reparacion y pas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -765,10 +849,6 @@ exports[`createRepairAction > programada sin repuestos: crea la reparacion y pas
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -867,6 +947,19 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -891,10 +984,6 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
       },
     },
     "prisma": "repuesto.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1058,6 +1147,19 @@ exports[`createRepairAction > un repuesto inexistente o inactivo > llamadas 1`] 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1082,6 +1184,10 @@ exports[`createRepairAction > un repuesto inexistente o inactivo > llamadas 1`] 
     },
     "prisma": "repuesto.findMany",
   },
+  {
+    "args": "Uno o más repuestos seleccionados no existen o están inactivos.",
+    "effect": "prisma.$transaction:rollback",
+  },
 ]
 `;
 
@@ -1094,6 +1200,19 @@ exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcula
     "roles": [
       "ADMIN",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1118,10 +1237,6 @@ exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcula
       },
     },
     "prisma": "repuesto.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1259,6 +1374,19 @@ exports[`createRepairAction > una falla anulada no admite reparaciones > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1268,6 +1396,10 @@ exports[`createRepairAction > una falla anulada no admite reparaciones > llamada
       },
     },
     "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1283,6 +1415,19 @@ exports[`createRepairAction > una falla reparada no admite reparaciones > llamad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1292,6 +1437,10 @@ exports[`createRepairAction > una falla reparada no admite reparaciones > llamad
       },
     },
     "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -1307,6 +1456,19 @@ exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1316,10 +1478,6 @@ exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega 
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1418,6 +1576,19 @@ exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1427,10 +1598,6 @@ exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1529,6 +1696,19 @@ exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1551,10 +1731,6 @@ exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en
       },
     },
     "prisma": "repuesto.findMany",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1666,6 +1842,19 @@ exports[`createRepairAction > una mano de obra de 1e12 pasa el esquema y llega a
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "maquina": true,
@@ -1675,10 +1864,6 @@ exports[`createRepairAction > una mano de obra de 1e12 pasa el esquema y llega a
       },
     },
     "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1803,6 +1988,19 @@ exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pe
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -1812,10 +2010,6 @@ exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pe
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1884,6 +2078,19 @@ exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda re
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -1893,10 +2100,6 @@ exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda re
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1976,6 +2179,19 @@ exports[`updateRepairStatusAction > de programada a observada: falla en atencion
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -1985,10 +2201,6 @@ exports[`updateRepairStatusAction > de programada a observada: falla en atencion
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2068,6 +2280,19 @@ exports[`updateRepairStatusAction > la reparacion no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -2077,6 +2302,10 @@ exports[`updateRepairStatusAction > la reparacion no existe > llamadas 1`] = `
       },
     },
     "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": "La reparación seleccionada no existe.",
+    "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
@@ -2092,6 +2321,19 @@ exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escrib
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -2101,10 +2343,6 @@ exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escrib
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2210,6 +2448,19 @@ exports[`updateRepairStatusAction > una reparacion anulada no se modifica: el er
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -2219,10 +2470,6 @@ exports[`updateRepairStatusAction > una reparacion anulada no se modifica: el er
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": "No se puede modificar una reparacion finalizada o anulada.",
@@ -2242,6 +2489,19 @@ exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica: el 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "falla_maquina": true,
@@ -2251,10 +2511,6 @@ exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica: el 
       },
     },
     "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": "No se puede modificar una reparacion finalizada o anulada.",
