@@ -5677,10 +5677,10 @@ Datos leídos de la API de GitHub el 2026-10-29 (UTC) y comparados con git:
 
 ### Sub-entrega 10.5a — Máquinas, repuestos e inicio de Mantenimiento
 
-Fecha: 2026-10-29 (Lima). Estado: registrada; falta la verificación en
-staging. El paso 0 (`56c3c20`) registró la integración de la 10.4c en
-`main`. 8 commits, de `34ecade` a `a898729`, y este registro. Plan en
-`tmp/e10-diff/plan-10-5.md`.
+Fecha: 2026-10-29 (Lima). Estado: cerrada el 2026-10-29 (Lima). El paso 0
+(`56c3c20`) registró la integración de la 10.4c en `main`. 8 commits, de
+`34ecade` a `a898729`, el registro `55c6b47` (CI #110 en verde) y este
+cierre. Plan en `tmp/e10-diff/plan-10-5.md`.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -5693,7 +5693,8 @@ staging. El paso 0 (`56c3c20`) registró la integración de la 10.4c en
 | c850ca0 | feat | Repuestos en panel lateral con `FormActionState`, `FilterBar` y sin `<main>` anidado; la alta rápida de proveedor sin toasts (D3). |
 | ad805da | feat | Inactivar repuesto pide confirmación; el cambio de estado fija el estado pedido; se retira `updateSparePartStatusAction`. |
 | a898729 | feat | Las tarjetas del inicio de Mantenimiento siguen los roles de su destino. |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md`, la nota de `StatusBadge` (D8) e inventario. |
+| 55c6b47 | docs | Registro de la sub-entrega, `CLAUDE.md`, la nota de `StatusBadge` (D8) e inventario. |
+| este | docs | Cierre: publicación y verificación en staging, hallazgos y capítulo de Mantenimiento del manual. |
 
 Decisiones del responsable (2026-10-29), tras la auditoría; aprobó las ocho
 recomendadas:
@@ -5850,6 +5851,95 @@ Siguen pendientes: `updateOrderAction` decide fuera de la transacción
 los hallazgos 3 a 5 de la 10.4b; el filtro «Producto» con inactivos
 (hallazgo 15 de la 10.4a), y los hallazgos 1, 2 y 5 de la 10.4c.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e105-huella`) y etiquetas `e105/`
+  (`tmp/e10-diff/e105-*.js`, generados por `c-e105-guiones.py` a partir de
+  los de la 10.4c), cargada en el `localStorage` de staging y comprobada con
+  su SHA-256 (`e105-guiones.sha256`). Plan en
+  `tmp/e10-diff/plan-verificacion-10-5a.md`.
+- 1281 × 800 y el preset móvil (376 px). Cada captura se tomó tras cargar el
+  documento con `navigate`, así que el alta y la edición del «después» son
+  la página completa, como en el «antes».
+- Las tareas usaron clics reales por `ref`, `form_input` para los `select` y
+  la opción de `SearchableSelect` con un clic.
+- La predicción se escribió antes del push, sobre los cambios de cada commit
+  y los snapshots de página (`tmp/e10-diff/prediccion-10-5a.md`); el
+  «después» se comparó registro a registro con `__resumen`.
+- Datos de prueba, con autorización del responsable:
+  - el «antes» creó el proveedor PVE00000010 «Proveedor prueba 10.5a» y el
+    repuesto REP00000004 «Repuesto prueba 10.5a» (S/ 10,00) con ese
+    proveedor, e inactivó el proveedor;
+  - en cada fase, T57 inactivó y volvió a activar MAQ00000006 «Taladro de
+    banco» y REP00000004, que terminan en su estado de partida;
+  - el «después» actualizó la descripción de REP00000004.
+  - No se exportó nada.
+- Solo ADMIN: el responsable decidió omitir T59, el inicio con el maestro
+  de taller; lo cubre `maintenance-links.test.ts`.
+
+Publicación y medición:
+
+- «Antes» sobre `24fe030` (CSS servido de 112.744 bytes, `ef3c3e19…`), el
+  2026-10-30 UTC: 14 capturas de 01:26 a 01:28 y luego las tareas.
+- Push de 10 commits (de `56c3c20` a `55c6b47`): CI #110 en verde (2m 51s,
+  de 01:47:56 a 01:50:47 UTC). Vercel desplegó `55c6b47` (`pending` a las
+  01:47:56 y `success` a las 01:49:55 UTC). El CSS servido no cambió, como
+  se predijo.
+- «Después» el mismo día UTC: 14 capturas de 01:51 a 01:53 y las tareas
+  hasta las 02:10. Evidencia en `tmp/e10-diff/registro-10-5a.tsv` (28 filas)
+  y `e105-antes-notas.md`. Los registros completos de cada captura quedaron
+  en la IndexedDB del navegador, donde se compararon; no se exportaron.
+
+Huella: 14 de 14 como se predijo.
+
+- **Listas de máquinas y repuestos:** de 352 a 342 y de 345 a 336
+  elementos. Emparejando registros, se quitan el `main`, la tarjeta
+  «Filtros de búsqueda» (el único texto que desaparece) y los dos `form` de
+  fila con sus `input` ocultos; cambian los estilos de la barra por los de
+  `FilterBar` y `Field`, y lo de abajo sube 38,3 px. En repuestos se añade
+  además `option "Proveedor prueba 10.5a"`: el filtro de proveedores lista
+  también los inactivos (predicho).
+- **Alta y edición, a 1281 y a 376 px:** +3 elementos, los asteriscos de
+  obligatorio; `main` → `div` y la separación de `Field` en las etiquetas.
+- **Galería:** un solo registro distinto en cada sección, el texto de la
+  nota de `StatusBadge`, con la misma altura.
+- **Inicio con ADMIN y los tres controles (fallas, reparaciones y
+  reincidencias):** idénticos byte a byte.
+
+Tareas (ADMIN), con los mismos pasos en las dos fases:
+
+| Tarea | Antes (`24fe030`) | Después (`55c6b47`) |
+|---|---|---|
+| T54 Editar un repuesto con su proveedor inactivo | «El proveedor seleccionado no existe o esta inactivo.» con toast y alerta. No guarda y la descripción escrita se pierde | La opción dice «Inactivo». Guarda con un solo aviso y «Puede no aparecer con los filtros activos del listado.»; la lista conserva su filtro |
+| T55 Registrar una máquina con nombre y tipo repetidos | Página completa. Toast y alerta. React vacía los campos y el tipo vuelve a «prensa». Foco en `body` | Panel sobre la lista filtrada. El error en la alerta y junto al nombre, con `aria-invalid` y el foco. Sin toast. Los seis campos se conservan |
+| T56 Cancelar con cambios | Sale sin preguntar a la lista sin el filtro | «¿Descartar la máquina nueva?»: seguir conserva lo escrito; descartar cierra el panel y la lista conserva el filtro |
+| T57 Inactivar y activar una máquina y un repuesto | Se aplica al pulsar, sin confirmar, y vuelve a la lista sin el filtro | Confirmación con el nombre y la consecuencia y el botón destructivo; un aviso; la lista conserva el filtro y el foco pasa a «Activar». Activar se ejecuta al pulsar |
+| T58 Alta rápida con la razón social de un proveedor inactivo | Toast «No se pudo registrar el proveedor» con el mensaje | El mismo mensaje dentro del recuadro, sin toast. Lo escrito se conserva |
+
+Hallazgos de la verificación:
+
+8. Al abrir el proveedor de un repuesto, el buscador toma el nombre elegido
+   como búsqueda y la lista solo muestra esa opción; para ver las demás hay
+   que borrar el texto. Es el comportamiento de `SearchableSelect` de
+   siempre; se registra.
+9. Método: dos clics usaron referencias adivinadas en lugar de las de
+   `find`: uno no tuvo efecto y el otro escribió en la descripción del
+   panel de alta, que se borró antes de seguir. Nada se envió. Un clic en
+   «Inactivar» justo después de cargar la página llegó antes de hidratar y
+   no hizo nada; se repitió.
+10. Método: la confirmación sigue en el DOM durante su animación de salida
+    (como el hallazgo 14 de la 10.4c); una lectura a los 1,5 s ya la dio
+    cerrada. Antes del «después», la pestaña estaba en el `/login` de
+    producción, donde no se tocó nada; la sesión de staging seguía válida.
+11. Método: un cambio de ancho del panel del navegador quitó la emulación
+    de 1281 × 800 durante las tareas, con las capturas ya hechas.
+
+El manual suma el capítulo de Mantenimiento (inicio, máquinas y
+repuestos), escrito con lo verificado, y las reglas comunes cuentan esas
+pantallas entre las renovadas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5874,7 +5964,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, registrada, con el hallazgo 4 de la 10.3a corregido, pendiente de verificar en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #110 verde en staging, 14 de 14 huellas como se predijo y el hallazgo 4 de la 10.3a corregido) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
