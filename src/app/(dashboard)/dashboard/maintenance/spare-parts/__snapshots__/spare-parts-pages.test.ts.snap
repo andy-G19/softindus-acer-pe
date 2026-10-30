@@ -53,7 +53,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -82,7 +82,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Registrar repuesto</a>
 </div>
 </div>
 </section>
@@ -130,12 +130,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/maintenance/spare-parts">
+<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
@@ -161,8 +156,6 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Repuestos registrados</div>
@@ -194,7 +187,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
@@ -214,7 +207,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
 <button data-variant="ghost" type="submit">Activar</button>
@@ -227,7 +220,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -280,7 +273,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -309,7 +302,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Registrar repuesto</a>
 </div>
 </div>
 </section>
@@ -357,12 +350,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/maintenance/spare-parts">
+<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value=""/>
@@ -388,8 +376,6 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Repuestos registrados</div>
@@ -421,7 +407,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
@@ -441,7 +427,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
 <button data-variant="ghost" type="submit">Activar</button>
@@ -454,7 +440,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -532,7 +518,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > llamadas 1`] =
 
 exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -561,7 +547,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/spare-parts/new">Registrar repuesto</a>
+<a data-variant="default" href="/dashboard/maintenance/spare-parts/new?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Registrar repuesto</a>
 </div>
 </div>
 </section>
@@ -609,12 +595,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/maintenance/spare-parts">
+<form role="search" aria-label="Filtros de repuestos" action="/dashboard/maintenance/spare-parts" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar repuesto..." name="q" value="rodamiento"/>
@@ -640,8 +621,6 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 <a data-variant="clear" href="/dashboard/maintenance/spare-parts">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Repuestos registrados</div>
@@ -673,7 +652,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <button data-variant="destructive" type="submit">Inactivar</button>
@@ -693,7 +672,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </td>
 <td>
 <div>
-<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit">Editar</a>
+<a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
 <button data-variant="ghost" type="submit">Activar</button>
@@ -706,7 +685,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -771,7 +750,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > l
 
 exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -784,7 +763,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 </li>
 <li>
 <svg/>
-<a href="/dashboard/maintenance/spare-parts">Repuestos</a>
+<a href="/dashboard/maintenance/spare-parts?q=faja">Repuestos</a>
 </li>
 <li>
 <svg/>
@@ -816,29 +795,32 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <div>
-<label for="nombre_repuesto">Nombre del repuesto</label>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
 </div>
 <div>
 <div>
 <div>
-<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="id_proveedor-1"/>
 <div>
-<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="razon_social-1"/>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="razon_social-1"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
 </div>
 <div>
-<label for="costo_unitario">Costo unitario</label>
-<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value="11.5"/>
 </div>
 </div>
 <div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
@@ -849,12 +831,12 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con proveedor > r
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
-<a data-variant="outline" href="/dashboard/maintenance/spare-parts">Volver al listado</a>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts?q=faja">Volver al listado</a>
 </div>
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -919,7 +901,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 
 exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor inactivo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -964,29 +946,32 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <div>
-<label for="nombre_repuesto">Nombre del repuesto</label>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
 </div>
 <div>
 <div>
 <div>
-<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value="PVE00000009"/>
 <div>
-<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
 <button type="button">Limpiar</button>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
 </div>
 <div>
-<label for="costo_unitario">Costo unitario</label>
-<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value="11.5"/>
 </div>
 </div>
 <div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
@@ -1002,7 +987,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar con su proveedor 
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1064,7 +1049,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > l
 
 exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1109,28 +1094,31 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
 <div>
-<label for="nombre_repuesto">Nombre del repuesto</label>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
 </div>
 <div>
 <div>
 <div>
-<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
-<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
 </div>
 <div>
-<label for="costo_unitario">Costo unitario</label>
-<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value="11.5"/>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value="11.5"/>
 </div>
 </div>
 <div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
@@ -1146,7 +1134,7 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > editar sin proveedor > r
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1175,6 +1163,140 @@ exports[`/dashboard/maintenance/spare-parts/[id]/edit > inexistente > resultado 
 {
   "html": null,
   "outcome": "notFound",
+}
+`;
+
+exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "orderBy": {
+        "razon_social": "asc",
+      },
+      "select": {
+        "id_proveedor": true,
+        "razon_social": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "proveedor.findMany",
+  },
+  {
+    "args": {
+      "orderBy": {
+        "nombre": "asc",
+      },
+      "select": {
+        "nombre": true,
+        "slug": true,
+      },
+      "where": {
+        "estado": true,
+      },
+    },
+    "prisma": "tipo_proveedor_catalogo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/spare-parts/new > con regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/spare-parts?status=inactive">Repuestos</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nuevo repuesto</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar repuesto</h1>
+<p>Registra repuestos disponibles para mantenimiento, proveedor, descripcion y costo unitario.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al listado">
+<svg/>Volver al listado</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value=""/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor">Proveedor</label>
+<input type="hidden" name="id_proveedor" value=""/>
+<div>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar repuesto</button>
+<a data-variant="outline" href="/dashboard/maintenance/spare-parts?status=inactive">Volver al listado</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
 }
 `;
 
@@ -1221,7 +1343,7 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1265,28 +1387,31 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 <div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <div>
-<label for="nombre_repuesto">Nombre del repuesto</label>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_repuesto" required="" name="nombre_repuesto" value=""/>
 </div>
 <div>
 <div>
 <div>
-<label for="id_proveedor-_R_2pa_">Proveedor</label>
+<label for="id_proveedor">Proveedor</label>
 <input type="hidden" name="id_proveedor" value=""/>
 <div>
-<input id="id_proveedor-_R_2pa_" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-_R_2pa_-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
 </div>
 </div>
 <button data-variant="outline" type="button">Registrar proveedor nuevo</button>
 </div>
 <div>
-<label for="costo_unitario">Costo unitario</label>
-<input type="number" id="costo_unitario" min="0" step="0.01" required="" name="costo_unitario" value=""/>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value=""/>
 </div>
 </div>
 <div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
 <option value="true" selected="">Activo</option>
 <option value="false">Inactivo</option>
 </select>
@@ -1303,8 +1428,125 @@ exports[`/dashboard/maintenance/spare-parts/new > formulario > resultado 1`] = `
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
+`;
+
+exports[`panel lateral de repuestos > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Registrar repuesto</h2>
+<p id="radix-_R_1H2_">Registra repuestos disponibles para mantenimiento, proveedor, descripcion y costo unitario.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value=""/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor">Proveedor</label>
+<input type="hidden" name="id_proveedor" value=""/>
+<div>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value=""/>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">
+</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Registrar repuesto</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de repuestos > la edicion en panel hace la misma consulta que la pagina y marca el proveedor inactivo 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar repuesto</h2>
+<p id="radix-_R_1H2_">nombre_repuesto-1 · id_repuesto-1</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
+<div>
+<label for="nombre_repuesto">Nombre del repuesto<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_repuesto" required="" name="nombre_repuesto" value="nombre_repuesto-1"/>
+</div>
+<div>
+<div>
+<div>
+<label for="id_proveedor">Proveedor</label>
+<input type="hidden" name="id_proveedor" value="PVE00000009"/>
+<div>
+<input id="id_proveedor" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_proveedor-listbox" aria-expanded="false" placeholder="Buscar proveedor..." value="Ferreteria El Perno"/>
+<button type="button">Limpiar</button>
+</div>
+</div>
+<button data-variant="outline" type="button">Registrar proveedor nuevo</button>
+</div>
+<div>
+<label for="costo_unitario">Costo unitario<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="costo_unitario" required="" min="0" step="0.01" name="costo_unitario" value="11.5"/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="true" selected="">Activo</option>
+<option value="false">Inactivo</option>
+</select>
+</div>
+<div>
+<label for="descripcion">Descripcion</label>
+<textarea id="descripcion" name="descripcion" rows="4">descripcion-1</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

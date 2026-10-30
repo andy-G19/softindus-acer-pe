@@ -1,6 +1,8 @@
 import { CheckCircle2, Cog, XCircle } from "lucide-react";
 import Link from "next/link";
 
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import {
   RowEditLink,
   RowToggleStatusButton,
@@ -16,7 +18,6 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -29,7 +30,12 @@ import {
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
 import { formatMoney } from "@/lib/formatters";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleSparePartStatusAction } from "@/modules/maintenance/spare-parts/actions";
 import { getSparePartListData } from "@/modules/maintenance/spare-parts/queries";
@@ -60,6 +66,7 @@ export default async function SparePartsPage({
   const q = getSearchParam(params, "q");
   const provider = getSearchParam(params, "provider");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.spareParts, params);
   const { spareParts, providers } = await getSparePartListData({
     q,
     provider,
@@ -70,7 +77,7 @@ export default async function SparePartsPage({
   const inactiveSpareParts = spareParts.filter((sparePart) => !sparePart.estado);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Listado de repuestos"
         description="Consulta repuestos disponibles para mantenimiento, proveedor, costo unitario, estado y uso historico en reparaciones."
@@ -82,7 +89,7 @@ export default async function SparePartsPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/maintenance/spare-parts/new">
+            <Link href={withReturnTo(`${navigationHrefs.spareParts}/new`, returnTo)}>
               Registrar repuesto
             </Link>
           </Button>
@@ -95,49 +102,39 @@ export default async function SparePartsPage({
         <KpiCard title="Inactivos" value={inactiveSpareParts.length.toString()} description="Fuera de catálogo." tone="warning" icon={XCircle} />
       </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Filtros de búsqueda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            action="/dashboard/maintenance/spare-parts"
-            className="grid gap-3 md:grid-cols-4"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="q">Buscar</Label>
-              <Input id="q" name="q" defaultValue={q} placeholder="Buscar repuesto..." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="provider">Proveedor</Label>
-              <NativeSelect id="provider" name="provider" defaultValue={provider}>
-                <option value="">Todos los proveedores</option>
-                {providers.map((item) => (
-                  <option key={item.id_proveedor} value={item.id_proveedor}>
-                    {item.razon_social}
-                  </option>
-                ))}
-              </NativeSelect>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Estado</Label>
-              <NativeSelect id="status" name="status" defaultValue={status}>
-                <option value="">Todos los estados</option>
-                <option value="active">Activo</option>
-                <option value="inactive">Inactivo</option>
-              </NativeSelect>
-            </div>
-            <div className="flex items-end gap-2">
-              <Button type="submit" className="flex-1">
-                Filtrar
-              </Button>
-              <Button variant="clear" asChild>
-                <Link href="/dashboard/maintenance/spare-parts">Limpiar</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <FilterBar
+        action={navigationHrefs.spareParts}
+        label="Filtros de repuestos"
+        clearHref={navigationHrefs.spareParts}
+        clearLabel="Limpiar"
+      >
+        <Field id="q" label="Buscar">
+          {(control) => <Input {...control} name="q" defaultValue={q} placeholder="Buscar repuesto..." />}
+        </Field>
+
+        <Field id="provider" label="Proveedor">
+          {(control) => (
+            <NativeSelect {...control} name="provider" defaultValue={provider}>
+              <option value="">Todos los proveedores</option>
+              {providers.map((item) => (
+                <option key={item.id_proveedor} value={item.id_proveedor}>
+                  {item.razon_social}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
+
+        <Field id="status" label="Estado">
+          {(control) => (
+            <NativeSelect {...control} name="status" defaultValue={status}>
+              <option value="">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </NativeSelect>
+          )}
+        </Field>
+      </FilterBar>
 
       <Card>
         <CardHeader>
@@ -191,7 +188,10 @@ export default async function SparePartsPage({
                     <TableCell>
                       <div className="flex justify-end gap-2">
                         <RowEditLink
-                          href={`/dashboard/maintenance/spare-parts/${sparePart.id_repuesto}/edit`}
+                          href={withReturnTo(
+                            `${navigationHrefs.spareParts}/${sparePart.id_repuesto}/edit`,
+                            returnTo,
+                          )}
                         />
                         <RowToggleStatusButton
                           action={toggleSparePartStatusAction}
@@ -208,6 +208,6 @@ export default async function SparePartsPage({
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

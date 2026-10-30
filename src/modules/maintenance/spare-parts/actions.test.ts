@@ -31,12 +31,22 @@ import {
 // sin transaccion, y registran la bitacora despues: el doble lo permite
 // (writesOutsideTransaction) y lo marca. El repuesto no lleva stock: ninguna
 // accion toca inventario.
+//
+// Desde el panel lateral (A6), el alta y la edicion devuelven el resultado
+// (FormActionState) en lugar de redirigir y niegan el permiso con un error
+// dentro del formulario; el cambio de estado sigue con requireRole y su
+// redireccion.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -97,7 +107,7 @@ type FormFields = Record<string, string | null>;
 // escribe con lo que hace el codigo, no con lo que deberia hacer.
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role; expected?: unknown };
 
-const initialState: SparePartFormState = { error: "" };
+const initialState: SparePartFormState = { status: "idle" };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
@@ -243,8 +253,8 @@ defineCases("createSparePartAction", create, [
     name: "los textos llegan sin los espacios de los extremos",
     ...createWith({ nombre_repuesto: "  Faja en V B-52  ", costo_unitario: " 38.50 ", id_proveedor: ` ${PROVEEDOR} ` }),
   },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: requireRole lo rechaza (redirige) sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   {
     name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     form: { ...createForm, id_proveedor: "PVE1", nombre_repuesto: "F", costo_unitario: "-1", estado: "quizas" },
@@ -288,7 +298,7 @@ defineCases("createSparePartAction", create, [
 defineCases("updateSparePartAction", update, [
   { name: "ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion", ...updateWith({}) },
   { name: "quitar el proveedor lo guarda como null sin validarlo", ...updateWith({ id_proveedor: "" }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...updateWith({}), role: "WORKSHOP_MASTER" },
   { name: "sin id de repuesto responde que no existe sin tocar Prisma", ...updateWith({ id_repuesto: "" }) },
   { name: "el repuesto no existe", ...updateWith({}, sparePartLookup({ exists: false })) },
   {
@@ -300,31 +310,33 @@ defineCases("updateSparePartAction", update, [
   {
     name: "conservar su proveedor actual inactivo se acepta",
     ...updateWith({}, sparePartLookup({ providerActive: false })),
-    expected: "redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated",
+    expected: { estado: expect.objectContaining({ status: "success", data: { id_repuesto: REPUESTO } }) },
   },
   {
     name: "cambiar a otro proveedor inactivo se rechaza",
     ...updateWith({ id_proveedor: OTRO_PROVEEDOR }, sparePartLookup({ providerActive: false })),
     expected: {
-      estado: {
+      estado: expect.objectContaining({
+        status: "error",
         error: "El proveedor seleccionado no existe o esta inactivo.",
         fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] },
-      },
+      }),
     },
   },
   {
     name: "cambiar a otro proveedor activo se acepta",
     ...updateWith({ id_proveedor: OTRO_PROVEEDOR }),
-    expected: "redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated",
+    expected: { estado: expect.objectContaining({ status: "success", data: { id_repuesto: REPUESTO } }) },
   },
   {
     name: "su proveedor actual ya no existe: se rechaza",
     ...updateWith({}, sparePartLookup({ providerActive: null })),
     expected: {
-      estado: {
+      estado: expect.objectContaining({
+        status: "error",
         error: "El proveedor seleccionado no existe o esta inactivo.",
         fieldErrors: { id_proveedor: ["El proveedor seleccionado no existe o esta inactivo."] },
-      },
+      }),
     },
   },
   {

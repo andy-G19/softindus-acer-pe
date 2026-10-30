@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createSparePartAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSparePartAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,12 +11,28 @@ exports[`createSparePartAction > SELLER: requireRole lo rechaza (redirige) sin t
 ]
 `;
 
-exports[`createSparePartAction > SELLER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSparePartAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
-exports[`createSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`createSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -24,12 +40,28 @@ exports[`createSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (rediri
 ]
 `;
 
-exports[`createSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > costo que no es un numero > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -46,6 +78,15 @@ exports[`createSparePartAction > costo que no es un numero > resultado 1`] = `
         "El costo unitario debe ser un número válido.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "abc",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -53,7 +94,7 @@ exports[`createSparePartAction > costo que no es un numero > resultado 1`] = `
 exports[`createSparePartAction > costo vacio: es obligatorio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -70,6 +111,15 @@ exports[`createSparePartAction > costo vacio: es obligatorio > resultado 1`] = `
         "El costo unitario es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -77,7 +127,7 @@ exports[`createSparePartAction > costo vacio: es obligatorio > resultado 1`] = `
 exports[`createSparePartAction > crea el repuesto con su proveedor, su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -157,12 +207,29 @@ exports[`createSparePartAction > crea el repuesto con su proveedor, su correlati
 ]
 `;
 
-exports[`createSparePartAction > crea el repuesto con su proveedor, su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > crea el repuesto con su proveedor, su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -188,6 +255,15 @@ exports[`createSparePartAction > datos invalidos devuelven los errores por campo
         "El nombre del repuesto debe tener al menos 2 caracteres.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "-1",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "quizas",
+      "id_proveedor": "PVE1",
+      "nombre_repuesto": "F",
+    },
   },
 }
 `;
@@ -195,7 +271,7 @@ exports[`createSparePartAction > datos invalidos devuelven los errores por campo
 exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -215,6 +291,15 @@ exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores
         "El nombre del repuesto es obligatorio.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "",
+    },
   },
 }
 `;
@@ -222,7 +307,7 @@ exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores
 exports[`createSparePartAction > los textos llegan sin los espacios de los extremos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -302,12 +387,29 @@ exports[`createSparePartAction > los textos llegan sin los espacios de los extre
 ]
 `;
 
-exports[`createSparePartAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": " 38.50 ",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": " PVE00000003 ",
+      "nombre_repuesto": "  Faja en V B-52  ",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -372,6 +474,16 @@ exports[`createSparePartAction > otro fallo al crear revierte con el mensaje gen
 {
   "estado": {
     "error": "No se pudo guardar el repuesto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -379,7 +491,7 @@ exports[`createSparePartAction > otro fallo al crear revierte con el mensaje gen
 exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -421,6 +533,15 @@ exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo
         "Ya existe un repuesto registrado con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -428,7 +549,7 @@ exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo
 exports[`createSparePartAction > proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -456,6 +577,15 @@ exports[`createSparePartAction > proveedor inactivo: error en el campo, sin tran
         "El proveedor seleccionado no existe o esta inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -463,7 +593,7 @@ exports[`createSparePartAction > proveedor inactivo: error en el campo, sin tran
 exports[`createSparePartAction > proveedor inexistente: el mismo error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -491,6 +621,15 @@ exports[`createSparePartAction > proveedor inexistente: el mismo error > resulta
         "El proveedor seleccionado no existe o esta inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -498,7 +637,7 @@ exports[`createSparePartAction > proveedor inexistente: el mismo error > resulta
 exports[`createSparePartAction > puede crearse inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -578,12 +717,29 @@ exports[`createSparePartAction > puede crearse inactivo > llamadas 1`] = `
 ]
 `;
 
-exports[`createSparePartAction > puede crearse inactivo > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > puede crearse inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "false",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > sin estado en el formulario queda activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -652,12 +808,29 @@ exports[`createSparePartAction > sin estado en el formulario queda activo > llam
 ]
 `;
 
-exports[`createSparePartAction > sin estado en el formulario queda activo > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > sin estado en el formulario queda activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "",
+      "estado": "",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como null; la descripcion vacia tambien > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -726,12 +899,29 @@ exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como nul
 ]
 `;
 
-exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como null; la descripcion vacia tambien > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como null; la descripcion vacia tambien > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "",
+      "estado": "true",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -811,12 +1001,29 @@ exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin 
 ]
 `;
 
-exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-created"`;
+exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "1.005",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
 
 exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -833,6 +1040,15 @@ exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaz
         "El costo unitario no debe superar S/ 9,999,999,999.99.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "1e12",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -840,7 +1056,7 @@ exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaz
 exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revierte con su mensaje, sin marcar campos > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -905,6 +1121,16 @@ exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revi
 {
   "estado": {
     "error": "Ya existe un repuesto registrado con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
   },
 }
 `;
@@ -1195,7 +1421,7 @@ exports[`toggleSparePartStatusAction > sin id vuelve al listado sin tocar Prisma
 exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1275,12 +1501,29 @@ exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitac
 ]
 `;
 
-exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
-exports[`updateSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`updateSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1288,12 +1531,28 @@ exports[`updateSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (rediri
 ]
 `;
 
-exports[`updateSparePartAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para editar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1373,12 +1632,29 @@ exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > lla
 ]
 `;
 
-exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000006",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1418,6 +1694,15 @@ exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > 
         "El proveedor seleccionado no existe o esta inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000006",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1425,7 +1710,7 @@ exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > 
 exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1505,12 +1790,29 @@ exports[`updateSparePartAction > conservar su propio nombre no es un duplicado >
 ]
 `;
 
-exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1590,12 +1892,29 @@ exports[`updateSparePartAction > conservar su proveedor actual inactivo se acept
 ]
 `;
 
-exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > datos invalidos devuelven los errores por campo despues de comprobar el repuesto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1627,6 +1946,15 @@ exports[`updateSparePartAction > datos invalidos devuelven los errores por campo
         "El nombre del repuesto debe tener al menos 2 caracteres.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "abc",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "",
+    },
   },
 }
 `;
@@ -1634,7 +1962,7 @@ exports[`updateSparePartAction > datos invalidos devuelven los errores por campo
 exports[`updateSparePartAction > el repuesto no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1658,6 +1986,16 @@ exports[`updateSparePartAction > el repuesto no existe > resultado 1`] = `
 {
   "estado": {
     "error": "El repuesto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1665,7 +2003,7 @@ exports[`updateSparePartAction > el repuesto no existe > resultado 1`] = `
 exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1730,6 +2068,16 @@ exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje ge
 {
   "estado": {
     "error": "No se pudo guardar el repuesto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1737,7 +2085,7 @@ exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje ge
 exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1791,6 +2139,15 @@ exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo
         "Ya existe otro repuesto registrado con ese nombre.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1798,7 +2155,7 @@ exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo
 exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin validarlo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1867,12 +2224,29 @@ exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin val
 ]
 `;
 
-exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin validarlo > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-updated"`;
+exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin validarlo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > sin id de repuesto responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1884,6 +2258,16 @@ exports[`updateSparePartAction > sin id de repuesto responde que no existe sin t
 {
   "estado": {
     "error": "El repuesto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1891,7 +2275,7 @@ exports[`updateSparePartAction > sin id de repuesto responde que no existe sin t
 exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1931,6 +2315,15 @@ exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > 
         "El proveedor seleccionado no existe o esta inactivo.",
       ],
     },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;
@@ -1938,7 +2331,7 @@ exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > 
 exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar) devuelve su mensaje y no registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2003,6 +2396,16 @@ exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar)
 {
   "estado": {
     "error": "Ya existe un repuesto registrado con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
   },
 }
 `;

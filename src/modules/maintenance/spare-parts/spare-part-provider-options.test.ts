@@ -15,6 +15,12 @@ describe("buildSparePartProviderOptions", () => {
     ]);
   });
 
+  it("los activos del alta llegan sin estado y no se marcan", () => {
+    expect(buildSparePartProviderOptions([{ id_proveedor: "PVE00000001", razon_social: "Aceros Arequipa" }])).toEqual([
+      { id: "PVE00000001", label: "Aceros Arequipa" },
+    ]);
+  });
+
   it("sin proveedores devuelve una lista vacia", () => {
     expect(buildSparePartProviderOptions([])).toEqual([]);
   });
