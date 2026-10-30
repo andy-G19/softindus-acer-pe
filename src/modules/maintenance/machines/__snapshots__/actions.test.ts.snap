@@ -822,10 +822,10 @@ exports[`createMachineAction > una carrera por el codigo interno (P2002 al crear
 }
 `;
 
-exports[`toggleMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleMachineStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -833,27 +833,26 @@ exports[`toggleMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (re
 ]
 `;
 
-exports[`toggleMachineStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleMachineStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar máquinas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operativa > llamadas 1`] = `
+exports[`toggleMachineStatusAction > activa una maquina inactiva: queda operativa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "nombre": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
-    },
-    "prisma": "maquina.findUnique",
   },
   {
     "args": {
@@ -861,11 +860,23 @@ exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operati
         "estado": "operativa",
       },
       "where": {
+        "estado": "inactiva",
         "id_maquina": "MAQ00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "maquina.update",
+    "prisma": "maquina.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
   },
   {
     "args": {
@@ -889,27 +900,52 @@ exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operati
 ]
 `;
 
-exports[`toggleMachineStatusAction > activa una maquina inactiva: pasa a operativa > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-activated"`;
+exports[`toggleMachineStatusAction > activa una maquina inactiva: queda operativa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > llamadas 1`] = `
+exports[`toggleMachineStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "nombre": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
+]
+`;
+
+exports[`toggleMachineStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAQ00000004",
     },
-    "prisma": "maquina.findUnique",
+  },
+}
+`;
+
+exports[`toggleMachineStatusAction > inactiva una maquina que no esta inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
   },
   {
     "args": {
@@ -917,11 +953,25 @@ exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > llamada
         "estado": "inactiva",
       },
       "where": {
+        "estado": {
+          "not": "inactiva",
+        },
         "id_maquina": "MAQ00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "maquina.update",
+    "prisma": "maquina.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
   },
   {
     "args": {
@@ -945,27 +995,28 @@ exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > llamada
 ]
 `;
 
-exports[`toggleMachineStatusAction > inactiva una maquina dada de baja > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
+exports[`toggleMachineStatusAction > inactiva una maquina que no esta inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMachineStatusAction > inactiva una maquina en reparacion > llamadas 1`] = `
+exports[`toggleMachineStatusAction > la maquina no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "nombre": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
-    },
-    "prisma": "maquina.findUnique",
   },
   {
     "args": {
@@ -973,104 +1024,18 @@ exports[`toggleMachineStatusAction > inactiva una maquina en reparacion > llamad
         "estado": "inactiva",
       },
       "where": {
+        "estado": {
+          "not": "inactiva",
+        },
         "id_maquina": "MAQ00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Maquina inactivada: Prensa hidraulica 60 t",
-      "enTransaccion": false,
-      "entidad_afectada": "maquina",
-      "id_registro_afectado": "MAQ00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`toggleMachineStatusAction > inactiva una maquina en reparacion > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
-
-exports[`toggleMachineStatusAction > inactiva una maquina operativa > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "prisma": "maquina.updateMany",
   },
   {
     "args": {
       "select": {
-        "estado": true,
-        "nombre": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
-    },
-    "prisma": "maquina.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "inactiva",
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Maquina inactivada: Prensa hidraulica 60 t",
-      "enTransaccion": false,
-      "entidad_afectada": "maquina",
-      "id_registro_afectado": "MAQ00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`toggleMachineStatusAction > inactiva una maquina operativa > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-deactivated"`;
-
-exports[`toggleMachineStatusAction > la maquina no existe: vuelve al listado > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
         "nombre": true,
       },
       "where": {
@@ -1082,27 +1047,26 @@ exports[`toggleMachineStatusAction > la maquina no existe: vuelve al listado > l
 ]
 `;
 
-exports[`toggleMachineStatusAction > la maquina no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+exports[`toggleMachineStatusAction > la maquina no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva la activa: el estado pedido no se lee > llamadas 1`] = `
+exports[`toggleMachineStatusAction > pedir activar una maquina que no esta inactiva no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "nombre": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000004",
-      },
-    },
-    "prisma": "maquina.findUnique",
   },
   {
     "args": {
@@ -1110,40 +1074,94 @@ exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta ina
         "estado": "operativa",
       },
       "where": {
+        "estado": "inactiva",
         "id_maquina": "MAQ00000004",
       },
     },
     "fueraDeTransaccion": true,
-    "prisma": "maquina.update",
+    "prisma": "maquina.updateMany",
   },
   {
     "args": {
-      "accion": "activar",
-      "detalle": "Maquina activada: Prensa hidraulica 60 t",
-      "enTransaccion": false,
-      "entidad_afectada": "maquina",
-      "id_registro_afectado": "MAQ00000004",
-      "userId": "USU00000001",
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
     },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
+    "prisma": "maquina.findUnique",
   },
 ]
 `;
 
-exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva la activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/maintenance/machines?toast=machine-activated"`;
+exports[`toggleMachineStatusAction > pedir activar una maquina que no esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina ya estaba activa.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleMachineStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "inactiva",
+      },
+      "where": {
+        "estado": {
+          "not": "inactiva",
+        },
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "maquina.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000004",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`toggleMachineStatusAction > pedir inactivar una maquina que ya esta inactiva no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MAQ00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleMachineStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1151,7 +1169,18 @@ exports[`toggleMachineStatusAction > sin id vuelve al listado sin tocar Prisma >
 ]
 `;
 
-exports[`toggleMachineStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/machines"`;
+exports[`toggleMachineStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateMachineAction > ADMIN actualiza la maquina y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [

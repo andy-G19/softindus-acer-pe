@@ -1,15 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { machineSchema } from "@/schemas/maintenance/machine.schema";
 
 /** Lo que el formulario de maquina envio, tal cual, para volver a mostrarlo. */
@@ -28,12 +33,6 @@ export type MachineFormValues = {
 export type MachineFormState = FormActionState<MachineFormValues, { id_maquina: string }>;
 
 const MACHINES_PATH = "/dashboard/maintenance/machines";
-
-// El cambio de estado desde la lista sigue redirigiendo hasta que pase a
-// ConfirmActionButton (A5 de la 10.5a).
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function getMachineFormValues(formData: FormData): MachineFormValues {
   const text = (name: keyof MachineFormValues) => formData.get(name)?.toString() ?? "";
@@ -276,13 +275,41 @@ export async function updateMachineAction(
   return machineSaved(values, machineId);
 }
 
-export async function toggleMachineStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const machineId = formData.get("id_maquina")?.toString().trim();
+// Activar o inactivar desde la fila (ConfirmActionButton). El boton envia el
+// estado pedido: "false" deja la maquina inactiva desde cualquier otro estado y
+// "true" la deja operativa solo si estaba inactiva. Comparar y escribir en una
+// sola sentencia evita que una lista desactualizada o un doble clic hagan lo
+// contrario de lo que dice el boton.
+export async function toggleMachineStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const machineId = formData.get("id_maquina")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return statusToggleError(machineId, "No tienes permisos para activar o inactivar máquinas.");
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!machineId) {
-    redirect(MACHINES_PATH);
+    return statusToggleError(machineId, "La máquina no existe.");
   }
+
+  if (nextStatus === null) {
+    return statusToggleError(machineId, "Estado no válido.");
+  }
+
+  const { count } = await prisma.maquina.updateMany({
+    where: {
+      id_maquina: machineId,
+      estado: nextStatus ? "inactiva" : { not: "inactiva" },
+    },
+    data: {
+      estado: nextStatus ? "operativa" : "inactiva",
+    },
+  });
 
   const machine = await prisma.maquina.findUnique({
     where: {
@@ -290,39 +317,27 @@ export async function toggleMachineStatusAction(formData: FormData) {
     },
     select: {
       nombre: true,
-      estado: true,
     },
   });
 
-  if (!machine) {
-    redirect(MACHINES_PATH);
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      machineId,
+      machine ? `La máquina ya estaba ${nextStatus ? "activa" : "inactiva"}.` : "La máquina no existe.",
+    );
   }
-
-  const nextStatus = machine.estado === "inactiva" ? "operativa" : "inactiva";
-
-  await prisma.maquina.update({
-    where: {
-      id_maquina: machineId,
-    },
-    data: {
-      estado: nextStatus,
-    },
-  });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "maquina",
     id_registro_afectado: machineId,
-    accion: nextStatus === "operativa" ? "activar" : "inactivar",
-    detalle: `Maquina ${
-      nextStatus === "operativa" ? "activada" : "inactivada"
-    }: ${machine.nombre}`,
+    accion: nextStatus ? "activar" : "inactivar",
+    detalle: `Maquina ${nextStatus ? "activada" : "inactivada"}: ${machine?.nombre ?? machineId}`,
   });
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(
-    `${MACHINES_PATH}?toast=${nextStatus === "operativa" ? "machine-activated" : "machine-deactivated"}`,
-  );
+  return statusToggleDone(machineId, nextStatus);
 }

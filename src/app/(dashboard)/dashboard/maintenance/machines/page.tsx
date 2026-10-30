@@ -3,10 +3,7 @@ import Link from "next/link";
 
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,7 +35,9 @@ import {
 } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { toggleMachineStatusAction } from "@/modules/maintenance/machines/actions";
+import { MachineStatusButton } from "@/modules/maintenance/machines/machine-status-button";
 import { getMachineListData } from "@/modules/maintenance/machines/queries";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 
 type MachinesPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -254,11 +253,11 @@ export default async function MachinesPage({ searchParams }: MachinesPageProps) 
                               returnTo,
                             )}
                           />
-                          <RowToggleStatusButton
+                          <MachineStatusButton
+                            machine={machine}
                             action={toggleMachineStatusAction}
-                            hiddenFieldName="id_maquina"
-                            hiddenFieldValue={machine.id_maquina}
-                            isActive={machine.estado !== "inactiva"}
+                            activatedNotification={maintenanceNotifications["machine-activated"]}
+                            deactivatedNotification={maintenanceNotifications["machine-deactivated"]}
                           />
                         </div>
                       </TableCell>

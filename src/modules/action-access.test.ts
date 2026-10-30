@@ -154,7 +154,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateMachineAction",
       "toggleMachineStatusAction",
     ],
-    rechazanConResultado: ["createMachineAction", "updateMachineAction"],
+    rechazanConResultado: ["createMachineAction", "updateMachineAction", "toggleMachineStatusAction"],
   },
   {
     ruta: "maintenance/preventive/actions",

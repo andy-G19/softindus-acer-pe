@@ -51,6 +51,8 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/maintenance/machines/@panel/(.)new/page.tsx [successNotification] -> machine-created",
   "src/app/(dashboard)/dashboard/maintenance/machines/[id]/edit/page.tsx [successNotification] -> machine-updated",
   "src/app/(dashboard)/dashboard/maintenance/machines/new/page.tsx [successNotification] -> machine-created",
+  "src/app/(dashboard)/dashboard/maintenance/machines/page.tsx [activatedNotification] -> machine-activated",
+  "src/app/(dashboard)/dashboard/maintenance/machines/page.tsx [deactivatedNotification] -> machine-deactivated",
   "src/app/(dashboard)/dashboard/petty-cash/categories/[id]/edit/page.tsx [successNotification] -> expense-category-updated",
   "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [activatedNotification] -> expense-category-activated",
   "src/app/(dashboard)/dashboard/petty-cash/categories/page.tsx [deactivatedNotification] -> expense-category-deactivated",

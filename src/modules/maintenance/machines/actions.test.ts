@@ -7,6 +7,7 @@ import {
   updateMachineAction,
   type MachineFormState,
 } from "@/modules/maintenance/machines/actions";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -31,8 +32,9 @@ import {
 //
 // Desde el panel lateral (A4), el alta y la edicion devuelven el resultado
 // (FormActionState) en lugar de redirigir y niegan el permiso con un error
-// dentro del formulario; el cambio de estado sigue con requireRole y su
-// redireccion. updateMachineStatusAction, sin uso, se retiro (D4).
+// dentro del formulario. updateMachineStatusAction, sin uso, se retiro (D4).
+// El cambio de estado (A5) recibe el estado pedido, lo fija con
+// compare-and-set y devuelve el resultado a ConfirmActionButton.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -286,20 +288,88 @@ defineCases("updateMachineAction", update, [
   },
 ]);
 
-// Hoy el cambio de estado lee la maquina y escribe el contrario de lo que lee:
-// cualquier estado distinto de inactiva pasa a inactiva, e inactiva pasa a
-// operativa. No recibe el estado que pide el boton.
-defineCases("toggleMachineStatusAction", toggleMachineStatusAction, [
-  { name: "inactiva una maquina operativa", form: { id_maquina: MAQUINA }, data: machineLookup({ estado: "operativa" }) },
-  { name: "inactiva una maquina en reparacion", form: { id_maquina: MAQUINA }, data: machineLookup({ estado: "en_reparacion" }) },
-  { name: "inactiva una maquina dada de baja", form: { id_maquina: MAQUINA }, data: machineLookup({ estado: "dada_de_baja" }) },
-  { name: "activa una maquina inactiva: pasa a operativa", form: { id_maquina: MAQUINA }, data: machineLookup({ estado: "inactiva" }) },
+// El boton envia el estado pedido: "false" deja la maquina inactiva desde
+// cualquier otro estado y "true" la deja operativa solo si estaba inactiva. La
+// accion compara y escribe en una sola sentencia (updateMany con el estado de
+// partida en el where); count 0 es lo que responde la base cuando no existe o
+// ya tiene el estado pedido: el doble lo simula.
+const initialToggleState: StatusToggleState = { status: "idle" };
+const toggle = (formData: FormData) => toggleMachineStatusAction(initialToggleState, formData);
+const noRowChanged: DataOverrides = { "maquina.updateMany": () => ({ count: 0 }) };
+
+defineCases("toggleMachineStatusAction", toggle, [
+  { name: "inactiva una maquina que no esta inactiva", form: { id_maquina: MAQUINA, estado: "false" }, data: machineLookup() },
+  { name: "activa una maquina inactiva: queda operativa", form: { id_maquina: MAQUINA, estado: "true" }, data: machineLookup({ estado: "inactiva" }) },
   {
-    name: "pedir inactivar una maquina que ya esta inactiva la activa: el estado pedido no se lee",
-    form: { id_maquina: MAQUINA, estado: "inactiva" },
-    data: machineLookup({ estado: "inactiva" }),
+    name: "pedir inactivar una maquina que ya esta inactiva no cambia ninguna fila ni registra bitacora",
+    form: { id_maquina: MAQUINA, estado: "false" },
+    data: { ...machineLookup({ estado: "inactiva" }), ...noRowChanged },
   },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  { name: "la maquina no existe: vuelve al listado", form: { id_maquina: MAQUINA }, data: machineLookup({ exists: false }) },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_maquina: MAQUINA }, role: "WORKSHOP_MASTER" },
+  {
+    name: "pedir activar una maquina que no esta inactiva no cambia ninguna fila ni registra bitacora",
+    form: { id_maquina: MAQUINA, estado: "true" },
+    data: { ...machineLookup({ estado: "en_reparacion" }), ...noRowChanged },
+  },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
+  { name: "con un estado pedido que no es true ni false responde sin tocar Prisma", form: { id_maquina: MAQUINA, estado: "inactiva" } },
+  {
+    name: "la maquina no existe: no cambia ninguna fila y responde sin bitacora",
+    form: { id_maquina: MAQUINA, estado: "false" },
+    data: { ...machineLookup({ exists: false }), ...noRowChanged },
+  },
+  {
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
+    form: { id_maquina: MAQUINA, estado: "false" },
+    role: "WORKSHOP_MASTER",
+  },
 ]);
+
+// La escritura misma, fuera del snapshot: lo que decide que boton nunca hace
+// lo contrario de lo que dice.
+describe("toggleMachineStatusAction fija el estado pedido", () => {
+  type Recorded = { prisma?: string; effect?: string; args?: unknown };
+
+  async function run(estado: string, data: DataOverrides = machineLookup()) {
+    const { calls, result } = await characterizeHandler(() => toggle(formOf({ id_maquina: MAQUINA, estado })), data);
+    const recorded = calls as Recorded[];
+
+    return {
+      writes: recorded.filter((call) => call.prisma?.startsWith("maquina.update")),
+      audits: recorded.filter((call) => call.effect === "registerAuditLog"),
+      result: result as StatusToggleState,
+    };
+  }
+
+  it("inactivar escribe inactiva solo si la maquina no lo esta", async () => {
+    const { writes, result } = await run("false");
+
+    expect(writes).toEqual([
+      expect.objectContaining({
+        prisma: "maquina.updateMany",
+        args: { where: { id_maquina: MAQUINA, estado: { not: "inactiva" } }, data: { estado: "inactiva" } },
+      }),
+    ]);
+    expect(result).toMatchObject({ status: "success", data: { estado: false }, values: { id: MAQUINA } });
+  });
+
+  it("activar escribe operativa solo si la maquina esta inactiva", async () => {
+    const { writes, result } = await run("true");
+
+    expect(writes).toEqual([
+      expect.objectContaining({
+        prisma: "maquina.updateMany",
+        args: { where: { id_maquina: MAQUINA, estado: "inactiva" }, data: { estado: "operativa" } },
+      }),
+    ]);
+    expect(result).toMatchObject({ status: "success", data: { estado: true } });
+  });
+
+  it("sin fila cambiada responde con el estado que ya tenia y no registra bitacora", async () => {
+    const deactivate = await run("false", { ...machineLookup({ estado: "inactiva" }), ...noRowChanged });
+    const activate = await run("true", { ...machineLookup({ estado: "operativa" }), ...noRowChanged });
+
+    expect(deactivate.result).toMatchObject({ status: "error", error: "La máquina ya estaba inactiva." });
+    expect(activate.result).toMatchObject({ status: "error", error: "La máquina ya estaba activa." });
+    expect([...deactivate.audits, ...activate.audits]).toEqual([]);
+  });
+});

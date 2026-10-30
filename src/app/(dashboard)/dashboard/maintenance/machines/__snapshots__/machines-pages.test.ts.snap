@@ -487,10 +487,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="id_maquina-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -511,10 +508,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="id_maquina-2"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -523,8 +517,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -749,10 +742,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="MAQ00000001"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -773,10 +763,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="MAQ00000002"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -797,10 +784,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="MAQ00000003"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -821,10 +805,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="MAQ00000004"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -833,8 +814,7 @@ exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultad
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
