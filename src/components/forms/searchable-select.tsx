@@ -63,6 +63,7 @@ export function SearchableSelect({
   const inputId = id ?? `${name}-${generatedId}`;
   const listboxId = `${inputId}-listbox`;
   const inputRef = useRef<HTMLInputElement>(null);
+  const hiddenRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
   const [internalSelectedValue, setInternalSelectedValue] = useState(
@@ -110,6 +111,8 @@ export function SearchableSelect({
   }, [label, required, selectedValue]);
 
   function updateSelection(nextValue: string, nextItem?: SearchableSelectItem) {
+    const changed = nextValue !== selectedValue;
+
     if (!isControlled) {
       setInternalSelectedValue(nextValue);
     }
@@ -117,6 +120,15 @@ export function SearchableSelect({
     setQuery(nextItem?.label ?? "");
     setIsOpen(false);
     onValueChange?.(nextValue);
+
+    // Elegir una opcion o limpiarla no escribe en ningun campo, asi que no
+    // hay evento input; un <select> nativo si lo dispara. RouteSheet y
+    // FormDialog marcan los cambios con el onInput de su contenido: sin este
+    // aviso, Cancelar cerraba sin preguntar (hallazgo 1 de la 10.5a). Sale del
+    // input oculto, que no tiene onChange, y solo si el valor cambia.
+    if (changed) {
+      hiddenRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
+    }
   }
 
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
@@ -209,7 +221,7 @@ export function SearchableSelect({
         {required ? " *" : ""}
       </label>
 
-      <input type="hidden" name={name} value={selectedValue} />
+      <input ref={hiddenRef} type="hidden" name={name} value={selectedValue} />
 
       <div className="relative">
         <input

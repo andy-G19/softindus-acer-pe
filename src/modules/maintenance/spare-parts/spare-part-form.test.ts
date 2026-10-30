@@ -335,6 +335,22 @@ describe("SparePartForm en el panel lateral", () => {
     expect(navigation.back).not.toHaveBeenCalled();
   });
 
+  // Hallazgo 1 de la 10.5a: elegir un proveedor sin escribir no marcaba
+  // cambios y Cancelar cerraba el panel sin preguntar.
+  it("elegir un proveedor sin escribir tambien cuenta como cambio", async () => {
+    await renderInPanel(success);
+    await act(async () => field<HTMLInputElement>("id_proveedor").focus());
+    const option = [...document.querySelectorAll<HTMLButtonElement>('[role="option"]')].find((item) =>
+      item.textContent?.includes("Rodamientos del Sur"),
+    )!;
+    await act(async () => option.click());
+
+    await act(async () => button("Cancelar").click());
+
+    expect(document.querySelector('[role="alertdialog"]')?.textContent).toContain("¿Descartar el repuesto nuevo?");
+    expect(navigation.back).not.toHaveBeenCalled();
+  });
+
   it("al guardar da un solo aviso y cierra volviendo atras sin confirmar", async () => {
     await renderInPanel(success);
     fillRequired();
