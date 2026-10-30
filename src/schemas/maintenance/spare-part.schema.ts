@@ -76,19 +76,3 @@ export const sparePartSchema = z.object({
     )
     .transform((value) => value === "true"),
 });
-
-export const sparePartStatusSchema = z.object({
-  id_repuesto: z
-    .string()
-    .trim()
-    .length(11, "El identificador del repuesto no es válido."),
-
-  estado: z
-    .string()
-    .trim()
-    .refine(
-      (value) => value === "true" || value === "false",
-      "Seleccione un estado válido.",
-    )
-    .transform((value) => value === "true"),
-});

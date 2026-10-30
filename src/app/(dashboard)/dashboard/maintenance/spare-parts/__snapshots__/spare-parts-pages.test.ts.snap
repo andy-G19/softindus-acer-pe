@@ -188,10 +188,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -208,10 +205,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fstatus%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -220,8 +214,7 @@ exports[`/dashboard/maintenance/spare-parts > inactivos > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -408,10 +401,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -428,10 +418,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -440,8 +427,7 @@ exports[`/dashboard/maintenance/spare-parts > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -653,10 +639,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -673,10 +656,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/spare-parts/id_repuesto-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fspare-parts%3Fq%3Drodamiento%26provider%3DPRV00000001%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_repuesto" value="id_repuesto-2"/>
-<button data-variant="ghost" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
@@ -685,8 +665,7 @@ exports[`/dashboard/maintenance/spare-parts > todos los filtros > resultado 1`] 
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

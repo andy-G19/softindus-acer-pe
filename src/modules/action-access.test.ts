@@ -178,10 +178,9 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: [
       "createSparePartAction",
       "updateSparePartAction",
-      "updateSparePartStatusAction",
       "toggleSparePartStatusAction",
     ],
-    rechazanConResultado: ["createSparePartAction", "updateSparePartAction"],
+    rechazanConResultado: ["createSparePartAction", "updateSparePartAction", "toggleSparePartStatusAction"],
   },
   {
     ruta: "petty-cash/boxes/actions",

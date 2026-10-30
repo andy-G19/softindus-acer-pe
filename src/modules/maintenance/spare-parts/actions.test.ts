@@ -5,9 +5,9 @@ import {
   createSparePartAction,
   toggleSparePartStatusAction,
   updateSparePartAction,
-  updateSparePartStatusAction,
   type SparePartFormState,
 } from "@/modules/maintenance/spare-parts/actions";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   characterizeHandler,
   describeNavigationError,
@@ -34,8 +34,9 @@ import {
 //
 // Desde el panel lateral (A6), el alta y la edicion devuelven el resultado
 // (FormActionState) en lugar de redirigir y niegan el permiso con un error
-// dentro del formulario; el cambio de estado sigue con requireRole y su
-// redireccion.
+// dentro del formulario. El cambio de estado (A7) recibe el estado pedido, lo
+// fija con compare-and-set y devuelve el resultado a ConfirmActionButton;
+// updateSparePartStatusAction, que solo usaba el cambio de estado, se retiro.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -357,44 +358,87 @@ defineCases("updateSparePartAction", update, [
   },
 ]);
 
-// Recibe el estado pedido y lo escribe aunque ya lo tenga: registra la
-// bitacora igual. Solo la llama toggleSparePartStatusAction.
-defineCases("updateSparePartStatusAction", updateSparePartStatusAction, [
-  { name: "inactiva al pedir false", form: { id_repuesto: REPUESTO, estado: "false" }, data: sparePartLookup() },
-  { name: "activa al pedir true", form: { id_repuesto: REPUESTO, estado: "true" }, data: sparePartLookup({ estado: false }) },
+// El boton envia el estado pedido y la accion solo lo fija si el repuesto tiene
+// el contrario (updateMany con el estado opuesto en el where); count 0 es lo
+// que responde la base cuando no existe o ya tiene el estado pedido: el doble
+// lo simula.
+const initialToggleState: StatusToggleState = { status: "idle" };
+const toggle = (formData: FormData) => toggleSparePartStatusAction(initialToggleState, formData);
+const noRowChanged: DataOverrides = { "repuesto.updateMany": () => ({ count: 0 }) };
+
+defineCases("toggleSparePartStatusAction", toggle, [
+  { name: "inactiva un repuesto activo", form: { id_repuesto: REPUESTO, estado: "false" }, data: sparePartLookup() },
+  { name: "activa un repuesto inactivo", form: { id_repuesto: REPUESTO, estado: "true" }, data: sparePartLookup({ estado: false }) },
   {
-    name: "pedir inactivar uno ya inactivo escribe y registra la bitacora igual",
+    name: "pedir inactivar un repuesto que ya esta inactivo no cambia ninguna fila ni registra bitacora",
     form: { id_repuesto: REPUESTO, estado: "false" },
-    data: sparePartLookup({ estado: false }),
+    data: { ...sparePartLookup({ estado: false }), ...noRowChanged },
   },
-  { name: "un estado invalido vuelve al listado sin tocar Prisma", form: { id_repuesto: REPUESTO, estado: "quizas" } },
   {
-    name: "el repuesto no existe: vuelve al listado",
+    name: "pedir activar un repuesto que ya esta activo no cambia ninguna fila ni registra bitacora",
+    form: { id_repuesto: REPUESTO, estado: "true" },
+    data: { ...sparePartLookup(), ...noRowChanged },
+  },
+  { name: "sin id responde que no existe sin tocar Prisma", form: { estado: "false" } },
+  { name: "con un estado pedido que no es true ni false responde sin tocar Prisma", form: { id_repuesto: REPUESTO, estado: "si" } },
+  {
+    name: "el repuesto no existe: no cambia ninguna fila y responde sin bitacora",
     form: { id_repuesto: REPUESTO, estado: "false" },
-    data: sparePartLookup({ exists: false }),
+    data: { ...sparePartLookup({ exists: false }), ...noRowChanged },
   },
   {
-    name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma",
+    name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma",
     form: { id_repuesto: REPUESTO, estado: "false" },
     role: "WORKSHOP_MASTER",
   },
 ]);
 
-// Hoy el cambio de estado lee el repuesto y pide el contrario de lo que lee:
-// no recibe el estado que pide el boton.
-defineCases("toggleSparePartStatusAction", toggleSparePartStatusAction, [
-  { name: "inactiva un repuesto activo", form: { id_repuesto: REPUESTO }, data: sparePartLookup({ estado: true }) },
-  { name: "activa un repuesto inactivo", form: { id_repuesto: REPUESTO }, data: sparePartLookup({ estado: false }) },
-  {
-    name: "pedir inactivar un repuesto que ya esta inactivo lo activa: el estado pedido no se lee",
-    form: { id_repuesto: REPUESTO, estado: "false" },
-    data: sparePartLookup({ estado: false }),
-  },
-  { name: "sin id vuelve al listado sin tocar Prisma", form: {} },
-  {
-    name: "el repuesto no existe: pide activarlo y vuelve al listado sin escribir",
-    form: { id_repuesto: REPUESTO },
-    data: sparePartLookup({ exists: false }),
-  },
-  { name: "WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma", form: { id_repuesto: REPUESTO }, role: "WORKSHOP_MASTER" },
-]);
+// La escritura misma, fuera del snapshot: lo que decide que el boton nunca
+// hace lo contrario de lo que dice.
+describe("toggleSparePartStatusAction fija el estado pedido", () => {
+  type Recorded = { prisma?: string; effect?: string; args?: unknown };
+
+  async function run(estado: string, data: DataOverrides = sparePartLookup()) {
+    const { calls, result } = await characterizeHandler(() => toggle(formOf({ id_repuesto: REPUESTO, estado })), data);
+    const recorded = calls as Recorded[];
+
+    return {
+      writes: recorded.filter((call) => call.prisma?.startsWith("repuesto.update")),
+      audits: recorded.filter((call) => call.effect === "registerAuditLog"),
+      result: result as StatusToggleState,
+    };
+  }
+
+  it("inactivar escribe false solo si el repuesto esta activo", async () => {
+    const { writes, result } = await run("false");
+
+    expect(writes).toEqual([
+      expect.objectContaining({
+        prisma: "repuesto.updateMany",
+        args: { where: { id_repuesto: REPUESTO, estado: true }, data: { estado: false } },
+      }),
+    ]);
+    expect(result).toMatchObject({ status: "success", data: { estado: false }, values: { id: REPUESTO } });
+  });
+
+  it("activar escribe true solo si el repuesto esta inactivo", async () => {
+    const { writes, result } = await run("true");
+
+    expect(writes).toEqual([
+      expect.objectContaining({
+        prisma: "repuesto.updateMany",
+        args: { where: { id_repuesto: REPUESTO, estado: false }, data: { estado: true } },
+      }),
+    ]);
+    expect(result).toMatchObject({ status: "success", data: { estado: true } });
+  });
+
+  it("sin fila cambiada responde con el estado que ya tenia y no registra bitacora", async () => {
+    const deactivate = await run("false", { ...sparePartLookup({ estado: false }), ...noRowChanged });
+    const activate = await run("true", { ...sparePartLookup(), ...noRowChanged });
+
+    expect(deactivate.result).toMatchObject({ status: "error", error: "El repuesto ya estaba inactivo." });
+    expect(activate.result).toMatchObject({ status: "error", error: "El repuesto ya estaba activo." });
+    expect([...deactivate.audits, ...activate.audits]).toEqual([]);
+  });
+});

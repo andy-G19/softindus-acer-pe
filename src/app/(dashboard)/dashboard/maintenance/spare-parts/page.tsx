@@ -3,10 +3,7 @@ import Link from "next/link";
 
 import { Field } from "@/components/forms/field";
 import { FilterBar } from "@/components/forms/filter-bar";
-import {
-  RowEditLink,
-  RowToggleStatusButton,
-} from "@/components/table/row-actions";
+import { RowEditLink } from "@/components/table/row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,8 +34,10 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 import { toggleSparePartStatusAction } from "@/modules/maintenance/spare-parts/actions";
 import { getSparePartListData } from "@/modules/maintenance/spare-parts/queries";
+import { SparePartStatusButton } from "@/modules/maintenance/spare-parts/spare-part-status-button";
 
 type SparePartsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -193,11 +192,11 @@ export default async function SparePartsPage({
                             returnTo,
                           )}
                         />
-                        <RowToggleStatusButton
+                        <SparePartStatusButton
+                          sparePart={sparePart}
                           action={toggleSparePartStatusAction}
-                          hiddenFieldName="id_repuesto"
-                          hiddenFieldValue={sparePart.id_repuesto}
-                          isActive={sparePart.estado}
+                          activatedNotification={maintenanceNotifications["spare-part-activated"]}
+                          deactivatedNotification={maintenanceNotifications["spare-part-deactivated"]}
                         />
                       </div>
                     </TableCell>

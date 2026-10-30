@@ -1135,10 +1135,10 @@ exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revi
 }
 `;
 
-exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1146,32 +1146,39 @@ exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (
 ]
 `;
 
-exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar repuestos.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSparePartStatusAction > activa un repuesto inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
       },
       "where": {
+        "estado": false,
         "id_repuesto": "REP00000004",
       },
     },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
   },
   {
     "args": {
@@ -1183,18 +1190,6 @@ exports[`toggleSparePartStatusAction > activa un repuesto inactivo > llamadas 1`
       },
     },
     "prisma": "repuesto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
   },
   {
     "args": {
@@ -1218,32 +1213,65 @@ exports[`toggleSparePartStatusAction > activa un repuesto inactivo > llamadas 1`
 ]
 `;
 
-exports[`toggleSparePartStatusAction > activa un repuesto inactivo > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-activated"`;
+exports[`toggleSparePartStatusAction > activa un repuesto inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSparePartStatusAction > el repuesto no existe: pide activarlo y vuelve al listado sin escribir > llamadas 1`] = `
+exports[`toggleSparePartStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > el repuesto no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
     "args": {
-      "select": {
-        "estado": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_repuesto": "REP00000004",
       },
     },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
   },
   {
     "args": {
@@ -1259,32 +1287,39 @@ exports[`toggleSparePartStatusAction > el repuesto no existe: pide activarlo y v
 ]
 `;
 
-exports[`toggleSparePartStatusAction > el repuesto no existe: pide activarlo y vuelve al listado sin escribir > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts"`;
+exports[`toggleSparePartStatusAction > el repuesto no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
 
 exports[`toggleSparePartStatusAction > inactiva un repuesto activo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
     "args": {
-      "select": {
-        "estado": true,
+      "data": {
+        "estado": false,
       },
       "where": {
+        "estado": true,
         "id_repuesto": "REP00000004",
       },
     },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
   },
   {
     "args": {
@@ -1296,18 +1331,6 @@ exports[`toggleSparePartStatusAction > inactiva un repuesto activo > llamadas 1`
       },
     },
     "prisma": "repuesto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
   },
   {
     "args": {
@@ -1331,32 +1354,41 @@ exports[`toggleSparePartStatusAction > inactiva un repuesto activo > llamadas 1`
 ]
 `;
 
-exports[`toggleSparePartStatusAction > inactiva un repuesto activo > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-deactivated"`;
+exports[`toggleSparePartStatusAction > inactiva un repuesto activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo lo activa: el estado pedido no se lee > llamadas 1`] = `
+exports[`toggleSparePartStatusAction > pedir activar un repuesto que ya esta activo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
   },
   {
     "args": {
-      "select": {
+      "data": {
         "estado": true,
       },
       "where": {
+        "estado": false,
         "id_repuesto": "REP00000004",
       },
     },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
   },
   {
     "args": {
@@ -1369,46 +1401,74 @@ exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta i
     },
     "prisma": "repuesto.findUnique",
   },
+]
+`;
+
+exports[`toggleSparePartStatusAction > pedir activar un repuesto que ya esta activo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto ya estaba activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
   {
     "args": {
       "data": {
+        "estado": false,
+      },
+      "where": {
         "estado": true,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
       },
       "where": {
         "id_repuesto": "REP00000004",
       },
     },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Repuesto activado: Faja en V B-52",
-      "enTransaccion": false,
-      "entidad_afectada": "repuesto",
-      "id_registro_afectado": "REP00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/spare-parts",
-    "effect": "revalidatePath",
+    "prisma": "repuesto.findUnique",
   },
 ]
 `;
 
-exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo lo activa: el estado pedido no se lee > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-activated"`;
+exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
 
-exports[`toggleSparePartStatusAction > sin id vuelve al listado sin tocar Prisma > llamadas 1`] = `
+exports[`toggleSparePartStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1416,7 +1476,18 @@ exports[`toggleSparePartStatusAction > sin id vuelve al listado sin tocar Prisma
 ]
 `;
 
-exports[`toggleSparePartStatusAction > sin id vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts"`;
+exports[`toggleSparePartStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
 [
@@ -2409,218 +2480,3 @@ exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar)
   },
 }
 `;
-
-exports[`updateSparePartStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > WORKSHOP_MASTER: requireRole lo rechaza (redirige) sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
-
-exports[`updateSparePartStatusAction > activa al pedir true > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "nombre_repuesto": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
-  },
-  {
-    "args": {
-      "accion": "activar",
-      "detalle": "Repuesto activado: Faja en V B-52",
-      "enTransaccion": false,
-      "entidad_afectada": "repuesto",
-      "id_registro_afectado": "REP00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/spare-parts",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > activa al pedir true > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-activated"`;
-
-exports[`updateSparePartStatusAction > el repuesto no existe: vuelve al listado > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "nombre_repuesto": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "prisma": "repuesto.findUnique",
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > el repuesto no existe: vuelve al listado > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts"`;
-
-exports[`updateSparePartStatusAction > inactiva al pedir false > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "nombre_repuesto": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Repuesto inactivado: Faja en V B-52",
-      "enTransaccion": false,
-      "entidad_afectada": "repuesto",
-      "id_registro_afectado": "REP00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/spare-parts",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > inactiva al pedir false > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-deactivated"`;
-
-exports[`updateSparePartStatusAction > pedir inactivar uno ya inactivo escribe y registra la bitacora igual > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "nombre_repuesto": true,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "prisma": "repuesto.findUnique",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": false,
-      },
-      "where": {
-        "id_repuesto": "REP00000004",
-      },
-    },
-    "fueraDeTransaccion": true,
-    "prisma": "repuesto.update",
-  },
-  {
-    "args": {
-      "accion": "inactivar",
-      "detalle": "Repuesto inactivado: Faja en V B-52",
-      "enTransaccion": false,
-      "entidad_afectada": "repuesto",
-      "id_registro_afectado": "REP00000004",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/spare-parts",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > pedir inactivar uno ya inactivo escribe y registra la bitacora igual > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts?toast=spare-part-deactivated"`;
-
-exports[`updateSparePartStatusAction > un estado invalido vuelve al listado sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`updateSparePartStatusAction > un estado invalido vuelve al listado sin tocar Prisma > resultado 1`] = `"redirect:/dashboard/maintenance/spare-parts"`;

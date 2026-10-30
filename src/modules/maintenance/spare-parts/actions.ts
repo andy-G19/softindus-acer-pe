@@ -1,19 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
 import {
-  sparePartSchema,
-  sparePartStatusSchema,
-} from "@/schemas/maintenance/spare-part.schema";
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
+import { sparePartSchema } from "@/schemas/maintenance/spare-part.schema";
 
 /** Lo que el formulario de repuesto envio, tal cual, para volver a mostrarlo. */
 export type SparePartFormValues = {
@@ -30,12 +32,6 @@ export type SparePartFormValues = {
 export type SparePartFormState = FormActionState<SparePartFormValues, { id_repuesto: string }>;
 
 const SPARE_PARTS_PATH = "/dashboard/maintenance/spare-parts";
-
-// El cambio de estado desde la lista sigue redirigiendo hasta que pase a
-// ConfirmActionButton (A7 de la 10.5a).
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function getSparePartFormValues(formData: FormData): SparePartFormValues {
   const text = (name: keyof SparePartFormValues) => formData.get(name)?.toString() ?? "";
@@ -280,79 +276,70 @@ export async function updateSparePartAction(
   return sparePartSaved(values, sparePartId);
 }
 
-export async function updateSparePartStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const parsed = sparePartStatusSchema.safeParse({
-    id_repuesto: formData.get("id_repuesto"),
-    estado: formData.get("estado"),
-  });
+// Activar o inactivar desde la fila (ConfirmActionButton). El boton envia el
+// estado pedido y la accion solo lo fija si el repuesto tiene el contrario:
+// comparar y escribir en una sola sentencia evita que una lista desactualizada
+// o un doble clic hagan lo contrario de lo que dice el boton.
+export async function toggleSparePartStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const sparePartId = formData.get("id_repuesto")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
 
-  if (!parsed.success) {
-    redirect(SPARE_PARTS_PATH);
+  if (!session) {
+    return statusToggleError(sparePartId, "No tienes permisos para activar o inactivar repuestos.");
   }
 
-  const data = parsed.data;
-  const sparePart = await prisma.repuesto.findUnique({
-    where: {
-      id_repuesto: data.id_repuesto,
-    },
-    select: {
-      nombre_repuesto: true,
-    },
-  });
-
-  if (!sparePart) {
-    redirect(SPARE_PARTS_PATH);
-  }
-
-  await prisma.repuesto.update({
-    where: {
-      id_repuesto: data.id_repuesto,
-    },
-    data: {
-      estado: data.estado,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "repuesto",
-    id_registro_afectado: data.id_repuesto,
-    accion: data.estado ? "activar" : "inactivar",
-    detalle: `Repuesto ${data.estado ? "activado" : "inactivado"}: ${
-      sparePart.nombre_repuesto
-    }`,
-  });
-
-  revalidatePath("/dashboard/maintenance");
-  revalidatePath(SPARE_PARTS_PATH);
-
-  redirect(
-    `${SPARE_PARTS_PATH}?toast=${data.estado ? "spare-part-activated" : "spare-part-deactivated"}`,
-  );
-}
-
-export async function toggleSparePartStatusAction(formData: FormData) {
-  await requireAdmin();
-  const sparePartId = formData.get("id_repuesto")?.toString().trim();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!sparePartId) {
-    redirect(SPARE_PARTS_PATH);
+    return statusToggleError(sparePartId, "El repuesto no existe.");
   }
+
+  if (nextStatus === null) {
+    return statusToggleError(sparePartId, "Estado no válido.");
+  }
+
+  const { count } = await prisma.repuesto.updateMany({
+    where: {
+      id_repuesto: sparePartId,
+      estado: !nextStatus,
+    },
+    data: {
+      estado: nextStatus,
+    },
+  });
 
   const sparePart = await prisma.repuesto.findUnique({
     where: {
       id_repuesto: sparePartId,
     },
     select: {
-      estado: true,
+      nombre_repuesto: true,
     },
   });
 
-  const nextStatus = sparePart ? !sparePart.estado : true;
-  const nextFormData = new FormData();
-  nextFormData.set("id_repuesto", sparePartId);
-  nextFormData.set("estado", String(nextStatus));
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      sparePartId,
+      sparePart ? `El repuesto ya estaba ${nextStatus ? "activo" : "inactivo"}.` : "El repuesto no existe.",
+    );
+  }
 
-  await updateSparePartStatusAction(nextFormData);
+  await registerAuditLog({
+    userId: session.user.id,
+    entidad_afectada: "repuesto",
+    id_registro_afectado: sparePartId,
+    accion: nextStatus ? "activar" : "inactivar",
+    detalle: `Repuesto ${nextStatus ? "activado" : "inactivado"}: ${
+      sparePart?.nombre_repuesto ?? sparePartId
+    }`,
+  });
+
+  revalidatePath("/dashboard/maintenance");
+  revalidatePath(SPARE_PARTS_PATH);
+
+  return statusToggleDone(sparePartId, nextStatus);
 }
