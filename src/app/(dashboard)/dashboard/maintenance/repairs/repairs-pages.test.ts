@@ -24,9 +24,9 @@ vi.mock("next/navigation", async (importOriginal) =>
 // de mover sus consultas a modules/maintenance/repairs/queries.ts.
 // La 10.5b agrega una reparacion en cada estado (ejecutadas y anuladas
 // muestran «Sin accion») y, en la primera, el ejemplo del hallazgo 3 tal como
-// lo guarda hoy la base: dos detalles de 12,81 y un costo total de 25,63, que
-// la base redondeo por su cuenta desde 25,625. La lista suma los subtotales
-// (25,62) y muestra el total guardado.
+// quedo guardado antes de B2: dos detalles de 12,81 y un costo total de 25,63,
+// que la base redondeo por su cuenta desde 25,625. La lista suma los subtotales
+// (25,62) y muestra el total guardado; esas filas no se corrigen.
 
 const REPAIR_STATES = ["programada", "ejecutada", "observada", "anulada"];
 

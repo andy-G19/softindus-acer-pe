@@ -25,8 +25,9 @@ import {
 // Hoy las dos acciones reciben solo el FormData y autorizan solo a ADMIN con
 // requireRole. El alta lee tres ranuras fijas de repuesto (id_repuesto_N y
 // cantidad_N), ignora en silencio la que llega incompleta (hallazgo 7),
-// calcula subtotales y total en coma flotante sin redondear (hallazgo 3) y
-// decide sobre la falla fuera de la transaccion (hallazgo 2). El cambio de
+// calcula los importes con src/lib/repair-amounts.ts y envia a Prisma las
+// cadenas que devuelve (B2, hallazgo 3) y decide sobre la falla fuera de la
+// transaccion (hallazgo 2). El cambio de
 // estado lee la reparacion fuera de la transaccion y comprueba dentro, con el
 // dato viejo, si esta finalizada. Las reglas de negocio que el hallazgo 12
 // registra (anular devuelve la falla a pendiente y deja la maquina en
@@ -259,7 +260,7 @@ defineCases("createRepairAction", createRepairAction, [
   },
   { name: "anulada al crear no toca la falla ni la maquina", ...createWith({ estado_reparacion: "anulada" }) },
   {
-    name: "dos repuestos: los detalles con sus correlativos y los importes en coma flotante",
+    name: "dos repuestos: los detalles con sus correlativos y los importes como los guarda la base",
     ...createWith(twoSpareParts),
   },
   {
@@ -267,7 +268,7 @@ defineCases("createRepairAction", createRepairAction, [
     ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "2", id_repuesto_2: RETEN, cantidad_2: "1", id_repuesto_3: CORREA, cantidad_3: "0.5" }),
   },
   {
-    name: "una cantidad de 1,005 se usa sin redondear en el subtotal",
+    name: "una cantidad de 1,005 se redondea antes de calcular el subtotal",
     ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "1.005" }),
   },
   {
@@ -336,9 +337,9 @@ defineCases("updateRepairStatusAction", updateRepairStatusAction, [
   { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
 ]);
 
-// Los importes que se envian hoy a la base, fuera del snapshot: B2 los
-// cambiara por los que la base guarda (redondeo de numeric(12,2)).
-describe("createRepairAction calcula los importes en coma flotante", () => {
+// Los importes que se envian a la base, fuera del snapshot: lo que se envia
+// es lo que se guarda (src/lib/repair-amounts.ts, valores de Postgres).
+describe("createRepairAction envia los importes como los guarda la base", () => {
   type Recorded = { prisma?: string; args?: { data?: Record<string, unknown> } };
 
   async function written(fields: FormFields) {
@@ -353,21 +354,21 @@ describe("createRepairAction calcula los importes en coma flotante", () => {
     };
   }
 
-  it("dos repuestos de 1,25 x 10,25 envian subtotales de 12,8125 y un total de 25,625", async () => {
+  it("dos repuestos de 1,25 x 10,25 envian subtotales de 12,81 y un total de 25,62", async () => {
     const { repair: created, details } = await written(twoSpareParts);
 
     expect(details.map((detail) => [detail?.cantidad, detail?.costo_unitario, detail?.subtotal])).toEqual([
-      [1.25, 10.25, 12.8125],
-      [1.25, 10.25, 12.8125],
+      ["1.25", "10.25", "12.81"],
+      ["1.25", "10.25", "12.81"],
     ]);
-    expect(created).toMatchObject({ mano_obra: null, costo_total: 25.625 });
+    expect(created).toMatchObject({ mano_obra: null, costo_total: "25.62" });
   });
 
-  it("una cantidad de 1,005 entra al subtotal sin redondear, en coma flotante", async () => {
+  it("una cantidad de 1,005 entra al subtotal ya redondeada a 1,01", async () => {
     const { repair: created, details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "1.005" });
 
-    expect(details[0]).toMatchObject({ cantidad: 1.005, subtotal: 1.005 * 10.25 });
-    expect(created).toMatchObject({ mano_obra: 150.5, costo_total: 150.5 + 1.005 * 10.25 });
+    expect(details[0]).toMatchObject({ cantidad: "1.01", costo_unitario: "10.25", subtotal: "10.35" });
+    expect(created).toMatchObject({ mano_obra: "150.50", costo_total: "160.85" });
   });
 
   it("una linea incompleta no deja detalle", async () => {

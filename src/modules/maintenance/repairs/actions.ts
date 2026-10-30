@@ -7,7 +7,7 @@ import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import { toNumber } from "@/lib/numbers";
+import { calculateRepairAmounts } from "@/lib/repair-amounts";
 import {
   repairSchema,
   repairSparePartSchema,
@@ -117,25 +117,17 @@ export async function createRepairAction(formData: FormData) {
       throw new Error("No se encontró uno de los repuestos seleccionados.");
     }
 
-    const quantity = item.cantidad ?? 0;
-    const unitCost = toNumber(sparePart.costo_unitario);
-    const subtotal = quantity * unitCost;
-
     return {
       id_repuesto: sparePart.id_repuesto,
-      cantidad: quantity,
-      costo_unitario: unitCost,
-      subtotal,
+      cantidad: item.cantidad ?? 0,
+      costo_unitario: String(sparePart.costo_unitario),
     };
   });
 
-  const laborCost = data.mano_obra ?? 0;
-
-  const sparePartsTotal = sparePartDetails.reduce((total, item) => {
-    return total + item.subtotal;
-  }, 0);
-
-  const totalCost = laborCost + sparePartsTotal;
+  const amounts = calculateRepairAmounts({
+    mano_obra: data.mano_obra,
+    items: sparePartDetails,
+  });
 
   await prisma.$transaction(async (tx) => {
     const idReparacion = await getNextCorrelativeId(tx, {
@@ -149,8 +141,8 @@ export async function createRepairAction(formData: FormData) {
         id_falla: data.id_falla,
         fecha_reparacion: data.fecha_reparacion,
         tecnico_proveedor: data.tecnico_proveedor || null,
-        mano_obra: data.mano_obra,
-        costo_total: totalCost,
+        mano_obra: amounts.mano_obra,
+        costo_total: amounts.total,
         estado_reparacion: data.estado_reparacion,
         observaciones: data.observaciones || null,
       },
@@ -168,9 +160,9 @@ export async function createRepairAction(formData: FormData) {
           id_detalle_repuesto: detailIds[index],
           id_reparacion: idReparacion,
           id_repuesto: detail.id_repuesto,
-          cantidad: detail.cantidad,
-          costo_unitario: detail.costo_unitario,
-          subtotal: detail.subtotal,
+          cantidad: amounts.lines[index].cantidad,
+          costo_unitario: amounts.lines[index].costo_unitario,
+          subtotal: amounts.lines[index].subtotal,
         },
       });
     }

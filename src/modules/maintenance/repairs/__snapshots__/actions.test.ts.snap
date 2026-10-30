@@ -46,12 +46,12 @@ exports[`createRepairAction > anulada al crear no toca la falla ni la maquina > 
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "anulada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -115,7 +115,7 @@ exports[`createRepairAction > datos invalidos lanzan los mensajes unidos sin toc
 
 exports[`createRepairAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una falla válida. La fecha de reparación es obligatoria. Seleccione un estado de reparación válido."`;
 
-exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes en coma flotante > llamadas 1`] = `
+exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes como los guarda la base > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -162,7 +162,7 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
   {
     "args": {
       "data": {
-        "costo_total": 25.625,
+        "costo_total": "25.62",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
@@ -185,12 +185,12 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
   {
     "args": {
       "data": {
-        "cantidad": 1.25,
-        "costo_unitario": 10.25,
+        "cantidad": "1.25",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000021",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000001",
-        "subtotal": 12.8125,
+        "subtotal": "12.81",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -198,12 +198,12 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
   {
     "args": {
       "data": {
-        "cantidad": 1.25,
-        "costo_unitario": 10.25,
+        "cantidad": "1.25",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000022",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000002",
-        "subtotal": 12.8125,
+        "subtotal": "12.81",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -264,7 +264,7 @@ exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y
 ]
 `;
 
-exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes en coma flotante > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes como los guarda la base > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
 
 exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina operativa > llamadas 1`] = `
 [
@@ -299,12 +299,12 @@ exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina op
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "ejecutada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -410,12 +410,12 @@ exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como 
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-03-02T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -558,7 +558,7 @@ exports[`createRepairAction > los opcionales vacios o ausentes se guardan como n
   {
     "args": {
       "data": {
-        "costo_total": 0,
+        "costo_total": "0.00",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
@@ -669,12 +669,12 @@ exports[`createRepairAction > observada hace lo mismo que programada > llamadas 
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "observada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -780,12 +780,12 @@ exports[`createRepairAction > programada sin repuestos: crea la reparacion y pas
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -906,12 +906,12 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "costo_total": 200.7,
+        "costo_total": "200.70",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -929,12 +929,12 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 2,
-        "costo_unitario": 10.25,
+        "cantidad": "2.00",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000021",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000001",
-        "subtotal": 20.5,
+        "subtotal": "20.50",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -942,12 +942,12 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 1,
-        "costo_unitario": 10.25,
+        "cantidad": "1.00",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000022",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000002",
-        "subtotal": 10.25,
+        "subtotal": "10.25",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -955,12 +955,12 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
   {
     "args": {
       "data": {
-        "cantidad": 0.5,
-        "costo_unitario": 38.9,
+        "cantidad": "0.50",
+        "costo_unitario": "38.90",
         "id_detalle_repuesto": "DRP00000023",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000003",
-        "subtotal": 19.45,
+        "subtotal": "19.45",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -1087,7 +1087,7 @@ exports[`createRepairAction > un repuesto inexistente o inactivo > llamadas 1`] 
 
 exports[`createRepairAction > un repuesto inexistente o inactivo > resultado 1`] = `"error: Uno o más repuestos seleccionados no existen o están inactivos."`;
 
-exports[`createRepairAction > una cantidad de 1,005 se usa sin redondear en el subtotal > llamadas 1`] = `
+exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcular el subtotal > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1133,12 +1133,12 @@ exports[`createRepairAction > una cantidad de 1,005 se usa sin redondear en el s
   {
     "args": {
       "data": {
-        "costo_total": 160.80125,
+        "costo_total": "160.85",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -1156,12 +1156,12 @@ exports[`createRepairAction > una cantidad de 1,005 se usa sin redondear en el s
   {
     "args": {
       "data": {
-        "cantidad": 1.005,
-        "costo_unitario": 10.25,
+        "cantidad": "1.01",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000021",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000001",
-        "subtotal": 10.30125,
+        "subtotal": "10.35",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -1222,7 +1222,7 @@ exports[`createRepairAction > una cantidad de 1,005 se usa sin redondear en el s
 ]
 `;
 
-exports[`createRepairAction > una cantidad de 1,005 se usa sin redondear en el subtotal > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcular el subtotal > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
 
 exports[`createRepairAction > una cantidad de cero > llamadas 1`] = `
 [
@@ -1331,12 +1331,12 @@ exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega 
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "programada",
         "fecha_reparacion": Date { NaN },
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -1442,12 +1442,12 @@ exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en
   {
     "args": {
       "data": {
-        "costo_total": 150.5,
+        "costo_total": "150.50",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -1566,12 +1566,12 @@ exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en
   {
     "args": {
       "data": {
-        "costo_total": 160.75,
+        "costo_total": "160.75",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 150.5,
+        "mano_obra": "150.50",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
@@ -1589,12 +1589,12 @@ exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en
   {
     "args": {
       "data": {
-        "cantidad": 1,
-        "costo_unitario": 10.25,
+        "cantidad": "1.00",
+        "costo_unitario": "10.25",
         "id_detalle_repuesto": "DRP00000021",
         "id_reparacion": "RPA00000021",
         "id_repuesto": "REP00000002",
-        "subtotal": 10.25,
+        "subtotal": "10.25",
       },
     },
     "prisma": "detalle_repuesto_reparacion.create",
@@ -1690,12 +1690,12 @@ exports[`createRepairAction > una mano de obra de 1e12 pasa el esquema y llega a
   {
     "args": {
       "data": {
-        "costo_total": 1000000000000,
+        "costo_total": "1000000000000.00",
         "estado_reparacion": "programada",
         "fecha_reparacion": 2026-07-16T00:00:00.000Z,
         "id_falla": "FAL00000007",
         "id_reparacion": "RPA00000021",
-        "mano_obra": 1000000000000,
+        "mano_obra": "1000000000000.00",
         "observaciones": "Cambiar rodamientos del cabezal",
         "tecnico_proveedor": "Servicios Electromecanicos Lima",
       },
