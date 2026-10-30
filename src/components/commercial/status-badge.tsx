@@ -74,9 +74,10 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 // Etiqueta de estado con Badge (entrega 10.4b, D6 de la 10.4): las mismas
 // etiquetas y los mismos tonos que StatusBadge, con la forma de Badge, mas
 // compacta y en mayusculas. Comercial la usa desde la 10.4b; Mantenimiento y
-// Mermas siguen con StatusBadge hasta la 10.5 y la 10.7. Cada clase de tono
-// pasa a su variante, como en la galeria; un estado sin tono usa outline, la
-// mas parecida al gris de StatusBadge. Solo cuentan los estados de las tablas
+// Mermas ya usaban Badge con sus propias variantes, asi que StatusBadge solo
+// queda en la galeria y se retira en la entrega 11 (D8 de la 10.5). Cada
+// clase de tono pasa a su variante, como en la galeria; un estado sin tono usa
+// outline, la mas parecida al gris de StatusBadge. Solo cuentan los estados de las tablas
 // (Object.hasOwn): "constructor" no toma una propiedad de Object.
 type BadgeVariant = NonNullable<ComponentProps<typeof Badge>["variant"]>;
 

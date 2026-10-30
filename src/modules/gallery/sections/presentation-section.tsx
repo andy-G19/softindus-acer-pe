@@ -71,8 +71,9 @@ export function PresentationSection() {
       </GallerySample>
       <GalleryNote>
         La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono
-        de cada estado, y Comercial la usa desde la entrega 10.4b. StatusBadge
-        queda en Mantenimiento y Mermas hasta la 10.5 y la 10.7.
+        de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento
+        y Mermas ya usaban Badge con sus propias variantes: StatusBadge solo
+        queda en esta galería y se retira en la entrega 11.
       </GalleryNote>
 
       <div className="grid gap-6 lg:grid-cols-3">

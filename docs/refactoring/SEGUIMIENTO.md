@@ -5675,6 +5675,181 @@ Datos leídos de la API de GitHub el 2026-10-29 (UTC) y comparados con git:
   `pending` a las 12:39:50 UTC y `success` a las 12:41:46 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.5a — Máquinas, repuestos e inicio de Mantenimiento
+
+Fecha: 2026-10-29 (Lima). Estado: registrada; falta la verificación en
+staging. El paso 0 (`56c3c20`) registró la integración de la 10.4c en
+`main`. 8 commits, de `34ecade` a `a898729`, y este registro. Plan en
+`tmp/e10-diff/plan-10-5.md`.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 56c3c20 | docs | Paso 0: integración de la 10.4c en `main`. |
+| 34ecade | test | Caracterización de las acciones de máquinas y repuestos (75 casos) y de 3 casos de página que los datos generados no pintaban. |
+| 78dcdc0 | fix | Editar un repuesto conserva su proveedor actual aunque esté inactivo (D2, hallazgo 4 de la 10.3a). |
+| a072d7c | fix | Mensajes en español y límite de `costo_unitario` en los esquemas de máquina y repuesto. |
+| b806662 | feat | Máquinas en panel lateral con `FormActionState`, `FilterBar` y sin `<main>` anidado; se retira `updateMachineStatusAction` (D4). |
+| 923bc5d | feat | Inactivar máquina pide confirmación; el cambio de estado fija el estado pedido. |
+| c850ca0 | feat | Repuestos en panel lateral con `FormActionState`, `FilterBar` y sin `<main>` anidado; la alta rápida de proveedor sin toasts (D3). |
+| ad805da | feat | Inactivar repuesto pide confirmación; el cambio de estado fija el estado pedido; se retira `updateSparePartStatusAction`. |
+| a898729 | feat | Las tarjetas del inicio de Mantenimiento siguen los roles de su destino. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md`, la nota de `StatusBadge` (D8) e inventario. |
+
+Decisiones del responsable (2026-10-29), tras la auditoría; aprobó las ocho
+recomendadas:
+
+- D1. La 10.5 se parte en 10.5a (máquinas, repuestos e inicio) y 10.5b
+  (fallas, preventivos y reparaciones), en ese orden: las dos primeras son
+  los catálogos de los que dependen las demás. Recalibradas, unas 6 y 6,7
+  horas frente a las 8 del plan.
+- D2. Editar un repuesto conserva su proveedor actual aunque esté inactivo,
+  marcado «Inactivo» en su opción; uno nuevo debe existir y estar activo.
+- D3. El hallazgo 5 de la 10.3b (la alta rápida de proveedor sin bloqueo)
+  va a la entrega 11, con Postgres real y dos transacciones. En la 10.5a la
+  alta rápida solo cambia de presentación: su error queda dentro del
+  formulario.
+- D4. Se retiran `updateMachineStatusAction` y la clave
+  `machine-status-updated`: un POST público sin pantalla.
+- D5. Las decisiones fuera de la transacción de fallas, preventivos y
+  reparaciones se corrigen en la 10.5b, con bloqueo de fila.
+- D6. Reparaciones será una superficie amplia en página completa con líneas
+  dinámicas (10.5b).
+- D7. El cambio de estado de fallas, preventivos y reparaciones pasa a un
+  componente compartido, `RowStatusSelect` (10.5b).
+- D8. `StatusBadge` ya no lo usa Mantenimiento ni Mermas: se corrige la
+  documentación aquí y el componente se retira en la entrega 11.
+
+Auditoría (sobre `24fe030`):
+
+- El inicio admite ADMIN y maestro de taller; las listas de máquinas y
+  fallas también (el maestro de taller solo consulta máquinas); repuestos,
+  reparaciones, preventivos, reincidencias y las altas y ediciones de
+  máquina y repuesto, solo ADMIN. Las 12 páginas tenían un `<main>`
+  anidado.
+- Ninguna acción de Mantenimiento tenía pruebas, salvo los roles de
+  `action-access.test.ts`. El alta y la edición de máquinas y repuestos
+  autorizaban con `requireRole` y redirigían (la desviación conocida) y
+  avisaban dos veces de un error (toast y alerta).
+- Los cambios de estado de máquinas y repuestos leían el estado y escribían
+  el contrario, sin confirmar.
+- La sonda de Zod (`tmp/e10-diff/zod-probe-105.ts`) dio mensajes en inglés
+  con un POST armado y un costo de `1e12` que pasaba el esquema y
+  desbordaba la columna (500). Fallas, preventivos y reparaciones tienen los
+  mismos defectos y otros de fecha; van en la 10.5b.
+- El maestro de taller veía en el inicio cuatro tarjetas que lo llevaban a
+  «acceso denegado».
+- Para la 10.5b, la auditoría también encontró los hallazgos 2, 3, 6 a 8,
+  11 y 12 del plan: decisiones fuera de la transacción, importes de
+  reparación en coma flotante, fechas que no existen aceptadas, líneas de
+  repuesto incompletas ignoradas, el selector de estado en fallas cerradas,
+  el día UTC y tres reglas de negocio que no se tocan.
+
+Diseño:
+
+- Máquinas y repuestos como Productos: `layout.tsx` con la ranura `@panel`,
+  `(.)new` y `(.)[id]/edit` sobre `RouteSheet`; `machine-edit-values.ts` y
+  `spare-part-edit-values.ts` comparten los valores de la edición entre la
+  página y el panel; las acciones devuelven `FormActionState` y autorizan
+  con `getAuthorizedSession(["ADMIN"])`; las páginas pasan el aviso con su
+  clave literal y las listas llevan el `returnTo` al alta y a «Editar». Las
+  parejas de campos van en dos columnas según el ancho del formulario
+  (`@md:grid-cols-2`), porque el panel es angosto.
+- El cambio de estado de máquina recibe el estado pedido: «Inactivar» pide
+  `inactiva` desde operativa, en mantenimiento o fuera de servicio, y
+  «Activar» pide `operativa` solo desde `inactiva`, con un `updateMany` que
+  lleva el estado de partida en el `where`. El de repuesto, como los demás
+  booleanos. Inactivar confirma con la consecuencia comprobada en el código:
+  - máquina: no se registran fallas sobre ella ni se asigna a etapas de
+    producción, y no cuenta como operativa en el inicio;
+  - repuesto: deja de ofrecerse al registrar reparaciones; las que ya lo
+    usan lo conservan.
+- La validación del proveedor lee su estado con `findUnique` y acepta el
+  actual del repuesto aunque esté inactivo; `buildSparePartProviderOptions`
+  marca «Inactivo» en la descripción de la opción.
+- El combobox del proveedor tiene un `id` estable (`id_proveedor`) y su
+  error asociado. La alta rápida deja su error en su recuadro y, con éxito,
+  elige el proveedor nuevo y lo dice en una línea `role="status"`.
+- Cada tarjeta del inicio declara los roles del `requireRole` de su destino.
+  `maintenance-links.test.ts`, como el de Inventario, abre con ADMIN y con
+  el maestro de taller cada enlace del inicio y de las listas de máquinas y
+  fallas, y fija las tarjetas de cada rol.
+
+Evidencia:
+
+1. Pruebas rojas antes de cada arreglo: `tmp/e10-diff/rojo-105a-a2.log`
+   (proveedor inactivo), `rojo-105a-a3.log` (6 de 10, esquemas) y
+   `rojo-105a-a8.log` (las tarjetas con el maestro de taller). Una
+   expectativa explícita del resultado acompaña al snapshot donde el caso es
+   nuevo: un snapshot nuevo se escribe con lo que hace el código.
+2. Caracterización antes de cambiar: 75 casos de acciones y 3 de página en
+   `34ecade`, sin tocar los snapshots existentes.
+3. Las llamadas de las acciones se compararon con script contra el commit
+   anterior (`cmp_105a_a4_calls.py` y `cmp_105a_a6_calls.py`): en el alta y
+   la edición solo cambia la autorización (30 de 30 y 44 de 44). Las de las
+   páginas no cambian; su HTML solo cambia por el patrón de `Field`,
+   `FilterBar`, el `returnTo` y el `<main>`.
+4. Mutaciones (`tmp/e10-diff/mut_105a_a*.txt`): 18 de 18, 7 de 7, 9 de 9,
+   13 de 14, 12 de 12, 16 de 17, 12 de 12 y 5 de 5; en total, 92 de 94
+   (hallazgos 3 y 4).
+5. CSS compilado igual en los 8 commits (112.745 bytes).
+6. `npm run check` terminó con código 0 después de cada commit, de 2.829
+   pruebas en 167 archivos a 2.883 en 175. `npm run refactor:inventory`
+   analiza 709 archivos: 149 páginas (21 en ranuras, 14 que interceptan) y
+   97 formularios JSX (eran 101).
+
+Tiempo de preparación: del commit anterior al `npm run check` en verde
+(Lima). Las esperas al responsable quedan fuera:
+
+| Commit | 34ecade | 78dcdc0 | a072d7c | b806662 | 923bc5d | c850ca0 | ad805da | a898729 |
+|---|---|---|---|---|---|---|---|---|
+| Hora del commit | 17:36 | 17:46 | 18:05 | 18:22 | 19:20 | 19:36 | 19:44 | 19:57 |
+| Check en verde | 17:25 | 17:42 | 17:53 | 18:20 | 18:30 | 19:35 | 19:43 | 19:50 |
+| Minutos de preparación | 13 | 6 | 7 | 15 | 8 | 15 | 7 | 6 |
+
+Suman 77 minutos frente a 217 estimados en bruto (160 con el factor 0,74
+del plan): un factor de 0,35. Las dos migraciones al panel (A4 y A6) se
+llevan casi el 40 %.
+
+Hallazgos:
+
+1. En un panel, elegir una opción de `SearchableSelect` sin escribir no
+   dispara `input`: el panel no queda con cambios y «Cancelar» cierra sin
+   preguntar. Pasa con el proveedor del repuesto y con cualquier
+   `SearchableSelect` dentro de un `RouteSheet` o un `FormDialog`. El
+   arreglo es exponer `markDirty` en `FormSurfaceControls`, un componente
+   compartido: se propone aparte, antes de la 10.5b, que usa
+   `SearchableSelect` en fallas y preventivos.
+2. La tarjeta «Máquinas» del inicio dice «Acceso: ADMIN.», y el maestro de
+   taller la ve y puede abrir la lista en modo consulta. Es un texto de la
+   interfaz; no se cambió.
+3. La marca «Inactivo» del proveedor no se ve en el HTML del servidor: la
+   lista del `SearchableSelect` está cerrada. La mutación que la quita del
+   panel de edición sobrevive; la cubre la prueba de
+   `buildSparePartProviderOptions`.
+4. Método: una mutación de A4 es equivalente (el respaldo `operativa` del
+   formulario: las tres páginas pasan el estado inicial), y la primera de A3
+   también lo era (subir el tope medio céntimo: en coma flotante
+   `MAX_COST + 0.005` es menor que `9999999999.995`); se cambió por una que
+   acepta lo que la base redondearía por encima.
+5. Método: en A6 la base del guion de mutaciones falló porque faltaba
+   declarar el alta y la edición en `rechazanConResultado`. El guion lo
+   mostró («Sin mutar: FALLA») y las mutaciones se repitieron tras
+   corregirlo.
+6. Método: `count_104a_metrics.py` no detecta los cambios de estado que
+   voltean comparando una cadena (máquinas, recetas técnicas y operadores)
+   ni el de repuestos, que delegaba en otra acción: la fila de la línea base
+   seguía en 2 con los de máquinas y repuestos sin corregir. Medidos a mano,
+   quedan 4, todos fuera de Mantenimiento: rutas de fabricación y etapas
+   (que el script sí cuenta), recetas técnicas y operadores.
+7. Método: un heredoc de Bash con un literal de plantilla de JavaScript
+   cortó el comando; los guiones de edición se escribieron con Write
+   (`tmp/e10-diff/edit_105a_*.py`).
+
+Siguen pendientes: `updateOrderAction` decide fuera de la transacción
+(hallazgo 7 de la 10.4a, entrega 11); el día UTC (hallazgo 8 de la 10.4a);
+los hallazgos 3 a 5 de la 10.4b; el filtro «Producto» con inactivos
+(hallazgo 15 de la 10.4a), y los hallazgos 1, 2 y 5 de la 10.4c.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5699,7 +5874,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, registrada, con el hallazgo 4 de la 10.3a corregido, pendiente de verificar en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -5721,9 +5896,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Definiciones locales de `formatDate` | 52 | 1 | 3 |
 | Archivos que importan `sweetalert2` o `react-toastify` | 2 | 2, solo la fachada y el proveedor (regla de ESLint) | 7 |
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
-| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 129 / 129 | 7, G3, 9 y 10 |
+| Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 165 / 2.750 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 175 / 2.883 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -5742,11 +5917,11 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 8 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 73 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 13 (19 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 6 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 67 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 11 (17 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 14 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 10 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
@@ -5759,6 +5934,8 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
 | Pantallas con `DateRangeFields` que pierden las fechas elegidas antes de hidratar | 14 | 0 | 10 |
 | Pantallas de Comercial con `StatusBadge` | 5 | 0 | 10 |
+| Archivos de acciones de Mantenimiento sin caracterizar (máquinas, repuestos, fallas, preventivos y reparaciones) | 5 | 3 | 10 |
+| Enlaces de Mantenimiento que un rol ve y su pantalla rechaza | 4 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -6049,6 +6226,26 @@ nuevo, y los formularios GET 19, porque la sub-entrega no toca ninguno.
 
 El cierre de la 10.4c (2026-10-29) no cambia código: las métricas son las
 de `7d03553`.
+
+Actualizado en la sub-entrega 10.5a (2026-10-29) sobre `a898729`:
+
+- Pruebas: 175 / 2.883.
+- La desviación baja a 10, en 5 archivos (alta y edición de máquinas y
+  repuestos; `count_104a_metrics.py`).
+- El `<main>` anidado baja a 67 (las listas, altas y ediciones de máquinas
+  y repuestos) y los formularios GET a 17, con 11 combinaciones de clases:
+  las dos barras pasan a `FilterBar`.
+- Las copias locales de `FieldError` bajan a 6 (los formularios de máquina y
+  repuesto).
+- Las claves caracterizadas pasan a 128 / 128: se retira
+  `machine-status-updated` (D4).
+- Las dos filas nuevas se midieron sobre `24fe030`, su línea base: ninguno
+  de los 5 archivos de acciones de Mantenimiento tenía pruebas propias, y el
+  inicio mostraba al maestro de taller 4 tarjetas que lo rechazaban.
+
+Las demás no cambian: los cambios de estado que voltean 2 según el script,
+que no contaba los de máquinas y repuestos (hallazgo 6 de la 10.5a), y el
+`import` de las librerías de notificaciones en 2 archivos, medidos de nuevo.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
