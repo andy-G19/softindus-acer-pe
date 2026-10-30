@@ -570,6 +570,331 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 }
 `;
 
+exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+        "usuario": {
+          "select": {
+            "apellidos": true,
+            "nombres": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "fecha_programada": "asc",
+        },
+        {
+          "estado": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "mantenimiento_preventivo.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > resultado 1`] = `
+{
+  "html": "<main>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Preventivos</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Mantenimientos preventivos</h1>
+<p>Programa y consulta mantenimientos preventivos por máquina, responsable, fecha programada, fecha realizada y estado de cumplimiento.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver al módulo">
+<svg/>Volver al módulo</button>
+<a data-variant="default" href="/dashboard/maintenance/preventive/new">Programar preventivo</a>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Filtros de búsqueda</div>
+</div>
+<div>
+<form>
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar mantenimiento o actividad" name="q" value=""/>
+</div>
+<div>
+<label for="machine">Máquina</label>
+<input id="machine" placeholder="Maquina" name="machine" value=""/>
+</div>
+<div>
+<label for="responsible">Responsable</label>
+<input id="responsible" placeholder="Responsable" name="responsible" value=""/>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+</div>
+<div>
+<label for="from">Desde</label>
+<input type="date" id="from" name="from" value=""/>
+</div>
+<div>
+<label for="to">Hasta</label>
+<input type="date" id="to" name="to" value=""/>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/preventive">Limpiar</a>
+</div>
+</form>
+</div>
+</div>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Preventivos registrados</div>
+</div>
+</div>
+<div>
+<p>5</p>
+<p>Total histórico de programaciones.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Pendientes</div>
+</div>
+</div>
+<div>
+<p>2</p>
+<p>Vencidos: 1</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Realizados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Cumplidos según registro.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Anulados</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Programaciones canceladas.</p>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Programaciones preventivas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Actividad</th>
+<th>Responsable</th>
+<th>Programada</th>
+<th>Realizada</th>
+<th>Usuario</th>
+<th>Estado</th>
+<th>Cambiar estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MTP00000001</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>Mantenimiento pendiente 2026-07-20</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>20/07/2026</td>
+<td>-</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="warning">Pendiente</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="MTP00000001"/>
+<select name="estado">
+<option value="pendiente" selected="">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>MTP00000002</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>Mantenimiento pendiente 2026-07-10</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>10/07/2026<p>Vencido</p>
+</td>
+<td>-</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="destructive">Vencido</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="MTP00000002"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido" selected="">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>MTP00000003</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>Mantenimiento vencido 2026-07-05</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>05/07/2026</td>
+<td>-</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="destructive">Vencido</span>
+</td>
+<td>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_mantenimiento" value="MTP00000003"/>
+<select name="estado">
+<option value="pendiente">Pendiente</option>
+<option value="realizado">Realizado</option>
+<option value="vencido" selected="">Vencido</option>
+<option value="anulado">Anulado</option>
+</select>
+<button data-variant="outline" type="submit">Guardar</button>
+</form>
+</td>
+</tr>
+<tr>
+<td>MTP00000004</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>Mantenimiento realizado 2026-07-01</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>01/07/2026</td>
+<td>02/07/2026</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="success">Realizado</span>
+</td>
+<td>
+<span>Sin accion</span>
+</td>
+</tr>
+<tr>
+<td>MTP00000005</td>
+<td>nombre-1<p>tipo-1 · estado-1</p>
+</td>
+<td>
+<p>Mantenimiento anulado 2026-06-28</p>
+<p>observaciones-1</p>
+</td>
+<td>responsable-1</td>
+<td>28/06/2026</td>
+<td>-</td>
+<td>nombres-1 apellidos-1</td>
+<td>
+<span data-variant="secondary">Anulado</span>
+</td>
+<td>
+<span>Sin accion</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
 exports[`/dashboard/maintenance/preventive/new > formulario > llamadas 1`] = `
 [
   {

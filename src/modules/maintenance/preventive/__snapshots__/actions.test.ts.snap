@@ -1,0 +1,1150 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha realizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "anulado",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha programada es obligatoria. La actividad debe tener al menos 5 caracteres. Seleccione un estado válido."`;
+
+exports[`createPreventiveMaintenanceAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": 2026-03-02T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > la maquina no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > la maquina no existe > resultado 1`] = `"error: La máquina seleccionada no existe."`;
+
+exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": null,
+        "responsable": null,
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": null,
+        "responsable": null,
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "realizado",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": 2026-07-20T00:00:00.000Z,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null"`;
+
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": Date { NaN },
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "vencido",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000007",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "anulado",
+        "fecha_realizada": null,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de mantenimiento preventivo actualizado de pendiente a anulado.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la fecha realizada es el momento del cambio > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "realizado",
+        "fecha_realizada": 2026-07-15T15:00:00.000Z,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de mantenimiento preventivo actualizado de pendiente a realizado.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la fecha realizada es el momento del cambio > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "vencido",
+        "fecha_realizada": null,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de mantenimiento preventivo actualizado de pendiente a vencido.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pendiente",
+        "fecha_realizada": null,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de mantenimiento preventivo actualizado de vencido a pendiente.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > resultado 1`] = `"error: El mantenimiento seleccionado no existe."`;
+
+exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene vuelve a escribirlo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "pendiente",
+        "fecha_realizada": null,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de mantenimiento preventivo actualizado de pendiente a pendiente.",
+      "enTransaccion": true,
+      "entidad_afectada": "mantenimiento_preventivo",
+      "id_registro_afectado": "MTP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/preventive",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene vuelve a escribirlo > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null"`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione un estado válido."`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > resultado 1`] = `"error: No se puede modificar un mantenimiento realizado o anulado."`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no se modifica > resultado 1`] = `"error: No se puede modificar un mantenimiento realizado o anulado."`;

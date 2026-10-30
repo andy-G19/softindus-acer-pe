@@ -1,0 +1,1213 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > SELLER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > SELLER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "en_atencion",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La descripción de la falla debe tener al menos 5 caracteres. Seleccione un estado de atención válido. El tiempo perdido no puede ser negativo."`;
+
+exports[`createFailureAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-03-02T10:00:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > la maquina no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createFailureAction > la maquina no existe > resultado 1`] = `"error: La máquina seleccionada no existe."`;
+
+exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": null,
+        "responsable_registro": null,
+        "tiempo_perdido_horas": null,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": null,
+        "responsable_registro": null,
+        "tiempo_perdido_horas": null,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > resultado 1`] = `"error: No se puede registrar una falla sobre una maquina inactiva."`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina inactiva > resultado 1`] = `"error: No se puede registrar una falla sobre una maquina inactiva."`;
+
+exports[`createFailureAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null"`;
+
+exports[`createFailureAction > un tiempo perdido de 1e12 pasa el esquema y llega a la base > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 1000000000000,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > un tiempo perdido de 1e12 pasa el esquema y llega a la base > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`createFailureAction > un tiempo perdido que no es numero lanza su mensaje > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un tiempo perdido que no es numero lanza su mensaje > resultado 1`] = `"error: El tiempo perdido debe ser un número válido."`;
+
+exports[`createFailureAction > una fecha que no es fecha lanza su mensaje > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > una fecha que no es fecha lanza su mensaje > resultado 1`] = `"error: La fecha de la falla no es válida."`;
+
+exports[`createFailureAction > una maquina en reparacion admite otra falla > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > una maquina en reparacion admite otra falla > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+
+exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a en_atencion.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > de en atencion a pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "pendiente",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de en_atencion a pendiente.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de en atencion a pendiente > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > de pendiente a anulada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "anulada",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a anulada.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a anulada > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > de pendiente a en atencion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a en_atencion.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a en atencion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "reparada",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a reparada.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > la falla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > la falla no existe > resultado 1`] = `"error: La falla seleccionada no existe."`;
+
+exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escribirlo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "pendiente",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a pendiente.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escribirlo > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+
+exports[`updateFailureStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null"`;
+
+exports[`updateFailureStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione un estado de atención válido."`;
+
+exports[`updateFailureStatusAction > una falla anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > una falla anulada no se modifica > resultado 1`] = `"error: No se puede modificar una falla cerrada o anulada."`;
+
+exports[`updateFailureStatusAction > una falla reparada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > una falla reparada no se modifica > resultado 1`] = `"error: No se puede modificar una falla cerrada o anulada."`;
