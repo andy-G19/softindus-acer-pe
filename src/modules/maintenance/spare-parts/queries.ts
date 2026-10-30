@@ -110,7 +110,7 @@ export async function getNewSparePartFormOptions() {
 }
 
 // Devuelve null si el repuesto no existe; los proveedores incluyen el actual
-// del repuesto aunque este inactivo.
+// del repuesto aunque este inactivo, con su estado para marcarlo.
 export async function getSparePartEditData(idRepuesto: string) {
   const sparePart = await prisma.repuesto.findUnique({
     where: {
@@ -144,6 +144,7 @@ export async function getSparePartEditData(idRepuesto: string) {
       select: {
         id_proveedor: true,
         razon_social: true,
+        estado: true,
       },
     }),
     getActiveSupplierTypeOptions(),

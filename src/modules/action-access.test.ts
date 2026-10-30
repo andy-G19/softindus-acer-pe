@@ -152,9 +152,9 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: [
       "createMachineAction",
       "updateMachineAction",
-      "updateMachineStatusAction",
       "toggleMachineStatusAction",
     ],
+    rechazanConResultado: ["createMachineAction", "updateMachineAction", "toggleMachineStatusAction"],
   },
   {
     ruta: "maintenance/preventive/actions",
@@ -178,9 +178,9 @@ const MODULOS: ModuloDeAcciones[] = [
     acciones: [
       "createSparePartAction",
       "updateSparePartAction",
-      "updateSparePartStatusAction",
       "toggleSparePartStatusAction",
     ],
+    rechazanConResultado: ["createSparePartAction", "updateSparePartAction", "toggleSparePartStatusAction"],
   },
   {
     ruta: "petty-cash/boxes/actions",

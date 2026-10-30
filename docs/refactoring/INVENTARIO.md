@@ -6,13 +6,13 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 
 | Medida | Cantidad |
 | --- | --- |
-| Archivos fuente analizados | 684 |
-| Páginas | 143 |
-| Páginas en ranuras paralelas (@ranura) | 15 |
-| Páginas que interceptan una ruta | 10 |
-| Declaraciones JSX de formulario | 101 |
+| Archivos fuente analizados | 709 |
+| Páginas | 149 |
+| Páginas en ranuras paralelas (@ranura) | 21 |
+| Páginas que interceptan una ruta | 14 |
+| Declaraciones JSX de formulario | 97 |
 | Archivos con directiva use server | 48 |
-| Funciones exportadas en esos archivos | 114 |
+| Funciones exportadas en esos archivos | 112 |
 
 ## Páginas por área
 
@@ -26,7 +26,7 @@ Este inventario analiza el árbol sintáctico de `src`, excluyendo el cliente ge
 | gallery | 1 |
 | inicio | 2 |
 | inventory | 29 |
-| maintenance | 14 |
+| maintenance | 20 |
 | petty-cash | 9 |
 | production | 26 |
 | reports | 10 |
@@ -102,18 +102,24 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `/dashboard/inventory/suppliers` | — | `src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx` | 0 | — |
 | `/dashboard/maintenance/failures/new` | — | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 1 | — |
 | `/dashboard/maintenance/failures` | — | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 1 | — |
+| `/dashboard/maintenance/machines/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/maintenance/machines/@panel/(.)[id]/edit/page.tsx` | 0 | MachineForm |
+| `/dashboard/maintenance/machines/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/maintenance/machines/@panel/(.)new/page.tsx` | 0 | MachineForm |
+| `/dashboard/maintenance/machines` | `@panel` | `src/app/(dashboard)/dashboard/maintenance/machines/@panel/page.tsx` | 0 | — |
 | `/dashboard/maintenance/machines/[id]/edit` | — | `src/app/(dashboard)/dashboard/maintenance/machines/[id]/edit/page.tsx` | 0 | MachineForm |
 | `/dashboard/maintenance/machines/new` | — | `src/app/(dashboard)/dashboard/maintenance/machines/new/page.tsx` | 0 | MachineForm |
-| `/dashboard/maintenance/machines` | — | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 1 | — |
+| `/dashboard/maintenance/machines` | — | `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 0 | — |
 | `/dashboard/maintenance` | — | `src/app/(dashboard)/dashboard/maintenance/page.tsx` | 0 | — |
 | `/dashboard/maintenance/preventive/new` | — | `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 1 | — |
 | `/dashboard/maintenance/preventive` | — | `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 2 | — |
 | `/dashboard/maintenance/recurrences` | — | `src/app/(dashboard)/dashboard/maintenance/recurrences/page.tsx` | 0 | — |
 | `/dashboard/maintenance/repairs/new` | — | `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 1 | — |
 | `/dashboard/maintenance/repairs` | — | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 2 | — |
+| `/dashboard/maintenance/spare-parts/[id]/edit` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/maintenance/spare-parts/@panel/(.)[id]/edit/page.tsx` | 0 | SparePartForm |
+| `/dashboard/maintenance/spare-parts/new` | `@panel`, intercepta | `src/app/(dashboard)/dashboard/maintenance/spare-parts/@panel/(.)new/page.tsx` | 0 | SparePartForm |
+| `/dashboard/maintenance/spare-parts` | `@panel` | `src/app/(dashboard)/dashboard/maintenance/spare-parts/@panel/page.tsx` | 0 | — |
 | `/dashboard/maintenance/spare-parts/[id]/edit` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/[id]/edit/page.tsx` | 0 | SparePartForm |
 | `/dashboard/maintenance/spare-parts/new` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/new/page.tsx` | 0 | SparePartForm |
-| `/dashboard/maintenance/spare-parts` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 1 | — |
+| `/dashboard/maintenance/spare-parts` | — | `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 0 | — |
 | `/dashboard` | — | `src/app/(dashboard)/dashboard/page.tsx` | 0 | — |
 | `/dashboard/petty-cash/boxes/new` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 1 | — |
 | `/dashboard/petty-cash/boxes` | — | `src/app/(dashboard)/dashboard/petty-cash/boxes/page.tsx` | 0 | — |
@@ -198,14 +204,12 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/app/(dashboard)/dashboard/inventory/purchases/page.tsx` | 210 | `{annulPurchaseAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx` | 89 | `{createFailureAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/failures/page.tsx` | 213 | `{updateFailureStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/machines/page.tsx` | 142 | `"/dashboard/maintenance/machines"` |
 | `src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx` | 91 | `{createPreventiveMaintenanceAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 155 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx` | 322 | `{updatePreventiveMaintenanceStatusAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx` | 97 | `{createRepairAction}` |
 | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 142 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx` | 312 | `{updateRepairStatusAction}` |
-| `src/app/(dashboard)/dashboard/maintenance/spare-parts/page.tsx` | 103 | `"/dashboard/maintenance/spare-parts"` |
 | `src/app/(dashboard)/dashboard/petty-cash/boxes/new/page.tsx` | 46 | `{createPettyCashBoxAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/expenses/new/page.tsx` | 90 | `{createPettyCashExpenseAction}` |
 | `src/app/(dashboard)/dashboard/petty-cash/income-adjustments/new/page.tsx` | 115 | `{createPettyCashIncomeAdjustmentAction}` |
@@ -278,8 +282,6 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/costs/profitability/profitability-section.tsx` | 149 | `{createProfitabilityAction}` |
 | `src/modules/gallery/dialog-demo.tsx` | 72 | `Sin action explícita (revisar filtros/onSubmit)` |
 | `src/modules/inventory/movements/inventory-output-form.tsx` | 62 | `{formAction}` |
-| `src/modules/maintenance/machines/machine-form.tsx` | 85 | `{formAction}` |
-| `src/modules/maintenance/spare-parts/spare-part-form.tsx` | 140 | `{formAction}` |
 | `src/modules/production/recipe-details/recipe-detail-form.tsx` | 107 | `{formAction}` |
 | `src/modules/production/recipes/components/recipe-version-form.tsx` | 151 | `{createRecipeVersionAction}` |
 | `src/modules/production/stages/stage-form.tsx` | 123 | `{formAction}` |
@@ -315,10 +317,10 @@ La ruta es la URL. Una página en una ranura paralela se pinta en esa ranura del
 | `src/modules/inventory/supplier-types/actions.ts` | createSupplierTypeAction, updateSupplierTypeAction, toggleSupplierTypeStatusAction |
 | `src/modules/inventory/suppliers/actions.ts` | createSupplierAction, updateSupplierAction, toggleSupplierStatusAction, createQuickSupplierAction |
 | `src/modules/maintenance/failures/actions.ts` | createFailureAction, updateFailureStatusAction |
-| `src/modules/maintenance/machines/actions.ts` | createMachineAction, updateMachineAction, updateMachineStatusAction, toggleMachineStatusAction |
+| `src/modules/maintenance/machines/actions.ts` | createMachineAction, updateMachineAction, toggleMachineStatusAction |
 | `src/modules/maintenance/preventive/actions.ts` | createPreventiveMaintenanceAction, updatePreventiveMaintenanceStatusAction |
 | `src/modules/maintenance/repairs/actions.ts` | createRepairAction, updateRepairStatusAction |
-| `src/modules/maintenance/spare-parts/actions.ts` | createSparePartAction, updateSparePartAction, updateSparePartStatusAction, toggleSparePartStatusAction |
+| `src/modules/maintenance/spare-parts/actions.ts` | createSparePartAction, updateSparePartAction, toggleSparePartStatusAction |
 | `src/modules/petty-cash/boxes/actions.ts` | createPettyCashBoxAction |
 | `src/modules/petty-cash/categories/actions.ts` | createExpenseCategoryAction, updateExpenseCategoryAction, toggleExpenseCategoryStatusAction |
 | `src/modules/petty-cash/expenses/actions.ts` | createPettyCashExpenseAction |

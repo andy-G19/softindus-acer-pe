@@ -1,25 +1,58 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
-import type { ActionErrorState } from "@/lib/errors";
+import type { FieldErrors } from "@/lib/errors";
 import {
-  machineSchema,
-  machineStatusSchema,
-} from "@/schemas/maintenance/machine.schema";
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
+import { machineSchema } from "@/schemas/maintenance/machine.schema";
 
-export type MachineFormState = ActionErrorState;
+/** Lo que el formulario de maquina envio, tal cual, para volver a mostrarlo. */
+export type MachineFormValues = {
+  nombre: string;
+  tipo: string;
+  codigo_interno: string;
+  ubicacion: string;
+  estado: string;
+  observaciones: string;
+};
+
+// Entrega 10.5a: el alta y la edicion de maquinas no redirigen; devuelven el
+// resultado y el formulario da el aviso y cierra el panel o vuelve al listado.
+// Sin permiso responden con un error, no redirigen.
+export type MachineFormState = FormActionState<MachineFormValues, { id_maquina: string }>;
 
 const MACHINES_PATH = "/dashboard/maintenance/machines";
 
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
+function getMachineFormValues(formData: FormData): MachineFormValues {
+  const text = (name: keyof MachineFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    nombre: text("nombre"),
+    tipo: text("tipo"),
+    codigo_interno: text("codigo_interno"),
+    ubicacion: text("ubicacion"),
+    estado: text("estado"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function machineError(values: MachineFormValues, error: string, fieldErrors?: FieldErrors): MachineFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function machineSaved(values: MachineFormValues, idMaquina: string): MachineFormState {
+  return { status: "success", data: { id_maquina: idMaquina }, values, operationId: newOperationId() };
 }
 
 function getMachineFormData(formData: FormData) {
@@ -94,14 +127,17 @@ export async function createMachineAction(
   _prevState: MachineFormState,
   formData: FormData,
 ): Promise<MachineFormState> {
-  const session = await requireAdmin();
+  const values = getMachineFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return machineError(values, "No tienes permisos para registrar máquinas.");
+  }
+
   const parsed = machineSchema.safeParse(getMachineFormData(formData));
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la maquina.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return machineError(values, "Revisa los datos de la maquina.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -112,20 +148,16 @@ export async function createMachineAction(
   );
 
   if (duplicated) {
-    return {
-      error:
-        "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.",
-      fieldErrors: {
-        nombre: [
-          "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.",
-        ],
-      },
-    };
+    return machineError(values, "Ya existe una maquina registrada con ese nombre, tipo o codigo interno.", {
+      nombre: ["Ya existe una maquina registrada con ese nombre, tipo o codigo interno."],
+    });
   }
+
+  let idMaquina = "";
 
   try {
     await prisma.$transaction(async (tx) => {
-      const idMaquina = await getNextCorrelativeId(tx, {
+      idMaquina = await getNextCorrelativeId(tx, {
         codigoEntidad: "maquina",
         prefijo: "MAQ",
       });
@@ -152,26 +184,30 @@ export async function createMachineAction(
       });
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return machineError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(`${MACHINES_PATH}?toast=machine-created`);
+  return machineSaved(values, idMaquina);
 }
 
 export async function updateMachineAction(
   _prevState: MachineFormState,
   formData: FormData,
 ): Promise<MachineFormState> {
-  const session = await requireAdmin();
+  const values = getMachineFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return machineError(values, "No tienes permisos para editar máquinas.");
+  }
+
   const machineId = formData.get("id_maquina")?.toString().trim();
 
   if (!machineId) {
-    return { error: "La maquina no existe." };
+    return machineError(values, "La maquina no existe.");
   }
 
   const currentMachine = await prisma.maquina.findUnique({
@@ -184,16 +220,13 @@ export async function updateMachineAction(
   });
 
   if (!currentMachine) {
-    return { error: "La maquina no existe." };
+    return machineError(values, "La maquina no existe.");
   }
 
   const parsed = machineSchema.safeParse(getMachineFormData(formData));
 
   if (!parsed.success) {
-    return {
-      error: "Revisa los datos de la maquina.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
+    return machineError(values, "Revisa los datos de la maquina.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -205,15 +238,9 @@ export async function updateMachineAction(
   );
 
   if (duplicated) {
-    return {
-      error:
-        "Ya existe otra maquina registrada con ese nombre, tipo o codigo interno.",
-      fieldErrors: {
-        nombre: [
-          "Ya existe otra maquina registrada con ese nombre, tipo o codigo interno.",
-        ],
-      },
-    };
+    return machineError(values, "Ya existe otra maquina registrada con ese nombre, tipo o codigo interno.", {
+      nombre: ["Ya existe otra maquina registrada con ese nombre, tipo o codigo interno."],
+    });
   }
 
   try {
@@ -239,73 +266,50 @@ export async function updateMachineAction(
       detalle: `Maquina actualizada: ${data.nombre}`,
     });
   } catch (error) {
-    return {
-      error: getPrismaErrorMessage(error),
-    };
+    return machineError(values, getPrismaErrorMessage(error));
   }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(`${MACHINES_PATH}?toast=machine-updated`);
+  return machineSaved(values, machineId);
 }
 
-export async function updateMachineStatusAction(formData: FormData) {
-  const session = await requireAdmin();
+// Activar o inactivar desde la fila (ConfirmActionButton). El boton envia el
+// estado pedido: "false" deja la maquina inactiva desde cualquier otro estado y
+// "true" la deja operativa solo si estaba inactiva. Comparar y escribir en una
+// sola sentencia evita que una lista desactualizada o un doble clic hagan lo
+// contrario de lo que dice el boton.
+export async function toggleMachineStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const machineId = formData.get("id_maquina")?.toString().trim() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
 
-  const parsed = machineStatusSchema.safeParse({
-    id_maquina: formData.get("id_maquina"),
-    estado: formData.get("estado"),
-  });
-
-  if (!parsed.success) {
-    redirect(MACHINES_PATH);
+  if (!session) {
+    return statusToggleError(machineId, "No tienes permisos para activar o inactivar máquinas.");
   }
 
-  const data = parsed.data;
-  const machine = await prisma.maquina.findUnique({
-    where: {
-      id_maquina: data.id_maquina,
-    },
-    select: {
-      nombre: true,
-    },
-  });
-
-  if (!machine) {
-    redirect(MACHINES_PATH);
-  }
-
-  await prisma.maquina.update({
-    where: {
-      id_maquina: data.id_maquina,
-    },
-    data: {
-      estado: data.estado,
-    },
-  });
-
-  await registerAuditLog({
-    userId: session.user.id,
-    entidad_afectada: "maquina",
-    id_registro_afectado: data.id_maquina,
-    accion: "actualizar",
-    detalle: `Estado de maquina actualizado: ${machine.nombre}`,
-  });
-
-  revalidatePath("/dashboard/maintenance");
-  revalidatePath(MACHINES_PATH);
-
-  redirect(`${MACHINES_PATH}?toast=machine-status-updated`);
-}
-
-export async function toggleMachineStatusAction(formData: FormData) {
-  const session = await requireAdmin();
-  const machineId = formData.get("id_maquina")?.toString().trim();
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!machineId) {
-    redirect(MACHINES_PATH);
+    return statusToggleError(machineId, "La máquina no existe.");
   }
+
+  if (nextStatus === null) {
+    return statusToggleError(machineId, "Estado no válido.");
+  }
+
+  const { count } = await prisma.maquina.updateMany({
+    where: {
+      id_maquina: machineId,
+      estado: nextStatus ? "inactiva" : { not: "inactiva" },
+    },
+    data: {
+      estado: nextStatus ? "operativa" : "inactiva",
+    },
+  });
 
   const machine = await prisma.maquina.findUnique({
     where: {
@@ -313,39 +317,27 @@ export async function toggleMachineStatusAction(formData: FormData) {
     },
     select: {
       nombre: true,
-      estado: true,
     },
   });
 
-  if (!machine) {
-    redirect(MACHINES_PATH);
+  // count 0: no existe o ya tenia ese estado; no hay nada que registrar.
+  if (count === 0) {
+    return statusToggleError(
+      machineId,
+      machine ? `La máquina ya estaba ${nextStatus ? "activa" : "inactiva"}.` : "La máquina no existe.",
+    );
   }
-
-  const nextStatus = machine.estado === "inactiva" ? "operativa" : "inactiva";
-
-  await prisma.maquina.update({
-    where: {
-      id_maquina: machineId,
-    },
-    data: {
-      estado: nextStatus,
-    },
-  });
 
   await registerAuditLog({
     userId: session.user.id,
     entidad_afectada: "maquina",
     id_registro_afectado: machineId,
-    accion: nextStatus === "operativa" ? "activar" : "inactivar",
-    detalle: `Maquina ${
-      nextStatus === "operativa" ? "activada" : "inactivada"
-    }: ${machine.nombre}`,
+    accion: nextStatus ? "activar" : "inactivar",
+    detalle: `Maquina ${nextStatus ? "activada" : "inactivada"}: ${machine?.nombre ?? machineId}`,
   });
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath(MACHINES_PATH);
 
-  redirect(
-    `${MACHINES_PATH}?toast=${nextStatus === "operativa" ? "machine-activated" : "machine-deactivated"}`,
-  );
+  return statusToggleDone(machineId, nextStatus);
 }

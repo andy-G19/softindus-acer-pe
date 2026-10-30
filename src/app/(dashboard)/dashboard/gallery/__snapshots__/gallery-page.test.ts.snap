@@ -1090,7 +1090,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 <span>desconocido</span>
 </div>
 </figure>
-<p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. StatusBadge queda en Mantenimiento y Mermas hasta la 10.5 y la 10.7.</p>
+<p>La etiqueta de estado es Badge: StateBadge le pone la etiqueta y el tono de cada estado, y Comercial la usa desde la entrega 10.4b. Mantenimiento y Mermas ya usaban Badge con sus propias variantes: StatusBadge solo queda en esta galería y se retira en la entrega 11.</p>
 <div>
 <figure>
 <figcaption>Tarjeta completa</figcaption>
@@ -1555,7 +1555,7 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </div>
 </div>
 </figure>
-<p>Las dos usan las mismas etiquetas y los mismos colores (las clases badge-state-*); solo cambia la forma: StatusBadge es redondeada y en minúsculas; StateBadge es un Badge, más compacto y en mayúsculas. Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas pasan a ella en la 10.5 y la 10.7.</p>
+<p>Las dos usan las mismas etiquetas y los mismos colores (las clases badge-state-*); solo cambia la forma: StatusBadge es redondeada y en minúsculas; StateBadge es un Badge, más compacto y en mayúsculas. Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas ya usaban Badge con sus propias variantes, y StatusBadge se retira en la entrega 11.</p>
 <figure>
 <figcaption>Tabla sin resultados</figcaption>
 <div>

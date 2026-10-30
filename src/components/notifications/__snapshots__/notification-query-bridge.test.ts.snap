@@ -464,22 +464,6 @@ exports[`cada clave del catalogo > machine-deactivated: muestra su toast y limpi
 ]
 `;
 
-exports[`cada clave del catalogo > machine-status-updated: muestra su toast y limpia la URL 1`] = `
-[
-  {
-    "html": "<div class="space-y-1"><p class="text-sm font-semibold">Estado de máquina actualizado</p></div>",
-    "options": {
-      "className": "toast-industrial-success",
-      "progressClassName": "toast-industrial-progress-success",
-    },
-    "toast": "success",
-  },
-  {
-    "effect": "router.replace /dashboard {"scroll":false}",
-  },
-]
-`;
-
 exports[`cada clave del catalogo > machine-updated: muestra su toast y limpia la URL 1`] = `
 [
   {

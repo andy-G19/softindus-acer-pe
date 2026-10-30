@@ -98,7 +98,7 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > llamada
 
 exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -170,12 +170,7 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/maintenance/machines">
+<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar maquina..." name="q" value="torno"/>
@@ -210,8 +205,6 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 <a data-variant="clear" href="/dashboard/maintenance/machines">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Maquinas registradas</div>
@@ -269,7 +262,7 @@ exports[`/dashboard/maintenance/machines > filtros y maestro de taller > resulta
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -344,7 +337,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -371,7 +364,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </div>
 <div>
-<a data-variant="default" href="/dashboard/maintenance/machines/new">Registrar máquina</a>
+<a data-variant="default" href="/dashboard/maintenance/machines/new?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Registrar máquina</a>
 </div>
 </div>
 </section>
@@ -419,12 +412,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form action="/dashboard/maintenance/machines">
+<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar maquina..." name="q" value=""/>
@@ -459,8 +447,6 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <a data-variant="clear" href="/dashboard/maintenance/machines">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <div>
 <div>
 <div>Maquinas registradas</div>
@@ -501,10 +487,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-1/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="id_maquina-1"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -525,10 +508,7 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 <td>
 <div>
 <a data-variant="ghost" href="/dashboard/maintenance/machines/id_maquina-2/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_maquina" value="id_maquina-2"/>
-<button data-variant="destructive" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -537,8 +517,304 @@ exports[`/dashboard/maintenance/machines > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/machines > una maquina en cada estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "etapa_ruta_maquina": true,
+            "falla_maquina": true,
+            "mantenimiento_preventivo": true,
+          },
+        },
+      },
+      "orderBy": [
+        {
+          "estado": "asc",
+        },
+        {
+          "nombre": "asc",
+        },
+      ],
+      "where": {},
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "tipo",
+      ],
+      "orderBy": {
+        "tipo": "asc",
+      },
+      "select": {
+        "tipo": true,
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+  {
+    "args": {
+      "distinct": [
+        "ubicacion",
+      ],
+      "orderBy": {
+        "ubicacion": "asc",
+      },
+      "select": {
+        "ubicacion": true,
+      },
+      "where": {
+        "ubicacion": {
+          "not": null,
+        },
+      },
+    },
+    "prisma": "maquina.findMany",
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/machines > una maquina en cada estado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Máquinas</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Máquinas</h1>
+<p>Consulta máquinas del taller, estado operativo, ubicación, código interno y trazabilidad relacionada.</p>
+</div>
+</div>
+<div>
+<a data-variant="default" href="/dashboard/maintenance/machines/new?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Registrar máquina</a>
+</div>
+</div>
+</section>
+<section>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Maquinas registradas</div>
+</div>
+</div>
+<div>
+<p>4</p>
+<p>Total de equipos registrados.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Operativas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Disponibles para producción.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<span>
+<svg/>
+</span>
+<div>Inactivas</div>
+</div>
+</div>
+<div>
+<p>1</p>
+<p>Fuera de operación.</p>
+</div>
+</div>
+</section>
+<form role="search" aria-label="Filtros de máquinas" action="/dashboard/maintenance/machines" method="GET">
+<div>
+<label for="q">Buscar</label>
+<input id="q" placeholder="Buscar maquina..." name="q" value=""/>
+</div>
+<div>
+<label for="type">Tipo</label>
+<select id="type" name="type">
+<option value="" selected="">Todos los tipos</option>
+<option value="tipo-1">tipo-1</option>
+<option value="tipo-2">tipo-2</option>
+</select>
+</div>
+<div>
+<label for="location">Ubicación</label>
+<select id="location" name="location">
+<option value="" selected="">Todas las ubicaciones</option>
+<option value="ubicacion-1">ubicacion-1</option>
+</select>
+</div>
+<div>
+<label for="status">Estado</label>
+<select id="status" name="status">
+<option value="" selected="">Todos los estados</option>
+<option value="operativa">Operativa</option>
+<option value="en_reparacion">En mantenimiento</option>
+<option value="dada_de_baja">Fuera de servicio</option>
+<option value="inactiva">Inactiva</option>
+</select>
+</div>
+<div>
+<button data-variant="default" type="submit">Filtrar</button>
+<a data-variant="clear" href="/dashboard/maintenance/machines">Limpiar</a>
+</div>
+</form>
+<div>
+<div>
+<div>Maquinas registradas</div>
+</div>
+<div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Máquina</th>
+<th>Tipo</th>
+<th>Ubicación</th>
+<th>Código interno</th>
+<th>Registro</th>
+<th>Fallas</th>
+<th>Preventivos</th>
+<th>Etapas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAQ00000001</td>
+<td>Maquina operativa<p>observaciones-1</p>
+</td>
+<td>tipo-1</td>
+<td>ubicacion-1</td>
+<td>codigo_interno-1</td>
+<td>01/07/2026</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="success">Operativa</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000001/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
+</div>
+</td>
+</tr>
+<tr>
+<td>MAQ00000002</td>
+<td>Maquina en_reparacion<p>Sin observaciones</p>
+</td>
+<td>tipo-2</td>
+<td>-</td>
+<td>-</td>
+<td>02/07/2026</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="secondary">En mantenimiento</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000002/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
+</div>
+</td>
+</tr>
+<tr>
+<td>MAQ00000003</td>
+<td>Maquina dada_de_baja<p>observaciones-1</p>
+</td>
+<td>tipo-1</td>
+<td>ubicacion-1</td>
+<td>codigo_interno-1</td>
+<td>01/07/2026</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="destructive">Fuera de servicio</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000003/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<button data-variant="destructive" type="button">Inactivar</button>
+</div>
+</td>
+</tr>
+<tr>
+<td>MAQ00000004</td>
+<td>Maquina inactiva<p>Sin observaciones</p>
+</td>
+<td>tipo-2</td>
+<td>-</td>
+<td>-</td>
+<td>02/07/2026</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>
+<span data-variant="outline">Inactiva</span>
+</td>
+<td>
+<div>
+<a data-variant="ghost" href="/dashboard/maintenance/machines/MAQ00000004/edit?returnTo=%2Fdashboard%2Fmaintenance%2Fmachines">Editar</a>
+<button data-variant="ghost" type="button">Activar</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>",
   "outcome": "render",
 }
 `;
@@ -564,7 +840,7 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 
 exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al listado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -610,12 +886,14 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 <input type="hidden" name="id_maquina" value="id_maquina-1"/>
 <div>
 <div>
-<label for="nombre">Nombre de la maquina</label>
+<label for="nombre">Nombre de la maquina<span aria-hidden="true">*</span>
+</label>
 <input id="nombre" required="" name="nombre" value="nombre-1"/>
 </div>
 <div>
-<label for="tipo">Tipo de maquina</label>
-<select id="tipo" name="tipo" required="">
+<label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
+</label>
+<select id="tipo" required="" name="tipo">
 <option value="prensa">prensa</option>
 <option value="cortadora">cortadora</option>
 <option value="soldadora">soldadora</option>
@@ -638,8 +916,9 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 </div>
 </div>
 <div>
-<label for="estado">Estado</label>
-<select id="estado" name="estado" required="">
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
 <option value="operativa">Operativa</option>
 <option value="en_reparacion">En mantenimiento</option>
 <option value="dada_de_baja">Fuera de servicio</option>
@@ -652,12 +931,12 @@ exports[`/dashboard/maintenance/machines/[id]/edit > editar con regreso al lista
 </div>
 <div>
 <button data-variant="default" type="submit">Guardar cambios</button>
-<a data-variant="outline" href="/dashboard/maintenance/machines">Cancelar</a>
+<a data-variant="outline" href="/dashboard/maintenance/machines?status=operativa">Cancelar</a>
 </div>
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -687,4 +966,372 @@ exports[`/dashboard/maintenance/machines/[id]/edit > inexistente > resultado 1`]
   "html": null,
   "outcome": "notFound",
 }
+`;
+
+exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/machines/new > con regreso al listado filtrado > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/machines?type=prensa">Máquinas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva máquina</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar máquina</h1>
+<p>Registra una máquina o equipo crítico del taller para controlar su estado operativo, ubicación y código interno.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a máquinas">
+<svg/>Volver a máquinas</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombre">Nombre de la maquina<span aria-hidden="true">*</span>
+</label>
+<input id="nombre" required="" name="nombre" value=""/>
+</div>
+<div>
+<label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
+</label>
+<select id="tipo" required="" name="tipo">
+<option value="prensa" selected="">prensa</option>
+<option value="cortadora">cortadora</option>
+<option value="soldadora">soldadora</option>
+<option value="esmeril">esmeril</option>
+<option value="taladro">taladro</option>
+<option value="compresora">compresora</option>
+<option value="dobladora">dobladora</option>
+<option value="otro">otro</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="codigo_interno">Codigo interno</label>
+<input id="codigo_interno" name="codigo_interno" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicacion</label>
+<input id="ubicacion" name="ubicacion" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="operativa" selected="">Operativa</option>
+<option value="en_reparacion">En mantenimiento</option>
+<option value="dada_de_baja">Fuera de servicio</option>
+<option value="inactiva">Inactiva</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar maquina</button>
+<a data-variant="outline" href="/dashboard/maintenance/machines?type=prensa">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`/dashboard/maintenance/machines/new > formulario > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`/dashboard/maintenance/machines/new > formulario > resultado 1`] = `
+{
+  "html": "<div>
+<section>
+<nav aria-label="Ruta de navegación">
+<ol>
+<li>
+<a href="/dashboard">Dashboard</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance">Mantenimiento</a>
+</li>
+<li>
+<svg/>
+<a href="/dashboard/maintenance/machines">Máquinas</a>
+</li>
+<li>
+<svg/>
+<span aria-current="page">Nueva máquina</span>
+</li>
+</ol>
+</nav>
+<div>
+<div>
+<div aria-hidden="true">
+</div>
+<div>
+<h1>Registrar máquina</h1>
+<p>Registra una máquina o equipo crítico del taller para controlar su estado operativo, ubicación y código interno.</p>
+</div>
+</div>
+<div>
+<button type="button" aria-label="Volver a máquinas">
+<svg/>Volver a máquinas</button>
+<span data-variant="default">Solo ADMIN</span>
+</div>
+</div>
+</section>
+<div>
+<div>
+<div>Datos principales</div>
+</div>
+<div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="nombre">Nombre de la maquina<span aria-hidden="true">*</span>
+</label>
+<input id="nombre" required="" name="nombre" value=""/>
+</div>
+<div>
+<label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
+</label>
+<select id="tipo" required="" name="tipo">
+<option value="prensa" selected="">prensa</option>
+<option value="cortadora">cortadora</option>
+<option value="soldadora">soldadora</option>
+<option value="esmeril">esmeril</option>
+<option value="taladro">taladro</option>
+<option value="compresora">compresora</option>
+<option value="dobladora">dobladora</option>
+<option value="otro">otro</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="codigo_interno">Codigo interno</label>
+<input id="codigo_interno" name="codigo_interno" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicacion</label>
+<input id="ubicacion" name="ubicacion" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="operativa" selected="">Operativa</option>
+<option value="en_reparacion">En mantenimiento</option>
+<option value="dada_de_baja">Fuera de servicio</option>
+<option value="inactiva">Inactiva</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4">
+</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Registrar maquina</button>
+<a data-variant="outline" href="/dashboard/maintenance/machines">Cancelar</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+  "outcome": "render",
+}
+`;
+
+exports[`panel lateral de maquinas > el alta en panel autoriza igual que la pagina, sin consultar, y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Registrar máquina</h2>
+<p id="radix-_R_1H2_">Registra una máquina o equipo crítico del taller para controlar su estado operativo, ubicación y código interno.</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<div>
+<label for="nombre">Nombre de la maquina<span aria-hidden="true">*</span>
+</label>
+<input id="nombre" required="" name="nombre" value=""/>
+</div>
+<div>
+<label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
+</label>
+<select id="tipo" required="" name="tipo">
+<option value="prensa" selected="">prensa</option>
+<option value="cortadora">cortadora</option>
+<option value="soldadora">soldadora</option>
+<option value="esmeril">esmeril</option>
+<option value="taladro">taladro</option>
+<option value="compresora">compresora</option>
+<option value="dobladora">dobladora</option>
+<option value="otro">otro</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="codigo_interno">Codigo interno</label>
+<input id="codigo_interno" name="codigo_interno" value=""/>
+</div>
+<div>
+<label for="ubicacion">Ubicacion</label>
+<input id="ubicacion" name="ubicacion" value=""/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="operativa" selected="">Operativa</option>
+<option value="en_reparacion">En mantenimiento</option>
+<option value="dada_de_baja">Fuera de servicio</option>
+<option value="inactiva">Inactiva</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4">
+</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Registrar maquina</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de maquinas > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<div data-state="open">
+</div>
+<div role="dialog" id="radix-_R_1_" aria-describedby="radix-_R_1H2_" aria-labelledby="radix-_R_1H1_" data-state="open" data-side="right" tabindex="-1">
+<div>
+<h2 id="radix-_R_1H1_">Editar máquina</h2>
+<p id="radix-_R_1H2_">nombre-1 · id_maquina-1</p>
+</div>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<input type="hidden" name="id_maquina" value="id_maquina-1"/>
+<div>
+<div>
+<label for="nombre">Nombre de la maquina<span aria-hidden="true">*</span>
+</label>
+<input id="nombre" required="" name="nombre" value="nombre-1"/>
+</div>
+<div>
+<label for="tipo">Tipo de maquina<span aria-hidden="true">*</span>
+</label>
+<select id="tipo" required="" name="tipo">
+<option value="prensa">prensa</option>
+<option value="cortadora">cortadora</option>
+<option value="soldadora">soldadora</option>
+<option value="esmeril">esmeril</option>
+<option value="taladro">taladro</option>
+<option value="compresora">compresora</option>
+<option value="dobladora">dobladora</option>
+<option value="otro">otro</option>
+</select>
+</div>
+</div>
+<div>
+<div>
+<label for="codigo_interno">Codigo interno</label>
+<input id="codigo_interno" name="codigo_interno" value="codigo_interno-1"/>
+</div>
+<div>
+<label for="ubicacion">Ubicacion</label>
+<input id="ubicacion" name="ubicacion" value="ubicacion-1"/>
+</div>
+</div>
+<div>
+<label for="estado">Estado<span aria-hidden="true">*</span>
+</label>
+<select id="estado" required="" name="estado">
+<option value="operativa">Operativa</option>
+<option value="en_reparacion">En mantenimiento</option>
+<option value="dada_de_baja">Fuera de servicio</option>
+<option value="inactiva">Inactiva</option>
+</select>
+</div>
+<div>
+<label for="observaciones">Observaciones</label>
+<textarea id="observaciones" name="observaciones" rows="4">observaciones-1</textarea>
+</div>
+</div>
+<div>
+<button data-variant="outline" type="button">Cancelar</button>
+<button data-variant="default" type="submit">Guardar cambios</button>
+</div>
+</form>
+<button data-variant="ghost" type="button" aria-label="Cerrar">
+<svg/>
+</button>
+</div>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
 `;

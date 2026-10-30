@@ -197,7 +197,8 @@ export function ListingSection() {
         badge-state-*); solo cambia la forma: StatusBadge es redondeada y en
         minúsculas; StateBadge es un Badge, más compacto y en mayúsculas.
         Comercial usa StateBadge desde la entrega 10.4b; Mantenimiento y Mermas
-        pasan a ella en la 10.5 y la 10.7.
+        ya usaban Badge con sus propias variantes, y StatusBadge se retira en la
+        entrega 11.
       </GalleryNote>
 
       <GallerySample label="Tabla sin resultados" className="block">

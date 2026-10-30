@@ -1,0 +1,2482 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createSparePartAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > costo que no es un numero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > costo que no es un numero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "abc",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > costo vacio: es obligatorio > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > costo vacio: es obligatorio > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > crea el repuesto con su proveedor, su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > crea el repuesto con su proveedor, su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario no puede ser negativo.",
+      ],
+      "estado": [
+        "Seleccione un estado válido.",
+      ],
+      "id_proveedor": [
+        "Seleccione un proveedor válido.",
+      ],
+      "nombre_repuesto": [
+        "El nombre del repuesto debe tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "-1",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "quizas",
+      "id_proveedor": "PVE1",
+      "nombre_repuesto": "F",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > los obligatorios ausentes devuelven sus errores en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario es obligatorio.",
+      ],
+      "nombre_repuesto": [
+        "El nombre del repuesto es obligatorio.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > los textos llegan sin los espacios de los extremos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > los textos llegan sin los espacios de los extremos > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": " 38.50 ",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": " PVE00000003 ",
+      "nombre_repuesto": "  Faja en V B-52  ",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > otro fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSparePartAction > otro fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el repuesto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+]
+`;
+
+exports[`createSparePartAction > otro repuesto con ese nombre: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un repuesto registrado con ese nombre.",
+    "fieldErrors": {
+      "nombre_repuesto": [
+        "Ya existe un repuesto registrado con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > proveedor inactivo: error en el campo, sin transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`createSparePartAction > proveedor inactivo: error en el campo, sin transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > proveedor inexistente: el mismo error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`createSparePartAction > proveedor inexistente: el mismo error > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > puede crearse inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": false,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > puede crearse inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "false",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > sin estado en el formulario queda activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": null,
+        "estado": true,
+        "id_proveedor": null,
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > sin estado en el formulario queda activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "",
+      "estado": "",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como null; la descripcion vacia tambien > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": null,
+        "estado": true,
+        "id_proveedor": null,
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > sin proveedor no lo valida y lo guarda como null; la descripcion vacia tambien > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "",
+      "estado": "true",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 1.005,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Repuesto creado: Faja en V B-52",
+      "enTransaccion": true,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000008",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createSparePartAction > un costo con tres decimales llega a Prisma sin redondear > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000008",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "1.005",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createSparePartAction > un costo que no cabe en numeric(12,2) se rechaza sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario no debe superar S/ 9,999,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "1e12",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revierte con su mensaje, sin marcar campos > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "repuesto",
+      "prefijo": "REP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 38.5,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "id_repuesto": "REP00000008",
+        "nombre_repuesto": "Faja en V B-52",
+      },
+    },
+    "prisma": "repuesto.create",
+  },
+  {
+    "args": "Unique constraint failed on the fields: (\`nombre_repuesto\`)",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createSparePartAction > una carrera por el nombre (P2002 al crear) revierte con su mensaje, sin marcar campos > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un repuesto registrado con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "38.50",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para activar o inactivar repuestos.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > activa un repuesto inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Repuesto activado: Faja en V B-52",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > activa un repuesto inactivo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > con un estado pedido que no es true ni false responde sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > el repuesto no existe: no cambia ninguna fila y responde sin bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > el repuesto no existe: no cambia ninguna fila y responde sin bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > inactiva un repuesto activo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Repuesto inactivado: Faja en V B-52",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > inactiva un repuesto activo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > pedir activar un repuesto que ya esta activo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "estado": false,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > pedir activar un repuesto que ya esta activo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto ya estaba activo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo no cambia ninguna fila ni registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "estado": true,
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.updateMany",
+  },
+  {
+    "args": {
+      "select": {
+        "nombre_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > pedir inactivar un repuesto que ya esta inactivo no cambia ninguna fila ni registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto ya estaba inactivo.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "REP00000004",
+    },
+  },
+}
+`;
+
+exports[`toggleSparePartStatusAction > sin id responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`toggleSparePartStatusAction > sin id responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > ADMIN actualiza el repuesto y registra la bitacora despues, fuera de transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSparePartAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para editar repuestos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000006",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000006",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor activo se acepta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000006",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000006",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > cambiar a otro proveedor inactivo se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000006",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > conservar su propio nombre no es un duplicado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > conservar su proveedor actual inactivo se acepta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > datos invalidos devuelven los errores por campo despues de comprobar el repuesto > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > datos invalidos devuelven los errores por campo despues de comprobar el repuesto > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del repuesto.",
+    "fieldErrors": {
+      "costo_unitario": [
+        "El costo unitario debe ser un número válido.",
+      ],
+      "nombre_repuesto": [
+        "El nombre del repuesto debe tener al menos 2 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "abc",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > el repuesto no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > el repuesto no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+]
+`;
+
+exports[`updateSparePartAction > otro fallo al actualizar devuelve el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar el repuesto. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+]
+`;
+
+exports[`updateSparePartAction > otro repuesto con ese nombre: error en el campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe otro repuesto registrado con ese nombre.",
+    "fieldErrors": {
+      "nombre_repuesto": [
+        "Ya existe otro repuesto registrado con ese nombre.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin validarlo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": null,
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Repuesto actualizado: Faja en V B-52 (reforzada)",
+      "enTransaccion": false,
+      "entidad_afectada": "repuesto",
+      "id_registro_afectado": "REP00000004",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/spare-parts",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateSparePartAction > quitar el proveedor lo guarda como null sin validarlo > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_repuesto": "REP00000004",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > sin id de repuesto responde que no existe sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateSparePartAction > sin id de repuesto responde que no existe sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El repuesto no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+]
+`;
+
+exports[`updateSparePartAction > su proveedor actual ya no existe: se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El proveedor seleccionado no existe o esta inactivo.",
+    "fieldErrors": {
+      "id_proveedor": [
+        "El proveedor seleccionado no existe o esta inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;
+
+exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar) devuelve su mensaje y no registra bitacora > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_proveedor": true,
+        "id_repuesto": true,
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "prisma": "repuesto.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+      },
+      "where": {
+        "id_proveedor": "PVE00000003",
+      },
+    },
+    "prisma": "proveedor.findUnique",
+  },
+  {
+    "args": {
+      "select": {
+        "id_repuesto": true,
+      },
+      "where": {
+        "nombre_repuesto": {
+          "equals": "Faja en V B-52 (reforzada)",
+          "mode": "insensitive",
+        },
+      },
+    },
+    "prisma": "repuesto.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_unitario": 41.9,
+        "descripcion": "Para el motor de la cizalla",
+        "estado": true,
+        "id_proveedor": "PVE00000003",
+        "nombre_repuesto": "Faja en V B-52 (reforzada)",
+      },
+      "where": {
+        "id_repuesto": "REP00000004",
+      },
+    },
+    "fueraDeTransaccion": true,
+    "prisma": "repuesto.update",
+  },
+]
+`;
+
+exports[`updateSparePartAction > una carrera por el nombre (P2002 al actualizar) devuelve su mensaje y no registra bitacora > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe un repuesto registrado con ese nombre.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "costo_unitario": "41.90",
+      "descripcion": "Para el motor de la cizalla",
+      "estado": "true",
+      "id_proveedor": "PVE00000003",
+      "nombre_repuesto": "Faja en V B-52 (reforzada)",
+    },
+  },
+}
+`;

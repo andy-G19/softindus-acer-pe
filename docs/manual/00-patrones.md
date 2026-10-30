@@ -13,6 +13,7 @@ Pantallas renovadas hasta ahora:
   proveedor, categorías de materiales, materiales e insumos, alertas y stock
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
+- Mantenimiento: el inicio, máquinas y repuestos.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 
@@ -69,8 +70,8 @@ Puedes cerrar la ventana con **Cancelar**, con la **X**, con la tecla
 
 Los registros de los catálogos no se borran: se **inactivan**. Esto vale
 para tipos de proveedor, proveedores, materiales de proveedor, categorías de
-materiales, materiales, categorías de gasto, clientes, productos y
-categorías de producto.
+materiales, materiales, categorías de gasto, clientes, productos,
+categorías de producto, máquinas y repuestos.
 
 - **Inactivar** pide confirmación. La pregunta nombra el registro y explica
   qué pasa, por ejemplo: «Dejará de ofrecerse al registrar proveedores; los
@@ -130,6 +131,7 @@ revés, el mensaje aparece igual y la barra no se envía.
 
 Cada pantalla muestra solo lo que tu usuario puede hacer. Si un rol solo
 puede consultar, verás la lista con la indicación **Solo lectura** y sin los
-botones de crear, editar o inactivar. El inicio de Inventario muestra solo
-las tarjetas de las pantallas que tu usuario puede abrir. Los permisos de
+botones de crear, editar o inactivar. Los inicios de Inventario y de
+Mantenimiento muestran solo las tarjetas de las pantallas que tu usuario
+puede abrir. Los permisos de
 cada pantalla están en el capítulo de su área.
