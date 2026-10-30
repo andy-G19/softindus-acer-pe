@@ -5679,8 +5679,10 @@ Datos leídos de la API de GitHub el 2026-10-29 (UTC) y comparados con git:
 
 Fecha: 2026-10-29 (Lima). Estado: cerrada el 2026-10-29 (Lima). El paso 0
 (`56c3c20`) registró la integración de la 10.4c en `main`. 8 commits, de
-`34ecade` a `a898729`, el registro `55c6b47` (CI #110 en verde) y este
-cierre. Plan en `tmp/e10-diff/plan-10-5.md`.
+`34ecade` a `a898729`, el registro `55c6b47` (CI #110 en verde) y el cierre
+`1a3a018` (CI #111 en verde). Después del cierre, el arreglo del hallazgo 1
+(`543bf58`, CI #112 en verde). Integrada en `main` con el PR #31 (merge
+commit `1cd778b`, CI #114 en verde). Plan en `tmp/e10-diff/plan-10-5.md`.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -5694,7 +5696,8 @@ cierre. Plan en `tmp/e10-diff/plan-10-5.md`.
 | ad805da | feat | Inactivar repuesto pide confirmación; el cambio de estado fija el estado pedido; se retira `updateSparePartStatusAction`. |
 | a898729 | feat | Las tarjetas del inicio de Mantenimiento siguen los roles de su destino. |
 | 55c6b47 | docs | Registro de la sub-entrega, `CLAUDE.md`, la nota de `StatusBadge` (D8) e inventario. |
-| este | docs | Cierre: publicación y verificación en staging, hallazgos y capítulo de Mantenimiento del manual. |
+| 1a3a018 | docs | Cierre: publicación y verificación en staging, hallazgos y capítulo de Mantenimiento del manual. |
+| 543bf58 | fix | Después del cierre: elegir o limpiar una opción de `SearchableSelect` dispara `input`, así que un panel o una ventana lo cuentan como cambio (hallazgo 1). |
 
 Decisiones del responsable (2026-10-29), tras la auditoría; aprobó las ocho
 recomendadas:
@@ -5819,7 +5822,9 @@ Hallazgos:
    `SearchableSelect` dentro de un `RouteSheet` o un `FormDialog`. El
    arreglo es exponer `markDirty` en `FormSurfaceControls`, un componente
    compartido: se propone aparte, antes de la 10.5b, que usa
-   `SearchableSelect` en fallas y preventivos.
+   `SearchableSelect` en fallas y preventivos. Corregido después del cierre
+   en `543bf58`, con otro arreglo que el propuesto (véase «Arreglo del
+   hallazgo 1»).
 2. La tarjeta «Máquinas» del inicio dice «Acceso: ADMIN.», y el maestro de
    taller la ve y puede abrir la lista en modo consulta. Es un texto de la
    interfaz; no se cambió.
@@ -5940,6 +5945,47 @@ El manual suma el capítulo de Mantenimiento (inicio, máquinas y
 repuestos), escrito con lo verificado, y las reglas comunes cuentan esas
 pantallas entre las renovadas.
 
+#### Arreglo del hallazgo 1
+
+Después del cierre, `543bf58` (`fix`) corrigió el hallazgo 1 sin tocar
+`FormSurfaceControls`: `SearchableSelect` dispara un `input` que burbujea
+desde su `input` oculto cuando la opción cambia (elegida con clic o Enter, o
+limpiada), como un `select` nativo; volver a elegir la misma no cuenta. Así
+`RouteSheet` y `FormDialog`, que marcan los cambios con el `onInput` de su
+contenido, se enteran, y «Cancelar» pregunta antes de descartar. Nada más
+cambia de comportamiento.
+
+- Prueba roja antes del arreglo (`tmp/e10-diff/rojo-hallazgo1.log`): 4 de
+  17 casos fallan, 3 de `searchable-select.test.ts` (clic, Enter y Limpiar)
+  y 1 de `spare-part-form.test.ts` (elegir un proveedor sin escribir, en el
+  panel); el contrario, volver a elegir la misma opción, ya pasaba.
+- Mutaciones (`tmp/e10-diff/mut_hallazgo1.txt`): 4 de 4 detectadas (sin el
+  aviso, sin burbujeo, avisar aunque no cambie y avisar con otro evento).
+- `npm run check` terminó con código 0: de 2.883 pruebas en 175 archivos a
+  2.888 en 176. CSS compilado igual (112.745 bytes).
+- `CLAUDE.md` ya lo documenta en «Wide surface in a full page»: elegir una
+  opción deja de pedir `markDirty` a mano.
+- Publicado en `staging`: CI #112 en verde (2m 35s); Vercel lo desplegó
+  (`success` a las 03:09:06 UTC del 2026-10-30).
+
+#### Integración en `main`
+
+Datos leídos de la API de GitHub el 2026-10-30 (UTC) y comparados con git:
+
+- El cierre `1a3a018` se publicó en `staging`: CI #111 en verde (3m 22s), y
+  Vercel lo desplegó (`success` a las 02:48:30 UTC del 2026-10-30). Después
+  llegó `543bf58` (CI #112, véase arriba).
+- PR #31, abierto a las 03:11:26 UTC y fusionado con merge commit a las
+  03:14:28 UTC del 2026-10-30: 12 commits, de `56c3c20` a `543bf58`, y 62
+  archivos (+9.807 −1.005). Su CI, el #113, sobre `543bf58`, terminó en
+  verde (2m 18s).
+- El merge commit `1cd778b` tiene como padres `3ed8001` (`main`) y `543bf58`
+  (`staging`), y su árbol es el de `543bf58` (`0e297ee2`): `main` y `staging`
+  tienen el mismo contenido. CI #114 en verde (3m 18s).
+- Vercel desplegó `1cd778b` en producción al primer intento (estado «Vercel»
+  `pending` a las 03:14:31 UTC y `success` a las 03:15:53 UTC). La
+  sub-entrega no trae migraciones.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -5964,7 +6010,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #110 verde en staging, 14 de 14 huellas como se predijo y el hallazgo 4 de la 10.3a corregido) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, en curso) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
