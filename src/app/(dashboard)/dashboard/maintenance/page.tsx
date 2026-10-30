@@ -31,7 +31,7 @@ import { getMaintenanceOverviewData } from "@/modules/maintenance/overview/queri
 import { formatDate, formatMoney } from "@/lib/formatters";
 import { dashboardBreadcrumbs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
-import { APP_ROLES } from "@/lib/permissions";
+import { APP_ROLES, type AppRole } from "@/lib/permissions";
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
@@ -43,12 +43,17 @@ type MaintenanceSection = {
   phase: string;
   access: string;
   href?: string;
+  /** Los roles que admite el requireRole de la pantalla de destino. */
+  roles: readonly AppRole[];
   icon: LucideIcon;
   tone: ModuleCardTone;
 };
 
+const ADMIN_ONLY = [APP_ROLES.ADMIN] as const;
+const ADMIN_AND_WORKSHOP = [APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER] as const;
+
 export default async function MaintenanceDashboardPage() {
-  await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
+  const session = await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
   const today = new Date();
 
@@ -66,7 +71,11 @@ export default async function MaintenanceDashboardPage() {
 
   const inactiveMachines = totalMachines - operationalMachines;
 
-  const sections: MaintenanceSection[] = [
+  // Cada tarjeta lleva los roles que admite su pantalla (los de su
+  // requireRole) y solo se muestra a ellos (entrega 10.5a), como en
+  // Inventario: el maestro de taller veia tarjetas que lo llevaban a «acceso
+  // denegado». maintenance-links.test.ts abre cada enlace con cada rol.
+  const sections = ([
     {
       title: "Máquinas",
       description:
@@ -74,6 +83,7 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.2",
       access: "ADMIN",
       href: "/dashboard/maintenance/machines",
+      roles: ADMIN_AND_WORKSHOP,
       icon: Wrench,
       tone: "chart-1",
     },
@@ -84,6 +94,7 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.3",
       access: "ADMIN / Maestro de taller",
       href: "/dashboard/maintenance/failures",
+      roles: ADMIN_AND_WORKSHOP,
       icon: AlertTriangle,
       tone: "chart-2",
     },
@@ -94,6 +105,7 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.4",
       access: "ADMIN",
       href: "/dashboard/maintenance/spare-parts",
+      roles: ADMIN_ONLY,
       icon: Cog,
       tone: "chart-3",
     },
@@ -104,6 +116,7 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.5",
       access: "ADMIN",
       href: "/dashboard/maintenance/repairs",
+      roles: ADMIN_ONLY,
       icon: Hammer,
       tone: "chart-4",
     },
@@ -114,6 +127,7 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.6",
       access: "ADMIN",
       href: "/dashboard/maintenance/preventive",
+      roles: ADMIN_ONLY,
       icon: CalendarClock,
       tone: "chart-5",
     },
@@ -124,10 +138,13 @@ export default async function MaintenanceDashboardPage() {
       phase: "Subfase 9.7",
       access: "ADMIN",
       href: "/dashboard/maintenance/recurrences",
+      roles: ADMIN_ONLY,
       icon: RefreshCcw,
       tone: "chart-1",
     },
-  ];
+  ] satisfies MaintenanceSection[]).filter((section) =>
+    section.roles.some((role) => role === session.user.role),
+  );
 
   return (
     <div className="space-y-6">

@@ -560,62 +560,6 @@ exports[`/dashboard/maintenance > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </a>
-<a href="/dashboard/maintenance/spare-parts">
-<div>
-<span aria-hidden="true">03</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Repuestos</div>
-</div>
-<div>
-<p>Registro de repuestos utilizados en reparaciones de maquinaria. Acceso: ADMIN.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/maintenance/repairs">
-<div>
-<span aria-hidden="true">04</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Reparaciones</div>
-</div>
-<div>
-<p>Registro de técnico, mano de obra, costo total y repuestos usados. Acceso: ADMIN.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/maintenance/preventive">
-<div>
-<span aria-hidden="true">05</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Preventivos</div>
-</div>
-<div>
-<p>Programación y seguimiento de mantenimientos preventivos básicos. Acceso: ADMIN.</p>
-</div>
-</div>
-</a>
-<a href="/dashboard/maintenance/recurrences">
-<div>
-<span aria-hidden="true">06</span>
-<div>
-<div>
-<svg/>
-</div>
-<div>Reincidencias</div>
-</div>
-<div>
-<p>Consulta de máquinas con más fallas, tiempos perdidos y costos. Acceso: ADMIN.</p>
-</div>
-</div>
-</a>
 </div>
 <div>
 <div>
