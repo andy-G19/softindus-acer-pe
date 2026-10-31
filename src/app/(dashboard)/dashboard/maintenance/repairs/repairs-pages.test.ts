@@ -1,7 +1,8 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
 import {
+  characterizePage,
   definePageSuite,
   generatedResult,
   type PrismaArgs,
@@ -86,3 +87,39 @@ definePageSuite([
     ],
   },
 ]);
+
+// Entrega 10.5b: la lista usa FilterBar y DateRangeFields con los mismos nombres
+// de URL, y el alta lleva el regreso a la lista filtrada.
+describe("lista de reparaciones con filtros", () => {
+  const LIST_ROUTE = "/dashboard/maintenance/repairs";
+  const loadList = () => import("./page");
+  const filtered = {
+    name: "filtrada",
+    searchParams: { status: "anulada", from: "2026-07-01", to: "2026-07-31" },
+  };
+
+  it("el alta lleva el regreso al listado filtrado", async () => {
+    const { html } = await characterizePage(loadList, filtered, LIST_ROUTE);
+    const returnTo = encodeURIComponent(`${LIST_ROUTE}?status=anulada&from=2026-07-01&to=2026-07-31`);
+
+    expect(html).toContain(`href="${LIST_ROUTE}/new?returnTo=${returnTo}"`);
+  });
+
+  it("el estado vacio tambien lo lleva", async () => {
+    const { html } = await characterizePage(
+      loadList,
+      { ...filtered, data: { "reparacion.findMany": [] } },
+      LIST_ROUTE,
+    );
+
+    expect(html?.match(/repairs\/new\?returnTo=/g)).toHaveLength(2);
+  });
+
+  it("los filtros conservan sus nombres en la URL", async () => {
+    const { html } = await characterizePage(loadList, filtered, LIST_ROUTE);
+
+    for (const name of ["q", "machine", "failure", "status", "from", "to"]) {
+      expect(html).toContain(`name="${name}"`);
+    }
+  });
+});

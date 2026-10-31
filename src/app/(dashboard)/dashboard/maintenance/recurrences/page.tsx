@@ -214,7 +214,7 @@ export default async function MaintenanceRecurrencesPage() {
     .slice(0, 5);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Reincidencias y reportes básicos"
         description="Analiza máquinas con mayor número de fallas, horas perdidas, costo acumulado de reparaciones y mantenimientos preventivos vencidos."
@@ -444,6 +444,6 @@ export default async function MaintenanceRecurrencesPage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

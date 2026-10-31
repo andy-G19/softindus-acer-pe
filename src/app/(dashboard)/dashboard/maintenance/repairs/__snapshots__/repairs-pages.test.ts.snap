@@ -34,7 +34,7 @@ exports[`/dashboard/maintenance/repairs > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -63,16 +63,11 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/repairs/new">Registrar reparación</a>
+<a data-variant="default" href="/dashboard/maintenance/repairs/new?returnTo=%2Fdashboard%2Fmaintenance%2Frepairs">Registrar reparación</a>
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value=""/>
@@ -95,21 +90,22 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/maintenance/repairs">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -268,7 +264,7 @@ exports[`/dashboard/maintenance/repairs > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -369,7 +365,7 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -398,16 +394,11 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/repairs/new">Registrar reparación</a>
+<a data-variant="default" href="/dashboard/maintenance/repairs/new?returnTo=%2Fdashboard%2Fmaintenance%2Frepairs%3Fq%3Drodamiento%26machine%3Dtorno%26failure%3DFAL%26status%3Dejecutada%26from%3D2026-07-01%26to%3D2026-07-31">Registrar reparación</a>
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value="rodamiento"/>
@@ -430,21 +421,22 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/maintenance/repairs">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -603,7 +595,7 @@ exports[`/dashboard/maintenance/repairs > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -642,7 +634,7 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > llamad
 
 exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -671,16 +663,11 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 <div>
 <button type="button" aria-label="Volver al módulo">
 <svg/>Volver al módulo</button>
-<a data-variant="default" href="/dashboard/maintenance/repairs/new">Registrar reparación</a>
+<a data-variant="default" href="/dashboard/maintenance/repairs/new?returnTo=%2Fdashboard%2Fmaintenance%2Frepairs">Registrar reparación</a>
 </div>
 </div>
 </section>
-<div>
-<div>
-<div>Filtros de búsqueda</div>
-</div>
-<div>
-<form>
+<form role="search" aria-label="Filtros de reparaciones" action="/dashboard/maintenance/repairs" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar reparacion, falla o tecnico" name="q" value=""/>
@@ -703,21 +690,22 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 <option value="anulada">Anulada</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
 <a data-variant="clear" href="/dashboard/maintenance/repairs">Limpiar</a>
 </div>
 </form>
-</div>
-</div>
 <section>
 <div>
 <div>
@@ -904,7 +892,7 @@ exports[`/dashboard/maintenance/repairs > una reparacion en cada estado > result
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

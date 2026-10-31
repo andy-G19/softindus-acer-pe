@@ -76,7 +76,7 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > llamadas 1`] = `
 
 exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -344,7 +344,7 @@ exports[`/dashboard/maintenance/recurrences > reporte del mes > resultado 1`] = 
 </div>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
