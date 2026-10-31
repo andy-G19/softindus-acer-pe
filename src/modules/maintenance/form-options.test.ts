@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { Prisma } from "@/generated/prisma/client";
 import {
   buildMachineOptionItems,
+  buildSparePartOptionItems,
   getCurrentDateTimeValue,
   getTodayValue,
 } from "@/modules/maintenance/form-options";
@@ -19,6 +21,16 @@ describe("opciones de maquina", () => {
     expect(
       buildMachineOptionItems([{ id_maquina: "MAQ00000001", nombre: "Torno paralelo", tipo: "torno", estado }]),
     ).toEqual([{ id: "MAQ00000001", label: "Torno paralelo", description }]);
+  });
+});
+
+describe("opciones de repuesto", () => {
+  it("llevan el costo del catalogo como texto, sin pasar por coma flotante", () => {
+    expect(
+      buildSparePartOptionItems([
+        { id_repuesto: "REP00000001", nombre_repuesto: "Rodamiento 6205", costo_unitario: new Prisma.Decimal("10.25") },
+      ]),
+    ).toEqual([{ id: "REP00000001", label: "Rodamiento 6205", description: "S/ 10.25", costo_unitario: "10.25" }]);
   });
 });
 

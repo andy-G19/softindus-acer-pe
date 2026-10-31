@@ -84,6 +84,14 @@ definePageSuite([
     load: () => import("./new/page"),
     cases: [
       { name: "formulario" },
+      {
+        name: "con regreso al listado filtrado",
+        searchParams: { returnTo: "/dashboard/maintenance/repairs?status=anulada" },
+      },
+      {
+        name: "sin fallas abiertas",
+        data: { "falla_maquina.findMany": [] },
+      },
     ],
   },
 ]);

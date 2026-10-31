@@ -59,6 +59,7 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/maintenance/preventive/@panel/(.)new/page.tsx [successNotification] -> preventive-maintenance-created",
   "src/app/(dashboard)/dashboard/maintenance/preventive/new/page.tsx [successNotification] -> preventive-maintenance-created",
   "src/app/(dashboard)/dashboard/maintenance/preventive/page.tsx [successNotification] -> preventive-maintenance-updated",
+  "src/app/(dashboard)/dashboard/maintenance/repairs/new/page.tsx [successNotification] -> repair-created",
   "src/app/(dashboard)/dashboard/maintenance/repairs/page.tsx [successNotification] -> repair-updated",
   "src/app/(dashboard)/dashboard/maintenance/spare-parts/@panel/(.)[id]/edit/page.tsx [successNotification] -> spare-part-updated",
   "src/app/(dashboard)/dashboard/maintenance/spare-parts/@panel/(.)new/page.tsx [successNotification] -> spare-part-created",

@@ -5,6 +5,7 @@ import type { RowStatusState } from "@/lib/requested-status";
 import {
   createRepairAction,
   updateRepairStatusAction,
+  type RepairFormState,
 } from "@/modules/maintenance/repairs/actions";
 import {
   characterizeHandler,
@@ -21,12 +22,13 @@ import {
 // transaccion y de llevarlas a una superficie amplia con lineas dinamicas.
 // Cada caso fija en un snapshot, en orden: la autorizacion con sus roles, las
 // lecturas, la transaccion con sus escrituras y su final, los correlativos,
-// la bitacora, las revalidaciones y el resultado: la redireccion o el error
-// que lanza, con su mensaje exacto.
+// la bitacora, las revalidaciones y el resultado: el estado que devuelve al
+// formulario o a la fila, con su mensaje exacto.
 //
-// Hoy las dos acciones reciben solo el FormData y autorizan solo a ADMIN con
-// requireRole. El alta lee tres ranuras fijas de repuesto (id_repuesto_N y
-// cantidad_N), rechaza la que llega incompleta (B4, hallazgo 7),
+// Las dos autorizan solo a ADMIN y devuelven el resultado. El alta (B8) lee las
+// lineas repetidas id_repuesto y cantidad, ignora una vacia del todo y da cada
+// error de una linea con la clave items.<posicion>.<campo>; rechaza la que llega
+// incompleta (B4, hallazgo 7),
 // calcula los importes con src/lib/repair-amounts.ts y envia a Prisma las
 // cadenas que devuelve (B2, hallazgo 3) y, con la falla bloqueada, decide
 // dentro de la transaccion (B3, hallazgo 2). El cambio de estado bloquea la
@@ -113,16 +115,17 @@ vi.mock("@/lib/correlatives-core", async (importOriginal) => {
 // Ejecucion
 // ---------------------------------------------------------------------------
 
-// null deja el campo fuera del formulario: formData.get devuelve null.
-type FormFields = Record<string, string | null>;
+// null deja el campo fuera del formulario: formData.get devuelve null. Una lista
+// repite el campo: las lineas de repuesto.
+type FormFields = Record<string, string | string[] | null>;
 type ActionCase = { name: string; form: FormFields; data?: DataOverrides; role?: Role };
 
 function formOf(fields: FormFields) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(fields)) {
-    if (value !== null) {
-      formData.append(key, value);
+    for (const item of value === null ? [] : [value].flat()) {
+      formData.append(key, item);
     }
   }
 
@@ -174,6 +177,8 @@ const RETEN = "REP00000002";
 const CORREA = "REP00000003";
 const CABEZAL = "REP00000004";
 
+const initialState: RepairFormState = { status: "idle" };
+const create = (formData: FormData) => createRepairAction(initialState, formData);
 const initialStatusState: RowStatusState = { status: "idle" };
 const changeStatus = (formData: FormData) => updateRepairStatusAction(initialStatusState, formData);
 
@@ -188,22 +193,19 @@ const createForm: FormFields = {
   mano_obra: "150.50",
   estado_reparacion: "programada",
   observaciones: "Cambiar rodamientos del cabezal",
-  id_repuesto_1: "",
-  cantidad_1: "",
-  id_repuesto_2: "",
-  cantidad_2: "",
-  id_repuesto_3: "",
-  cantidad_3: "",
 };
+
+// Las lineas de repuesto del formulario: [repuesto, cantidad].
+const lines = (...items: [string, string][]): FormFields => ({
+  id_repuesto: items.map(([id]) => id),
+  cantidad: items.map(([, quantity]) => quantity),
+});
 
 // Dos repuestos de 1,25 x S/ 10,25 sin mano de obra: el ejemplo del hallazgo
 // 3, donde la base redondea cada columna por su cuenta.
 const twoSpareParts: FormFields = {
   mano_obra: "",
-  id_repuesto_1: RODAMIENTO,
-  cantidad_1: "1.25",
-  id_repuesto_2: RETEN,
-  cantidad_2: "1.25",
+  ...lines([RODAMIENTO, "1.25"], [RETEN, "1.25"]),
 };
 
 const SPARE_PARTS = [
@@ -265,7 +267,7 @@ const statusWith = (estado_reparacion: string, current: string | null = "program
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createRepairAction", createRepairAction, [
+defineCases("createRepairAction", create, [
   {
     name: "programada sin repuestos: crea la reparacion y pasa la falla a en atencion y la maquina a en reparacion",
     ...createWith({}),
@@ -282,64 +284,72 @@ defineCases("createRepairAction", createRepairAction, [
   },
   {
     name: "tres repuestos con mano de obra",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "2", id_repuesto_2: RETEN, cantidad_2: "1", id_repuesto_3: CORREA, cantidad_3: "0.5" }),
+    ...createWith(lines([RODAMIENTO, "2"], [RETEN, "1"], [CORREA, "0.5"])),
   },
   {
     name: "una cantidad de 1,005 se redondea antes de calcular el subtotal",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "1.005" }),
+    ...createWith(lines([RODAMIENTO, "1.005"])),
   },
   {
-    name: "una linea con repuesto y sin cantidad lanza su mensaje sin tocar Prisma",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: RETEN, cantidad_2: "1" }),
+    name: "una linea con repuesto y sin cantidad devuelve su error sin tocar Prisma",
+    ...createWith(lines([RODAMIENTO, ""], [RETEN, "1"])),
   },
   {
-    name: "una linea con cantidad y sin repuesto lanza su mensaje sin tocar Prisma",
-    ...createWith({ id_repuesto_1: "", cantidad_1: "3" }),
+    name: "una linea con cantidad y sin repuesto devuelve su error sin tocar Prisma",
+    ...createWith(lines(["", "3"])),
   },
   {
     name: "el mismo repuesto en dos lineas",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "1", id_repuesto_3: RODAMIENTO, cantidad_3: "2" }),
+    ...createWith(lines([RODAMIENTO, "1"], [RODAMIENTO, "2"])),
   },
   {
     name: "un repuesto inexistente o inactivo",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "1", id_repuesto_2: RETEN, cantidad_2: "1" }, lookups({ available: [RODAMIENTO] })),
+    ...createWith(lines([RODAMIENTO, "1"], [RETEN, "1"]), lookups({ available: [RODAMIENTO] })),
   },
-  { name: "un id de repuesto mal formado", ...createWith({ id_repuesto_2: "REP1", cantidad_2: "1" }) },
-  { name: "una cantidad de cero", ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "0" }) },
-  { name: "una cantidad que no es numero", ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "dos" }) },
+  { name: "un id de repuesto mal formado", ...createWith(lines(["REP1", "1"])) },
+  { name: "una cantidad de cero", ...createWith(lines([RODAMIENTO, "0"])) },
+  { name: "una cantidad que no es numero", ...createWith(lines([RODAMIENTO, "dos"])) },
   {
     name: "una cantidad que la base guardaria como cero",
-    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "0.001" }),
+    ...createWith(lines([RODAMIENTO, "0.001"])),
   },
   {
     name: "un subtotal que desborda su columna revierte la transaccion",
-    ...createWith({ id_repuesto_1: CABEZAL, cantidad_1: "2" }),
+    ...createWith(lines([CABEZAL, "2"])),
   },
   {
     name: "un costo total que desborda su columna revierte la transaccion",
-    ...createWith({ id_repuesto_1: CABEZAL, cantidad_1: "1" }),
+    ...createWith(lines([CABEZAL, "1"])),
   },
   { name: "una mano de obra negativa", ...createWith({ mano_obra: "-5" }) },
-  { name: "una mano de obra que desborda su columna lanza su mensaje sin tocar Prisma", ...createWith({ mano_obra: "1e12" }) },
+  { name: "una mano de obra que desborda su columna devuelve su error sin tocar Prisma", ...createWith({ mano_obra: "1e12" }) },
   {
     name: "los opcionales vacios o ausentes se guardan como null",
     ...createWith({ tecnico_proveedor: null, mano_obra: null, observaciones: "" }),
   },
-  { name: "WORKSHOP_MASTER: sin permiso, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
   {
-    name: "datos invalidos lanzan los mensajes unidos sin tocar Prisma",
+    name: "una linea vacia del todo no cuenta",
+    ...createWith(lines(["", ""], [RODAMIENTO, "2"], ["", ""])),
+  },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...createWith({}, { ...lookups(), "reparacion.create": failWith(new Error("conexion perdida")) }),
+  },
+  {
+    name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     ...createWith({ id_falla: "FAL", fecha_reparacion: "", estado_reparacion: "hecha" }),
   },
-  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
+  { name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma", form: {} },
   { name: "la falla no existe", ...createWith({}, lookups({ failureState: null })) },
   { name: "una falla reparada no admite reparaciones", ...createWith({}, lookups({ failureState: "reparada" })) },
   { name: "una falla anulada no admite reparaciones", ...createWith({}, lookups({ failureState: "anulada" })) },
   {
-    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
+    name: "el 30 de febrero devuelve su error sin tocar Prisma",
     ...createWith({ fecha_reparacion: "2026-02-30" }),
   },
   {
-    name: "una fecha que no es fecha lanza su mensaje sin tocar Prisma",
+    name: "una fecha que no es fecha devuelve su error sin tocar Prisma",
     ...createWith({ fecha_reparacion: "mañana" }),
   },
 ]);
@@ -378,7 +388,7 @@ describe("createRepairAction envia los importes como los guarda la base", () => 
   type Recorded = { prisma?: string; args?: { data?: Record<string, unknown> } };
 
   async function written(fields: FormFields) {
-    const { calls } = await runCase(createRepairAction, createWith(fields));
+    const { calls } = await runCase(create, createWith(fields));
     const recorded = calls as Recorded[];
 
     return {
@@ -400,14 +410,14 @@ describe("createRepairAction envia los importes como los guarda la base", () => 
   });
 
   it("una cantidad de 1,005 entra al subtotal ya redondeada a 1,01", async () => {
-    const { repair: created, details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "1.005" });
+    const { repair: created, details } = await written(lines([RODAMIENTO, "1.005"]));
 
     expect(details[0]).toMatchObject({ cantidad: "1.01", costo_unitario: "10.25", subtotal: "10.35" });
     expect(created).toMatchObject({ mano_obra: "150.50", costo_total: "160.85" });
   });
 
   it("una linea incompleta no guarda la reparacion", async () => {
-    const { repair: created, details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: "", cantidad_2: "3" });
+    const { repair: created, details } = await written(lines([RODAMIENTO, ""], ["", "3"]));
 
     expect(created).toBeUndefined();
     expect(details).toEqual([]);
@@ -421,13 +431,13 @@ describe("las acciones de reparaciones deciden con la fila bloqueada", () => {
     prisma === "falla_maquina.findUnique" || prisma === "repuesto.findMany";
 
   it("el alta bloquea la falla antes de leerla y de leer los repuestos", async () => {
-    const { calls } = await runCase(createRepairAction, createWith(twoSpareParts));
+    const { calls } = await runCase(create, createWith(twoSpareParts));
 
     expectRowLockedBefore(calls, { table: "falla_maquina", id: FALLA, reads: readsFailureOrSpareParts });
   });
 
   it("el alta rechaza una falla cerrada despues de bloquearla", async () => {
-    const { calls } = await runCase(createRepairAction, createWith({}, lookups({ failureState: "reparada" })));
+    const { calls } = await runCase(create, createWith({}, lookups({ failureState: "reparada" })));
 
     expectRowLockedBefore(calls, { table: "falla_maquina", id: FALLA, reads: readsFailureOrSpareParts });
   });
@@ -475,6 +485,130 @@ describe("updateRepairStatusAction devuelve el resultado a la fila", () => {
     expect(state).toMatchObject({
       status: "error",
       error: "No se puede modificar una reparacion finalizada o anulada.",
+    });
+  });
+});
+
+// El resultado del alta, fuera del snapshot: lo que usa el formulario.
+describe("createRepairAction devuelve el resultado al formulario", () => {
+  async function result(actionCase: Omit<ActionCase, "name">) {
+    const { result: outcome } = await runCase(create, actionCase);
+
+    return (outcome as { estado: RepairFormState }).estado;
+  }
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await result(createWith({}))).toMatchObject({ status: "success", data: { id_reparacion: "RPA00000021" } });
+  });
+
+  it("conserva lo enviado, tambien las lineas", async () => {
+    expect(await result(createWith(lines([RODAMIENTO, "2"], ["", "3"])))).toMatchObject({
+      status: "error",
+      values: {
+        tecnico_proveedor: createForm.tecnico_proveedor,
+        items: [
+          { id_repuesto: RODAMIENTO, cantidad: "2" },
+          { id_repuesto: "", cantidad: "3" },
+        ],
+      },
+    });
+  });
+
+  it("cada error de una linea lleva la posicion de esa linea en el formulario", async () => {
+    const state = await result(createWith(lines(["", ""], [RODAMIENTO, ""], ["", "3"], [RETEN, "dos"])));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "Revisa los datos de la reparación.",
+      fieldErrors: {
+        "items.1.cantidad": ["Ingrese la cantidad del repuesto."],
+        "items.2.id_repuesto": ["Seleccione el repuesto."],
+        "items.3.cantidad": ["La cantidad del repuesto debe ser un número válido."],
+      },
+    });
+  });
+
+  it("reune los errores de los campos y de las lineas", async () => {
+    const state = await result(createWith({ id_falla: "", ...lines([RODAMIENTO, ""]) }));
+
+    expect(state).toMatchObject({
+      fieldErrors: {
+        id_falla: ["Seleccione una falla válida."],
+        "items.0.cantidad": ["Ingrese la cantidad del repuesto."],
+      },
+    });
+  });
+
+  it("un repuesto repetido se marca en cada linea que lo usa", async () => {
+    const state = await result(createWith(lines([RODAMIENTO, "1"], [RETEN, "1"], [RODAMIENTO, "2"])));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "No repitas el mismo repuesto en la reparación.",
+      fieldErrors: {
+        "items.0.id_repuesto": ["No repitas el mismo repuesto en la reparación."],
+        "items.2.id_repuesto": ["No repitas el mismo repuesto en la reparación."],
+      },
+    });
+    expect((state as { fieldErrors: object }).fieldErrors).not.toHaveProperty(["items.1.id_repuesto"]);
+  });
+
+  it("la posicion de un repetido es la del formulario, aunque antes haya una linea vacia", async () => {
+    const state = await result(createWith(lines(["", ""], [RODAMIENTO, "1"], [RODAMIENTO, "2"])));
+
+    expect(state).toMatchObject({
+      fieldErrors: {
+        "items.1.id_repuesto": ["No repitas el mismo repuesto en la reparación."],
+        "items.2.id_repuesto": ["No repitas el mismo repuesto en la reparación."],
+      },
+    });
+  });
+
+  it("un repuesto repetido junto a otro error pide revisar los datos", async () => {
+    const state = await result(createWith(lines([RODAMIENTO, "1"], [RODAMIENTO, "2"], [RETEN, ""])));
+
+    expect(state).toMatchObject({ error: "Revisa los datos de la reparación." });
+  });
+
+  it("un repuesto inactivo se marca en su linea", async () => {
+    const state = await result(
+      createWith(lines([RODAMIENTO, "1"], [RETEN, "1"]), lookups({ available: [RODAMIENTO] })),
+    );
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "Uno o más repuestos seleccionados no existen o están inactivos.",
+      fieldErrors: { "items.1.id_repuesto": ["El repuesto seleccionado no existe o está inactivo."] },
+    });
+    expect((state as { fieldErrors: object }).fieldErrors).not.toHaveProperty(["items.0.id_repuesto"]);
+  });
+
+  it("un subtotal que desborda se marca en su linea", async () => {
+    expect(await result(createWith(lines(["", ""], [CABEZAL, "2"])))).toMatchObject({
+      fieldErrors: { "items.1": ["El subtotal de un repuesto no debe superar S/ 9,999,999,999.99."] },
+    });
+  });
+
+  it("un total que desborda queda en el mensaje general", async () => {
+    const state = await result(createWith(lines([CABEZAL, "1"])));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "El costo total de la reparación no debe superar S/ 9,999,999,999.99.",
+    });
+    expect((state as { fieldErrors?: object }).fieldErrors).toBeUndefined();
+  });
+
+  it.each(["reparada", null])("una falla %s deja el error junto al campo", async (failureState) => {
+    const state = await result(createWith({}, lookups({ failureState })));
+
+    expect(state).toMatchObject({ status: "error", fieldErrors: { id_falla: [expect.any(String)] } });
+  });
+
+  it("sin permiso responde con un error dentro del formulario", async () => {
+    expect(await result({ ...createWith({}), role: "WORKSHOP_MASTER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para registrar reparaciones.",
     });
   });
 });

@@ -175,7 +175,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/maintenance/repairs/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createRepairAction", "updateRepairStatusAction"],
-    rechazanConResultado: ["updateRepairStatusAction"],
+    rechazanConResultado: ["createRepairAction", "updateRepairStatusAction"],
   },
   {
     ruta: "maintenance/spare-parts/actions",

@@ -1,6 +1,12 @@
 // Lo que las paginas y los paneles de alta de Mantenimiento comparten para
 // llenar sus formularios: las fechas por defecto y las opciones de maquina.
 
+type SparePartOption = {
+  id_repuesto: string;
+  nombre_repuesto: string;
+  costo_unitario: { toString(): string };
+};
+
 type MachineOption = {
   id_maquina: string;
   nombre: string;
@@ -41,5 +47,15 @@ export function buildMachineOptionItems(machines: MachineOption[]) {
     id: machine.id_maquina,
     label: machine.nombre,
     description: `${machine.tipo} - ${getMachineStatusLabel(machine.estado)}`,
+  }));
+}
+
+/** Opciones de repuesto, con el costo del catalogo que usa la vista previa. */
+export function buildSparePartOptionItems(spareParts: SparePartOption[]) {
+  return spareParts.map((sparePart) => ({
+    id: sparePart.id_repuesto,
+    label: sparePart.nombre_repuesto,
+    description: `S/ ${sparePart.costo_unitario.toString()}`,
+    costo_unitario: sparePart.costo_unitario.toString(),
   }));
 }
