@@ -1398,6 +1398,34 @@ exports[`/dashboard/gallery > catalogo > resultado 1`] = `
 </figure>
 <p>«Inactivar» usa ConfirmActionButton: pide confirmar con el nombre del registro y, mientras la acción espera, la confirmación no se cancela ni se cierra con Esc; al terminar da un solo aviso, se cierra y el foco vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el mensaje queda dentro de la confirmación. «Activar» no pide confirmar. Aquí la acción solo espera en el navegador: no se guarda nada.</p>
 <figure>
+<figcaption>Cambio de estado desde la fila (RowStatusSelect)</figcaption>
+<div>
+<div>
+<div>
+<select id="estado-EJM00000001" aria-label="Estado del registro de ejemplo EJM00000001">
+<option value="pendiente" selected="">Pendiente</option>
+<option value="en_atencion">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
+<div>
+<div>
+<select id="estado-EJM00000002" aria-label="Estado del registro de ejemplo EJM00000002">
+<option value="pendiente">Pendiente</option>
+<option value="en_atencion" selected="">En atención</option>
+<option value="reparada">Reparada</option>
+<option value="anulada">Anulada</option>
+</select>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
+</div>
+</figure>
+<p>«Guardar» envía el estado elegido y no hace nada si no cambió. Los estados finales piden confirmar: «Anulada» con el botón destructivo y «Reparada» con el normal, porque no borra nada. En el segundo ejemplo la acción falla y el mensaje queda en la fila. Aquí la acción solo espera en el navegador: no se guarda nada.</p>
+<figure>
 <figcaption>Tabla cargando (TableLoadingRows)</figcaption>
 <div>
 <div>

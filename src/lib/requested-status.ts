@@ -33,3 +33,17 @@ export function statusToggleError(id: string, error: string): StatusToggleState 
 export function statusToggleDone(id: string, estado: boolean): StatusToggleState {
   return { status: "success", data: { estado }, values: { id }, operationId: newOperationId() };
 }
+
+/**
+ * Resultado de cambiar el estado desde la fila (RowStatusSelect): el id enviado
+ * y, con exito, el estado que quedo.
+ */
+export type RowStatusState = FormActionState<{ id: string }, { estado: string }>;
+
+export function rowStatusError(id: string, error: string): RowStatusState {
+  return { status: "error", error, values: { id }, operationId: newOperationId() };
+}
+
+export function rowStatusDone(id: string, estado: string): RowStatusState {
+  return { status: "success", data: { estado }, values: { id }, operationId: newOperationId() };
+}
