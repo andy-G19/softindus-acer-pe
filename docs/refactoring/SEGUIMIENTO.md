@@ -5986,6 +5986,156 @@ Datos leídos de la API de GitHub el 2026-10-30 (UTC) y comparados con git:
   `pending` a las 03:14:31 UTC y `success` a las 03:15:53 UTC). La
   sub-entrega no trae migraciones.
 
+### Sub-entrega 10.5b — Fallas, preventivos y reparaciones
+
+Fecha: del 2026-10-29 al 2026-10-30 (Lima). Estado: registrada; falta la
+verificación en staging. El paso 0 (`68b3258`) registró la integración de la
+10.5a en `main` y el arreglo del hallazgo 1. 10 commits, de `7c8e1a4` a
+`69f1b71`, y este registro. Plan en `tmp/e10-diff/plan-10-5.md`, con los
+hallazgos de cada paso.
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 68b3258 | docs | Paso 0: integración de la 10.5a en `main` y arreglo del hallazgo 1. |
+| 7c8e1a4 | test | Caracterización de las acciones de fallas, preventivos y reparaciones (94 casos) y casos de página con un registro en cada estado. |
+| 03dbb97 | fix | Importes de reparación con la regla de la base; el núcleo en centésimos pasa a `decimal-cents.ts`, compartido con pedidos. |
+| 40b46a3 | fix | Decidir dentro de la transacción con bloqueo de fila (D5, hallazgo 2). |
+| 08e3889 | fix | Fechas reales, límites de columna, mensajes en español y líneas completas (hallazgos 6 y 7). |
+| 30dc16d | feat | Fallas en panel lateral con `FormActionState`, para ADMIN y maestro de taller. |
+| 423a11a | feat | Preventivos en panel lateral, con `FilterBar` y `DateRangeFields`; opciones y estado sin máquinas compartidos. |
+| 8a6a747 | feat | `RowStatusSelect`, sobre `ConfirmActionButton`, y su muestra en la galería (D7). |
+| 72153f8 | feat | Cambio de estado de fallas, preventivos y reparaciones con resultado; fallas cerradas con «Sin accion» (hallazgo 8). |
+| ea8969c | feat | Filtros compartidos en reparaciones y reincidencias sin `<main>`. |
+| 69f1b71 | feat | Reparaciones como superficie amplia con líneas dinámicas, vista previa y resultado (D6). |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Ajustes al plan, aprobados por el responsable:
+
+- D5: fallas y preventivos usan bloqueo de fila y no compare-and-set. Su
+  bitácora dice «de X a Y» y tienen mensajes distintos para «no existe» y
+  «cerrada»: con compare-and-set habría que leer antes, fuera de la
+  transacción. Se añade `lockPreventiveMaintenanceRow`, que el plan no
+  preveía.
+- `createPreventiveMaintenanceAction` no bloquea: solo comprueba que la
+  máquina exista y ninguna acción borra máquinas. Son 5 acciones con bloqueo.
+- B7 y B8 se parten en dos commits cada una.
+- `RowStatusSelect` no duplica `ConfirmActionButton`: se apoya en él, que suma
+  `disabled` (`aria-disabled`, conserva el foco) y `onError`, y pinta siempre
+  la misma estructura para no remontar el botón.
+- Pedir el estado que ya tiene responde «ya estaba en ese estado» sin escribir
+  ni registrar bitácora, y «Guardar» queda desactivado; antes reescribía y, en
+  reparaciones, volvía a tocar la falla y la máquina.
+- Texto nuevo en reparaciones: decía «hasta 3 repuestos».
+- Sin máquinas, el estado vacío del alta de falla enlazaba «Registrar
+  maquina» también al maestro de taller, que no puede abrirla: se muestra solo
+  a ADMIN.
+
+Diseño:
+
+- Orden de los bloqueos: reparación, falla, máquina. Ninguna operación los
+  toma al revés. `updateRepairStatusAction` bloquea la reparación y sus
+  `update` toman la falla y la máquina; `createRepairAction` bloquea la falla;
+  `createFailureAction`, la máquina.
+- Las decisiones dentro de la transacción devuelven el problema desde el
+  callback en lugar de lanzarlo: nada se escribió antes, y no hace falta una
+  clase de error.
+- `decimal-cents.ts` tiene `toCents`, `divideRounded`, `multiplyCents` y
+  `formatCents`. `repair-amounts.ts` redondea cantidad, costo y mano de obra,
+  calcula el subtotal sobre lo redondeado y suma los subtotales; la acción
+  envía esas cadenas. Valores esperados de PGlite
+  (`tmp/e10-diff/e105b-demo/casos-reparacion.mjs`).
+- `form-options.ts` y `no-machines-state.tsx`, en `src/modules/maintenance`,
+  comparten entre fallas, preventivos y reparaciones las fechas por defecto,
+  las opciones de máquina y repuesto y el estado sin máquinas.
+- Los errores de línea de reparación usan `items.<posición>.<campo>`, con la
+  posición del formulario enviado; una línea vacía del todo no se guarda y un
+  repuesto repetido se marca en cada línea que lo usa. El subtotal y el total
+  los comprueba la acción, que conoce el costo.
+- La vista previa usa el costo cargado con la página; la acción lee el
+  vigente al guardar.
+- Los confirm de fila viven en `failure-status-select`,
+  `preventive-status-select` y `repair-status-select`, con las consecuencias
+  comprobadas en el código. Un preventivo pendiente con fecha pasada se
+  muestra «Vencido» sin estar guardado así: `storedValue` hace que guardarlo
+  cuente como cambio.
+
+Evidencia:
+
+1. Pruebas rojas antes de cada arreglo: `tmp/e10-diff/rojo-105b-b2.log` (17
+   fallos, con un doble en coma flotante para que fallaran por los importes),
+   `rojo-105b-b3.log` (10) y `rojo-105b-b4.log` (51).
+2. Las llamadas se compararon con script contra el commit anterior:
+   `cmp_105b_b3_calls.txt` (85 de 85 resultados iguales),
+   `cmp_105b_b5_calls.txt`, `cmp_105b_b6_calls.txt`, `cmp_105b_b7_calls.txt` y
+   `cmp_105b_b8_calls.txt`: solo cambian la autorización y el final de la
+   transacción, salvo los casos previstos.
+3. Mutaciones (`tmp/e10-diff/mut_105b_b*.txt`): 21 de 21, 14 de 14, 16 de 16,
+   23 de 23, 18 de 18, 22 de 22, 16 de 16, 22 de 22, 6 de 6 y 28 de 28; en
+   total, 186 de 186 (véanse los hallazgos 6 a 10 sobre las que sobrevivieron
+   primero).
+4. CSS compilado igual en cada commit salvo dos: `423a11a` añade
+   `@md:grid-cols-3` y `69f1b71` añade `items-baseline` y retira
+   `md:grid-cols-[1fr_160px]`. De 112.745 a 112.786 bytes.
+5. `npm run check` terminó con código 0 después de cada commit, de 2.888
+   pruebas en 176 archivos a 3.225 en 190. `npm run refactor:inventory` analiza
+   744 archivos: 153 páginas (25 en ranuras, 16 que interceptan) y 89
+   formularios JSX (eran 97).
+
+Tiempo de preparación: del primer guion o prueba de cada paso al
+`npm run check` en verde (Lima). Las esperas al responsable y la lectura previa
+quedan fuera:
+
+| Commit | 7c8e1a4 | 03dbb97 | 40b46a3 | 08e3889 | 30dc16d | 423a11a | 8a6a747 | 72153f8 | ea8969c | 69f1b71 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Inicio | 22:32 | 06:37 | 06:59 | 07:15 | 21:08 | 21:32 | 21:56 | 22:07 | 22:23 | 22:30 |
+| Check en verde | 22:47 | 06:46 | 07:04 | 07:23 | 21:25 | 21:45 | 22:04 | 22:16 | 22:26 | 22:47 |
+| Minutos | 15 | 9 | 5 | 8 | 17 | 13 | 8 | 9 | 3 | 17 |
+
+Suman 104 minutos frente a 340 estimados en bruto (170 con el factor 0,5 del
+plan): un factor de 0,31.
+
+Hallazgos:
+
+1. Crear una reparación ya «anulada» no toca la falla ni la máquina. Es una
+   regla de negocio, de la familia del hallazgo 12 de la auditoría: se fija en
+   las pruebas y no se cambia.
+2. Una reparación ejecutada deja la máquina «operativa» aunque se haya
+   inactivado o dado de baja; programada u observada, «en reparación». También
+   de esa familia; no se cambia sin decisión del responsable.
+3. Las reparaciones guardadas antes de `03dbb97` conservan su total: los
+   detalles pueden sumar 25,62 y el total 25,63. Corregirlas pide una migración
+   de datos; la lista muestra lo guardado.
+4. La tarjeta «Recomendacion» del alta de fallas dice que las reparaciones se
+   implementarán en la siguiente subfase, y ya existen. Es copia; no se cambió.
+5. Los mensajes «No se puede modificar una reparacion finalizada o anulada.» y
+   similares siguen sin tilde; ahora se ven en la fila. Es copia; no se cambió.
+6. Método: la mutación G1 de B1 sobrevivió porque los datos tenían una falla
+   reparada y una anulada y los dos indicadores valían 1. Se añadió otra
+   reparada.
+7. Método: la mutación D6 de B4 sobrevivió porque `toDateInputValue("")`
+   devuelve `""`: el `!value ||` sobraba en preventivo y reparación, y se quitó.
+8. Método: la descripción de una opción y el costo de un repuesto no llegan al
+   HTML del servidor, como el hallazgo 3 de la 10.5a: O3 de B6 y P1 de B8b
+   sobrevivieron y `form-options.test.ts` los cubre directamente.
+9. Método: S5 y C6 de B7a sobrevivieron por huecos reales de la prueba, y A3 y
+   F6 de B8b también (un repetido tras una línea vacía; quitar la última línea).
+10. Método: A4 de B8b era equivalente (tras validar, una línea tiene los dos
+    campos o ninguno) y se rehízo; F4 mostró que `markDirty` sobraba al quitar
+    una línea, porque solo se quita lo que antes se agregó, y se retiró.
+11. Método: un heredoc largo de Bash se cortó en B6, como en la 10.5a (hallazgo
+    7); los guiones se escribieron con Write. En B8b un comparador caracter a
+    caracter de `difflib` sobre el CSS tardó más de dos minutos; se compara por
+    reglas.
+
+Siguen pendientes: `updateOrderAction` decide fuera de la transacción
+(hallazgo 7 de la 10.4a, entrega 11); el día UTC (hallazgo 8 de la 10.4a,
+también las fechas por defecto de fallas y el `fecha_realizada` del preventivo);
+los hallazgos 3 a 5 de la 10.4b, el 15 de la 10.4a y los 1, 2 y 5 de la 10.4c;
+la alta rápida de proveedor sin bloqueo (entrega 11); el texto «Acceso: ADMIN.»
+de la tarjeta Máquinas (hallazgo 2 de la 10.5a); las reglas del hallazgo 12 de
+la auditoría; y una prueba de carrera real con Postgres para los bloqueos
+(entrega 11), porque las unitarias fijan el protocolo, no la carrera.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6010,7 +6160,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, en curso) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, registrada, con los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos, pendiente de verificación en staging) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6034,7 +6184,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 175 / 2.883 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 190 / 3.225 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -6054,14 +6204,14 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
 | Copias locales de `FieldError` | 16 | 6 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 67 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 11 (17 formularios) | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 60 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 11 (15 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
 | Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 10 | 10 |
 | Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 9 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 7 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
 | Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 4 (copias locales) | 10 |
@@ -6070,7 +6220,9 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
 | Pantallas con `DateRangeFields` que pierden las fechas elegidas antes de hidratar | 14 | 0 | 10 |
 | Pantallas de Comercial con `StatusBadge` | 5 | 0 | 10 |
-| Archivos de acciones de Mantenimiento sin caracterizar (máquinas, repuestos, fallas, preventivos y reparaciones) | 5 | 3 | 10 |
+| Archivos de acciones de Mantenimiento sin caracterizar (máquinas, repuestos, fallas, preventivos y reparaciones) | 5 | 0 | 10 |
+| Acciones de fallas, preventivos y reparaciones que deciden fuera de la transacción | 5 | 0 | 10 |
+| Acciones de fallas, preventivos y reparaciones que lanzan en lugar de devolver el error | 6 | 0 | 10 |
 | Enlaces de Mantenimiento que un rol ve y su pantalla rechaza | 4 | 0 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
@@ -6382,6 +6534,22 @@ Actualizado en la sub-entrega 10.5a (2026-10-29) sobre `a898729`:
 Las demás no cambian: los cambios de estado que voltean 2 según el script,
 que no contaba los de máquinas y repuestos (hallazgo 6 de la 10.5a), y el
 `import` de las librerías de notificaciones en 2 archivos, medidos de nuevo.
+
+Actualizado en la sub-entrega 10.5b (2026-10-30) sobre `69f1b71`:
+
+- Pruebas: 190 / 3.225.
+- El `<main>` anidado baja a 60 (las listas y altas de fallas, preventivos y
+  reparaciones, y reincidencias) y los formularios GET a 15, con 11
+  combinaciones de clases (`count_105b_get_forms.py`).
+- Las pantallas con rango de fechas sin `DateRangeFields` bajan a 7:
+  preventivos y reparaciones.
+- Los 3 archivos de acciones que faltaban en Mantenimiento quedan
+  caracterizados. Las dos filas nuevas se midieron sobre `68b3258`, su línea
+  base.
+
+Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
+acciones lanzaban y no usaban `useActionState`; las copias locales de
+`FieldError` en 6; y los cambios de estado que voltean en 2.
 
 Método de medición, para que `/verificar` y la línea base cuenten lo mismo:
 
