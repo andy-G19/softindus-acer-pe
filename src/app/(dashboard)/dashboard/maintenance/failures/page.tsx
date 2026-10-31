@@ -96,7 +96,7 @@ export default async function FailuresPage() {
   }, 0);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Fallas"
         description="Consulta las fallas registradas por máquina, su estado de atención, tiempo perdido, impacto en producción y trazabilidad de reparaciones asociadas."
@@ -244,7 +244,7 @@ export default async function FailuresPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

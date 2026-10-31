@@ -47,6 +47,8 @@ exports[`avisos dados con el resultado de la accion > cada archivo emite sus cla
   "src/app/(dashboard)/dashboard/inventory/suppliers/new/page.tsx [successNotification] -> supplier-created",
   "src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx [activatedNotification] -> supplier-activated",
   "src/app/(dashboard)/dashboard/inventory/suppliers/page.tsx [deactivatedNotification] -> supplier-deactivated",
+  "src/app/(dashboard)/dashboard/maintenance/failures/@panel/(.)new/page.tsx [successNotification] -> failure-created",
+  "src/app/(dashboard)/dashboard/maintenance/failures/new/page.tsx [successNotification] -> failure-created",
   "src/app/(dashboard)/dashboard/maintenance/machines/@panel/(.)[id]/edit/page.tsx [successNotification] -> machine-updated",
   "src/app/(dashboard)/dashboard/maintenance/machines/@panel/(.)new/page.tsx [successNotification] -> machine-created",
   "src/app/(dashboard)/dashboard/maintenance/machines/[id]/edit/page.tsx [successNotification] -> machine-updated",

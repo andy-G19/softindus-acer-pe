@@ -144,6 +144,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/maintenance/failures/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createFailureAction", "updateFailureStatusAction"],
+    rechazanConResultado: ["createFailureAction"],
   },
   {
     ruta: "maintenance/machines/actions",

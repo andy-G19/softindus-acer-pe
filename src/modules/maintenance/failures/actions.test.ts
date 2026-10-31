@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createFailureAction,
   updateFailureStatusAction,
+  type FailureFormState,
 } from "@/modules/maintenance/failures/actions";
 import {
   characterizeHandler,
@@ -19,19 +20,27 @@ import {
 // con Prisma, la sesion, la cache, la bitacora y los correlativos simulados, y
 // fija en un snapshot, en orden: la autorizacion con sus roles, las lecturas,
 // la transaccion con sus escrituras y su final, los correlativos, la bitacora,
-// las revalidaciones y el resultado: la redireccion o el error que lanza, con
-// su mensaje exacto.
+// las revalidaciones y el resultado: la redireccion, el error que lanza o el
+// estado que devuelve al formulario, con su mensaje exacto.
 //
-// Hoy las dos acciones reciben solo el FormData, autorizan con requireRole
-// (ADMIN y maestro de taller), bloquean la maquina o la falla y deciden dentro
-// de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5), lanzan un
-// Error con los mensajes de Zod unidos y redirigen con su toast al terminar.
+// Las dos bloquean la maquina o la falla y deciden dentro de la transaccion
+// (B3, hallazgo 2 de la auditoria de la 10.5). Desde el panel lateral (B5), el
+// alta autoriza con getAuthorizedSession (ADMIN y maestro de taller) y devuelve
+// el resultado (FormActionState) en lugar de redirigir; niega el permiso con un
+// error dentro del formulario. El cambio de estado aun recibe solo el FormData,
+// autoriza con requireRole, lanza un Error con los mensajes de Zod unidos y
+// redirige con su toast.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -141,6 +150,13 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 const MAQUINA = "MAQ00000003";
 const FALLA = "FAL00000005";
 
+const initialState: FailureFormState = { status: "idle" };
+const create = (formData: FormData) => createFailureAction(initialState, formData);
+
+const failWith = (error: Error) => () => {
+  throw error;
+};
+
 const createForm: FormFields = {
   id_maquina: MAQUINA,
   fecha_falla: "2026-07-14T09:30",
@@ -179,41 +195,45 @@ const statusWith = (estado_atencion: string, current: string | null = "pendiente
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createFailureAction", createFailureAction, [
+defineCases("createFailureAction", create, [
   { name: "ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion", ...createWith({}) },
   {
     name: "WORKSHOP_MASTER tambien registra fallas",
     ...createWith({ estado_atencion: "en_atencion" }),
     role: "WORKSHOP_MASTER",
   },
-  { name: "SELLER: sin permiso, sin tocar Prisma", ...createWith({}), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "SELLER" },
   { name: "los opcionales vacios se guardan como null", ...createWith(emptyOptionals) },
   {
     name: "los opcionales ausentes del formulario cuentan como vacios",
     ...createWith({ responsable_registro: null, tiempo_perdido_horas: null, impacto_produccion: null }),
   },
   {
-    name: "datos invalidos lanzan los mensajes unidos sin tocar Prisma",
+    name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     ...createWith({ id_maquina: "MAQ1", descripcion: "mal", estado_atencion: "rota", tiempo_perdido_horas: "-1" }),
   },
   {
-    name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma",
+    name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma",
     form: {},
   },
-  { name: "un tiempo perdido que no es numero lanza su mensaje", ...createWith({ tiempo_perdido_horas: "dos" }) },
+  { name: "un tiempo perdido que no es numero devuelve su error", ...createWith({ tiempo_perdido_horas: "dos" }) },
   {
-    name: "un tiempo perdido que desborda su columna lanza su mensaje sin tocar Prisma",
+    name: "un tiempo perdido que desborda su columna devuelve su error sin tocar Prisma",
     ...createWith({ tiempo_perdido_horas: "1e12" }),
   },
-  { name: "una fecha que no es fecha lanza su mensaje", ...createWith({ fecha_falla: "mañana" }) },
+  { name: "una fecha que no es fecha devuelve su error", ...createWith({ fecha_falla: "mañana" }) },
   {
-    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
+    name: "el 30 de febrero devuelve su error sin tocar Prisma",
     ...createWith({ fecha_falla: "2026-02-30T10:00" }),
   },
   { name: "la maquina no existe", ...createWith({}, machine(null)) },
   { name: "no registra fallas sobre una maquina inactiva", ...createWith({}, machine("inactiva")) },
   { name: "no registra fallas sobre una maquina dada de baja", ...createWith({}, machine("dada_de_baja")) },
   { name: "una maquina en reparacion admite otra falla", ...createWith({}, machine("en_reparacion")) },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...createWith({}, { ...machine("operativa"), "falla_maquina.create": failWith(new Error("conexion perdida")) }),
+  },
 ]);
 
 defineCases("updateFailureStatusAction", updateFailureStatusAction, [
@@ -237,7 +257,7 @@ describe("createFailureAction escribe lo que recibe", () => {
   type Recorded = { prisma?: string; args?: { data?: Record<string, unknown> } };
 
   async function created(fields: FormFields) {
-    const { calls } = await runCase(createFailureAction, createWith(fields));
+    const { calls } = await runCase(create, createWith(fields));
     const write = (calls as Recorded[]).find((call) => call.prisma === "falla_maquina.create");
 
     return write?.args?.data;
@@ -259,7 +279,7 @@ describe("las acciones de fallas deciden con la fila bloqueada", () => {
     ["operativa", "acepta"],
     ["inactiva", "rechaza"],
   ])("el alta bloquea la maquina antes de leerla (%s: %s)", async (estado) => {
-    const { calls } = await runCase(createFailureAction, createWith({}, machine(estado)));
+    const { calls } = await runCase(create, createWith({}, machine(estado)));
 
     expectRowLockedBefore(calls, {
       table: "maquina",
@@ -278,6 +298,38 @@ describe("las acciones de fallas deciden con la fila bloqueada", () => {
       table: "falla_maquina",
       id: FALLA,
       reads: (call) => call.prisma === "falla_maquina.findUnique",
+    });
+  });
+});
+
+// El resultado del alta, fuera del snapshot: lo que usa el formulario.
+describe("createFailureAction devuelve el resultado al formulario", () => {
+  async function result(actionCase: Omit<ActionCase, "name">) {
+    const { result: outcome } = await runCase(create, actionCase);
+
+    return (outcome as { estado: FailureFormState }).estado;
+  }
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await result(createWith({}))).toMatchObject({ status: "success", data: { id_falla: "FAL00000012" } });
+  });
+
+  it.each([
+    ["inactiva", "No se puede registrar una falla sobre una maquina inactiva."],
+    [null, "La máquina seleccionada no existe."],
+  ])("una maquina %s deja el error junto al campo y conserva lo escrito", async (estado, message) => {
+    expect(await result(createWith({}, machine(estado)))).toMatchObject({
+      status: "error",
+      error: message,
+      fieldErrors: { id_maquina: [message] },
+      values: { descripcion: createForm.descripcion, id_maquina: MAQUINA },
+    });
+  });
+
+  it("sin permiso responde con un error dentro del formulario", async () => {
+    expect(await result({ ...createWith({}), role: "SELLER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para registrar fallas.",
     });
   });
 });

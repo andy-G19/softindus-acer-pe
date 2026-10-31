@@ -1,66 +1,49 @@
-import Link from "next/link";
-
-import { SearchableSelect } from "@/components/forms/searchable-select";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/navigation/page-header";
 import { requireRole } from "@/lib/authz";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  dashboardBreadcrumbs,
+  getSafeReturnTo,
+  navigationHrefs,
+} from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createFailureAction } from "@/modules/maintenance/failures/actions";
+import { FailureForm } from "@/modules/maintenance/failures/failure-form";
+import {
+  buildFailureMachineItems,
+  getCurrentDateTimeValue,
+} from "@/modules/maintenance/failures/failure-form-options";
+import { FailureNoMachines } from "@/modules/maintenance/failures/failure-no-machines";
 import { findMachineOptions } from "@/modules/maintenance/machines/queries";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 
-function getCurrentDateTimeValue() {
-  const now = new Date();
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+type NewFailurePageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
-  return now.toISOString().slice(0, 16);
-}
+export default async function NewFailurePage({ searchParams }: NewFailurePageProps) {
+  const session = await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
 
-function getMachineStatusLabel(status: string) {
-  const labels: Record<string, string> = {
-    operativa: "Operativa",
-    en_reparacion: "En mantenimiento",
-    inactiva: "Inactiva",
-    dada_de_baja: "Fuera de servicio",
-  };
-
-  return labels[status] ?? status;
-}
-
-export default async function NewFailurePage() {
-  await requireRole([APP_ROLES.ADMIN, APP_ROLES.WORKSHOP_MASTER]);
-
+  const queryParams = (await searchParams) ?? {};
+  const backHref = getSafeReturnTo(queryParams.returnTo, navigationHrefs.failures);
   const machines = await findMachineOptions();
 
-  const currentDateTime = getCurrentDateTimeValue();
-  const machineItems = machines.map((machine) => ({
-    id: machine.id_maquina,
-    label: machine.nombre,
-    description: `${machine.tipo} - ${getMachineStatusLabel(machine.estado)}`,
-  }));
-
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Registrar falla de maquinaria"
         description="Documenta una falla tecnica de una maquina o equipo critico, registrando fecha, descripcion, responsable, tiempo perdido e impacto en produccion."
-        backHref={navigationHrefs.failures}
+        backHref={backHref}
         backLabel="Volver al listado"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Mantenimiento", href: navigationHrefs.maintenance },
-          { label: "Fallas", href: navigationHrefs.failures },
+          { label: "Fallas", href: backHref },
           { label: "Nueva falla" },
         ])}
         actions={<Badge>ADMIN / Maestro de taller</Badge>}
@@ -74,121 +57,15 @@ export default async function NewFailurePage() {
 
           <CardContent>
             {machines.length === 0 ? (
-              <EmptyState
-                label="No hay maquinas registradas."
-                description="Primero registra una maquina para poder documentar sus fallas."
-                action={
-                  <Button asChild>
-                    <Link href="/dashboard/maintenance/machines/new">
-                      Registrar maquina
-                    </Link>
-                  </Button>
-                }
-              />
+              <FailureNoMachines canRegisterMachine={session.user.role === APP_ROLES.ADMIN} />
             ) : (
-              <form action={createFailureAction} className="space-y-4">
-                <div className="space-y-2">
-                  <SearchableSelect
-                    name="id_maquina"
-                    label="Maquina"
-                    placeholder="Buscar maquina..."
-                    items={machineItems}
-                    required
-                    emptyMessage="No hay maquinas registradas."
-                  />
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="fecha_falla">Fecha y hora de falla</Label>
-                    <Input
-                      id="fecha_falla"
-                      name="fecha_falla"
-                      type="datetime-local"
-                      required
-                      defaultValue={currentDateTime}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="estado_atencion">Estado de atencion</Label>
-                    <NativeSelect
-                      id="estado_atencion"
-                      name="estado_atencion"
-                      required
-                      defaultValue="pendiente"
-                    >
-                      <option value="pendiente">Pendiente</option>
-                      <option value="en_atencion">En atencion</option>
-                      <option value="reparada">Reparada</option>
-                      <option value="anulada">Anulada</option>
-                    </NativeSelect>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="descripcion">Descripcion de la falla</Label>
-                  <Textarea
-                    id="descripcion"
-                    name="descripcion"
-                    rows={4}
-                    required
-                    placeholder="Ejemplo: La prensa hidraulica perdio presion durante el proceso de doblado."
-                  />
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="responsable_registro">
-                      Responsable del registro
-                    </Label>
-                    <Input
-                      id="responsable_registro"
-                      name="responsable_registro"
-                      type="text"
-                      placeholder="Ejemplo: Maestro de taller"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="tiempo_perdido_horas">
-                      Tiempo perdido en horas
-                    </Label>
-                    <Input
-                      id="tiempo_perdido_horas"
-                      name="tiempo_perdido_horas"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="Ejemplo: 2.50"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="impacto_produccion">
-                    Impacto en produccion
-                  </Label>
-                  <Textarea
-                    id="impacto_produccion"
-                    name="impacto_produccion"
-                    rows={3}
-                    placeholder="Ejemplo: Se detuvo el doblado de piezas durante la tarde."
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button type="submit">Registrar falla</Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/dashboard/maintenance/failures">
-                      Ver listado
-                    </Link>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/dashboard/maintenance">Volver al modulo</Link>
-                  </Button>
-                </div>
-              </form>
+              <FailureForm
+                action={createFailureAction}
+                machines={buildFailureMachineItems(machines)}
+                defaultValues={{ fecha_falla: getCurrentDateTimeValue(), estado_atencion: "pendiente" }}
+                successNotification={maintenanceNotifications["failure-created"]}
+                returnTo={backHref}
+              />
             )}
           </CardContent>
         </Card>
@@ -217,6 +94,6 @@ export default async function NewFailurePage() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }

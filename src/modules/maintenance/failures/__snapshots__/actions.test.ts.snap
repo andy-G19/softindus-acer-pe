@@ -3,7 +3,7 @@
 exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -87,12 +87,31 @@ exports[`createFailureAction > ADMIN registra la falla con su correlativo y la b
 ]
 `;
 
-exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > SELLER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+exports[`createFailureAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -101,12 +120,30 @@ exports[`createFailureAction > SELLER: sin permiso, sin tocar Prisma > llamadas 
 ]
 `;
 
-exports[`createFailureAction > SELLER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createFailureAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar fallas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -190,12 +227,31 @@ exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > llamada
 ]
 `;
 
-exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "en_atencion",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > llamadas 1`] = `
+exports[`createFailureAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -204,12 +260,43 @@ exports[`createFailureAction > datos invalidos lanzan los mensajes unidos sin to
 ]
 `;
 
-exports[`createFailureAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La descripción de la falla debe tener al menos 5 caracteres. Seleccione un estado de atención válido. El tiempo perdido no puede ser negativo."`;
+exports[`createFailureAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción de la falla debe tener al menos 5 caracteres.",
+      ],
+      "estado_atencion": [
+        "Seleccione un estado de atención válido.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+      "tiempo_perdido_horas": [
+        "El tiempo perdido no puede ser negativo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "mal",
+      "estado_atencion": "rota",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ1",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "-1",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > el 30 de febrero lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`createFailureAction > el 30 de febrero devuelve su error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -218,12 +305,34 @@ exports[`createFailureAction > el 30 de febrero lanza su mensaje sin tocar Prism
 ]
 `;
 
-exports[`createFailureAction > el 30 de febrero lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha de la falla no es válida."`;
+exports[`createFailureAction > el 30 de febrero devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "fecha_falla": [
+        "La fecha de la falla no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-02-30T10:00",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > la maquina no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -255,18 +364,40 @@ exports[`createFailureAction > la maquina no existe > llamadas 1`] = `
     "prisma": "maquina.findUnique",
   },
   {
-    "args": "La máquina seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createFailureAction > la maquina no existe > resultado 1`] = `"error: La máquina seleccionada no existe."`;
+exports[`createFailureAction > la maquina no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina seleccionada no existe.",
+    "fieldErrors": {
+      "id_maquina": [
+        "La máquina seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -350,12 +481,31 @@ exports[`createFailureAction > los opcionales ausentes del formulario cuentan co
 ]
 `;
 
-exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > los opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -439,12 +589,31 @@ exports[`createFailureAction > los opcionales vacios se guardan como null > llam
 ]
 `;
 
-exports[`createFailureAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+exports[`createFailureAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -476,18 +645,40 @@ exports[`createFailureAction > no registra fallas sobre una maquina dada de baja
     "prisma": "maquina.findUnique",
   },
   {
-    "args": "No se puede registrar una falla sobre una maquina inactiva.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > resultado 1`] = `"error: No se puede registrar una falla sobre una maquina inactiva."`;
+exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una falla sobre una maquina inactiva.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede registrar una falla sobre una maquina inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
 exports[`createFailureAction > no registra fallas sobre una maquina inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -519,18 +710,169 @@ exports[`createFailureAction > no registra fallas sobre una maquina inactiva > l
     "prisma": "maquina.findUnique",
   },
   {
-    "args": "No se puede registrar una falla sobre una maquina inactiva.",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una falla sobre una maquina inactiva.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede registrar una falla sobre una maquina inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción de la falla es obligatoria.",
+      ],
+      "estado_atencion": [
+        "Seleccione un estado de atención válido.",
+      ],
+      "fecha_falla": [
+        "La fecha de la falla es obligatoria.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "estado_atencion": "",
+      "fecha_falla": "",
+      "id_maquina": "",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": "conexion perdida",
     "effect": "prisma.$transaction:rollback",
   },
 ]
 `;
 
-exports[`createFailureAction > no registra fallas sobre una maquina inactiva > resultado 1`] = `"error: No se puede registrar una falla sobre una maquina inactiva."`;
+exports[`createFailureAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar la falla. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+exports[`createFailureAction > un tiempo perdido que desborda su columna devuelve su error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -539,12 +881,34 @@ exports[`createFailureAction > un POST sin campos lanza los mensajes en espanol 
 ]
 `;
 
-exports[`createFailureAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha de la falla es obligatoria. La descripción de la falla es obligatoria. Seleccione un estado de atención válido."`;
+exports[`createFailureAction > un tiempo perdido que desborda su columna devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "tiempo_perdido_horas": [
+        "El tiempo perdido no debe superar 99,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "1e12",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > un tiempo perdido que desborda su columna lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`createFailureAction > un tiempo perdido que no es numero devuelve su error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -553,12 +917,34 @@ exports[`createFailureAction > un tiempo perdido que desborda su columna lanza s
 ]
 `;
 
-exports[`createFailureAction > un tiempo perdido que desborda su columna lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: El tiempo perdido no debe superar 99,999,999.99."`;
+exports[`createFailureAction > un tiempo perdido que no es numero devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "tiempo_perdido_horas": [
+        "El tiempo perdido debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "dos",
+    },
+  },
+}
+`;
 
-exports[`createFailureAction > un tiempo perdido que no es numero lanza su mensaje > llamadas 1`] = `
+exports[`createFailureAction > una fecha que no es fecha devuelve su error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -567,26 +953,34 @@ exports[`createFailureAction > un tiempo perdido que no es numero lanza su mensa
 ]
 `;
 
-exports[`createFailureAction > un tiempo perdido que no es numero lanza su mensaje > resultado 1`] = `"error: El tiempo perdido debe ser un número válido."`;
-
-exports[`createFailureAction > una fecha que no es fecha lanza su mensaje > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+exports[`createFailureAction > una fecha que no es fecha devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "fecha_falla": [
+        "La fecha de la falla no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "mañana",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
   },
-]
+}
 `;
-
-exports[`createFailureAction > una fecha que no es fecha lanza su mensaje > resultado 1`] = `"error: La fecha de la falla no es válida."`;
 
 exports[`createFailureAction > una maquina en reparacion admite otra falla > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -670,7 +1064,26 @@ exports[`createFailureAction > una maquina en reparacion admite otra falla > lla
 ]
 `;
 
-exports[`createFailureAction > una maquina en reparacion admite otra falla > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-created"`;
+exports[`createFailureAction > una maquina en reparacion admite otra falla > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > llamadas 1`] = `
 [
