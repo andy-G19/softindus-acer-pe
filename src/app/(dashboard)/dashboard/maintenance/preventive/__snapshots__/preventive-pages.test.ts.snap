@@ -203,16 +203,17 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-1"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-id_mantenimiento-1" aria-label="Estado del mantenimiento id_mantenimiento-1">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -230,16 +231,17 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-2"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-id_mantenimiento-2" aria-label="Estado del mantenimiento id_mantenimiento-2">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 </tbody>
@@ -247,8 +249,7 @@ exports[`/dashboard/maintenance/preventive > sin filtros > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -512,16 +513,17 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <span data-variant="secondary">estado-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-1"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-id_mantenimiento-1" aria-label="Estado del mantenimiento id_mantenimiento-1">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -539,16 +541,17 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 <span data-variant="secondary">estado-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="id_mantenimiento-2"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-id_mantenimiento-2" aria-label="Estado del mantenimiento id_mantenimiento-2">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 </tbody>
@@ -556,8 +559,7 @@ exports[`/dashboard/maintenance/preventive > todos los filtros > resultado 1`] =
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -765,16 +767,17 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <span data-variant="warning">Pendiente</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="MTP00000001"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-MTP00000001" aria-label="Estado del mantenimiento MTP00000001">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -794,16 +797,17 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <span data-variant="destructive">Vencido</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="MTP00000002"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-MTP00000002" aria-label="Estado del mantenimiento MTP00000002">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido" selected="">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -822,16 +826,17 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 <span data-variant="destructive">Vencido</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_mantenimiento" value="MTP00000003"/>
-<select name="estado">
+<div>
+<div>
+<select id="estado-MTP00000003" aria-label="Estado del mantenimiento MTP00000003">
 <option value="pendiente">Pendiente</option>
 <option value="realizado">Realizado</option>
 <option value="vencido" selected="">Vencido</option>
 <option value="anulado">Anulado</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -877,8 +882,7 @@ exports[`/dashboard/maintenance/preventive > un mantenimiento en cada estado > r
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

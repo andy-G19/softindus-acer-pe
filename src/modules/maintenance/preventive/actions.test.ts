@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import type { RowStatusState } from "@/lib/requested-status";
 import {
   createPreventiveMaintenanceAction,
   updatePreventiveMaintenanceStatusAction,
@@ -28,10 +29,10 @@ import {
 // de redirigir; niega el permiso con un error dentro del formulario. Solo
 // comprueba que la maquina exista, fuera de la transaccion: las maquinas no se
 // borran, asi que no hay carrera que proteger, y acepta una maquina inactiva
-// (hallazgo 12: se registra, no se cambia). El cambio de estado aun recibe solo
-// el FormData, autoriza con requireRole, bloquea el mantenimiento y decide
-// dentro de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5), lanza
-// un Error con los mensajes de Zod unidos y redirige con su toast.
+// (hallazgo 12: se registra, no se cambia). El cambio de estado bloquea el
+// mantenimiento y decide dentro de la transaccion (B3, hallazgo 2 de la
+// auditoria de la 10.5), devuelve su resultado a RowStatusSelect (B7) y pedir el
+// estado que ya tiene no escribe nada.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -154,6 +155,8 @@ const MANTENIMIENTO = "MTP00000004";
 
 const initialState: PreventiveFormState = { status: "idle" };
 const create = (formData: FormData) => createPreventiveMaintenanceAction(initialState, formData);
+const initialStatusState: RowStatusState = { status: "idle" };
+const changeStatus = (formData: FormData) => updatePreventiveMaintenanceStatusAction(initialStatusState, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -228,18 +231,24 @@ defineCases("createPreventiveMaintenanceAction", create, [
   },
 ]);
 
-defineCases("updatePreventiveMaintenanceStatusAction", updatePreventiveMaintenanceStatusAction, [
+defineCases("updatePreventiveMaintenanceStatusAction", changeStatus, [
   { name: "de pendiente a realizado: la fecha realizada es el momento del cambio", ...statusWith("realizado") },
   { name: "de pendiente a vencido", ...statusWith("vencido") },
   { name: "de pendiente a anulado", ...statusWith("anulado") },
   { name: "de vencido a pendiente", ...statusWith("pendiente", "vencido") },
-  { name: "pedir el estado que ya tiene vuelve a escribirlo", ...statusWith("pendiente") },
-  { name: "WORKSHOP_MASTER: sin permiso, sin tocar Prisma", ...statusWith("realizado"), role: "WORKSHOP_MASTER" },
+  { name: "pedir el estado que ya tiene responde sin escribir nada", ...statusWith("pendiente") },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...statusWith("realizado"), role: "WORKSHOP_MASTER" },
   { name: "un mantenimiento realizado no se modifica", ...statusWith("pendiente", "realizado") },
   { name: "un mantenimiento anulado no se modifica", ...statusWith("pendiente", "anulado") },
   { name: "el mantenimiento no existe", ...statusWith("realizado", null) },
-  { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("hecho") },
-  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
+  { name: "un estado que no existe devuelve su error sin tocar Prisma", ...statusWith("hecho") },
+  {
+    name: "un fallo al escribir revierte con el mensaje generico",
+    form: statusWith("anulado").form,
+    data: { ...maintenance("pendiente"), "mantenimiento_preventivo.update": failWith(new Error("conexion perdida")) },
+  },
+
+  { name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Las fechas que se escriben, fuera del snapshot.
@@ -265,7 +274,7 @@ describe("las fechas del mantenimiento preventivo", () => {
   });
 
   it("marcar realizado guarda el momento del cambio; los demas estados la dejan vacia", async () => {
-    const run = updatePreventiveMaintenanceStatusAction;
+    const run = changeStatus;
     const key = "mantenimiento_preventivo.update";
 
     expect((await written(run, statusWith("realizado"), key))?.fecha_realizada).toEqual(FIXED_NOW);
@@ -281,7 +290,7 @@ describe("el cambio de estado decide con la fila bloqueada", () => {
     ["pendiente", "acepta"],
     ["realizado", "rechaza"],
   ])("bloquea el mantenimiento antes de leerlo (%s: %s)", async (estado) => {
-    const { calls } = await runCase(updatePreventiveMaintenanceStatusAction, statusWith("anulado", estado));
+    const { calls } = await runCase(changeStatus, statusWith("anulado", estado));
 
     expectRowLockedBefore(calls, {
       table: "mantenimiento_preventivo",
@@ -319,6 +328,39 @@ describe("createPreventiveMaintenanceAction devuelve el resultado al formulario"
     expect(await result({ ...createWith({}), role: "WORKSHOP_MASTER" })).toMatchObject({
       status: "error",
       error: "No tienes permisos para programar mantenimientos.",
+    });
+  });
+});
+
+describe("updatePreventiveMaintenanceStatusAction devuelve el resultado a la fila", () => {
+  type Recorded = { prisma?: string; effect?: string };
+
+  async function run(actionCase: Omit<ActionCase, "name">) {
+    const { calls, result } = await runCase(changeStatus, actionCase);
+
+    return { calls: calls as Recorded[], state: (result as { estado: RowStatusState }).estado };
+  }
+
+  it("con exito devuelve el estado que quedo y no redirige", async () => {
+    const { state } = await run(statusWith("vencido"));
+
+    expect(state).toMatchObject({ status: "success", data: { estado: "vencido" }, values: { id: MANTENIMIENTO } });
+  });
+
+  it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {
+    const { calls, state } = await run(statusWith("pendiente"));
+
+    expect(state).toMatchObject({ status: "error", error: "El mantenimiento ya estaba en ese estado." });
+    expect(calls.filter((call) => call.prisma === "mantenimiento_preventivo.update")).toEqual([]);
+    expect(calls.filter((call) => call.effect === "registerAuditLog")).toEqual([]);
+  });
+
+  it("uno realizado responde con su mensaje", async () => {
+    const { state } = await run(statusWith("anulado", "realizado"));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "No se puede modificar un mantenimiento realizado o anulado.",
     });
   });
 });

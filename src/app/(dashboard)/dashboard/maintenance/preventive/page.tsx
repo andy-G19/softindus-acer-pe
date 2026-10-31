@@ -39,7 +39,9 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 import { updatePreventiveMaintenanceStatusAction } from "@/modules/maintenance/preventive/actions";
+import { PreventiveStatusSelect } from "@/modules/maintenance/preventive/preventive-status-select";
 import { getPreventiveMaintenanceList } from "@/modules/maintenance/preventive/queries";
 
 type PreventiveMaintenancePageProps = {
@@ -300,41 +302,12 @@ export default async function PreventiveMaintenancePage({
 
                       {canManagePreventive ? (
                         <TableCell className="text-right">
-                          {["realizado", "anulado"].includes(
-                            maintenance.estado,
-                          ) ? (
-                            <span className="text-xs text-muted-foreground">
-                              Sin accion
-                            </span>
-                          ) : (
-                            <form
-                              action={updatePreventiveMaintenanceStatusAction}
-                              className="flex justify-end gap-2"
-                            >
-                              <input
-                                type="hidden"
-                                name="id_mantenimiento"
-                                value={maintenance.id_mantenimiento}
-                              />
-
-                              <NativeSelect
-                                name="estado"
-                                defaultValue={
-                                  isOverdue ? "vencido" : maintenance.estado
-                                }
-                                className="h-8 text-xs"
-                              >
-                                <option value="pendiente">Pendiente</option>
-                                <option value="realizado">Realizado</option>
-                                <option value="vencido">Vencido</option>
-                                <option value="anulado">Anulado</option>
-                              </NativeSelect>
-
-                              <Button type="submit" variant="outline" size="sm">
-                                Guardar
-                              </Button>
-                            </form>
-                          )}
+                          <PreventiveStatusSelect
+                            maintenance={maintenance}
+                            isOverdue={isOverdue}
+                            action={updatePreventiveMaintenanceStatusAction}
+                            successNotification={maintenanceNotifications["preventive-maintenance-updated"]}
+                          />
                         </TableCell>
                       ) : null}
                     </TableRow>

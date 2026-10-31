@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import type { RowStatusState } from "@/lib/requested-status";
 import {
   createFailureAction,
   updateFailureStatusAction,
@@ -27,9 +28,8 @@ import {
 // (B3, hallazgo 2 de la auditoria de la 10.5). Desde el panel lateral (B5), el
 // alta autoriza con getAuthorizedSession (ADMIN y maestro de taller) y devuelve
 // el resultado (FormActionState) en lugar de redirigir; niega el permiso con un
-// error dentro del formulario. El cambio de estado aun recibe solo el FormData,
-// autoriza con requireRole, lanza un Error con los mensajes de Zod unidos y
-// redirige con su toast.
+// error dentro del formulario. El cambio de estado (B7) devuelve su resultado a
+// RowStatusSelect, y pedir el estado que ya tiene no escribe nada.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
@@ -152,6 +152,8 @@ const FALLA = "FAL00000005";
 
 const initialState: FailureFormState = { status: "idle" };
 const create = (formData: FormData) => createFailureAction(initialState, formData);
+const initialStatusState: RowStatusState = { status: "idle" };
+const changeStatus = (formData: FormData) => updateFailureStatusAction(initialStatusState, formData);
 
 const failWith = (error: Error) => () => {
   throw error;
@@ -236,19 +238,25 @@ defineCases("createFailureAction", create, [
   },
 ]);
 
-defineCases("updateFailureStatusAction", updateFailureStatusAction, [
+defineCases("updateFailureStatusAction", changeStatus, [
   { name: "de pendiente a en atencion", ...statusWith("en_atencion") },
   { name: "de pendiente a reparada, sin reparacion", ...statusWith("reparada") },
   { name: "de pendiente a anulada", ...statusWith("anulada") },
-  { name: "pedir el estado que ya tiene vuelve a escribirlo", ...statusWith("pendiente") },
+  { name: "pedir el estado que ya tiene responde sin escribir nada", ...statusWith("pendiente") },
   { name: "de en atencion a pendiente", ...statusWith("pendiente", "en_atencion") },
   { name: "WORKSHOP_MASTER tambien cambia el estado", ...statusWith("en_atencion"), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: sin permiso, sin tocar Prisma", ...statusWith("en_atencion"), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...statusWith("en_atencion"), role: "SELLER" },
   { name: "una falla reparada no se modifica", ...statusWith("pendiente", "reparada") },
   { name: "una falla anulada no se modifica", ...statusWith("pendiente", "anulada") },
   { name: "la falla no existe", ...statusWith("en_atencion", null) },
-  { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("cerrada") },
-  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
+  { name: "un estado que no existe devuelve su error sin tocar Prisma", ...statusWith("cerrada") },
+  {
+    name: "un fallo al escribir revierte con el mensaje generico",
+    form: statusWith("en_atencion").form,
+    data: { ...failure("pendiente"), "falla_maquina.update": failWith(new Error("conexion perdida")) },
+  },
+
+  { name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Lo que la accion escribe, fuera del snapshot: el estado pedido y la fecha
@@ -292,7 +300,7 @@ describe("las acciones de fallas deciden con la fila bloqueada", () => {
     ["pendiente", "acepta"],
     ["reparada", "rechaza"],
   ])("el cambio de estado bloquea la falla antes de leerla (%s: %s)", async (estado) => {
-    const { calls } = await runCase(updateFailureStatusAction, statusWith("en_atencion", estado));
+    const { calls } = await runCase(changeStatus, statusWith("en_atencion", estado));
 
     expectRowLockedBefore(calls, {
       table: "falla_maquina",
@@ -331,5 +339,36 @@ describe("createFailureAction devuelve el resultado al formulario", () => {
       status: "error",
       error: "No tienes permisos para registrar fallas.",
     });
+  });
+});
+
+describe("updateFailureStatusAction devuelve el resultado a la fila", () => {
+  type Recorded = { prisma?: string; effect?: string };
+
+  async function run(actionCase: Omit<ActionCase, "name">) {
+    const { calls, result } = await runCase(changeStatus, actionCase);
+
+    return { calls: calls as Recorded[], state: (result as { estado: RowStatusState }).estado };
+  }
+
+  it("con exito devuelve el estado que quedo y no redirige", async () => {
+    const { state } = await run(statusWith("en_atencion"));
+
+    expect(state).toMatchObject({ status: "success", data: { estado: "en_atencion" }, values: { id: FALLA } });
+  });
+
+  it("pedir el estado que ya tiene no escribe ni registra bitacora", async () => {
+    const { calls, state } = await run(statusWith("pendiente"));
+
+    expect(state).toMatchObject({ status: "error", error: "La falla ya estaba en ese estado." });
+    expect(calls.filter((call) => call.prisma === "falla_maquina.update")).toEqual([]);
+    expect(calls.filter((call) => call.effect === "registerAuditLog")).toEqual([]);
+    expect(calls.filter((call) => call.effect === "revalidatePath")).toEqual([]);
+  });
+
+  it("una falla cerrada responde con su mensaje", async () => {
+    const { state } = await run(statusWith("en_atencion", "anulada"));
+
+    expect(state).toMatchObject({ status: "error", error: "No se puede modificar una falla cerrada o anulada." });
   });
 });

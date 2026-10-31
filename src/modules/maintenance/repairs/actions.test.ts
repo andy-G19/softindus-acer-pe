@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { RowStatusState } from "@/lib/requested-status";
 import {
   createRepairAction,
   updateRepairStatusAction,
@@ -29,8 +30,9 @@ import {
 // calcula los importes con src/lib/repair-amounts.ts y envia a Prisma las
 // cadenas que devuelve (B2, hallazgo 3) y, con la falla bloqueada, decide
 // dentro de la transaccion (B3, hallazgo 2). El cambio de estado bloquea la
-// reparacion antes de leerla. El orden de los bloqueos es reparacion, falla,
-// maquina. Las reglas de negocio que el hallazgo 12
+// reparacion antes de leerla, devuelve su resultado a RowStatusSelect (B7) y
+// pedir el estado que ya tiene no escribe nada. El orden de los bloqueos es
+// reparacion, falla, maquina. Las reglas de negocio que el hallazgo 12
 // registra (anular devuelve la falla a pendiente y deja la maquina en
 // reparacion; ejecutar cierra la falla aunque otra reparacion siga
 // programada) se fijan tal como estan.
@@ -40,6 +42,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -166,6 +173,13 @@ const RODAMIENTO = "REP00000001";
 const RETEN = "REP00000002";
 const CORREA = "REP00000003";
 const CABEZAL = "REP00000004";
+
+const initialStatusState: RowStatusState = { status: "idle" };
+const changeStatus = (formData: FormData) => updateRepairStatusAction(initialStatusState, formData);
+
+const failWith = (error: Error) => () => {
+  throw error;
+};
 
 const createForm: FormFields = {
   id_falla: FALLA,
@@ -330,26 +344,32 @@ defineCases("createRepairAction", createRepairAction, [
   },
 ]);
 
-defineCases("updateRepairStatusAction", updateRepairStatusAction, [
+defineCases("updateRepairStatusAction", changeStatus, [
   { name: "de programada a ejecutada: la falla queda reparada y la maquina operativa", ...statusWith("ejecutada") },
   { name: "de programada a observada: falla en atencion y maquina en reparacion", ...statusWith("observada") },
-  { name: "pedir el estado que ya tiene vuelve a escribir falla y maquina", ...statusWith("programada") },
+  { name: "pedir el estado que ya tiene responde sin escribir nada", ...statusWith("programada") },
   {
     name: "de observada a anulada: la falla vuelve a pendiente y la maquina no cambia",
     ...statusWith("anulada", "observada"),
   },
-  { name: "WORKSHOP_MASTER: sin permiso, sin tocar Prisma", ...statusWith("ejecutada"), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...statusWith("ejecutada"), role: "WORKSHOP_MASTER" },
   {
-    name: "una reparacion ejecutada no se modifica: el error se lanza dentro de la transaccion",
+    name: "una reparacion ejecutada no se modifica",
     ...statusWith("programada", "ejecutada"),
   },
   {
-    name: "una reparacion anulada no se modifica: el error se lanza dentro de la transaccion",
+    name: "una reparacion anulada no se modifica",
     ...statusWith("programada", "anulada"),
   },
   { name: "la reparacion no existe", ...statusWith("ejecutada", null) },
-  { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("hecha") },
-  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
+  { name: "un estado que no existe devuelve su error sin tocar Prisma", ...statusWith("hecha") },
+  {
+    name: "un fallo al escribir revierte con el mensaje generico",
+    form: statusWith("observada").form,
+    data: { ...repair("programada"), "reparacion.update": failWith(new Error("conexion perdida")) },
+  },
+
+  { name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Los importes que se envian a la base, fuera del snapshot: lo que se envia
@@ -416,12 +436,45 @@ describe("las acciones de reparaciones deciden con la fila bloqueada", () => {
     ["programada", "acepta"],
     ["ejecutada", "rechaza"],
   ])("el cambio de estado bloquea la reparacion antes de leerla (%s: %s)", async (estado) => {
-    const { calls } = await runCase(updateRepairStatusAction, statusWith("observada", estado));
+    const { calls } = await runCase(changeStatus, statusWith("observada", estado));
 
     expectRowLockedBefore(calls, {
       table: "reparacion",
       id: REPARACION,
       reads: (call) => call.prisma === "reparacion.findUnique",
+    });
+  });
+});
+
+describe("updateRepairStatusAction devuelve el resultado a la fila", () => {
+  type Recorded = { prisma?: string; effect?: string };
+
+  async function run(actionCase: Omit<ActionCase, "name">) {
+    const { calls, result } = await runCase(changeStatus, actionCase);
+
+    return { calls: calls as Recorded[], state: (result as { estado: RowStatusState }).estado };
+  }
+
+  it("con exito devuelve el estado que quedo y no redirige", async () => {
+    const { state } = await run(statusWith("observada"));
+
+    expect(state).toMatchObject({ status: "success", data: { estado: "observada" }, values: { id: REPARACION } });
+  });
+
+  it("pedir el estado que ya tiene no toca la reparacion, la falla ni la maquina", async () => {
+    const { calls, state } = await run(statusWith("programada"));
+
+    expect(state).toMatchObject({ status: "error", error: "La reparación ya estaba en ese estado." });
+    expect(calls.filter((call) => call.prisma?.endsWith(".update"))).toEqual([]);
+    expect(calls.filter((call) => call.effect === "registerAuditLog")).toEqual([]);
+  });
+
+  it("una ejecutada responde con su mensaje", async () => {
+    const { state } = await run(statusWith("anulada", "ejecutada"));
+
+    expect(state).toMatchObject({
+      status: "error",
+      error: "No se puede modificar una reparacion finalizada o anulada.",
     });
   });
 });

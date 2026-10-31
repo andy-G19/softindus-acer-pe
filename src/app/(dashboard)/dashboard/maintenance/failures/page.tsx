@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -32,7 +31,9 @@ import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { toNumber } from "@/lib/numbers";
 import { APP_ROLES } from "@/lib/permissions";
 import { updateFailureStatusAction } from "@/modules/maintenance/failures/actions";
+import { FailureStatusSelect } from "@/modules/maintenance/failures/failure-status-select";
 import { getFailureList } from "@/modules/maintenance/failures/queries";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 
 function formatHours(value: unknown) {
   return `${toNumber(value).toFixed(2)} h`;
@@ -210,31 +211,11 @@ export default async function FailuresPage() {
 
                     {canManageFailures ? (
                       <TableCell className="text-right">
-                        <form
+                        <FailureStatusSelect
+                          failure={failure}
                           action={updateFailureStatusAction}
-                          className="flex justify-end gap-2"
-                        >
-                          <input
-                            type="hidden"
-                            name="id_falla"
-                            value={failure.id_falla}
-                          />
-
-                          <NativeSelect
-                            name="estado_atencion"
-                            defaultValue={failure.estado_atencion}
-                            className="h-8 text-xs"
-                          >
-                            <option value="pendiente">Pendiente</option>
-                            <option value="en_atencion">En atención</option>
-                            <option value="reparada">Reparada</option>
-                            <option value="anulada">Anulada</option>
-                          </NativeSelect>
-
-                          <Button type="submit" variant="outline" size="sm">
-                            Guardar
-                          </Button>
-                        </form>
+                          successNotification={maintenanceNotifications["failure-updated"]}
+                        />
                       </TableCell>
                     ) : null}
                   </TableRow>

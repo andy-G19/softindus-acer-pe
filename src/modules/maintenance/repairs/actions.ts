@@ -4,10 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId, getNextCorrelativeIds } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import { calculateRepairAmounts } from "@/lib/repair-amounts";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockFailureRow, lockRepairRow } from "@/lib/row-locks";
 import {
   MAX_REPAIR_AMOUNT,
@@ -240,8 +241,16 @@ export async function createRepairAction(formData: FormData) {
   redirect("/dashboard/maintenance/repairs?toast=repair-created");
 }
 
-export async function updateRepairStatusAction(formData: FormData) {
-  const session = await requireAdmin();
+export async function updateRepairStatusAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const id = formData.get("id_reparacion")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return rowStatusError(id, "No tienes permisos para cambiar el estado de las reparaciones.");
+  }
 
   const parsed = repairStatusSchema.safeParse({
     id_reparacion: formData.get("id_reparacion"),
@@ -249,112 +258,124 @@ export async function updateRepairStatusAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    const message = parsed.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return rowStatusError(id, parsed.error.issues.map((issue) => issue.message).join(" "));
   }
 
   const data = parsed.data;
 
-  await prisma.$transaction(async (tx) => {
-    await lockRepairRow(tx, data.id_reparacion);
+  let problem: string | null = null;
 
-    const repair = await tx.reparacion.findUnique({
-      where: {
-        id_reparacion: data.id_reparacion,
-      },
-      include: {
-        falla_maquina: true,
-      },
+  try {
+    problem = await prisma.$transaction(async (tx) => {
+      await lockRepairRow(tx, data.id_reparacion);
+
+      const repair = await tx.reparacion.findUnique({
+        where: {
+          id_reparacion: data.id_reparacion,
+        },
+        include: {
+          falla_maquina: true,
+        },
+      });
+
+      if (!repair) {
+        return "La reparación seleccionada no existe.";
+      }
+
+      if (["ejecutada", "anulada"].includes(repair.estado_reparacion)) {
+        return "No se puede modificar una reparacion finalizada o anulada.";
+      }
+
+      if (repair.estado_reparacion === data.estado_reparacion) {
+        return "La reparación ya estaba en ese estado.";
+      }
+
+      await tx.reparacion.update({
+        where: {
+          id_reparacion: data.id_reparacion,
+        },
+        data: {
+          estado_reparacion: data.estado_reparacion,
+        },
+      });
+
+      if (data.estado_reparacion === "ejecutada") {
+        await tx.falla_maquina.update({
+          where: {
+            id_falla: repair.id_falla,
+          },
+          data: {
+            estado_atencion: "reparada",
+          },
+        });
+
+        await tx.maquina.update({
+          where: {
+            id_maquina: repair.falla_maquina.id_maquina,
+          },
+          data: {
+            estado: "operativa",
+          },
+        });
+      }
+
+      if (
+        data.estado_reparacion === "programada" ||
+        data.estado_reparacion === "observada"
+      ) {
+        await tx.falla_maquina.update({
+          where: {
+            id_falla: repair.id_falla,
+          },
+          data: {
+            estado_atencion: "en_atencion",
+          },
+        });
+
+        await tx.maquina.update({
+          where: {
+            id_maquina: repair.falla_maquina.id_maquina,
+          },
+          data: {
+            estado: "en_reparacion",
+          },
+        });
+      }
+
+      if (data.estado_reparacion === "anulada") {
+        await tx.falla_maquina.update({
+          where: {
+            id_falla: repair.id_falla,
+          },
+          data: {
+            estado_atencion: "pendiente",
+          },
+        });
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "reparacion",
+        id_registro_afectado: data.id_reparacion,
+        accion: "actualizar",
+        detalle: `Estado de reparacion actualizado de ${repair.estado_reparacion} a ${data.estado_reparacion}.`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    return rowStatusError(id, "No se pudo cambiar el estado de la reparación. Intenta nuevamente.");
+  }
 
-    if (!repair) {
-      throw new Error("La reparación seleccionada no existe.");
-    }
-
-    if (["ejecutada", "anulada"].includes(repair.estado_reparacion)) {
-      throw new Error("No se puede modificar una reparacion finalizada o anulada.");
-    }
-
-    await tx.reparacion.update({
-      where: {
-        id_reparacion: data.id_reparacion,
-      },
-      data: {
-        estado_reparacion: data.estado_reparacion,
-      },
-    });
-
-    if (data.estado_reparacion === "ejecutada") {
-      await tx.falla_maquina.update({
-        where: {
-          id_falla: repair.id_falla,
-        },
-        data: {
-          estado_atencion: "reparada",
-        },
-      });
-
-      await tx.maquina.update({
-        where: {
-          id_maquina: repair.falla_maquina.id_maquina,
-        },
-        data: {
-          estado: "operativa",
-        },
-      });
-    }
-
-    if (
-      data.estado_reparacion === "programada" ||
-      data.estado_reparacion === "observada"
-    ) {
-      await tx.falla_maquina.update({
-        where: {
-          id_falla: repair.id_falla,
-        },
-        data: {
-          estado_atencion: "en_atencion",
-        },
-      });
-
-      await tx.maquina.update({
-        where: {
-          id_maquina: repair.falla_maquina.id_maquina,
-        },
-        data: {
-          estado: "en_reparacion",
-        },
-      });
-    }
-
-    if (data.estado_reparacion === "anulada") {
-      await tx.falla_maquina.update({
-        where: {
-          id_falla: repair.id_falla,
-        },
-        data: {
-          estado_atencion: "pendiente",
-        },
-      });
-    }
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "reparacion",
-      id_registro_afectado: data.id_reparacion,
-      accion: "actualizar",
-      detalle: `Estado de reparacion actualizado de ${repair.estado_reparacion} a ${data.estado_reparacion}.`,
-      tx,
-    });
-  });
+  if (problem) {
+    return rowStatusError(id, problem);
+  }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath("/dashboard/maintenance/repairs");
   revalidatePath("/dashboard/maintenance/failures");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/repairs?toast=repair-updated");
+  return rowStatusDone(id, data.estado_reparacion);
 }

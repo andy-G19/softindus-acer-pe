@@ -170,16 +170,17 @@ exports[`/dashboard/maintenance/failures > administrador > resultado 1`] = `
 <span data-variant="secondary">estado_atencion-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="id_falla-1"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-id_falla-1" aria-label="Estado de la falla id_falla-1">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -197,16 +198,17 @@ exports[`/dashboard/maintenance/failures > administrador > resultado 1`] = `
 <span data-variant="secondary">estado_atencion-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="id_falla-2"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-id_falla-2" aria-label="Estado de la falla id_falla-2">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 </tbody>
@@ -214,8 +216,7 @@ exports[`/dashboard/maintenance/failures > administrador > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -390,16 +391,17 @@ exports[`/dashboard/maintenance/failures > maestro de taller > resultado 1`] = `
 <span data-variant="secondary">estado_atencion-1</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="id_falla-1"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-id_falla-1" aria-label="Estado de la falla id_falla-1">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -417,16 +419,17 @@ exports[`/dashboard/maintenance/failures > maestro de taller > resultado 1`] = `
 <span data-variant="secondary">estado_atencion-2</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="id_falla-2"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-id_falla-2" aria-label="Estado de la falla id_falla-2">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 </tbody>
@@ -434,8 +437,7 @@ exports[`/dashboard/maintenance/failures > maestro de taller > resultado 1`] = `
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -610,16 +612,17 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 <span data-variant="warning">Pendiente</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000001"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-FAL00000001" aria-label="Estado de la falla FAL00000001">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -638,16 +641,17 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 <span data-variant="secondary">En atención</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000002"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-FAL00000002" aria-label="Estado de la falla FAL00000002">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion" selected="">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -666,16 +670,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 <span data-variant="success">Reparada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000003"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada" selected="">Reparada</option>
-<option value="anulada">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 <tr>
@@ -694,16 +689,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 <span data-variant="destructive">Anulada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000004"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada">Reparada</option>
-<option value="anulada" selected="">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 <tr>
@@ -722,16 +708,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 <span data-variant="success">Reparada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000005"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada" selected="">Reparada</option>
-<option value="anulada">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 </tbody>
@@ -739,8 +716,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado > resultado 
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -915,16 +891,17 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 <span data-variant="warning">Pendiente</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000001"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-FAL00000001" aria-label="Estado de la falla FAL00000001">
 <option value="pendiente" selected="">Pendiente</option>
 <option value="en_atencion">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -943,16 +920,17 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 <span data-variant="secondary">En atención</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000002"/>
-<select name="estado_atencion">
+<div>
+<div>
+<select id="estado-FAL00000002" aria-label="Estado de la falla FAL00000002">
 <option value="pendiente">Pendiente</option>
 <option value="en_atencion" selected="">En atención</option>
 <option value="reparada">Reparada</option>
 <option value="anulada">Anulada</option>
 </select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<button data-variant="outline" type="button" aria-disabled="true">Guardar</button>
+</div>
+</div>
 </td>
 </tr>
 <tr>
@@ -971,16 +949,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 <span data-variant="success">Reparada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000003"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada" selected="">Reparada</option>
-<option value="anulada">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 <tr>
@@ -999,16 +968,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 <span data-variant="destructive">Anulada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000004"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada">Reparada</option>
-<option value="anulada" selected="">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 <tr>
@@ -1027,16 +987,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 <span data-variant="success">Reparada</span>
 </td>
 <td>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_falla" value="FAL00000005"/>
-<select name="estado_atencion">
-<option value="pendiente">Pendiente</option>
-<option value="en_atencion">En atención</option>
-<option value="reparada" selected="">Reparada</option>
-<option value="anulada">Anulada</option>
-</select>
-<button data-variant="outline" type="submit">Guardar</button>
-</form>
+<span>Sin accion</span>
 </td>
 </tr>
 </tbody>
@@ -1044,8 +995,7 @@ exports[`/dashboard/maintenance/failures > una falla en cada estado con el maest
 </div>
 </div>
 </div>
-</div>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

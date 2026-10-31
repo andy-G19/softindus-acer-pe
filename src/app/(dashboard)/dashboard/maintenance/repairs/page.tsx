@@ -39,8 +39,10 @@ import {
   parseStringParam,
   type SearchParamsRecord,
 } from "@/lib/search-params";
+import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 import { updateRepairStatusAction } from "@/modules/maintenance/repairs/actions";
 import { getRepairList } from "@/modules/maintenance/repairs/queries";
+import { RepairStatusSelect } from "@/modules/maintenance/repairs/repair-status-select";
 
 type RepairsPageProps = {
   searchParams?: Promise<SearchParamsRecord>;
@@ -302,39 +304,11 @@ export default async function RepairsPage({ searchParams }: RepairsPageProps) {
 
                       {canManageRepairs ? (
                         <TableCell className="text-right">
-                          {["ejecutada", "anulada"].includes(
-                            repair.estado_reparacion,
-                          ) ? (
-                            <span className="text-xs text-muted-foreground">
-                              Sin accion
-                            </span>
-                          ) : (
-                            <form
-                              action={updateRepairStatusAction}
-                              className="flex justify-end gap-2"
-                            >
-                              <input
-                                type="hidden"
-                                name="id_reparacion"
-                                value={repair.id_reparacion}
-                              />
-
-                              <NativeSelect
-                                name="estado_reparacion"
-                                defaultValue={repair.estado_reparacion}
-                                className="h-8 text-xs"
-                              >
-                                <option value="programada">Programada</option>
-                                <option value="ejecutada">Ejecutada</option>
-                                <option value="observada">Observada</option>
-                                <option value="anulada">Anulada</option>
-                              </NativeSelect>
-
-                              <Button type="submit" variant="outline" size="sm">
-                                Guardar
-                              </Button>
-                            </form>
-                          )}
+                          <RepairStatusSelect
+                            repair={repair}
+                            action={updateRepairStatusAction}
+                            successNotification={maintenanceNotifications["repair-updated"]}
+                          />
                         </TableCell>
                       ) : null}
                     </TableRow>

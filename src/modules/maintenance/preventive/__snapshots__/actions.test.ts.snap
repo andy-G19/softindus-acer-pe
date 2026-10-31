@@ -877,10 +877,10 @@ exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha rea
 }
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -888,12 +888,23 @@ exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso,
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de los mantenimientos.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -966,12 +977,25 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > llam
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a anulado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulado",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la fecha realizada es el momento del cambio > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1044,12 +1068,25 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la 
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la fecha realizada es el momento del cambio > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a realizado: la fecha realizada es el momento del cambio > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "realizado",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1122,12 +1159,25 @@ exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > llam
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+exports[`updatePreventiveMaintenanceStatusAction > de pendiente a vencido > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "vencido",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1200,12 +1250,25 @@ exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > llam
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
+exports[`updatePreventiveMaintenanceStatusAction > de vencido a pendiente > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "pendiente",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1237,18 +1300,131 @@ exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > 
     "prisma": "mantenimiento_preventivo.findUnique",
   },
   {
-    "args": "El mantenimiento seleccionado no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > resultado 1`] = `"error: El mantenimiento seleccionado no existe."`;
+exports[`updatePreventiveMaintenanceStatusAction > el mantenimiento no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "El mantenimiento seleccionado no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
 
-exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene vuelve a escribirlo > llamadas 1`] = `
+exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene responde sin escribir nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene responde sin escribir nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "El mantenimiento ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El identificador del mantenimiento no es válido. Seleccione un estado válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Seleccione un estado válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1282,7 +1458,7 @@ exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene 
   {
     "args": {
       "data": {
-        "estado": "pendiente",
+        "estado": "anulado",
         "fecha_realizada": null,
       },
       "where": {
@@ -1292,110 +1468,83 @@ exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene 
     "prisma": "mantenimiento_preventivo.update",
   },
   {
-    "args": {
-      "accion": "actualizar",
-      "detalle": "Estado de mantenimiento preventivo actualizado de pendiente a pendiente.",
-      "enTransaccion": true,
-      "entidad_afectada": "mantenimiento_preventivo",
-      "id_registro_afectado": "MTP00000004",
-      "userId": "USU00000001",
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado del mantenimiento. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
     },
-    "effect": "registerAuditLog",
+  },
+}
+`;
+
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MTP00000004",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "fecha_programada": true,
+        "id_mantenimiento": true,
+      },
+      "where": {
+        "id_mantenimiento": "MTP00000004",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.findUnique",
   },
   {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/preventive",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene vuelve a escribirlo > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
-
-exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: El identificador del mantenimiento no es válido. Seleccione un estado válido."`;
-
-exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione un estado válido."`;
-
-exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_mantenimiento FROM aceros.mantenimiento_preventivo WHERE id_mantenimiento = $1 FOR NO KEY UPDATE",
-      "values": [
-        "MTP00000004",
-      ],
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un mantenimiento realizado o anulado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
     },
-    "prisma": "$queryRaw",
   },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "fecha_programada": true,
-        "id_mantenimiento": true,
-      },
-      "where": {
-        "id_mantenimiento": "MTP00000004",
-      },
-    },
-    "prisma": "mantenimiento_preventivo.findUnique",
-  },
-  {
-    "args": "No se puede modificar un mantenimiento realizado o anulado.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
+}
 `;
-
-exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento anulado no se modifica > resultado 1`] = `"error: No se puede modificar un mantenimiento realizado o anulado."`;
 
 exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no se modifica > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1427,10 +1576,21 @@ exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no
     "prisma": "mantenimiento_preventivo.findUnique",
   },
   {
-    "args": "No se puede modificar un mantenimiento realizado o anulado.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no se modifica > resultado 1`] = `"error: No se puede modificar un mantenimiento realizado o anulado."`;
+exports[`updatePreventiveMaintenanceStatusAction > un mantenimiento realizado no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar un mantenimiento realizado o anulado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "MTP00000004",
+    },
+  },
+}
+`;

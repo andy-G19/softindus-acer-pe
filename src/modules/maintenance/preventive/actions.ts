@@ -1,14 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockPreventiveMaintenanceRow } from "@/lib/row-locks";
 import {
   preventiveMaintenanceSchema,
@@ -27,12 +27,9 @@ export type PreventiveFormValues = {
 
 // Entrega 10.5b: el alta de preventivos no redirige; devuelve el resultado y el
 // formulario da el aviso y cierra el panel o vuelve al listado. Sin permiso
-// responde con un error, no redirige. El cambio de estado sigue redirigiendo.
+// responde con un error, no redirige. El cambio de estado tampoco: devuelve su
+// resultado a RowStatusSelect.
 export type PreventiveFormState = FormActionState<PreventiveFormValues, { id_mantenimiento: string }>;
-
-async function requireAdmin() {
-  return requireRole(["ADMIN"]);
-}
 
 function getPreventiveFormValues(formData: FormData): PreventiveFormValues {
   const text = (name: keyof PreventiveFormValues) => formData.get(name)?.toString() ?? "";
@@ -141,9 +138,15 @@ export async function createPreventiveMaintenanceAction(
 }
 
 export async function updatePreventiveMaintenanceStatusAction(
+  _prevState: RowStatusState,
   formData: FormData,
-) {
-  const session = await requireAdmin();
+): Promise<RowStatusState> {
+  const id = formData.get("id_mantenimiento")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return rowStatusError(id, "No tienes permisos para cambiar el estado de los mantenimientos.");
+  }
 
   const parsed = preventiveMaintenanceStatusSchema.safeParse({
     id_mantenimiento: formData.get("id_mantenimiento"),
@@ -151,63 +154,73 @@ export async function updatePreventiveMaintenanceStatusAction(
   });
 
   if (!parsed.success) {
-    const message = parsed.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return rowStatusError(id, parsed.error.issues.map((issue) => issue.message).join(" "));
   }
 
   const data = parsed.data;
 
-  await prisma.$transaction(async (tx) => {
-    await lockPreventiveMaintenanceRow(tx, data.id_mantenimiento);
+  let problem: string | null = null;
 
-    const maintenance = await tx.mantenimiento_preventivo.findUnique({
-      where: {
-        id_mantenimiento: data.id_mantenimiento,
-      },
-      select: {
-        id_mantenimiento: true,
-        fecha_programada: true,
-        estado: true,
-      },
+  try {
+    problem = await prisma.$transaction(async (tx) => {
+      await lockPreventiveMaintenanceRow(tx, data.id_mantenimiento);
+
+      const maintenance = await tx.mantenimiento_preventivo.findUnique({
+        where: {
+          id_mantenimiento: data.id_mantenimiento,
+        },
+        select: {
+          id_mantenimiento: true,
+          fecha_programada: true,
+          estado: true,
+        },
+      });
+
+      if (!maintenance) {
+        return "El mantenimiento seleccionado no existe.";
+      }
+
+      if (["realizado", "anulado"].includes(maintenance.estado)) {
+        return "No se puede modificar un mantenimiento realizado o anulado.";
+      }
+
+      if (maintenance.estado === data.estado) {
+        return "El mantenimiento ya estaba en ese estado.";
+      }
+
+      await tx.mantenimiento_preventivo.update({
+        where: {
+          id_mantenimiento: data.id_mantenimiento,
+        },
+        data: {
+          estado: data.estado,
+          fecha_realizada:
+            data.estado === "realizado" ? new Date() : null,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "mantenimiento_preventivo",
+        id_registro_afectado: data.id_mantenimiento,
+        accion: "actualizar",
+        detalle: `Estado de mantenimiento preventivo actualizado de ${maintenance.estado} a ${data.estado}.`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    return rowStatusError(id, "No se pudo cambiar el estado del mantenimiento. Intenta nuevamente.");
+  }
 
-    if (!maintenance) {
-      throw new Error("El mantenimiento seleccionado no existe.");
-    }
-
-    if (["realizado", "anulado"].includes(maintenance.estado)) {
-      throw new Error(
-        "No se puede modificar un mantenimiento realizado o anulado.",
-      );
-    }
-
-    await tx.mantenimiento_preventivo.update({
-      where: {
-        id_mantenimiento: data.id_mantenimiento,
-      },
-      data: {
-        estado: data.estado,
-        fecha_realizada:
-          data.estado === "realizado" ? new Date() : null,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "mantenimiento_preventivo",
-      id_registro_afectado: data.id_mantenimiento,
-      accion: "actualizar",
-      detalle: `Estado de mantenimiento preventivo actualizado de ${maintenance.estado} a ${data.estado}.`,
-      tx,
-    });
-  });
+  if (problem) {
+    return rowStatusError(id, problem);
+  }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath("/dashboard/maintenance/preventive");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/preventive?toast=preventive-maintenance-updated");
+  return rowStatusDone(id, data.estado);
 }

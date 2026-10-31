@@ -1,14 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import { rowStatusDone, rowStatusError, type RowStatusState } from "@/lib/requested-status";
 import { lockFailureRow, lockMachineRow } from "@/lib/row-locks";
 import {
   failureSchema,
@@ -28,12 +28,9 @@ export type FailureFormValues = {
 
 // Entrega 10.5b: el alta de fallas no redirige; devuelve el resultado y el
 // formulario da el aviso y cierra el panel o vuelve al listado. Sin permiso
-// responde con un error, no redirige. El cambio de estado sigue redirigiendo.
+// responde con un error, no redirige. El cambio de estado tampoco: devuelve su
+// resultado a RowStatusSelect.
 export type FailureFormState = FormActionState<FailureFormValues, { id_falla: string }>;
-
-async function requireMaintenanceRole() {
-  return requireRole(["ADMIN", "WORKSHOP_MASTER"]);
-}
 
 function getFailureFormValues(formData: FormData): FailureFormValues {
   const text = (name: keyof FailureFormValues) => formData.get(name)?.toString() ?? "";
@@ -153,8 +150,16 @@ export async function createFailureAction(
   return failureSaved(values, idFalla);
 }
 
-export async function updateFailureStatusAction(formData: FormData) {
-  const session = await requireMaintenanceRole();
+export async function updateFailureStatusAction(
+  _prevState: RowStatusState,
+  formData: FormData,
+): Promise<RowStatusState> {
+  const id = formData.get("id_falla")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return rowStatusError(id, "No tienes permisos para cambiar el estado de las fallas.");
+  }
 
   const parsed = failureStatusSchema.safeParse({
     id_falla: formData.get("id_falla"),
@@ -162,57 +167,69 @@ export async function updateFailureStatusAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    const message = parsed.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return rowStatusError(id, parsed.error.issues.map((issue) => issue.message).join(" "));
   }
 
   const data = parsed.data;
 
-  await prisma.$transaction(async (tx) => {
-    await lockFailureRow(tx, data.id_falla);
+  let problem: string | null = null;
 
-    const failure = await tx.falla_maquina.findUnique({
-      where: {
-        id_falla: data.id_falla,
-      },
-      select: {
-        id_falla: true,
-        estado_atencion: true,
-      },
+  try {
+    problem = await prisma.$transaction(async (tx) => {
+      await lockFailureRow(tx, data.id_falla);
+
+      const failure = await tx.falla_maquina.findUnique({
+        where: {
+          id_falla: data.id_falla,
+        },
+        select: {
+          id_falla: true,
+          estado_atencion: true,
+        },
+      });
+
+      if (!failure) {
+        return "La falla seleccionada no existe.";
+      }
+
+      if (["reparada", "anulada"].includes(failure.estado_atencion)) {
+        return "No se puede modificar una falla cerrada o anulada.";
+      }
+
+      if (failure.estado_atencion === data.estado_atencion) {
+        return "La falla ya estaba en ese estado.";
+      }
+
+      await tx.falla_maquina.update({
+        where: {
+          id_falla: data.id_falla,
+        },
+        data: {
+          estado_atencion: data.estado_atencion,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "falla_maquina",
+        id_registro_afectado: data.id_falla,
+        accion: "actualizar",
+        detalle: `Estado de falla actualizado de ${failure.estado_atencion} a ${data.estado_atencion}.`,
+        tx,
+      });
+
+      return null;
     });
+  } catch {
+    return rowStatusError(id, "No se pudo cambiar el estado de la falla. Intenta nuevamente.");
+  }
 
-    if (!failure) {
-      throw new Error("La falla seleccionada no existe.");
-    }
-
-    if (["reparada", "anulada"].includes(failure.estado_atencion)) {
-      throw new Error("No se puede modificar una falla cerrada o anulada.");
-    }
-
-    await tx.falla_maquina.update({
-      where: {
-        id_falla: data.id_falla,
-      },
-      data: {
-        estado_atencion: data.estado_atencion,
-      },
-    });
-
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "falla_maquina",
-      id_registro_afectado: data.id_falla,
-      accion: "actualizar",
-      detalle: `Estado de falla actualizado de ${failure.estado_atencion} a ${data.estado_atencion}.`,
-      tx,
-    });
-  });
+  if (problem) {
+    return rowStatusError(id, problem);
+  }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath("/dashboard/maintenance/failures");
 
-  redirect("/dashboard/maintenance/failures?toast=failure-updated");
+  return rowStatusDone(id, data.estado_atencion);
 }

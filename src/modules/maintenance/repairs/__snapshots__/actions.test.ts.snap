@@ -1526,10 +1526,10 @@ exports[`createRepairAction > una mano de obra que desborda su columna lanza su 
 
 exports[`createRepairAction > una mano de obra que desborda su columna lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La mano de obra no debe superar S/ 9,999,999,999.99."`;
 
-exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1537,12 +1537,23 @@ exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Pris
 ]
 `;
 
-exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de las reparaciones.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
 
 exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pendiente y la maquina no cambia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1627,12 +1638,25 @@ exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pe
 ]
 `;
 
-exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pendiente y la maquina no cambia > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-updated"`;
+exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pendiente y la maquina no cambia > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
 
 exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda reparada y la maquina operativa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1728,12 +1752,25 @@ exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda re
 ]
 `;
 
-exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda reparada y la maquina operativa > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-updated"`;
+exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda reparada y la maquina operativa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "ejecutada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
 
 exports[`updateRepairStatusAction > de programada a observada: falla en atencion y maquina en reparacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1829,12 +1866,25 @@ exports[`updateRepairStatusAction > de programada a observada: falla en atencion
 ]
 `;
 
-exports[`updateRepairStatusAction > de programada a observada: falla en atencion y maquina en reparacion > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-updated"`;
+exports[`updateRepairStatusAction > de programada a observada: falla en atencion y maquina en reparacion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "observada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
 
 exports[`updateRepairStatusAction > la reparacion no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1864,18 +1914,129 @@ exports[`updateRepairStatusAction > la reparacion no existe > llamadas 1`] = `
     "prisma": "reparacion.findUnique",
   },
   {
-    "args": "La reparación seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateRepairStatusAction > la reparacion no existe > resultado 1`] = `"error: La reparación seleccionada no existe."`;
+exports[`updateRepairStatusAction > la reparacion no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La reparación seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
 
-exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escribir falla y maquina > llamadas 1`] = `
+exports[`updateRepairStatusAction > pedir el estado que ya tiene responde sin escribir nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > pedir el estado que ya tiene responde sin escribir nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La reparación ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El identificador de la reparación no es válido. Seleccione un estado de reparación válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un estado que no existe devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un estado que no existe devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Seleccione un estado de reparación válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -1907,7 +2068,7 @@ exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escrib
   {
     "args": {
       "data": {
-        "estado_reparacion": "programada",
+        "estado_reparacion": "observada",
       },
       "where": {
         "id_reparacion": "RPA00000003",
@@ -1916,93 +2077,81 @@ exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escrib
     "prisma": "reparacion.update",
   },
   {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la reparación. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
     },
-    "prisma": "falla_maquina.update",
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > una reparacion anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
     },
-    "prisma": "maquina.update",
+    "prisma": "$queryRaw",
   },
   {
     "args": {
-      "accion": "actualizar",
-      "detalle": "Estado de reparacion actualizado de programada a programada.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000003",
-      "userId": "USU00000001",
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
     },
-    "effect": "registerAuditLog",
+    "prisma": "reparacion.findUnique",
   },
   {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escribir falla y maquina > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-updated"`;
-
-exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
+exports[`updateRepairStatusAction > una reparacion anulada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una reparacion finalizada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
   },
-]
+}
 `;
 
-exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: El identificador de la reparación no es válido. Seleccione un estado de reparación válido."`;
-
-exports[`updateRepairStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-]
-`;
-
-exports[`updateRepairStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione un estado de reparación válido."`;
-
-exports[`updateRepairStatusAction > una reparacion anulada no se modifica: el error se lanza dentro de la transaccion > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -2032,51 +2181,21 @@ exports[`updateRepairStatusAction > una reparacion anulada no se modifica: el er
     "prisma": "reparacion.findUnique",
   },
   {
-    "args": "No se puede modificar una reparacion finalizada o anulada.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`updateRepairStatusAction > una reparacion anulada no se modifica: el error se lanza dentro de la transaccion > resultado 1`] = `"error: No se puede modificar una reparacion finalizada o anulada."`;
-
-exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica: el error se lanza dentro de la transaccion > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
     "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
-      "values": [
-        "RPA00000003",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "falla_maquina": true,
-      },
-      "where": {
-        "id_reparacion": "RPA00000003",
-      },
-    },
-    "prisma": "reparacion.findUnique",
-  },
-  {
-    "args": "No se puede modificar una reparacion finalizada o anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica: el error se lanza dentro de la transaccion > resultado 1`] = `"error: No se puede modificar una reparacion finalizada o anulada."`;
+exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una reparacion finalizada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;

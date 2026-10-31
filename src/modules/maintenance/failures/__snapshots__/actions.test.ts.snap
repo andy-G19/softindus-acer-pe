@@ -1085,10 +1085,10 @@ exports[`createFailureAction > una maquina en reparacion admite otra falla > res
 }
 `;
 
-exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+exports[`updateFailureStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1097,12 +1097,23 @@ exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > lla
 ]
 `;
 
-exports[`updateFailureStatusAction > SELLER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateFailureStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de las fallas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1170,12 +1181,25 @@ exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > 
 ]
 `;
 
-exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "en_atencion",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > de en atencion a pendiente > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1243,12 +1267,25 @@ exports[`updateFailureStatusAction > de en atencion a pendiente > llamadas 1`] =
 ]
 `;
 
-exports[`updateFailureStatusAction > de en atencion a pendiente > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+exports[`updateFailureStatusAction > de en atencion a pendiente > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "pendiente",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > de pendiente a anulada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1316,12 +1353,25 @@ exports[`updateFailureStatusAction > de pendiente a anulada > llamadas 1`] = `
 ]
 `;
 
-exports[`updateFailureStatusAction > de pendiente a anulada > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+exports[`updateFailureStatusAction > de pendiente a anulada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > de pendiente a en atencion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1389,12 +1439,25 @@ exports[`updateFailureStatusAction > de pendiente a en atencion > llamadas 1`] =
 ]
 `;
 
-exports[`updateFailureStatusAction > de pendiente a en atencion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+exports[`updateFailureStatusAction > de pendiente a en atencion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "en_atencion",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1462,12 +1525,25 @@ exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > l
 ]
 `;
 
-exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
+exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "reparada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
 exports[`updateFailureStatusAction > la falla no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1499,18 +1575,133 @@ exports[`updateFailureStatusAction > la falla no existe > llamadas 1`] = `
     "prisma": "falla_maquina.findUnique",
   },
   {
-    "args": "La falla seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFailureStatusAction > la falla no existe > resultado 1`] = `"error: La falla seleccionada no existe."`;
+exports[`updateFailureStatusAction > la falla no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La falla seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
 
-exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escribirlo > llamadas 1`] = `
+exports[`updateFailureStatusAction > pedir el estado que ya tiene responde sin escribir nada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > pedir el estado que ya tiene responde sin escribir nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La falla ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El identificador de la falla no es válido. Seleccione un estado de atención válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un estado que no existe devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un estado que no existe devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Seleccione un estado de atención válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1544,7 +1735,7 @@ exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escri
   {
     "args": {
       "data": {
-        "estado_atencion": "pendiente",
+        "estado_atencion": "en_atencion",
       },
       "where": {
         "id_falla": "FAL00000005",
@@ -1553,108 +1744,83 @@ exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escri
     "prisma": "falla_maquina.update",
   },
   {
-    "args": {
-      "accion": "actualizar",
-      "detalle": "Estado de falla actualizado de pendiente a pendiente.",
-      "enTransaccion": true,
-      "entidad_afectada": "falla_maquina",
-      "id_registro_afectado": "FAL00000005",
-      "userId": "USU00000001",
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la falla. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
     },
-    "effect": "registerAuditLog",
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > una falla anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
   },
   {
     "args": null,
     "effect": "prisma.$transaction:commit",
   },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`updateFailureStatusAction > pedir el estado que ya tiene vuelve a escribirlo > resultado 1`] = `"redirect:/dashboard/maintenance/failures?toast=failure-updated"`;
-
-exports[`updateFailureStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`updateFailureStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: El identificador de la falla no es válido. Seleccione un estado de atención válido."`;
-
-exports[`updateFailureStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`updateFailureStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione un estado de atención válido."`;
-
-exports[`updateFailureStatusAction > una falla anulada no se modifica > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000005",
-      ],
+exports[`updateFailureStatusAction > una falla anulada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una falla cerrada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
     },
-    "prisma": "$queryRaw",
   },
-  {
-    "args": {
-      "select": {
-        "estado_atencion": true,
-        "id_falla": true,
-      },
-      "where": {
-        "id_falla": "FAL00000005",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": "No se puede modificar una falla cerrada o anulada.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
+}
 `;
-
-exports[`updateFailureStatusAction > una falla anulada no se modifica > resultado 1`] = `"error: No se puede modificar una falla cerrada o anulada."`;
 
 exports[`updateFailureStatusAction > una falla reparada no se modifica > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1686,10 +1852,21 @@ exports[`updateFailureStatusAction > una falla reparada no se modifica > llamada
     "prisma": "falla_maquina.findUnique",
   },
   {
-    "args": "No se puede modificar una falla cerrada o anulada.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFailureStatusAction > una falla reparada no se modifica > resultado 1`] = `"error: No se puede modificar una falla cerrada o anulada."`;
+exports[`updateFailureStatusAction > una falla reparada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una falla cerrada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
