@@ -10,6 +10,7 @@ import { prisma } from "@/lib/db";
 import { calculateRepairAmounts } from "@/lib/repair-amounts";
 import { lockFailureRow, lockRepairRow } from "@/lib/row-locks";
 import {
+  MAX_REPAIR_AMOUNT,
   repairSchema,
   repairSparePartSchema,
   repairStatusSchema,
@@ -132,6 +133,14 @@ export async function createRepairAction(formData: FormData) {
       mano_obra: data.mano_obra,
       items: sparePartDetails,
     });
+
+    if (amounts.lines.some((line) => Number(line.subtotal) > MAX_REPAIR_AMOUNT)) {
+      throw new Error("El subtotal de un repuesto no debe superar S/ 9,999,999,999.99.");
+    }
+
+    if (Number(amounts.total) > MAX_REPAIR_AMOUNT) {
+      throw new Error("El costo total de la reparación no debe superar S/ 9,999,999,999.99.");
+    }
 
     const idReparacion = await getNextCorrelativeId(tx, {
       codigoEntidad: "reparacion",

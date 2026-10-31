@@ -25,7 +25,7 @@ import {
 //
 // Hoy las dos acciones reciben solo el FormData y autorizan solo a ADMIN con
 // requireRole. El alta lee tres ranuras fijas de repuesto (id_repuesto_N y
-// cantidad_N), ignora en silencio la que llega incompleta (hallazgo 7),
+// cantidad_N), rechaza la que llega incompleta (B4, hallazgo 7),
 // calcula los importes con src/lib/repair-amounts.ts y envia a Prisma las
 // cadenas que devuelve (B2, hallazgo 3) y, con la falla bloqueada, decide
 // dentro de la transaccion (B3, hallazgo 2). El cambio de estado bloquea la
@@ -165,6 +165,7 @@ const REPARACION = "RPA00000003";
 const RODAMIENTO = "REP00000001";
 const RETEN = "REP00000002";
 const CORREA = "REP00000003";
+const CABEZAL = "REP00000004";
 
 const createForm: FormFields = {
   id_falla: FALLA,
@@ -195,6 +196,7 @@ const SPARE_PARTS = [
   { id_repuesto: RODAMIENTO, nombre: "Rodamiento 6205", costo_unitario: new Prisma.Decimal("10.25"), estado: true },
   { id_repuesto: RETEN, nombre: "Reten 35x52", costo_unitario: new Prisma.Decimal("10.25"), estado: true },
   { id_repuesto: CORREA, nombre: "Correa B-42", costo_unitario: new Prisma.Decimal("38.90"), estado: true },
+  { id_repuesto: CABEZAL, nombre: "Cabezal completo", costo_unitario: new Prisma.Decimal("9999999999.99"), estado: true },
 ];
 
 // La falla con su maquina (include) y los repuestos activos que existen: la
@@ -273,11 +275,11 @@ defineCases("createRepairAction", createRepairAction, [
     ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "1.005" }),
   },
   {
-    name: "una linea con repuesto y sin cantidad se ignora en silencio",
+    name: "una linea con repuesto y sin cantidad lanza su mensaje sin tocar Prisma",
     ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: RETEN, cantidad_2: "1" }),
   },
   {
-    name: "una linea con cantidad y sin repuesto se ignora en silencio",
+    name: "una linea con cantidad y sin repuesto lanza su mensaje sin tocar Prisma",
     ...createWith({ id_repuesto_1: "", cantidad_1: "3" }),
   },
   {
@@ -291,8 +293,20 @@ defineCases("createRepairAction", createRepairAction, [
   { name: "un id de repuesto mal formado", ...createWith({ id_repuesto_2: "REP1", cantidad_2: "1" }) },
   { name: "una cantidad de cero", ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "0" }) },
   { name: "una cantidad que no es numero", ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "dos" }) },
+  {
+    name: "una cantidad que la base guardaria como cero",
+    ...createWith({ id_repuesto_1: RODAMIENTO, cantidad_1: "0.001" }),
+  },
+  {
+    name: "un subtotal que desborda su columna revierte la transaccion",
+    ...createWith({ id_repuesto_1: CABEZAL, cantidad_1: "2" }),
+  },
+  {
+    name: "un costo total que desborda su columna revierte la transaccion",
+    ...createWith({ id_repuesto_1: CABEZAL, cantidad_1: "1" }),
+  },
   { name: "una mano de obra negativa", ...createWith({ mano_obra: "-5" }) },
-  { name: "una mano de obra de 1e12 pasa el esquema y llega a la base", ...createWith({ mano_obra: "1e12" }) },
+  { name: "una mano de obra que desborda su columna lanza su mensaje sin tocar Prisma", ...createWith({ mano_obra: "1e12" }) },
   {
     name: "los opcionales vacios o ausentes se guardan como null",
     ...createWith({ tecnico_proveedor: null, mano_obra: null, observaciones: "" }),
@@ -302,16 +316,16 @@ defineCases("createRepairAction", createRepairAction, [
     name: "datos invalidos lanzan los mensajes unidos sin tocar Prisma",
     ...createWith({ id_falla: "FAL", fecha_reparacion: "", estado_reparacion: "hecha" }),
   },
-  { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
+  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
   { name: "la falla no existe", ...createWith({}, lookups({ failureState: null })) },
   { name: "una falla reparada no admite reparaciones", ...createWith({}, lookups({ failureState: "reparada" })) },
   { name: "una falla anulada no admite reparaciones", ...createWith({}, lookups({ failureState: "anulada" })) },
   {
-    name: "el 30 de febrero pasa el esquema y se guarda como el 2 de marzo",
+    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
     ...createWith({ fecha_reparacion: "2026-02-30" }),
   },
   {
-    name: "una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida",
+    name: "una fecha que no es fecha lanza su mensaje sin tocar Prisma",
     ...createWith({ fecha_reparacion: "mañana" }),
   },
 ]);
@@ -335,7 +349,7 @@ defineCases("updateRepairStatusAction", updateRepairStatusAction, [
   },
   { name: "la reparacion no existe", ...statusWith("ejecutada", null) },
   { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("hecha") },
-  { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
+  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Los importes que se envian a la base, fuera del snapshot: lo que se envia
@@ -372,9 +386,10 @@ describe("createRepairAction envia los importes como los guarda la base", () => 
     expect(created).toMatchObject({ mano_obra: "150.50", costo_total: "160.85" });
   });
 
-  it("una linea incompleta no deja detalle", async () => {
-    const { details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: "", cantidad_2: "3" });
+  it("una linea incompleta no guarda la reparacion", async () => {
+    const { repair: created, details } = await written({ id_repuesto_1: RODAMIENTO, cantidad_1: "", id_repuesto_2: "", cantidad_2: "3" });
 
+    expect(created).toBeUndefined();
     expect(details).toEqual([]);
   });
 });

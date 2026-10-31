@@ -104,7 +104,7 @@ exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes
 
 exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha programada es obligatoria. La actividad debe tener al menos 5 caracteres. Seleccione un estado válido."`;
 
-exports[`createPreventiveMaintenanceAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > el 30 de febrero lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -112,75 +112,10 @@ exports[`createPreventiveMaintenanceAction > el 30 de febrero pasa el esquema y 
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "id_maquina": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000002",
-      },
-    },
-    "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "mantenimiento_preventivo",
-      "prefijo": "MTP",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "actividad": "Cambio de aceite y filtros",
-        "estado": "pendiente",
-        "fecha_programada": 2026-03-02T00:00:00.000Z,
-        "fecha_realizada": null,
-        "id_mantenimiento": "MTP00000007",
-        "id_maquina": "MAQ00000002",
-        "id_usuario_programa": "USU00000001",
-        "observaciones": "Usar aceite ISO 68",
-        "responsable": "Rosa Huaman",
-      },
-    },
-    "prisma": "mantenimiento_preventivo.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
-      "enTransaccion": true,
-      "entidad_afectada": "mantenimiento_preventivo",
-      "id_registro_afectado": "MTP00000007",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/preventive",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > el 30 de febrero lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha programada no es válida."`;
 
 exports[`createPreventiveMaintenanceAction > la maquina no existe > llamadas 1`] = `
 [
@@ -518,7 +453,7 @@ exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha p
 
 exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
 
-exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -529,9 +464,9 @@ exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensaj
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha programada es obligatoria. La actividad es obligatoria. Seleccione un estado válido."`;
 
-exports[`createPreventiveMaintenanceAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -539,75 +474,10 @@ exports[`createPreventiveMaintenanceAction > una fecha que no es fecha pasa el e
       "ADMIN",
     ],
   },
-  {
-    "args": {
-      "select": {
-        "id_maquina": true,
-      },
-      "where": {
-        "id_maquina": "MAQ00000002",
-      },
-    },
-    "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "mantenimiento_preventivo",
-      "prefijo": "MTP",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "actividad": "Cambio de aceite y filtros",
-        "estado": "pendiente",
-        "fecha_programada": Date { NaN },
-        "fecha_realizada": null,
-        "id_mantenimiento": "MTP00000007",
-        "id_maquina": "MAQ00000002",
-        "id_usuario_programa": "USU00000001",
-        "observaciones": "Usar aceite ISO 68",
-        "responsable": "Rosa Huaman",
-      },
-    },
-    "prisma": "mantenimiento_preventivo.create",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Mantenimiento preventivo programado para la maquina MAQ00000002.",
-      "enTransaccion": true,
-      "entidad_afectada": "mantenimiento_preventivo",
-      "id_registro_afectado": "MTP00000007",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/preventive",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha programada no es válida."`;
 
 exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > llamadas 1`] = `
 [
@@ -1133,7 +1003,7 @@ exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene 
 
 exports[`updatePreventiveMaintenanceStatusAction > pedir el estado que ya tiene vuelve a escribirlo > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-updated"`;
 
-exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1144,7 +1014,7 @@ exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los 
 ]
 `;
 
-exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`updatePreventiveMaintenanceStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: El identificador del mantenimiento no es válido. Seleccione un estado válido."`;
 
 exports[`updatePreventiveMaintenanceStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [

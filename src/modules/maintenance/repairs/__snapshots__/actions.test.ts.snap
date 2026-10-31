@@ -404,7 +404,7 @@ exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina op
 
 exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina operativa > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
 
-exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > llamadas 1`] = `
+exports[`createRepairAction > el 30 de febrero lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -412,117 +412,10 @@ exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como 
       "ADMIN",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000007",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "maquina": true,
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": {
-      "codigoEntidad": "reparacion",
-      "prefijo": "RPA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_total": "150.50",
-        "estado_reparacion": "programada",
-        "fecha_reparacion": 2026-03-02T00:00:00.000Z,
-        "id_falla": "FAL00000007",
-        "id_reparacion": "RPA00000021",
-        "mano_obra": "150.50",
-        "observaciones": "Cambiar rodamientos del cabezal",
-        "tecnico_proveedor": "Servicios Electromecanicos Lima",
-      },
-    },
-    "prisma": "reparacion.create",
-  },
-  {
-    "args": {
-      "cantidad": 0,
-      "codigoEntidad": "detalle_repuesto_reparacion",
-      "prefijo": "DRP",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.update",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
-    },
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Reparacion registrada para la falla FAL00000007.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000021",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createRepairAction > el 30 de febrero pasa el esquema y se guarda como el 2 de marzo > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > el 30 de febrero lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha de reparación no es válida."`;
 
 exports[`createRepairAction > el mismo repuesto en dos lineas > llamadas 1`] = `
 [
@@ -1112,7 +1005,7 @@ exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
 
 exports[`createRepairAction > tres repuestos con mano de obra > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
 
-exports[`createRepairAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+exports[`createRepairAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1123,7 +1016,61 @@ exports[`createRepairAction > un POST sin campos lanza los mensajes de Zod sin t
 ]
 `;
 
-exports[`createRepairAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`createRepairAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: Seleccione una falla válida. La fecha de reparación es obligatoria. Seleccione un estado de reparación válido."`;
+
+exports[`createRepairAction > un costo total que desborda su columna revierte la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": "El costo total de la reparación no debe superar S/ 9,999,999,999.99.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRepairAction > un costo total que desborda su columna revierte la transaccion > resultado 1`] = `"error: El costo total de la reparación no debe superar S/ 9,999,999,999.99."`;
 
 exports[`createRepairAction > un id de repuesto mal formado > llamadas 1`] = `
 [
@@ -1192,6 +1139,60 @@ exports[`createRepairAction > un repuesto inexistente o inactivo > llamadas 1`] 
 `;
 
 exports[`createRepairAction > un repuesto inexistente o inactivo > resultado 1`] = `"error: Uno o más repuestos seleccionados no existen o están inactivos."`;
+
+exports[`createRepairAction > un subtotal que desborda su columna revierte la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": "El subtotal de un repuesto no debe superar S/ 9,999,999,999.99.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRepairAction > un subtotal que desborda su columna revierte la transaccion > resultado 1`] = `"error: El subtotal de un repuesto no debe superar S/ 9,999,999,999.99."`;
 
 exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcular el subtotal > llamadas 1`] = `
 [
@@ -1352,6 +1353,19 @@ exports[`createRepairAction > una cantidad de cero > llamadas 1`] = `
 
 exports[`createRepairAction > una cantidad de cero > resultado 1`] = `"error: La cantidad del repuesto debe ser mayor a cero."`;
 
+exports[`createRepairAction > una cantidad que la base guardaria como cero > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una cantidad que la base guardaria como cero > resultado 1`] = `"error: La cantidad del repuesto debe ser mayor a cero."`;
+
 exports[`createRepairAction > una cantidad que no es numero > llamadas 1`] = `
 [
   {
@@ -1447,7 +1461,7 @@ exports[`createRepairAction > una falla reparada no admite reparaciones > llamad
 
 exports[`createRepairAction > una falla reparada no admite reparaciones > resultado 1`] = `"error: No se puede registrar una reparacion sobre una falla cerrada o anulada."`;
 
-exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > llamadas 1`] = `
+exports[`createRepairAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1455,119 +1469,12 @@ exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega 
       "ADMIN",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000007",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "maquina": true,
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": {
-      "codigoEntidad": "reparacion",
-      "prefijo": "RPA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_total": "150.50",
-        "estado_reparacion": "programada",
-        "fecha_reparacion": Date { NaN },
-        "id_falla": "FAL00000007",
-        "id_reparacion": "RPA00000021",
-        "mano_obra": "150.50",
-        "observaciones": "Cambiar rodamientos del cabezal",
-        "tecnico_proveedor": "Servicios Electromecanicos Lima",
-      },
-    },
-    "prisma": "reparacion.create",
-  },
-  {
-    "args": {
-      "cantidad": 0,
-      "codigoEntidad": "detalle_repuesto_reparacion",
-      "prefijo": "DRP",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.update",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
-    },
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Reparacion registrada para la falla FAL00000007.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000021",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createRepairAction > una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha de reparación no es válida."`;
 
-exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en silencio > llamadas 1`] = `
+exports[`createRepairAction > una linea con cantidad y sin repuesto lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1575,119 +1482,12 @@ exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en
       "ADMIN",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000007",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "maquina": true,
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": {
-      "codigoEntidad": "reparacion",
-      "prefijo": "RPA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_total": "150.50",
-        "estado_reparacion": "programada",
-        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
-        "id_falla": "FAL00000007",
-        "id_reparacion": "RPA00000021",
-        "mano_obra": "150.50",
-        "observaciones": "Cambiar rodamientos del cabezal",
-        "tecnico_proveedor": "Servicios Electromecanicos Lima",
-      },
-    },
-    "prisma": "reparacion.create",
-  },
-  {
-    "args": {
-      "cantidad": 0,
-      "codigoEntidad": "detalle_repuesto_reparacion",
-      "prefijo": "DRP",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.update",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
-    },
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Reparacion registrada para la falla FAL00000007.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000021",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createRepairAction > una linea con cantidad y sin repuesto se ignora en silencio > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > una linea con cantidad y sin repuesto lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Seleccione el repuesto."`;
 
-exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en silencio > llamadas 1`] = `
+exports[`createRepairAction > una linea con repuesto y sin cantidad lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1695,263 +1495,10 @@ exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en
       "ADMIN",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000007",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "maquina": true,
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": {
-      "where": {
-        "estado": true,
-        "id_repuesto": {
-          "in": [
-            "REP00000002",
-          ],
-        },
-      },
-    },
-    "prisma": "repuesto.findMany",
-  },
-  {
-    "args": {
-      "codigoEntidad": "reparacion",
-      "prefijo": "RPA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_total": "160.75",
-        "estado_reparacion": "programada",
-        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
-        "id_falla": "FAL00000007",
-        "id_reparacion": "RPA00000021",
-        "mano_obra": "150.50",
-        "observaciones": "Cambiar rodamientos del cabezal",
-        "tecnico_proveedor": "Servicios Electromecanicos Lima",
-      },
-    },
-    "prisma": "reparacion.create",
-  },
-  {
-    "args": {
-      "cantidad": 1,
-      "codigoEntidad": "detalle_repuesto_reparacion",
-      "prefijo": "DRP",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "cantidad": "1.00",
-        "costo_unitario": "10.25",
-        "id_detalle_repuesto": "DRP00000021",
-        "id_reparacion": "RPA00000021",
-        "id_repuesto": "REP00000002",
-        "subtotal": "10.25",
-      },
-    },
-    "prisma": "detalle_repuesto_reparacion.create",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.update",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
-    },
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Reparacion registrada para la falla FAL00000007.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000021",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createRepairAction > una linea con repuesto y sin cantidad se ignora en silencio > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
-
-exports[`createRepairAction > una mano de obra de 1e12 pasa el esquema y llega a la base > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
-      "values": [
-        "FAL00000007",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "maquina": true,
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.findUnique",
-  },
-  {
-    "args": {
-      "codigoEntidad": "reparacion",
-      "prefijo": "RPA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "costo_total": "1000000000000.00",
-        "estado_reparacion": "programada",
-        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
-        "id_falla": "FAL00000007",
-        "id_reparacion": "RPA00000021",
-        "mano_obra": "1000000000000.00",
-        "observaciones": "Cambiar rodamientos del cabezal",
-        "tecnico_proveedor": "Servicios Electromecanicos Lima",
-      },
-    },
-    "prisma": "reparacion.create",
-  },
-  {
-    "args": {
-      "cantidad": 0,
-      "codigoEntidad": "detalle_repuesto_reparacion",
-      "prefijo": "DRP",
-    },
-    "effect": "getNextCorrelativeIds",
-  },
-  {
-    "args": {
-      "data": {
-        "estado_atencion": "en_atencion",
-      },
-      "where": {
-        "id_falla": "FAL00000007",
-      },
-    },
-    "prisma": "falla_maquina.update",
-  },
-  {
-    "args": {
-      "data": {
-        "estado": "en_reparacion",
-      },
-      "where": {
-        "id_maquina": "MAQ00000005",
-      },
-    },
-    "prisma": "maquina.update",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Reparacion registrada para la falla FAL00000007.",
-      "enTransaccion": true,
-      "entidad_afectada": "reparacion",
-      "id_registro_afectado": "RPA00000021",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/maintenance",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/repairs",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/failures",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/maintenance/machines",
-    "effect": "revalidatePath",
-  },
-]
-`;
-
-exports[`createRepairAction > una mano de obra de 1e12 pasa el esquema y llega a la base > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-created"`;
+exports[`createRepairAction > una linea con repuesto y sin cantidad lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: Ingrese la cantidad del repuesto."`;
 
 exports[`createRepairAction > una mano de obra negativa > llamadas 1`] = `
 [
@@ -1964,7 +1511,20 @@ exports[`createRepairAction > una mano de obra negativa > llamadas 1`] = `
 ]
 `;
 
-exports[`createRepairAction > una mano de obra negativa > resultado 1`] = `"error: La mano de obra no puede ser negativo."`;
+exports[`createRepairAction > una mano de obra negativa > resultado 1`] = `"error: La mano de obra no puede ser negativa."`;
+
+exports[`createRepairAction > una mano de obra que desborda su columna lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una mano de obra que desborda su columna lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La mano de obra no debe superar S/ 9,999,999,999.99."`;
 
 exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
 [
@@ -2413,7 +1973,7 @@ exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escrib
 
 exports[`updateRepairStatusAction > pedir el estado que ya tiene vuelve a escribir falla y maquina > resultado 1`] = `"redirect:/dashboard/maintenance/repairs?toast=repair-updated"`;
 
-exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > llamadas 1`] = `
+exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -2424,7 +1984,7 @@ exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes de Zod
 ]
 `;
 
-exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes de Zod sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null Invalid input: expected string, received null"`;
+exports[`updateRepairStatusAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: El identificador de la reparación no es válido. Seleccione un estado de reparación válido."`;
 
 exports[`updateRepairStatusAction > un estado que no existe lanza su mensaje sin tocar Prisma > llamadas 1`] = `
 [

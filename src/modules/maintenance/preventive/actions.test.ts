@@ -197,14 +197,14 @@ defineCases("createPreventiveMaintenanceAction", createPreventiveMaintenanceActi
     name: "datos invalidos lanzan los mensajes unidos sin tocar Prisma",
     ...createWith({ id_maquina: "", fecha_programada: "", actividad: "rev", estado: "hecho" }),
   },
-  { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
+  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
   { name: "la maquina no existe", ...createWith({}, machine(false)) },
   {
-    name: "el 30 de febrero pasa el esquema y se guarda como el 2 de marzo",
+    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
     ...createWith({ fecha_programada: "2026-02-30" }),
   },
   {
-    name: "una fecha que no es fecha pasa el esquema y llega a la base como fecha invalida",
+    name: "una fecha que no es fecha lanza su mensaje sin tocar Prisma",
     ...createWith({ fecha_programada: "mañana" }),
   },
 ]);
@@ -220,7 +220,7 @@ defineCases("updatePreventiveMaintenanceStatusAction", updatePreventiveMaintenan
   { name: "un mantenimiento anulado no se modifica", ...statusWith("pendiente", "anulado") },
   { name: "el mantenimiento no existe", ...statusWith("realizado", null) },
   { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("hecho") },
-  { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
+  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Las fechas que se escriben, fuera del snapshot.
@@ -240,16 +240,9 @@ describe("las fechas del mantenimiento preventivo", () => {
     expect((await create({}))?.fecha_programada).toEqual(new Date("2026-07-20T00:00:00.000Z"));
   });
 
-  it("hoy el 30 de febrero se convierte en el 2 de marzo", async () => {
-    expect((await create({ fecha_programada: "2026-02-30" }))?.fecha_programada).toEqual(
-      new Date("2026-03-02T00:00:00.000Z"),
-    );
-  });
-
-  it("hoy un texto llega a la base como fecha invalida", async () => {
-    const data = await create({ fecha_programada: "mañana" });
-
-    expect(Number.isNaN((data?.fecha_programada as Date).getTime())).toBe(true);
+  it("una fecha que no existe o un texto no llegan a la base", async () => {
+    expect(await create({ fecha_programada: "2026-02-30" })).toBeUndefined();
+    expect(await create({ fecha_programada: "mañana" })).toBeUndefined();
   });
 
   it("marcar realizado guarda el momento del cambio; los demas estados la dejan vacia", async () => {

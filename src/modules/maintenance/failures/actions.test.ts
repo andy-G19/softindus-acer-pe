@@ -197,17 +197,17 @@ defineCases("createFailureAction", createFailureAction, [
     ...createWith({ id_maquina: "MAQ1", descripcion: "mal", estado_atencion: "rota", tiempo_perdido_horas: "-1" }),
   },
   {
-    name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma",
+    name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma",
     form: {},
   },
   { name: "un tiempo perdido que no es numero lanza su mensaje", ...createWith({ tiempo_perdido_horas: "dos" }) },
   {
-    name: "un tiempo perdido de 1e12 pasa el esquema y llega a la base",
+    name: "un tiempo perdido que desborda su columna lanza su mensaje sin tocar Prisma",
     ...createWith({ tiempo_perdido_horas: "1e12" }),
   },
   { name: "una fecha que no es fecha lanza su mensaje", ...createWith({ fecha_falla: "mañana" }) },
   {
-    name: "el 30 de febrero pasa el esquema y se guarda como el 2 de marzo",
+    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
     ...createWith({ fecha_falla: "2026-02-30T10:00" }),
   },
   { name: "la maquina no existe", ...createWith({}, machine(null)) },
@@ -228,7 +228,7 @@ defineCases("updateFailureStatusAction", updateFailureStatusAction, [
   { name: "una falla anulada no se modifica", ...statusWith("pendiente", "anulada") },
   { name: "la falla no existe", ...statusWith("en_atencion", null) },
   { name: "un estado que no existe lanza su mensaje sin tocar Prisma", ...statusWith("cerrada") },
-  { name: "un POST sin campos lanza los mensajes de Zod sin tocar Prisma", form: {} },
+  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
 ]);
 
 // Lo que la accion escribe, fuera del snapshot: el estado pedido y la fecha
@@ -247,10 +247,8 @@ describe("createFailureAction escribe lo que recibe", () => {
     expect((await created({}))?.fecha_falla).toEqual(new Date("2026-07-14T09:30:00.000Z"));
   });
 
-  it("hoy el 30 de febrero se convierte en el 2 de marzo", async () => {
-    expect((await created({ fecha_falla: "2026-02-30T10:00" }))?.fecha_falla).toEqual(
-      new Date("2026-03-02T10:00:00.000Z"),
-    );
+  it("el 30 de febrero no llega a la base", async () => {
+    expect(await created({ fecha_falla: "2026-02-30T10:00" })).toBeUndefined();
   });
 });
 
