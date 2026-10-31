@@ -5,12 +5,9 @@ import { getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
 import { APP_ROLES } from "@/lib/permissions";
 import { createFailureAction } from "@/modules/maintenance/failures/actions";
 import { FailureForm } from "@/modules/maintenance/failures/failure-form";
-import {
-  buildFailureMachineItems,
-  getCurrentDateTimeValue,
-} from "@/modules/maintenance/failures/failure-form-options";
-import { FailureNoMachines } from "@/modules/maintenance/failures/failure-no-machines";
+import { buildMachineOptionItems, getCurrentDateTimeValue } from "@/modules/maintenance/form-options";
 import { findMachineOptions } from "@/modules/maintenance/machines/queries";
+import { NoMachinesState } from "@/modules/maintenance/no-machines-state";
 import { maintenanceNotifications } from "@/modules/maintenance/notifications";
 
 type NewFailurePanelProps = {
@@ -35,12 +32,15 @@ export default async function NewFailurePanel({ searchParams }: NewFailurePanelP
     >
       {machines.length === 0 ? (
         <SheetBody>
-          <FailureNoMachines canRegisterMachine={session.user.role === APP_ROLES.ADMIN} />
+          <NoMachinesState
+            description="Primero registra una maquina para poder documentar sus fallas."
+            canRegisterMachine={session.user.role === APP_ROLES.ADMIN}
+          />
         </SheetBody>
       ) : (
         <FailureForm
           action={createFailureAction}
-          machines={buildFailureMachineItems(machines)}
+          machines={buildMachineOptionItems(machines)}
           defaultValues={{ fecha_falla: getCurrentDateTimeValue(), estado_atencion: "pendiente" }}
           successNotification={maintenanceNotifications["failure-created"]}
           returnTo={returnTo}

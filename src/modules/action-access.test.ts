@@ -165,6 +165,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "createPreventiveMaintenanceAction",
       "updatePreventiveMaintenanceStatusAction",
     ],
+    rechazanConResultado: ["createPreventiveMaintenanceAction"],
   },
   {
     ruta: "maintenance/repairs/actions",

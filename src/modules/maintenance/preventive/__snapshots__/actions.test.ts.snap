@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -11,12 +11,29 @@ exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso, sin t
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createPreventiveMaintenanceAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para programar mantenimientos.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha realizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -89,12 +106,30 @@ exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha rea
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > anulado al crear no tiene fecha realizada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "anulado",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
-exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -102,12 +137,42 @@ exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > datos invalidos lanzan los mensajes unidos sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha programada es obligatoria. La actividad debe tener al menos 5 caracteres. Seleccione un estado válido."`;
+exports[`createPreventiveMaintenanceAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del mantenimiento.",
+    "fieldErrors": {
+      "actividad": [
+        "La actividad debe tener al menos 5 caracteres.",
+      ],
+      "estado": [
+        "Seleccione un estado válido.",
+      ],
+      "fecha_programada": [
+        "La fecha programada es obligatoria.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "rev",
+      "estado": "hecho",
+      "fecha_programada": "",
+      "id_maquina": "",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
-exports[`createPreventiveMaintenanceAction > el 30 de febrero lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > el 30 de febrero devuelve su error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -115,12 +180,33 @@ exports[`createPreventiveMaintenanceAction > el 30 de febrero lanza su mensaje s
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > el 30 de febrero lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha programada no es válida."`;
+exports[`createPreventiveMaintenanceAction > el 30 de febrero devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del mantenimiento.",
+    "fieldErrors": {
+      "fecha_programada": [
+        "La fecha programada no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-02-30",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > la maquina no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -139,12 +225,33 @@ exports[`createPreventiveMaintenanceAction > la maquina no existe > llamadas 1`]
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > la maquina no existe > resultado 1`] = `"error: La máquina seleccionada no existe."`;
+exports[`createPreventiveMaintenanceAction > la maquina no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina seleccionada no existe.",
+    "fieldErrors": {
+      "id_maquina": [
+        "La máquina seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -217,12 +324,30 @@ exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formula
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "",
+      "responsable": "",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -295,12 +420,30 @@ exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan co
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "",
+      "responsable": "",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -373,12 +516,30 @@ exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su co
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -451,12 +612,30 @@ exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha p
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > realizado al crear copia la fecha programada como realizada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "realizado",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
-exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -464,12 +643,114 @@ exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensaj
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > un POST sin campos lanza los mensajes en espanol sin tocar Prisma > resultado 1`] = `"error: Seleccione una máquina válida. La fecha programada es obligatoria. La actividad es obligatoria. Seleccione un estado válido."`;
+exports[`createPreventiveMaintenanceAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del mantenimiento.",
+    "fieldErrors": {
+      "actividad": [
+        "La actividad es obligatoria.",
+      ],
+      "estado": [
+        "Seleccione un estado válido.",
+      ],
+      "fecha_programada": [
+        "La fecha programada es obligatoria.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "",
+      "estado": "",
+      "fecha_programada": "",
+      "id_maquina": "",
+      "observaciones": "",
+      "responsable": "",
+    },
+  },
+}
+`;
 
-exports[`createPreventiveMaintenanceAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`createPreventiveMaintenanceAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "mantenimiento_preventivo",
+      "prefijo": "MTP",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "actividad": "Cambio de aceite y filtros",
+        "estado": "pendiente",
+        "fecha_programada": 2026-07-20T00:00:00.000Z,
+        "fecha_realizada": null,
+        "id_mantenimiento": "MTP00000007",
+        "id_maquina": "MAQ00000002",
+        "id_usuario_programa": "USU00000001",
+        "observaciones": "Usar aceite ISO 68",
+        "responsable": "Rosa Huaman",
+      },
+    },
+    "prisma": "mantenimiento_preventivo.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createPreventiveMaintenanceAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo programar el mantenimiento. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
+
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -477,12 +758,33 @@ exports[`createPreventiveMaintenanceAction > una fecha que no es fecha lanza su 
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > una fecha que no es fecha lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: La fecha programada no es válida."`;
+exports[`createPreventiveMaintenanceAction > una fecha que no es fecha devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos del mantenimiento.",
+    "fieldErrors": {
+      "fecha_programada": [
+        "La fecha programada no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "pendiente",
+      "fecha_programada": "mañana",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
     ],
@@ -555,7 +857,25 @@ exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha rea
 ]
 `;
 
-exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > resultado 1`] = `"redirect:/dashboard/maintenance/preventive?toast=preventive-maintenance-created"`;
+exports[`createPreventiveMaintenanceAction > vencido al crear no tiene fecha realizada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_mantenimiento": "MTP00000007",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "actividad": "Cambio de aceite y filtros",
+      "estado": "vencido",
+      "fecha_programada": "2026-07-20",
+      "id_maquina": "MAQ00000002",
+      "observaciones": "Usar aceite ISO 68",
+      "responsable": "Rosa Huaman",
+    },
+  },
+}
+`;
 
 exports[`updatePreventiveMaintenanceStatusAction > WORKSHOP_MASTER: sin permiso, sin tocar Prisma > llamadas 1`] = `
 [

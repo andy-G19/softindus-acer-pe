@@ -3,22 +3,68 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { lockPreventiveMaintenanceRow } from "@/lib/row-locks";
 import {
   preventiveMaintenanceSchema,
   preventiveMaintenanceStatusSchema,
 } from "@/schemas/maintenance/preventive-maintenance.schema";
 
+/** Lo que el formulario de preventivo envio, tal cual, para volver a mostrarlo. */
+export type PreventiveFormValues = {
+  id_maquina: string;
+  fecha_programada: string;
+  estado: string;
+  responsable: string;
+  actividad: string;
+  observaciones: string;
+};
+
+// Entrega 10.5b: el alta de preventivos no redirige; devuelve el resultado y el
+// formulario da el aviso y cierra el panel o vuelve al listado. Sin permiso
+// responde con un error, no redirige. El cambio de estado sigue redirigiendo.
+export type PreventiveFormState = FormActionState<PreventiveFormValues, { id_mantenimiento: string }>;
+
 async function requireAdmin() {
   return requireRole(["ADMIN"]);
 }
 
-export async function createPreventiveMaintenanceAction(formData: FormData) {
-  const session = await requireAdmin();
+function getPreventiveFormValues(formData: FormData): PreventiveFormValues {
+  const text = (name: keyof PreventiveFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_maquina: text("id_maquina"),
+    fecha_programada: text("fecha_programada"),
+    estado: text("estado"),
+    responsable: text("responsable"),
+    actividad: text("actividad"),
+    observaciones: text("observaciones"),
+  };
+}
+
+function preventiveError(values: PreventiveFormValues, error: string, fieldErrors?: FieldErrors): PreventiveFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function preventiveSaved(values: PreventiveFormValues, idMantenimiento: string): PreventiveFormState {
+  return { status: "success", data: { id_mantenimiento: idMantenimiento }, values, operationId: newOperationId() };
+}
+
+export async function createPreventiveMaintenanceAction(
+  _prevState: PreventiveFormState,
+  formData: FormData,
+): Promise<PreventiveFormState> {
+  const values = getPreventiveFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN"]);
+
+  if (!session) {
+    return preventiveError(values, "No tienes permisos para programar mantenimientos.");
+  }
 
   const parsed = preventiveMaintenanceSchema.safeParse({
     id_maquina: formData.get("id_maquina"),
@@ -30,11 +76,7 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    const message = parsed.error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-
-    throw new Error(message);
+    return preventiveError(values, "Revisa los datos del mantenimiento.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -49,45 +91,53 @@ export async function createPreventiveMaintenanceAction(formData: FormData) {
   });
 
   if (!machine) {
-    throw new Error("La máquina seleccionada no existe.");
+    const message = "La máquina seleccionada no existe.";
+
+    return preventiveError(values, message, { id_maquina: [message] });
   }
 
-  await prisma.$transaction(async (tx) => {
-    const idMantenimiento = await getNextCorrelativeId(tx, {
-      codigoEntidad: "mantenimiento_preventivo",
-      prefijo: "MTP",
-    });
+  let idMantenimiento = "";
 
-    await tx.mantenimiento_preventivo.create({
-      data: {
-        id_mantenimiento: idMantenimiento,
-        id_maquina: data.id_maquina,
-        id_usuario_programa: session.user.id,
-        fecha_programada: data.fecha_programada,
-        fecha_realizada:
-          data.estado === "realizado" ? data.fecha_programada : null,
-        responsable: data.responsable || null,
-        actividad: data.actividad,
-        estado: data.estado,
-        observaciones: data.observaciones || null,
-      },
-    });
+  try {
+    await prisma.$transaction(async (tx) => {
+      idMantenimiento = await getNextCorrelativeId(tx, {
+        codigoEntidad: "mantenimiento_preventivo",
+        prefijo: "MTP",
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "mantenimiento_preventivo",
-      id_registro_afectado: idMantenimiento,
-      accion: "crear",
-      detalle: `Mantenimiento preventivo programado para la maquina ${data.id_maquina}.`,
-      tx,
+      await tx.mantenimiento_preventivo.create({
+        data: {
+          id_mantenimiento: idMantenimiento,
+          id_maquina: data.id_maquina,
+          id_usuario_programa: session.user.id,
+          fecha_programada: data.fecha_programada,
+          fecha_realizada:
+            data.estado === "realizado" ? data.fecha_programada : null,
+          responsable: data.responsable || null,
+          actividad: data.actividad,
+          estado: data.estado,
+          observaciones: data.observaciones || null,
+        },
+      });
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "mantenimiento_preventivo",
+        id_registro_afectado: idMantenimiento,
+        accion: "crear",
+        detalle: `Mantenimiento preventivo programado para la maquina ${data.id_maquina}.`,
+        tx,
+      });
     });
-  });
+  } catch {
+    return preventiveError(values, "No se pudo programar el mantenimiento. Intenta nuevamente.");
+  }
 
   revalidatePath("/dashboard/maintenance");
   revalidatePath("/dashboard/maintenance/preventive");
   revalidatePath("/dashboard/maintenance/machines");
 
-  redirect("/dashboard/maintenance/preventive?toast=preventive-maintenance-created");
+  return preventiveSaved(values, idMantenimiento);
 }
 
 export async function updatePreventiveMaintenanceStatusAction(

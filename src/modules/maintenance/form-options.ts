@@ -1,18 +1,28 @@
-// Lo que la pagina y el panel de alta de fallas comparten para llenar el
-// formulario: la fecha y hora por defecto y las opciones de maquina.
+// Lo que las paginas y los paneles de alta de Mantenimiento comparten para
+// llenar sus formularios: las fechas por defecto y las opciones de maquina.
 
-type FailureMachine = {
+type MachineOption = {
   id_maquina: string;
   nombre: string;
   tipo: string;
   estado: string;
 };
 
-export function getCurrentDateTimeValue() {
+function getLocalIsoValue() {
   const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
-  return now.toISOString().slice(0, 16);
+  return now.toISOString();
+}
+
+/** Valor de un input type="datetime-local" con el momento actual. */
+export function getCurrentDateTimeValue() {
+  return getLocalIsoValue().slice(0, 16);
+}
+
+/** Valor de un input type="date" con el dia actual. */
+export function getTodayValue() {
+  return getLocalIsoValue().slice(0, 10);
 }
 
 function getMachineStatusLabel(status: string) {
@@ -26,7 +36,7 @@ function getMachineStatusLabel(status: string) {
   return labels[status] ?? status;
 }
 
-export function buildFailureMachineItems(machines: FailureMachine[]) {
+export function buildMachineOptionItems(machines: MachineOption[]) {
   return machines.map((machine) => ({
     id: machine.id_maquina,
     label: machine.nombre,

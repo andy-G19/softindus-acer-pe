@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createPreventiveMaintenanceAction,
   updatePreventiveMaintenanceStatusAction,
+  type PreventiveFormState,
 } from "@/modules/maintenance/preventive/actions";
 import {
   characterizeHandler,
@@ -19,22 +20,29 @@ import {
 // transaccion y de llevarlas al resultado de accion y al panel lateral. Cada
 // caso fija en un snapshot, en orden: la autorizacion con sus roles, las
 // lecturas, la transaccion con sus escrituras y su final, los correlativos,
-// la bitacora, las revalidaciones y el resultado: la redireccion o el error
-// que lanza, con su mensaje exacto.
+// la bitacora, las revalidaciones y el resultado: la redireccion, el error que
+// lanza o el estado que devuelve al formulario, con su mensaje exacto.
 //
-// Hoy las dos acciones reciben solo el FormData, autorizan solo a ADMIN con
-// requireRole, lanzan un Error con los mensajes de Zod unidos y redirigen con
-// su toast al terminar. El cambio de estado bloquea el mantenimiento y decide
-// dentro de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5). El alta
-// solo comprueba que la maquina exista, fuera de la transaccion: las maquinas
-// no se borran, asi que no hay carrera que proteger, y acepta una maquina
-// inactiva (hallazgo 12: se registra, no se cambia).
+// Las dos autorizan solo a ADMIN. Desde el panel lateral (B6), el alta autoriza
+// con getAuthorizedSession y devuelve el resultado (FormActionState) en lugar
+// de redirigir; niega el permiso con un error dentro del formulario. Solo
+// comprueba que la maquina exista, fuera de la transaccion: las maquinas no se
+// borran, asi que no hay carrera que proteger, y acepta una maquina inactiva
+// (hallazgo 12: se registra, no se cambia). El cambio de estado aun recibe solo
+// el FormData, autoriza con requireRole, bloquea el mantenimiento y decide
+// dentro de la transaccion (B3, hallazgo 2 de la auditoria de la 10.5), lanza
+// un Error con los mensajes de Zod unidos y redirige con su toast.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -144,6 +152,13 @@ function defineCases(name: string, run: (formData: FormData) => Promise<unknown>
 const MAQUINA = "MAQ00000002";
 const MANTENIMIENTO = "MTP00000004";
 
+const initialState: PreventiveFormState = { status: "idle" };
+const create = (formData: FormData) => createPreventiveMaintenanceAction(initialState, formData);
+
+const failWith = (error: Error) => () => {
+  throw error;
+};
+
 const createForm: FormFields = {
   id_maquina: MAQUINA,
   fecha_programada: "2026-07-20",
@@ -179,7 +194,7 @@ const statusWith = (estado: string, current: string | null = "pendiente") => ({
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createPreventiveMaintenanceAction", createPreventiveMaintenanceAction, [
+defineCases("createPreventiveMaintenanceAction", create, [
   { name: "programa el mantenimiento con su correlativo y la bitacora dentro de la transaccion", ...createWith({}) },
   { name: "realizado al crear copia la fecha programada como realizada", ...createWith({ estado: "realizado" }) },
   { name: "vencido al crear no tiene fecha realizada", ...createWith({ estado: "vencido" }) },
@@ -192,20 +207,24 @@ defineCases("createPreventiveMaintenanceAction", createPreventiveMaintenanceActi
     name: "los opcionales ausentes del formulario cuentan como vacios",
     ...createWith({ responsable: null, observaciones: null }),
   },
-  { name: "WORKSHOP_MASTER: sin permiso, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
+  { name: "WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma", ...createWith({}), role: "WORKSHOP_MASTER" },
   {
-    name: "datos invalidos lanzan los mensajes unidos sin tocar Prisma",
+    name: "datos invalidos devuelven los errores por campo sin tocar Prisma",
     ...createWith({ id_maquina: "", fecha_programada: "", actividad: "rev", estado: "hecho" }),
   },
-  { name: "un POST sin campos lanza los mensajes en espanol sin tocar Prisma", form: {} },
+  { name: "un POST sin campos devuelve los mensajes en espanol sin tocar Prisma", form: {} },
   { name: "la maquina no existe", ...createWith({}, machine(false)) },
   {
-    name: "el 30 de febrero lanza su mensaje sin tocar Prisma",
+    name: "el 30 de febrero devuelve su error sin tocar Prisma",
     ...createWith({ fecha_programada: "2026-02-30" }),
   },
   {
-    name: "una fecha que no es fecha lanza su mensaje sin tocar Prisma",
+    name: "una fecha que no es fecha devuelve su error sin tocar Prisma",
     ...createWith({ fecha_programada: "mañana" }),
+  },
+  {
+    name: "un fallo al crear revierte con el mensaje generico",
+    ...createWith({}, { ...machine(), "mantenimiento_preventivo.create": failWith(new Error("conexion perdida")) }),
   },
 ]);
 
@@ -233,16 +252,16 @@ describe("las fechas del mantenimiento preventivo", () => {
     return (calls as Recorded[]).find((call) => call.prisma === key)?.args?.data;
   }
 
-  const create = (fields: FormFields) =>
-    written(createPreventiveMaintenanceAction, createWith(fields), "mantenimiento_preventivo.create");
+  const createdWith = (fields: FormFields) =>
+    written(create, createWith(fields), "mantenimiento_preventivo.create");
 
   it("la fecha programada es la medianoche del dia en la zona del servidor", async () => {
-    expect((await create({}))?.fecha_programada).toEqual(new Date("2026-07-20T00:00:00.000Z"));
+    expect((await createdWith({}))?.fecha_programada).toEqual(new Date("2026-07-20T00:00:00.000Z"));
   });
 
   it("una fecha que no existe o un texto no llegan a la base", async () => {
-    expect(await create({ fecha_programada: "2026-02-30" })).toBeUndefined();
-    expect(await create({ fecha_programada: "mañana" })).toBeUndefined();
+    expect(await createdWith({ fecha_programada: "2026-02-30" })).toBeUndefined();
+    expect(await createdWith({ fecha_programada: "mañana" })).toBeUndefined();
   });
 
   it("marcar realizado guarda el momento del cambio; los demas estados la dejan vacia", async () => {
@@ -268,6 +287,38 @@ describe("el cambio de estado decide con la fila bloqueada", () => {
       table: "mantenimiento_preventivo",
       id: MANTENIMIENTO,
       reads: (call) => call.prisma === "mantenimiento_preventivo.findUnique",
+    });
+  });
+});
+
+// El resultado del alta, fuera del snapshot: lo que usa el formulario.
+describe("createPreventiveMaintenanceAction devuelve el resultado al formulario", () => {
+  async function result(actionCase: Omit<ActionCase, "name">) {
+    const { result: outcome } = await runCase(create, actionCase);
+
+    return (outcome as { estado: PreventiveFormState }).estado;
+  }
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await result(createWith({}))).toMatchObject({
+      status: "success",
+      data: { id_mantenimiento: "MTP00000007" },
+    });
+  });
+
+  it("una maquina que no existe deja el error junto al campo y conserva lo escrito", async () => {
+    expect(await result(createWith({}, machine(false)))).toMatchObject({
+      status: "error",
+      error: "La máquina seleccionada no existe.",
+      fieldErrors: { id_maquina: ["La máquina seleccionada no existe."] },
+      values: { actividad: createForm.actividad, id_maquina: MAQUINA },
+    });
+  });
+
+  it("sin permiso responde con un error dentro del formulario", async () => {
+    expect(await result({ ...createWith({}), role: "WORKSHOP_MASTER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para programar mantenimientos.",
     });
   });
 });
