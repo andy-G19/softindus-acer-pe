@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { createFabricationRouteAction } from "@/modules/production/routes/actions";
 import { getNewFabricationRouteProducts } from "@/modules/production/routes/queries";
+import { buildRouteProductOptions } from "@/modules/production/routes/route-product-options";
 import Link from "next/link";
 
 export default async function NewFabricationRoutePage() {
@@ -16,11 +17,7 @@ export default async function NewFabricationRoutePage() {
 
   const products = await getNewFabricationRouteProducts();
 
-  const productItems = products.map((product) => ({
-    id: product.id_producto,
-    label: product.nombre_producto,
-    description: `${product.categoria} - ${product.unidad_medida}`,
-  }));
+  const productItems = buildRouteProductOptions(products);
 
   return (
     <main className="mx-auto max-w-3xl space-y-6">

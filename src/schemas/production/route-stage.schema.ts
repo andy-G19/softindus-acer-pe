@@ -3,6 +3,8 @@ import { z } from "zod";
 import { STAGE_TIME_MODES } from "@/lib/production-times";
 
 const MAX_MINUTOS_UNIDAD = 9999.99;
+// Las columnas tienen 2 decimales: por debajo de esto la base guardaria 0.00.
+const MIN_MINUTOS_UNIDAD = 0.01;
 
 /**
  * Minutos por unidad: opcional, pero si se envía debe ser mayor que cero. Un cero o un
@@ -22,6 +24,7 @@ function minutosPorUnidad() {
     z.coerce
       .number({ message: "El tiempo debe ser numérico." })
       .positive("El tiempo debe ser mayor que cero.")
+      .min(MIN_MINUTOS_UNIDAD, `El tiempo debe ser de al menos ${MIN_MINUTOS_UNIDAD} minutos.`)
       .max(
         MAX_MINUTOS_UNIDAD,
         `El tiempo no debe superar ${MAX_MINUTOS_UNIDAD} minutos por unidad.`,
@@ -32,16 +35,19 @@ function minutosPorUnidad() {
 
 export const routeStageSchema = z
   .object({
-    id_ruta: z.string().trim().min(1, "La ruta de fabricación es obligatoria."),
+    id_ruta: z
+      .string({ error: "La ruta de fabricación es obligatoria." })
+      .trim()
+      .min(1, "La ruta de fabricación es obligatoria."),
 
     nombre_etapa: z
-      .string()
+      .string({ error: "El nombre de la etapa debe tener al menos 3 caracteres." })
       .trim()
       .min(3, "El nombre de la etapa debe tener al menos 3 caracteres.")
       .max(100, "El nombre de la etapa no debe superar 100 caracteres."),
 
     orden_secuencia: z.coerce
-      .number()
+      .number({ error: "El orden debe ser un número entero." })
       .int("El orden debe ser un número entero.")
       .min(1, "El orden debe ser mayor o igual a 1.")
       .max(999, "El orden no debe superar 999."),

@@ -251,7 +251,7 @@ defineCases("createRouteStageAction", create, [
   { name: "un orden que no es numero devuelve su error", ...createWith({ orden_secuencia: "uno" }) },
   { name: "un orden con decimales devuelve su error", ...createWith({ orden_secuencia: "1.5" }) },
   { name: "minutos negativos devuelven su error", ...createWith({ tiempo_operario_minutos_unidad: "-1" }) },
-  { name: "minutos que redondean a cero hoy se aceptan", ...createWith({ tiempo_operario_minutos_unidad: "0.001" }) },
+  { name: "minutos que redondean a cero se rechazan", ...createWith({ tiempo_operario_minutos_unidad: "0.001" }) },
   { name: "minutos de maquina sin maquina devuelven su error", ...createWith({ tiempo_maquina_minutos_unidad: "5" }) },
   {
     name: "maquina sin minutos devuelve su error",
@@ -405,5 +405,43 @@ describe("las acciones de etapas deciden con la ruta bloqueada", () => {
     const { calls } = await runCase(create, createWith());
 
     expect(calls.filter((call) => isRowLock(call, "maquina", MAQUINA))).toEqual([]);
+  });
+});
+
+// A3 (hallazgo 10): ningun error de un formulario sale con el mensaje de Zod en
+// ingles, y lo que la columna guardaria como cero no pasa por un dato valido.
+describe("los mensajes de etapas estan en espanol", () => {
+  type Errors = { estado: { fieldErrors: Record<string, string[]> } };
+
+  const errorsOf = async (actionCase: Omit<ActionCase, "name">) =>
+    ((await runCase(create, actionCase)).result as Errors).estado.fieldErrors;
+
+  it("un POST sin campos", async () => {
+    const errors = await errorsOf({ form: {} });
+
+    expect(errors).toEqual({
+      id_ruta: ["La ruta de fabricación es obligatoria."],
+      nombre_etapa: ["El nombre de la etapa debe tener al menos 3 caracteres."],
+      orden_secuencia: ["El orden debe ser mayor o igual a 1."],
+    });
+  });
+
+  it("un orden que no es numero", async () => {
+    expect((await errorsOf(createWith({ orden_secuencia: "uno" }))).orden_secuencia).toEqual([
+      "El orden debe ser un número entero.",
+    ]);
+  });
+
+  it.each([
+    ["operario", { tiempo_operario_minutos_unidad: "0.001" }, "tiempo_operario_minutos_unidad"],
+    ["maquina", { id_maquina: MAQUINA, tiempo_maquina_minutos_unidad: "0.009" }, "tiempo_maquina_minutos_unidad"],
+  ])("los minutos de %s que redondean a cero", async (_name, fields, field) => {
+    expect((await errorsOf(createWith(fields)))[field]).toEqual(["El tiempo debe ser de al menos 0.01 minutos."]);
+  });
+
+  it("0.01 minutos si se acepta", async () => {
+    const { result } = await runCase(create, createWith({ tiempo_operario_minutos_unidad: "0.01" }));
+
+    expect(result).toMatch(/^redirect:/);
   });
 });

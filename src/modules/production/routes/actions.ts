@@ -147,18 +147,21 @@ export async function updateFabricationRouteAction(formData: FormData) {
         );
       }
 
-      const product = await tx.producto.findFirst({
-        where: {
-          id_producto: data.id_producto,
-          estado: true,
-        },
-        select: {
-          id_producto: true,
-        },
-      });
+      // El producto actual se conserva aunque hoy este inactivo, como en pedidos.
+      if (data.id_producto !== currentRoute.id_producto) {
+        const product = await tx.producto.findFirst({
+          where: {
+            id_producto: data.id_producto,
+            estado: true,
+          },
+          select: {
+            id_producto: true,
+          },
+        });
 
-      if (!product) {
-        throw new Error("El producto seleccionado no existe o esta inactivo.");
+        if (!product) {
+          throw new Error("El producto seleccionado no existe o esta inactivo.");
+        }
       }
 
       const existingRoute = await tx.ruta_fabricacion.findFirst({

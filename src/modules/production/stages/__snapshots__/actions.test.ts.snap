@@ -776,13 +776,14 @@ exports[`createRouteStageAction > minutos negativos devuelven su error > resulta
     "fieldErrors": {
       "tiempo_operario_minutos_unidad": [
         "El tiempo debe ser mayor que cero.",
+        "El tiempo debe ser de al menos 0.01 minutos.",
       ],
     },
   },
 }
 `;
 
-exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > llamadas 1`] = `
+exports[`createRouteStageAction > minutos que redondean a cero se rechazan > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -791,116 +792,21 @@ exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > 
       "WORKSHOP_MASTER",
     ],
   },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
-      "values": [
-        "RUT00000003",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "select": {
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_ruta": "RUT00000003",
-        "nombre_etapa": "Corte de plancha",
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_ruta": "RUT00000003",
-        "orden_secuencia": 3,
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": {
-      "codigoEntidad": "etapa_ruta",
-      "prefijo": "ETA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "descripcion": "Corte segun medida base",
-        "estado": true,
-        "id_etapa_ruta": "ETA00000012",
-        "id_ruta": "RUT00000003",
-        "modo_tiempo": "simultaneo",
-        "nombre_etapa": "Corte de plancha",
-        "orden_secuencia": 3,
-        "requiere_maquina": false,
-        "tiempo_operario_minutos_unidad": 0.001,
-      },
-    },
-    "prisma": "etapa_ruta.create",
-  },
-  {
-    "args": {
-      "select": {
-        "id_etapa_ruta_maquina": true,
-        "id_maquina": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000012",
-      },
-    },
-    "prisma": "etapa_ruta_maquina.findMany",
-  },
-  {
-    "args": {
-      "accion": "crear",
-      "detalle": "Etapa creada: Corte de plancha",
-      "enTransaccion": true,
-      "entidad_afectada": "etapa_ruta",
-      "id_registro_afectado": "ETA00000012",
-      "userId": "USU00000001",
-    },
-    "effect": "registerAuditLog",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction:commit",
-  },
-  {
-    "args": "/dashboard/production",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/routes",
-    "effect": "revalidatePath",
-  },
-  {
-    "args": "/dashboard/production/routes/RUT00000003/stages",
-    "effect": "revalidatePath",
-  },
 ]
 `;
 
-exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+exports[`createRouteStageAction > minutos que redondean a cero se rechazan > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "tiempo_operario_minutos_unidad": [
+        "El tiempo debe ser de al menos 0.01 minutos.",
+      ],
+    },
+  },
+}
+`;
 
 exports[`createRouteStageAction > modo secuencial con maquina > llamadas 1`] = `
 [
@@ -1404,14 +1310,11 @@ exports[`createRouteStageAction > un POST sin campos devuelve sus errores sin to
   "estado": {
     "error": "Revisa los datos de la etapa.",
     "fieldErrors": {
-      "id_maquina": [
-        "Invalid input: expected string, received null",
-      ],
       "id_ruta": [
-        "Invalid input: expected string, received null",
+        "La ruta de fabricación es obligatoria.",
       ],
       "nombre_etapa": [
-        "Invalid input: expected string, received null",
+        "El nombre de la etapa debe tener al menos 3 caracteres.",
       ],
       "orden_secuencia": [
         "El orden debe ser mayor o igual a 1.",
@@ -1489,7 +1392,7 @@ exports[`createRouteStageAction > un orden que no es numero devuelve su error > 
     "error": "Revisa los datos de la etapa.",
     "fieldErrors": {
       "orden_secuencia": [
-        "Invalid input: expected number, received NaN",
+        "El orden debe ser un número entero.",
       ],
     },
   },

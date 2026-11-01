@@ -409,7 +409,7 @@ exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prism
 ]
 `;
 
-exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prisma > resultado 1`] = `"error: Invalid input: expected string, received null"`;
+exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prisma > resultado 1`] = `"error: Seleccione un producto."`;
 
 exports[`createFabricationRouteAction > un fallo al crear revierte y deja el error > llamadas 1`] = `
 [
@@ -920,18 +920,6 @@ exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > llamadas 1`] =
   },
   {
     "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
       "where": {
         "id_producto": "PRO00000004",
         "id_ruta": {
@@ -1037,18 +1025,6 @@ exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas 
       },
     },
     "prisma": "ruta_fabricacion.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
   },
   {
     "args": {
@@ -1192,15 +1168,97 @@ exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > l
   },
   {
     "args": {
-      "select": {
-        "id_producto": true,
-      },
       "where": {
-        "estado": true,
         "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
       },
     },
-    "prisma": "producto.findFirst",
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+
+exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": {
@@ -1257,65 +1315,7 @@ exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > l
 ]
 `;
 
-exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
-
-exports[`updateFabricationRouteAction > con ordenes y el producto inactivo tampoco se puede editar lo demas > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
-      "values": [
-        "RUT00000003",
-      ],
-    },
-    "prisma": "$queryRaw",
-  },
-  {
-    "args": {
-      "include": {
-        "_count": {
-          "select": {
-            "orden_trabajo": true,
-          },
-        },
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": "El producto seleccionado no existe o esta inactivo.",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`updateFabricationRouteAction > con ordenes y el producto inactivo tampoco se puede editar lo demas > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
 
 exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > llamadas 1`] = `
 [
@@ -1331,7 +1331,7 @@ exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje
 
 exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > resultado 1`] = `"error: El nombre de la ruta debe tener al menos 3 caracteres."`;
 
-exports[`updateFabricationRouteAction > el producto no existe o esta inactivo > llamadas 1`] = `
+exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1370,24 +1370,60 @@ exports[`updateFabricationRouteAction > el producto no existe o esta inactivo > 
   },
   {
     "args": {
-      "select": {
-        "id_producto": true,
-      },
       "where": {
-        "estado": true,
         "id_producto": "PRO00000004",
+        "id_ruta": {
+          "not": "RUT00000003",
+        },
+        "nombre_ruta": "Ruta estandar para lampa",
       },
     },
-    "prisma": "producto.findFirst",
+    "prisma": "ruta_fabricacion.findFirst",
   },
   {
-    "args": "El producto seleccionado no existe o esta inactivo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": {
+      "data": {
+        "descripcion": "Corte, formado y pintura",
+        "id_producto": "PRO00000004",
+        "nombre_ruta": "Ruta estandar para lampa",
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Ruta actualizada: Ruta estandar para lampa",
+      "enTransaccion": true,
+      "entidad_afectada": "ruta_fabricacion",
+      "id_registro_afectado": "RUT00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
   },
 ]
 `;
 
-exports[`updateFabricationRouteAction > el producto no existe o esta inactivo > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
 
 exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > llamadas 1`] = `
 [
@@ -1425,18 +1461,6 @@ exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null
       },
     },
     "prisma": "ruta_fabricacion.findUnique",
-  },
-  {
-    "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
   },
   {
     "args": {
@@ -1580,18 +1604,6 @@ exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre
   },
   {
     "args": {
-      "select": {
-        "id_producto": true,
-      },
-      "where": {
-        "estado": true,
-        "id_producto": "PRO00000004",
-      },
-    },
-    "prisma": "producto.findFirst",
-  },
-  {
-    "args": {
       "where": {
         "id_producto": "PRO00000004",
         "id_ruta": {
@@ -1731,7 +1743,7 @@ exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto
 
 exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
 
-exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
+exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -1775,10 +1787,56 @@ exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) respon
       },
       "where": {
         "estado": true,
-        "id_producto": "PRO00000004",
+        "id_producto": "PRO00000005",
       },
     },
     "prisma": "producto.findFirst",
+  },
+  {
+    "args": "El producto seleccionado no existe o esta inactivo.",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+
+exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "_count": {
+          "select": {
+            "orden_trabajo": true,
+          },
+        },
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": {

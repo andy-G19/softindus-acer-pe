@@ -237,9 +237,16 @@ defineCases("updateFabricationRouteAction", updateFabricationRouteAction, [
     ...updateWith({ id_producto: OTRO_PRODUCTO }, currentRoute(2)),
   },
   { name: "con ordenes se puede editar lo demas", ...updateWith({}, currentRoute(2)) },
-  { name: "el producto no existe o esta inactivo", ...updateWith({}, product(false)) },
   {
-    name: "con ordenes y el producto inactivo tampoco se puede editar lo demas",
+    name: "un producto nuevo que no existe o esta inactivo se rechaza",
+    ...updateWith({ id_producto: OTRO_PRODUCTO }, product(false)),
+  },
+  {
+    name: "el producto actual inactivo se conserva al editar lo demas",
+    ...updateWith({}, product(false)),
+  },
+  {
+    name: "con ordenes y el producto inactivo se puede editar lo demas",
     ...updateWith({}, { ...currentRoute(2), ...product(false) }),
   },
   { name: "otra ruta del producto ya usa ese nombre", ...updateWith({}, duplicate) },
@@ -341,5 +348,39 @@ describe("las acciones de rutas deciden con la fila bloqueada", () => {
     );
 
     expect(result).toBe("error: conexion perdida");
+  });
+});
+
+// A3 (hallazgo 2 de la auditoria de la 10.6): como en pedidos, editar conserva el
+// producto actual aunque hoy este inactivo; uno nuevo debe estar activo.
+describe("la edicion de una ruta con el producto inactivo", () => {
+  type Recorded = { prisma?: string };
+
+  it("no vuelve a comprobar el producto que ya tenia", async () => {
+    const { calls, result } = await runCase(updateFabricationRouteAction, updateWith({}, product(false)));
+
+    expect(result).toBe("redirect:/dashboard/production/routes?toast=route-updated");
+    expect((calls as Recorded[]).filter((call) => call.prisma === "producto.findFirst")).toEqual([]);
+  });
+
+  it("rechaza pasar a otro producto inactivo", async () => {
+    const { result } = await runCase(
+      updateFabricationRouteAction,
+      updateWith({ id_producto: OTRO_PRODUCTO }, product(false)),
+    );
+
+    expect(result).toBe("error: El producto seleccionado no existe o esta inactivo.");
+  });
+});
+
+// A3 (hallazgo 10): un POST sin campos no responde con el mensaje de Zod en ingles.
+describe("los mensajes de rutas estan en espanol", () => {
+  it.each([
+    ["alta", createFabricationRouteAction, { id_ruta: null }],
+    ["edicion", updateFabricationRouteAction, { id_ruta: RUTA }],
+  ])("%s sin campos", async (_name, run, fields) => {
+    const { result } = await runCase(run, { form: fields });
+
+    expect(result).toBe("error: Seleccione un producto.");
   });
 });

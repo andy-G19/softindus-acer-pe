@@ -34,6 +34,13 @@ const routeWithOrders = (args: Parameters<typeof generatedRow>[2]) => ({
 const routeWithInactiveProduct = (args: Parameters<typeof generatedRow>[2]) => ({
   ...generatedRow("ruta_fabricacion", "findUnique", args),
   id_producto: "PRO00000099",
+  producto: {
+    id_producto: "PRO00000099",
+    nombre_producto: "Producto dado de baja",
+    categoria: "herramientas",
+    unidad_medida: "unidad",
+    estado: false,
+  },
   _count: { orden_trabajo: 0 },
 });
 

@@ -30,7 +30,7 @@ function parseStageFormData(formData: FormData) {
     tiempo_operario_minutos_unidad: formData.get(
       "tiempo_operario_minutos_unidad",
     ),
-    id_maquina: formData.get("id_maquina"),
+    id_maquina: formData.get("id_maquina") ?? "",
     tiempo_maquina_minutos_unidad: formData.get(
       "tiempo_maquina_minutos_unidad",
     ),

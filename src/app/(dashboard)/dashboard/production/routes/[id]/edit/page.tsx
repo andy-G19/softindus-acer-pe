@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
 import { updateFabricationRouteAction } from "@/modules/production/routes/actions";
 import { getFabricationRouteEditData } from "@/modules/production/routes/queries";
+import { buildRouteProductOptions } from "@/modules/production/routes/route-product-options";
 import Link from "next/link";
 
 type EditFabricationRoutePageProps = {
@@ -30,11 +31,7 @@ export default async function EditFabricationRoutePage({
     notFound();
   }
 
-  const productItems = products.map((product) => ({
-    id: product.id_producto,
-    label: product.nombre_producto,
-    description: `${product.categoria} - ${product.unidad_medida}`,
-  }));
+  const productItems = buildRouteProductOptions(products, route.producto);
 
   const productLocked = route._count.orden_trabajo > 0;
 
