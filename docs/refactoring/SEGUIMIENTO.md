@@ -3160,7 +3160,7 @@ Límite con la entrega 11:
 | 10.3 | Inventario | ADMIN | Proveedores, materiales y materiales de proveedor; atender alerta; listados. Partida el 2026-10-18 en 10.3a (materiales y alertas) y 10.3b (proveedores, materiales de proveedor y listados); el 2026-10-19 la 10.3b se partió en 10.3b (proveedores y asociaciones) y 10.3c (listados con fechas y `<main>`) | 5 h; recalibrada a 5,3 h y 4,9 h, la 10.3b a 7,5 h y 2,5 h, y la 10.3c a 4,5 h |
 | 10.4 | Comercial | ADMIN y SELLER; productos, solo ADMIN | Productos y pedidos; inactivar con confirmación; listados con `Badge`. Partida el 2026-10-23 en 10.4a (productos, estados e inicio), 10.4b (listados con fechas y `Badge`) y 10.4c (pedidos, la superficie amplia) | 5 h; recalibrada a 6,3 h, 3,5 h y 6,6 h, y la 10.4b a 5 h |
 | 10.5 | Mantenimiento | ADMIN; fallas, también WORKSHOP_MASTER | Máquinas, repuestos, fallas, preventivos y reparaciones; cambios de estado. Partida el 2026-10-29 en 10.5a (máquinas, repuestos e inicio) y 10.5b (fallas, preventivos y reparaciones) | 8 h; recalibrada a 6 h y 6,7 h |
-| 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes | 7 h |
+| 10.6 | Producción: rutas, etapas y recetas | ADMIN y WORKSHOP_MASTER | Rutas, etapas, recetas, versiones y detalles; requerimientos y cuellos de botella; listado de órdenes. Partida el 2026-10-31 en 10.6a (rutas, etapas y listados) y 10.6b (recetas, versiones y detalles) | 7 h; recalibrada a 6,4 h y 7 h en bruto |
 | 10.7 | Campañas, mermas y usuarios | ADMIN y WORKSHOP_MASTER; usuarios, solo ADMIN | Campañas y su detalle, chatarra, retazos, usuarios y restablecer contraseña | 8 h |
 | 10.8 | Personal y Costos | ADMIN; asistencia y tareas, también WORKSHOP_MASTER | Operarios, asistencia y tareas; secciones del detalle del costeo; listados | 8 h |
 
@@ -3204,11 +3204,11 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5b | Migrado |
 | Mantenimientos preventivos | Mantenimiento | ADMIN | Página, lanza | Panel lateral | 10.5b | Migrado |
 | Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Superficie amplia en página completa (D6) | 10.5b | Migrado |
-| Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Modal breve | 10.6 | Pendiente |
-| Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
-| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.6 | Pendiente |
-| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6 | Pendiente |
-| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
+| Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral (D1 de la 10.6) | 10.6a | Migrado |
+| Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6a | Migrado |
+| Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral (D1 de la 10.6) | 10.6b | Pendiente |
+| Versiones de receta | Producción | ADMIN, WORKSHOP_MASTER | Página con líneas, lanza | Superficie amplia | 10.6b | Pendiente |
+| Detalles de receta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6b | Pendiente |
 | Campañas de producción | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Panel lateral | 10.7 | Pendiente |
 | Detalle de campaña | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.7 | Pendiente |
 | Chatarra | Mermas | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.7 | Pendiente |
@@ -3232,7 +3232,7 @@ destructivas confirman:
 | 10.3 | Inactivar material y atender alerta de stock (10.3a, migradas); inactivar proveedor y material de proveedor (10.3b, migradas) |
 | 10.4 | Inactivar cliente, producto y categoría de producto (10.4a, migradas) |
 | 10.5 | Inactivar máquina y repuesto; cambiar el estado de máquina, repuesto, falla, preventivo y reparación |
-| 10.6 | Inactivar ruta, etapa y receta; marcar versión vigente; anular versión; borrar detalle de receta |
+| 10.6 | Inactivar ruta y etapa (10.6a, migradas); inactivar receta; marcar versión vigente; anular versión; borrar detalle de receta (10.6b) |
 | 10.7 | Cambiar el estado de campaña y de retazo; activar y desactivar usuario |
 | 10.8 | Inactivar operario; cancelar tarea; generar costeo desde una orden; recalcular costeo; anular costo indirecto |
 
@@ -6267,6 +6267,143 @@ Datos leídos de la API de GitHub el 2026-11-01 (UTC) y comparados con git:
   «Vercel» `success` a las 00:49:54 UTC; la API ya no conserva el `pending`).
   La sub-entrega no trae migraciones (sin cambios en `prisma/`).
 
+### Sub-entrega 10.6a — Rutas, etapas y listados
+
+Fecha: 2026-10-31 (Lima). Estado: en preparación; falta la verificación en
+staging. El paso 0 (`94392a8`) registró la integración de la 10.5b en `main`. 9
+commits, de `9e8475f` a `0c506e0`, y este registro. Plan en
+`tmp/e10-diff/plan-10-6.md`.
+
+La auditoría partió la 10.6 en dos, aprobado por el responsable: la 10.6a
+(rutas, etapas y listados) y la 10.6b (recetas, versiones y detalles).
+
+| Commit | Tipo | Cambio |
+|---|---|---|
+| 94392a8 | docs | Paso 0: integración de la 10.5b en `main`. |
+| 9e8475f | test | Caracterización de las 6 acciones de rutas y etapas y casos de página; las dos entran en `MODULOS`, que no fijaba sus roles. |
+| 98d3ef4 | fix | Decidir dentro de la transacción con `lockRouteRow`; la etapa bloquea después su máquina; P2002 en rutas (hallazgo 1). |
+| 0b3b85a | fix | Editar una ruta con el producto inactivo y mensajes de los esquemas (hallazgos 2 y 10). |
+| 0d74c4d | feat | Rutas en panel lateral con `FormActionState` y tildes en sus mensajes (hallazgo 11). |
+| c7d37a0 | feat | Etapas en panel lateral, sin la desviación de autorización; `colSpan` (hallazgo 7). |
+| 10a26fe | feat | Inactivar ruta y etapa con confirmación y compare-and-set; `FilterBar` en las dos listas. |
+| 914672a | fix | Cuellos de botella y órdenes con `buildDateRangeFilter` (hallazgo 6 de la 10.3a). |
+| efeadc0 | feat | `FilterBar` y `DateRangeFields` en cuellos de botella y órdenes. |
+| 0c506e0 | feat | Sin `<main>` en el inicio y las páginas de órdenes; `production-links.test.ts`. |
+| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+
+Ajustes al plan, aprobados por el responsable:
+
+- D1: rutas y recetas van en panel y no en modal breve. La regla de la entrega
+  pide «sin datos dependientes», y estas tienen selector de productos y bloqueo
+  por órdenes; las URL de alta y edición ya existían.
+- D3: como en pedidos, editar conserva el producto inactivo marcado y uno nuevo
+  debe estar activo.
+- D6: se rechazan los minutos menores que 0.01, que la base guardaría como cero.
+
+Diseño:
+
+- Un candado por raíz: `lockRouteRow` protege una ruta y sus etapas, y después
+  la etapa bloquea su máquina. Ninguna operación de Mantenimiento toma rutas, así
+  que no aparece un orden inverso.
+- El alta de ruta no bloquea porque no hay fila: el guardián es
+  `uq_ruta_producto_nombre`, y el P2002 responde como el duplicado. En etapas
+  todos los que escriben bloquean la ruta, así que el P2002 ya no se espera.
+- Los dos toggles son compare-and-set con `updateManyAndReturn`: la misma
+  sentencia devuelve el nombre o el `id_ruta` que piden la bitácora y
+  `revalidatePath`, sin leer antes (D5 de la 10.5). Con 0 filas se lee para
+  distinguir «no existe» de «ya estaba».
+- Las confirmaciones dicen lo comprobado en el código: una ruta inactiva no se
+  ofrece en órdenes nuevas ni admite etapas, y las órdenes creadas siguen; una
+  etapa inactiva no entra en los avances que se generen, no se ofrece en tareas
+  nuevas y no suma minutos, y si es la última activa la ruta no sirve para
+  órdenes nuevas.
+- Las ranuras se anidan: `routes/@panel` y `routes/[id]/stages/@panel`. Cada una
+  tiene `default.tsx` y `page.tsx`.
+- `RouteForm` y `StageForm` reciben los avisos y las opciones de funciones puras
+  compartidas por la página y el panel (`route-edit-props.ts`,
+  `route-product-options.ts`, `stage-edit-values.ts`, `stage-notices.tsx`).
+
+Evidencia:
+
+1. Pruebas rojas antes de cada arreglo: `tmp/e10-diff/rojo-106a-a2.log` (13
+   fallos), `rojo-106a-a3.log` (7), `rojo-106a-a4.log` (44), `rojo-106a-a5.log`
+   (21), `rojo-106a-a6.log` (28) y `rojo-106a-a7.log` (3).
+2. Las llamadas se compararon con script contra el commit anterior:
+   `cmp_106a_a2_calls.txt` (78 resultados iguales y los 2 previstos),
+   `cmp_106a_a4_calls.txt` (26 de 26) y `cmp_106a_a5_calls.txt` (43 de 43): solo
+   cambian la autorización y el final de la transacción.
+3. Mutaciones (`tmp/e10-diff/mut_106a_a*.txt`): 28 de 28, 13 de 13, 14 de 14, 24
+   de 24, 29 de 29, 24 de 24, 7 de 7, 11 de 11 y 6 de 6; en total, 156 de 156
+   (véanse los hallazgos 16 y 17 sobre las que sobrevivieron primero).
+4. CSS compilado igual en todos los commits: 112.786 bytes.
+5. `npm run check` terminó con código 0 después de cada commit, de 3.225 pruebas
+   en 190 archivos a 3.472 en 198. `npm run refactor:inventory` analiza 159
+   páginas y 80 formularios JSX.
+
+Tiempo de preparación: del primer guion o prueba de cada paso al
+`npm run check` en verde (Lima). Las esperas al responsable y la lectura previa
+quedan fuera:
+
+| Commit | 9e8475f | 98d3ef4 | 0b3b85a | 0d74c4d | c7d37a0 | 10a26fe | 914672a | efeadc0 | 0c506e0 |
+|---|---|---|---|---|---|---|---|---|---|
+| Inicio | 19:59 | 20:24 | 20:37 | 20:48 | 21:16 | 21:39 | 21:55 | 22:01 | 22:09 |
+| Check en verde | 20:06 | 20:32 | 20:42 | 20:57 | 21:31 | 21:52 | 21:59 | 22:07 | 22:15 |
+| Minutos | 7 | 8 | 5 | 9 | 15 | 13 | 4 | 6 | 6 |
+
+Suman 73 minutos frente a 295 estimados en bruto: un factor de 0,25.
+
+Hallazgos de la auditoría, con los números del plan. Los corrige esta
+sub-entrega: 1 en rutas y etapas, 2, 6, 7, 10 en rutas y etapas, y 11. Quedan para
+la 10.6b: 1 y 10 en recetas, 3, 4, 5, 8 y 9. Se registran y no se cambian:
+
+- R1. La nota del detalle de receta dice que al generar la orden «se valida el
+  stock disponible»: `createWorkOrder` no lee stock. Es copia.
+- R2. Los KPI de etapas y recetas dicen «Total» pero cuentan lo filtrado, y
+  «Minutos por unidad» suma solo las etapas filtradas.
+- R3. Anular una versión no exige receta activa y marcarla vigente sí. Es regla
+  de negocio.
+- R4. La base de una versión nueva puede ser una anulada.
+- R5. `createWorkOrder` decide fuera de la transacción y no bloquea (entrega 11):
+  «versión usada por órdenes» y «ruta con órdenes» ordenan solo a quienes toman
+  el candado.
+- R6. Comentario sobrante «Ubicación destino» en `production/page.tsx`.
+
+Hallazgos de la implementación:
+
+12. La métrica de toggles contaba 2 y eran 3: recetas lee el estado y escribe el
+    contrario con `=== "activa" ? ...`, que su patrón no veía. Queda 1, para la
+    10.6b.
+13. React 19 reinicia el formulario tras la acción, y un `<select>` controlado no
+    tiene opción por defecto: tras un error volvía a «Sin máquina» con la máquina
+    en el estado. Dentro de `ActionForm` usa `defaultValue`. `recipe-version-form`
+    tiene el mismo patrón (10.6b). El tipo del alta rápida de proveedor, en
+    `spare-part-form`, también es un select controlado dentro de `ActionForm`: tras
+    un error del repuesto podría mostrar la primera opción y guardar la elegida. No
+    se reprodujo; queda por confirmar con la alta rápida de la entrega 11.
+14. El `Switch` de Radix no dispara `input`: el panel no contaba el cambio de modo
+    y cancelar salía sin preguntar. Lo dispara su campo oculto, como
+    `SearchableSelect`.
+15. `RouteSheet` pinta en un portal: el HTML de un panel sale vacío en el arnés, y
+    los snapshots de panel de otras áreas solo guardan `<div data-state="open">`.
+    Sus pruebas sí comparan permisos y consultas. `routes-pages.test.ts` dobla
+    `RouteSheet`; las otras áreas no se tocaron.
+16. Método: F7, V3 y P2 de A5 sobrevivieron por huecos reales (el botón
+    deshabilitado en el panel, el modo al editar y el panel con la ruta inactiva):
+    se añadieron sus pruebas.
+17. Método: L3 de A6 sobrevivió porque `notification-registry.test.ts` no estaba
+    en la lista de la mutación.
+18. Método: el caso de página con producto inactivo no falló al aplicar el arreglo:
+    forzaba `id_producto` pero el objeto `producto` generado era otro. Un caso que
+    no se inmuta cuando debería cambiar no prueba nada.
+19. Método: el guion de mutaciones de A1 se copió con su ruta de salida y
+    sobrescribió `mut_105b_b1.txt` de la 10.5b, que no se pudo recuperar. Su
+    resultado, 21 de 21, consta en esta página.
+20. Método: un heredoc largo de Bash se cortó en A4 (la comilla de un comentario),
+    como en la 10.5a y la 10.5b; no se aplicó nada y se usó Write. En A6, Windows
+    dio un error transitorio al escribir un archivo: los guiones reintentan.
+21. Conteo: la auditoría dijo 26 `<main>` en Producción, 6 de campañas. Eran 25, 5
+    de campañas. Tras esta sub-entrega quedan 13: 8 de recetas y 5 de campañas.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6291,7 +6428,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #118 verde en main, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos; la 10.6, en curso, partida en 10.6a y 10.6b, con la 10.6a preparada y sin verificar) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
@@ -6315,7 +6452,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Entradas del catálogo de notificaciones dentro del puente `?toast=` | 124 | 0 | 7 |
 | Claves `?toast=` caracterizadas (texto, severidad y HTML) | 0 / 124 | 128 / 128 | 7, G3, 9 y 10 |
 | Claves emitidas sin entrada / entradas sin emisor no declaradas, comprobado por prueba | sin control | 0 / 0 | 7 |
-| Archivos de prueba / pruebas aprobadas | 18 / 203 | 190 / 3.225 | todas |
+| Archivos de prueba / pruebas aprobadas | 18 / 203 | 198 / 3.472 | todas |
 | Escrituras de stock no atómicas en compras | 2 | 0 | 1 |
 | Cargas de `usuario` completo en reportes y exportación | 15 | 0 | 5 |
 | Comparaciones de rol a mano en la exportación | 1 | 0 | 5 |
@@ -6334,18 +6471,18 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Reglas / selectores del adaptador `industrial-dark` | 49 / 134 | 25 / 40 | 8 y 11 |
 | Variables de color definidas dos veces (`:root` y `.dark`) | 37 | 0 | 8 |
 | Familias de fuentes que el build descarga de Google | 3 | 0 (regla de ESLint) | 8 |
-| Copias locales de `FieldError` | 16 | 6 | 9 y 10 |
-| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 60 | 9 y 10 |
-| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 11 (15 formularios) | 9 y 10 |
+| Copias locales de `FieldError` | 16 | 5 | 9 y 10 |
+| Páginas con un `<main>` dentro del `<main>` del shell | 113 | 47 | 9 y 10 |
+| Combinaciones de clases distintas en los formularios GET (43 al medir la línea base) | 27 | 10 (11 formularios) | 9 y 10 |
 | Acciones de alta y edición de Clientes y categorías de producto caracterizadas | 0 / 4 | 4 / 4 | 9 |
-| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 10 | 10 |
-| Acciones de activar e inactivar que leen el estado y escriben el contrario | 11 | 2 | 10 |
+| Funciones de `useActionState` que redirigen al negar el permiso (desviación conocida) | 30 | 8 | 10 |
+| Acciones de activar e inactivar que leen el estado y escriben el contrario | 12 | 1 (recetas) | 10 |
 | Utilidades CSS sin consumidores sacadas de documentación o del gestor viejo | 7 | 0 | 10 |
 | Pantallas de reportes que consultan con el rango invertido / que ofrecen exportar un rango que la ruta rechaza | 10 / 9 | 0 / 0 | 10 |
-| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 7 | 10 |
+| Pantallas con rango de fechas sin `DateRangeFields` | 27 | 5 | 10 |
 | Archivos de acciones de inventario sin caracterizar (materiales, alertas, proveedores y materiales de proveedor) | 4 | 0 | 10 |
 | Altas que deciden el kárdex o la alerta con los números del formulario y no con la fila escrita | 1 | 0 | 10 |
-| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 4 (copias locales) | 10 |
+| Listados que cortan el último día con `lte` (con `buildDateRangeFilter` o con una copia local) | 17 | 2 (copias locales) | 10 |
 | Enlaces de Inventario que un rol ve y su pantalla rechaza / pantallas de Inventario sin ningún enlace en la app | 4 / 3 | 0 / 0 | 10 |
 | Acciones de Comercial sin caracterizar: el cambio de estado de clientes; el alta, la edición y el cambio de estado de productos; el de categorías | 5 | 0 | 10 |
 | Listas de Comercial sin tarjeta en su inicio (el vendedor no llegaba a ellas) / enlaces de Comercial que un rol ve y su pantalla rechaza | 2 / 0 | 0 / 0 | 10 |
@@ -6355,6 +6492,7 @@ Actualizar la columna "Actual" al cerrar cada entrega (comando `/verificar`).
 | Acciones de fallas, preventivos y reparaciones que deciden fuera de la transacción | 5 | 0 | 10 |
 | Acciones de fallas, preventivos y reparaciones que lanzan en lugar de devolver el error | 6 | 0 | 10 |
 | Enlaces de Mantenimiento que un rol ve y su pantalla rechaza | 4 | 0 | 10 |
+| Acciones de Producción sin caracterizar (rutas, etapas, recetas, versiones y detalles) | 14 | 8 | 10 |
 
 Actualizado en la entrega 2 (2026-09-30) con `/verificar` sobre `5de9193`. Las dos
 filas nuevas se midieron sobre `58edb6c`; entre `42f4308` y ese commit, en `src`
@@ -6677,6 +6815,19 @@ Actualizado en la sub-entrega 10.5b (2026-10-30) sobre `69f1b71`:
 - Los 3 archivos de acciones que faltaban en Mantenimiento quedan
   caracterizados. Las dos filas nuevas se midieron sobre `68b3258`, su línea
   base.
+
+Actualizado en la sub-entrega 10.6a (2026-10-31) sobre `0c506e0`:
+
+- Pruebas: 198 / 3.472.
+- La desviación baja a 8 (alta y edición de etapas), las copias locales de
+  `FieldError` a 5 y el `<main>` anidado a 47.
+- Los formularios GET bajan a 11, con 10 combinaciones de clases
+  (`count_105b_get_forms.py`), y las pantallas con rango de fechas sin
+  `DateRangeFields` a 5: cuellos de botella y órdenes.
+- Los listados con copia local a `lte` bajan a 2: campañas y movimientos de caja.
+- Los toggles que leen y escriben el contrario: la línea base contaba 11 y eran
+  12, porque el patrón no veía el de recetas (hallazgo 12 de la 10.6a).
+- La fila de acciones de Producción se midió sobre `411077f`, su línea base.
 
 Las demás no cambian, medidas de nuevo: la desviación en 10, porque estas
 acciones lanzaban y no usaban `useActionState`; las copias locales de
