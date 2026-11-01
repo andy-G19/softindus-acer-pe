@@ -236,14 +236,18 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateFabricationRouteAction",
       "toggleFabricationRouteStatusAction",
     ],
-    rechazanConResultado: ["createFabricationRouteAction", "updateFabricationRouteAction"],
+    rechazanConResultado: [
+      "createFabricationRouteAction",
+      "updateFabricationRouteAction",
+      "toggleFabricationRouteStatusAction",
+    ],
   },
   {
     ruta: "production/stages/actions",
     cargar: () => import("@/modules/production/stages/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createRouteStageAction", "updateRouteStageAction", "toggleRouteStageStatusAction"],
-    rechazanConResultado: ["createRouteStageAction", "updateRouteStageAction"],
+    rechazanConResultado: ["createRouteStageAction", "updateRouteStageAction", "toggleRouteStageStatusAction"],
   },
   {
     ruta: "production/work-orders/actions",

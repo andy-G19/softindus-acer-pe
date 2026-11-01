@@ -772,10 +772,10 @@ exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para e
 }
 `;
 
-exports[`toggleFabricationRouteStatusAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`toggleFabricationRouteStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -784,29 +784,27 @@ exports[`toggleFabricationRouteStatusAction > SELLER: se redirige sin tocar Pris
 ]
 `;
 
-exports[`toggleFabricationRouteStatusAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleFabricationRouteStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
 
 exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": null,
@@ -817,11 +815,15 @@ exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el 
       "data": {
         "estado": false,
       },
+      "select": {
+        "nombre_ruta": true,
+      },
       "where": {
+        "estado": true,
         "id_ruta": "RUT00000003",
       },
     },
-    "prisma": "ruta_fabricacion.update",
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
   },
   {
     "args": {
@@ -853,70 +855,29 @@ exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el 
 ]
 `;
 
-exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-deactivated"`;
+exports[`toggleFabricationRouteStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
 
 exports[`toggleFabricationRouteStatusAction > la ruta no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
-  },
-]
-`;
-
-exports[`toggleFabricationRouteStatusAction > la ruta no existe > resultado 1`] = `"error: La ruta seleccionada no existe."`;
-
-exports[`toggleFabricationRouteStatusAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`toggleFabricationRouteStatusAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibio la ruta de fabricacion."`;
-
-exports[`toggleFabricationRouteStatusAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": null,
@@ -927,42 +888,105 @@ exports[`toggleFabricationRouteStatusAction > un fallo al escribir revierte y de
       "data": {
         "estado": false,
       },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+      },
       "where": {
         "id_ruta": "RUT00000003",
       },
     },
-    "prisma": "ruta_fabricacion.update",
+    "prisma": "ruta_fabricacion.findUnique",
   },
   {
-    "args": "conexion perdida",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`toggleFabricationRouteStatusAction > un fallo al escribir revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`toggleFabricationRouteStatusAction > la ruta no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin estado pedido devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin estado pedido devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la ruta de fabricación.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": null,
@@ -973,11 +997,15 @@ exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > llam
       "data": {
         "estado": false,
       },
+      "select": {
+        "nombre_ruta": true,
+      },
       "where": {
+        "estado": true,
         "id_ruta": "RUT00000003",
       },
     },
-    "prisma": "ruta_fabricacion.update",
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
   },
   {
     "args": {
@@ -1009,29 +1037,29 @@ exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > llam
 ]
 `;
 
-exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-deactivated"`;
+exports[`toggleFabricationRouteStatusAction > una ruta activa se inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
 
 exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findUnique",
   },
   {
     "args": null,
@@ -1042,11 +1070,15 @@ exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > llam
       "data": {
         "estado": true,
       },
+      "select": {
+        "nombre_ruta": true,
+      },
       "where": {
+        "estado": false,
         "id_ruta": "RUT00000003",
       },
     },
-    "prisma": "ruta_fabricacion.update",
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
   },
   {
     "args": {
@@ -1078,7 +1110,79 @@ exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > llam
 ]
 `;
 
-exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-activated"`;
+exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
+
+exports[`toggleFabricationRouteStatusAction > ya tenia ese estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+      },
+      "where": {
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleFabricationRouteStatusAction > ya tenia ese estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RUT00000003",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > llamadas 1`] = `
 [

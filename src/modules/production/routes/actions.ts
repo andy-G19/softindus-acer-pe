@@ -1,14 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { lockRouteRow } from "@/lib/row-locks";
 import { fabricationRouteSchema } from "@/schemas/production/route.schema";
 
@@ -282,57 +287,87 @@ export async function updateFabricationRouteAction(
   return routeSaved(values, idRuta);
 }
 
-export async function toggleFabricationRouteStatusAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+// Activar e inactivar desde la fila (entrega 10.6a): devuelven el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=, y sin permiso responden
+// con un error.
+export async function toggleFabricationRouteStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idRuta = formData.get("id_ruta")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const idRuta = String(formData.get("id_ruta") ?? "");
+  if (!session) {
+    return statusToggleError(idRuta, PERMISSION_ERROR);
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!idRuta) {
-    throw new Error("No se recibio la ruta de fabricacion.");
+    return statusToggleError(idRuta, "No se recibió la ruta de fabricación.");
   }
 
-  const route = await prisma.ruta_fabricacion.findUnique({
-    where: {
-      id_ruta: idRuta,
-    },
-    select: {
-      id_ruta: true,
-      nombre_ruta: true,
-      estado: true,
-    },
-  });
-
-  if (!route) {
-    throw new Error("La ruta seleccionada no existe.");
+  if (nextStatus === null) {
+    return statusToggleError(idRuta, "Estado no válido.");
   }
 
-  const nextStatus = !route.estado;
+  let problem: string | null;
 
-  await prisma.$transaction(async (tx) => {
-    await tx.ruta_fabricacion.update({
-      where: {
-        id_ruta: idRuta,
-      },
-      data: {
-        estado: nextStatus,
-      },
-    });
+  try {
+    problem = await prisma.$transaction(async (tx) => {
+      // Fija el estado pedido solo si la ruta tiene el contrario: comparar y escribir
+      // en una sola sentencia evita que una lista desactualizada o un doble clic
+      // hagan lo contrario de lo que dice el boton. La misma sentencia devuelve el
+      // nombre que pide la bitacora, sin leer antes.
+      const [route] = await tx.ruta_fabricacion.updateManyAndReturn({
+        where: {
+          id_ruta: idRuta,
+          estado: !nextStatus,
+        },
+        data: {
+          estado: nextStatus,
+        },
+        select: {
+          nombre_ruta: true,
+        },
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "ruta_fabricacion",
-      id_registro_afectado: idRuta,
-      accion: nextStatus ? "activar" : "inactivar",
-      detalle: `Ruta ${nextStatus ? "activada" : "inactivada"}: ${route.nombre_ruta}`,
-      tx,
+      // Nada cambio: no existe o ya tenia ese estado; no hay nada que registrar.
+      if (!route) {
+        const exists = await tx.ruta_fabricacion.findUnique({
+          where: {
+            id_ruta: idRuta,
+          },
+          select: {
+            id_ruta: true,
+          },
+        });
+
+        return exists ? `La ruta ya estaba ${nextStatus ? "activa" : "inactiva"}.` : "La ruta seleccionada no existe.";
+      }
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "ruta_fabricacion",
+        id_registro_afectado: idRuta,
+        accion: nextStatus ? "activar" : "inactivar",
+        detalle: `Ruta ${nextStatus ? "activada" : "inactivada"}: ${route.nombre_ruta}`,
+        tx,
+      });
+
+      return null;
     });
-  });
+  } catch {
+    problem = "No se pudo cambiar el estado de la ruta. Intenta nuevamente.";
+  }
+
+  if (problem) {
+    return statusToggleError(idRuta, problem);
+  }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${idRuta}/stages`);
 
-  redirect(
-    `/dashboard/production/routes?toast=${nextStatus ? "route-activated" : "route-deactivated"}`,
-  );
+  return statusToggleDone(idRuta, nextStatus);
 }

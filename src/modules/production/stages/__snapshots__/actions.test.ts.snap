@@ -2140,10 +2140,10 @@ exports[`createRouteStageAction > ya existe una etapa con ese orden > resultado 
 }
 `;
 
-exports[`toggleRouteStageStatusAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`toggleRouteStageStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -2152,29 +2152,27 @@ exports[`toggleRouteStageStatusAction > SELLER: se redirige sin tocar Prisma > l
 ]
 `;
 
-exports[`toggleRouteStageStatusAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`toggleRouteStageStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar etapas de ruta.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
 
 exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
   },
   {
     "args": null,
@@ -2185,11 +2183,15 @@ exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado
       "data": {
         "estado": false,
       },
+      "select": {
+        "id_ruta": true,
+      },
       "where": {
+        "estado": true,
         "id_etapa_ruta": "ETA00000006",
       },
     },
-    "prisma": "etapa_ruta.update",
+    "prisma": "etapa_ruta.updateManyAndReturn",
   },
   {
     "args": {
@@ -2221,70 +2223,29 @@ exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado
 ]
 `;
 
-exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-deactivated"`;
+exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
 
 exports[`toggleRouteStageStatusAction > la etapa no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
-  },
-]
-`;
-
-exports[`toggleRouteStageStatusAction > la etapa no existe > resultado 1`] = `"error: La etapa seleccionada no existe."`;
-
-exports[`toggleRouteStageStatusAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-]
-`;
-
-exports[`toggleRouteStageStatusAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió la etapa de ruta."`;
-
-exports[`toggleRouteStageStatusAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
   },
   {
     "args": null,
@@ -2295,42 +2256,105 @@ exports[`toggleRouteStageStatusAction > un fallo al escribir revierte y deja el 
       "data": {
         "estado": false,
       },
+      "select": {
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta": true,
+      },
       "where": {
         "id_etapa_ruta": "ETA00000006",
       },
     },
-    "prisma": "etapa_ruta.update",
+    "prisma": "etapa_ruta.findUnique",
   },
   {
-    "args": "conexion perdida",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`toggleRouteStageStatusAction > un fallo al escribir revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`toggleRouteStageStatusAction > la etapa no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
+
+exports[`toggleRouteStageStatusAction > sin estado pedido devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > sin estado pedido devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Estado no válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
+
+exports[`toggleRouteStageStatusAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la etapa de ruta.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
 
 exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
   },
   {
     "args": null,
@@ -2341,11 +2365,15 @@ exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > llamadas 
       "data": {
         "estado": false,
       },
+      "select": {
+        "id_ruta": true,
+      },
       "where": {
+        "estado": true,
         "id_etapa_ruta": "ETA00000006",
       },
     },
-    "prisma": "etapa_ruta.update",
+    "prisma": "etapa_ruta.updateManyAndReturn",
   },
   {
     "args": {
@@ -2377,29 +2405,29 @@ exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > llamadas 
 ]
 `;
 
-exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-deactivated"`;
+exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": false,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
 
 exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
-  },
-  {
-    "args": {
-      "select": {
-        "estado": true,
-        "id_etapa_ruta": true,
-        "id_ruta": true,
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
   },
   {
     "args": null,
@@ -2410,11 +2438,15 @@ exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > llamadas 
       "data": {
         "estado": true,
       },
+      "select": {
+        "id_ruta": true,
+      },
       "where": {
+        "estado": false,
         "id_etapa_ruta": "ETA00000006",
       },
     },
-    "prisma": "etapa_ruta.update",
+    "prisma": "etapa_ruta.updateManyAndReturn",
   },
   {
     "args": {
@@ -2446,7 +2478,79 @@ exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > llamadas 
 ]
 `;
 
-exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-activated"`;
+exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": true,
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
+
+exports[`toggleRouteStageStatusAction > ya tenia ese estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "select": {
+        "id_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.updateManyAndReturn",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > ya tenia ese estado > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa ya estaba inactiva.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "ETA00000006",
+    },
+  },
+}
+`;
 
 exports[`updateRouteStageAction > ADMIN actualiza la etapa > llamadas 1`] = `
 [

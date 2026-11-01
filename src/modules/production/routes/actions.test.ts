@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { Prisma } from "@/generated/prisma/client";
+import type { StatusToggleState } from "@/lib/requested-status";
 import {
   createFabricationRouteAction,
   toggleFabricationRouteStatusAction,
@@ -199,15 +200,27 @@ const updateWith = (fields: FormFields = {}, data: DataOverrides = {}) => ({
   data: { ...currentRoute(0), ...product(), ...noDuplicate, ...data },
 });
 
-const toggleOf = (estado: boolean | null) => ({
-  form: { id_ruta: RUTA },
-  data:
-    estado === null
-      ? noRoute
-      : {
-          "ruta_fabricacion.findUnique": { id_ruta: RUTA, nombre_ruta: "Ruta de lampa", estado },
-        },
+const initialToggleState: StatusToggleState = { status: "idle" };
+const toggle = (formData: FormData) => toggleFabricationRouteStatusAction(initialToggleState, formData);
+
+// El estado pedido, que el boton envia; la fila que devuelve la base lleva su nombre.
+const toggleOf = (estado: boolean) => ({
+  form: { id_ruta: RUTA, estado: String(estado) },
+  data: { "ruta_fabricacion.updateManyAndReturn": [{ nombre_ruta: "Ruta de lampa" }] } satisfies DataOverrides,
 });
+
+const alreadyThere = {
+  form: { id_ruta: RUTA, estado: "false" },
+  data: {
+    "ruta_fabricacion.updateManyAndReturn": [],
+    "ruta_fabricacion.findUnique": { id_ruta: RUTA },
+  } satisfies DataOverrides,
+};
+
+const missing = {
+  form: { id_ruta: RUTA, estado: "false" },
+  data: { "ruta_fabricacion.updateManyAndReturn": [], ...noRoute } satisfies DataOverrides,
+};
 
 // ---------------------------------------------------------------------------
 // Casos
@@ -270,18 +283,15 @@ defineCases("updateFabricationRouteAction", update, [
   },
 ]);
 
-defineCases("toggleFabricationRouteStatusAction", toggleFabricationRouteStatusAction, [
-  { name: "una ruta activa se inactiva", ...toggleOf(true) },
-  { name: "una ruta inactiva se activa", ...toggleOf(false) },
-  { name: "WORKSHOP_MASTER tambien cambia el estado", ...toggleOf(true), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...toggleOf(true), role: "SELLER" },
-  { name: "sin id lanza su mensaje sin tocar Prisma", form: {} },
-  { name: "la ruta no existe", ...toggleOf(null) },
-  {
-    name: "un fallo al escribir revierte y deja el error",
-    form: toggleOf(true).form,
-    data: { ...toggleOf(true).data, "ruta_fabricacion.update": failWith(new Error("conexion perdida")) },
-  },
+defineCases("toggleFabricationRouteStatusAction", toggle, [
+  { name: "una ruta activa se inactiva", ...toggleOf(false) },
+  { name: "una ruta inactiva se activa", ...toggleOf(true) },
+  { name: "WORKSHOP_MASTER tambien cambia el estado", ...toggleOf(false), role: "WORKSHOP_MASTER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...toggleOf(false), role: "SELLER" },
+  { name: "sin id devuelve su error sin tocar Prisma", form: { estado: "false" } },
+  { name: "sin estado pedido devuelve su error sin tocar Prisma", form: { id_ruta: RUTA } },
+  { name: "ya tenia ese estado", ...alreadyThere },
+  { name: "la ruta no existe", ...missing },
 ]);
 
 // Lo que el alta y la edicion escriben, fuera del snapshot.
@@ -468,5 +478,73 @@ describe("el alta y la edicion devuelven el resultado al formulario", () => {
       status: "error",
       error: "No tienes permisos para gestionar rutas de fabricación.",
     });
+  });
+});
+
+// A6: el boton envia el estado que quiere dejar y la accion lo fija con una sola
+// sentencia que compara y escribe, dentro de la transaccion de la bitacora: una
+// lista desactualizada o un doble clic no hacen lo contrario de lo que dice.
+describe("toggleFabricationRouteStatusAction con el estado pedido", () => {
+  type Recorded = { prisma?: string; effect?: string; args?: Record<string, unknown> };
+
+  async function run(actionCase: Omit<ActionCase, "name">) {
+    const { calls, result } = await runCase(toggle, actionCase);
+
+    return { calls: calls as Recorded[], state: (result as { estado: StatusToggleState }).estado };
+  }
+
+  it("fija el estado pedido solo si tiene el contrario y no redirige", async () => {
+    const { calls, state } = await run(toggleOf(false));
+    const write = calls.find((call) => call.prisma === "ruta_fabricacion.updateManyAndReturn");
+
+    expect(write?.args?.where).toEqual({ id_ruta: RUTA, estado: true });
+    expect(write?.args?.data).toEqual({ estado: false });
+    expect(calls.filter((call) => call.prisma === "ruta_fabricacion.update")).toEqual([]);
+    expect(state).toMatchObject({ status: "success", data: { estado: false }, values: { id: RUTA } });
+  });
+
+  it("no lee el estado antes de escribir", async () => {
+    const { calls } = await run(toggleOf(true));
+    const write = calls.findIndex((call) => call.prisma === "ruta_fabricacion.updateManyAndReturn");
+    const read = calls.findIndex((call) => call.prisma === "ruta_fabricacion.findUnique");
+
+    expect(write).toBeGreaterThanOrEqual(0);
+    expect(read).toBe(-1);
+  });
+
+  it("si ya tenia ese estado responde sin bitacora ni revalidacion", async () => {
+    const { calls, state } = await run(alreadyThere);
+
+    expect(state).toMatchObject({ status: "error", error: "La ruta ya estaba inactiva." });
+    expect(calls.filter((call) => call.effect === "registerAuditLog")).toEqual([]);
+    expect(calls.filter((call) => call.effect === "revalidatePath")).toEqual([]);
+  });
+
+  it("si no existe lo dice", async () => {
+    expect((await run(missing)).state).toMatchObject({ status: "error", error: "La ruta seleccionada no existe." });
+  });
+
+  it("un estado que no es true ni false se rechaza sin tocar Prisma", async () => {
+    const { calls, state } = await run({ form: { id_ruta: RUTA, estado: "quizas" } });
+
+    expect(state).toMatchObject({ status: "error", error: "Estado no válido." });
+    expect(calls.filter((call) => call.prisma)).toEqual([]);
+  });
+
+  it("sin permiso responde con un error, sin tocar Prisma", async () => {
+    const { calls, state } = await run({ ...toggleOf(false), role: "SELLER" });
+
+    expect(state).toMatchObject({ status: "error", error: "No tienes permisos para gestionar rutas de fabricación." });
+    expect(calls.filter((call) => call.prisma)).toEqual([]);
+  });
+
+  it("un fallo al escribir responde con el mensaje generico", async () => {
+    const { calls, state } = await run({
+      ...toggleOf(false),
+      data: { "ruta_fabricacion.updateManyAndReturn": failWith(new Error("conexion perdida")) },
+    });
+
+    expect(state).toMatchObject({ status: "error", error: "No se pudo cambiar el estado de la ruta. Intenta nuevamente." });
+    expect(calls.filter((call) => call.effect === "registerAuditLog")).toEqual([]);
   });
 });

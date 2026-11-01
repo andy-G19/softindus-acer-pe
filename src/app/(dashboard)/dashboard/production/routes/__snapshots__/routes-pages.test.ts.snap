@@ -58,7 +58,7 @@ exports[`/dashboard/production/routes > inactivas > llamadas 1`] = `
 
 exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -91,7 +91,7 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
@@ -114,8 +114,6 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
 </div>
 </form>
@@ -151,10 +149,7 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%3Fstatus%3Dinactive">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -174,18 +169,14 @@ exports[`/dashboard/production/routes > inactivas > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%3Fstatus%3Dinactive">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -242,7 +233,7 @@ exports[`/dashboard/production/routes > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -275,7 +266,7 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value=""/>
@@ -298,8 +289,6 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
 </div>
 </form>
@@ -335,10 +324,7 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -358,18 +344,14 @@ exports[`/dashboard/production/routes > sin filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -459,7 +441,7 @@ exports[`/dashboard/production/routes > todos los filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -492,7 +474,7 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de rutas" action="/dashboard/production/routes" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar ruta, código o producto..." name="q" value="corte"/>
@@ -515,8 +497,6 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
 <a data-variant="clear" href="/dashboard/production/routes">Limpiar filtros</a>
 </div>
 </form>
@@ -552,10 +532,7 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%3Fq%3Dcorte%26product%3DPRO00000001%26status%3Dactive">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -575,18 +552,14 @@ exports[`/dashboard/production/routes > todos los filtros > resultado 1`] = `
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%3Fq%3Dcorte%26product%3DPRO00000001%26status%3Dactive">Editar</a>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-2/stages">Gestionar etapas</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1050,7 +1023,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > llamadas 1`] = `
 
 exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1087,7 +1060,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>
@@ -1110,9 +1083,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
-<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -1211,10 +1182,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -1239,18 +1207,14 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1320,7 +1284,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 
 exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1357,7 +1321,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value="soldadura"/>
@@ -1380,9 +1344,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
-<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -1481,10 +1443,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3Fq%3Dsoldadura%26requiresMachine%3Dyes%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -1509,18 +1468,14 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3Fq%3Dsoldadura%26requiresMachine%3Dyes%26status%3Dactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1630,7 +1585,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > llamadas 1
 
 exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1667,7 +1622,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>
@@ -1690,9 +1645,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
-<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -1781,7 +1734,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </tbody>
 </table>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -1845,7 +1798,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > ll
 
 exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1882,7 +1835,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de etapas" action="/dashboard/production/routes/id_ruta-1/stages" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar etapa..." name="q" value=""/>
@@ -1905,9 +1858,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </div>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-</div>
-<div>
-<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/routes/id_ruta-1/stages">Limpiar filtros</a>
 </div>
 </form>
 <section>
@@ -2006,10 +1957,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3FrequiresMachine%3Dno%26status%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
-<button data-variant="link" type="submit">Inactivar</button>
-</form>
+<button data-variant="destructive" type="button">Inactivar</button>
 </div>
 </td>
 </tr>
@@ -2034,18 +1982,14 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 <td>
 <div>
 <a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3FrequiresMachine%3Dno%26status%3Dinactive">Editar</a>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
-<button data-variant="link" type="submit">Activar</button>
-</form>
+<button data-variant="ghost" type="button">Activar</button>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</main>
-<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
+</div>",
   "outcome": "render",
 }
 `;

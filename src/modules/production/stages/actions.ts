@@ -1,14 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma/client";
 import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { getAuthorizedSession, requireRole } from "@/lib/authz";
+import { getAuthorizedSession } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { FieldErrors } from "@/lib/errors";
+import {
+  parseRequestedStatus,
+  statusToggleDone,
+  statusToggleError,
+  type StatusToggleState,
+} from "@/lib/requested-status";
 import { lockMachineRow, lockRouteRow } from "@/lib/row-locks";
 import { syncStageMachineAssignment } from "@/modules/production/stages/stage-machine";
 import { routeStageSchema } from "@/schemas/production/route-stage.schema";
@@ -388,57 +393,90 @@ export async function updateRouteStageAction(
   return stageSaved(values, idEtapaRuta);
 }
 
-export async function toggleRouteStageStatusAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+// Activar e inactivar desde la fila (entrega 10.6a): devuelven el resultado para
+// ConfirmActionButton en lugar de redirigir con ?toast=, y sin permiso responden
+// con un error.
+export async function toggleRouteStageStatusAction(
+  _prevState: StatusToggleState,
+  formData: FormData,
+): Promise<StatusToggleState> {
+  const idEtapaRuta = formData.get("id_etapa_ruta")?.toString() ?? "";
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
 
-  const idEtapaRuta = String(formData.get("id_etapa_ruta") ?? "");
+  if (!session) {
+    return statusToggleError(idEtapaRuta, PERMISSION_ERROR);
+  }
+
+  const nextStatus = parseRequestedStatus(formData.get("estado"));
 
   if (!idEtapaRuta) {
-    throw new Error("No se recibió la etapa de ruta.");
+    return statusToggleError(idEtapaRuta, "No se recibió la etapa de ruta.");
   }
 
-  const stage = await prisma.etapa_ruta.findUnique({
-    where: {
-      id_etapa_ruta: idEtapaRuta,
-    },
-    select: {
-      id_etapa_ruta: true,
-      id_ruta: true,
-      estado: true,
-    },
-  });
-
-  if (!stage) {
-    throw new Error("La etapa seleccionada no existe.");
+  if (nextStatus === null) {
+    return statusToggleError(idEtapaRuta, "Estado no válido.");
   }
 
-  const nextStatus = !stage.estado;
+  let idRuta = "";
+  let problem: string | null;
 
-  await prisma.$transaction(async (tx) => {
-    await tx.etapa_ruta.update({
-      where: {
-        id_etapa_ruta: idEtapaRuta,
-      },
-      data: {
-        estado: nextStatus,
-      },
-    });
+  try {
+    problem = await prisma.$transaction(async (tx) => {
+      // Fija el estado pedido solo si la etapa tiene el contrario: comparar y escribir
+      // en una sola sentencia evita que una lista desactualizada o un doble clic
+      // hagan lo contrario de lo que dice el boton. La misma sentencia devuelve la
+      // ruta que hay que revalidar, sin leer antes.
+      const [stage] = await tx.etapa_ruta.updateManyAndReturn({
+        where: {
+          id_etapa_ruta: idEtapaRuta,
+          estado: !nextStatus,
+        },
+        data: {
+          estado: nextStatus,
+        },
+        select: {
+          id_ruta: true,
+        },
+      });
 
-    await registerAuditLog({
-      userId: session.user.id,
-      entidad_afectada: "etapa_ruta",
-      id_registro_afectado: idEtapaRuta,
-      accion: nextStatus ? "activar" : "inactivar",
-      detalle: `Etapa ${nextStatus ? "activada" : "inactivada"}: ${stage.id_etapa_ruta}`,
-      tx,
+      // Nada cambio: no existe o ya tenia ese estado; no hay nada que registrar.
+      if (!stage) {
+        const exists = await tx.etapa_ruta.findUnique({
+          where: {
+            id_etapa_ruta: idEtapaRuta,
+          },
+          select: {
+            id_etapa_ruta: true,
+          },
+        });
+
+        return exists ? `La etapa ya estaba ${nextStatus ? "activa" : "inactiva"}.` : "La etapa seleccionada no existe.";
+      }
+
+      idRuta = stage.id_ruta;
+
+      await registerAuditLog({
+        userId: session.user.id,
+        entidad_afectada: "etapa_ruta",
+        id_registro_afectado: idEtapaRuta,
+        accion: nextStatus ? "activar" : "inactivar",
+        detalle: `Etapa ${nextStatus ? "activada" : "inactivada"}: ${idEtapaRuta}`,
+        tx,
+      });
+
+      return null;
     });
-  });
+  } catch {
+    problem = "No se pudo cambiar el estado de la etapa. Intenta nuevamente.";
+  }
+
+  if (problem) {
+    return statusToggleError(idEtapaRuta, problem);
+  }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
-  revalidatePath(`/dashboard/production/routes/${stage.id_ruta}/stages`);
+  revalidatePath(`/dashboard/production/routes/${idRuta}/stages`);
 
-  redirect(
-    `/dashboard/production/routes/${stage.id_ruta}/stages?toast=${nextStatus ? "route-stage-activated" : "route-stage-deactivated"}`,
-  );
+  return statusToggleDone(idEtapaRuta, nextStatus);
 }
