@@ -50,7 +50,7 @@ export default async function ReassignWorkOrderProgressPage({
   }));
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Reasignar avance"
         description={`Orden: ${advance.orden_trabajo.id_orden_trabajo} · Producto: ${advance.orden_trabajo.producto.nombre_producto}`}
@@ -190,6 +190,6 @@ export default async function ReassignWorkOrderProgressPage({
           ) : null}
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

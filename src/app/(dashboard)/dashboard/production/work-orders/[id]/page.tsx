@@ -240,7 +240,7 @@ export default async function WorkOrderDetailPage({
         : "Reposición de stock";
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title={`Orden ${workOrder.id_orden_trabajo}`}
         description={`Producto: ${workOrder.producto.nombre_producto} · Cantidad: ${formatDecimal(workOrder.cantidad)} ${workOrder.producto.unidad_medida}`}
@@ -638,6 +638,6 @@ export default async function WorkOrderDetailPage({
           </CardContent>
         </Card>
       ) : null}
-    </main>
+    </div>
   );
 }

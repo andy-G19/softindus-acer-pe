@@ -140,7 +140,7 @@ exports[`/dashboard/production > indicadores > llamadas 1`] = `
 
 exports[`/dashboard/production > indicadores > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -419,7 +419,7 @@ exports[`/dashboard/production > indicadores > resultado 1`] = `
 <span data-variant="secondary">Campañas registradas: 42</span>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -564,7 +564,7 @@ exports[`/dashboard/production > maestro de taller > llamadas 1`] = `
 
 exports[`/dashboard/production > maestro de taller > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -843,7 +843,7 @@ exports[`/dashboard/production > maestro de taller > resultado 1`] = `
 <span data-variant="secondary">Campañas registradas: 42</span>
 </div>
 </section>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;

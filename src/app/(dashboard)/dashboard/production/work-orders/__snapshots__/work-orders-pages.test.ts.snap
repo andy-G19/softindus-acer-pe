@@ -3309,7 +3309,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 
 exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entrega lo pendiente y concilia > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -3648,7 +3648,7 @@ exports[`/dashboard/production/work-orders/[id] > con entregas y pendiente: entr
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -3813,7 +3813,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 
 exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN puede reabrir > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4071,7 +4071,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: ADMIN pue
 </form>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -4154,7 +4154,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 
 exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_MASTER no puede reabrir > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4399,7 +4399,7 @@ exports[`/dashboard/production/work-orders/[id] > materiales cerrados: WORKSHOP_
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -4481,7 +4481,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 
 exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacion > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4674,7 +4674,7 @@ exports[`/dashboard/production/work-orders/[id] > orden anulada: sin conciliacio
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -4756,7 +4756,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 
 exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimiento: desglose desde la receta > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -4951,7 +4951,7 @@ exports[`/dashboard/production/work-orders/[id] > orden historica sin requerimie
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -5033,7 +5033,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 
 exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega materiales y aun no concilia > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5281,7 +5281,7 @@ exports[`/dashboard/production/work-orders/[id] > sin entregas: entrega material
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -5364,7 +5364,7 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
 
 exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5523,7 +5523,7 @@ exports[`/dashboard/production/work-orders/[id] > sin receta ni requerimiento > 
 </div>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -5605,7 +5605,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 
 exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de entrega > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -5940,7 +5940,7 @@ exports[`/dashboard/production/work-orders/[id] > todo entregado: sin boton de e
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6010,7 +6010,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 
 exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados: se muestran por secuencia > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6285,7 +6285,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > avances desordenados:
 </div>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6355,7 +6355,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > llamada
 
 exports[`/dashboard/production/work-orders/[id]/progress > con avances > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -6630,7 +6630,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > con avances > resulta
 </div>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -6769,7 +6769,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 
 exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edicion deshabilitada > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7042,7 +7042,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > orden finalizada: edi
 </div>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7112,7 +7112,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 
 exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activas > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7236,7 +7236,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > ruta sin etapas activ
 <button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7306,7 +7306,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 
 exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta y etapas: puede generar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7427,7 +7427,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances con ruta 
 <button data-variant="default" type="submit">Generar avances por etapa</button>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7497,7 +7497,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 
 exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin ruta > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7621,7 +7621,7 @@ exports[`/dashboard/production/work-orders/[id]/progress > sin avances y sin rut
 <button data-variant="default" type="submit" disabled="">Generar avances por etapa</button>
 </form>
 </section>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7751,7 +7751,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 
 exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > avance sin operario: no excluye a nadie > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -7848,7 +7848,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -7927,7 +7927,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 
 exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > orden finalizada: no permite reasignar > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8038,7 +8038,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -8117,7 +8117,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 
 exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > reasignar: excluye al operario actual > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8225,7 +8225,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -8304,7 +8304,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 
 exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > sin operarios disponibles > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8415,7 +8415,7 @@ exports[`/dashboard/production/work-orders/[id]/progress/[advanceId]/reassign > 
 </div>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -8561,7 +8561,7 @@ exports[`/dashboard/production/work-orders/new > con opciones > llamadas 1`] = `
 
 exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8679,7 +8679,7 @@ exports[`/dashboard/production/work-orders/new > con opciones > resultado 1`] = 
 <button data-variant="default" type="submit">Crear orden</button>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -8825,7 +8825,7 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > l
 
 exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -8946,7 +8946,7 @@ exports[`/dashboard/production/work-orders/new > sin rutas: no permite crear > r
 <button data-variant="default" type="submit" disabled="">Crear orden</button>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }

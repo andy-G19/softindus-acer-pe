@@ -69,7 +69,7 @@ export default async function NewWorkOrderPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
         title="Nueva orden de trabajo"
         description="Registra una orden de producción por pedido, campaña o reposición de stock."
@@ -104,6 +104,6 @@ export default async function NewWorkOrderPage() {
         canCreateOrder={canCreateOrder}
         initialStartDate={getTodayInputValue()}
       />
-    </main>
+    </div>
   );
 }
