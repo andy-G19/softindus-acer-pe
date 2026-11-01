@@ -1,14 +1,15 @@
 import { Activity, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { requireRole } from "@/lib/authz";
+import { DateRangeFields } from "@/components/forms/date-range-fields";
+import { Field } from "@/components/forms/field";
+import { FilterBar } from "@/components/forms/filter-bar";
 import { SearchableSelectFilter } from "@/components/forms/searchable-select-filter";
 import { PageHeader } from "@/components/navigation/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
 import { KpiCard } from "@/components/ui/kpi-card";
-import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   Table,
@@ -219,7 +220,7 @@ export default async function ProductionBottlenecksPage({
   }));
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Cuellos de botella en producción"
         description="Detecta avances en proceso cercanos a vencer, atrasados o concentrados en una misma etapa."
@@ -231,9 +232,12 @@ export default async function ProductionBottlenecksPage({
         ])}
       />
 
-      <form className="grid gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-sm md:grid-cols-4">
+      <FilterBar
+        action={navigationHrefs.bottlenecks}
+        label="Filtros de cuellos de botella"
+        clearHref={navigationHrefs.bottlenecks}
+      >
         <SearchableSelectFilter
-          key={product}
           name="product"
           label="Producto"
           placeholder="Todos los productos"
@@ -242,66 +246,45 @@ export default async function ProductionBottlenecksPage({
           emptyMessage="No se encontraron productos."
         />
 
-        <div className="space-y-2">
-          <Label htmlFor="route">Ruta</Label>
-          <NativeSelect id="route" name="route" defaultValue={route}>
-            <option value="">Todas las rutas</option>
-            {routes.map((item) => (
-              <option key={item.id_ruta} value={item.id_ruta}>
-                {item.nombre_ruta}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="route" label="Ruta">
+          {(control) => (
+            <NativeSelect {...control} name="route" defaultValue={route}>
+              <option value="">Todas las rutas</option>
+              {routes.map((item) => (
+                <option key={item.id_ruta} value={item.id_ruta}>
+                  {item.nombre_ruta}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="stage">Etapa</Label>
-          <NativeSelect id="stage" name="stage" defaultValue={stage}>
-            <option value="">Todas las etapas</option>
-            {stages.map((item) => (
-              <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
-                {item.nombre_etapa}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <Field id="stage" label="Etapa">
+          {(control) => (
+            <NativeSelect {...control} name="stage" defaultValue={stage}>
+              <option value="">Todas las etapas</option>
+              {stages.map((item) => (
+                <option key={item.id_etapa_ruta} value={item.id_etapa_ruta}>
+                  {item.nombre_etapa}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="orderStatus">Estado de orden</Label>
-          <NativeSelect
-            id="orderStatus"
-            name="orderStatus"
-            defaultValue={orderStatus}
-          >
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="en_proceso">En proceso</option>
-            <option value="pausada">Pausada</option>
-          </NativeSelect>
-        </div>
+        <Field id="orderStatus" label="Estado de orden">
+          {(control) => (
+            <NativeSelect {...control} name="orderStatus" defaultValue={orderStatus}>
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="pausada">Pausada</option>
+            </NativeSelect>
+          )}
+        </Field>
 
-        <div className="grid grid-cols-2 gap-2 md:col-span-2">
-          <div className="space-y-2">
-            <Label htmlFor="from">Desde</Label>
-            <Input id="from" name="from" type="date" defaultValue={from} />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="to">Hasta</Label>
-            <Input id="to" name="to" type="date" defaultValue={to} />
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-end gap-2 md:col-span-2">
-          <Button type="submit">Filtrar</Button>
-
-          <Button variant="outline" asChild>
-            <Link href="/dashboard/production/bottlenecks">
-              Limpiar filtros
-            </Link>
-          </Button>
-        </div>
-      </form>
+        <DateRangeFields id="fecha" defaultFrom={from} defaultTo={to} />
+      </FilterBar>
 
       <section className="grid gap-4 md:grid-cols-4">
         <KpiCard title="Avances en proceso" value={rows.length.toString()} description="Etapas activas monitoreadas." tone="info" icon={Activity} />
@@ -411,6 +394,6 @@ export default async function ProductionBottlenecksPage({
           ) : null}
         </TableBody>
       </Table>
-    </main>
+    </div>
   );
 }

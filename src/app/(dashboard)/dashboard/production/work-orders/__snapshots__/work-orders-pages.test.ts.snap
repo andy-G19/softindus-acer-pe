@@ -362,7 +362,7 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 
 exports[`/dashboard/production/work-orders > fecha invalida y parametros repetidos > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -453,7 +453,7 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value="lote"/>
@@ -511,19 +511,20 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-13-45"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -635,7 +636,7 @@ exports[`/dashboard/production/work-orders > fecha invalida y parametros repetid
 <a data-variant="outline" href="/dashboard/production/work-orders?from=2026-13-45&amp;q=+lote+&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -798,7 +799,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 
 exports[`/dashboard/production/work-orders > origenes y estados: anular y finalizar segun el estado > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -889,7 +890,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -947,19 +948,20 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -1130,7 +1132,7 @@ exports[`/dashboard/production/work-orders > origenes y estados: anular y finali
 <a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1293,7 +1295,7 @@ exports[`/dashboard/production/work-orders > sin filtros > llamadas 1`] = `
 
 exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1384,7 +1386,7 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -1442,19 +1444,20 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -1566,7 +1569,7 @@ exports[`/dashboard/production/work-orders > sin filtros > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/production/work-orders?page=2">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -1729,7 +1732,7 @@ exports[`/dashboard/production/work-orders > sin resultados > llamadas 1`] = `
 
 exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -1820,7 +1823,7 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -1878,19 +1881,20 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value=""/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value=""/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -1929,7 +1933,7 @@ exports[`/dashboard/production/work-orders > sin resultados > resultado 1`] = `
 <button data-variant="outline" disabled="">Siguiente</button>
 </div>
 </div>
-</main>",
+</div>",
   "outcome": "render",
 }
 `;
@@ -2131,7 +2135,7 @@ exports[`/dashboard/production/work-orders > solo hasta > llamadas 1`] = `
 
 exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2222,7 +2226,7 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value=""/>
@@ -2280,19 +2284,20 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value=""/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value=""/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -2404,7 +2409,7 @@ exports[`/dashboard/production/work-orders > solo hasta > resultado 1`] = `
 <a data-variant="outline" href="/dashboard/production/work-orders?to=2026-07-31&amp;page=2">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2947,7 +2952,7 @@ exports[`/dashboard/production/work-orders > todos los filtros > llamadas 1`] = 
 
 exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -3038,7 +3043,7 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 </div>
 </div>
 </section>
-<form>
+<form role="search" aria-label="Filtros de órdenes de trabajo" action="/dashboard/production/work-orders" method="GET">
 <div>
 <label for="q">Buscar</label>
 <input id="q" placeholder="Buscar orden, cliente o producto..." name="q" value="puerta"/>
@@ -3096,19 +3101,20 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <option value="baja">Baja</option>
 </select>
 </div>
+<fieldset>
+<legend>Rango de fechas</legend>
 <div>
-<div>
-<label for="from">Desde</label>
-<input type="date" id="from" name="from" value="2026-07-01"/>
+<label for="fecha-desde">Desde</label>
+<input type="date" id="fecha-desde" name="from" value="2026-07-01"/>
 </div>
 <div>
-<label for="to">Hasta</label>
-<input type="date" id="to" name="to" value="2026-07-31"/>
+<label for="fecha-hasta">Hasta</label>
+<input type="date" id="fecha-hasta" min="2026-07-01" name="to" value="2026-07-31"/>
 </div>
-</div>
+</fieldset>
 <div>
 <button data-variant="default" type="submit">Filtrar</button>
-<a data-variant="outline" href="/dashboard/production/work-orders">Limpiar filtros</a>
+<a data-variant="clear" href="/dashboard/production/work-orders">Limpiar filtros</a>
 </div>
 </form>
 <div>
@@ -3220,7 +3226,7 @@ exports[`/dashboard/production/work-orders > todos los filtros > resultado 1`] =
 <a data-variant="outline" href="/dashboard/production/work-orders?q=puerta&amp;product=PRO00000001&amp;client=CLI00000001&amp;campaign=CAM00000001&amp;type=pedido&amp;status=en_proceso&amp;priority=alta&amp;from=2026-07-01&amp;to=2026-07-31&amp;page=3">Siguiente</a>
 </div>
 </div>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
