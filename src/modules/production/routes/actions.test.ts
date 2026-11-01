@@ -5,6 +5,7 @@ import {
   createFabricationRouteAction,
   toggleFabricationRouteStatusAction,
   updateFabricationRouteAction,
+  type FabricationRouteFormState,
 } from "@/modules/production/routes/actions";
 import {
   characterizeHandler,
@@ -21,13 +22,22 @@ import {
 // cache, la bitacora y los correlativos simulados, y fija en un snapshot, en
 // orden: la autorizacion con sus roles, las lecturas, la transaccion con sus
 // escrituras y su final, los correlativos, la bitacora, las revalidaciones y el
-// resultado: la redireccion o el error que lanza, con su mensaje exacto.
+// resultado, con su mensaje exacto.
+//
+// Desde el panel lateral (A4), el alta y la edicion autorizan con
+// getAuthorizedSession y devuelven el resultado (FormActionState) en lugar de
+// lanzar y redirigir: sin permiso responden con un error dentro del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -138,6 +148,10 @@ const RUTA = "RUT00000003";
 const PRODUCTO = "PRO00000004";
 const OTRO_PRODUCTO = "PRO00000005";
 
+const initialState: FabricationRouteFormState = { status: "idle" };
+const create = (formData: FormData) => createFabricationRouteAction(initialState, formData);
+const update = (formData: FormData) => updateFabricationRouteAction(initialState, formData);
+
 const failWith = (error: Error) => () => {
   throw error;
 };
@@ -199,15 +213,15 @@ const toggleOf = (estado: boolean | null) => ({
 // Casos
 // ---------------------------------------------------------------------------
 
-defineCases("createFabricationRouteAction", createFabricationRouteAction, [
+defineCases("createFabricationRouteAction", create, [
   { name: "ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion", ...createWith() },
   { name: "WORKSHOP_MASTER tambien crea rutas", ...createWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...createWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith(), role: "SELLER" },
   { name: "la descripcion vacia se guarda como null", ...createWith({ descripcion: "" }) },
   { name: "la descripcion ausente cuenta como vacia", ...createWith({ descripcion: null }) },
-  { name: "datos invalidos lanzan el primer mensaje sin tocar Prisma", ...createWith({ nombre_ruta: "ab" }) },
-  { name: "sin producto lanza su mensaje", ...createWith({ id_producto: "" }) },
-  { name: "un POST sin campos lanza sin tocar Prisma", form: {} },
+  { name: "datos invalidos devuelven los errores por campo sin tocar Prisma", ...createWith({ nombre_ruta: "ab" }) },
+  { name: "sin producto devuelve su error", ...createWith({ id_producto: "" }) },
+  { name: "un POST sin campos devuelve sus errores sin tocar Prisma", form: {} },
   { name: "el producto no existe o esta inactivo", ...createWith({}, product(false)) },
   { name: "ya existe una ruta con ese nombre para el producto", ...createWith({}, duplicate) },
   {
@@ -215,18 +229,18 @@ defineCases("createFabricationRouteAction", createFabricationRouteAction, [
     ...createWith({}, { "ruta_fabricacion.create": failWith(uniqueViolation()) }),
   },
   {
-    name: "un fallo al crear revierte y deja el error",
+    name: "un fallo al crear revierte con el mensaje generico",
     ...createWith({}, { "ruta_fabricacion.create": failWith(new Error("conexion perdida")) }),
   },
 ]);
 
-defineCases("updateFabricationRouteAction", updateFabricationRouteAction, [
+defineCases("updateFabricationRouteAction", update, [
   { name: "ADMIN actualiza la ruta", ...updateWith() },
   { name: "WORKSHOP_MASTER tambien actualiza rutas", ...updateWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...updateWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...updateWith(), role: "SELLER" },
   { name: "la descripcion vacia se guarda como null", ...updateWith({ descripcion: "" }) },
-  { name: "sin id lanza su mensaje sin tocar Prisma", ...updateWith({ id_ruta: "" }) },
-  { name: "datos invalidos lanzan el primer mensaje sin tocar Prisma", ...updateWith({ nombre_ruta: "ab" }) },
+  { name: "sin id devuelve su error sin tocar Prisma", ...updateWith({ id_ruta: "" }) },
+  { name: "datos invalidos devuelven los errores por campo sin tocar Prisma", ...updateWith({ nombre_ruta: "ab" }) },
   { name: "la ruta no existe", ...updateWith({}, noRoute) },
   {
     name: "sin ordenes se puede cambiar el producto",
@@ -286,7 +300,7 @@ describe("las acciones de rutas escriben lo que reciben", () => {
 
   it("el alta guarda la ruta activa con el correlativo", async () => {
     expect(
-      (await written(createFabricationRouteAction, createWith(), "ruta_fabricacion.create"))?.data,
+      (await written(create, createWith(), "ruta_fabricacion.create"))?.data,
     ).toEqual({
       id_ruta: "RUT00000012",
       id_producto: PRODUCTO,
@@ -297,7 +311,7 @@ describe("las acciones de rutas escriben lo que reciben", () => {
   });
 
   it("la edicion no toca el estado", async () => {
-    const args = await written(updateFabricationRouteAction, updateWith(), "ruta_fabricacion.update");
+    const args = await written(update, updateWith(), "ruta_fabricacion.update");
 
     expect(args?.where).toEqual({ id_ruta: RUTA });
     expect(args?.data).not.toHaveProperty("estado");
@@ -308,13 +322,15 @@ describe("las acciones de rutas escriben lo que reciben", () => {
 // leer lo que decide, y una carrera por el nombre, que el alta no puede evitar
 // porque todavia no hay fila que bloquear, responde como el duplicado.
 describe("las acciones de rutas deciden con la fila bloqueada", () => {
-  const DUPLICATE = "error: Ya existe una ruta con ese nombre para este producto.";
+  const DUPLICATE = "Ya existe una ruta con ese nombre para este producto.";
+
+  const stateOf = (result: unknown) => (result as { estado: FabricationRouteFormState }).estado;
 
   it.each([
     ["acepta", updateWith()],
     ["rechaza por sus ordenes", updateWith({ id_producto: OTRO_PRODUCTO }, currentRoute(2))],
   ])("la edicion bloquea la ruta antes de leerla (%s)", async (_name, actionCase) => {
-    const { calls } = await runCase(updateFabricationRouteAction, actionCase);
+    const { calls } = await runCase(update, actionCase);
 
     expectRowLockedBefore(calls, {
       table: "ruta_fabricacion",
@@ -325,29 +341,41 @@ describe("las acciones de rutas deciden con la fila bloqueada", () => {
 
   it("una carrera por el nombre al crear responde como el duplicado", async () => {
     const { result } = await runCase(
-      createFabricationRouteAction,
+      create,
       createWith({}, { "ruta_fabricacion.create": failWith(uniqueViolation()) }),
     );
 
-    expect(result).toBe(DUPLICATE);
+    expect(stateOf(result)).toMatchObject({
+      status: "error",
+      error: DUPLICATE,
+      fieldErrors: { nombre_ruta: [DUPLICATE] },
+    });
   });
 
   it("una carrera por el nombre al editar responde como el duplicado", async () => {
     const { result } = await runCase(
-      updateFabricationRouteAction,
+      update,
       updateWith({}, { "ruta_fabricacion.update": failWith(uniqueViolation()) }),
     );
 
-    expect(result).toBe(DUPLICATE);
+    expect(stateOf(result)).toMatchObject({
+      status: "error",
+      error: DUPLICATE,
+      fieldErrors: { nombre_ruta: [DUPLICATE] },
+    });
   });
 
-  it("otro fallo al crear conserva su error", async () => {
+  it("otro fallo no se presenta como duplicado", async () => {
     const { result } = await runCase(
-      createFabricationRouteAction,
+      create,
       createWith({}, { "ruta_fabricacion.create": failWith(new Error("conexion perdida")) }),
     );
 
-    expect(result).toBe("error: conexion perdida");
+    expect(stateOf(result)).toMatchObject({
+      status: "error",
+      error: "No se pudo guardar la ruta. Intenta nuevamente.",
+    });
+    expect(stateOf(result)).not.toHaveProperty("fieldErrors.nombre_ruta");
   });
 });
 
@@ -357,30 +385,88 @@ describe("la edicion de una ruta con el producto inactivo", () => {
   type Recorded = { prisma?: string };
 
   it("no vuelve a comprobar el producto que ya tenia", async () => {
-    const { calls, result } = await runCase(updateFabricationRouteAction, updateWith({}, product(false)));
+    const { calls, result } = await runCase(update, updateWith({}, product(false)));
 
-    expect(result).toBe("redirect:/dashboard/production/routes?toast=route-updated");
+    expect(result).toMatchObject({ estado: { status: "success", data: { id_ruta: RUTA } } });
     expect((calls as Recorded[]).filter((call) => call.prisma === "producto.findFirst")).toEqual([]);
   });
 
   it("rechaza pasar a otro producto inactivo", async () => {
-    const { result } = await runCase(
-      updateFabricationRouteAction,
-      updateWith({ id_producto: OTRO_PRODUCTO }, product(false)),
-    );
+    const { result } = await runCase(update, updateWith({ id_producto: OTRO_PRODUCTO }, product(false)));
 
-    expect(result).toBe("error: El producto seleccionado no existe o esta inactivo.");
+    expect(result).toMatchObject({
+      estado: {
+        status: "error",
+        error: "El producto seleccionado no existe o está inactivo.",
+        fieldErrors: { id_producto: ["El producto seleccionado no existe o está inactivo."] },
+      },
+    });
   });
 });
 
 // A3 (hallazgo 10): un POST sin campos no responde con el mensaje de Zod en ingles.
 describe("los mensajes de rutas estan en espanol", () => {
   it.each([
-    ["alta", createFabricationRouteAction, { id_ruta: null }],
-    ["edicion", updateFabricationRouteAction, { id_ruta: RUTA }],
+    ["alta", create, { id_ruta: null }],
+    ["edicion", update, { id_ruta: RUTA }],
   ])("%s sin campos", async (_name, run, fields) => {
     const { result } = await runCase(run, { form: fields });
 
-    expect(result).toBe("error: Seleccione un producto.");
+    expect(result).toMatchObject({
+      estado: {
+        status: "error",
+        error: "Revisa los datos de la ruta.",
+        fieldErrors: {
+          id_producto: ["Seleccione un producto."],
+          nombre_ruta: ["El nombre de la ruta debe tener al menos 3 caracteres."],
+        },
+      },
+    });
+  });
+});
+
+// A4: cada mensaje que antes se perdia en la pagina de error llega al formulario,
+// junto al campo que lo causa, con lo escrito y sin redirigir.
+describe("el alta y la edicion devuelven el resultado al formulario", () => {
+  const stateOf = async (run: (formData: FormData) => Promise<unknown>, actionCase: Omit<ActionCase, "name">) =>
+    ((await runCase(run, actionCase)).result as { estado: FabricationRouteFormState }).estado;
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await stateOf(create, createWith())).toMatchObject({ status: "success", data: { id_ruta: "RUT00000012" } });
+    expect(await stateOf(update, updateWith())).toMatchObject({ status: "success", data: { id_ruta: RUTA } });
+  });
+
+  it.each([
+    ["el producto del alta", create, createWith({}, product(false)), "id_producto", "El producto seleccionado no existe o está inactivo."],
+    ["el nombre del alta", create, createWith({}, duplicate), "nombre_ruta", "Ya existe una ruta con ese nombre para este producto."],
+    ["el nombre de la edicion", update, updateWith({}, duplicate), "nombre_ruta", "Ya existe una ruta con ese nombre para este producto."],
+    [
+      "el producto con ordenes",
+      update,
+      updateWith({ id_producto: OTRO_PRODUCTO }, currentRoute(2)),
+      "id_producto",
+      "No se puede cambiar el producto de una ruta con órdenes asociadas.",
+    ],
+  ])("%s deja el error junto al campo y conserva lo escrito", async (_name, run, actionCase, field, message) => {
+    expect(await stateOf(run, actionCase)).toMatchObject({
+      status: "error",
+      error: message,
+      fieldErrors: { [field]: [message] },
+      values: { nombre_ruta: form.nombre_ruta },
+    });
+  });
+
+  it.each([
+    ["la ruta no existe", updateWith({}, noRoute), "La ruta seleccionada no existe."],
+    ["sin id", updateWith({ id_ruta: "" }), "No se recibió la ruta de fabricación."],
+  ])("%s responde con su mensaje", async (_name, actionCase, message) => {
+    expect(await stateOf(update, actionCase)).toMatchObject({ status: "error", error: message });
+  });
+
+  it("sin permiso responde con un error dentro del formulario", async () => {
+    expect(await stateOf(create, { ...createWith(), role: "SELLER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para gestionar rutas de fabricación.",
+    });
   });
 });

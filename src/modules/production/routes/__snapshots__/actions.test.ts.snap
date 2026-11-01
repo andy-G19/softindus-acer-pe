@@ -3,7 +3,7 @@
 exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -80,12 +80,27 @@ exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correla
 ]
 `;
 
-exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-created"`;
+exports[`createFabricationRouteAction > ADMIN crea la ruta activa con su correlativo y la bitacora en la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`createFabricationRouteAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`createFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -94,12 +109,26 @@ exports[`createFabricationRouteAction > SELLER: se redirige sin tocar Prisma > l
 ]
 `;
 
-exports[`createFabricationRouteAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`createFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -176,12 +205,27 @@ exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > lla
 ]
 `;
 
-exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-created"`;
+exports[`createFabricationRouteAction > WORKSHOP_MASTER tambien crea rutas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`createFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`createFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -190,12 +234,30 @@ exports[`createFabricationRouteAction > datos invalidos lanzan el primer mensaje
 ]
 `;
 
-exports[`createFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > resultado 1`] = `"error: El nombre de la ruta debe tener al menos 3 caracteres."`;
+exports[`createFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "ab",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > el producto no existe o esta inactivo > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -217,12 +279,30 @@ exports[`createFabricationRouteAction > el producto no existe o esta inactivo > 
 ]
 `;
 
-exports[`createFabricationRouteAction > el producto no existe o esta inactivo > resultado 1`] = `"error: El producto seleccionado no existe o está inactivo."`;
+exports[`createFabricationRouteAction > el producto no existe o esta inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -299,12 +379,27 @@ exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia
 ]
 `;
 
-exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-created"`;
+exports[`createFabricationRouteAction > la descripcion ausente cuenta como vacia > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > la descripcion vacia se guarda como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -381,12 +476,27 @@ exports[`createFabricationRouteAction > la descripcion vacia se guarda como null
 ]
 `;
 
-exports[`createFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-created"`;
+exports[`createFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`createFabricationRouteAction > sin producto lanza su mensaje > llamadas 1`] = `
+exports[`createFabricationRouteAction > sin producto devuelve su error > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -395,12 +505,30 @@ exports[`createFabricationRouteAction > sin producto lanza su mensaje > llamadas
 ]
 `;
 
-exports[`createFabricationRouteAction > sin producto lanza su mensaje > resultado 1`] = `"error: Seleccione un producto."`;
+exports[`createFabricationRouteAction > sin producto devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prisma > llamadas 1`] = `
+exports[`createFabricationRouteAction > un POST sin campos devuelve sus errores sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -409,12 +537,33 @@ exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prism
 ]
 `;
 
-exports[`createFabricationRouteAction > un POST sin campos lanza sin tocar Prisma > resultado 1`] = `"error: Seleccione un producto."`;
+exports[`createFabricationRouteAction > un POST sin campos devuelve sus errores sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "id_producto": [
+        "Seleccione un producto.",
+      ],
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "id_producto": "",
+      "nombre_ruta": "",
+    },
+  },
+}
+`;
 
-exports[`createFabricationRouteAction > un fallo al crear revierte y deja el error > llamadas 1`] = `
+exports[`createFabricationRouteAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -472,12 +621,26 @@ exports[`createFabricationRouteAction > un fallo al crear revierte y deja el err
 ]
 `;
 
-exports[`createFabricationRouteAction > un fallo al crear revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+exports[`createFabricationRouteAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo guardar la ruta. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -535,12 +698,30 @@ exports[`createFabricationRouteAction > una carrera por el nombre (P2002) respon
 ]
 `;
 
-exports[`createFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `"error: Ya existe una ruta con ese nombre para este producto."`;
+exports[`createFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para el producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -571,7 +752,25 @@ exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para e
 ]
 `;
 
-exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para el producto > resultado 1`] = `"error: Ya existe una ruta con ese nombre para este producto."`;
+exports[`createFabricationRouteAction > ya existe una ruta con ese nombre para el producto > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`toggleFabricationRouteStatusAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
 [
@@ -884,7 +1083,7 @@ exports[`toggleFabricationRouteStatusAction > una ruta inactiva se activa > resu
 exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -973,12 +1172,27 @@ exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > llamadas 1`] =
 ]
 `;
 
-exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > ADMIN actualiza la ruta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`updateFabricationRouteAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+exports[`updateFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -987,12 +1201,26 @@ exports[`updateFabricationRouteAction > SELLER: se redirige sin tocar Prisma > l
 ]
 `;
 
-exports[`updateFabricationRouteAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+exports[`updateFabricationRouteAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para gestionar rutas de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1081,12 +1309,27 @@ exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas 
 ]
 `;
 
-exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > WORKSHOP_MASTER tambien actualiza rutas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1121,18 +1364,36 @@ exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el produ
     "prisma": "ruta_fabricacion.findUnique",
   },
   {
-    "args": "No se puede cambiar el producto de una ruta con ordenes asociadas.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el producto > resultado 1`] = `"error: No se puede cambiar el producto de una ruta con ordenes asociadas."`;
+exports[`updateFabricationRouteAction > con ordenes no se puede cambiar el producto > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede cambiar el producto de una ruta con órdenes asociadas.",
+    "fieldErrors": {
+      "id_producto": [
+        "No se puede cambiar el producto de una ruta con órdenes asociadas.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1221,12 +1482,27 @@ exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > l
 ]
 `;
 
-exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > con ordenes se puede editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1315,12 +1591,27 @@ exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se pu
 ]
 `;
 
-exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > con ordenes y el producto inactivo se puede editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`updateFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1329,12 +1620,30 @@ exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje
 ]
 `;
 
-exports[`updateFabricationRouteAction > datos invalidos lanzan el primer mensaje sin tocar Prisma > resultado 1`] = `"error: El nombre de la ruta debe tener al menos 3 caracteres."`;
+exports[`updateFabricationRouteAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la ruta.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "El nombre de la ruta debe tener al menos 3 caracteres.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "ab",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1423,12 +1732,27 @@ exports[`updateFabricationRouteAction > el producto actual inactivo se conserva 
 ]
 `;
 
-exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > el producto actual inactivo se conserva al editar lo demas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1517,12 +1841,27 @@ exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null
 ]
 `;
 
-exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > la descripcion vacia se guarda como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > la ruta no existe > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1557,18 +1896,32 @@ exports[`updateFabricationRouteAction > la ruta no existe > llamadas 1`] = `
     "prisma": "ruta_fabricacion.findUnique",
   },
   {
-    "args": "La ruta seleccionada no existe.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFabricationRouteAction > la ruta no existe > resultado 1`] = `"error: La ruta seleccionada no existe."`;
+exports[`updateFabricationRouteAction > la ruta no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta seleccionada no existe.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1615,18 +1968,36 @@ exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre
     "prisma": "ruta_fabricacion.findFirst",
   },
   {
-    "args": "Ya existe una ruta con ese nombre para este producto.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre > resultado 1`] = `"error: Ya existe una ruta con ese nombre para este producto."`;
+exports[`updateFabricationRouteAction > otra ruta del producto ya usa ese nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
-exports[`updateFabricationRouteAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+exports[`updateFabricationRouteAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1635,12 +2006,26 @@ exports[`updateFabricationRouteAction > sin id lanza su mensaje sin tocar Prisma
 ]
 `;
 
-exports[`updateFabricationRouteAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibio la ruta de fabricacion."`;
+exports[`updateFabricationRouteAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la ruta de fabricación.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1741,12 +2126,27 @@ exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto
 ]
 `;
 
-exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > resultado 1`] = `"redirect:/dashboard/production/routes?toast=route-updated"`;
+exports[`updateFabricationRouteAction > sin ordenes se puede cambiar el producto > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_ruta": "RUT00000003",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1793,18 +2193,36 @@ exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta i
     "prisma": "producto.findFirst",
   },
   {
-    "args": "El producto seleccionado no existe o esta inactivo.",
-    "effect": "prisma.$transaction:rollback",
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
 
-exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > resultado 1`] = `"error: El producto seleccionado no existe o esta inactivo."`;
+exports[`updateFabricationRouteAction > un producto nuevo que no existe o esta inactivo se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "El producto seleccionado no existe o está inactivo.",
+    "fieldErrors": {
+      "id_producto": [
+        "El producto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000005",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;
 
 exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > llamadas 1`] = `
 [
   {
-    "authz": "requireRole",
+    "authz": "getAuthorizedSession",
     "roles": [
       "ADMIN",
       "WORKSHOP_MASTER",
@@ -1870,4 +2288,22 @@ exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) respon
 ]
 `;
 
-exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `"error: Ya existe una ruta con ese nombre para este producto."`;
+exports[`updateFabricationRouteAction > una carrera por el nombre (P2002) responde como el duplicado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una ruta con ese nombre para este producto.",
+    "fieldErrors": {
+      "nombre_ruta": [
+        "Ya existe una ruta con ese nombre para este producto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "Corte, formado y pintura",
+      "id_producto": "PRO00000004",
+      "nombre_ruta": "Ruta estandar para lampa",
+    },
+  },
+}
+`;

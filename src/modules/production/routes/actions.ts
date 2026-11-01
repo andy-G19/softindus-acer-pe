@@ -3,27 +3,77 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
+import { newOperationId, type FormActionState } from "@/lib/action-result";
 import { registerAuditLog } from "@/lib/audit";
-import { requireRole } from "@/lib/authz";
+import { getAuthorizedSession, requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
+import type { FieldErrors } from "@/lib/errors";
 import { lockRouteRow } from "@/lib/row-locks";
 import { fabricationRouteSchema } from "@/schemas/production/route.schema";
 
+/** Lo que el formulario de ruta envio, tal cual, para volver a mostrarlo. */
+export type FabricationRouteFormValues = {
+  id_producto: string;
+  nombre_ruta: string;
+  descripcion: string;
+};
+
+// Entrega 10.6a: el alta y la edicion se usan desde el panel lateral y devuelven
+// el resultado; sin permiso responden con un error, no redirigen.
+export type FabricationRouteFormState = FormActionState<FabricationRouteFormValues, { id_ruta: string }>;
+
+type RouteProblem = { error: string; fieldErrors?: FieldErrors };
+
 const DUPLICATED_ROUTE = "Ya existe una ruta con ese nombre para este producto.";
+const INACTIVE_PRODUCT = "El producto seleccionado no existe o está inactivo.";
+const PERMISSION_ERROR = "No tienes permisos para gestionar rutas de fabricación.";
+
+const duplicatedRoute: RouteProblem = { error: DUPLICATED_ROUTE, fieldErrors: { nombre_ruta: [DUPLICATED_ROUTE] } };
+const inactiveProduct: RouteProblem = { error: INACTIVE_PRODUCT, fieldErrors: { id_producto: [INACTIVE_PRODUCT] } };
+
+function getRouteFormValues(formData: FormData): FabricationRouteFormValues {
+  const text = (name: keyof FabricationRouteFormValues) => formData.get(name)?.toString() ?? "";
+
+  return {
+    id_producto: text("id_producto"),
+    nombre_ruta: text("nombre_ruta"),
+    descripcion: text("descripcion"),
+  };
+}
+
+function routeError(
+  values: FabricationRouteFormValues,
+  error: string,
+  fieldErrors?: FieldErrors,
+): FabricationRouteFormState {
+  return { status: "error", error, fieldErrors, values, operationId: newOperationId() };
+}
+
+function routeSaved(values: FabricationRouteFormValues, idRuta: string): FabricationRouteFormState {
+  return { status: "success", data: { id_ruta: idRuta }, values, operationId: newOperationId() };
+}
 
 // Una carrera por el nombre llega como violacion de uq_ruta_producto_nombre: al
 // crear no hay fila que bloquear, y al editar el otro puede estar creando.
-function toRouteSaveError(error: unknown) {
+function routeSaveProblem(error: unknown): RouteProblem {
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-    return new Error(DUPLICATED_ROUTE);
+    return duplicatedRoute;
   }
 
-  return error;
+  return { error: "No se pudo guardar la ruta. Intenta nuevamente." };
 }
 
-export async function createFabricationRouteAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function createFabricationRouteAction(
+  _prevState: FabricationRouteFormState,
+  formData: FormData,
+): Promise<FabricationRouteFormState> {
+  const values = getRouteFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return routeError(values, PERMISSION_ERROR);
+  }
 
   const parsed = fabricationRouteSchema.safeParse({
     id_producto: formData.get("id_producto"),
@@ -32,7 +82,7 @@ export async function createFabricationRouteAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos inválidos.");
+    return routeError(values, "Revisa los datos de la ruta.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
@@ -49,7 +99,7 @@ export async function createFabricationRouteAction(formData: FormData) {
   });
 
   if (!product) {
-    throw new Error("El producto seleccionado no existe o está inactivo.");
+    return routeError(values, inactiveProduct.error, inactiveProduct.fieldErrors);
   }
 
   const existingRoute = await prisma.ruta_fabricacion.findFirst({
@@ -60,19 +110,21 @@ export async function createFabricationRouteAction(formData: FormData) {
   });
 
   if (existingRoute) {
-    throw new Error(DUPLICATED_ROUTE);
+    return routeError(values, duplicatedRoute.error, duplicatedRoute.fieldErrors);
   }
 
+  let idRuta: string;
+
   try {
-    await prisma.$transaction(async (tx) => {
-      const idRuta = await getNextCorrelativeId(tx, {
+    idRuta = await prisma.$transaction(async (tx) => {
+      const idNuevo = await getNextCorrelativeId(tx, {
         codigoEntidad: "ruta_fabricacion",
         prefijo: "RUT",
       });
 
       await tx.ruta_fabricacion.create({
         data: {
-          id_ruta: idRuta,
+          id_ruta: idNuevo,
           id_producto: data.id_producto,
           nombre_ruta: data.nombre_ruta,
           descripcion: data.descripcion,
@@ -83,29 +135,41 @@ export async function createFabricationRouteAction(formData: FormData) {
       await registerAuditLog({
         userId: session.user.id,
         entidad_afectada: "ruta_fabricacion",
-        id_registro_afectado: idRuta,
+        id_registro_afectado: idNuevo,
         accion: "crear",
         detalle: `Ruta creada: ${data.nombre_ruta}`,
         tx,
       });
+
+      return idNuevo;
     });
   } catch (error) {
-    throw toRouteSaveError(error);
+    const problem = routeSaveProblem(error);
+
+    return routeError(values, problem.error, problem.fieldErrors);
   }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
 
-  redirect("/dashboard/production/routes?toast=route-created");
+  return routeSaved(values, idRuta);
 }
 
-export async function updateFabricationRouteAction(formData: FormData) {
-  const session = await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
+export async function updateFabricationRouteAction(
+  _prevState: FabricationRouteFormState,
+  formData: FormData,
+): Promise<FabricationRouteFormState> {
+  const values = getRouteFormValues(formData);
+  const session = await getAuthorizedSession(["ADMIN", "WORKSHOP_MASTER"]);
+
+  if (!session) {
+    return routeError(values, PERMISSION_ERROR);
+  }
 
   const idRuta = String(formData.get("id_ruta") ?? "");
 
   if (!idRuta) {
-    throw new Error("No se recibio la ruta de fabricacion.");
+    return routeError(values, "No se recibió la ruta de fabricación.");
   }
 
   const parsed = fabricationRouteSchema.safeParse({
@@ -115,13 +179,16 @@ export async function updateFabricationRouteAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    throw new Error(parsed.error.issues[0]?.message ?? "Datos invalidos.");
+    return routeError(values, "Revisa los datos de la ruta.", parsed.error.flatten().fieldErrors);
   }
 
   const data = parsed.data;
 
+  let problem: RouteProblem | null;
+
   try {
-    await prisma.$transaction(async (tx) => {
+    // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+    problem = await prisma.$transaction(async (tx): Promise<RouteProblem | null> => {
       await lockRouteRow(tx, idRuta);
 
       const currentRoute = await tx.ruta_fabricacion.findUnique({
@@ -138,13 +205,13 @@ export async function updateFabricationRouteAction(formData: FormData) {
       });
 
       if (!currentRoute) {
-        throw new Error("La ruta seleccionada no existe.");
+        return { error: "La ruta seleccionada no existe." };
       }
 
       if (currentRoute._count.orden_trabajo > 0 && currentRoute.id_producto !== data.id_producto) {
-        throw new Error(
-          "No se puede cambiar el producto de una ruta con ordenes asociadas.",
-        );
+        const message = "No se puede cambiar el producto de una ruta con órdenes asociadas.";
+
+        return { error: message, fieldErrors: { id_producto: [message] } };
       }
 
       // El producto actual se conserva aunque hoy este inactivo, como en pedidos.
@@ -160,7 +227,7 @@ export async function updateFabricationRouteAction(formData: FormData) {
         });
 
         if (!product) {
-          throw new Error("El producto seleccionado no existe o esta inactivo.");
+          return inactiveProduct;
         }
       }
 
@@ -175,7 +242,7 @@ export async function updateFabricationRouteAction(formData: FormData) {
       });
 
       if (existingRoute) {
-        throw new Error(DUPLICATED_ROUTE);
+        return duplicatedRoute;
       }
 
       await tx.ruta_fabricacion.update({
@@ -197,16 +264,22 @@ export async function updateFabricationRouteAction(formData: FormData) {
         detalle: `Ruta actualizada: ${data.nombre_ruta}`,
         tx,
       });
+
+      return null;
     });
   } catch (error) {
-    throw toRouteSaveError(error);
+    problem = routeSaveProblem(error);
+  }
+
+  if (problem) {
+    return routeError(values, problem.error, problem.fieldErrors);
   }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
   revalidatePath(`/dashboard/production/routes/${idRuta}/stages`);
 
-  redirect("/dashboard/production/routes?toast=route-updated");
+  return routeSaved(values, idRuta);
 }
 
 export async function toggleFabricationRouteStatusAction(formData: FormData) {

@@ -15,7 +15,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import { toggleFabricationRouteStatusAction } from "@/modules/production/routes/actions";
 import { getFabricationRouteListData } from "@/modules/production/routes/queries";
 
@@ -45,6 +50,7 @@ export default async function FabricationRoutesPage({
   const q = getSearchParam(params, "q");
   const product = getSearchParam(params, "product");
   const status = getSearchParam(params, "status");
+  const returnTo = createReturnToHref(navigationHrefs.routes, params);
   const { routes, products } = await getFabricationRouteListData({
     q,
     product,
@@ -64,7 +70,7 @@ export default async function FabricationRoutesPage({
         ])}
         actions={
           <Button asChild>
-            <Link href="/dashboard/production/routes/new">Nueva ruta</Link>
+            <Link href={withReturnTo(`${navigationHrefs.routes}/new`, returnTo)}>Nueva ruta</Link>
           </Button>
         }
       />
@@ -161,7 +167,7 @@ export default async function FabricationRoutesPage({
               <TableCell>
                 <div className="flex flex-col gap-2">
                   <Button variant="link" className="h-auto justify-start p-0" asChild>
-                    <Link href={`/dashboard/production/routes/${route.id_ruta}/edit`}>
+                    <Link href={withReturnTo(`${navigationHrefs.routes}/${route.id_ruta}/edit`, returnTo)}>
                       Editar
                     </Link>
                   </Button>

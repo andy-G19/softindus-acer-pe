@@ -236,6 +236,7 @@ const MODULOS: ModuloDeAcciones[] = [
       "updateFabricationRouteAction",
       "toggleFabricationRouteStatusAction",
     ],
+    rechazanConResultado: ["createFabricationRouteAction", "updateFabricationRouteAction"],
   },
   {
     ruta: "production/stages/actions",
