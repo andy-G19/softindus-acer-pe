@@ -22,14 +22,22 @@ import {
 // lateral. Cada caso ejecuta la accion real con Prisma, la sesion, la cache, la
 // bitacora y los correlativos simulados, y fija en un snapshot, en orden: la
 // autorizacion con sus roles, las lecturas, la transaccion con sus escrituras y
-// su final, los correlativos, la bitacora, las revalidaciones y el resultado:
-// la redireccion, el error que lanza o el estado que devuelve al formulario.
+// su final, los correlativos, la bitacora, las revalidaciones y el resultado.
+//
+// Desde el panel lateral (A5), el alta y la edicion autorizan con
+// getAuthorizedSession y devuelven el resultado (FormActionState) en lugar de
+// redirigir: sin permiso responden con un error dentro del formulario.
 
 const mocks = vi.hoisted(() => ({
   correlatives: new Map<string, number>(),
 }));
 
 vi.mock("server-only", () => ({}));
+// Cada respuesta lleva un operationId aleatorio; en los snapshots, uno fijo.
+vi.mock("@/lib/action-result", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/action-result")>()),
+  newOperationId: () => "operacion-de-prueba",
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock({
     transactions: true,
@@ -141,7 +149,7 @@ const ETAPA = "ETA00000006";
 const MAQUINA = "MAQ00000002";
 const OTRA_MAQUINA = "MAQ00000008";
 
-const initialState: RouteStageFormState = { error: "" };
+const initialState: RouteStageFormState = { status: "idle" };
 const create = (formData: FormData) => createRouteStageAction(initialState, formData);
 const update = (formData: FormData) => updateRouteStageAction(initialState, formData);
 
@@ -230,7 +238,7 @@ const toggleOf = (estado: boolean | null) => ({
 defineCases("createRouteStageAction", create, [
   { name: "ADMIN crea la etapa sin maquina", ...createWith() },
   { name: "WORKSHOP_MASTER tambien crea etapas", ...createWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...createWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...createWith(), role: "SELLER" },
   { name: "con maquina crea la asignacion y queda obligada", ...createWith(withMachine, machine("operativa")) },
   { name: "una maquina en reparacion se puede asignar", ...createWith(withMachine, machine("en_reparacion")) },
   { name: "una maquina inactiva no se puede asignar", ...createWith(withMachine, machine("inactiva")) },
@@ -262,7 +270,7 @@ defineCases("createRouteStageAction", create, [
   { name: "ya existe una etapa con ese nombre", ...createWith({}, duplicated("nombre_etapa")) },
   { name: "ya existe una etapa con ese orden", ...createWith({}, duplicated("orden_secuencia")) },
   {
-    name: "un P2002, que el candado de la ruta ya evita, deja el error de Prisma",
+    name: "un P2002, que el candado de la ruta ya evita, responde con el mensaje generico",
     ...createWith({}, { "etapa_ruta.create": failWith(uniqueViolation()) }),
   },
 ]);
@@ -270,7 +278,7 @@ defineCases("createRouteStageAction", create, [
 defineCases("updateRouteStageAction", update, [
   { name: "ADMIN actualiza la etapa", ...updateWith() },
   { name: "WORKSHOP_MASTER tambien actualiza etapas", ...updateWith(), role: "WORKSHOP_MASTER" },
-  { name: "SELLER: se redirige sin tocar Prisma", ...updateWith(), role: "SELLER" },
+  { name: "SELLER: sin permiso responde con un error, sin tocar Prisma", ...updateWith(), role: "SELLER" },
   { name: "sin id devuelve su error sin tocar Prisma", ...updateWith({ id_etapa_ruta: "" }) },
   { name: "datos invalidos devuelven los errores por campo", ...updateWith({ nombre_etapa: "ab" }) },
   { name: "la etapa no existe", ...updateWith({}, { "etapa_ruta.findUnique": null }) },
@@ -308,7 +316,7 @@ defineCases("updateRouteStageAction", update, [
     ...updateWith({}, { ...currentStage(MAQUINA), ...assignments(MAQUINA) }),
   },
   {
-    name: "un P2002, que el candado de la ruta ya evita, deja el error de Prisma",
+    name: "un P2002, que el candado de la ruta ya evita, responde con el mensaje generico",
     ...updateWith({}, { "etapa_ruta.update": failWith(uniqueViolation()) }),
   },
 ]);
@@ -413,6 +421,8 @@ describe("las acciones de etapas deciden con la ruta bloqueada", () => {
 describe("los mensajes de etapas estan en espanol", () => {
   type Errors = { estado: { fieldErrors: Record<string, string[]> } };
 
+  // El snapshot del resultado ya no redirige: la accion devuelve el id.
+
   const errorsOf = async (actionCase: Omit<ActionCase, "name">) =>
     ((await runCase(create, actionCase)).result as Errors).estado.fieldErrors;
 
@@ -442,6 +452,51 @@ describe("los mensajes de etapas estan en espanol", () => {
   it("0.01 minutos si se acepta", async () => {
     const { result } = await runCase(create, createWith({ tiempo_operario_minutos_unidad: "0.01" }));
 
-    expect(result).toMatch(/^redirect:/);
+    expect(result).toMatchObject({ estado: { status: "success" } });
+  });
+});
+
+// A5: el resultado llega al formulario con lo escrito, sin redirigir.
+describe("el alta y la edicion de etapas devuelven el resultado al formulario", () => {
+  const stateOf = async (run: (formData: FormData) => Promise<unknown>, actionCase: Omit<ActionCase, "name">) =>
+    ((await runCase(run, actionCase)).result as { estado: RouteStageFormState }).estado;
+
+  it("con exito devuelve el id y no redirige", async () => {
+    expect(await stateOf(create, createWith())).toMatchObject({
+      status: "success",
+      data: { id_etapa_ruta: "ETA00000012" },
+    });
+    expect(await stateOf(update, updateWith())).toMatchObject({
+      status: "success",
+      data: { id_etapa_ruta: ETAPA },
+    });
+  });
+
+  it("el error conserva lo escrito, tambien la maquina y los tiempos", async () => {
+    expect(await stateOf(create, createWith(withMachine, machine("inactiva")))).toMatchObject({
+      status: "error",
+      fieldErrors: { id_maquina: ['No se puede asignar la máquina "Plegadora": está inactiva.'] },
+      values: {
+        nombre_etapa: form.nombre_etapa,
+        orden_secuencia: form.orden_secuencia,
+        descripcion: form.descripcion,
+      },
+    });
+  });
+
+  it.each([
+    ["alta", create, createWith()],
+    ["edicion", update, updateWith()],
+  ])("sin permiso, la %s responde con un error dentro del formulario", async (_name, run, actionCase) => {
+    expect(await stateOf(run, { ...actionCase, role: "SELLER" })).toMatchObject({
+      status: "error",
+      error: "No tienes permisos para gestionar etapas de ruta.",
+    });
+  });
+
+  it("un fallo al escribir responde con el mensaje generico", async () => {
+    expect(
+      await stateOf(create, createWith({}, { "etapa_ruta.create": failWith(new Error("conexion perdida")) })),
+    ).toMatchObject({ status: "error", error: "No se pudo guardar la etapa. Intenta nuevamente." });
   });
 });

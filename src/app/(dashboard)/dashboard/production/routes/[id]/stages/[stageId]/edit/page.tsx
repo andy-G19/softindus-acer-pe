@@ -1,33 +1,30 @@
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/authz";
 import { PageHeader } from "@/components/navigation/page-header";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import { dashboardBreadcrumbs, getSafeReturnTo, navigationHrefs } from "@/lib/navigation";
+import { productionNotifications } from "@/modules/production/notifications";
 import { updateRouteStageAction } from "@/modules/production/stages/actions";
-import { StageForm } from "@/modules/production/stages/stage-form";
 import { getRouteStageEditData } from "@/modules/production/stages/queries";
+import { getStageEditValues } from "@/modules/production/stages/stage-edit-values";
+import { StageForm } from "@/modules/production/stages/stage-form";
+import { EditStageNotices } from "@/modules/production/stages/stage-notices";
 
 type EditRouteStagePageProps = {
   params: Promise<{
     id: string;
     stageId: string;
   }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatDecimalInput(value: unknown) {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  return Number(value.toString()).toString();
-}
 
 export default async function EditRouteStagePage({
   params,
+  searchParams,
 }: EditRouteStagePageProps) {
   await requireRole(["ADMIN", "WORKSHOP_MASTER"]);
 
   const { id, stageId } = await params;
+  const queryParams = (await searchParams) ?? {};
 
   const routeStageEditData = await getRouteStageEditData(id, stageId);
 
@@ -36,65 +33,33 @@ export default async function EditRouteStagePage({
   }
 
   const { stage, machines } = routeStageEditData;
-  const assignment = stage.etapa_ruta_maquina[0];
+  const backHref = getSafeReturnTo(queryParams.returnTo, `${navigationHrefs.routes}/${stage.id_ruta}/stages`);
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
         title="Editar etapa de ruta"
         description={`Ruta: ${stage.ruta_fabricacion.nombre_ruta} · Producto: ${stage.ruta_fabricacion.producto.nombre_producto}`}
-        backHref={`/dashboard/production/routes/${stage.id_ruta}/stages`}
+        backHref={backHref}
         backLabel="Volver a etapas"
         breadcrumbs={dashboardBreadcrumbs([
           { label: "Producción", href: navigationHrefs.production },
           { label: "Rutas", href: navigationHrefs.routes },
-          { label: "Etapas", href: `/dashboard/production/routes/${stage.id_ruta}/stages` },
+          { label: "Etapas", href: backHref },
           { label: "Editar etapa" },
         ])}
       />
-
-      {stage._count.avance_orden > 0 || stage._count.tarea_operario > 0 ? (
-        <Alert variant="warning">
-          <AlertDescription>
-            Esta etapa ya tiene trazabilidad operativa. Los cambios quedan
-            auditados; evita alterar su significado productivo si ya fue usada.
-          </AlertDescription>
-        </Alert>
-      ) : null}
-
-      {stage.tiempo_estimado_horas !== null &&
-      stage.tiempo_operario_minutos_unidad === null ? (
-        <Alert variant="warning">
-          <AlertDescription>
-            Esta etapa tiene un tiempo antiguo de{" "}
-            {formatDecimalInput(stage.tiempo_estimado_horas)} horas registrado
-            para la etapa completa. Ese dato quedó obsoleto: captura los minutos
-            por unidad de operario y de máquina.
-          </AlertDescription>
-        </Alert>
-      ) : null}
 
       <StageForm
         action={updateRouteStageAction}
         routeId={stage.id_ruta}
         machines={machines}
-        defaultValues={{
-          id_etapa_ruta: stage.id_etapa_ruta,
-          nombre_etapa: stage.nombre_etapa,
-          orden_secuencia: String(stage.orden_secuencia),
-          descripcion: stage.descripcion ?? "",
-          tiempo_operario_minutos_unidad: formatDecimalInput(
-            stage.tiempo_operario_minutos_unidad,
-          ),
-          id_maquina: assignment?.id_maquina ?? "",
-          tiempo_maquina_minutos_unidad: formatDecimalInput(
-            assignment?.tiempo_maquina_minutos_unidad,
-          ),
-          modo_tiempo: stage.modo_tiempo,
-          requiere_maquina: stage.requiere_maquina,
-        }}
+        defaultValues={getStageEditValues(stage)}
         submitLabel="Guardar cambios"
+        successNotification={productionNotifications["route-stage-updated"]}
+        returnTo={backHref}
+        notices={<EditStageNotices stage={stage} />}
       />
-    </main>
+    </div>
   );
 }

@@ -243,6 +243,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/production/stages/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createRouteStageAction", "updateRouteStageAction", "toggleRouteStageStatusAction"],
+    rechazanConResultado: ["createRouteStageAction", "updateRouteStageAction"],
   },
   {
     ruta: "production/work-orders/actions",

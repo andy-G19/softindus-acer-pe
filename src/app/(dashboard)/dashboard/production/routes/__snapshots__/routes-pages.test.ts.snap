@@ -1083,7 +1083,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 <div>
 <button type="button" aria-label="Volver a rutas">
 <svg/>Volver a rutas</button>
-<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Nueva etapa</a>
 </div>
 </div>
 </section>
@@ -1210,7 +1210,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
 <button data-variant="link" type="submit">Inactivar</button>
@@ -1238,7 +1238,7 @@ exports[`/dashboard/production/routes/[id]/stages > etapas > resultado 1`] = `
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
 <button data-variant="link" type="submit">Activar</button>
@@ -1353,7 +1353,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 <div>
 <button type="button" aria-label="Volver a rutas">
 <svg/>Volver a rutas</button>
-<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3Fq%3Dsoldadura%26requiresMachine%3Dyes%26status%3Dactive">Nueva etapa</a>
 </div>
 </div>
 </section>
@@ -1480,7 +1480,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3Fq%3Dsoldadura%26requiresMachine%3Dyes%26status%3Dactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
 <button data-variant="link" type="submit">Inactivar</button>
@@ -1508,7 +1508,7 @@ exports[`/dashboard/production/routes/[id]/stages > filtros con maquina y activa
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3Fq%3Dsoldadura%26requiresMachine%3Dyes%26status%3Dactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
 <button data-variant="link" type="submit">Activar</button>
@@ -1663,7 +1663,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 <div>
 <button type="button" aria-label="Volver a rutas">
 <svg/>Volver a rutas</button>
-<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages">Nueva etapa</a>
 </div>
 </div>
 </section>
@@ -1770,7 +1770,7 @@ exports[`/dashboard/production/routes/[id]/stages > ruta sin etapas > resultado 
 </thead>
 <tbody>
 <tr>
-<td colSpan="8">
+<td colSpan="9">
 <div>
 <div>
 <p>Esta ruta todavía no tiene etapas registradas.</p>
@@ -1878,7 +1878,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 <div>
 <button type="button" aria-label="Volver a rutas">
 <svg/>Volver a rutas</button>
-<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new">Nueva etapa</a>
+<a data-variant="default" href="/dashboard/production/routes/id_ruta-1/stages/new?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3FrequiresMachine%3Dno%26status%3Dinactive">Nueva etapa</a>
 </div>
 </div>
 </section>
@@ -2005,7 +2005,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-1/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3FrequiresMachine%3Dno%26status%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
 <button data-variant="link" type="submit">Inactivar</button>
@@ -2033,7 +2033,7 @@ exports[`/dashboard/production/routes/[id]/stages > sin maquina e inactivas > re
 </td>
 <td>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit">Editar</a>
+<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages/id_etapa_ruta-2/edit?returnTo=%2Fdashboard%2Fproduction%2Froutes%2Fid_ruta-1%2Fstages%3FrequiresMachine%3Dno%26status%3Dinactive">Editar</a>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-2"/>
 <button data-variant="link" type="submit">Activar</button>
@@ -2118,7 +2118,7 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con av
 
 exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con avances y tiempo antiguo > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2158,29 +2158,31 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con av
 </div>
 </div>
 </section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
 <div role="alert">
 <div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
 </div>
 <div role="alert">
 <div>Esta etapa tiene un tiempo antiguo de 4 horas registrado para la etapa completa. Ese dato quedó obsoleto: captura los minutos por unidad de operario y de máquina.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-1"/>
-<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
-<input type="hidden" name="modo_tiempo" value="simultaneo"/>
 <div>
-<label for="nombre_etapa">Nombre de la etapa *</label>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
 </div>
 <div>
 <div>
-<label for="orden_secuencia">Orden de ejecución *</label>
-<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="1"/>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="1"/>
 </div>
 <div>
 <label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
-<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
-<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
 </div>
 </div>
 <div>
@@ -2207,11 +2209,11 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con av
 </span>
 </label>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2288,7 +2290,7 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 
 exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con maquina > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2328,26 +2330,28 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 </div>
 </div>
 </section>
-<div role="alert">
-<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
-</div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_ruta" value="id_ruta-1"/>
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
 <input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div role="alert">
+<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
+</div>
 <div>
-<label for="nombre_etapa">Nombre de la etapa *</label>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
 </div>
 <div>
 <div>
-<label for="orden_secuencia">Orden de ejecución *</label>
-<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="1"/>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="1"/>
 </div>
 <div>
 <label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
-<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
-<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
 </div>
 </div>
 <div>
@@ -2361,9 +2365,10 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 </select>
 </div>
 <div>
-<label for="tiempo_maquina_minutos_unidad">Minutos de máquina por unidad *</label>
-<input type="number" id="tiempo_maquina_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 6" name="tiempo_maquina_minutos_unidad" value="11.5"/>
-<p>Minutos de uso de la máquina para producir <strong>una</strong> unidad.</p>
+<label for="tiempo_maquina_minutos_unidad">Minutos de máquina por unidad<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="tiempo_maquina_minutos_unidad" required="" aria-describedby="tiempo_maquina_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 6" name="tiempo_maquina_minutos_unidad" value="11.5"/>
+<p id="tiempo_maquina_minutos_unidad-ayuda">Minutos de uso de la máquina para producir <strong>una</strong> unidad.</p>
 </div>
 </div>
 <div>
@@ -2402,11 +2407,11 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar con ma
 </span>
 </label>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2480,7 +2485,7 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin ma
 
 exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin maquina > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2520,26 +2525,28 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin ma
 </div>
 </div>
 </section>
-<div role="alert">
-<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
-</div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_ruta" value="id_ruta-1"/>
 <input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
 <input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div role="alert">
+<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
+</div>
 <div>
-<label for="nombre_etapa">Nombre de la etapa *</label>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
 </div>
 <div>
 <div>
-<label for="orden_secuencia">Orden de ejecución *</label>
-<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="1"/>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="1"/>
 </div>
 <div>
 <label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
-<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
-<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value="11.5"/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
 </div>
 </div>
 <div>
@@ -2575,11 +2582,11 @@ exports[`/dashboard/production/routes/[id]/stages/[stageId]/edit > editar sin ma
 </span>
 </label>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
 <button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2743,7 +2750,7 @@ exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > llamadas 1
 
 exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2783,25 +2790,27 @@ exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 
 </div>
 </div>
 </section>
-<div role="alert">
-<div>Usa números consecutivos en el orden de ejecución: 1, 2, 3, 4... Esto permite calcular el flujo de producción y mostrar los avances ordenados.</div>
-</div>
 <form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
 <input type="hidden" name="id_ruta" value="id_ruta-1"/>
 <input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div role="alert">
+<div>Usa números consecutivos en el orden de ejecución: 1, 2, 3, 4... Esto permite calcular el flujo de producción y mostrar los avances ordenados.</div>
+</div>
 <div>
-<label for="nombre_etapa">Nombre de la etapa *</label>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
 <input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value=""/>
 </div>
 <div>
 <div>
-<label for="orden_secuencia">Orden de ejecución *</label>
-<input type="number" id="orden_secuencia" min="1" max="999" required="" name="orden_secuencia" value="2"/>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="2"/>
 </div>
 <div>
 <label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
-<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
-<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
 </div>
 </div>
 <div>
@@ -2829,11 +2838,11 @@ exports[`/dashboard/production/routes/[id]/stages/new > nueva etapa > resultado 
 </span>
 </label>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
 <button data-variant="default" type="submit">Registrar etapa</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -2892,7 +2901,7 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > llamadas
 
 exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultado 1`] = `
 {
-  "html": "<main>
+  "html": "<div>
 <section>
 <nav aria-label="Ruta de navegación">
 <ol>
@@ -2932,35 +2941,37 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultad
 </div>
 </div>
 </section>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
 <div role="alert">
 <div>Esta ruta está inactiva. Actívala antes de agregar nuevas etapas.</div>
 </div>
 <div role="alert">
 <div>Usa números consecutivos en el orden de ejecución: 1, 2, 3, 4... Esto permite calcular el flujo de producción y mostrar los avances ordenados.</div>
 </div>
-<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
-<input type="hidden" name="id_ruta" value="id_ruta-1"/>
-<input type="hidden" name="modo_tiempo" value="simultaneo"/>
-<div>
-<label for="nombre_etapa">Nombre de la etapa *</label>
-<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" disabled="" name="nombre_etapa" value=""/>
+<div data-disabled="true">
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_etapa" required="" disabled="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value=""/>
 </div>
 <div>
-<div>
-<label for="orden_secuencia">Orden de ejecución *</label>
-<input type="number" id="orden_secuencia" min="1" max="999" required="" disabled="" name="orden_secuencia" value="1"/>
+<div data-disabled="true">
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" disabled="" min="1" max="999" name="orden_secuencia" value="1"/>
 </div>
-<div>
+<div data-disabled="true">
 <label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
-<input type="number" id="tiempo_operario_minutos_unidad" min="0.01" step="0.01" placeholder="Ej. 8" disabled="" name="tiempo_operario_minutos_unidad" value=""/>
-<p>Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+<input type="number" id="tiempo_operario_minutos_unidad" disabled="" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
 </div>
 </div>
 <div>
 <div>
-<div>
+<div data-disabled="true">
 <label for="id_maquina">Máquina utilizada</label>
-<select id="id_maquina" name="id_maquina" disabled="">
+<select id="id_maquina" disabled="" name="id_maquina">
 <option value="" selected="">Sin máquina</option>
 <option value="id_maquina-1">nombre-1 · tipo-1</option>
 <option value="id_maquina-2">nombre-2 · tipo-2</option>
@@ -2968,9 +2979,9 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultad
 </div>
 </div>
 </div>
-<div>
+<div data-disabled="true">
 <label for="descripcion">Descripción técnica</label>
-<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado." disabled="">
+<textarea id="descripcion" disabled="" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">
 </textarea>
 </div>
 <label>
@@ -2981,11 +2992,11 @@ exports[`/dashboard/production/routes/[id]/stages/new > ruta inactiva > resultad
 </span>
 </label>
 <div>
-<a data-variant="link" href="/dashboard/production/routes/id_ruta-1/stages">Volver a etapas</a>
 <button data-variant="default" type="submit" disabled="">Registrar etapa</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
 </div>
 </form>
-</main>
+</div>
 <script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>",
   "outcome": "render",
 }
@@ -3097,6 +3108,191 @@ exports[`/dashboard/production/routes/new > formulario > resultado 1`] = `
 }
 `;
 
-exports[`panel lateral de rutas > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `""`;
+exports[`panel lateral de etapas > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<section>
+<h2>Nueva etapa de ruta</h2>
+<p>Ruta: nombre_ruta-1 · Producto: nombre_producto-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div role="alert">
+<div>Usa números consecutivos en el orden de ejecución: 1, 2, 3, 4... Esto permite calcular el flujo de producción y mostrar los avances ordenados.</div>
+</div>
+<div>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value=""/>
+</div>
+<div>
+<div>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="2"/>
+</div>
+<div>
+<label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_maquina">Máquina utilizada</label>
+<select id="id_maquina" name="id_maquina">
+<option value="" selected="">Sin máquina</option>
+<option value="id_maquina-1">nombre-1 · tipo-1</option>
+<option value="id_maquina-2">nombre-2 · tipo-2</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">
+</textarea>
+</div>
+<label>
+<input type="checkbox" name="requiere_maquina"/>
+<span>
+<span>Esta etapa requiere máquina o equipo crítico</span>
+<span>Márcala para etapas como corte, prensa, soldadura o esmerilado, aunque todavía no asignes la máquina.</span>
+</span>
+</label>
+<div>
+<button data-variant="default" type="submit">Registrar etapa</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
 
-exports[`panel lateral de rutas > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `""`;
+exports[`panel lateral de etapas > la edicion en panel hace la misma consulta que la pagina y muestra sus avisos 1`] = `
+"<section>
+<h2>Editar etapa de ruta</h2>
+<p>nombre_etapa-1 · Ruta: nombre_ruta-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_etapa_ruta" value="id_etapa_ruta-1"/>
+<input type="hidden" name="modo_tiempo" value="simultaneo"/>
+<div role="alert">
+<div>Esta etapa ya tiene trazabilidad operativa. Los cambios quedan auditados; evita alterar su significado productivo si ya fue usada.</div>
+</div>
+<div role="alert">
+<div>Esta etapa tiene un tiempo antiguo de 4 horas registrado para la etapa completa. Ese dato quedó obsoleto: captura los minutos por unidad de operario y de máquina.</div>
+</div>
+<div>
+<label for="nombre_etapa">Nombre de la etapa<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_etapa" required="" maxLength="100" placeholder="Ej. Corte de plancha" name="nombre_etapa" value="nombre_etapa-1"/>
+</div>
+<div>
+<div>
+<label for="orden_secuencia">Orden de ejecución<span aria-hidden="true">*</span>
+</label>
+<input type="number" id="orden_secuencia" required="" min="1" max="999" name="orden_secuencia" value="1"/>
+</div>
+<div>
+<label for="tiempo_operario_minutos_unidad">Minutos de operario por unidad</label>
+<input type="number" id="tiempo_operario_minutos_unidad" aria-describedby="tiempo_operario_minutos_unidad-ayuda" min="0.01" step="0.01" placeholder="Ej. 8" name="tiempo_operario_minutos_unidad" value=""/>
+<p id="tiempo_operario_minutos_unidad-ayuda">Minutos que necesita un operario para producir <strong>una</strong> unidad en esta etapa.</p>
+</div>
+</div>
+<div>
+<div>
+<div>
+<label for="id_maquina">Máquina utilizada</label>
+<select id="id_maquina" name="id_maquina">
+<option value="" selected="">Sin máquina</option>
+<option value="id_maquina-1">nombre-1 · tipo-1</option>
+<option value="id_maquina-2">nombre-2 · tipo-2</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label for="descripcion">Descripción técnica</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Se corta la plancha según medida base antes del formado.">descripcion-1</textarea>
+</div>
+<label>
+<input type="checkbox" name="requiere_maquina" checked=""/>
+<span>
+<span>Esta etapa requiere máquina o equipo crítico</span>
+<span>Márcala para etapas como corte, prensa, soldadura o esmerilado, aunque todavía no asignes la máquina.</span>
+</span>
+</label>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/routes/id_ruta-1/stages">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de rutas > el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel 1`] = `
+"<section>
+<h2>Nueva ruta de fabricación</h2>
+<p>Registra una ruta productiva para un producto. Luego agregaremos sus etapas: corte, forjado, soldadura, lijado, pintura u otras.</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<div>
+<div>
+<label for="id_producto">Producto *</label>
+<input type="hidden" name="id_producto" value=""/>
+<div>
+<input id="id_producto" type="text" role="combobox" aria-autocomplete="list" aria-controls="id_producto-listbox" aria-expanded="false" required="" placeholder="Buscar producto..." value=""/>
+</div>
+</div>
+</div>
+<div>
+<label for="nombre_ruta">Nombre de la ruta<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_ruta" required="" maxLength="100" placeholder="Ej. Ruta estándar para lampa" name="nombre_ruta" value=""/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Corte de plancha, formado, soldadura, lijado y pintura.">
+</textarea>
+</div>
+<div role="alert">
+<div>En esta pantalla solo registramos la ruta general. Las etapas ordenadas de la ruta se crean desde la gestión de etapas de cada ruta.</div>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar ruta</button>
+<a data-variant="outline" href="/dashboard/production/routes">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;
+
+exports[`panel lateral de rutas > la edicion en panel hace la misma consulta que la pagina y muestra el formulario en el panel 1`] = `
+"<section>
+<h2>Editar ruta de fabricación</h2>
+<p>nombre_ruta-1 · id_ruta-1</p>
+<form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)">
+<input type="hidden" name="id_ruta" value="id_ruta-1"/>
+<input type="hidden" name="id_producto" value="id_producto-1"/>
+<div>
+<label for="producto_bloqueado">Producto</label>
+<input id="producto_bloqueado" readOnly="" aria-describedby="producto_bloqueado-ayuda" value="nombre_producto-1"/>
+<p id="producto_bloqueado-ayuda">Esta ruta tiene órdenes asociadas; el producto no se puede cambiar desde datos maestros productivos.</p>
+</div>
+<div>
+<label for="nombre_ruta">Nombre de la ruta<span aria-hidden="true">*</span>
+</label>
+<input id="nombre_ruta" required="" maxLength="100" placeholder="Ej. Ruta estándar para lampa" name="nombre_ruta" value="nombre_ruta-1"/>
+</div>
+<div>
+<label for="descripcion">Descripción</label>
+<textarea id="descripcion" name="descripcion" rows="4" maxLength="500" placeholder="Ej. Corte de plancha, formado, soldadura, lijado y pintura.">descripcion-1</textarea>
+</div>
+<div>
+<button data-variant="default" type="submit">Guardar cambios</button>
+<a data-variant="outline" href="/dashboard/production/routes">Cancelar</a>
+</div>
+</form>
+</section>
+<script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script>"
+`;

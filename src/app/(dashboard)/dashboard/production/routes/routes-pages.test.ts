@@ -1,3 +1,4 @@
+import { createElement, type ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -12,6 +13,13 @@ import {
 } from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
+// RouteSheet pinta su contenido en un portal, que no existe en el render de
+// servidor: el HTML de un panel sale vacio. El doble lo deja en linea para que la
+// prueba vea el titulo, los avisos y el formulario del panel.
+vi.mock("@/components/navigation/route-sheet", () => ({
+  RouteSheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) =>
+    createElement("section", null, createElement("h2", null, title), createElement("p", null, description), children),
+}));
 vi.mock("@/lib/db", async () =>
   (await import("@/testing/page-characterization")).dbModuleMock(),
 );
@@ -241,6 +249,79 @@ describe("panel lateral de rutas", () => {
   it("fuera del alta y la edicion interceptadas, la ranura del panel no muestra nada", async () => {
     const { default: PanelDefault } = await import("./@panel/default");
     const { default: PanelOnList } = await import("./@panel/page");
+
+    expect(PanelDefault()).toBeNull();
+    expect(PanelOnList()).toBeNull();
+  });
+});
+
+// Entrega 10.6a: las etapas tienen su propia ranura, debajo de la de rutas.
+const STAGES_ROUTE = "/dashboard/production/routes/RUT00000001/stages";
+const loadNewStage = () => import("./[id]/stages/new/page");
+const loadEditStage = () => import("./[id]/stages/[stageId]/edit/page");
+const loadNewStagePanel = () => import("./[id]/stages/@panel/(.)new/page");
+const loadEditStagePanel = () => import("./[id]/stages/@panel/(.)[stageId]/edit/page");
+
+preloadPages(loadNewStagePanel, loadEditStagePanel);
+
+describe("panel lateral de etapas", () => {
+  const newCase = { params: { id: "RUT00000001" } };
+  const editCase = { params: { id: "RUT00000001", stageId: "ETR00000001" } };
+
+  it("el alta en panel autoriza y consulta igual que la pagina y muestra el formulario en el panel", async () => {
+    const panel = await characterizePage(loadNewStagePanel, { name: "panel nueva", ...newCase }, `${STAGES_ROUTE}/new`);
+    const page = await characterizePage(loadNewStage, { name: "nueva", ...newCase }, `${STAGES_ROUTE}/new`);
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(panel.calls).toEqual(page.calls);
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("el alta en panel avisa si la ruta esta inactiva y no deja guardar", async () => {
+    const panel = await characterizePage(
+      loadNewStagePanel,
+      { name: "panel ruta inactiva", ...newCase, data: { "ruta_fabricacion.findUnique": inactiveRoute } },
+      `${STAGES_ROUTE}/new`,
+    );
+
+    expect(panel.html).toContain("Esta ruta está inactiva.");
+    expect(panel.html).toMatch(/<input id="nombre_etapa"[^>]* disabled=""/);
+  });
+
+  it("la edicion en panel hace la misma consulta que la pagina y muestra sus avisos", async () => {
+    const withHistory = { ...editCase, data: { "etapa_ruta.findFirst": stageWithHistory } };
+    const panel = await characterizePage(loadEditStagePanel, { name: "panel editar", ...withHistory }, `${STAGES_ROUTE}/ETR00000001/edit`);
+    const page = await characterizePage(loadEditStage, { name: "editar", ...withHistory }, `${STAGES_ROUTE}/ETR00000001/edit`);
+
+    expectAuthorizesBeforePrisma(panel.calls);
+    expect(prismaCalls(panel.calls)).toEqual(prismaCalls(page.calls));
+    expect(panel.html).toContain("Esta etapa ya tiene trazabilidad operativa.");
+    expect(panel.html).toContain("tiempo antiguo de");
+    expect(panel.html).toMatchSnapshot();
+  });
+
+  it("la edicion en panel responde notFound si la etapa no existe", async () => {
+    const result = await characterizePage(
+      loadEditStagePanel,
+      { name: "panel inexistente", params: { id: "RUT00000001", stageId: "ETR99999999" }, data: { "etapa_ruta.findFirst": null } },
+      `${STAGES_ROUTE}/ETR99999999/edit`,
+    );
+
+    expect(result.outcome).toBe("notFound");
+  });
+
+  it.each([
+    ["alta", loadNewStagePanel, newCase],
+    ["edicion", loadEditStagePanel, editCase],
+  ] as const)("un acceso rechazado al panel de %s no consulta Prisma", async (_name, load, extra) => {
+    const calls = await runWithRejectedAuth(load, { name: "rechazo", ...extra }, STAGES_ROUTE);
+
+    expect(calls).toEqual([{ authz: "requireRole", roles: ROLES }]);
+  });
+
+  it("fuera del alta y la edicion interceptadas, la ranura del panel no muestra nada", async () => {
+    const { default: PanelDefault } = await import("./[id]/stages/@panel/default");
+    const { default: PanelOnList } = await import("./[id]/stages/@panel/page");
 
     expect(PanelDefault()).toBeNull();
     expect(PanelOnList()).toBeNull();

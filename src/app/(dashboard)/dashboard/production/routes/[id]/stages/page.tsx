@@ -18,7 +18,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dashboardBreadcrumbs, navigationHrefs } from "@/lib/navigation";
+import {
+  createReturnToHref,
+  dashboardBreadcrumbs,
+  navigationHrefs,
+  withReturnTo,
+} from "@/lib/navigation";
 import {
   STAGE_TIME_MODES,
   getStageDurationPerUnit,
@@ -93,6 +98,9 @@ export default async function RouteStagesPage({
     );
   }, 0);
 
+  const stagesHref = `${navigationHrefs.routes}/${route.id_ruta}/stages`;
+  const returnTo = createReturnToHref(stagesHref, queryParams);
+
   const stagesPendingCapture = route.etapa_ruta.filter(
     (stage) => stage.tiempo_operario_minutos_unidad === null,
   ).length;
@@ -111,7 +119,7 @@ export default async function RouteStagesPage({
         ])}
         actions={
           <Button asChild>
-            <Link href={`/dashboard/production/routes/${route.id_ruta}/stages/new`}>
+            <Link href={withReturnTo(`${stagesHref}/new`, returnTo)}>
               Nueva etapa
             </Link>
           </Button>
@@ -279,7 +287,7 @@ export default async function RouteStagesPage({
                 <div className="flex flex-col gap-2">
                   <Button variant="link" className="h-auto justify-start p-0" asChild>
                     <Link
-                      href={`/dashboard/production/routes/${route.id_ruta}/stages/${stage.id_etapa_ruta}/edit`}
+                      href={withReturnTo(`${stagesHref}/${stage.id_etapa_ruta}/edit`, returnTo)}
                     >
                       Editar
                     </Link>
@@ -307,7 +315,7 @@ export default async function RouteStagesPage({
 
           {route.etapa_ruta.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} className="p-0">
+              <TableCell colSpan={9} className="p-0">
                 <EmptyState
                   className="border-0"
                   label="Esta ruta todavía no tiene etapas registradas."
