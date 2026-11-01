@@ -3199,11 +3199,11 @@ Cobertura de formularios. «Hoy» describe el mecanismo actual:
 | Materiales de proveedor | Inventario | ADMIN | Páginas, desviación | Panel lateral | 10.3b | Migrado |
 | Productos | Comercial | ADMIN | Páginas, desviación | Panel lateral | 10.4a | Migrado |
 | Pedidos | Comercial | ADMIN, SELLER | Páginas con líneas, desviación | Superficie amplia | 10.4c | Pendiente |
-| Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5 | Pendiente |
-| Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5 | Pendiente |
-| Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5 | Pendiente |
-| Mantenimientos preventivos | Mantenimiento | ADMIN | Página, lanza | Panel lateral | 10.5 | Pendiente |
-| Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Panel lateral amplio | 10.5 | Pendiente |
+| Máquinas | Mantenimiento | ADMIN | Páginas, desviación | Panel lateral | 10.5a | Migrado |
+| Repuestos | Mantenimiento | ADMIN | Páginas, desviación; alta auxiliar de proveedor | Panel lateral | 10.5a | Migrado |
+| Fallas | Mantenimiento | ADMIN, WORKSHOP_MASTER | Página, lanza | Panel lateral | 10.5b | Migrado |
+| Mantenimientos preventivos | Mantenimiento | ADMIN | Página, lanza | Panel lateral | 10.5b | Migrado |
+| Reparaciones | Mantenimiento | ADMIN | Página con varios repuestos, lanza | Superficie amplia en página completa (D6) | 10.5b | Migrado |
 | Rutas de fabricación | Producción | ADMIN, WORKSHOP_MASTER | Páginas de alta y edición, lanza | Modal breve | 10.6 | Pendiente |
 | Etapas de ruta | Producción | ADMIN, WORKSHOP_MASTER | Páginas, desviación | Panel lateral | 10.6 | Pendiente |
 | Recetas técnicas | Producción | ADMIN, WORKSHOP_MASTER | Página, lanza | Modal breve | 10.6 | Pendiente |
@@ -5988,11 +5988,11 @@ Datos leídos de la API de GitHub el 2026-10-30 (UTC) y comparados con git:
 
 ### Sub-entrega 10.5b — Fallas, preventivos y reparaciones
 
-Fecha: del 2026-10-29 al 2026-10-30 (Lima). Estado: registrada; falta la
-verificación en staging. El paso 0 (`68b3258`) registró la integración de la
-10.5a en `main` y el arreglo del hallazgo 1. 10 commits, de `7c8e1a4` a
-`69f1b71`, y este registro. Plan en `tmp/e10-diff/plan-10-5.md`, con los
-hallazgos de cada paso.
+Fecha: del 2026-10-29 al 2026-10-31 (Lima). Estado: cerrada el 2026-10-31
+(Lima). El paso 0 (`68b3258`) registró la integración de la 10.5a en `main` y
+el arreglo del hallazgo 1. 10 commits, de `7c8e1a4` a `69f1b71`, el registro
+`5347266` (CI #115 en verde) y este cierre. Plan en
+`tmp/e10-diff/plan-10-5.md`, con los hallazgos de cada paso.
 
 | Commit | Tipo | Cambio |
 |---|---|---|
@@ -6007,7 +6007,8 @@ hallazgos de cada paso.
 | 72153f8 | feat | Cambio de estado de fallas, preventivos y reparaciones con resultado; fallas cerradas con «Sin accion» (hallazgo 8). |
 | ea8969c | feat | Filtros compartidos en reparaciones y reincidencias sin `<main>`. |
 | 69f1b71 | feat | Reparaciones como superficie amplia con líneas dinámicas, vista previa y resultado (D6). |
-| este | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| 5347266 | docs | Registro de la sub-entrega, `CLAUDE.md` e inventario. |
+| este | docs | Cierre: verificación en staging, manual de Mantenimiento completo y reglas comunes. |
 
 Ajustes al plan, aprobados por el responsable:
 
@@ -6136,6 +6137,117 @@ de la tarjeta Máquinas (hallazgo 2 de la 10.5a); las reglas del hallazgo 12 de
 la auditoría; y una prueba de carrera real con Postgres para los bloqueos
 (entrega 11), porque las unitarias fijan el protocolo, no la carrera.
 
+#### Publicación, CI y verificación en staging
+
+Método:
+
+- Huella v5 con su propia base (`e105b-huella`) y etiquetas `e105b/`
+  (`tmp/e10-diff/e105b-*.js`, generados por `c-e105b-guiones.py`), con el
+  SHA-256 de la huella comprobado (`e105b-guiones.sha256`). De los demás
+  guiones se usó una versión sin comentarios: se anotó en
+  `e105b-antes-notas.md`. Plan en `tmp/e10-diff/plan-verificacion-10-5b.md`.
+- 1281 × 800 y el preset móvil (376 px). Cada captura se tomó tras cargar el
+  documento con `navigate`, así que las altas son la página completa, en las
+  dos fases.
+- Las capturas se hicieron emuladas; las tareas, al ancho natural del panel
+  (576 px), porque la emulación paraba las animaciones (hallazgo 14).
+- Las tareas usaron clics reales por `ref`, `form_input` para los `select` y
+  `type` y la opción con un clic en `SearchableSelect`.
+- La predicción se escribió antes del push
+  (`tmp/e10-diff/prediccion-10-5b.md`), con los datos de prueba del «antes» que
+  aparecen en el «después»; se comparó registro a registro con `__resumen`.
+- Datos de prueba, con autorización del responsable en cada turno:
+  - el «antes» subió el costo de REP00000004 a S/ 10,25 y creó REP00000005
+    «Repuesto prueba 10.5b» (S/ 10,25), FAL00000004 (anulada), MTP00000001
+    (realizado), FAL00000005 (reparada) y RPA00000002 (ejecutada);
+  - el «después» creó FAL00000006 (anulada), MTP00000002 (realizado),
+    FAL00000007 (reparada) y RPA00000003 (ejecutada).
+  - MAQ00000006 termina operativa. RPA00000002 conserva su total de 25,63 como
+    evidencia. No se exportó nada ni se borró nada.
+- Solo ADMIN: el responsable decidió omitir T69, el maestro de taller; lo
+  cubren `maintenance-links.test.ts` y las pruebas de acceso.
+
+Publicación y medición:
+
+- «Antes» sobre `543bf58` (CSS servido de 112.744 bytes, `14cy57rpwekhg.css`),
+  el 2026-10-31 UTC: la preparación desde las 04:02, 15 capturas de 04:12 a
+  04:14 y las tareas hasta las 04:20.
+- Push de 12 commits (de `68b3258` a `5347266`): CI #115 en verde (2m 45s, de
+  11:55:21 a 11:58:06 UTC). Vercel desplegó `5347266` (`pending` a las 11:55:22
+  y `success` a las 11:56:33 UTC). CSS servido de 112.785 bytes
+  (`1poyo02240o5e.css`), +41 como se predijo.
+- «Después»: 15 capturas hacia las 12:00 UTC del mismo día. Las tareas se
+  retrasaron hasta el cierre del día UTC (hallazgo 12). Evidencia en
+  `tmp/e10-diff/registro-10-5b.tsv` (30 filas), `e105b-antes-notas.md` y
+  `e105b-despues-notas.md`. Los registros de cada captura se compararon en la
+  IndexedDB y se perdieron después (hallazgo 14): del «después» quedan los
+  hashes, sin `textHash`.
+
+Huella: 15 explicadas.
+
+- **Como se predijo (8):**
+  - La lista de fallas, de 359 a 370 elementos: 2 filas nuevas por los datos y
+    «Sin accion» en las cerradas; solo FAL3 conserva el selector.
+  - Los filtros de preventivos y reparaciones: `FilterBar` y `DateRangeFields`,
+    sin «Filtros de búsqueda».
+  - La galería de listados: la muestra de `RowStatusSelect`, y lo de abajo baja
+    143,47 px.
+  - La galería de presentación: mismo hash completo.
+  - El inicio, máquinas y repuestos: solo los datos de prueba.
+- **Con un detalle que no se predijo (6):** las 3 altas a 1281 y a 376 px
+  cambian como se esperaba, y además las etiquetas pasan de 8 a 4 px de
+  separación, la de `Field`, igual que en la 10.5a (la predicción no la nombró).
+  En reparaciones salen las 3 ranuras y entran «Agregar repuesto» y la vista
+  previa.
+- **Sin explicación segura (1):** en reincidencias, además de `main` → `div` y
+  los datos, 12 filas pasan de 60,79 a 60,37 px. Esa pantalla solo cambió en el
+  `main`; cuando se revisó ya no quedaban los registros para afinarlo.
+
+Tareas (ADMIN), con los mismos pasos en las dos fases salvo T67 y T68:
+
+| Tarea | Antes (`543bf58`) | Después (`5347266`) |
+|---|---|---|
+| T60 Descripción de 3 letras (cambiada: no hay máquinas inactivas en staging, y crear una era otra escritura) | «This page couldn't load», en pantalla negra; se pierde lo escrito | Panel. «Revisa los datos de la falla.», `aria-invalid` y foco en la descripción; todo conservado; sin toast |
+| T61 Cancelar con solo la máquina elegida | «Ver listado» sale sin preguntar | «¿Descartar la falla nueva?» y «¿Descartar el preventivo nuevo?», con la máquina conservada |
+| T62 Rango invertido | Lista vacía y ningún aviso | «La fecha inicial no puede ser mayor que la fecha final.», en preventivos y reparaciones; «Limpiar» deja la URL sin parámetros |
+| T63 Registrar y anular una falla | Página completa con redirección; anula al pulsar y el selector sigue | Panel y un aviso; confirmación con botón destructivo; «Sin accion» y foco a la fila |
+| T64 Falla cerrada | «Guardar» da la página de error (hallazgo 8) | Sin selector |
+| T65 Programar y marcar realizado | Se aplica al pulsar | Panel y un aviso; confirmación con botón normal y la consecuencia; foco a la fila |
+| T66 Reparación con 2 repuestos × 1,25 a S/ 10,25 | 3 ranuras fijas; RPA2: repuestos S/ 25.62, **total S/ 25.63** (hallazgo 3); ejecuta al pulsar | Líneas dinámicas, vista previa S/ 25.62, RPA3: **total S/ 25.62**; la máquina pasa a «En mantenimiento»; ejecutar confirma; FAL7 reparada y máquina operativa |
+| T67 Línea sin cantidad | No se reproduce: guardaría sin el repuesto (lo fija `7c8e1a4`) | «Ingrese la cantidad del repuesto.» junto a la línea, foco en su cantidad; no guarda; todo conservado |
+| T68 Mismo estado | No se reproduce | `aria-disabled`; con teclado, Enter no hace nada y el foco sigue en el botón |
+
+Riesgos de la predicción, medidos: el panel de 576 px da 3 columnas de 165 px y
+la fecha se ve entera; la vista previa queda alineada a la derecha; el foco pasa
+a la fila con clics reales.
+
+Hallazgos de la verificación:
+
+12. Excepción al «mismo día UTC»: las capturas son del día UTC 31, pero las
+    tareas llegaron al cierre (T60 a las 23:59:58) y el resto se hizo el día
+    UTC 1, por las esperas a las entradas del responsable. No afecta a lo
+    comparado. MTP00000002 y RPA00000003 quedan con fecha 01/11/2026, cuando en
+    Lima era el 31: es el default en UTC (hallazgo 8 de la 10.4a), igual que en
+    `543bf58`.
+13. Con ratón, un `Button` con `aria-disabled` no toma el foco
+    (`pointer-events: none`): el clic atraviesa. Con teclado lo conserva, como
+    se quería. En el panel de preventivos el ejemplo de «Responsable» se corta.
+    Se registran; no se cambian.
+14. Método: con la emulación de 1281 × 800, `requestAnimationFrame` se paró. Las
+    animaciones de salida de Radix no terminaban, la capa de la confirmación
+    seguía tapando el formulario y los clics caían en ella; el formulario no
+    recibió lo escrito y nada se envió. Al ancho natural del panel, corre. Las
+    capturas no se vieron afectadas (mismo hash en el control). Antes de un clic
+    hay que comprobar `requestAnimationFrame`. Además, al reabrirse el panel
+    pidió entrar a Vercel y se perdieron su IndexedDB y su `localStorage`: el
+    registro hay que escribirlo al terminar las capturas.
+15. Método: `sed -i` en Git Bash quitó los CRLF de este archivo en B9; se
+    restauraron. Se edita con guiones de Python y `write_bytes`.
+
+El manual completa el capítulo de Mantenimiento (fallas, preventivos,
+reparaciones y reincidencias), escrito con lo verificado, y las reglas comunes
+suman el cambio de estado desde la fila.
+
 ## Secuencia de próximas entregas
 
 Orden vigente desde el 2026-09-28 (detalle y motivos en la sección 16 del plan).
@@ -6160,7 +6272,7 @@ grupos de `fix` agrupados por invariante, cada uno con prueba que falla primero.
 | G4 | Fix | Divergencias entre pantalla y exportación de la entrega 5 (D1, D2, fechas, forma y alias) y prefetch de las exportaciones | Cerrado (CI #63 verde en main; 18 de 18 observaciones como se predijo en staging, D1 reproducido antes y no después) |
 | 8 | B | Base visual y galería | Cerrada (CI #69 verde en main; 10 de 10, 24 de 24 y 26 de 26 huellas contra la predicción en staging) |
 | 9 | B | Piloto Clientes y categoría en ventanas | Cerrada (CI #75 verde en main; 15 de 18 huellas como se predijo y 3 desviaciones explicadas; T1 a T5 medidas antes y después en staging) |
-| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, registrada, con los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos, pendiente de verificación en staging) |
+| 10 | B | Catálogos, listados y resto de dominios | En curso (plan aprobado el 2026-10-15: 8 sub-entregas; 10.1 cerrada, con CI #79 verde en main y 17 de 17 huellas explicadas en staging; 10.2 cerrada, con CI #84 verde en main y 16 de 16 huellas como se predijo en staging; 10.3 partida en dos, 10.3a cerrada, con CI #89 verde en main y 7 de 7 huellas como se predijo en staging; la 10.3b, partida a su vez en 10.3b y 10.3c, cerrada, con CI #93 verde en main, 10 de 10 huellas como se predijo en staging y los hallazgos 4 y 13 de la 10.3a corregidos; la 10.3c, cerrada, con CI #97 verde en main, 21 de 21 huellas como se predijo en staging y el hallazgo 6 de la 10.3a corregido; la 10.4, partida en 10.4a, 10.4b y 10.4c; la 10.4a, cerrada, con CI #101 verde en main, 22 huellas del «después» (21 como se predijo y la del control de pedidos explicada por un dato de prueba) y los hallazgos 1 a 4 corregidos; la 10.4b, cerrada, con CI #105 verde en main, 17 huellas del «después» (15 como se predijo y los 2 controles explicados por la barra lateral) y el hallazgo 9 de la 10.3c corregido; la 10.4c, cerrada, con CI #109 verde en main, 12 huellas del «después» (10 como se predijo y 2 explicadas por los datos de prueba) y D2 y D3 de la 10.4 corregidos; la 10.5, en curso, partida en 10.5a y 10.5b; la 10.5a, cerrada, con CI #114 verde en main, 14 de 14 huellas como se predijo y los hallazgos 4 de la 10.3a y 1 de la 10.5a corregidos; la 10.5b, cerrada, con CI #115 verde en `staging`, 15 huellas del «después» (8 como se predijo, 6 con la separación de `Field`, que no se predijo, y 1 con 12 filas 0,42 px más bajas sin explicar) y los hallazgos 2, 3, 6, 7 y 8 de la auditoría corregidos) |
 | 11 | — | Operaciones críticas con integración e idempotencia; consolidación | Pendiente |
 
 ## Línea base de métricas (rama `staging`, commit `42f4308`)
