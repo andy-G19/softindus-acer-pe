@@ -36,6 +36,13 @@ type ConfirmActionButtonProps<Values, Data> = {
     variant?: "default" | "destructive";
   };
   pendingText?: string;
+  /** Se ve y se anuncia deshabilitado e ignora el clic, pero conserva el foco. */
+  disabled?: boolean;
+  /**
+   * Sin confirmacion, recibe el error en lugar de darlo como aviso; recibe null
+   * al ejecutar la accion, para limpiar el anterior.
+   */
+  onError?: (error: string | null) => void;
 };
 
 const IDLE = { status: "idle" } as const;
@@ -81,6 +88,8 @@ export function ConfirmActionButton<Values, Data>({
   successNotification,
   confirm,
   pendingText,
+  disabled = false,
+  onError,
 }: ConfirmActionButtonProps<Values, Data>) {
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -124,6 +133,8 @@ export function ConfirmActionButton<Values, Data>({
       formData.set(name, value);
     }
 
+    onError?.(null);
+
     startTransition(async () => {
       const result = await action(IDLE, formData);
 
@@ -134,6 +145,8 @@ export function ConfirmActionButton<Values, Data>({
       } else if (result.status === "error") {
         if (confirm) {
           setError(result.error);
+        } else if (onError) {
+          onError(result.error);
         } else {
           notify({ type: "error", message: result.error });
         }
@@ -141,20 +154,16 @@ export function ConfirmActionButton<Values, Data>({
     });
   }
 
-  if (!confirm) {
-    return (
-      <Button
-        ref={triggerRef}
-        type="button"
-        variant={variant}
-        size={size}
-        pending={pending}
-        pendingText={pendingText}
-        onClick={run}
-      >
-        {children}
-      </Button>
-    );
+  function press() {
+    if (disabled) {
+      return;
+    }
+
+    if (confirm) {
+      setOpen(true);
+    } else {
+      run();
+    }
   }
 
   function changeOpen(next: boolean) {
@@ -164,25 +173,39 @@ export function ConfirmActionButton<Values, Data>({
     }
   }
 
+  // La misma estructura con o sin confirmacion: en RowStatusSelect la
+  // confirmacion depende del estado elegido, y otra forma remontaria el boton.
   return (
     <>
-      <Button ref={triggerRef} type="button" variant={variant} size={size} onClick={() => setOpen(true)}>
+      <Button
+        ref={triggerRef}
+        type="button"
+        variant={variant}
+        size={size}
+        pending={confirm ? undefined : pending}
+        pendingText={confirm ? undefined : pendingText}
+        aria-disabled={disabled ? true : undefined}
+        className={disabled ? "pointer-events-none opacity-50" : undefined}
+        onClick={press}
+      >
         {children}
       </Button>
-      <ConfirmDialog
-        open={open}
-        onOpenChange={changeOpen}
-        closeOnConfirm={false}
-        returnFocusTo={returnFocusTo}
-        variant={confirm.variant ?? "destructive"}
-        title={confirm.title}
-        description={confirm.description}
-        confirmText={confirm.confirmText}
-        onConfirm={run}
-        pending={pending}
-        pendingText={pendingText}
-        error={error}
-      />
+      {confirm ? (
+        <ConfirmDialog
+          open={open}
+          onOpenChange={changeOpen}
+          closeOnConfirm={false}
+          returnFocusTo={returnFocusTo}
+          variant={confirm.variant ?? "destructive"}
+          title={confirm.title}
+          description={confirm.description}
+          confirmText={confirm.confirmText}
+          onConfirm={run}
+          pending={pending}
+          pendingText={pendingText}
+          error={error}
+        />
+      ) : null}
     </>
   );
 }

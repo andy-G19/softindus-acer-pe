@@ -34,3 +34,13 @@ export function toDateInputValue(value: string | undefined) {
 
   return exists ? match[0] : "";
 }
+
+/**
+ * El valor de un input type="datetime-local": "aaaa-mm-ddThh:mm", con segundos
+ * opcionales, de una fecha que existe y una hora valida (entrega 10.5b).
+ */
+export function isDateTimeInputValue(value: string) {
+  const match = /^(\d{4}-\d{2}-\d{2})T(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/.exec(value);
+
+  return Boolean(match && toDateInputValue(match[1]));
+}

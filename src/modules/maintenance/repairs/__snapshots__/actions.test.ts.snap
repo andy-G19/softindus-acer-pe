@@ -1,0 +1,3148 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createRepairAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar reparaciones.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > anulada al crear no toca la falla ni la maquina > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "150.50",
+        "estado_reparacion": "anulada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 0,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > anulada al crear no toca la falla ni la maquina > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "anulada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "estado_reparacion": [
+        "Seleccione un estado de reparación válido.",
+      ],
+      "fecha_reparacion": [
+        "La fecha de reparación es obligatoria.",
+      ],
+      "id_falla": [
+        "Seleccione una falla válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "hecha",
+      "fecha_reparacion": "",
+      "id_falla": "FAL",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes como los guarda la base > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000001",
+            "REP00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "25.62",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": null,
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 2,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "1.25",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000021",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000001",
+        "subtotal": "12.81",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "1.25",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000022",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000002",
+        "subtotal": "12.81",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > dos repuestos: los detalles con sus correlativos y los importes como los guarda la base > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1.25",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "1.25",
+          "id_repuesto": "REP00000002",
+        },
+      ],
+      "mano_obra": "",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina operativa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "150.50",
+        "estado_reparacion": "ejecutada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 0,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "reparada",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "operativa",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > ejecutada: la falla queda reparada y la maquina operativa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "ejecutada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > el 30 de febrero devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > el 30 de febrero devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "fecha_reparacion": [
+        "La fecha de reparación no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-02-30",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > el mismo repuesto en dos lineas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > el mismo repuesto en dos lineas > resultado 1`] = `
+{
+  "estado": {
+    "error": "No repitas el mismo repuesto en la reparación.",
+    "fieldErrors": {
+      "items.0.id_repuesto": [
+        "No repitas el mismo repuesto en la reparación.",
+      ],
+      "items.1.id_repuesto": [
+        "No repitas el mismo repuesto en la reparación.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "2",
+          "id_repuesto": "REP00000001",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > la falla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > la falla no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La falla seleccionada no existe.",
+    "fieldErrors": {
+      "id_falla": [
+        "La falla seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > los opcionales vacios o ausentes se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "0.00",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": null,
+        "observaciones": null,
+        "tecnico_proveedor": null,
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 0,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > los opcionales vacios o ausentes se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "",
+      "observaciones": "",
+      "tecnico_proveedor": "",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > observada hace lo mismo que programada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "150.50",
+        "estado_reparacion": "observada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 0,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > observada hace lo mismo que programada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "observada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > programada sin repuestos: crea la reparacion y pasa la falla a en atencion y la maquina a en reparacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "150.50",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 0,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > programada sin repuestos: crea la reparacion y pasa la falla a en atencion y la maquina a en reparacion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > tres repuestos con mano de obra > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000001",
+            "REP00000002",
+            "REP00000003",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "200.70",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 3,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "2.00",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000021",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000001",
+        "subtotal": "20.50",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "1.00",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000022",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000002",
+        "subtotal": "10.25",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "0.50",
+        "costo_unitario": "38.90",
+        "id_detalle_repuesto": "DRP00000023",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000003",
+        "subtotal": "19.45",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > tres repuestos con mano de obra > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000002",
+        },
+        {
+          "cantidad": "0.5",
+          "id_repuesto": "REP00000003",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "estado_reparacion": [
+        "Seleccione un estado de reparación válido.",
+      ],
+      "fecha_reparacion": [
+        "La fecha de reparación es obligatoria.",
+      ],
+      "id_falla": [
+        "Seleccione una falla válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "",
+      "fecha_reparacion": "",
+      "id_falla": "",
+      "items": [],
+      "mano_obra": "",
+      "observaciones": "",
+      "tecnico_proveedor": "",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un costo total que desborda su columna revierte la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > un costo total que desborda su columna revierte la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El costo total de la reparación no debe superar S/ 9,999,999,999.99.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000004",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "150.50",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRepairAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar la reparación. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un id de repuesto mal formado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > un id de repuesto mal formado > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.id_repuesto": [
+        "Seleccione un repuesto válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP1",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un repuesto inexistente o inactivo > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000001",
+            "REP00000002",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > un repuesto inexistente o inactivo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Uno o más repuestos seleccionados no existen o están inactivos.",
+    "fieldErrors": {
+      "items.1.id_repuesto": [
+        "El repuesto seleccionado no existe o está inactivo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000002",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > un subtotal que desborda su columna revierte la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000004",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > un subtotal que desborda su columna revierte la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "error": "El subtotal de un repuesto no debe superar S/ 9,999,999,999.99.",
+    "fieldErrors": {
+      "items.0": [
+        "El subtotal de un repuesto no debe superar S/ 9,999,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "2",
+          "id_repuesto": "REP00000004",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcular el subtotal > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "160.85",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "1.01",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000021",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000001",
+        "subtotal": "10.35",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > una cantidad de 1,005 se redondea antes de calcular el subtotal > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "1.005",
+          "id_repuesto": "REP00000001",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una cantidad de cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una cantidad de cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad del repuesto debe ser mayor a cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "0",
+          "id_repuesto": "REP00000001",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una cantidad que la base guardaria como cero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una cantidad que la base guardaria como cero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad del repuesto debe ser mayor a cero.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "0.001",
+          "id_repuesto": "REP00000001",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una cantidad que no es numero > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una cantidad que no es numero > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "La cantidad del repuesto debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "dos",
+          "id_repuesto": "REP00000001",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una falla anulada no admite reparaciones > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > una falla anulada no admite reparaciones > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+    "fieldErrors": {
+      "id_falla": [
+        "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una falla reparada no admite reparaciones > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createRepairAction > una falla reparada no admite reparaciones > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+    "fieldErrors": {
+      "id_falla": [
+        "No se puede registrar una reparacion sobre una falla cerrada o anulada.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una fecha que no es fecha devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una fecha que no es fecha devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "fecha_reparacion": [
+        "La fecha de reparación no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "mañana",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una linea con cantidad y sin repuesto devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una linea con cantidad y sin repuesto devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.id_repuesto": [
+        "Seleccione el repuesto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "3",
+          "id_repuesto": "",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una linea con repuesto y sin cantidad devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una linea con repuesto y sin cantidad devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "items.0.cantidad": [
+        "Ingrese la cantidad del repuesto.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "1",
+          "id_repuesto": "REP00000002",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una linea vacia del todo no cuenta > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000007",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "maquina": true,
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "estado": true,
+        "id_repuesto": {
+          "in": [
+            "REP00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "repuesto.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "reparacion",
+      "prefijo": "RPA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "costo_total": "171.00",
+        "estado_reparacion": "programada",
+        "fecha_reparacion": 2026-07-16T00:00:00.000Z,
+        "id_falla": "FAL00000007",
+        "id_reparacion": "RPA00000021",
+        "mano_obra": "150.50",
+        "observaciones": "Cambiar rodamientos del cabezal",
+        "tecnico_proveedor": "Servicios Electromecanicos Lima",
+      },
+    },
+    "prisma": "reparacion.create",
+  },
+  {
+    "args": {
+      "cantidad": 1,
+      "codigoEntidad": "detalle_repuesto_reparacion",
+      "prefijo": "DRP",
+    },
+    "effect": "getNextCorrelativeIds",
+  },
+  {
+    "args": {
+      "data": {
+        "cantidad": "2.00",
+        "costo_unitario": "10.25",
+        "id_detalle_repuesto": "DRP00000021",
+        "id_reparacion": "RPA00000021",
+        "id_repuesto": "REP00000001",
+        "subtotal": "20.50",
+      },
+    },
+    "prisma": "detalle_repuesto_reparacion.create",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Reparacion registrada para la falla FAL00000007.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000021",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRepairAction > una linea vacia del todo no cuenta > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_reparacion": "RPA00000021",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [
+        {
+          "cantidad": "",
+          "id_repuesto": "",
+        },
+        {
+          "cantidad": "2",
+          "id_repuesto": "REP00000001",
+        },
+        {
+          "cantidad": "",
+          "id_repuesto": "",
+        },
+      ],
+      "mano_obra": "150.50",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una mano de obra negativa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una mano de obra negativa > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "mano_obra": [
+        "La mano de obra no puede ser negativa.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "-5",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`createRepairAction > una mano de obra que desborda su columna devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`createRepairAction > una mano de obra que desborda su columna devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la reparación.",
+    "fieldErrors": {
+      "mano_obra": [
+        "La mano de obra no debe superar S/ 9,999,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "estado_reparacion": "programada",
+      "fecha_reparacion": "2026-07-16",
+      "id_falla": "FAL00000007",
+      "items": [],
+      "mano_obra": "1e12",
+      "observaciones": "Cambiar rodamientos del cabezal",
+      "tecnico_proveedor": "Servicios Electromecanicos Lima",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > WORKSHOP_MASTER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de las reparaciones.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pendiente y la maquina no cambia > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_reparacion": "anulada",
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "pendiente",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de reparacion actualizado de observada a anulada.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > de observada a anulada: la falla vuelve a pendiente y la maquina no cambia > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda reparada y la maquina operativa > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_reparacion": "ejecutada",
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "reparada",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "operativa",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de reparacion actualizado de programada a ejecutada.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > de programada a ejecutada: la falla queda reparada y la maquina operativa > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "ejecutada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > de programada a observada: falla en atencion y maquina en reparacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_reparacion": "observada",
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000007",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": "en_reparacion",
+      },
+      "where": {
+        "id_maquina": "MAQ00000005",
+      },
+    },
+    "prisma": "maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de reparacion actualizado de programada a observada.",
+      "enTransaccion": true,
+      "entidad_afectada": "reparacion",
+      "id_registro_afectado": "RPA00000003",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/repairs",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > de programada a observada: falla en atencion y maquina en reparacion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "observada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > la reparacion no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > la reparacion no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La reparación seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > pedir el estado que ya tiene responde sin escribir nada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > pedir el estado que ya tiene responde sin escribir nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La reparación ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El identificador de la reparación no es válido. Seleccione un estado de reparación válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un estado que no existe devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un estado que no existe devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Seleccione un estado de reparación válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_reparacion": "observada",
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la reparación. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > una reparacion anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > una reparacion anulada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una reparacion finalizada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;
+
+exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_reparacion FROM aceros.reparacion WHERE id_reparacion = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RPA00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "falla_maquina": true,
+      },
+      "where": {
+        "id_reparacion": "RPA00000003",
+      },
+    },
+    "prisma": "reparacion.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRepairStatusAction > una reparacion ejecutada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una reparacion finalizada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "RPA00000003",
+    },
+  },
+}
+`;

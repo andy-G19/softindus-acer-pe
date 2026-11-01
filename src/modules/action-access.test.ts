@@ -144,6 +144,7 @@ const MODULOS: ModuloDeAcciones[] = [
     cargar: () => import("@/modules/maintenance/failures/actions"),
     roles: ADMIN_Y_TALLER,
     acciones: ["createFailureAction", "updateFailureStatusAction"],
+    rechazanConResultado: ["createFailureAction", "updateFailureStatusAction"],
   },
   {
     ruta: "maintenance/machines/actions",
@@ -164,12 +165,17 @@ const MODULOS: ModuloDeAcciones[] = [
       "createPreventiveMaintenanceAction",
       "updatePreventiveMaintenanceStatusAction",
     ],
+    rechazanConResultado: [
+      "createPreventiveMaintenanceAction",
+      "updatePreventiveMaintenanceStatusAction",
+    ],
   },
   {
     ruta: "maintenance/repairs/actions",
     cargar: () => import("@/modules/maintenance/repairs/actions"),
     roles: SOLO_ADMIN,
     acciones: ["createRepairAction", "updateRepairStatusAction"],
+    rechazanConResultado: ["createRepairAction", "updateRepairStatusAction"],
   },
   {
     ruta: "maintenance/spare-parts/actions",

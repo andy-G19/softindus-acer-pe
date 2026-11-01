@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import { getPaginationMeta } from "@/lib/pagination";
 import { RowStatusDemo } from "@/modules/gallery/confirm-action-demo";
+import { RowStatusSelectDemo } from "@/modules/gallery/row-status-select-demo";
 import {
   GalleryNote,
   GallerySample,
@@ -150,6 +151,18 @@ export function ListingSection() {
         vuelve al botón. En «Taller Arequipa» la acción de ejemplo falla y el
         mensaje queda dentro de la confirmación. «Activar» no pide confirmar.
         Aquí la acción solo espera en el navegador: no se guarda nada.
+      </GalleryNote>
+
+      <GallerySample label="Cambio de estado desde la fila (RowStatusSelect)">
+        <RowStatusSelectDemo id="EJM00000001" initialStatus="pendiente" />
+        <RowStatusSelectDemo id="EJM00000002" initialStatus="en_atencion" rejects />
+      </GallerySample>
+      <GalleryNote>
+        «Guardar» envía el estado elegido y no hace nada si no cambió. Los estados
+        finales piden confirmar: «Anulada» con el botón destructivo y «Reparada»
+        con el normal, porque no borra nada. En el segundo ejemplo la acción falla
+        y el mensaje queda en la fila. Aquí la acción solo espera en el navegador:
+        no se guarda nada.
       </GalleryNote>
 
       <GallerySample label="Tabla cargando (TableLoadingRows)" className="block">

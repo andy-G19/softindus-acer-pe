@@ -13,7 +13,7 @@ Pantallas renovadas hasta ahora:
   proveedor, categorías de materiales, materiales e insumos, alertas y stock
   crítico, entradas, salidas, compras (la lista) y pagos a proveedores.
 - Caja chica: categorías de gasto.
-- Mantenimiento: el inicio, máquinas y repuestos.
+- Mantenimiento: todas sus pantallas.
 - Reportes: los ocho reportes con filtros, el historial de exportaciones y
   la bitácora de auditoría.
 
@@ -32,6 +32,9 @@ lista. Así no pierdes la lista ni los filtros que tenías puestos.
   dirección: si recargas la página o copias el enlace, el mismo formulario
   se abre a pantalla completa, y allí **Cancelar** te devuelve a la lista
   con los filtros que tenía.
+- Los formularios con líneas que se agregan, como los pedidos y las
+  reparaciones, se abren en una página completa. **Cancelar** pregunta antes de
+  salir si cambiaste algo.
 - En el teléfono, la ventana y el panel ocupan toda la pantalla.
 
 Los campos marcados con un asterisco (*) son obligatorios.
@@ -92,6 +95,22 @@ categorías de producto, máquinas y repuestos.
   desactualizada, el sistema no hace lo contrario de lo que pediste: te
   avisa, por ejemplo, de que «ya estaba inactivo».
 
+## Cambiar el estado desde la fila
+
+Los registros que pasan por varios estados, como las fallas, los preventivos y
+las reparaciones, tienen en su fila una lista de estados y el botón **Guardar**.
+
+- **Guardar** se activa cuando eliges un estado distinto del actual.
+- Los estados que no se pueden deshacer piden confirmación, y la pregunta
+  explica qué pasa. **Anular** usa el botón rojo; los demás, el botón normal,
+  porque no anulan nada. Los otros estados se aplican al pulsar **Guardar**.
+- Al terminar aparece un solo aviso. Si el registro queda en un estado final, la
+  fila muestra «Sin accion» y el cursor queda en esa fila.
+- Si algo falla, el mensaje aparece en la fila, o dentro de la confirmación si
+  se había abierto.
+- Si otra persona ya había hecho el cambio, el sistema te avisa de que «ya
+  estaba en ese estado» y no escribe nada.
+
 ## Filtrar las listas
 
 Las listas renovadas tienen una barra de filtros arriba. Completa los campos
@@ -112,8 +131,8 @@ se incluyen completos. **Hasta** no ofrece días anteriores a **Desde**; si
 quedan al revés, muestra «La fecha inicial no puede ser mayor que la fecha
 final.» y la barra no se envía hasta corregirlo. Si llegas con un enlace que
 ya trae el rango al revés, **Hasta** muestra el mismo mensaje: los reportes
-no muestran datos y piden corregir el rango, y las listas de Inventario y
-de Comercial salen vacías.
+no muestran datos y piden corregir el rango, y las listas de Inventario, de
+Comercial y de Mantenimiento salen vacías.
 
 Las fechas cuentan aunque las elijas mientras la página todavía carga, o
 aunque el navegador las recupere al volver con **Atrás**: si quedan al

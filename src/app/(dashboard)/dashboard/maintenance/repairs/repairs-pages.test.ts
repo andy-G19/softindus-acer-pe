@@ -1,6 +1,12 @@
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { definePageSuite } from "@/testing/page-characterization";
+import { Prisma } from "@/generated/prisma/client";
+import {
+  characterizePage,
+  definePageSuite,
+  generatedResult,
+  type PrismaArgs,
+} from "@/testing/page-characterization";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/db", async () =>
@@ -17,6 +23,38 @@ vi.mock("next/navigation", async (importOriginal) =>
 
 // Caracterizacion de Reparaciones (entrega 4.4), escrita antes
 // de mover sus consultas a modules/maintenance/repairs/queries.ts.
+// La 10.5b agrega una reparacion en cada estado (ejecutadas y anuladas
+// muestran «Sin accion») y, en la primera, el ejemplo del hallazgo 3 tal como
+// quedo guardado antes de B2: dos detalles de 12,81 y un costo total de 25,63,
+// que la base redondeo por su cuenta desde 25,625. La lista suma los subtotales
+// (25,62) y muestra el total guardado; esas filas no se corrigen.
+
+const REPAIR_STATES = ["programada", "ejecutada", "observada", "anulada"];
+
+const repairsInEveryState = (args: PrismaArgs) => {
+  const [first] = generatedResult("reparacion", "findMany", args) as Record<string, unknown>[];
+  const [detail] = first.detalle_repuesto_reparacion as Record<string, unknown>[];
+  const halfRoundedDetail = (id: string) => ({
+    ...detail,
+    id_detalle_repuesto: id,
+    cantidad: new Prisma.Decimal("1.25"),
+    costo_unitario: new Prisma.Decimal("10.25"),
+    subtotal: new Prisma.Decimal("12.81"),
+  });
+
+  return REPAIR_STATES.map((estado_reparacion, index) => ({
+    ...first,
+    id_reparacion: `RPA0000000${index + 1}`,
+    estado_reparacion,
+    ...(index === 0
+      ? {
+          mano_obra: null,
+          costo_total: new Prisma.Decimal("25.63"),
+          detalle_repuesto_reparacion: [halfRoundedDetail("DRP00000001"), halfRoundedDetail("DRP00000002")],
+        }
+      : { detalle_repuesto_reparacion: [] }),
+  }));
+};
 
 definePageSuite([
   {
@@ -35,6 +73,10 @@ definePageSuite([
           to: "2026-07-31",
         },
       },
+      {
+        name: "una reparacion en cada estado",
+        data: { "reparacion.findMany": repairsInEveryState },
+      },
     ],
   },
   {
@@ -42,6 +84,50 @@ definePageSuite([
     load: () => import("./new/page"),
     cases: [
       { name: "formulario" },
+      {
+        name: "con regreso al listado filtrado",
+        searchParams: { returnTo: "/dashboard/maintenance/repairs?status=anulada" },
+      },
+      {
+        name: "sin fallas abiertas",
+        data: { "falla_maquina.findMany": [] },
+      },
     ],
   },
 ]);
+
+// Entrega 10.5b: la lista usa FilterBar y DateRangeFields con los mismos nombres
+// de URL, y el alta lleva el regreso a la lista filtrada.
+describe("lista de reparaciones con filtros", () => {
+  const LIST_ROUTE = "/dashboard/maintenance/repairs";
+  const loadList = () => import("./page");
+  const filtered = {
+    name: "filtrada",
+    searchParams: { status: "anulada", from: "2026-07-01", to: "2026-07-31" },
+  };
+
+  it("el alta lleva el regreso al listado filtrado", async () => {
+    const { html } = await characterizePage(loadList, filtered, LIST_ROUTE);
+    const returnTo = encodeURIComponent(`${LIST_ROUTE}?status=anulada&from=2026-07-01&to=2026-07-31`);
+
+    expect(html).toContain(`href="${LIST_ROUTE}/new?returnTo=${returnTo}"`);
+  });
+
+  it("el estado vacio tambien lo lleva", async () => {
+    const { html } = await characterizePage(
+      loadList,
+      { ...filtered, data: { "reparacion.findMany": [] } },
+      LIST_ROUTE,
+    );
+
+    expect(html?.match(/repairs\/new\?returnTo=/g)).toHaveLength(2);
+  });
+
+  it("los filtros conservan sus nombres en la URL", async () => {
+    const { html } = await characterizePage(loadList, filtered, LIST_ROUTE);
+
+    for (const name of ["q", "machine", "failure", "status", "from", "to"]) {
+      expect(html).toContain(`name="${name}"`);
+    }
+  });
+});

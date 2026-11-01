@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { DATE_RANGE_INVERTED_MESSAGE, isDateRangeInverted, toDateInputValue } from "@/lib/date-range";
+import { DATE_RANGE_INVERTED_MESSAGE, isDateRangeInverted, isDateTimeInputValue, toDateInputValue } from "@/lib/date-range";
 import { parseReportDate, validateDateRange } from "@/lib/reports/report-filters";
 
 describe("isDateRangeInverted", () => {
@@ -61,5 +61,29 @@ describe("mensaje del rango invertido", () => {
 
     expect(result).toEqual({ ok: false, error: DATE_RANGE_INVERTED_MESSAGE });
     expect(DATE_RANGE_INVERTED_MESSAGE).toBe("La fecha inicial no puede ser mayor que la fecha final.");
+  });
+});
+
+describe("isDateTimeInputValue", () => {
+  it.each(["2026-07-14T09:30", "2026-07-14T23:59", "2026-07-14T00:00:59", "2024-02-29T10:00"])(
+    "acepta %s",
+    (value) => {
+      expect(isDateTimeInputValue(value)).toBe(true);
+    },
+  );
+
+  it.each([
+    "2026-02-30T10:00",
+    "2025-02-29T10:00",
+    "2026-07-14T24:00",
+    "2026-07-14T09:60",
+    "2026-07-14T09:30:60",
+    "2026-07-14 09:30",
+    "2026-07-14",
+    "2026-07-14T09:30:15.123",
+    "",
+    "July 14 2026",
+  ])("rechaza %j", (value) => {
+    expect(isDateTimeInputValue(value)).toBe(false);
   });
 });

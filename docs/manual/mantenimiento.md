@@ -1,8 +1,8 @@
 # Manual de usuario — Mantenimiento
 
-Este capítulo describe las pantallas de Mantenimiento que ya se renovaron.
-Las reglas comunes (ventanas, guardar, cancelar, inactivar y filtros) están
-en [Cómo funcionan las pantallas](00-patrones.md).
+Este capítulo describe todas las pantallas de Mantenimiento. Las reglas
+comunes (ventanas, guardar, cancelar, inactivar, cambiar el estado y filtros)
+están en [Cómo funcionan las pantallas](00-patrones.md).
 
 ## Inicio de Mantenimiento
 
@@ -97,3 +97,144 @@ filtro de proveedor lista todos los proveedores, también los inactivos.
 Al abrir el buscador de proveedor, la lista solo muestra el proveedor
 elegido, porque el buscador empieza con su nombre: borra el texto para ver
 los demás.
+
+## Fallas
+
+**Dónde:** Mantenimiento → Fallas.
+**Quién:** el administrador (ADMIN) y el maestro de taller
+(WORKSHOP_MASTER) las registran y cambian su estado.
+
+Arriba están los totales de fallas registradas, pendientes, en atención y
+reparadas, y el tiempo perdido. La lista muestra, por falla, el código, la
+máquina, la fecha, la descripción, el responsable, el tiempo perdido, cuántas
+reparaciones tiene y su estado.
+
+Una falla puede estar:
+
+- **Pendiente:** aún sin atender.
+- **En atención:** alguien trabaja en ella.
+- **Reparada:** resuelta. Es un estado final.
+- **Anulada:** se registró por error o ya no aplica. Es un estado final.
+
+Acciones:
+
+- **Registrar:** pulsa **Registrar falla**. El panel pide la máquina, la fecha
+  y hora, el estado (empieza en «Pendiente»), la descripción, el responsable,
+  el tiempo perdido en horas y el impacto en producción. Pulsa **Registrar
+  falla**.
+  - La descripción lleva al menos 5 caracteres.
+  - No se puede registrar una falla sobre una máquina inactiva.
+  - Registrar una falla no cambia el estado de la máquina.
+- **Cambiar el estado:** elige el estado en la fila y pulsa **Guardar** (ver
+  [Cambiar el estado desde la fila](00-patrones.md#cambiar-el-estado-desde-la-fila)).
+  - **Reparada** y **Anulada** piden confirmación, porque después no se podrá
+    cambiar el estado ni registrar reparaciones sobre esa falla. Una falla
+    anulada se conserva en la lista.
+  - Una falla reparada o anulada muestra «Sin accion» en su fila.
+
+## Preventivos
+
+**Dónde:** Mantenimiento → Preventivos.
+**Quién:** solo el administrador (ADMIN).
+
+Arriba están los totales de preventivos registrados, pendientes, realizados y
+anulados. La lista muestra, por preventivo, el código, la máquina, la actividad,
+el responsable, la fecha programada, la fecha realizada y su estado. Se puede
+filtrar por texto (mantenimiento o actividad), máquina, responsable, estado y
+rango de fechas.
+
+Un preventivo puede estar:
+
+- **Pendiente:** programado. Si su fecha ya pasó, la lista lo muestra
+  **Vencido**.
+- **Vencido:** también se puede guardar así a propósito.
+- **Realizado:** cumplido. Es un estado final.
+- **Anulado:** ya no se hará. Es un estado final.
+
+Acciones:
+
+- **Programar:** pulsa **Programar preventivo**. El panel pide la máquina, la
+  fecha programada, el estado inicial (empieza en «Pendiente»), el responsable,
+  la actividad y las observaciones. Pulsa **Programar preventivo**.
+- **Cambiar el estado:** elige el estado en la fila y pulsa **Guardar**.
+  - **Realizado** pide confirmación: la fecha de hoy queda como fecha realizada
+    y después no se podrá cambiar el estado.
+  - **Anulado** pide confirmación: no se podrá cambiar el estado, y se conserva
+    en la lista.
+  - Un preventivo realizado o anulado muestra «Sin accion» en su fila.
+
+## Reparaciones
+
+**Dónde:** Mantenimiento → Reparaciones.
+**Quién:** solo el administrador (ADMIN).
+
+Arriba están los totales de reparaciones, programadas y ejecutadas, el costo
+total y el promedio. La lista muestra, por reparación, el código, la máquina,
+la falla y los repuestos usados, la fecha, el técnico o proveedor, la mano de
+obra, el costo de los repuestos, el costo total y su estado. Se puede filtrar
+por texto (reparación, falla o técnico), máquina, falla, estado y rango de
+fechas.
+
+Una reparación puede estar:
+
+- **Programada:** planificada.
+- **Observada:** con algo por revisar.
+- **Ejecutada:** terminada. Es un estado final.
+- **Anulada:** ya no se hará. Es un estado final.
+
+El estado de la reparación mueve el de su falla y su máquina:
+
+| Reparación | Falla | Máquina |
+|---|---|---|
+| Programada u observada | En atención | En mantenimiento |
+| Ejecutada | Reparada | Operativa |
+| Anulada | Vuelve a pendiente | No cambia |
+
+Una reparación que se registra ya como **Anulada** no cambia ni la falla ni la
+máquina.
+
+**Registrar una reparación.** El formulario se abre en una página completa,
+porque puede llevar varias líneas:
+
+1. Pulsa **Registrar reparación** en la lista.
+2. Elige la **falla**. Solo se ofrecen las que siguen abiertas: no se puede
+   registrar una reparación sobre una falla reparada o anulada.
+3. Completa la fecha, el estado (empieza en «Programada»), la mano de obra y
+   el técnico o proveedor.
+4. Para cada repuesto usado, pulsa **Agregar repuesto**, elígelo y escribe la
+   cantidad. **Quitar** retira la línea. Una reparación puede no llevar
+   repuestos.
+5. Revisa el resumen: **Repuestos**, **Mano de obra** y **Costo total**. Se
+   actualiza mientras escribes, y es lo que se guardará.
+6. Pulsa **Registrar reparacion**.
+
+Reglas de las líneas:
+
+- Un repuesto sin cantidad, o una cantidad sin repuesto, se marca junto a su
+  línea. Una línea vacía del todo no se guarda.
+- No se puede repetir un repuesto: se marcan las líneas que lo usan.
+- Solo se ofrecen los repuestos activos.
+- El costo unitario sale del catálogo de repuestos. Si cambia mientras tienes
+  el formulario abierto, se guarda el costo vigente al guardar.
+- Cada subtotal se redondea a 2 decimales y el total es la suma de lo que ves.
+  Las reparaciones registradas antes de esta regla conservan su total, que puede
+  diferir en un céntimo de la suma de sus repuestos.
+
+**Cambiar el estado:** elige el estado en la fila y pulsa **Guardar**.
+
+- **Ejecutada** pide confirmación: la falla queda reparada y la máquina,
+  operativa.
+- **Anulada** pide confirmación: la falla vuelve a pendiente y la máquina no
+  cambia de estado.
+- Después de cualquiera de los dos no se podrá cambiar el estado, y la fila
+  muestra «Sin accion».
+
+## Reincidencias
+
+**Dónde:** Mantenimiento → Reincidencias.
+**Quién:** solo el administrador (ADMIN).
+
+Es una pantalla de consulta. Muestra los totales de fallas, fallas abiertas,
+horas perdidas, costo acumulado y preventivos vencidos; las 5 máquinas con más
+fallas y las 5 con mayor costo de reparación; el reporte general por máquina,
+con su nivel de riesgo (alto, medio o bajo), y el criterio de riesgo usado.

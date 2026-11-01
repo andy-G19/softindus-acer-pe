@@ -1,0 +1,1872 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > ADMIN registra la falla con su correlativo y la bitacora dentro de la transaccion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para registrar fallas.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "en_atencion",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > WORKSHOP_MASTER tambien registra fallas > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "en_atencion",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción de la falla debe tener al menos 5 caracteres.",
+      ],
+      "estado_atencion": [
+        "Seleccione un estado de atención válido.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+      "tiempo_perdido_horas": [
+        "El tiempo perdido no puede ser negativo.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "mal",
+      "estado_atencion": "rota",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ1",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "-1",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > el 30 de febrero devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > el 30 de febrero devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "fecha_falla": [
+        "La fecha de la falla no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-02-30T10:00",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > la maquina no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createFailureAction > la maquina no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina seleccionada no existe.",
+    "fieldErrors": {
+      "id_maquina": [
+        "La máquina seleccionada no existe.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": null,
+        "responsable_registro": null,
+        "tiempo_perdido_horas": null,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > los opcionales ausentes del formulario cuentan como vacios > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": null,
+        "responsable_registro": null,
+        "tiempo_perdido_horas": null,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > los opcionales vacios se guardan como null > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina dada de baja > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una falla sobre una maquina inactiva.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede registrar una falla sobre una maquina inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`createFailureAction > no registra fallas sobre una maquina inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede registrar una falla sobre una maquina inactiva.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede registrar una falla sobre una maquina inactiva.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "descripcion": [
+        "La descripción de la falla es obligatoria.",
+      ],
+      "estado_atencion": [
+        "Seleccione un estado de atención válido.",
+      ],
+      "fecha_falla": [
+        "La fecha de la falla es obligatoria.",
+      ],
+      "id_maquina": [
+        "Seleccione una máquina válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "",
+      "estado_atencion": "",
+      "fecha_falla": "",
+      "id_maquina": "",
+      "impacto_produccion": "",
+      "responsable_registro": "",
+      "tiempo_perdido_horas": "",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un fallo al crear revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createFailureAction > un fallo al crear revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo registrar la falla. Intenta nuevamente.",
+    "fieldErrors": undefined,
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un tiempo perdido que desborda su columna devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un tiempo perdido que desborda su columna devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "tiempo_perdido_horas": [
+        "El tiempo perdido no debe superar 99,999,999.99.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "1e12",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > un tiempo perdido que no es numero devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > un tiempo perdido que no es numero devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "tiempo_perdido_horas": [
+        "El tiempo perdido debe ser un número válido.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "dos",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > una fecha que no es fecha devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createFailureAction > una fecha que no es fecha devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la falla.",
+    "fieldErrors": {
+      "fecha_falla": [
+        "La fecha de la falla no es válida.",
+      ],
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "mañana",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`createFailureAction > una maquina en reparacion admite otra falla > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000003",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": {
+      "codigoEntidad": "falla_maquina",
+      "prefijo": "FAL",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "El husillo vibra al pasar de 800 rpm",
+        "estado_atencion": "pendiente",
+        "fecha_falla": 2026-07-14T09:30:00.000Z,
+        "id_falla": "FAL00000012",
+        "id_maquina": "MAQ00000003",
+        "id_usuario_registro": "USU00000001",
+        "impacto_produccion": "Se detuvo el torneado de bridas",
+        "responsable_registro": "Juan Quispe",
+        "tiempo_perdido_horas": 2.5,
+      },
+    },
+    "prisma": "falla_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Falla registrada para la maquina MAQ00000003.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/machines",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createFailureAction > una maquina en reparacion admite otra falla > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "id_falla": "FAL00000012",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "descripcion": "El husillo vibra al pasar de 800 rpm",
+      "estado_atencion": "pendiente",
+      "fecha_falla": "2026-07-14T09:30",
+      "id_maquina": "MAQ00000003",
+      "impacto_produccion": "Se detuvo el torneado de bridas",
+      "responsable_registro": "Juan Quispe",
+      "tiempo_perdido_horas": "2.5",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > SELLER: sin permiso responde con un error, sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No tienes permisos para cambiar el estado de las fallas.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a en_atencion.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "en_atencion",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > de en atencion a pendiente > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "pendiente",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de en_atencion a pendiente.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de en atencion a pendiente > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "pendiente",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > de pendiente a anulada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "anulada",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a anulada.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a anulada > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "anulada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > de pendiente a en atencion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a en_atencion.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a en atencion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "en_atencion",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "reparada",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Estado de falla actualizado de pendiente a reparada.",
+      "enTransaccion": true,
+      "entidad_afectada": "falla_maquina",
+      "id_registro_afectado": "FAL00000005",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/maintenance",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/maintenance/failures",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > de pendiente a reparada, sin reparacion > resultado 1`] = `
+{
+  "estado": {
+    "data": {
+      "estado": "reparada",
+    },
+    "operationId": "operacion-de-prueba",
+    "status": "success",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > la falla no existe > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > la falla no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La falla seleccionada no existe.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > pedir el estado que ya tiene responde sin escribir nada > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > pedir el estado que ya tiene responde sin escribir nada > resultado 1`] = `
+{
+  "estado": {
+    "error": "La falla ya estaba en ese estado.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un POST sin campos devuelve los mensajes en espanol sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "El identificador de la falla no es válido. Seleccione un estado de atención válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un estado que no existe devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un estado que no existe devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Seleccione un estado de atención válido.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > un fallo al escribir revierte con el mensaje generico > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": {
+      "data": {
+        "estado_atencion": "en_atencion",
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > un fallo al escribir revierte con el mensaje generico > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se pudo cambiar el estado de la falla. Intenta nuevamente.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > una falla anulada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > una falla anulada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una falla cerrada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;
+
+exports[`updateFailureStatusAction > una falla reparada no se modifica > llamadas 1`] = `
+[
+  {
+    "authz": "getAuthorizedSession",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_falla FROM aceros.falla_maquina WHERE id_falla = $1 FOR NO KEY UPDATE",
+      "values": [
+        "FAL00000005",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "estado_atencion": true,
+        "id_falla": true,
+      },
+      "where": {
+        "id_falla": "FAL00000005",
+      },
+    },
+    "prisma": "falla_maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateFailureStatusAction > una falla reparada no se modifica > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede modificar una falla cerrada o anulada.",
+    "operationId": "operacion-de-prueba",
+    "status": "error",
+    "values": {
+      "id": "FAL00000005",
+    },
+  },
+}
+`;

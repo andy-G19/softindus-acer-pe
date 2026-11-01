@@ -48,3 +48,39 @@ export async function lockIndirectCostRow(tx: RowLockClient, idCostoIndirecto: s
     FOR NO KEY UPDATE
   `);
 }
+
+export async function lockMachineRow(tx: RowLockClient, idMaquina: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_maquina
+    FROM aceros.maquina
+    WHERE id_maquina = ${idMaquina}
+    FOR NO KEY UPDATE
+  `);
+}
+
+export async function lockFailureRow(tx: RowLockClient, idFalla: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_falla
+    FROM aceros.falla_maquina
+    WHERE id_falla = ${idFalla}
+    FOR NO KEY UPDATE
+  `);
+}
+
+export async function lockPreventiveMaintenanceRow(tx: RowLockClient, idMantenimiento: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_mantenimiento
+    FROM aceros.mantenimiento_preventivo
+    WHERE id_mantenimiento = ${idMantenimiento}
+    FOR NO KEY UPDATE
+  `);
+}
+
+export async function lockRepairRow(tx: RowLockClient, idReparacion: string) {
+  await tx.$queryRaw(Prisma.sql`
+    SELECT id_reparacion
+    FROM aceros.reparacion
+    WHERE id_reparacion = ${idReparacion}
+    FOR NO KEY UPDATE
+  `);
+}
