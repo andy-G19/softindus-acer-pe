@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { buildDateRangeFilter } from "@/lib/search-params";
 import { findActiveProductFilterOptions } from "@/modules/commercial/products/queries";
 
 // Consultas de lectura de la pagina de Cuellos de botella. No autorizan: la
@@ -12,12 +13,13 @@ export type BottleneckFilters = {
   route: string;
   stage: string;
   orderStatus: string;
-  fromDate: Date | null;
-  toDate: Date | null;
+  from: Date | null;
+  to: Date | null;
 };
 
 function buildBottleneckConditions(filters: BottleneckFilters) {
-  const { product, route, stage, orderStatus, fromDate, toDate } = filters;
+  const { product, route, stage, orderStatus, from, to } = filters;
+  const dateRange = buildDateRangeFilter(from, to);
   const conditions: Prisma.avance_ordenWhereInput[] = [
     {
       estado_etapa: "en_proceso",
@@ -54,12 +56,9 @@ function buildBottleneckConditions(filters: BottleneckFilters) {
     });
   }
 
-  if (fromDate || toDate) {
+  if (dateRange) {
     conditions.push({
-      fecha_inicio_etapa: {
-        ...(fromDate ? { gte: fromDate } : {}),
-        ...(toDate ? { lte: toDate } : {}),
-      },
+      fecha_inicio_etapa: dateRange,
     });
   }
 

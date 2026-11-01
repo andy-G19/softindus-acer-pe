@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { getProductionBottleneckData } from "@/modules/production/bottlenecks/queries";
 import { getStageDurationForQuantity } from "@/lib/production-times";
+import { parseDateParam } from "@/lib/search-params";
 import {
   createReturnToHref,
   dashboardBreadcrumbs,
@@ -105,16 +106,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function parseDate(value: string, endOfDay = false) {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 export default async function ProductionBottlenecksPage({
   searchParams,
 }: ProductionBottlenecksPageProps) {
@@ -128,16 +119,14 @@ export default async function ProductionBottlenecksPage({
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
   const returnTo = createReturnToHref(navigationHrefs.bottlenecks, params);
-  const fromDate = parseDate(from);
-  const toDate = parseDate(to, true);
   const { activeAdvances, products, routes, stages } =
     await getProductionBottleneckData({
       product,
       route,
       stage,
       orderStatus,
-      fromDate,
-      toDate,
+      from: parseDateParam(params, "from"),
+      to: parseDateParam(params, "to"),
     });
 
   const now = new Date();

@@ -713,7 +713,7 @@ exports[`/dashboard/production/bottlenecks > todos los filtros > llamadas 1`] = 
           {
             "fecha_inicio_etapa": {
               "gte": 2026-07-01T00:00:00.000Z,
-              "lte": 2026-07-31T23:59:59.000Z,
+              "lt": 2026-08-01T00:00:00.000Z,
             },
           },
         ],

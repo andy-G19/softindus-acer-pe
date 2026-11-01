@@ -27,6 +27,7 @@ import {
   withReturnTo,
 } from "@/lib/navigation";
 import { getPaginationMeta, getPaginationParams } from "@/lib/pagination";
+import { parseDateParam } from "@/lib/search-params";
 import { getWorkOrderListData } from "@/modules/production/work-orders/queries";
 import {
   annulWorkOrderAction,
@@ -90,16 +91,6 @@ function getSearchParam(
   return value?.trim() ?? "";
 }
 
-function parseDate(value: string, endOfDay = false) {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
 export default async function WorkOrdersPage({
   searchParams,
 }: WorkOrdersPageProps) {
@@ -116,8 +107,6 @@ export default async function WorkOrdersPage({
   const from = getSearchParam(params, "from");
   const to = getSearchParam(params, "to");
   const returnTo = createReturnToHref(navigationHrefs.workOrders, params);
-  const fromDate = parseDate(from);
-  const toDate = parseDate(to, true);
   const { page, pageSize, skip, take } = getPaginationParams(params);
 
   const {
@@ -130,7 +119,17 @@ export default async function WorkOrdersPage({
     clients,
     campaigns,
   } = await getWorkOrderListData(
-    { q, product, client, campaign, type, status, priority, fromDate, toDate },
+    {
+      q,
+      product,
+      client,
+      campaign,
+      type,
+      status,
+      priority,
+      from: parseDateParam(params, "from"),
+      to: parseDateParam(params, "to"),
+    },
     { skip, take },
   );
 
