@@ -11,6 +11,8 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
+  isRowLock,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -260,7 +262,7 @@ defineCases("createRouteStageAction", create, [
   { name: "ya existe una etapa con ese nombre", ...createWith({}, duplicated("nombre_etapa")) },
   { name: "ya existe una etapa con ese orden", ...createWith({}, duplicated("orden_secuencia")) },
   {
-    name: "una carrera por el orden (P2002) deja el error de Prisma",
+    name: "un P2002, que el candado de la ruta ya evita, deja el error de Prisma",
     ...createWith({}, { "etapa_ruta.create": failWith(uniqueViolation()) }),
   },
 ]);
@@ -306,7 +308,7 @@ defineCases("updateRouteStageAction", update, [
     ...updateWith({}, { ...currentStage(MAQUINA), ...assignments(MAQUINA) }),
   },
   {
-    name: "una carrera por el orden (P2002) deja el error de Prisma",
+    name: "un P2002, que el candado de la ruta ya evita, deja el error de Prisma",
     ...updateWith({}, { "etapa_ruta.update": failWith(uniqueViolation()) }),
   },
 ]);
@@ -352,5 +354,56 @@ describe("las acciones de etapas escriben lo que reciben", () => {
 
     expect(data).not.toHaveProperty("id_ruta");
     expect(data).not.toHaveProperty("estado");
+  });
+});
+
+// A2 (hallazgo 1 de la auditoria de la 10.6): un solo candado por ruta pone en fila
+// a quienes crean y editan sus etapas, asi que las comprobaciones de nombre y
+// orden ya no compiten; la maquina se bloquea despues de la ruta.
+describe("las acciones de etapas deciden con la ruta bloqueada", () => {
+  const decides = (call: { prisma: string }) =>
+    ["ruta_fabricacion.findFirst", "etapa_ruta.findFirst", "etapa_ruta.findUnique", "maquina.findUnique"].includes(call.prisma);
+
+  it.each([
+    ["acepta", createWith(withMachine, machine("operativa"))],
+    ["rechaza la ruta", createWith({}, route(false))],
+    ["rechaza el nombre", createWith({}, duplicated("nombre_etapa"))],
+  ])("el alta bloquea la ruta antes de leer (%s)", async (_name, actionCase) => {
+    const { calls } = await runCase(create, actionCase);
+
+    expectRowLockedBefore(calls, { table: "ruta_fabricacion", id: RUTA, reads: decides });
+  });
+
+  it.each([
+    ["acepta", updateWith(withMachine, machine("operativa"))],
+    ["rechaza la etapa", updateWith({}, { "etapa_ruta.findUnique": null })],
+    ["rechaza otra ruta", updateWith({}, currentStage(null, "RUT00000009"))],
+  ])("la edicion bloquea la ruta antes de leer (%s)", async (_name, actionCase) => {
+    const { calls } = await runCase(update, actionCase);
+
+    expectRowLockedBefore(calls, { table: "ruta_fabricacion", id: RUTA, reads: decides });
+  });
+
+  it.each([
+    ["alta", create, createWith(withMachine, machine("operativa"))],
+    ["alta que rechaza", create, createWith(withMachine, machine("inactiva"))],
+    ["edicion", update, updateWith(withMachine, machine("operativa"))],
+  ])("la maquina se bloquea antes de leerla y despues de la ruta (%s)", async (_name, run, actionCase) => {
+    const { calls } = await runCase(run, actionCase);
+
+    expectRowLockedBefore(calls, {
+      table: "maquina",
+      id: MAQUINA,
+      reads: (call) => call.prisma === "maquina.findUnique",
+    });
+    expect(calls.findIndex((call) => isRowLock(call, "ruta_fabricacion", RUTA))).toBeLessThan(
+      calls.findIndex((call) => isRowLock(call, "maquina", MAQUINA)),
+    );
+  });
+
+  it("sin maquina no se bloquea ninguna", async () => {
+    const { calls } = await runCase(create, createWith());
+
+    expect(calls.filter((call) => isRowLock(call, "maquina", MAQUINA))).toEqual([]);
   });
 });

@@ -2,11 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { Prisma } from "@/generated/prisma/client";
 import { registerAuditLog } from "@/lib/audit";
 import { requireRole } from "@/lib/authz";
 import { getNextCorrelativeId } from "@/lib/correlatives";
 import { prisma } from "@/lib/db";
 import type { ActionErrorState } from "@/lib/errors";
+import { lockMachineRow, lockRouteRow } from "@/lib/row-locks";
 import { syncStageMachineAssignment } from "@/modules/production/stages/stage-machine";
 import { routeStageSchema } from "@/schemas/production/route-stage.schema";
 
@@ -39,15 +41,19 @@ function parseStageFormData(formData: FormData) {
 }
 
 /**
- * Valida la maquina antes de abrir la transaccion. El estado solo se exige cuando la
- * maquina cambia: si ya estaba asignada y despues se dio de baja, no tiene sentido
- * bloquear la edicion de otros campos de la etapa.
+ * Valida la maquina dentro de la transaccion, con su fila bloqueada: despues de la ruta,
+ * el orden de los candados de una etapa. El estado solo se exige cuando la maquina
+ * cambia: si ya estaba asignada y despues se dio de baja, no tiene sentido bloquear la
+ * edicion de otros campos de la etapa.
  */
 async function validateAssignableMachine(
+  tx: Prisma.TransactionClient,
   idMaquina: string,
   idMaquinaActual: string | null,
 ): Promise<string | null> {
-  const maquina = await prisma.maquina.findUnique({
+  await lockMachineRow(tx, idMaquina);
+
+  const maquina = await tx.maquina.findUnique({
     where: {
       id_maquina: idMaquina,
     },
@@ -92,56 +98,59 @@ export async function createRouteStageAction(
 
   const data = parsed.data;
 
-  const route = await prisma.ruta_fabricacion.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      estado: true,
-    },
-    select: {
-      id_ruta: true,
-      nombre_ruta: true,
-    },
-  });
+  // Un rechazo vuelve del callback sin escribir nada y la transaccion termina.
+  const problem = await prisma.$transaction(async (tx): Promise<RouteStageFormState | null> => {
+    await lockRouteRow(tx, data.id_ruta);
 
-  if (!route) {
-    return { error: "La ruta seleccionada no existe o está inactiva." };
-  }
+    const route = await tx.ruta_fabricacion.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        estado: true,
+      },
+      select: {
+        id_ruta: true,
+        nombre_ruta: true,
+      },
+    });
 
-  const duplicatedName = await prisma.etapa_ruta.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      nombre_etapa: data.nombre_etapa,
-    },
-  });
-
-  if (duplicatedName) {
-    const message = "Ya existe una etapa con ese nombre dentro de esta ruta.";
-
-    return { error: message, fieldErrors: { nombre_etapa: [message] } };
-  }
-
-  const duplicatedOrder = await prisma.etapa_ruta.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      orden_secuencia: data.orden_secuencia,
-    },
-  });
-
-  if (duplicatedOrder) {
-    const message = "Ya existe una etapa con ese número de orden en esta ruta.";
-
-    return { error: message, fieldErrors: { orden_secuencia: [message] } };
-  }
-
-  if (data.id_maquina) {
-    const machineError = await validateAssignableMachine(data.id_maquina, null);
-
-    if (machineError) {
-      return machineFieldError(machineError);
+    if (!route) {
+      return { error: "La ruta seleccionada no existe o está inactiva." };
     }
-  }
 
-  await prisma.$transaction(async (tx) => {
+    const duplicatedName = await tx.etapa_ruta.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        nombre_etapa: data.nombre_etapa,
+      },
+    });
+
+    if (duplicatedName) {
+      const message = "Ya existe una etapa con ese nombre dentro de esta ruta.";
+
+      return { error: message, fieldErrors: { nombre_etapa: [message] } };
+    }
+
+    const duplicatedOrder = await tx.etapa_ruta.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        orden_secuencia: data.orden_secuencia,
+      },
+    });
+
+    if (duplicatedOrder) {
+      const message = "Ya existe una etapa con ese número de orden en esta ruta.";
+
+      return { error: message, fieldErrors: { orden_secuencia: [message] } };
+    }
+
+    if (data.id_maquina) {
+      const machineError = await validateAssignableMachine(tx, data.id_maquina, null);
+
+      if (machineError) {
+        return machineFieldError(machineError);
+      }
+    }
+
     const idEtapaRuta = await getNextCorrelativeId(tx, {
       codigoEntidad: "etapa_ruta",
       prefijo: "ETA",
@@ -176,7 +185,13 @@ export async function createRouteStageAction(
       detalle: `Etapa creada: ${data.nombre_etapa}`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return problem;
+  }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");
@@ -208,73 +223,77 @@ export async function updateRouteStageAction(
 
   const data = parsed.data;
 
-  const stage = await prisma.etapa_ruta.findUnique({
-    where: {
-      id_etapa_ruta: idEtapaRuta,
-    },
-    include: {
-      etapa_ruta_maquina: {
-        select: {
-          id_maquina: true,
+  // Se bloquea la ruta del formulario: la etapa solo sigue si es de esa ruta.
+  const problem = await prisma.$transaction(async (tx): Promise<RouteStageFormState | null> => {
+    await lockRouteRow(tx, data.id_ruta);
+
+    const stage = await tx.etapa_ruta.findUnique({
+      where: {
+        id_etapa_ruta: idEtapaRuta,
+      },
+      include: {
+        etapa_ruta_maquina: {
+          select: {
+            id_maquina: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!stage) {
-    return { error: "La etapa seleccionada no existe." };
-  }
-
-  if (stage.id_ruta !== data.id_ruta) {
-    return { error: "La etapa no pertenece a la ruta indicada." };
-  }
-
-  const duplicatedName = await prisma.etapa_ruta.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      nombre_etapa: data.nombre_etapa,
-      id_etapa_ruta: {
-        not: idEtapaRuta,
-      },
-    },
-  });
-
-  if (duplicatedName) {
-    const message = "Ya existe una etapa con ese nombre dentro de esta ruta.";
-
-    return { error: message, fieldErrors: { nombre_etapa: [message] } };
-  }
-
-  const duplicatedOrder = await prisma.etapa_ruta.findFirst({
-    where: {
-      id_ruta: data.id_ruta,
-      orden_secuencia: data.orden_secuencia,
-      id_etapa_ruta: {
-        not: idEtapaRuta,
-      },
-    },
-  });
-
-  if (duplicatedOrder) {
-    const message = "Ya existe una etapa con ese número de orden en esta ruta.";
-
-    return { error: message, fieldErrors: { orden_secuencia: [message] } };
-  }
-
-  if (data.id_maquina) {
-    const idMaquinaActual = stage.etapa_ruta_maquina[0]?.id_maquina ?? null;
-
-    const machineError = await validateAssignableMachine(
-      data.id_maquina,
-      idMaquinaActual,
-    );
-
-    if (machineError) {
-      return machineFieldError(machineError);
+    if (!stage) {
+      return { error: "La etapa seleccionada no existe." };
     }
-  }
 
-  await prisma.$transaction(async (tx) => {
+    if (stage.id_ruta !== data.id_ruta) {
+      return { error: "La etapa no pertenece a la ruta indicada." };
+    }
+
+    const duplicatedName = await tx.etapa_ruta.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        nombre_etapa: data.nombre_etapa,
+        id_etapa_ruta: {
+          not: idEtapaRuta,
+        },
+      },
+    });
+
+    if (duplicatedName) {
+      const message = "Ya existe una etapa con ese nombre dentro de esta ruta.";
+
+      return { error: message, fieldErrors: { nombre_etapa: [message] } };
+    }
+
+    const duplicatedOrder = await tx.etapa_ruta.findFirst({
+      where: {
+        id_ruta: data.id_ruta,
+        orden_secuencia: data.orden_secuencia,
+        id_etapa_ruta: {
+          not: idEtapaRuta,
+        },
+      },
+    });
+
+    if (duplicatedOrder) {
+      const message = "Ya existe una etapa con ese número de orden en esta ruta.";
+
+      return { error: message, fieldErrors: { orden_secuencia: [message] } };
+    }
+
+    if (data.id_maquina) {
+      const idMaquinaActual = stage.etapa_ruta_maquina[0]?.id_maquina ?? null;
+
+      const machineError = await validateAssignableMachine(
+        tx,
+        data.id_maquina,
+        idMaquinaActual,
+      );
+
+      if (machineError) {
+        return machineFieldError(machineError);
+      }
+    }
+
     await tx.etapa_ruta.update({
       where: {
         id_etapa_ruta: idEtapaRuta,
@@ -304,7 +323,13 @@ export async function updateRouteStageAction(
       detalle: `Etapa actualizada: ${data.nombre_etapa}`,
       tx,
     });
+
+    return null;
   });
+
+  if (problem) {
+    return problem;
+  }
 
   revalidatePath("/dashboard/production");
   revalidatePath("/dashboard/production/routes");

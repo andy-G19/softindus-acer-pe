@@ -10,6 +10,7 @@ import {
   characterizeHandler,
   describeNavigationError,
   expectAuthorizesBeforePrisma,
+  expectRowLockedBefore,
   type DataOverrides,
   type Role,
 } from "@/testing/page-characterization";
@@ -210,7 +211,7 @@ defineCases("createFabricationRouteAction", createFabricationRouteAction, [
   { name: "el producto no existe o esta inactivo", ...createWith({}, product(false)) },
   { name: "ya existe una ruta con ese nombre para el producto", ...createWith({}, duplicate) },
   {
-    name: "una carrera por el nombre (P2002) deja el error de Prisma",
+    name: "una carrera por el nombre (P2002) responde como el duplicado",
     ...createWith({}, { "ruta_fabricacion.create": failWith(uniqueViolation()) }),
   },
   {
@@ -243,7 +244,7 @@ defineCases("updateFabricationRouteAction", updateFabricationRouteAction, [
   },
   { name: "otra ruta del producto ya usa ese nombre", ...updateWith({}, duplicate) },
   {
-    name: "una carrera por el nombre (P2002) deja el error de Prisma",
+    name: "una carrera por el nombre (P2002) responde como el duplicado",
     ...updateWith({}, { "ruta_fabricacion.update": failWith(uniqueViolation()) }),
   },
 ]);
@@ -293,5 +294,52 @@ describe("las acciones de rutas escriben lo que reciben", () => {
 
     expect(args?.where).toEqual({ id_ruta: RUTA });
     expect(args?.data).not.toHaveProperty("estado");
+  });
+});
+
+// A2 (hallazgo 1 de la auditoria de la 10.6): la edicion bloquea la ruta antes de
+// leer lo que decide, y una carrera por el nombre, que el alta no puede evitar
+// porque todavia no hay fila que bloquear, responde como el duplicado.
+describe("las acciones de rutas deciden con la fila bloqueada", () => {
+  const DUPLICATE = "error: Ya existe una ruta con ese nombre para este producto.";
+
+  it.each([
+    ["acepta", updateWith()],
+    ["rechaza por sus ordenes", updateWith({ id_producto: OTRO_PRODUCTO }, currentRoute(2))],
+  ])("la edicion bloquea la ruta antes de leerla (%s)", async (_name, actionCase) => {
+    const { calls } = await runCase(updateFabricationRouteAction, actionCase);
+
+    expectRowLockedBefore(calls, {
+      table: "ruta_fabricacion",
+      id: RUTA,
+      reads: (call) => call.prisma.startsWith("ruta_fabricacion.find") || call.prisma === "producto.findFirst",
+    });
+  });
+
+  it("una carrera por el nombre al crear responde como el duplicado", async () => {
+    const { result } = await runCase(
+      createFabricationRouteAction,
+      createWith({}, { "ruta_fabricacion.create": failWith(uniqueViolation()) }),
+    );
+
+    expect(result).toBe(DUPLICATE);
+  });
+
+  it("una carrera por el nombre al editar responde como el duplicado", async () => {
+    const { result } = await runCase(
+      updateFabricationRouteAction,
+      updateWith({}, { "ruta_fabricacion.update": failWith(uniqueViolation()) }),
+    );
+
+    expect(result).toBe(DUPLICATE);
+  });
+
+  it("otro fallo al crear conserva su error", async () => {
+    const { result } = await runCase(
+      createFabricationRouteAction,
+      createWith({}, { "ruta_fabricacion.create": failWith(new Error("conexion perdida")) }),
+    );
+
+    expect(result).toBe("error: conexion perdida");
   });
 });

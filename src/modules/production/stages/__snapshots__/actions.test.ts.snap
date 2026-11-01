@@ -10,6 +10,19 @@ exports[`createRouteStageAction > ADMIN crea la etapa sin maquina > llamadas 1`]
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -39,10 +52,6 @@ exports[`createRouteStageAction > ADMIN crea la etapa sin maquina > llamadas 1`]
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -135,6 +144,19 @@ exports[`createRouteStageAction > WORKSHOP_MASTER tambien crea etapas > llamadas
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -164,10 +186,6 @@ exports[`createRouteStageAction > WORKSHOP_MASTER tambien crea etapas > llamadas
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -246,6 +264,19 @@ exports[`createRouteStageAction > con maquina crea la asignacion y queda obligad
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -278,6 +309,15 @@ exports[`createRouteStageAction > con maquina crea la asignacion y queda obligad
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -288,10 +328,6 @@ exports[`createRouteStageAction > con maquina crea la asignacion y queda obligad
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -416,6 +452,19 @@ exports[`createRouteStageAction > la maquina no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -448,6 +497,15 @@ exports[`createRouteStageAction > la maquina no existe > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -458,6 +516,10 @@ exports[`createRouteStageAction > la maquina no existe > llamadas 1`] = `
       },
     },
     "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -485,6 +547,19 @@ exports[`createRouteStageAction > la ruta no existe o esta inactiva > llamadas 1
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -496,6 +571,10 @@ exports[`createRouteStageAction > la ruta no existe o esta inactiva > llamadas 1
       },
     },
     "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -516,6 +595,19 @@ exports[`createRouteStageAction > los opcionales vacios se guardan como null > l
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -547,10 +639,6 @@ exports[`createRouteStageAction > los opcionales vacios se guardan como null > l
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -704,6 +792,19 @@ exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -733,10 +834,6 @@ exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > 
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -815,6 +912,19 @@ exports[`createRouteStageAction > modo secuencial con maquina > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -847,6 +957,15 @@ exports[`createRouteStageAction > modo secuencial con maquina > llamadas 1`] = `
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -857,10 +976,6 @@ exports[`createRouteStageAction > modo secuencial con maquina > llamadas 1`] = `
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -957,6 +1072,19 @@ exports[`createRouteStageAction > sin maquina se puede marcar que la requiere > 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -986,10 +1114,6 @@ exports[`createRouteStageAction > sin maquina se puede marcar que la requiere > 
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1068,6 +1192,19 @@ exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > llamada
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -1097,10 +1234,6 @@ exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > llamada
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1168,6 +1301,91 @@ exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > llamada
 `;
 
 exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > un P2002, que el candado de la ruta ya evita, deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRouteStageAction > un P2002, que el candado de la ruta ya evita, deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
 
 exports[`createRouteStageAction > un POST sin campos devuelve sus errores sin tocar Prisma > llamadas 1`] = `
 [
@@ -1278,82 +1496,6 @@ exports[`createRouteStageAction > un orden que no es numero devuelve su error > 
 }
 `;
 
-exports[`createRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
-  },
-  {
-    "args": {
-      "select": {
-        "id_ruta": true,
-        "nombre_ruta": true,
-      },
-      "where": {
-        "estado": true,
-        "id_ruta": "RUT00000003",
-      },
-    },
-    "prisma": "ruta_fabricacion.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_ruta": "RUT00000003",
-        "nombre_etapa": "Corte de plancha",
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_ruta": "RUT00000003",
-        "orden_secuencia": 3,
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
-    "args": {
-      "codigoEntidad": "etapa_ruta",
-      "prefijo": "ETA",
-    },
-    "effect": "getNextCorrelativeId",
-  },
-  {
-    "args": {
-      "data": {
-        "descripcion": "Corte segun medida base",
-        "estado": true,
-        "id_etapa_ruta": "ETA00000012",
-        "id_ruta": "RUT00000003",
-        "modo_tiempo": "simultaneo",
-        "nombre_etapa": "Corte de plancha",
-        "orden_secuencia": 3,
-        "requiere_maquina": false,
-        "tiempo_operario_minutos_unidad": 8,
-      },
-    },
-    "prisma": "etapa_ruta.create",
-  },
-  {
-    "args": "Unique constraint failed",
-    "effect": "prisma.$transaction:rollback",
-  },
-]
-`;
-
-exports[`createRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
-
 exports[`createRouteStageAction > una maquina dada de baja no se puede asignar > llamadas 1`] = `
 [
   {
@@ -1364,6 +1506,19 @@ exports[`createRouteStageAction > una maquina dada de baja no se puede asignar >
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -1393,6 +1548,15 @@ exports[`createRouteStageAction > una maquina dada de baja no se puede asignar >
       },
     },
     "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1406,6 +1570,10 @@ exports[`createRouteStageAction > una maquina dada de baja no se puede asignar >
       },
     },
     "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1433,6 +1601,19 @@ exports[`createRouteStageAction > una maquina en reparacion se puede asignar > l
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -1465,6 +1646,15 @@ exports[`createRouteStageAction > una maquina en reparacion se puede asignar > l
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -1475,10 +1665,6 @@ exports[`createRouteStageAction > una maquina en reparacion se puede asignar > l
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -1575,6 +1761,19 @@ exports[`createRouteStageAction > una maquina inactiva no se puede asignar > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -1607,6 +1806,15 @@ exports[`createRouteStageAction > una maquina inactiva no se puede asignar > lla
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -1617,6 +1825,10 @@ exports[`createRouteStageAction > una maquina inactiva no se puede asignar > lla
       },
     },
     "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1644,6 +1856,19 @@ exports[`createRouteStageAction > ya existe una etapa con ese nombre > llamadas 
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "select": {
         "id_ruta": true,
@@ -1664,6 +1889,10 @@ exports[`createRouteStageAction > ya existe una etapa con ese nombre > llamadas 
       },
     },
     "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -1689,6 +1918,19 @@ exports[`createRouteStageAction > ya existe una etapa con ese orden > llamadas 1
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -1720,6 +1962,10 @@ exports[`createRouteStageAction > ya existe una etapa con ese orden > llamadas 1
       },
     },
     "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2055,6 +2301,19 @@ exports[`updateRouteStageAction > ADMIN actualiza la etapa > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2092,10 +2351,6 @@ exports[`updateRouteStageAction > ADMIN actualiza la etapa > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2181,6 +2436,19 @@ exports[`updateRouteStageAction > WORKSHOP_MASTER tambien actualiza etapas > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2218,10 +2486,6 @@ exports[`updateRouteStageAction > WORKSHOP_MASTER tambien actualiza etapas > lla
       },
     },
     "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2293,6 +2557,19 @@ exports[`updateRouteStageAction > asignar una maquina crea la asignacion > llama
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2333,6 +2610,15 @@ exports[`updateRouteStageAction > asignar una maquina crea la asignacion > llama
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -2343,10 +2629,6 @@ exports[`updateRouteStageAction > asignar una maquina crea la asignacion > llama
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2436,6 +2718,19 @@ exports[`updateRouteStageAction > cambiar a otra maquina borra la anterior > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2476,6 +2771,15 @@ exports[`updateRouteStageAction > cambiar a otra maquina borra la anterior > lla
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000008",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -2486,10 +2790,6 @@ exports[`updateRouteStageAction > cambiar a otra maquina borra la anterior > lla
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2591,6 +2891,19 @@ exports[`updateRouteStageAction > cambiar a una maquina de baja se rechaza > lla
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2631,6 +2944,15 @@ exports[`updateRouteStageAction > cambiar a una maquina de baja se rechaza > lla
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000008",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -2641,6 +2963,10 @@ exports[`updateRouteStageAction > cambiar a una maquina de baja se rechaza > lla
       },
     },
     "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2668,6 +2994,19 @@ exports[`updateRouteStageAction > conservar la maquina actualiza sus minutos aun
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2708,6 +3047,15 @@ exports[`updateRouteStageAction > conservar la maquina actualiza sus minutos aun
   },
   {
     "args": {
+      "sql": "SELECT id_maquina FROM aceros.maquina WHERE id_maquina = $1 FOR NO KEY UPDATE",
+      "values": [
+        "MAQ00000002",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
       "select": {
         "estado": true,
         "id_maquina": true,
@@ -2718,10 +3066,6 @@ exports[`updateRouteStageAction > conservar la maquina actualiza sus minutos aun
       },
     },
     "prisma": "maquina.findUnique",
-  },
-  {
-    "args": null,
-    "effect": "prisma.$transaction",
   },
   {
     "args": {
@@ -2829,6 +3173,19 @@ exports[`updateRouteStageAction > la etapa es de otra ruta > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2842,6 +3199,10 @@ exports[`updateRouteStageAction > la etapa es de otra ruta > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2864,6 +3225,19 @@ exports[`updateRouteStageAction > la etapa no existe > llamadas 1`] = `
     ],
   },
   {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
     "args": {
       "include": {
         "etapa_ruta_maquina": {
@@ -2877,6 +3251,10 @@ exports[`updateRouteStageAction > la etapa no existe > llamadas 1`] = `
       },
     },
     "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2897,6 +3275,19 @@ exports[`updateRouteStageAction > otra etapa ya usa ese nombre > llamadas 1`] = 
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -2924,6 +3315,10 @@ exports[`updateRouteStageAction > otra etapa ya usa ese nombre > llamadas 1`] = 
       },
     },
     "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
   },
 ]
 `;
@@ -2951,68 +3346,17 @@ exports[`updateRouteStageAction > otra etapa ya usa ese orden > llamadas 1`] = `
     ],
   },
   {
-    "args": {
-      "include": {
-        "etapa_ruta_maquina": {
-          "select": {
-            "id_maquina": true,
-          },
-        },
-      },
-      "where": {
-        "id_etapa_ruta": "ETA00000006",
-      },
-    },
-    "prisma": "etapa_ruta.findUnique",
+    "args": null,
+    "effect": "prisma.$transaction",
   },
   {
     "args": {
-      "where": {
-        "id_etapa_ruta": {
-          "not": "ETA00000006",
-        },
-        "id_ruta": "RUT00000003",
-        "nombre_etapa": "Corte de plancha",
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-  {
-    "args": {
-      "where": {
-        "id_etapa_ruta": {
-          "not": "ETA00000006",
-        },
-        "id_ruta": "RUT00000003",
-        "orden_secuencia": 3,
-      },
-    },
-    "prisma": "etapa_ruta.findFirst",
-  },
-]
-`;
-
-exports[`updateRouteStageAction > otra etapa ya usa ese orden > resultado 1`] = `
-{
-  "estado": {
-    "error": "Ya existe una etapa con ese número de orden en esta ruta.",
-    "fieldErrors": {
-      "orden_secuencia": [
-        "Ya existe una etapa con ese número de orden en esta ruta.",
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
       ],
     },
-  },
-}
-`;
-
-exports[`updateRouteStageAction > quitar la maquina borra la asignacion > llamadas 1`] = `
-[
-  {
-    "authz": "requireRole",
-    "roles": [
-      "ADMIN",
-      "WORKSHOP_MASTER",
-    ],
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -3055,7 +3399,84 @@ exports[`updateRouteStageAction > quitar la maquina borra la asignacion > llamad
   },
   {
     "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > otra etapa ya usa ese orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una etapa con ese número de orden en esta ruta.",
+    "fieldErrors": {
+      "orden_secuencia": [
+        "Ya existe una etapa con ese número de orden en esta ruta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRouteStageAction > quitar la maquina borra la asignacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": null,
     "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
   },
   {
     "args": {
@@ -3145,7 +3566,7 @@ exports[`updateRouteStageAction > sin id devuelve su error sin tocar Prisma > re
 }
 `;
 
-exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > llamadas 1`] = `
+exports[`updateRouteStageAction > un P2002, que el candado de la ruta ya evita, deja el error de Prisma > llamadas 1`] = `
 [
   {
     "authz": "requireRole",
@@ -3153,6 +3574,19 @@ exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error
       "ADMIN",
       "WORKSHOP_MASTER",
     ],
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "sql": "SELECT id_ruta FROM aceros.ruta_fabricacion WHERE id_ruta = $1 FOR NO KEY UPDATE",
+      "values": [
+        "RUT00000003",
+      ],
+    },
+    "prisma": "$queryRaw",
   },
   {
     "args": {
@@ -3194,10 +3628,6 @@ exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error
     "prisma": "etapa_ruta.findFirst",
   },
   {
-    "args": null,
-    "effect": "prisma.$transaction",
-  },
-  {
     "args": {
       "data": {
         "descripcion": "Corte segun medida base",
@@ -3220,4 +3650,4 @@ exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error
 ]
 `;
 
-exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+exports[`updateRouteStageAction > un P2002, que el candado de la ruta ya evita, deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
