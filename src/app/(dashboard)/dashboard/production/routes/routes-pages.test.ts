@@ -24,6 +24,39 @@ const stageWithoutMachine = (args: Parameters<typeof generatedRow>[2]) => ({
   etapa_ruta_maquina: [],
 });
 
+// Ruta con ordenes asociadas: el producto queda protegido.
+const routeWithOrders = (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("ruta_fabricacion", "findUnique", args),
+  _count: { orden_trabajo: 2 },
+});
+
+// Ruta cuyo producto ya no esta entre los activos que ofrece el selector.
+const routeWithInactiveProduct = (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("ruta_fabricacion", "findUnique", args),
+  id_producto: "PRO00000099",
+  _count: { orden_trabajo: 0 },
+});
+
+const inactiveRoute = (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("ruta_fabricacion", "findUnique", args),
+  estado: false,
+  etapa_ruta: [],
+});
+
+const routeWithoutStages = (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("ruta_fabricacion", "findUnique", args),
+  etapa_ruta: [],
+});
+
+// Etapa con avances y un tiempo antiguo sin recapturar.
+const stageWithHistory = (args: Parameters<typeof generatedRow>[2]) => ({
+  ...generatedRow("etapa_ruta", "findFirst", args),
+  etapa_ruta_maquina: [],
+  tiempo_estimado_horas: 4,
+  tiempo_operario_minutos_unidad: null,
+  _count: { avance_orden: 3, tarea_operario: 1 },
+});
+
 definePageSuite([
   {
     route: "/dashboard/production/routes",
@@ -50,6 +83,16 @@ definePageSuite([
     cases: [
       { name: "editar", params: { id: "RUT00000001" } },
       {
+        name: "con ordenes asociadas",
+        params: { id: "RUT00000001" },
+        data: { "ruta_fabricacion.findUnique": routeWithOrders },
+      },
+      {
+        name: "con el producto inactivo",
+        params: { id: "RUT00000001" },
+        data: { "ruta_fabricacion.findUnique": routeWithInactiveProduct },
+      },
+      {
         name: "inexistente",
         params: { id: "RUT99999999" },
         data: { "ruta_fabricacion.findUnique": null },
@@ -61,6 +104,11 @@ definePageSuite([
     load: () => import("./[id]/stages/page"),
     cases: [
       { name: "etapas", params: { id: "RUT00000001" } },
+      {
+        name: "ruta sin etapas",
+        params: { id: "RUT00000001" },
+        data: { "ruta_fabricacion.findUnique": routeWithoutStages },
+      },
       {
         name: "filtros con maquina y activas",
         params: { id: "RUT00000001" },
@@ -84,6 +132,11 @@ definePageSuite([
     cases: [
       { name: "nueva etapa", params: { id: "RUT00000001" } },
       {
+        name: "ruta inactiva",
+        params: { id: "RUT00000001" },
+        data: { "ruta_fabricacion.findUnique": inactiveRoute },
+      },
+      {
         name: "inexistente",
         params: { id: "RUT99999999" },
         data: { "ruta_fabricacion.findUnique": null },
@@ -95,6 +148,11 @@ definePageSuite([
     load: () => import("./[id]/stages/[stageId]/edit/page"),
     cases: [
       { name: "editar con maquina", params: { id: "RUT00000001", stageId: "ETR00000001" } },
+      {
+        name: "editar con avances y tiempo antiguo",
+        params: { id: "RUT00000001", stageId: "ETR00000002" },
+        data: { "etapa_ruta.findFirst": stageWithHistory },
+      },
       {
         name: "editar sin maquina",
         params: { id: "RUT00000001", stageId: "ETR00000002" },

@@ -1,0 +1,3223 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createRouteStageAction > ADMIN crea la etapa sin maquina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > ADMIN crea la etapa sin maquina > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`createRouteStageAction > WORKSHOP_MASTER tambien crea etapas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > WORKSHOP_MASTER tambien crea etapas > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > con maquina crea la asignacion y queda obligada > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta_maquina",
+      "prefijo": "ERM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_etapa_ruta": "ETA00000012",
+        "id_etapa_ruta_maquina": "ERM00000012",
+        "id_maquina": "MAQ00000002",
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+    },
+    "prisma": "etapa_ruta_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > con maquina crea la asignacion y queda obligada > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > datos invalidos devuelven los errores por campo sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > datos invalidos devuelven los errores por campo sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "nombre_etapa": [
+        "El nombre de la etapa debe tener al menos 3 caracteres.",
+      ],
+      "orden_secuencia": [
+        "El orden debe ser mayor o igual a 1.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > la maquina no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createRouteStageAction > la maquina no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La máquina seleccionada no existe.",
+    "fieldErrors": {
+      "id_maquina": [
+        "La máquina seleccionada no existe.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > la ruta no existe o esta inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+]
+`;
+
+exports[`createRouteStageAction > la ruta no existe o esta inactiva > resultado 1`] = `
+{
+  "estado": {
+    "error": "La ruta seleccionada no existe o está inactiva.",
+  },
+}
+`;
+
+exports[`createRouteStageAction > los opcionales vacios se guardan como null > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": null,
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": null,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > los opcionales vacios se guardan como null > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > maquina sin minutos devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > maquina sin minutos devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "tiempo_maquina_minutos_unidad": [
+        "Indica cuántos minutos de máquina se necesitan para producir una unidad.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > minutos de maquina sin maquina devuelven su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > minutos de maquina sin maquina devuelven su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "tiempo_maquina_minutos_unidad": [
+        "No puedes registrar tiempo de máquina sin seleccionar una máquina.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > minutos negativos devuelven su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > minutos negativos devuelven su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "tiempo_operario_minutos_unidad": [
+        "El tiempo debe ser mayor que cero.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 0.001,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > minutos que redondean a cero hoy se aceptan > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > modo secuencial con maquina > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "secuencial",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta_maquina",
+      "prefijo": "ERM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_etapa_ruta": "ETA00000012",
+        "id_etapa_ruta_maquina": "ERM00000012",
+        "id_maquina": "MAQ00000002",
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+    },
+    "prisma": "etapa_ruta_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > modo secuencial con maquina > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > sin maquina se puede marcar que la requiere > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > sin maquina se puede marcar que la requiere > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > sin modo de tiempo usa el simultaneo > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > un POST sin campos devuelve sus errores sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > un POST sin campos devuelve sus errores sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "id_maquina": [
+        "Invalid input: expected string, received null",
+      ],
+      "id_ruta": [
+        "Invalid input: expected string, received null",
+      ],
+      "nombre_etapa": [
+        "Invalid input: expected string, received null",
+      ],
+      "orden_secuencia": [
+        "El orden debe ser mayor o igual a 1.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > un modo de tiempo que no existe devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > un modo de tiempo que no existe devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "modo_tiempo": [
+        "Selecciona un modo de trabajo válido.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > un orden con decimales devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > un orden con decimales devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "orden_secuencia": [
+        "El orden debe ser un número entero.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > un orden que no es numero devuelve su error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`createRouteStageAction > un orden que no es numero devuelve su error > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "orden_secuencia": [
+        "Invalid input: expected number, received NaN",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`createRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
+
+exports[`createRouteStageAction > una maquina dada de baja no se puede asignar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createRouteStageAction > una maquina dada de baja no se puede asignar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede asignar la máquina "Plegadora": está dada de baja.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede asignar la máquina "Plegadora": está dada de baja.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > una maquina en reparacion se puede asignar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta",
+      "prefijo": "ETA",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "estado": true,
+        "id_etapa_ruta": "ETA00000012",
+        "id_ruta": "RUT00000003",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+    },
+    "prisma": "etapa_ruta.create",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000012",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta_maquina",
+      "prefijo": "ERM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_etapa_ruta": "ETA00000012",
+        "id_etapa_ruta_maquina": "ERM00000012",
+        "id_maquina": "MAQ00000002",
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+    },
+    "prisma": "etapa_ruta_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "crear",
+      "detalle": "Etapa creada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000012",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`createRouteStageAction > una maquina en reparacion se puede asignar > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-created"`;
+
+exports[`createRouteStageAction > una maquina inactiva no se puede asignar > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`createRouteStageAction > una maquina inactiva no se puede asignar > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede asignar la máquina "Plegadora": está inactiva.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede asignar la máquina "Plegadora": está inactiva.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > ya existe una etapa con ese nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+]
+`;
+
+exports[`createRouteStageAction > ya existe una etapa con ese nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una etapa con ese nombre dentro de esta ruta.",
+    "fieldErrors": {
+      "nombre_etapa": [
+        "Ya existe una etapa con ese nombre dentro de esta ruta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`createRouteStageAction > ya existe una etapa con ese orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "id_ruta": true,
+        "nombre_ruta": true,
+      },
+      "where": {
+        "estado": true,
+        "id_ruta": "RUT00000003",
+      },
+    },
+    "prisma": "ruta_fabricacion.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+]
+`;
+
+exports[`createRouteStageAction > ya existe una etapa con ese orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una etapa con ese número de orden en esta ruta.",
+    "fieldErrors": {
+      "orden_secuencia": [
+        "Ya existe una etapa con ese número de orden en esta ruta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`toggleRouteStageStatusAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Etapa inactivada: ETA00000006",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > WORKSHOP_MASTER tambien cambia el estado > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-deactivated"`;
+
+exports[`toggleRouteStageStatusAction > la etapa no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > la etapa no existe > resultado 1`] = `"error: La etapa seleccionada no existe."`;
+
+exports[`toggleRouteStageStatusAction > sin id lanza su mensaje sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > sin id lanza su mensaje sin tocar Prisma > resultado 1`] = `"error: No se recibió la etapa de ruta."`;
+
+exports[`toggleRouteStageStatusAction > un fallo al escribir revierte y deja el error > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": "conexion perdida",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > un fallo al escribir revierte y deja el error > resultado 1`] = `"error: conexion perdida"`;
+
+exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": false,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "accion": "inactivar",
+      "detalle": "Etapa inactivada: ETA00000006",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > una etapa activa se inactiva > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-deactivated"`;
+
+exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_etapa_ruta": true,
+        "id_ruta": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "estado": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "accion": "activar",
+      "detalle": "Etapa activada: ETA00000006",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`toggleRouteStageStatusAction > una etapa inactiva se activa > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-activated"`;
+
+exports[`updateRouteStageAction > ADMIN actualiza la etapa > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > ADMIN actualiza la etapa > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > SELLER: se redirige sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRouteStageAction > SELLER: se redirige sin tocar Prisma > resultado 1`] = `"error: Acceso rechazado por el doble de autorizacion."`;
+
+exports[`updateRouteStageAction > WORKSHOP_MASTER tambien actualiza etapas > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > WORKSHOP_MASTER tambien actualiza etapas > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > asignar una maquina crea la asignacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta_maquina",
+      "prefijo": "ERM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_etapa_ruta": "ETA00000006",
+        "id_etapa_ruta_maquina": "ERM00000012",
+        "id_maquina": "MAQ00000002",
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+    },
+    "prisma": "etapa_ruta_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > asignar una maquina crea la asignacion > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > cambiar a otra maquina borra la anterior > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000008",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta_maquina": {
+          "in": [
+            "ERM00000001",
+          ],
+        },
+      },
+    },
+    "prisma": "etapa_ruta_maquina.deleteMany",
+  },
+  {
+    "args": {
+      "codigoEntidad": "etapa_ruta_maquina",
+      "prefijo": "ERM",
+    },
+    "effect": "getNextCorrelativeId",
+  },
+  {
+    "args": {
+      "data": {
+        "id_etapa_ruta": "ETA00000006",
+        "id_etapa_ruta_maquina": "ERM00000012",
+        "id_maquina": "MAQ00000008",
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+    },
+    "prisma": "etapa_ruta_maquina.create",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > cambiar a otra maquina borra la anterior > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > cambiar a una maquina de baja se rechaza > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000008",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > cambiar a una maquina de baja se rechaza > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se puede asignar la máquina "Plegadora": está dada de baja.",
+    "fieldErrors": {
+      "id_maquina": [
+        "No se puede asignar la máquina "Plegadora": está dada de baja.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRouteStageAction > conservar la maquina actualiza sus minutos aunque este de baja > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "select": {
+        "estado": true,
+        "id_maquina": true,
+        "nombre": true,
+      },
+      "where": {
+        "id_maquina": "MAQ00000002",
+      },
+    },
+    "prisma": "maquina.findUnique",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": true,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "data": {
+        "tiempo_maquina_minutos_unidad": 6,
+      },
+      "where": {
+        "id_etapa_ruta_maquina": "ERM00000001",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.update",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > conservar la maquina actualiza sus minutos aunque este de baja > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > datos invalidos devuelven los errores por campo > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRouteStageAction > datos invalidos devuelven los errores por campo > resultado 1`] = `
+{
+  "estado": {
+    "error": "Revisa los datos de la etapa.",
+    "fieldErrors": {
+      "nombre_etapa": [
+        "El nombre de la etapa debe tener al menos 3 caracteres.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRouteStageAction > la etapa es de otra ruta > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > la etapa es de otra ruta > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa no pertenece a la ruta indicada.",
+  },
+}
+`;
+
+exports[`updateRouteStageAction > la etapa no existe > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > la etapa no existe > resultado 1`] = `
+{
+  "estado": {
+    "error": "La etapa seleccionada no existe.",
+  },
+}
+`;
+
+exports[`updateRouteStageAction > otra etapa ya usa ese nombre > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > otra etapa ya usa ese nombre > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una etapa con ese nombre dentro de esta ruta.",
+    "fieldErrors": {
+      "nombre_etapa": [
+        "Ya existe una etapa con ese nombre dentro de esta ruta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRouteStageAction > otra etapa ya usa ese orden > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > otra etapa ya usa ese orden > resultado 1`] = `
+{
+  "estado": {
+    "error": "Ya existe una etapa con ese número de orden en esta ruta.",
+    "fieldErrors": {
+      "orden_secuencia": [
+        "Ya existe una etapa con ese número de orden en esta ruta.",
+      ],
+    },
+  },
+}
+`;
+
+exports[`updateRouteStageAction > quitar la maquina borra la asignacion > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": {
+      "select": {
+        "id_etapa_ruta_maquina": true,
+        "id_maquina": true,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.findMany",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta_maquina.deleteMany",
+  },
+  {
+    "args": {
+      "accion": "actualizar",
+      "detalle": "Etapa actualizada: Corte de plancha",
+      "enTransaccion": true,
+      "entidad_afectada": "etapa_ruta",
+      "id_registro_afectado": "ETA00000006",
+      "userId": "USU00000001",
+    },
+    "effect": "registerAuditLog",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction:commit",
+  },
+  {
+    "args": "/dashboard/production",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes",
+    "effect": "revalidatePath",
+  },
+  {
+    "args": "/dashboard/production/routes/RUT00000003/stages",
+    "effect": "revalidatePath",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > quitar la maquina borra la asignacion > resultado 1`] = `"redirect:/dashboard/production/routes/RUT00000003/stages?toast=route-stage-updated"`;
+
+exports[`updateRouteStageAction > sin id devuelve su error sin tocar Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+]
+`;
+
+exports[`updateRouteStageAction > sin id devuelve su error sin tocar Prisma > resultado 1`] = `
+{
+  "estado": {
+    "error": "No se recibió la etapa de ruta.",
+  },
+}
+`;
+
+exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > llamadas 1`] = `
+[
+  {
+    "authz": "requireRole",
+    "roles": [
+      "ADMIN",
+      "WORKSHOP_MASTER",
+    ],
+  },
+  {
+    "args": {
+      "include": {
+        "etapa_ruta_maquina": {
+          "select": {
+            "id_maquina": true,
+          },
+        },
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.findUnique",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "nombre_etapa": "Corte de plancha",
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": {
+      "where": {
+        "id_etapa_ruta": {
+          "not": "ETA00000006",
+        },
+        "id_ruta": "RUT00000003",
+        "orden_secuencia": 3,
+      },
+    },
+    "prisma": "etapa_ruta.findFirst",
+  },
+  {
+    "args": null,
+    "effect": "prisma.$transaction",
+  },
+  {
+    "args": {
+      "data": {
+        "descripcion": "Corte segun medida base",
+        "modo_tiempo": "simultaneo",
+        "nombre_etapa": "Corte de plancha",
+        "orden_secuencia": 3,
+        "requiere_maquina": false,
+        "tiempo_operario_minutos_unidad": 8,
+      },
+      "where": {
+        "id_etapa_ruta": "ETA00000006",
+      },
+    },
+    "prisma": "etapa_ruta.update",
+  },
+  {
+    "args": "Unique constraint failed",
+    "effect": "prisma.$transaction:rollback",
+  },
+]
+`;
+
+exports[`updateRouteStageAction > una carrera por el orden (P2002) deja el error de Prisma > resultado 1`] = `"error: Unique constraint failed"`;
